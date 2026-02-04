@@ -79,8 +79,7 @@ public sealed partial class CEDungeonSystem
     }
 
     public bool TrySpawn3DRoom(
-        EntityUid gridUid,
-        MapGridComponent grid,
+        Entity<MapGridComponent?> gridEnt,
         Vector2i origin,
         CEDungeonRoom3DPrototype room,
         Random random,
@@ -92,29 +91,25 @@ public sealed partial class CEDungeonSystem
         var roomRotation = Angle.Zero;
 
         if (rotation)
-        {
             roomRotation = random.Next(4) * Math.PI / 2;
-        }
 
         var roomTransform = Matrix3Helpers.CreateTransform((Vector2)room.Size / 2f, roomRotation);
         var finalTransform = Matrix3x2.Multiply(roomTransform, originTransform);
 
-        return TrySpawn3DRoom(gridUid, grid, finalTransform, room, reservedTiles, clearExisting);
+        return TrySpawn3DRoom(gridEnt, finalTransform, room, reservedTiles, clearExisting);
     }
 
     public bool TrySpawn3DRoom(
-        EntityUid gridUid,
-        MapGridComponent grid,
+        Entity<MapGridComponent?> gridEnt,
         Matrix3x2 roomTransform,
         CEDungeonRoom3DPrototype room,
         HashSet<Vector2i>? reservedTiles = null,
         bool clearExisting = false)
     {
-        if (!_proto.Resolve(room.ZLevelMap, out var indexedZMap))
+        if (!Resolve(gridEnt, ref gridEnt.Comp))
             return false;
-        // Try to get z-level information for the provided grid. If none exists we'll just
-        // spawn everything onto the provided grid.
-        if (!TryComp<CEZLevelMapComponent>(gridUid, out var zMapComp))
+
+        if (!_proto.Resolve(room.ZLevelMap, out var indexedZMap))
             return false;
 
         for (var offset = 0; offset < room.Height; offset++)
@@ -127,17 +122,17 @@ public sealed partial class CEDungeonSystem
 
             var finalRoomRotation = roomTransform.Rotation();
 
-            var roomCenter = (room.Offset + room.Size / 2f) * grid.TileSize;
-            var tileOffset = -roomCenter + grid.TileSizeHalfVector;
+            var roomCenter = (room.Offset + room.Size / 2f) * gridEnt.Comp.TileSize;
+            var tileOffset = -roomCenter + gridEnt.Comp.TileSizeHalfVector;
             _tiles.Clear();
 
             //Calculate target map
-            var targetMapUid = gridUid;
-            var targetGrid = grid;
+            EntityUid targetMapUid = gridEnt;
+            var targetGrid = gridEnt.Comp;
 
             if (offset != 0)
             {
-                targetMapUid = _zLevels.EnsureMapOffset((gridUid, zMapComp), offset);
+                targetMapUid = _zLevels.EnsureMapOffset(gridEnt.Owner, offset);
                 targetGrid = Comp<MapGridComponent>(targetMapUid);
             }
 
