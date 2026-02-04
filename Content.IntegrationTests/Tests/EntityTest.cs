@@ -45,7 +45,6 @@ namespace Content.IntegrationTests.Tests
                     //CrystallEdge zone
                     .Where(p => !p.Components.ContainsKey("CEDungeonRoom3D")) // This comp can delete all entities, and spawn others
                     //CrystallEdge zone end
-                    .Where(o )
                     .Select(p => p.ID)
                     .ToList();
 
@@ -112,6 +111,7 @@ namespace Content.IntegrationTests.Tests
                     //CrystallEdge zone
                     .Where(p => !p.Components.ContainsKey("CEDungeonRoom3D")) // This comp can delete all entities, and spawn others
                     //CrystallEdge zone end
+                    .Select(p => p.ID)
                     .ToList();
                 foreach (var protoId in protoIds)
                 {
