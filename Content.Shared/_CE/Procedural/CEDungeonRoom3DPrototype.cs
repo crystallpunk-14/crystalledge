@@ -39,5 +39,5 @@ public sealed partial class CEDungeonRoom3DPrototype : IPrototype
     /// allowing you to make rooms of irregular shapes that blend seamlessly into their surroundings
     /// </summary>
     [DataField]
-    public ProtoId<ContentTileDefinition>? IgnoreTile;
+    public ProtoId<ContentTileDefinition>? IgnoreTile = "Space";
 }

@@ -28,9 +28,15 @@
       ambientLightColor: "#c8fdff"
 
 - type: dungeonRoom3d
-  id: TestRoom
-  size: 16, 16
+  id: TestBrickCorridor
+  size: 17, 7
   height: 2
   zLevelMap: Atlas
-  offset: 0, 0
-  ignoreTile: Space
+  offset: 0, -2
+
+- type: dungeonRoom3d
+  id: TestBox
+  size: 8, 8
+  height: 2
+  zLevelMap: Atlas
+  offset: 0, 7

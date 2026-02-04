@@ -1,0 +1,13 @@
+- type: entity
+  parent: MarkerBase
+  id: CERoomExitMarker
+  name: room exit marker
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: _CE/Actions/zLevels.rsi
+      state: down
+      color: "#74e2c3"
