@@ -55,8 +55,17 @@ public sealed partial class CEDungeonSystem : EntitySystem
         var network = _zLevels.CreateZNetwork(indexedDungeon.NetworkComponents);
 
 
-        _zLevels.TryAddMapIntoZNetwork(network, new ResPath("/Maps/_CE/Empty.yml"), 0);
+        if (!_zLevels.TryAddMapIntoZNetwork(network, new ResPath("/Maps/_CE/Empty.yml"), 0, out var newMap))
+            return false;
+
+        //TrySpawn3DRoom(newMap,)
+
+
+
         _zLevels.InitializeAllZNetwork(network);
+
+
+
 
         return true;
     }

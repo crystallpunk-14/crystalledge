@@ -3,6 +3,7 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using System.Diagnostics.CodeAnalysis;
 using Content.Server._CE.PVS;
 using Content.Shared._CE.ZLevels.Core.Components;
 using JetBrains.Annotations;
@@ -86,13 +87,20 @@ public sealed partial class CEZLevelsSystem
     /// <summary>
     /// Attempts to load the specified map resource and add it to the z-network at the specified depth.
     /// </summary>
-    public bool TryAddMapIntoZNetwork(Entity<CEZLevelsNetworkComponent> network, ResPath path, int depth)
+    public bool TryAddMapIntoZNetwork(
+        Entity<CEZLevelsNetworkComponent> network,
+        ResPath path,
+        int depth,
+        [NotNullWhen(true)] out Entity<MapComponent>? outMap)
     {
+        outMap = null;
+
         if (!_mapLoader.TryLoadMap(path, out var mapEnt, out _))
         {
             Log.Error($"Failed to load map {path} for ZLevelNetwork {network} at depth {depth}!");
             return false;
         }
+        outMap = mapEnt;
 
         return TryAddMapIntoZNetwork(network, mapEnt.Value, depth);
     }
