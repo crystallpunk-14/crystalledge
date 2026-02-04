@@ -19,6 +19,9 @@ public sealed partial class CEDungeonRoom3DPrototype : IPrototype
     [DataField(required: true)]
     public Vector2i Size;
 
+    [DataField(required: true)]
+    public int Height = 1;
+
     /// <summary>
     /// Path to the file to use for the room.
     /// </summary>
