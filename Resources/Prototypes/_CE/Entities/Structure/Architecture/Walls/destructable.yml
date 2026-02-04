@@ -30,4 +30,5 @@
   #- type: CEAutoTilePlacement
   #  tile: CEStonebricks
   - type: IconSmooth
-    base: natural_walls
+    key: natural_walls
+    base: wall

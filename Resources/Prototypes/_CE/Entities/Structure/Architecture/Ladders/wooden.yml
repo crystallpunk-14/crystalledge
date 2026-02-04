@@ -1,0 +1,28 @@
+- type: entity
+  id: CEZLevelsLadderWoodenBase
+  abstract: true
+  name: wooden ladder
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Ladders/wooden.rsi
+
+- type: entity
+  parent:
+  - CEZLevelLadderBase
+  - CEZLevelsLadderWoodenBase
+  id: CEZLevelLadderWooden
+  components:
+  - type: Construction
+    graph: CEZLevelLadderWooden
+    node: CEZLevelLadderWooden
+
+- type: entity
+  parent:
+  - CEZLevelLadderCornerBase
+  - CEZLevelsLadderWoodenBase
+  id: CEZLevelLadderWoodenCorner
+  suffix: Corner
+  components:
+  - type: Construction
+    graph: CEZLevelLadderWooden
+    node: CEZLevelLadderWoodenCorner
