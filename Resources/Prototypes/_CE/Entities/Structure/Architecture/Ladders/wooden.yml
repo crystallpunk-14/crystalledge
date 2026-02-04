@@ -11,10 +11,6 @@
   - CEZLevelLadderBase
   - CEZLevelsLadderWoodenBase
   id: CEZLevelLadderWooden
-  components:
-  - type: Construction
-    graph: CEZLevelLadderWooden
-    node: CEZLevelLadderWooden
 
 - type: entity
   parent:
@@ -22,7 +18,3 @@
   - CEZLevelsLadderWoodenBase
   id: CEZLevelLadderWoodenCorner
   suffix: Corner
-  components:
-  - type: Construction
-    graph: CEZLevelLadderWooden
-    node: CEZLevelLadderWoodenCorner

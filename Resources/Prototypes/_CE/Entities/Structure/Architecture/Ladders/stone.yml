@@ -11,10 +11,6 @@
   - CEZLevelLadderBase
   - CEZLevelsLadderStoneBase
   id: CEZLevelLadderStone
-  components:
-  - type: Construction
-    graph: CEZLevelLadderStone
-    node: CEZLevelLadderStone
 
 - type: entity
   parent:
@@ -22,10 +18,6 @@
   - CEZLevelsLadderStoneBase
   id: CEZLevelLadderStoneCorner
   suffix: Corner
-  components:
-  - type: Construction
-    graph: CEZLevelLadderStone
-    node: CEZLevelLadderStoneCorner
 
 - type: entity
   parent:
@@ -33,7 +25,3 @@
   - CEZLevelsLadderStoneBase
   id: CEZLevelLadderStoneCornerInner
   suffix: Inner Corner
-  components:
-  - type: Construction
-    graph: CEZLevelLadderStone
-    node: CEZLevelLadderStoneCornerInner

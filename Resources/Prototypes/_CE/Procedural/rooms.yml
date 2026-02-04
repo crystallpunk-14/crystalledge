@@ -1,4 +1,3 @@
-
 - type: zMap
   id: Atlas
   maps:
@@ -27,3 +26,11 @@
     - type: SunShadow
     - type: MapLight
       ambientLightColor: "#c8fdff"
+
+- type: dungeonRoom3d
+  id: TestRoom
+  size: 16, 16
+  zLevelMap: Atlas
+  offset: 0, 0
+  ignoreTile:
+  - Space
