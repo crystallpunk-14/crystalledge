@@ -33,5 +33,4 @@
   height: 2
   zLevelMap: Atlas
   offset: 0, 0
-  ignoreTile:
-  - Space
+  ignoreTile: Space

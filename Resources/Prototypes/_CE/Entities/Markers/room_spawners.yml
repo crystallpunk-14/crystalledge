@@ -1,0 +1,22 @@
+- type: entity
+  parent: MarkerBase
+  id: CERoomSpawnerBase
+  name: room spawner
+  categories: [ ForkFiltered ]
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: Objects/Weapons/Guns/SMGs/wt550.rsi
+      state: icon
+  - type: CERoomSpawner3D
+
+
+- type: entity
+  parent: CERoomSpawnerBase
+  id: CERoomSpawnerTest
+  components:
+  - type: CERoomSpawner3D
+    maxSize: 20, 20
