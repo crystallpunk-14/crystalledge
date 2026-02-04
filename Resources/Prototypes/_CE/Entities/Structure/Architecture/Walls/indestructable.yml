@@ -1,0 +1,33 @@
+- type: entity
+  id: CEBaseWallIndestructable
+  parent: CEBaseWall
+  suffix: Indestructable
+  abstract: true
+
+- type: entity
+  id: CEWallStoneBrick
+  name: stone brick wall
+  parent: CEBaseWallIndestructable
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/brick_stone.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/brick_stone.rsi
+  #- type: CEAutoTilePlacement
+  #  tile: CEStonebricks
+  - type: IconSmooth
+    base: stonebricks
+
+- type: entity
+  id: CEWallStone
+  name: stone
+  parent: CEBaseWallIndestructable
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/cave_stone.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/cave_stone.rsi
+  #- type: CEAutoTilePlacement
+  #  tile: CEStonebricks
+  - type: IconSmooth
+    base: natural_walls
