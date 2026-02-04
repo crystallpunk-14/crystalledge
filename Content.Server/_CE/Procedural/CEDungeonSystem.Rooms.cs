@@ -1,6 +1,13 @@
+using System.Numerics;
+using Content.Server.Procedural;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Procedural;
 using Content.Shared.Whitelist;
+using Robust.Shared.EntitySerialization;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CE.Procedural;
 
@@ -21,7 +28,6 @@ public sealed partial class CEDungeonSystem
     {
         return GetRoomPrototype(random, whitelist, minSize: size, maxSize: size);
     }
-
 
     /// <summary>
     /// Gets a random dungeon room matching the specified area and whitelist and size range
@@ -69,5 +75,58 @@ public sealed partial class CEDungeonSystem
         var room = _availableRooms[random.Next(_availableRooms.Count)];
 
         return room;
+    }
+
+    public bool TrySpawn3DRoom(
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Matrix3x2 roomTransform,
+        CEDungeonRoom3DPrototype room,
+        HashSet<Vector2i>? reservedTiles = null,
+        bool clearExisting = false)
+    {
+        if (!_proto.Resolve(room.ZLevelMap, out var indexedZMap))
+            return false;
+
+        foreach (var mapPath in indexedZMap.Maps)
+        {
+            var roomMap = GetOrCreateTemplate(mapPath);
+            var templateMapUid = _maps.GetMapOrInvalid(roomMap);
+            var templateGrid = Comp<MapGridComponent>(templateMapUid);
+            var roomDimensions = room.Size;
+
+            var finalRoomRotation = roomTransform.Rotation();
+
+            var roomCenter = (room.Offset + room.Size / 2f) * grid.TileSize;
+            var tileOffset = -roomCenter + grid.TileSizeHalfVector;
+            _tiles.Clear();
+        }
+    }
+
+
+    public MapId GetOrCreateTemplate(ResPath atlasPath)
+    {
+        var query = AllEntityQuery<DungeonAtlasTemplateComponent>();
+        DungeonAtlasTemplateComponent? comp;
+
+        while (query.MoveNext(out var uid, out comp))
+        {
+            // Exists
+            if (comp.Path.Equals(atlasPath))
+                return Transform(uid).MapID;
+        }
+
+        var opts = new MapLoadOptions
+        {
+            DeserializationOptions = DeserializationOptions.Default with {PauseMaps = true},
+            ExpectedCategory = FileCategory.Map
+        };
+
+        if (!_loader.TryLoadGeneric(atlasPath, out var res, opts) || !res.Maps.TryFirstOrNull(out var map))
+            throw new Exception($"Failed to load dungeon template.");
+
+        comp = AddComp<DungeonAtlasTemplateComponent>(map.Value.Owner);
+        comp.Path = atlasPath;
+        return map.Value.Comp.MapId;
     }
 }
