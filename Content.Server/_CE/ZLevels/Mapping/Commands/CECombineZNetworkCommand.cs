@@ -18,7 +18,6 @@ public sealed class CECombineZNetworkCommand : LocalizedEntityCommands
     [Dependency] private readonly IEntityManager _entities = default!;
     [Dependency] private readonly MapSystem _map = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
 
     public override string Command => "znetwork-combine";
     public override string Description => "Connects a number of maps into a common network of z-levels. Does not work if one of the maps is already in the z-level network";
@@ -69,7 +68,6 @@ public sealed class CECombineZNetworkCommand : LocalizedEntityCommands
         }
 
         var network = _zLevels.CreateZNetwork();
-        _meta.SetEntityName(network, $"Combined zNetwork: {network.Owner.Id}");
         var counter = 0;
         Dictionary<EntityUid, int> dict = new();
         foreach (var findMap in maps)

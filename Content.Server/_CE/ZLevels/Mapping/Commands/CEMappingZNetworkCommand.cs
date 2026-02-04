@@ -24,7 +24,6 @@ public sealed class CEMappingZNetworkCommand : LocalizedEntityCommands
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevel = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MapSystem _map = default!;
 
     public override string Command => "znetwork-mapping";
@@ -64,8 +63,7 @@ public sealed class CEMappingZNetworkCommand : LocalizedEntityCommands
 
         //Ok all parsing is done, we start creating maps
 
-        var network = _zLevel.CreateZNetwork(indexedZMap.Components);
-        _meta.SetEntityName(network, $"Mapping zNetwork: {indexedZMap.ID}");
+        var network = _zLevel.CreateZNetwork(indexedZMap.Components, $"Mapping zNetwork: {indexedZMap.ID}");
         Dictionary<EntityUid, int> dict = new();
 
         List<MapId> createdMaps = new();
@@ -84,7 +82,6 @@ public sealed class CEMappingZNetworkCommand : LocalizedEntityCommands
 
             dict.Add(mapEnt.Value, depth);
             createdMaps.Add(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"Mapping {indexedZMap.ID} [{depth}]");
             depth++;
         }
 

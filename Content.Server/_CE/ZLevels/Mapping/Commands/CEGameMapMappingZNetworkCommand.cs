@@ -26,7 +26,6 @@ public sealed class CEGameMapMappingZNetworkCommand : LocalizedEntityCommands
     [Dependency] private readonly IComponentFactory _compFactory = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevel = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
     [Dependency] private readonly MapSystem _map = default!;
 
     public override string Command => "znetwork-gamemap-mapping";
@@ -98,8 +97,7 @@ public sealed class CEGameMapMappingZNetworkCommand : LocalizedEntityCommands
 
         //Ok all parsing is done, we start creating maps
 
-        var network = _zLevel.CreateZNetwork(zNetwork.ZLevelsComponentOverrides);
-        _meta.SetEntityName(network, $"Mapping zNetwork: {mapProto.MapName}");
+        var network = _zLevel.CreateZNetwork(zNetwork.ZLevelsComponentOverrides,  $"Mapping zNetwork: {mapProto.MapName}");
         Dictionary<EntityUid, int> dict = new();
 
         List<MapId> createdMaps = new();
@@ -114,7 +112,6 @@ public sealed class CEGameMapMappingZNetworkCommand : LocalizedEntityCommands
         }
         dict.Add(defaultMapEnt.Value, 0);
         createdMaps.Add(defaultMapEnt.Value.Comp.MapId);
-        _meta.SetEntityName(defaultMapEnt.Value, $"Mapping {mapProto.MapName}");
 
         //Loading maps below first
         var depth = zNetwork.MapsBelow.Count * -1;
@@ -128,7 +125,6 @@ public sealed class CEGameMapMappingZNetworkCommand : LocalizedEntityCommands
 
             dict.Add(mapEnt.Value, depth);
             createdMaps.Add(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
             depth++;
         }
 
@@ -143,7 +139,6 @@ public sealed class CEGameMapMappingZNetworkCommand : LocalizedEntityCommands
 
             dict.Add(mapEnt.Value, depth);
             createdMaps.Add(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
             depth++;
         }
 

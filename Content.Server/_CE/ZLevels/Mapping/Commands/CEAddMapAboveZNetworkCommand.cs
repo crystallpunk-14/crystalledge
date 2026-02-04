@@ -24,7 +24,6 @@ public sealed class CEAddMapAboveZNetworkCommand : LocalizedEntityCommands
     [Dependency] private readonly IResourceManager _resourceMgr = default!;
     [Dependency] private readonly MapLoaderSystem _mapLoader = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevel = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
 
     public override string Command => "znetwork-add-above";
     public override string Description => "Add a map above an existing z-network.";
@@ -111,8 +110,6 @@ public sealed class CEAddMapAboveZNetworkCommand : LocalizedEntityCommands
             _entities.QueueDeleteEntity(mapEnt.Value);
             return;
         }
-
-        _meta.SetEntityName(mapEnt.Value, $"{path.FilenameWithoutExtension} [{newDepth}]");
 
         shell.WriteLine($"Successfully added map {path.FilenameWithoutExtension} to z-network at depth {newDepth}.");
         shell.WriteLine($"Map ID: {mapComp.MapId}");

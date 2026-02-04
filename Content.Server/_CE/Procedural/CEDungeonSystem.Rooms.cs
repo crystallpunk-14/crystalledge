@@ -155,6 +155,8 @@ public sealed partial class CEDungeonSystem
 
             if (offset != 0)
             {
+                //targetMapUid = _zLevels.EnsureMapOffset((ent, zMapComp), offset);
+
                 if (!_zLevels.TryMapOffset((ent, zMapComp), offset, out var found))
                 {
                     Log.Error($"Failed to find target map for dungeon room z-level offset {offset} on map {Transform(ent).MapID}");
@@ -200,7 +202,7 @@ public sealed partial class CEDungeonSystem
 
             var bounds = new Box2(room.Offset, room.Offset + room.Size);
 
-            _maps.SetTiles(targetMapUid, targetGrid, _tiles);
+            //_maps.SetTiles(targetMapUid, targetGrid, _tiles);
 
             // Load entities from template into target map
             foreach (var templateEnt in _lookup.GetEntitiesIntersecting(templateMapUid, bounds, LookupFlags.Uncontained))

@@ -12,6 +12,7 @@ using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
@@ -30,6 +31,8 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
     private EntityQuery<MapGridComponent> _gridQuery;
 
     protected EntityQuery<CEZPhysicsComponent> ZPhyzQuery;
+
+    public ResPath EmptyMap = new("/Maps/_CE/Empty.yml");
 
     public override void Initialize()
     {

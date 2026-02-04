@@ -20,3 +20,5 @@
   components:
   - type: CERoomSpawner3D
     maxSize: 20, 20
+    rotation: false
+    clearExisting: false
