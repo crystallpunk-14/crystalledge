@@ -78,24 +78,6 @@ public sealed partial class CEDungeonSystem
         return room;
     }
 
-
-    public Angle GetRoomRotation(CEDungeonRoom3DPrototype room, Random random)
-    {
-        var roomRotation = Angle.Zero;
-
-        if (room.Size.X == room.Size.Y)
-        {
-            // Give it a random rotation
-            roomRotation = random.Next(4) * Math.PI / 2;
-        }
-        else if (random.Next(2) == 1)
-        {
-            roomRotation += Math.PI;
-        }
-
-        return roomRotation;
-    }
-
     public bool TrySpawn3DRoom(
         EntityUid gridUid,
         MapGridComponent grid,
@@ -111,7 +93,7 @@ public sealed partial class CEDungeonSystem
 
         if (rotation)
         {
-            roomRotation = GetRoomRotation(room, random);
+            roomRotation = random.Next(4) * Math.PI / 2;
         }
 
         var roomTransform = Matrix3Helpers.CreateTransform((Vector2)room.Size / 2f, roomRotation);

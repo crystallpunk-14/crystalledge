@@ -11,6 +11,7 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CE.Procedural;
 
@@ -44,5 +45,19 @@ public sealed partial class CEDungeonSystem : EntitySystem
 
         InitializeRooms();
         InitializeCache();
+    }
+
+    public bool TryGenerateDungeon(ProtoId<CEDungeonZonePrototype> dungeon)
+    {
+        if (!_proto.Resolve(dungeon, out var indexedDungeon))
+            return false;
+
+        var network = _zLevels.CreateZNetwork(indexedDungeon.NetworkComponents);
+
+
+        _zLevels.TryAddMapIntoZNetwork(network, new ResPath("/Maps/_CE/Empty.yml"), 0);
+        _zLevels.InitializeAllZNetwork(network);
+
+        return true;
     }
 }

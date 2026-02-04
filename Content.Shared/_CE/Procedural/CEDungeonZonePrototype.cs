@@ -6,4 +6,7 @@ namespace Content.Shared._CE.Procedural;
 public sealed partial class CEDungeonZonePrototype : IPrototype
 {
     [IdDataField] public string ID { get; private set; } = default!;
+
+    [DataField]
+    public ComponentRegistry? NetworkComponents = new();
 }
