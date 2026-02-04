@@ -26,8 +26,7 @@ public sealed class CERoomFill3DSystem : EntitySystem
             {
                 var mapGrid = Comp<MapGridComponent>(xform.GridUid.Value);
                 _dungeon.TrySpawn3DRoom(
-                    xform.GridUid.Value,
-                    mapGrid,
+                    (xform.GridUid.Value, mapGrid),
                     _maps.LocalToTile(xform.GridUid.Value, mapGrid, xform.Coordinates) - new Vector2i(room.Size.X/2,room.Size.Y/2),
                     room,
                     random,

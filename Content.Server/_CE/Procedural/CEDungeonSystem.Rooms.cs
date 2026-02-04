@@ -99,8 +99,7 @@ public sealed partial class CEDungeonSystem
     }
 
     public bool TrySpawn3DRoom(
-        EntityUid gridUid,
-        MapGridComponent grid,
+        Entity<MapGridComponent> ent,
         Vector2i origin,
         CEDungeonRoom3DPrototype room,
         Random random,
@@ -119,12 +118,11 @@ public sealed partial class CEDungeonSystem
         var roomTransform = Matrix3Helpers.CreateTransform((Vector2)room.Size / 2f, roomRotation);
         var finalTransform = Matrix3x2.Multiply(roomTransform, originTransform);
 
-        return TrySpawn3DRoom(gridUid, grid, finalTransform, room, reservedTiles, clearExisting);
+        return TrySpawn3DRoom(ent, finalTransform, room, reservedTiles, clearExisting);
     }
 
     public bool TrySpawn3DRoom(
-        EntityUid gridUid,
-        MapGridComponent grid,
+        Entity<MapGridComponent> ent,
         Matrix3x2 roomTransform,
         CEDungeonRoom3DPrototype room,
         HashSet<Vector2i>? reservedTiles = null,
@@ -134,7 +132,7 @@ public sealed partial class CEDungeonSystem
             return false;
         // Try to get z-level information for the provided grid. If none exists we'll just
         // spawn everything onto the provided grid.
-        if (!TryComp<CEZLevelMapComponent>(gridUid, out var zMapComp))
+        if (!TryComp<CEZLevelMapComponent>(ent, out var zMapComp))
             return false;
 
         for (var offset = 0; offset < room.Height; offset++)
@@ -147,19 +145,19 @@ public sealed partial class CEDungeonSystem
 
             var finalRoomRotation = roomTransform.Rotation();
 
-            var roomCenter = (room.Offset + room.Size / 2f) * grid.TileSize;
-            var tileOffset = -roomCenter + grid.TileSizeHalfVector;
+            var roomCenter = (room.Offset + room.Size / 2f) * ent.Comp.TileSize;
+            var tileOffset = -roomCenter + ent.Comp.TileSizeHalfVector;
             _tiles.Clear();
 
             //Calculate target map
-            var targetMapUid = gridUid;
-            var targetGrid = grid;
+            var targetMapUid = ent.Owner;
+            var targetGrid = ent.Comp;
 
             if (offset != 0)
             {
-                if (!_zLevels.TryMapOffset((gridUid, zMapComp), offset, out var found))
+                if (!_zLevels.TryMapOffset((ent, zMapComp), offset, out var found))
                 {
-                    Log.Error($"Failed to find target map for dungeon room z-level offset {offset} on map {Transform(gridUid).MapID}");
+                    Log.Error($"Failed to find target map for dungeon room z-level offset {offset} on map {Transform(ent).MapID}");
                     continue;
                 }
 
@@ -192,9 +190,9 @@ public sealed partial class CEDungeonSystem
                     if (clearExisting)
                     {
                         var anchored = _maps.GetAnchoredEntities((targetMapUid, targetGrid), rounded);
-                        foreach (var ent in anchored)
+                        foreach (var e in anchored)
                         {
-                            QueueDel(ent);
+                            QueueDel(e);
                         }
                     }
                 }
@@ -216,7 +214,7 @@ public sealed partial class CEDungeonSystem
                 var childRot = templateXform.LocalRotation + finalRoomRotation;
                 var protoId = _metaQuery.GetComponent(templateEnt).EntityPrototype?.ID;
 
-                var ent = Spawn(protoId, new EntityCoordinates(targetMapUid, childPos));
+                Spawn(protoId, new EntityCoordinates(targetMapUid, childPos));
 
                 var childXform = _xformQuery.GetComponent(ent);
                 var anchored = templateXform.Anchored;
