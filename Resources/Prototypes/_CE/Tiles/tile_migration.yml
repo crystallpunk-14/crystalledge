@@ -1,0 +1,4 @@
+# Base Tiles
+- type: tileAlias
+  id: CEFloorStone
+  target: CEStone
