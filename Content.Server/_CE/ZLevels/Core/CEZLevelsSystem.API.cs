@@ -66,6 +66,7 @@ public sealed partial class CEZLevelsSystem
         _meta.SetEntityName(mapUid, $" {MetaData(network).EntityName}: [{depth}]");
 
         RaiseLocalEvent(mapUid, new CEMapAddedIntoZNetworkEvent(network, depth));
+        RaiseLocalEvent(network, new CEZLevelNetworkUpdatedEvent());
 
         return true;
     }
@@ -78,8 +79,6 @@ public sealed partial class CEZLevelsSystem
             if (!TryAddMapIntoZNetwork(network, ent, depth))
                 success = false;
         }
-
-        RaiseLocalEvent(network, new CEZLevelNetworkUpdatedEvent());
 
         return success;
     }
@@ -116,8 +115,6 @@ public sealed partial class CEZLevelsSystem
             if (!TryAddMapIntoZNetwork(network, mapEnt.Value, depth))
                 success = false;
         }
-
-        RaiseLocalEvent(network, new CEZLevelNetworkUpdatedEvent());
 
         return success;
     }
