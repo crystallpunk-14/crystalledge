@@ -43,6 +43,7 @@ namespace Content.Server.Database
 
         public DbSet<PlayTime> PlayTime { get; set; } = default!;
         public DbSet<UploadedResourceLog> UploadedResourceLog { get; set; } = default!;
+        public DbSet<PlayerAchievement> PlayerAchievement { get; set; } = default!; //CrystallEdge achievements
         public DbSet<AdminNote> AdminNotes { get; set; } = null!;
         public DbSet<AdminWatchlist> AdminWatchlists { get; set; } = null!;
         public DbSet<AdminMessage> AdminMessages { get; set; } = null!;
@@ -141,6 +142,19 @@ namespace Content.Server.Database
 
             modelBuilder.Entity<AdminLogPlayer>()
                 .HasIndex(p => p.PlayerUserId);
+
+            //CrystallEdge achievements
+            modelBuilder.Entity<PlayerAchievement>()
+                .HasIndex(p => new { p.PlayerUserId, p.ProtoId })
+                .IsUnique();
+
+            modelBuilder.Entity<PlayerAchievement>()
+                .HasOne(p => p.Player)
+                .WithMany(p => p.PlayerAchievements)
+                .HasForeignKey(p => p.PlayerUserId)
+                .HasPrincipalKey(p => p.UserId)
+                .IsRequired();
+            //CrystallEdge achievements end
 
             modelBuilder.Entity<Round>()
                 .HasIndex(round => round.StartDate);
@@ -519,6 +533,7 @@ namespace Content.Server.Database
         public List<Ban> AdminServerBansCreated { get; set; } = null!;
         public List<Ban> AdminServerBansLastEdited { get; set; } = null!;
         public List<RoleWhitelist> JobWhitelists { get; set; } = null!;
+        public List<PlayerAchievement> PlayerAchievements { get; set; } = null!; //CrystallEdge achievements
     }
 
     [Table("whitelist")]
@@ -1053,5 +1068,19 @@ namespace Content.Server.Database
         /// The score IPIntel returned
         /// </summary>
         public float Score { get; set; }
+    }
+
+    [Table("player_achievement")]
+    public sealed class PlayerAchievement
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [Required, ForeignKey("Player")]
+        public Guid PlayerUserId { get; set; }
+        public Player Player { get; set; } = default!;
+
+        [Required, Column("proto_id")]
+        public string ProtoId { get; set; } = string.Empty;
     }
 }

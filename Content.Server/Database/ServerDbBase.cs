@@ -23,6 +23,7 @@ using Robust.Shared.Asynchronous;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Utility;
 
@@ -1674,6 +1675,70 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return true;
         }
 
+        #endregion
+
+        #region Achievements
+        //CrystallEdge achievements
+
+        public async Task AddPlayerAchievement(Guid player, ProtoId<CEAchievementPrototype> achievement)
+        {
+            await using var db = await GetDb();
+
+            var exists = await db.DbContext.PlayerAchievement
+                .Where(w => w.PlayerUserId == player)
+                .Where(w => w.ProtoId == achievement.Id)
+                .AnyAsync();
+
+            if (exists)
+                return;
+
+            db.DbContext.PlayerAchievement.Add(new PlayerAchievement
+            {
+                PlayerUserId = player,
+                ProtoId = achievement.Id,
+            });
+
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> HasPlayerAchievement(Guid player, ProtoId<CEAchievementPrototype> achievement)
+        {
+            await using var db = await GetDb();
+
+            return await db.DbContext.PlayerAchievement
+                .Where(w => w.PlayerUserId == player)
+                .Where(w => w.ProtoId == achievement.Id)
+                .AnyAsync();
+        }
+
+        public async Task<bool> RemovePlayerAchievement(Guid player, ProtoId<CEAchievementPrototype> achievement)
+        {
+            await using var db = await GetDb();
+
+            var ent = await db.DbContext.PlayerAchievement
+                .Where(w => w.PlayerUserId == player)
+                .Where(w => w.ProtoId == achievement.Id)
+                .SingleOrDefaultAsync();
+
+            if (ent == null)
+                return false;
+
+            db.DbContext.PlayerAchievement.Remove(ent);
+            await db.DbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<string>> GetPlayerAchievements(Guid player, CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            return await db.DbContext.PlayerAchievement
+                .Where(w => w.PlayerUserId == player)
+                .Select(w => w.ProtoId)
+                .ToListAsync(cancellationToken: cancel);
+        }
+
+        //CrystallEdge achievements end
         #endregion
 
         # region IPIntel
