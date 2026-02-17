@@ -3,6 +3,7 @@ using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Client.Audio;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Achievements;
@@ -16,6 +17,8 @@ public sealed class CEAchievementNotificationSystem : EntitySystem
     [Dependency] private readonly IUserInterfaceManager _userInterface = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
+
+    private SoundSpecifier _notificationSound = new SoundPathSpecifier("/Audio/_CE/achievement.ogg");
 
     private CEAchievementNotificationControl _ui = default!;
     private bool _remove;
@@ -72,16 +75,15 @@ public sealed class CEAchievementNotificationSystem : EntitySystem
         var ev = _queue.Dequeue();
 
         // Get achievement prototype for display data
-        if (!_protoManager.Resolve<CEAchievementPrototype>(ev.AchievementProtoId, out var achievement))
+        if (!_protoManager.Resolve(ev.AchievementProtoId, out var achievement))
         {
             Log.Error($"Failed to find achievement prototype: {ev.AchievementProtoId}");
             PlayNext(); // Skip this one and try next
             return;
         }
 
-        // Optional achievement unlock sound
-        // if (_player.LocalEntity is not null)
-        //     _audio.PlayGlobal("/Audio/_CE/achievement_unlock.ogg", _player.LocalEntity.Value);
+        if (_player.LocalEntity is not null)
+            _audio.PlayGlobal(_notificationSound, _player.LocalEntity.Value);
 
         if (_ui.Parent is null)
             _userInterface.RootControl.AddChild(_ui);

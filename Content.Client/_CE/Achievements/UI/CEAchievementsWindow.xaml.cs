@@ -205,7 +205,7 @@ public sealed partial class CEAchievementsWindow : FancyWindow
         {
             // Use actual achievement data
             displayName = Loc.GetString(achievement.Name);
-            displayDescription = Loc.GetString(achievement.Description);
+            displayDescription = Loc.GetString(achievement.Desc);
 
             // Choose icon based on earned status
             iconControl.Texture = _sprite.Frame0(isEarned ? achievement.UnlockedIcon : achievement.LockedIcon);

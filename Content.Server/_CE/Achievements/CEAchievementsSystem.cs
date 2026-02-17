@@ -111,9 +111,6 @@ public sealed class CEAchievementsSystem : EntitySystem
 
             set.Add(achievementProtoId);
 
-            // Refresh percentages after adding achievement
-            await RefreshCachedPercentagesAsync();
-
             // Send achievement unlocked notification to connected sessions for this user
             foreach (var session in _playerManager.Sessions)
             {
@@ -169,9 +166,6 @@ public sealed class CEAchievementsSystem : EntitySystem
             {
                 set.Remove(achievementProtoId);
             }
-
-            // Refresh percentages after removing achievement
-            await RefreshCachedPercentagesAsync();
 
             // Notify connected sessions for this user
             foreach (var session in _playerManager.Sessions)

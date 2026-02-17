@@ -1,8 +1,9 @@
-﻿using Content.Client.FeedbackPopup;
+using Content.Client.FeedbackPopup;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.Client.UserInterface.Systems.Info;
+using Content.Client._CE.Achievements;
 using Content.Shared.CCVar;
 using JetBrains.Annotations;
 using Robust.Client.Console;
@@ -27,6 +28,7 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     [Dependency] private readonly OptionsUIController _options = default!;
     [Dependency] private readonly GuidebookUIController _guidebook = default!;
     [Dependency] private readonly FeedbackPopupUIController _feedback = null!;
+    [Dependency] private readonly CEAchievementsUIController _achievements = default!;
 
     private Options.UI.EscapeMenu? _escapeWindow;
 
@@ -109,6 +111,12 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
         _escapeWindow.GuidebookButton.OnPressed += _ =>
         {
             _guidebook.ToggleGuidebook();
+        };
+
+        _escapeWindow.AchievementsButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            _achievements.ToggleWindow();
         };
 
         // Hide wiki button if we don't have a link for it.

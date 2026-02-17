@@ -20,7 +20,7 @@ public sealed partial class CEAchievementPrototype : IPrototype
     /// Description of the achievement.
     /// </summary>
     [DataField(required: true)]
-    public LocId Description = string.Empty;
+    public LocId Desc = string.Empty;
 
     [DataField]
     public SpriteSpecifier LockedIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Interface/achievements.rsi"), "tester_0");

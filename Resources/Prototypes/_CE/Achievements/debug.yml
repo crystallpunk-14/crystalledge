@@ -1,31 +1,4 @@
 - type: achievement
-  id: Test1
-  name: First Steps
-  description: Welcome aboard, crew member!
-
-- type: achievement
-  id: Test2
-  name: Seasoned Spacer
-  description: You've been around the station a few times.
-
-- type: achievement
-  id: Test3
-  name: Station Legend
-  description: A true veteran of the stars.
-
-- type: achievement
-  id: Test4
-  name: Station Legend 4
-  description: A true veteran of the stars.
-
-- type: achievement
-  id: Test5
-  name: Station Legend 5
-  description: A true veteran of the EMPIRE.
-  secret: true
-
-- type: achievement
-  id: Test6
-  name: Station Legend 6
-  description: A true veteran of the stars.
-  secret: true
+  id: AdminInspiration
+  name: ce-achievement-admin-inspiration-name
+  desc: ce-achievement-admin-inspiration-desc
