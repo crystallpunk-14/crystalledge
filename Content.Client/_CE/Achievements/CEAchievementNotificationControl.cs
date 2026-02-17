@@ -1,6 +1,7 @@
-using System.Numerics;
+using Content.Client.Message;
 using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
@@ -14,7 +15,7 @@ namespace Content.Client._CE.Achievements;
 public sealed class CEAchievementNotificationControl : Control
 {
     private const float SlideDuration = 0.5f; // Time to slide in/out
-    private const float DisplayTime = 2.0f;   // Time to stay visible
+    private const float DisplayTime = 3.0f;   // Time to stay visible
 
     [Dependency] private readonly IEntityManager _entManager = default!;
     private readonly SpriteSystem _spriteSystem = default!;
@@ -25,9 +26,9 @@ public sealed class CEAchievementNotificationControl : Control
     private readonly BoxContainer _hbox;
     private readonly TextureRect _iconRect;
     private readonly BoxContainer _textVbox;
-    private readonly Label _titleLabel;
+    private readonly RichTextLabel _titleLabel;
     private readonly RichTextLabel _descriptionLabel;
-    private readonly Label _percentageLabel;
+    private readonly RichTextLabel _percentageLabel;
 
     private float _elapsedTime;
     private AnimationState _animationState;
@@ -53,7 +54,15 @@ public sealed class CEAchievementNotificationControl : Control
             HorizontalAlignment = HAlignment.Right,
             VerticalAlignment = VAlignment.Bottom,
             MinWidth = 300,
-            MaxWidth = 400
+            MaxWidth = 400,
+            PanelOverride = new StyleBoxFlat
+            {
+                BackgroundColor = Color.FromHex("#2a2a2a"),
+                ContentMarginTopOverride = 8,
+                ContentMarginBottomOverride = 8,
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8
+            }
         };
         _panel.AddStyleClass("AchievementNotificationPanel");
 
@@ -68,10 +77,10 @@ public sealed class CEAchievementNotificationControl : Control
         // Achievement icon
         _iconRect = new TextureRect
         {
-            MinWidth = 48,
-            MinHeight = 48,
-            MaxWidth = 48,
-            MaxHeight = 48,
+            MinWidth = 70,
+            MinHeight = 70,
+            MaxWidth = 70,
+            MaxHeight = 70,
             Stretch = TextureRect.StretchMode.Scale,
             VerticalAlignment = VAlignment.Center
         };
@@ -85,13 +94,11 @@ public sealed class CEAchievementNotificationControl : Control
         };
 
         // "Achievement Unlocked" title
-        _titleLabel = new Label
+        _titleLabel = new RichTextLabel
         {
-            Text = Loc.GetString("ce-achievement-unlocked"),
-            FontColorOverride = Color.Gold,
             Margin = new Thickness(0, 0, 0, 2)
         };
-        _titleLabel.AddStyleClass("LabelHeading");
+        _titleLabel.SetMarkup($"[color=gold][font size=16][b]{Loc.GetString("ce-achievement-unlocked")}[/b][/font][/color]");
 
         // Achievement name and description
         _descriptionLabel = new RichTextLabel
@@ -100,10 +107,9 @@ public sealed class CEAchievementNotificationControl : Control
         };
 
         // Percentage label
-        _percentageLabel = new Label
+        _percentageLabel = new RichTextLabel
         {
             HorizontalAlignment = HAlignment.Right,
-            FontColorOverride = Color.LightGray,
             Margin = new Thickness(0, 2, 0, 0)
         };
 
@@ -126,19 +132,11 @@ public sealed class CEAchievementNotificationControl : Control
     public void AnimationStart(CEAchievementPrototype achievement, float percentage)
     {
         // Set achievement data
-        _descriptionLabel.SetMessage($"[bold]{Loc.GetString(achievement.Name)}[/bold]\n{Loc.GetString(achievement.Description)}");
-        _percentageLabel.Text = Loc.GetString("ce-achievements-percentage", ("percent", percentage.ToString("F1")));
+        _descriptionLabel.SetMarkup($"[bold]{Loc.GetString(achievement.Name)}[/bold]\n{Loc.GetString(achievement.Description)}");
+        _percentageLabel.SetMarkup($"[color=lightgray]{Loc.GetString("ce-achievement-also-have", ("percent", percentage.ToString("F1")))}[/color]");
 
         // Set icon
-        try
-        {
-            _iconRect.Texture = _spriteSystem.Frame0(achievement.UnlockedIcon);
-        }
-        catch
-        {
-            // Fallback if texture not found
-            _iconRect.Texture = null;
-        }
+        _iconRect.Texture = _spriteSystem.Frame0(achievement.UnlockedIcon);
 
         // Calculate positions for animation using margin
         _onscreenMarginRight = 20f; // Normal margin from right edge

@@ -12,3 +12,4 @@ ce-achievement-popup-desc = { $percent }% of players have this achievement
 
 ## Achievement Notifications
 ce-achievement-unlocked = Achievement Unlocked!
+ce-achievement-also-have = Also owned by { $percent }% of players

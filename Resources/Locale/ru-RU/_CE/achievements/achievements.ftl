@@ -12,3 +12,4 @@ ce-achievement-popup-desc = { $percent }% игроков имеют это до�
 
 ## Achievement Notifications
 ce-achievement-unlocked = Достижение получено!
+ce-achievement-also-have = Так же есть у { $percent }% игроков
