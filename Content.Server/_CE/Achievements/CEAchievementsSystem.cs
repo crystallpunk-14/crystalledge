@@ -102,6 +102,9 @@ public sealed class CEAchievementsSystem : EntitySystem
 
             await _db.AddPlayerAchievement(player, achievementProtoId);
 
+            // Refresh global percentages so the notification uses the new value
+            await RefreshCachedPercentagesAsync();
+
             // Update cached player set if present
             if (!_playerAchievementsCache.TryGetValue(player, out var set))
             {
@@ -160,6 +163,9 @@ public sealed class CEAchievementsSystem : EntitySystem
                 return false;
 
             var removed = await _db.RemovePlayerAchievement(player, achievementProtoId);
+
+            // Refresh global percentages after removal so clients get updated stats
+            await RefreshCachedPercentagesAsync();
 
             // Update cached player set if present
             if (_playerAchievementsCache.TryGetValue(player, out var set))

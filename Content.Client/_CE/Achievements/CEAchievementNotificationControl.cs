@@ -133,7 +133,7 @@ public sealed class CEAchievementNotificationControl : Control
     {
         // Set achievement data
         _descriptionLabel.SetMarkup($"[bold]{Loc.GetString(achievement.Name)}[/bold]\n{Loc.GetString(achievement.Desc)}");
-        _percentageLabel.SetMarkup($"[color=lightgray]{Loc.GetString("ce-achievement-also-have", ("percent", percentage.ToString("F1")))}[/color]");
+        _percentageLabel.SetMarkup($"[color=#ffffff22]{Loc.GetString("ce-achievement-also-have", ("percent", percentage.ToString("F1")))}[/color]");
 
         // Set icon
         _iconRect.Texture = _spriteSystem.Frame0(achievement.UnlockedIcon);

@@ -145,114 +145,32 @@ public sealed partial class CEAchievementsWindow : FancyWindow
         bool isEarned,
         float percentage)
     {
-        var panel = new PanelContainer
-        {
-            HorizontalExpand = true,
-            Margin = new Thickness(2),
-        };
-        panel.AddStyleClass(StyleClass.BackgroundPanel);
+        var entry = new CEAchievementEntry();
 
-        if (isEarned)
-            panel.Modulate = new Color(0.7f, 1f, 0.7f);
-        else
-            panel.Modulate = new Color(0.6f, 0.6f, 0.6f);
-
-        // Fill bar background showing the percentage of players who have this achievement.
-        // PanelContainer overlays children, so this is drawn behind the content.
-        var fillBar = new CEAchievementFillBar
-        {
-            FillPercent = percentage,
-            FillColor = isEarned
-                ? new Color(0.2f, 0.6f, 0.2f, 0.35f)
-                : new Color(0.3f, 0.3f, 0.5f, 0.3f),
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-        panel.AddChild(fillBar);
-
-        var hBox = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            HorizontalExpand = true,
-            Margin = new Thickness(8, 6, 8, 6),
-        };
-
-        // Achievement icon
-        var iconControl = new TextureRect
-        {
-            MinWidth = 40,
-            MinHeight = 40,
-            MouseFilter = MouseFilterMode.Ignore,
-            Stretch = TextureRect.StretchMode.Scale,
-            Margin = new Thickness(0, 0, 16, 0),
-        };
-
-        // Determine which icon to use and what text/description to show
+        // Determine display strings and icon spec
         string displayName;
         string displayDescription;
+        SpriteSpecifier iconSpec;
 
         if (achievement.Secret && !isEarned)
         {
-            // Secret achievement not yet earned - show question mark icon
             displayName = "???";
             displayDescription = Loc.GetString("ce-achievements-secret");
-
-            // Use a placeholder secret icon texture path - to be created by the artist
-            var secretIconSpec = achievement.SecretIcon;
-            iconControl.Texture = _sprite.Frame0(secretIconSpec);
+            iconSpec = achievement.SecretIcon;
         }
         else
         {
-            // Use actual achievement data
             displayName = Loc.GetString(achievement.Name);
             displayDescription = Loc.GetString(achievement.Desc);
-
-            // Choose icon based on earned status
-            iconControl.Texture = _sprite.Frame0(isEarned ? achievement.UnlockedIcon : achievement.LockedIcon);
+            iconSpec = isEarned ? achievement.UnlockedIcon : achievement.LockedIcon;
         }
 
-        hBox.AddChild(iconControl);
+        // Set icon texture using SpriteSystem
+        entry.Icon.Texture = _sprite.Frame0(iconSpec);
 
-        // Name and description
-        var infoBox = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            HorizontalExpand = true,
-        };
+        // Fill rest of data
+        entry.SetData(displayName, displayDescription, isEarned, percentage, _adminManager.IsActive(), achievement.ID);
 
-        var nameLabel = new Label
-        {
-            Text = displayName + (_adminManager.IsActive() ? $" [{achievement.ID}]" : ""),
-        };
-        nameLabel.AddStyleClass(StyleClass.LabelKeyText);
-        nameLabel.FontColorOverride = isEarned ? Color.White : Color.LightGray;
-        infoBox.AddChild(nameLabel);
-
-        var descLabel = new Label
-        {
-            Text = displayDescription,
-            Margin = new Thickness(0, 2, 0, 0),
-        };
-        nameLabel.AddStyleClass(StyleClass.LabelSubText);
-        nameLabel.FontColorOverride = isEarned ? Color.White : Color.LightGray;
-        infoBox.AddChild(descLabel);
-
-        hBox.AddChild(infoBox);
-
-        // Percentage label
-        var percentLabel = new Label
-        {
-            Text = Loc.GetString("ce-achievements-percentage",
-                ("percent", percentage.ToString("F1"))),
-            VerticalAlignment = VAlignment.Center,
-            HorizontalAlignment = HAlignment.Right,
-            MinWidth = 60,
-        };
-        percentLabel.FontColorOverride = Color.LightGray;
-        hBox.AddChild(percentLabel);
-
-        panel.AddChild(hBox);
-
-        return panel;
+        return entry;
     }
 }
