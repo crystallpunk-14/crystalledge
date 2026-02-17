@@ -385,7 +385,7 @@ namespace Content.IntegrationTests.Tests
                 "DebugExceptionStartup",
                 "GridFill",
                 "RoomFill",
-                "CEDungeonRoom3D", // CrystallEdge zone Room spawner that can delete all entities
+                "CERoomSpawner3D", // CrystallEdge zone Room spawner that can delete all entities
                 "Map", // We aren't testing a map entity in this test
                 "MapGrid",
                 "Broadphase",
