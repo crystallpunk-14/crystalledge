@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Shared._CE.Achievements;
-using Content.Shared.GameTicking;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
@@ -20,6 +19,9 @@ public sealed class CEAchievementsSystem : EntitySystem
     [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     private Dictionary<string, float> _cachedPercentages = new();
+
+    // Cache of currently-connected players' achievement sets. Keyed by player Guid.
+    private readonly Dictionary<Guid, HashSet<string>> _playerAchievementsCache = new();
     private bool _initialLoad;
 
     public override void Initialize()
@@ -28,7 +30,6 @@ public sealed class CEAchievementsSystem : EntitySystem
 
         _netManager.RegisterNetMessage<CEMsgAchievements>();
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
 
     public override void Shutdown()
@@ -36,12 +37,6 @@ public sealed class CEAchievementsSystem : EntitySystem
         base.Shutdown();
 
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
-    }
-
-    private async void OnRoundRestart(RoundRestartCleanupEvent ev)
-    {
-        await RefreshCachedPercentagesAsync();
-        await SendAchievementsToAllPlayers();
     }
 
     private async void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
@@ -59,7 +54,13 @@ public sealed class CEAchievementsSystem : EntitySystem
 
         try
         {
-            var playerAchievements = await _db.GetPlayerAchievements(userId);
+            // Try to use cached data if available, otherwise load from DB and cache it.
+            if (!_playerAchievementsCache.TryGetValue(userId, out var playerAchievements))
+            {
+                var loaded = await _db.GetPlayerAchievements(userId);
+                playerAchievements = new HashSet<string>(loaded);
+                _playerAchievementsCache[userId] = playerAchievements;
+            }
 
             var msg = new CEMsgAchievements
             {
@@ -75,11 +76,6 @@ public sealed class CEAchievementsSystem : EntitySystem
         }
     }
 
-    private async void RefreshCachedPercentages()
-    {
-        await RefreshCachedPercentagesAsync();
-    }
-
     private async Task RefreshCachedPercentagesAsync()
     {
         try
@@ -92,30 +88,94 @@ public sealed class CEAchievementsSystem : EntitySystem
         }
     }
 
-    private async Task SendAchievementsToAllPlayers()
+    /// <summary>
+    /// Adds an achievement to a player in the database, updates local caches and notifies connected clients.
+    /// Returns true if the achievement was added, false if the player already had it.
+    /// </summary>
+    public async Task<bool> AddPlayerAchievementAsync(Guid player, string achievementProtoId)
     {
-        foreach (var session in _playerManager.Sessions)
+        try
         {
-            if (session.Status != SessionStatus.InGame &&
-                session.Status != SessionStatus.Connected)
-                continue;
+            var has = await _db.HasPlayerAchievement(player, achievementProtoId);
+            if (has)
+                return false;
 
-            try
+            await _db.AddPlayerAchievement(player, achievementProtoId);
+
+            // Update cached player set if present
+            if (!_playerAchievementsCache.TryGetValue(player, out var set))
             {
-                var playerAchievements = await _db.GetPlayerAchievements(session.UserId);
+                set = new HashSet<string>();
+                _playerAchievementsCache[player] = set;
+            }
+
+            set.Add(achievementProtoId);
+
+            // Notify connected sessions for this user
+            foreach (var session in _playerManager.Sessions)
+            {
+                if (session.UserId != player)
+                    continue;
 
                 var msg = new CEMsgAchievements
                 {
-                    PlayerAchievements = new HashSet<string>(playerAchievements),
+                    PlayerAchievements = new HashSet<string>(set),
                     AchievementPercentages = _cachedPercentages,
                 };
 
                 _netManager.ServerSendMessage(msg, session.Channel);
             }
-            catch (Exception e)
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to add achievement {achievementProtoId} to {player}: {e}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Removes an achievement from a player in the database, updates local caches and notifies connected clients.
+    /// Returns true if removed, false if player did not have the achievement.
+    /// </summary>
+    public async Task<bool> RemovePlayerAchievementAsync(Guid player, string achievementProtoId)
+    {
+        try
+        {
+            var has = await _db.HasPlayerAchievement(player, achievementProtoId);
+            if (!has)
+                return false;
+
+            var removed = await _db.RemovePlayerAchievement(player, achievementProtoId);
+
+            // Update cached player set if present
+            if (_playerAchievementsCache.TryGetValue(player, out var set))
             {
-                Log.Error($"Failed to send achievements to {session.Name}: {e}");
+                set.Remove(achievementProtoId);
             }
+
+            // Notify connected sessions for this user
+            foreach (var session in _playerManager.Sessions)
+            {
+                if (session.UserId != player)
+                    continue;
+
+                var msg = new CEMsgAchievements
+                {
+                    PlayerAchievements = new HashSet<string>(_playerAchievementsCache.GetValueOrDefault(player, new HashSet<string>())),
+                    AchievementPercentages = _cachedPercentages,
+                };
+
+                _netManager.ServerSendMessage(msg, session.Channel);
+            }
+
+            return removed;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to remove achievement {achievementProtoId} from {player}: {e}");
+            return false;
         }
     }
 }

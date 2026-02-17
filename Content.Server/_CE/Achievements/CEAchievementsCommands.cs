@@ -17,6 +17,7 @@ public sealed class CEAddAchievementCommand : LocalizedCommands
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
 
     public override string Command => "achievementadd";
 
@@ -73,14 +74,14 @@ public sealed class CEAddAchievementCommand : LocalizedCommands
 
         try
         {
-            var has = await _db.HasPlayerAchievement(sessionUserId, protoArg);
-            if (has)
+            var sys = _entMan.System<CEAchievementsSystem>();
+            var added = await sys.AddPlayerAchievementAsync(sessionUserId, protoArg);
+            if (!added)
             {
                 shell.WriteLine($"Player {located.Username} already has achievement {protoArg}.");
                 return;
             }
 
-            await _db.AddPlayerAchievement(sessionUserId, protoArg);
             shell.WriteLine($"Added achievement {protoArg} to player {located.Username}.");
         }
         catch (Exception e)
@@ -97,6 +98,7 @@ public sealed class CERemoveAchievementCommand : LocalizedCommands
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
 
     public override string Command => "achievementremove";
 
@@ -153,18 +155,12 @@ public sealed class CERemoveAchievementCommand : LocalizedCommands
 
         try
         {
-            var has = await _db.HasPlayerAchievement(sessionUserId, protoArg);
-            if (!has)
-            {
-                shell.WriteLine($"Player {located.Username} does not have achievement {protoArg}.");
-                return;
-            }
-
-            var removed = await _db.RemovePlayerAchievement(sessionUserId, protoArg);
+            var sys = _entMan.System<CEAchievementsSystem>();
+            var removed = await sys.RemovePlayerAchievementAsync(sessionUserId, protoArg);
             if (removed)
                 shell.WriteLine($"Removed achievement {protoArg} from player {located.Username}.");
             else
-                shell.WriteError($"Failed to remove achievement {protoArg} from player {located.Username}.");
+                shell.WriteLine($"Player {located.Username} does not have achievement {protoArg}.");
         }
         catch (Exception e)
         {
