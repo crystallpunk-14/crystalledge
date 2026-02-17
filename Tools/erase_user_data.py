@@ -12,7 +12,7 @@ import os
 import psycopg2
 from uuid import UUID
 
-LATEST_DB_MIGRATION = "20260217000000_PlayerAchievements"
+LATEST_DB_MIGRATION = "20260217112542_PlayerAchievements"
 
 def main():
     parser = argparse.ArgumentParser()
