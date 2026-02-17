@@ -26,7 +26,7 @@ public sealed class CEAchievementsSystem : EntitySystem
     {
         base.Initialize();
 
-        _netManager.RegisterNetMessage<MsgCEAchievements>();
+        _netManager.RegisterNetMessage<CEMsgAchievements>();
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
@@ -38,9 +38,10 @@ public sealed class CEAchievementsSystem : EntitySystem
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
     }
 
-    private void OnRoundRestart(RoundRestartCleanupEvent ev)
+    private async void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        RefreshCachedPercentages();
+        await RefreshCachedPercentagesAsync();
+        await SendAchievementsToAllPlayers();
     }
 
     private async void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
@@ -60,7 +61,7 @@ public sealed class CEAchievementsSystem : EntitySystem
         {
             var playerAchievements = await _db.GetPlayerAchievements(userId);
 
-            var msg = new MsgCEAchievements
+            var msg = new CEMsgAchievements
             {
                 PlayerAchievements = new HashSet<string>(playerAchievements),
                 AchievementPercentages = _cachedPercentages,
@@ -88,6 +89,33 @@ public sealed class CEAchievementsSystem : EntitySystem
         catch (Exception e)
         {
             Log.Error($"Failed to refresh achievement percentages: {e}");
+        }
+    }
+
+    private async Task SendAchievementsToAllPlayers()
+    {
+        foreach (var session in _playerManager.Sessions)
+        {
+            if (session.Status != SessionStatus.InGame &&
+                session.Status != SessionStatus.Connected)
+                continue;
+
+            try
+            {
+                var playerAchievements = await _db.GetPlayerAchievements(session.UserId);
+
+                var msg = new CEMsgAchievements
+                {
+                    PlayerAchievements = new HashSet<string>(playerAchievements),
+                    AchievementPercentages = _cachedPercentages,
+                };
+
+                _netManager.ServerSendMessage(msg, session.Channel);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to send achievements to {session.Name}: {e}");
+            }
         }
     }
 }

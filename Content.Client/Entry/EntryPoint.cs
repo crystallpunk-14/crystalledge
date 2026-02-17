@@ -1,3 +1,4 @@
+using Content.Client._CE.Achievements;
 using Content.Client.Administration.Managers;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
@@ -79,6 +80,7 @@ namespace Content.Client.Entry
         [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
         [Dependency] private readonly ClientsidePlaytimeTrackingManager _clientsidePlaytimeManager = default!;
         [Dependency] private readonly ClientFeedbackManager _feedbackManager = null!;
+        [Dependency] private readonly CEAchievementsManager _achievements = null!; //CrystallEdge
 
         public override void PreInit()
         {
@@ -141,6 +143,7 @@ namespace Content.Client.Entry
             _ghostKick.Initialize();
             _extendedDisconnectInformation.Initialize();
             _jobRequirements.Initialize();
+            _achievements.Initialize(); //CrystallEdge
             _playbackMan.Initialize();
             _clientsidePlaytimeManager.Initialize();
 

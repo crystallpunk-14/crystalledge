@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
@@ -7,7 +8,8 @@ namespace Content.Shared._CE.Achievements;
 /// <summary>
 /// Sent from server to client with the player's achievements and global achievement percentages.
 /// </summary>
-public sealed class MsgCEAchievements : NetMessage
+[UsedImplicitly]
+public sealed class CEMsgAchievements : NetMessage
 {
     public override MsgGroups MsgGroup => MsgGroups.EntityEvent;
 

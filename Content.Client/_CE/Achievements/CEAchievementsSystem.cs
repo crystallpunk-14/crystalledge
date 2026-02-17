@@ -1,14 +1,17 @@
 using Content.Shared._CE.Achievements;
+using Robust.Client;
 using Robust.Shared.Network;
 
 namespace Content.Client._CE.Achievements;
 
 /// <summary>
-/// Client-side system that receives and caches achievement data from the server.
+/// Client-side manager that receives and caches achievement data from the server.
+/// Registered early in IoC so the net message is known before the connection is established.
 /// </summary>
-public sealed class CEAchievementsSystem : EntitySystem
+public sealed class CEAchievementsManager
 {
     [Dependency] private readonly IClientNetManager _netManager = default!;
+    [Dependency] private readonly IBaseClient _client = default!;
 
     /// <summary>
     /// Achievement prototype IDs that the current player has earned.
@@ -30,17 +33,27 @@ public sealed class CEAchievementsSystem : EntitySystem
     /// </summary>
     public event Action? AchievementsUpdated;
 
-    public override void Initialize()
+    public void Initialize()
     {
-        base.Initialize();
-
-        _netManager.RegisterNetMessage<MsgCEAchievements>(OnAchievementsReceived);
+        _netManager.RegisterNetMessage<CEMsgAchievements>(OnAchievementsReceived);
+        _client.RunLevelChanged += OnRunLevelChanged;
     }
 
-    private void OnAchievementsReceived(MsgCEAchievements msg)
+    private void OnRunLevelChanged(object? sender, RunLevelChangedEventArgs e)
     {
-        PlayerAchievements = msg.PlayerAchievements;
-        AchievementPercentages = msg.AchievementPercentages;
+        if (e.NewLevel == ClientRunLevel.Initialize)
+        {
+            // Reset on disconnect.
+            PlayerAchievements = new HashSet<string>();
+            AchievementPercentages = new Dictionary<string, float>();
+            DataLoaded = false;
+        }
+    }
+
+    private void OnAchievementsReceived(CEMsgAchievements ceMsg)
+    {
+        PlayerAchievements = ceMsg.PlayerAchievements;
+        AchievementPercentages = ceMsg.AchievementPercentages;
         DataLoaded = true;
 
         AchievementsUpdated?.Invoke();
