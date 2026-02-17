@@ -502,7 +502,6 @@
   id: VisitorMime
   parent: VisitorCivilian
   components:
-    - type: MimePowers
     - type: GhostRole
       name: job-name-mime
     - type: Loadout
