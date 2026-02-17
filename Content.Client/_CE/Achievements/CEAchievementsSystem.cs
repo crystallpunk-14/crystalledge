@@ -35,7 +35,7 @@ public sealed class CEAchievementsManager
 
     public void Initialize()
     {
-        _netManager.RegisterNetMessage<CEMsgAchievements>(OnAchievementsReceived);
+        _netManager.RegisterNetMessage<CEMsgAllAchievementsData>(OnAchievementsReceived);
         _client.RunLevelChanged += OnRunLevelChanged;
     }
 
@@ -50,10 +50,10 @@ public sealed class CEAchievementsManager
         }
     }
 
-    private void OnAchievementsReceived(CEMsgAchievements ceMsg)
+    private void OnAchievementsReceived(CEMsgAllAchievementsData ceMsgAll)
     {
-        PlayerAchievements = ceMsg.PlayerAchievements;
-        AchievementPercentages = ceMsg.AchievementPercentages;
+        PlayerAchievements = ceMsgAll.PlayerAchievements;
+        AchievementPercentages = ceMsgAll.AchievementPercentages;
         DataLoaded = true;
 
         AchievementsUpdated?.Invoke();

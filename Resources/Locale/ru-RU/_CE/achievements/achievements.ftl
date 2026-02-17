@@ -7,3 +7,8 @@ ce-achievements-earned-header = Полученные
 ce-achievements-locked-header = Не получены
 ce-achievements-percentage = { $percent }%
 ce-achievements-secret = Секретное достижение
+ce-achievement-popup-title = Получено достижение: {$id}
+ce-achievement-popup-desc = { $percent }% игроков имеют это достижение
+
+## Achievement Notifications
+ce-achievement-unlocked = Достижение получено!

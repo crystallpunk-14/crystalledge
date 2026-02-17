@@ -1,6 +1,8 @@
+using Content.Shared._CE.Achievements.Prototypes;
 using JetBrains.Annotations;
 using Lidgren.Network;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.Achievements;
@@ -9,7 +11,7 @@ namespace Content.Shared._CE.Achievements;
 /// Sent from server to client with the player's achievements and global achievement percentages.
 /// </summary>
 [UsedImplicitly]
-public sealed class CEMsgAchievements : NetMessage
+public sealed class CEMsgAllAchievementsData : NetMessage
 {
     public override MsgGroups MsgGroup => MsgGroups.EntityEvent;
 
@@ -61,4 +63,12 @@ public sealed class CEMsgAchievements : NetMessage
             buffer.Write(percent);
         }
     }
+}
+
+[Serializable, NetSerializable]
+public sealed class CEAchievementUnlockedEvent(ProtoId<CEAchievementPrototype> achievement, float percentage)
+    : EntityEventArgs
+{
+    public ProtoId<CEAchievementPrototype> AchievementProtoId = achievement;
+    public float Percentage = percentage;
 }

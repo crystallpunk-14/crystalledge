@@ -28,7 +28,7 @@ public sealed class CEAchievementsSystem : EntitySystem
     {
         base.Initialize();
 
-        _netManager.RegisterNetMessage<CEMsgAchievements>();
+        _netManager.RegisterNetMessage<CEMsgAllAchievementsData>();
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
     }
 
@@ -62,7 +62,7 @@ public sealed class CEAchievementsSystem : EntitySystem
                 _playerAchievementsCache[userId] = playerAchievements;
             }
 
-            var msg = new CEMsgAchievements
+            var msg = new CEMsgAllAchievementsData
             {
                 PlayerAchievements = new HashSet<string>(playerAchievements),
                 AchievementPercentages = _cachedPercentages,
@@ -111,13 +111,25 @@ public sealed class CEAchievementsSystem : EntitySystem
 
             set.Add(achievementProtoId);
 
-            // Notify connected sessions for this user
+            // Send achievement unlocked notification to connected sessions for this user
             foreach (var session in _playerManager.Sessions)
             {
                 if (session.UserId != player)
                     continue;
 
-                var msg = new CEMsgAchievements
+                var ev = new CEAchievementUnlockedEvent(achievementProtoId,
+                    _cachedPercentages.GetValueOrDefault(achievementProtoId, 0f));
+
+                RaiseNetworkEvent(ev, session);
+            }
+
+            // Notify connected sessions for this user with updated achievement list
+            foreach (var session in _playerManager.Sessions)
+            {
+                if (session.UserId != player)
+                    continue;
+
+                var msg = new CEMsgAllAchievementsData
                 {
                     PlayerAchievements = new HashSet<string>(set),
                     AchievementPercentages = _cachedPercentages,
@@ -161,7 +173,7 @@ public sealed class CEAchievementsSystem : EntitySystem
                 if (session.UserId != player)
                     continue;
 
-                var msg = new CEMsgAchievements
+                var msg = new CEMsgAllAchievementsData
                 {
                     PlayerAchievements = new HashSet<string>(_playerAchievementsCache.GetValueOrDefault(player, new HashSet<string>())),
                     AchievementPercentages = _cachedPercentages,
