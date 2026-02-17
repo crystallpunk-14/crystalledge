@@ -309,7 +309,7 @@ namespace Content.Server.Database
 
         Task<bool> RemovePlayerAchievement(Guid player, ProtoId<CEAchievementPrototype> achievement);
 
-        Task<List<string>> GetPlayerAchievements(Guid player, CancellationToken cancel = default);
+        Task<List<string>> GetPlayerAchievements(Guid player);
 
         #endregion
 
@@ -968,6 +968,7 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.RemoveJobWhitelist(player, job));
         }
 
+        //CrystallEdge achievements
         public Task AddPlayerAchievement(Guid player, ProtoId<CEAchievementPrototype> achievement)
         {
             DbWriteOpsMetric.Inc();
@@ -986,11 +987,12 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.RemovePlayerAchievement(player, achievement));
         }
 
-        public Task<List<string>> GetPlayerAchievements(Guid player, CancellationToken cancel = default)
+        public Task<List<string>> GetPlayerAchievements(Guid player)
         {
             DbReadOpsMetric.Inc();
-            return RunDbCommand(() => _db.GetPlayerAchievements(player, cancel));
+            return RunDbCommand(() => _db.GetPlayerAchievements(player));
         }
+        //CrystallEdge achievements end
 
         public Task<bool> UpsertIPIntelCache(DateTime time, IPAddress ip, float score)
         {

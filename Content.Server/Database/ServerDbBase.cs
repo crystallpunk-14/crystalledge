@@ -1728,14 +1728,14 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return true;
         }
 
-        public async Task<List<string>> GetPlayerAchievements(Guid player, CancellationToken cancel = default)
+        public async Task<List<string>> GetPlayerAchievements(Guid player)
         {
-            await using var db = await GetDb(cancel);
+            await using var db = await GetDb();
 
             return await db.DbContext.PlayerAchievement
                 .Where(w => w.PlayerUserId == player)
                 .Select(w => w.ProtoId)
-                .ToListAsync(cancellationToken: cancel);
+                .ToListAsync();
         }
 
         //CrystallEdge achievements end
