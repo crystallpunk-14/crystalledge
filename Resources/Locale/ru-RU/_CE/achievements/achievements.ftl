@@ -6,3 +6,4 @@ ce-achievements-empty = Достижения отсутствуют.
 ce-achievements-earned-header = Полученные
 ce-achievements-locked-header = Не получены
 ce-achievements-percentage = { $percent }%
+ce-achievements-secret = Секретное достижение

@@ -22,8 +22,10 @@
   id: Test5
   name: Station Legend 5
   description: A true veteran of the EMPIRE.
+  secret: true
 
 - type: achievement
   id: Test6
   name: Station Legend 6
   description: A true veteran of the stars.
+  secret: true
