@@ -1738,6 +1738,24 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .ToListAsync();
         }
 
+        public async Task<Dictionary<string, float>> GetAchievementPercentages()
+        {
+            await using var db = await GetDb();
+
+            var totalPlayers = await db.DbContext.Player.CountAsync();
+            if (totalPlayers == 0)
+                return new Dictionary<string, float>();
+
+            var counts = await db.DbContext.PlayerAchievement
+                .GroupBy(a => a.ProtoId)
+                .Select(g => new { g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            return counts.ToDictionary(
+                x => x.Key,
+                x => (float) x.Count / totalPlayers * 100f);
+        }
+
         //CrystallEdge achievements end
         #endregion
 

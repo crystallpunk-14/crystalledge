@@ -1,8 +1,14 @@
 - type: achievement
   id: Test1
+  name: First Steps
+  description: Welcome aboard, crew member!
 
 - type: achievement
   id: Test2
+  name: Seasoned Spacer
+  description: You've been around the station a few times.
 
 - type: achievement
   id: Test3
+  name: Station Legend
+  description: A true veteran of the stars.

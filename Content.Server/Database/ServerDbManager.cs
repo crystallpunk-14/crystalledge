@@ -311,6 +311,8 @@ namespace Content.Server.Database
 
         Task<List<string>> GetPlayerAchievements(Guid player);
 
+        Task<Dictionary<string, float>> GetAchievementPercentages();
+
         #endregion
 
         #region IPintel
@@ -991,6 +993,12 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetPlayerAchievements(player));
+        }
+
+        public Task<Dictionary<string, float>> GetAchievementPercentages()
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetAchievementPercentages());
         }
         //CrystallEdge achievements end
 
