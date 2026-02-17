@@ -5,6 +5,7 @@ using Content.Shared._CE.Procedural;
 using Content.Shared.CCVar;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Content.Shared.Whitelist;
 using Robust.Shared.Configuration;
 using Robust.Shared.CPUJob.JobQueues.Queues;
 using Robust.Shared.EntitySerialization.Systems;
@@ -58,14 +59,15 @@ public sealed partial class CEDungeonSystem : EntitySystem
         if (!_zLevels.TryAddMapIntoZNetwork(network, new ResPath("/Maps/_CE/Empty.yml"), 0, out var newMap))
             return false;
 
-        //TrySpawn3DRoom(newMap,)
+        EntityWhitelist? whitelist = null;
 
+        TrySpawn3DRoom(newMap.Value.Owner, new Vector2i(0, 0), whitelist, null);
+        TrySpawn3DRoom(newMap.Value.Owner, new Vector2i(10, 0), whitelist, null);
+        TrySpawn3DRoom(newMap.Value.Owner, new Vector2i(0, 10), whitelist, null);
+        TrySpawn3DRoom(newMap.Value.Owner, new Vector2i(10, 10), whitelist, null);
 
 
         _zLevels.InitializeAllZNetwork(network);
-
-
-
 
         return true;
     }

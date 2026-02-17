@@ -25,15 +25,15 @@ public sealed partial class CEDungeonSystem
     /// <summary>
     /// Gets a random dungeon room matching the specified area, whitelist and size.
     /// </summary>
-    public CEDungeonRoom3DPrototype? GetRoomPrototype(Vector2i size, Random random, EntityWhitelist? whitelist = null)
+    public CEDungeonRoom3DPrototype? GetRoomPrototype(Vector2i size, EntityWhitelist? whitelist = null)
     {
-        return GetRoomPrototype(random, whitelist, minSize: size, maxSize: size);
+        return GetRoomPrototype(whitelist, minSize: size, maxSize: size);
     }
 
     /// <summary>
     /// Gets a random dungeon room matching the specified area and whitelist and size range
     /// </summary>
-    public CEDungeonRoom3DPrototype? GetRoomPrototype(Random random,
+    public CEDungeonRoom3DPrototype? GetRoomPrototype(
         EntityWhitelist? whitelist = null,
         Vector2i? minSize = null,
         Vector2i? maxSize = null)
@@ -73,7 +73,7 @@ public sealed partial class CEDungeonSystem
         if (_availableRooms.Count == 0)
             return null;
 
-        var room = _availableRooms[random.Next(_availableRooms.Count)];
+        var room = _availableRooms[_random.Next(_availableRooms.Count)];
 
         return room;
     }
@@ -81,8 +81,23 @@ public sealed partial class CEDungeonSystem
     public bool TrySpawn3DRoom(
         Entity<MapGridComponent?> gridEnt,
         Vector2i origin,
+        EntityWhitelist? whitelist,
+        HashSet<Vector2i>? reservedTiles,
+        bool clearExisting = false,
+        bool rotation = false)
+    {
+        var room = GetRoomPrototype(whitelist);
+
+        if (room == null)
+            return false;
+
+        return TrySpawn3DRoom(gridEnt, origin, room, reservedTiles, clearExisting, rotation);
+    }
+
+    public bool TrySpawn3DRoom(
+        Entity<MapGridComponent?> gridEnt,
+        Vector2i origin,
         CEDungeonRoom3DPrototype room,
-        Random random,
         HashSet<Vector2i>? reservedTiles,
         bool clearExisting = false,
         bool rotation = false)
@@ -91,7 +106,7 @@ public sealed partial class CEDungeonSystem
         var roomRotation = Angle.Zero;
 
         if (rotation)
-            roomRotation = random.Next(4) * Math.PI / 2;
+            roomRotation = _random.Next(4) * Math.PI / 2;
 
         var roomTransform = Matrix3Helpers.CreateTransform((Vector2)room.Size / 2f, roomRotation);
         var finalTransform = Matrix3x2.Multiply(roomTransform, originTransform);

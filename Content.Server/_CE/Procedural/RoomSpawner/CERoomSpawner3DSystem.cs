@@ -19,8 +19,7 @@ public sealed class CERoomFill3DSystem : EntitySystem
 
         if (xform.GridUid != null)
         {
-            var random = new Random();
-            var room = _dungeon.GetRoomPrototype(random, ent.Comp.RoomWhitelist, ent.Comp.MinSize, ent.Comp.MaxSize);
+            var room = _dungeon.GetRoomPrototype(ent.Comp.RoomWhitelist, ent.Comp.MinSize, ent.Comp.MaxSize);
 
             if (room != null)
             {
@@ -29,7 +28,6 @@ public sealed class CERoomFill3DSystem : EntitySystem
                     (xform.GridUid.Value, mapGrid),
                     _maps.LocalToTile(xform.GridUid.Value, mapGrid, xform.Coordinates) - new Vector2i(room.Size.X/2,room.Size.Y/2),
                     room,
-                    random,
                     null,
                     clearExisting: ent.Comp.ClearExisting,
                     rotation: ent.Comp.Rotation);
