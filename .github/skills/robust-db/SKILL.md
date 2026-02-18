@@ -12,8 +12,10 @@ description: 'RobustToolbox database helper: migration, model, and CLI workflows
 
 ## Prerequisites
 
-- `dotnet` SDK and `dotnet-ef` installed (global tool or restored via tool manifest).
-- Repository checked out and `dotnet build` succeeds.
+- `dotnet` SDK installed and accessible.
+- `dotnet-ef` installed as global tool: `dotnet tool install --global dotnet-ef`
+- Repository checked out and `dotnet build` succeeds from Content.Server.Database project.
+- **CRITICAL:** Both SQLite and PostgreSQL use different data types and constraints - both migration sets are REQUIRED.
 
 ## Step-by-step Workflows
 
@@ -21,21 +23,31 @@ description: 'RobustToolbox database helper: migration, model, and CLI workflows
    - Edit `Content.Server.Database/Model.cs` to add `DbSet<T>` and entity type with `[Table(...)]` and navigation properties.
    - Add EF Fluent API configuration in `OnModelCreating` (indexes, FK, unique constraints).
 
-2. Generate migrations (recommended)
-   - Ensure `dotnet-ef` is available.
-   - From project folder `Content.Server.Database` run:
+2. Generate migrations (ALWAYS for both databases)
+   - **NEVER generate migrations manually for individual contexts** - always use the provided scripts.
+   - Ensure `dotnet-ef` is available: `dotnet tool list -g | findstr dotnet-ef`
+   - From project folder `Content.Server.Database` run the appropriate script:
 
 ```powershell
-pwsh
-Set-Location .\Content.Server.Database
-.\add-migration.ps1 <MigrationName>
+# Windows PowerShell
+.\add-migration.ps1 MigrationName
+
+# Linux/macOS Bash
+./add-migration.sh MigrationName
 ```
 
-   - The script will run `dotnet ef migrations add` for both `SqliteServerDbContext` and `PostgresServerDbContext` and place files under `Migrations/Sqlite` and `Migrations/Postgres` respectively.
+   - The script will AUTOMATICALLY run `dotnet ef migrations add` for BOTH contexts:
+     - `SqliteServerDbContext` → `Migrations/Sqlite/`
+     - `PostgresServerDbContext` → `Migrations/Postgres/`
+   - **WARNING:** If only SQLite migrations are generated, PostgreSQL migrations are missing and MUST be created.
 
-3. Inspect generated files
-   - Verify both contexts have matching logical migrations (Up/Down create the same table/indices).
-   - Check `Designer.cs` and the `SqliteServerDbContextModelSnapshot.cs` or Postgres snapshot updated accordingly.
+3. Inspect generated files and verify BOTH databases
+   - **CRITICAL:** Verify both `Migrations/Sqlite/` and `Migrations/Postgres/` contain new migration files with matching timestamps.
+   - Compare migration logic - they should create equivalent tables/indices but with different SQL syntax:
+     - **SQLite:** Uses `INTEGER` with `Sqlite:Autoincrement`, `TEXT` for strings/UUIDs
+     - **PostgreSQL:** Uses `integer` with `NpgsqlValueGenerationStrategy.IdentityByDefaultColumn`, `text`/`uuid` types
+   - Check `Designer.cs` files and ensure model snapshots are updated for both contexts.
+   - If PostgreSQL migration is missing, manually generate it: `dotnet ef migrations add --context PostgresServerDbContext -o Migrations/Postgres MigrationName`
 
 4. Update repo tools/constants
    - If your repo contains scripts expecting a `LATEST_DB_MIGRATION` string (example: `Tools/dump_user_data.py`, `Tools/erase_user_data.py`), update them to reference the new migration id (the string inside `[Migration("...")]`).
@@ -47,35 +59,45 @@ Set-Location .\Content.Server.Database
 
 ## Troubleshooting
 
-- "PendingModelChangesWarning": run `add-migration` from the project folder and ensure snapshots and migration files are generated for both contexts.
-- `dotnet ef` not found: install via `dotnet tool install --global dotnet-ef` or `dotnet tool restore` if repo has a manifest.
-- Migration file names: EF generates timestamped filenames; renaming files is OK as long as the `[Migration("...")]` attribute remains consistent and `__EFMigrationsHistory` will record the attribute value.
-- If only one context got a migration (e.g., Sqlite auto-generated but Postgres looked manual), re-run the add-migration script from `Content.Server.Database` and inspect output; EF will produce both when run from the project directory.
+- **"Missing PostgreSQL migration"**: Common issue when only SQLite migrations are generated. Run: `dotnet ef migrations add --context PostgresServerDbContext -o Migrations/Postgres MigrationName` from Content.Server.Database folder.
+- **"PendingModelChangesWarning"**: Run migration scripts from Content.Server.Database project folder and ensure snapshots are generated for BOTH contexts.
+- **`dotnet ef` not found**: Install via `dotnet tool install --global dotnet-ef`. Verify with `dotnet tool list -g`.
+- **Migration file names**: EF generates timestamped filenames. Don't rename files, but `[Migration("...")]` attribute value is recorded in `__EFMigrationsHistory`.
+- **Script doesn't generate both migrations**: Ensure you run the script from `Content.Server.Database` directory, not from repo root.
+- **Different data types in migrations**: This is expected and correct - SQLite and PostgreSQL have different type systems.
 
 ## Best Practices & Notes
 
+- **NEVER skip PostgreSQL migrations** - production environments typically use PostgreSQL while development uses SQLite.
 - Keep migration `Up`/`Down` logic symmetric and review FK names and index names to match repository conventions.
 - Store prototype identifiers as strings in DB when referencing `ProtoId<T>` to avoid cross-layer serialization complexity.
 - Add unique composite indexes for (player_user_id, proto_id) to prevent duplicate entries.
 - Use `GetAwaiter().GetResult()` sparingly in completion code only when the environment requires synchronous completions; prefer async everywhere else.
+- **Data type differences are normal**: SQLite uses TEXT for UUIDs while PostgreSQL uses native uuid type.
+- Both `DesignTimeContextFactoryPostgres` and `DesignTimeContextFactorySqlite` exist in `DesignTimeContextFactories.cs` for EF tooling.
 
-## Useful Paths & Scripts (examples from the repo)
+## Useful Paths & Scripts
 
-- `Content.Server.Database/add-migration.ps1` — script that runs `dotnet ef migrations add` for both contexts.
-- `RobustToolbox/Robust.Benchmarks/add-migration.ps1` — similar helper used elsewhere.
-- Model file: `Content.Server.Database/Model.cs` — where entities and `DbSet<>` live.
-- Migrations folders: `Content.Server.Database/Migrations/Sqlite` and `.../Postgres`.
+- `Content.Server.Database/add-migration.ps1` — **PRIMARY SCRIPT** for Windows that creates migrations for both contexts.
+- `Content.Server.Database/add-migration.sh` — **PRIMARY SCRIPT** for Linux/macOS that creates migrations for both contexts.
+- `Content.Server.Database/DesignTimeContextFactories.cs` — Contains factory classes for both SQLite and PostgreSQL contexts.
+- Model file: `Content.Server.Database/Model.cs` — where entities, `DbSet<>` properties, and `OnModelCreating` configuration live.
+- SQLite migrations: `Content.Server.Database/Migrations/Sqlite/` — Contains all SQLite-specific migrations.
+- PostgreSQL migrations: `Content.Server.Database/Migrations/Postgres/` — Contains all PostgreSQL-specific migrations.
+- Model snapshots: `*ServerDbContextModelSnapshot.cs` files in each migration folder.
 - Tools to update after migrations: `Tools/dump_user_data.py`, `Tools/erase_user_data.py` (search for `LATEST_DB_MIGRATION`).
 
 ## Example Checklist to Run After Changes
 
-- [ ] Add entity and update `Model.cs`.
-- [ ] Run `Content.Server.Database\add-migration.ps1 <Name>` from `Content.Server.Database`.
-- [ ] Inspect both `Migrations/Sqlite` and `Migrations/Postgres` files.
-- [ ] Update any `LATEST_DB_MIGRATION` constants in `Tools/*`.
-- [ ] Implement and wire `IServerDbManager` methods.
+- [ ] Add entity and update `Model.cs` with `DbSet<T>` property and `OnModelCreating` configuration.
+- [ ] **CRITICAL:** Run `Content.Server.Database\add-migration.ps1 <Name>` from `Content.Server.Database` directory.
+- [ ] **VERIFY BOTH:** Inspect both `Migrations/Sqlite` and `Migrations/Postgres` folders contain new migration files.
+- [ ] **IF MISSING:** Generate missing PostgreSQL migration manually if script didn't create it.
+- [ ] Update any `LATEST_DB_MIGRATION` constants in `Tools/*` scripts.
+- [ ] Implement and wire `IServerDbManager` methods in `ServerDbBase.cs` and `ServerDbManager.cs`.
 - [ ] Add console commands and verify completions.
-- [ ] Run `dotnet build` and confirm no pending model changes.
+- [ ] Run `dotnet build` from both repo root and `Content.Server.Database` and confirm no pending model changes.
+- [ ] Test with both database types if possible (SQLite for dev, PostgreSQL for production).
 
 ## References
 
