@@ -1,0 +1,7 @@
+- type: species
+  id: CEHuman
+  name: species-name-human
+  roundStart: true
+  prototype: CEMobHuman
+  dollPrototype: CEAppearanceHuman
+  skinColoration: HumanToned
