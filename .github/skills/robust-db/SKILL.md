@@ -39,15 +39,10 @@ description: 'RobustToolbox database helper: migration, model, and CLI workflows
    - The script will AUTOMATICALLY run `dotnet ef migrations add` for BOTH contexts:
      - `SqliteServerDbContext` → `Migrations/Sqlite/`
      - `PostgresServerDbContext` → `Migrations/Postgres/`
-   - **WARNING:** If only SQLite migrations are generated, PostgreSQL migrations are missing and MUST be created.
 
-3. Inspect generated files and verify BOTH databases
-   - **CRITICAL:** Verify both `Migrations/Sqlite/` and `Migrations/Postgres/` contain new migration files with matching timestamps.
-   - Compare migration logic - they should create equivalent tables/indices but with different SQL syntax:
-     - **SQLite:** Uses `INTEGER` with `Sqlite:Autoincrement`, `TEXT` for strings/UUIDs
-     - **PostgreSQL:** Uses `integer` with `NpgsqlValueGenerationStrategy.IdentityByDefaultColumn`, `text`/`uuid` types
-   - Check `Designer.cs` files and ensure model snapshots are updated for both contexts.
-   - If PostgreSQL migration is missing, manually generate it: `dotnet ef migrations add --context PostgresServerDbContext -o Migrations/Postgres MigrationName`
+3. Inspect generated files
+   - Verify both contexts have matching logical migrations (Up/Down create the same table/indices).
+   - Check `Designer.cs` and the `SqliteServerDbContextModelSnapshot.cs` or Postgres snapshot updated accordingly.
 
 4. Update repo tools/constants
    - If your repo contains scripts expecting a `LATEST_DB_MIGRATION` string (example: `Tools/dump_user_data.py`, `Tools/erase_user_data.py`), update them to reference the new migration id (the string inside `[Migration("...")]`).
@@ -68,7 +63,6 @@ description: 'RobustToolbox database helper: migration, model, and CLI workflows
 
 ## Best Practices & Notes
 
-- **NEVER skip PostgreSQL migrations** - production environments typically use PostgreSQL while development uses SQLite.
 - Keep migration `Up`/`Down` logic symmetric and review FK names and index names to match repository conventions.
 - Store prototype identifiers as strings in DB when referencing `ProtoId<T>` to avoid cross-layer serialization complexity.
 - Add unique composite indexes for (player_user_id, proto_id) to prevent duplicate entries.
@@ -102,4 +96,3 @@ description: 'RobustToolbox database helper: migration, model, and CLI workflows
 ## References
 
 - EF Core migrations docs: https://aka.ms/efcore-docs-pending-changes
-- Agent Skill template used to create this file: make-skill-template SKILL.md
