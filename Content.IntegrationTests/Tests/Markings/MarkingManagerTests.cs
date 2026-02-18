@@ -71,6 +71,13 @@ public sealed class MarkingManagerTests
   id: ChestMarking
   bodyPart: Chest
   sprites: [{ sprite: Mobs/Customization/human_hair.rsi, state: afro }]
+
+- type: marking
+  id: HumanHairAfro
+  bodyPart: Hair
+  sprites:
+    - sprite: Mobs/Customization/human_hair.rsi
+      state: afro
 ";
 
     [Test]
@@ -85,7 +92,7 @@ public sealed class MarkingManagerTests
         {
             var markingManager = server.ResolveDependency<MarkingManager>();
 
-            var markings = new List<Marking>() { new("HumanHairLongBedhead2", new List<Color>() { Color.Red }) };
+            var markings = new List<Marking>() { new("HumanHairAfro", new List<Color>() { Color.Red }) };
 
             var converted = markingManager.ConvertMarkings(markings, "Human");
 
@@ -93,7 +100,7 @@ public sealed class MarkingManagerTests
             Assert.That(converted["Head"], Does.ContainKey(HumanoidVisualLayers.Hair));
             var hairMarkings = converted["Head"][HumanoidVisualLayers.Hair];
             Assert.That(hairMarkings, Has.Count.EqualTo(1));
-            Assert.That(hairMarkings[0].MarkingId, Is.EqualTo("HumanHairLongBedhead2"));
+            Assert.That(hairMarkings[0].MarkingId, Is.EqualTo("HumanHairAfro"));
             Assert.That(hairMarkings[0].MarkingColors[0], Is.EqualTo(Color.Red));
         });
 
