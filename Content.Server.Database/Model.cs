@@ -1070,6 +1070,7 @@ namespace Content.Server.Database
         public float Score { get; set; }
     }
 
+    //CrystallEdge achievements
     [Table("player_achievement")]
     public sealed class PlayerAchievement
     {
@@ -1083,4 +1084,5 @@ namespace Content.Server.Database
         [Required, Column("proto_id")]
         public string ProtoId { get; set; } = string.Empty;
     }
+    //CrystallEdge achievements end
 }

@@ -53,6 +53,7 @@ namespace Content.Client.Info
             var achievementsButton = new Button() { Text = Loc.GetString("ce-achievements-button") };
             achievementsButton.OnPressed += _ => UserInterfaceManager.GetUIController<CEAchievementsUIController>().ToggleWindow();
             buttons.AddChild(achievementsButton);
+            // CrystallEdge - Achievements button end
 
             void AddInfoButton(string loc, CVarDef<string> cVar)
             {

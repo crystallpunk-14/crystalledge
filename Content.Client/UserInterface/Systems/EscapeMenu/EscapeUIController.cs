@@ -28,7 +28,7 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
     [Dependency] private readonly OptionsUIController _options = default!;
     [Dependency] private readonly GuidebookUIController _guidebook = default!;
     [Dependency] private readonly FeedbackPopupUIController _feedback = null!;
-    [Dependency] private readonly CEAchievementsUIController _achievements = default!;
+    [Dependency] private readonly CEAchievementsUIController _achievements = default!; //CrystallEdge - Achievements
 
     private Options.UI.EscapeMenu? _escapeWindow;
 
@@ -113,11 +113,13 @@ public sealed class EscapeUIController : UIController, IOnStateEntered<GameplayS
             _guidebook.ToggleGuidebook();
         };
 
+        //CrystallEdge echievements button
         _escapeWindow.AchievementsButton.OnPressed += _ =>
         {
             CloseEscapeWindow();
             _achievements.ToggleWindow();
         };
+        //CrystallEdge echievements button end
 
         // Hide wiki button if we don't have a link for it.
         _escapeWindow.WikiButton.Visible = _cfg.GetCVar(CCVars.InfoLinksWiki) != "";

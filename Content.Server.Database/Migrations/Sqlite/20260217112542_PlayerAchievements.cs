@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Content.Server.Database.Migrations.Sqlite
 {
     /// <inheritdoc />
-    public partial class PlayerAchievements : Migration
+    public partial class PlayerAchievements : Migration //CrystallEdge achievements table added
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
