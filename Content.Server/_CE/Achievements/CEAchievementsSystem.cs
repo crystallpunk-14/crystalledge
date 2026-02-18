@@ -9,8 +9,8 @@ using Robust.Shared.Player;
 namespace Content.Server._CE.Achievements;
 
 /// <summary>
-/// Server-side system that sends cached achievement data to clients on connection.
-/// Refreshes achievement percentage statistics at the end of each round.
+/// Maintains cached achievement percentage statistics, refreshing them on first player join
+/// and when achievements are added or removed.
 /// </summary>
 public sealed class CEAchievementsSystem : EntitySystem
 {
@@ -41,6 +41,13 @@ public sealed class CEAchievementsSystem : EntitySystem
 
     private async void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
     {
+        if (args.NewStatus == SessionStatus.Disconnected)
+        {
+            // Remove the user from the cache on disconnect
+            _playerAchievementsCache.Remove(args.Session.UserId);
+            return;
+        }
+
         if (args.NewStatus != SessionStatus.InGame)
             return;
 

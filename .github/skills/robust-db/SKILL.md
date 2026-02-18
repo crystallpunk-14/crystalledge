@@ -81,5 +81,3 @@ Set-Location .\Content.Server.Database
 
 - EF Core migrations docs: https://aka.ms/efcore-docs-pending-changes
 - Agent Skill template used to create this file: make-skill-template SKILL.md
-
-````

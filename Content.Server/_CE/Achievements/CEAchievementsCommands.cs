@@ -1,7 +1,6 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Database;
-using Content.Server.Commands;
 using Content.Shared.Administration;
 using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Server.Player;
@@ -13,7 +12,6 @@ namespace Content.Server._CE.Achievements;
 [AdminCommand(AdminFlags.Debug)]
 public sealed class CEAddAchievementCommand : LocalizedCommands
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
@@ -49,13 +47,6 @@ public sealed class CEAddAchievementCommand : LocalizedCommands
 
         var playerArg = args[0];
         var protoArg = args[1];
-
-        var performer = shell.Player ?? _player.Sessions.FirstOrDefault();
-        if (performer == null)
-        {
-            shell.WriteError("No performer session available.");
-            return;
-        }
 
         var located = await _locator.LookupIdByNameOrIdAsync(playerArg);
         if (located == null)
@@ -94,7 +85,6 @@ public sealed class CEAddAchievementCommand : LocalizedCommands
 [AdminCommand(AdminFlags.Debug)]
 public sealed class CERemoveAchievementCommand : LocalizedCommands
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IPlayerLocator _locator = default!;
@@ -130,13 +120,6 @@ public sealed class CERemoveAchievementCommand : LocalizedCommands
 
         var playerArg = args[0];
         var protoArg = args[1];
-
-        var performer = shell.Player ?? _player.Sessions.FirstOrDefault();
-        if (performer == null)
-        {
-            shell.WriteError("No performer session available.");
-            return;
-        }
 
         var located = await _locator.LookupIdByNameOrIdAsync(playerArg);
         if (located == null)

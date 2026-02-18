@@ -8,7 +8,7 @@ public sealed class CEBetaTesterAchievementSystem : EntitySystem
 {
     [Dependency] private readonly CEAchievementsSystem _achievement = default!;
 
-    private ProtoId<CEAchievementPrototype> Proto = "BetaTester";
+    private readonly ProtoId<CEAchievementPrototype> _proto = "BetaTester";
 
     public override void Initialize()
     {
@@ -19,6 +19,6 @@ public sealed class CEBetaTesterAchievementSystem : EntitySystem
 
     private void OnSpawnComplete(PlayerSpawnCompleteEvent ev)
     {
-        _achievement.AddPlayerAchievementAsync(ev.Player.UserId, Proto);
+        _achievement.AddPlayerAchievementAsync(ev.Player.UserId, _proto);
     }
 }
