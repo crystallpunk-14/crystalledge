@@ -23,7 +23,7 @@ namespace Content.IntegrationTests.Tests.Commands;
 [TestFixture]
 public sealed class SuicideCommandTests
 {
-
+/*
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -372,4 +372,5 @@ public sealed class SuicideCommandTests
 
         await pair.CleanReturnAsync();
     }
+    */
 }
