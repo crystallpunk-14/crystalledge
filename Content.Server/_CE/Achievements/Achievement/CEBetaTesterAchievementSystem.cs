@@ -17,8 +17,8 @@ public sealed class CEBetaTesterAchievementSystem : EntitySystem
         SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnSpawnComplete);
     }
 
-    private void OnSpawnComplete(PlayerSpawnCompleteEvent ev)
+    private async void OnSpawnComplete(PlayerSpawnCompleteEvent ev)
     {
-        _achievement.AddPlayerAchievementAsync(ev.Player.UserId, _proto);
+        await _achievement.AddPlayerAchievementAsync(ev.Player.UserId, _proto);
     }
 }
