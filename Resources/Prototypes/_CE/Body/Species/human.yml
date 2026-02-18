@@ -118,7 +118,6 @@
   abstract: true
   suffix: human
 
-
 - type: entity
   parent: CEOrganHuman
   id: CEOrganHumanExternal
@@ -132,7 +131,6 @@
   - type: VisualOrganMarkings
     markingData:
       group: CEHuman
-
 
 - type: entity
   parent: [ CEOrganBaseTorsoSexed, OrganBaseTorso, CEOrganHumanExternal ]
@@ -180,7 +178,7 @@
   id: CEOrganHumanFootRight
 
 - type: entity
-  parent: [ OrganBaseEyes, OrganBaseEyes, CEOrganHumanExternal ]
+  parent: [ OrganBaseEyes, OrganHumanInternal, CEOrganHumanExternal ]
   id: CEOrganHumanEyes
   components:
   - type: VisualOrgan
