@@ -50,6 +50,7 @@
   categories: [ ForkFiltered, HideSpawnMenu ]
   components:
   - type: Inventory
+    templateId: CEHuman
     displacements:
       neck:
         sizeMaps:

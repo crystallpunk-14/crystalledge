@@ -29,8 +29,8 @@ public sealed partial class CEStatsSystem : EntitySystem
         var calcEvent = new CECalculateStatEvent(statType);
         RaiseLocalEvent(ent, calcEvent);
 
-        var baseStat = ent.Comp.BaseStats.GetValueOrDefault(statType, 1);
-        var oldValue = ent.Comp.Stats.GetValueOrDefault(statType, 1);
+        var baseStat = ent.Comp.BaseStats.GetValueOrDefault(statType, 0);
+        var oldValue = ent.Comp.Stats.GetValueOrDefault(statType, 0);
 
         var newValue = baseStat + (int)(calcEvent.Value * calcEvent.Multiplier);
         newValue = Math.Clamp(newValue, 1, 100);
@@ -51,7 +51,7 @@ public sealed partial class CEStatsSystem : EntitySystem
 public sealed class CECalculateStatEvent(CEStatType statType) : EntityEventArgs, IInventoryRelayEvent
 {
     public CEStatType StatType { get; private set; } = statType;
-    public int Value { get; private set; } = 1;
+    public int Value { get; private set; } = 0;
     public float Multiplier { get; private set; } = 1f;
 
     public void AffectValue(int amount)
