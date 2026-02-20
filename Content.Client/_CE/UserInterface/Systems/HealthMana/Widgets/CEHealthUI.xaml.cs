@@ -44,6 +44,19 @@ public sealed partial class CEHealthUI : UIWidget
         // Set Vollkorn font
         var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Volkorn/VollkornSC-Regular.ttf"), 14);
         HealthLabel.FontOverride = vollkornFont;
+        HealthLabel.Visible = false;
+    }
+
+    protected override void MouseEntered()
+    {
+        base.MouseEntered();
+        HealthLabel.Visible = true;
+    }
+
+    protected override void MouseExited()
+    {
+        base.MouseExited();
+        HealthLabel.Visible = false;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -106,8 +119,14 @@ public sealed partial class CEHealthUI : UIWidget
                 if (!_mobThreshold.TryGetThresholdForState(uid, MobState.Critical, out var critThreshold, thresholds))
                     critThreshold = FixedPoint2.Zero;
 
-                maxHp = critThreshold.Value;
-                currentHp = FixedPoint2.Zero;
+                if (!_mobThreshold.TryGetThresholdForState(uid, MobState.Dead, out var deadThreshold, thresholds))
+                    deadThreshold = critThreshold;
+
+                var maxToDead = deadThreshold.Value;
+                var remainingToDead = FixedPoint2.Max(maxToDead - dmg.TotalDamage, FixedPoint2.Zero);
+
+                maxHp = maxToDead;
+                currentHp = remainingToDead;
                 ratio = 0f;
                 break;
             }
@@ -126,7 +145,9 @@ public sealed partial class CEHealthUI : UIWidget
             }
         }
 
-        HealthLabel.Text = $"{currentHp.Int()}/{maxHp.Int()}";
+        HealthLabel.Text = currentState == MobState.Critical
+            ? $"-{currentHp.Int()}/-{maxHp.Int()}"
+            : $"{currentHp.Int()}/{maxHp.Int()}";
 
         if (currentState != _lastMobState)
         {

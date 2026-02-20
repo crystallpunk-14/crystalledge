@@ -24,15 +24,15 @@ public sealed partial class DefaultGameScreen : InGameScreen
         SetAnchorAndMarginPreset(Alerts, LayoutPreset.TopRight, margin: 10);
 
         // CrystallEdge - mana and health spheres
-        var gap = 350f;
+        var gap = 300f;
         var manaOffset = ManaBar.MinSize.X / 2f + gap;
         // Mirror health to the left so that HealthBar.Right == -ManaBar.Left.
         var healthOffset = -(HealthBar.MinSize.X + manaOffset);
 
-        SetAnchorAndMarginPreset(HealthBar, LayoutPreset.CenterBottom, margin: 5);
+        SetAnchorAndMarginPreset(HealthBar, LayoutPreset.CenterBottom);
         SetMarginLeft(HealthBar, healthOffset);
 
-        SetAnchorAndMarginPreset(ManaBar, LayoutPreset.CenterBottom, margin: 5);
+        SetAnchorAndMarginPreset(ManaBar, LayoutPreset.CenterBottom);
         SetMarginLeft(ManaBar, manaOffset);
         // CrystallEdge end
 

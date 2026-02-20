@@ -381,7 +381,7 @@ public sealed class MobThresholdSystem : EntitySystem
 
         if (!threshold.StateAlertDict.TryGetValue(currentMobState, out var currentAlert))
         {
-            Log.Error($"No alert alert for mob state {currentMobState} for entity {ToPrettyString(target)}");
+            //Log.Error($"No alert alert for mob state {currentMobState} for entity {ToPrettyString(target)}");
             return;
         }
 

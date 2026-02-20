@@ -35,6 +35,4 @@
     sprite: _CE/Clothing/Cloak/Cape/furcape2.rsi
   - type: CEClothingModifyStats
     modifyStats:
-      Vitality: 3
-    multiplyStats:
-      Vitality: 1.2
+      Vitality: 1

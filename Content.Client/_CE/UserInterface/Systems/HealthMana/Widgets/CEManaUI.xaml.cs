@@ -29,9 +29,22 @@ public sealed partial class CEManaUI : UIWidget
         // Set Vollkorn font
         var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Volkorn/VollkornSC-Regular.ttf"), 14);
         ManaLabel.FontOverride = vollkornFont;
+        ManaLabel.Visible = false;
 
         // Initialize mana at 0.5
         SetMana(0.5f, 5, 10);
+    }
+
+    protected override void MouseEntered()
+    {
+        base.MouseEntered();
+        ManaLabel.Visible = true;
+    }
+
+    protected override void MouseExited()
+    {
+        base.MouseExited();
+        ManaLabel.Visible = false;
     }
 
     /// <summary>

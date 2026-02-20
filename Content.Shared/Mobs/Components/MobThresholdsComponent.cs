@@ -27,9 +27,9 @@ public sealed partial class MobThresholdsComponent : Component
     [DataField("stateAlertDict")]
     public Dictionary<MobState, ProtoId<AlertPrototype>> StateAlertDict = new()
     {
-        {MobState.Alive, "HumanHealth"},
-        {MobState.Critical, "HumanCrit"},
-        {MobState.Dead, "HumanDead"},
+        //{MobState.Alive, "HumanHealth"}, //CrystallEdge removed alerts because we have separate health ui widgets
+        //{MobState.Critical, "HumanCrit"},
+        //{MobState.Dead, "HumanDead"},
     };
 
     [DataField]
