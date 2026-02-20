@@ -59,9 +59,9 @@ public sealed class CEMagicEnergyStatusControl : Control
     {
         base.FrameUpdate(args);
 
-        _progress.Value = (float)(_parent.Comp.Energy / _parent.Comp.MaxEnergy);
+        _progress.Value = _parent.Comp.Energy / _parent.Comp.MaxEnergy;
 
-        var power = (int) (_parent.Comp.Energy / _parent.Comp.MaxEnergy * 100);
+        var power = _parent.Comp.Energy / _parent.Comp.MaxEnergy * 100;
         _label.Text = $"{power}%";
     }
 }

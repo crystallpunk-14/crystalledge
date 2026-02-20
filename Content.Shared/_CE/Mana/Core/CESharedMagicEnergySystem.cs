@@ -69,7 +69,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         }
 
         var oldEnergy = ent.Comp.Energy;
-        var newEnergy = Math.Clamp((float) ent.Comp.Energy + (float) energy, 0, (float) ent.Comp.MaxEnergy);
+        var newEnergy = (int)Math.Clamp( ent.Comp.Energy + (float) energy, 0,  ent.Comp.MaxEnergy);
 
         deltaEnergy = newEnergy - oldEnergy;
         ent.Comp.Energy = newEnergy;
@@ -145,7 +145,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
             ("color", color));
     }
 
-    public void ChangeMaximumEnergy(Entity<CEMagicEnergyContainerComponent?> ent, FixedPoint2 energy)
+    public void ChangeMaximumEnergy(Entity<CEMagicEnergyContainerComponent?> ent, int energy)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;

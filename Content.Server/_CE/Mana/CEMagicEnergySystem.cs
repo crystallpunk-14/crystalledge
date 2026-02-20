@@ -16,6 +16,6 @@ public sealed partial class CEMagicEnergySystem : CESharedMagicEnergySystem
 
     private void OnMagicEnergyPriceCalculation(Entity<CEMagicEnergyContainerComponent> ent, ref PriceCalculationEvent args)
     {
-        args.Price += (double)(ent.Comp.Energy * 0.1f);
+        args.Price += ent.Comp.Energy * 0.1f;
     }
 }
