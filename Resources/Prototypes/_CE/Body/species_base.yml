@@ -3,6 +3,7 @@
   parent:
   - BaseMob
   - MobCombat
+  - CEMobDamageable
   - StripableInventoryBase
   - BaseSpeciesAppearance
   id: CEBaseSpeciesMob
