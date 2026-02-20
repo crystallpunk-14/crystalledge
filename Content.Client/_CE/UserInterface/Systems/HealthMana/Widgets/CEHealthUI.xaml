@@ -1,0 +1,14 @@
+<widgets:CEHealthUI xmlns="https://spacestation14.io"
+                    xmlns:widgets="clr-namespace:Content.Client._CE.UserInterface.Systems.HealthMana.Widgets"
+                    MinSize="144 144">
+    <PanelContainer>
+        <AnimatedTextureRect Name="HealthTexture"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             SetSize="144 144" />
+        <Label Name="HealthLabel"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontColorOverride="#FFFFFF" />
+    </PanelContainer>
+</widgets:CEHealthUI>

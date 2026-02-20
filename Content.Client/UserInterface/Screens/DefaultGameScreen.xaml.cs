@@ -23,6 +23,19 @@ public sealed partial class DefaultGameScreen : InGameScreen
         SetAnchorAndMarginPreset(Chat, LayoutPreset.TopRight, margin: 10);
         SetAnchorAndMarginPreset(Alerts, LayoutPreset.TopRight, margin: 10);
 
+        // CrystallEdge - mana and health spheres
+        var gap = 350f;
+        var manaOffset = ManaBar.MinSize.X / 2f + gap;
+        // Mirror health to the left so that HealthBar.Right == -ManaBar.Left.
+        var healthOffset = -(HealthBar.MinSize.X + manaOffset);
+
+        SetAnchorAndMarginPreset(HealthBar, LayoutPreset.CenterBottom, margin: 5);
+        SetMarginLeft(HealthBar, healthOffset);
+
+        SetAnchorAndMarginPreset(ManaBar, LayoutPreset.CenterBottom, margin: 5);
+        SetMarginLeft(ManaBar, manaOffset);
+        // CrystallEdge end
+
         Chat.OnResized += ChatOnResized;
         Chat.OnChatResizeFinish += ChatOnResizeFinish;
 
