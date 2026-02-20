@@ -6,7 +6,6 @@ public sealed partial class CEStatsSystem : EntitySystem
     {
         base.Initialize();
 
-
+        InitVitality();
     }
-
 }
