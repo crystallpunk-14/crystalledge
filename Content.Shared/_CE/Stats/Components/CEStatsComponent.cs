@@ -2,24 +2,32 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Stats.Components;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CEStatsSystem))]
 public sealed partial class CEStatsComponent : Component
 {
     /// <summary>
-    /// Basic vitality level of this entity.
+    /// Base stat values for this entity (before modifiers).
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int BaseVitality = 1;
+    public Dictionary<CEStatType, int> BaseStats = new()
+    {
+        { CEStatType.Vitality, 1 },
+        { CEStatType.Strength, 1 }
+    };
 
     /// <summary>
-    /// Current actual vitality level of this entity, taking into account equipment, buffs, etc.
+    /// Current actual stat values, taking into account equipment, buffs, etc.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int Vitality = 1;
+    public Dictionary<CEStatType, int> Stats = new()
+    {
+        { CEStatType.Vitality, 1 },
+        { CEStatType.Strength, 1 }
+    };
 }
 
-public enum CEStatType
+public enum CEStatType : byte
 {
     Vitality,
     Strength,
