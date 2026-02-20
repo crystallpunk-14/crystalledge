@@ -83,7 +83,7 @@ public sealed class CECalculateStatEvent(ProtoId<CECharacterStatPrototype> statT
     }
 
     /// <summary>
-    /// Applies a multiplicative modifier to the stat value. Use 0.1 for +10%, -0.1 for -10%.
+    /// Applies a multiplicative modifier to the stat value. Use 0.1 for -90%, 1.1 for +10%.
     /// </summary>
     public void AffectMultiplier(float amount)
     {
