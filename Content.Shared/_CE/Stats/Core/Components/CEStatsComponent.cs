@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Stats.Components;
+namespace Content.Shared._CE.Stats.Core.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CEStatsSystem))]
@@ -9,7 +9,7 @@ public sealed partial class CEStatsComponent : Component
     /// <summary>
     /// Base stat values for this entity (before modifiers).
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField, AutoNetworkedField, AlwaysPushInheritance]
     public Dictionary<CEStatType, int> BaseStats = new()
     {
         { CEStatType.Vitality, 1 },
@@ -19,7 +19,7 @@ public sealed partial class CEStatsComponent : Component
     /// <summary>
     /// Current actual stat values, taking into account equipment, buffs, etc.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadOnly)]
     public Dictionary<CEStatType, int> Stats = new()
     {
         { CEStatType.Vitality, 1 },

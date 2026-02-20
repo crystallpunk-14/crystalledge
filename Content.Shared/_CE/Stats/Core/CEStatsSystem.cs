@@ -1,18 +1,27 @@
-using Content.Shared._CE.Stats.Components;
+using Content.Shared._CE.Stats.Core.Components;
 using Content.Shared.Inventory;
 
-namespace Content.Shared._CE.Stats;
+namespace Content.Shared._CE.Stats.Core;
 
 public sealed partial class CEStatsSystem : EntitySystem
 {
     public override void Initialize()
     {
         base.Initialize();
+        InitClothing();
 
-        InitVitality();
+        SubscribeLocalEvent<CEStatsComponent, MapInitEvent>(OnMapInit);
     }
 
-    private void UpdateStatValue(Entity<CEStatsComponent?> ent, CEStatType statType)
+    private void OnMapInit(Entity<CEStatsComponent> ent, ref MapInitEvent args)
+    {
+        foreach (var stat in ent.Comp.BaseStats)
+        {
+            UpdateStatValue((ent, ent.Comp), stat.Key);
+        }
+    }
+
+    public void UpdateStatValue(Entity<CEStatsComponent?> ent, CEStatType statType)
     {
         if (!Resolve(ent, ref ent.Comp))
             return;

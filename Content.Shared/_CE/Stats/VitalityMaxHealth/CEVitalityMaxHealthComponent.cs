@@ -1,6 +1,7 @@
+using Content.Shared._CE.Stats.Core;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Stats.Components;
+namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CEStatsSystem))]

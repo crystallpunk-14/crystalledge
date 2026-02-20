@@ -1,15 +1,17 @@
-using Content.Shared._CE.Stats.Components;
+using Content.Shared._CE.Stats.Core;
+using Content.Shared._CE.Stats.Core.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 
-namespace Content.Shared._CE.Stats;
+namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 
-public sealed partial class CEStatsSystem
+public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 {
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
-
-    private void InitVitality()
+    public override void Initialize()
     {
+        base.Initialize();
+
         SubscribeLocalEvent<CEVitalityMaxHealthComponent, CEStatUpdatedEvent>(OnVitalityUpdated);
     }
 
@@ -23,10 +25,5 @@ public sealed partial class CEStatsSystem
 
         var dead = critical * 2;
         _mobThreshold.SetMobStateThreshold(ent, dead, MobState.Dead);
-    }
-
-    public void UpdateVitality(Entity<CEStatsComponent?> ent)
-    {
-        UpdateStatValue(ent, CEStatType.Vitality);
     }
 }

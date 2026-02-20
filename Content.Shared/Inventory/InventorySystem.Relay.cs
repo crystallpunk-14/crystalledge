@@ -1,3 +1,4 @@
+using Content.Shared._CE.Stats.Core;
 using Content.Shared.Armor;
 using Content.Shared.Atmos;
 using Content.Shared.Chat;
@@ -37,6 +38,10 @@ public partial class InventorySystem
 {
     public void InitializeRelay()
     {
+        //CrystallEdge zone
+        SubscribeLocalEvent<InventoryComponent, CECalculateStatEvent>(RelayInventoryEvent);
+        //CrystallEdge zone end
+
         SubscribeLocalEvent<InventoryComponent, DamageModifyEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, ElectrocutionAttemptEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, SlipAttemptEvent>(RelayInventoryEvent);
