@@ -23,14 +23,14 @@ public sealed partial class CEStatsSystem : EntitySystem
     {
         foreach (var stat in ent.Comp.BaseStats)
         {
-            UpdateStatValue((ent, ent.Comp), stat.Key);
+            RecalculateStat((ent, ent.Comp), stat.Key);
         }
     }
 
     /// <summary>
-    /// Recalculates the value of a specific stat for an entity, applying all modifiers and raising update events.
+    /// Recalculates the value of a specific stat for an entity, applying all modifiers.
     /// </summary>
-    public void UpdateStatValue(Entity<CEStatsComponent?> ent, ProtoId<CECharacterStatPrototype> statType)
+    public void RecalculateStat(Entity<CEStatsComponent?> ent, ProtoId<CECharacterStatPrototype> statType)
     {
         if (!Resolve(ent, ref ent.Comp))
             return;

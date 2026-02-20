@@ -47,7 +47,7 @@ public sealed partial class CEStatsSystem
 
         foreach (var stat in updatedStats)
         {
-            UpdateStatValue(wearer, stat);
+            RecalculateStat(wearer, stat);
         }
     }
 }

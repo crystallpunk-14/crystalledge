@@ -1,5 +1,4 @@
 using Content.Shared._CE.Stats.Core;
-using Content.Shared._CE.Stats.Core.Components;
 using Content.Shared._CE.Stats.Core.Prototypes;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
