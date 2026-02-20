@@ -1,4 +1,6 @@
+using Content.Shared._CE.Stats.Core.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Stats.Core.Components;
 
@@ -10,25 +12,11 @@ public sealed partial class CEStatsComponent : Component
     /// Base stat values for this entity (before modifiers).
     /// </summary>
     [DataField, AutoNetworkedField, AlwaysPushInheritance]
-    public Dictionary<CEStatType, int> BaseStats = new()
-    {
-        { CEStatType.Vitality, 1 },
-        { CEStatType.Strength, 1 }
-    };
+    public Dictionary<ProtoId<CECharacterStatPrototype>, int> BaseStats = new();
 
     /// <summary>
     /// Current actual stat values, taking into account equipment, buffs, etc.
     /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
-    public Dictionary<CEStatType, int> Stats = new()
-    {
-        { CEStatType.Vitality, 1 },
-        { CEStatType.Strength, 1 }
-    };
-}
-
-public enum CEStatType : byte
-{
-    Vitality,
-    Strength,
+    public Dictionary<ProtoId<CECharacterStatPrototype>, int> Stats = new();
 }

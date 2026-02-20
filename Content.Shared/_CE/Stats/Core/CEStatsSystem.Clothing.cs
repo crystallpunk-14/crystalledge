@@ -1,6 +1,8 @@
 using Content.Shared._CE.Stats.Core.Components;
+using Content.Shared._CE.Stats.Core.Prototypes;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Stats.Core;
 
@@ -17,7 +19,7 @@ public sealed partial class CEStatsSystem
     private void OnCalculateStat(Entity<CEClothingModifyStatsComponent> ent, ref InventoryRelayedEvent<CECalculateStatEvent> args)
     {
         args.Args.AffectValue(ent.Comp.ModifyStats.GetValueOrDefault(args.Args.StatType, 0));
-        args.Args.AffectMultiplier(ent.Comp.MultiplyStats.GetValueOrDefault(args.Args.StatType, 1f));
+        args.Args.AffectMultiplier(ent.Comp.MultiplyStats.GetValueOrDefault(args.Args.StatType, 0f));
     }
 
     private void OnEquipped(Entity<CEClothingModifyStatsComponent> ent, ref ClothingGotEquippedEvent args)
@@ -32,7 +34,7 @@ public sealed partial class CEStatsSystem
 
     private void UpdateClothingStats(Entity<CEClothingModifyStatsComponent> ent, EntityUid wearer)
     {
-        HashSet<CEStatType> updatedStats = new();
+        HashSet<ProtoId<CECharacterStatPrototype>> updatedStats = new();
 
         foreach (var stat in ent.Comp.ModifyStats)
         {

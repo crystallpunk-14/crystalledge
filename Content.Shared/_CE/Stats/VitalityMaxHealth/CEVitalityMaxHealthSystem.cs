@@ -17,7 +17,7 @@ public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 
     private void OnVitalityUpdated(Entity<CEVitalityMaxHealthComponent> ent, ref CEStatUpdatedEvent args)
     {
-        if (args.StatType != CEStatType.Vitality)
+        if (args.StatType != "Vitality") //TODO unhardcode
             return;
 
         var critical = args.NewValue * ent.Comp.HealthPerVitality;

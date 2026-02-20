@@ -1,4 +1,6 @@
+using Content.Shared._CE.Stats.Core.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Stats.Core.Components;
 
@@ -10,8 +12,8 @@ namespace Content.Shared._CE.Stats.Core.Components;
 public sealed partial class CEClothingModifyStatsComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public Dictionary<CEStatType, int> ModifyStats = new();
+    public Dictionary<ProtoId<CECharacterStatPrototype>, int> ModifyStats = new();
 
     [DataField, AutoNetworkedField]
-    public Dictionary<CEStatType, float> MultiplyStats = new();
+    public Dictionary<ProtoId<CECharacterStatPrototype>, float> MultiplyStats = new();
 }

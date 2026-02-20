@@ -36,3 +36,5 @@
   - type: CEClothingModifyStats
     modifyStats:
       Vitality: 3
+    multiplyStats:
+      Vitality: 2
