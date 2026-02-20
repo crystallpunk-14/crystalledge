@@ -4,6 +4,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Stats.Core.Components;
 
+/// <summary>
+/// Manages character stats for an entity. Stores both base values and calculated values after applying modifiers.
+/// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CEStatsSystem))]
 public sealed partial class CEStatsComponent : Component

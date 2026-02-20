@@ -5,6 +5,9 @@ using Content.Shared.Mobs.Systems;
 
 namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 
+/// <summary>
+/// Handles the connection between Vitality stat and mob health thresholds. Updates critical and death thresholds when vitality changes.
+/// </summary>
 public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 {
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;

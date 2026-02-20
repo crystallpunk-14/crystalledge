@@ -5,6 +5,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Stats.Core;
 
+/// <summary>
+/// Manages the character stats system, handling stat calculations, updates, and modifier application.
+/// </summary>
 public sealed partial class CEStatsSystem : EntitySystem
 {
     public override void Initialize()
@@ -23,6 +26,9 @@ public sealed partial class CEStatsSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Recalculates the value of a specific stat for an entity, applying all modifiers and raising update events.
+    /// </summary>
     public void UpdateStatValue(Entity<CEStatsComponent?> ent, ProtoId<CECharacterStatPrototype> statType)
     {
         if (!Resolve(ent, ref ent.Comp))
@@ -48,37 +54,64 @@ public sealed partial class CEStatsSystem : EntitySystem
 }
 
 /// <summary>
-/// This event is triggered when the current value of a character's characteristic needs to be recalculated.
+/// Event raised when a character stat value needs to be recalculated. Allows systems to apply modifiers.
 /// </summary>
 public sealed class CECalculateStatEvent(ProtoId<CECharacterStatPrototype> statType) : EntityEventArgs, IInventoryRelayEvent
 {
+    /// <summary>
+    /// The type of stat being calculated.
+    /// </summary>
     public ProtoId<CECharacterStatPrototype> StatType { get; private set; } = statType;
+
+    /// <summary>
+    /// Flat additive modifier to apply to the stat value.
+    /// </summary>
     public int Value { get; private set; } = 0;
+
+    /// <summary>
+    /// Multiplicative modifier to apply to the stat value.
+    /// </summary>
     public float Multiplier { get; private set; } = 1f;
 
+    /// <summary>
+    /// Adds a flat amount to the stat value.
+    /// </summary>
     public void AffectValue(int amount)
     {
         Value += amount;
     }
 
     /// <summary>
-    /// Change the parameter value as a percentage. 0 = do not change. 1 = increase by 100%
+    /// Applies a multiplicative modifier to the stat value. Use 0.1 for +10%, -0.1 for -10%.
     /// </summary>
-    /// <param name="amount"></param>
     public void AffectMultiplier(float amount)
     {
         Multiplier *= amount;
     }
 
+    /// <summary>
+    /// Inventory slots to relay this event to when calculating stats.
+    /// </summary>
     public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
 }
 
 /// <summary>
-/// This event is triggered when the value of a characteristic has been updated.
+/// Event raised when a character stat value has been updated to a new value.
 /// </summary>
 public sealed class CEStatUpdatedEvent(ProtoId<CECharacterStatPrototype> statType, int oldValue, int newValue) : EntityEventArgs
 {
+    /// <summary>
+    /// The type of stat that was updated.
+    /// </summary>
     public ProtoId<CECharacterStatPrototype> StatType = statType;
+
+    /// <summary>
+    /// The stat value before the update.
+    /// </summary>
     public int OldValue = oldValue;
+
+    /// <summary>
+    /// The stat value after the update.
+    /// </summary>
     public int NewValue = newValue;
 }
