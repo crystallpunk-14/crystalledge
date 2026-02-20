@@ -11,10 +11,10 @@ namespace Content.Shared._CE.Mana.Core.Components;
 public sealed partial class CEMagicEnergyContainerComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public FixedPoint2 Energy = 0;
+    public FixedPoint2 Energy = 10;
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 MaxEnergy = 100;
+    public FixedPoint2 MaxEnergy = 10;
 
     /// <summary>
     /// Does this container support unsafe energy manipulation?

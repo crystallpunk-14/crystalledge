@@ -38,3 +38,13 @@
     soundHit:
       path: /Audio/Effects/hit_kick.ogg
   - type: Pullable
+
+- type: entity
+  id: CEMobMagical
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEMagicEnergyContainer
+    maxEnergy: 10
+    energy: 10
+    unsafeSupport: false

@@ -76,7 +76,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         Dirty(ent);
 
         if (oldEnergy != newEnergy)
-            RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(oldEnergy, newEnergy, ent.Comp.MaxEnergy));
+            RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, newEnergy, ent.Comp.MaxEnergy), true);
     }
 
     /// <summary>
@@ -159,9 +159,10 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 /// <summary>
 /// It's triggered when the energy change in MagicEnergyContainer
 /// </summary>
-public sealed class CEMagicEnergyLevelChangeEvent(FixedPoint2 oldValue, FixedPoint2 newValue, FixedPoint2 maxValue)
+public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, FixedPoint2 oldValue, FixedPoint2 newValue, FixedPoint2 maxValue)
     : EntityEventArgs
 {
+    public readonly EntityUid Tagret = target;
     public readonly FixedPoint2 OldValue = oldValue;
     public readonly FixedPoint2 NewValue = newValue;
     public readonly FixedPoint2 MaxValue = maxValue;
