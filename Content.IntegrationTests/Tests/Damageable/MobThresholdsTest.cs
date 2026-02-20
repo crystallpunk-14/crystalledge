@@ -5,6 +5,7 @@ namespace Content.IntegrationTests.Tests.Damageable;
 
 public sealed class MobThresholdsTest
 {
+    /* CrystallEDge - disabled because we dont need health alerts
     /// <summary>
     /// Inspects every entity prototype with a <see cref="MobThresholdsComponent"/> and makes
     /// sure that every possible mob state is mapped to an <see cref="AlertPrototype"/>.
@@ -37,4 +38,5 @@ public sealed class MobThresholdsTest
 
         await pair.CleanReturnAsync();
     }
+    */
 }
