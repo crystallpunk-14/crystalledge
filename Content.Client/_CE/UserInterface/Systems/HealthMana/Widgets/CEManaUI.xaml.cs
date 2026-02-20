@@ -27,7 +27,7 @@ public sealed partial class CEManaUI : UIWidget
         ManaTexture.DisplayRect.TextureScale = new Vector2(TextureScale, TextureScale);
 
         // Set Vollkorn font
-        var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Volkorn/VollkornSC-Regular.ttf"), 14);
+        var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Vollkorn/VollkornSC-Regular.ttf"), 14);
         ManaLabel.FontOverride = vollkornFont;
 
         // Initialize mana at 0.5

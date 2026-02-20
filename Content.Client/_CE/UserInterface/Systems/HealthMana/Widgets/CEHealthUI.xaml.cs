@@ -42,7 +42,7 @@ public sealed partial class CEHealthUI : UIWidget
         HealthTexture.DisplayRect.TextureScale = new Vector2(TextureScale, TextureScale);
 
         // Set Vollkorn font
-        var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Volkorn/VollkornSC-Regular.ttf"), 14);
+        var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Vollkorn/VollkornSC-Regular.ttf"), 14);
         HealthLabel.FontOverride = vollkornFont;
     }
 
