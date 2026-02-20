@@ -87,6 +87,7 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+  - type: Stripping
   - type: Puller
   - type: Speech
     speechSounds: Alto
