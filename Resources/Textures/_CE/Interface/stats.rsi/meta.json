@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "made by TheShuEd",
+  "size": {
+    "x": 11,
+    "y": 11
+  },
+  "states": [
+    {
+      "name": "vitality"
+    }
+  ]
+}
