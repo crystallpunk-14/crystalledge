@@ -14,6 +14,7 @@ public sealed partial class CEStatsSystem : EntitySystem
     {
         base.Initialize();
         InitClothing();
+        InitStatusEffects();
 
         SubscribeLocalEvent<CEStatsComponent, MapInitEvent>(OnMapInit);
     }
@@ -40,7 +41,7 @@ public sealed partial class CEStatsSystem : EntitySystem
         var baseStat = ent.Comp.BaseStats.GetValueOrDefault(statType, 0);
         var oldValue = ent.Comp.Stats.GetValueOrDefault(statType, 0);
 
-        var newValue = (int)Math.Ceiling((baseStat + calcEvent.Value) * (calcEvent.Multiplier - 1));
+        var newValue = (int)Math.Ceiling((baseStat + calcEvent.Value) * calcEvent.Multiplier);
         newValue = Math.Clamp(newValue, 1, 100);
         ent.Comp.Stats[statType] = newValue;
         Dirty(ent);

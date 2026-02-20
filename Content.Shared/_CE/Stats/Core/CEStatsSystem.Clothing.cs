@@ -19,7 +19,7 @@ public sealed partial class CEStatsSystem
     private void OnCalculateStat(Entity<CEClothingModifyStatsComponent> ent, ref InventoryRelayedEvent<CECalculateStatEvent> args)
     {
         args.Args.AffectValue(ent.Comp.ModifyStats.GetValueOrDefault(args.Args.StatType, 0));
-        args.Args.AffectMultiplier(ent.Comp.MultiplyStats.GetValueOrDefault(args.Args.StatType, 0f));
+        args.Args.AffectMultiplier(ent.Comp.MultiplyStats.GetValueOrDefault(args.Args.StatType, 1f));
     }
 
     private void OnEquipped(Entity<CEClothingModifyStatsComponent> ent, ref ClothingGotEquippedEvent args)
