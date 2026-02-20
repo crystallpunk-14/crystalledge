@@ -44,19 +44,6 @@ public sealed partial class CEHealthUI : UIWidget
         // Set Vollkorn font
         var vollkornFont = new VectorFont(_resCache.GetResource<FontResource>("/Fonts/_CE/Volkorn/VollkornSC-Regular.ttf"), 14);
         HealthLabel.FontOverride = vollkornFont;
-        HealthLabel.Visible = false;
-    }
-
-    protected override void MouseEntered()
-    {
-        base.MouseEntered();
-        HealthLabel.Visible = true;
-    }
-
-    protected override void MouseExited()
-    {
-        base.MouseExited();
-        HealthLabel.Visible = false;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
