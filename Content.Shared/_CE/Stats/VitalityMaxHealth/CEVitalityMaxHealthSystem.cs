@@ -1,7 +1,9 @@
 using Content.Shared._CE.Stats.Core;
 using Content.Shared._CE.Stats.Core.Components;
+using Content.Shared._CE.Stats.Core.Prototypes;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 
@@ -10,6 +12,8 @@ namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 /// </summary>
 public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 {
+    private readonly ProtoId<CECharacterStatPrototype> _vitalityStat = "Vitality";
+
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
     public override void Initialize()
     {
@@ -20,7 +24,7 @@ public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 
     private void OnVitalityUpdated(Entity<CEVitalityMaxHealthComponent> ent, ref CEStatUpdatedEvent args)
     {
-        if (args.StatType != "Vitality") //TODO unhardcode
+        if (args.StatType != _vitalityStat)
             return;
 
         var critical = args.NewValue * ent.Comp.HealthPerVitality;
