@@ -46,5 +46,4 @@
   components:
   - type: CEMagicEnergyContainer
     maxEnergy: 10
-    energy: 10
     unsafeSupport: false

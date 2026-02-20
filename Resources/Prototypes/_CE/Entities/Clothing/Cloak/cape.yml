@@ -28,6 +28,7 @@
   id: CEClothingCloakCapeFur2
   name: fur cape variant
   description: A secondary fur cape style with a different fur pattern.
+  suffix: "+1 VIT, -1 INT"
   components:
   - type: Sprite
     sprite: _CE/Clothing/Cloak/Cape/furcape2.rsi
@@ -36,3 +37,4 @@
   - type: CEClothingModifyStats
     modifyStats:
       Vitality: 1
+      Intelligence: -1

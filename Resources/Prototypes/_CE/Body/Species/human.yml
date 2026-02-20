@@ -115,7 +115,9 @@
   - type: CEStats
     baseStats:
       Vitality: 5
+      Intelligence: 5
   - type: CEVitalityMaxHealth
+  - type: CEIntelligenceMaxMana
 
 - type: entity
   parent: OrganBase

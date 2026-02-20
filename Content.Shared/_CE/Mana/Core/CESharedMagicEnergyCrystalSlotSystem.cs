@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
-using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
 
@@ -72,7 +71,7 @@ public abstract class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
         return true;
     }
     public bool HasEnergy(Entity<CEMagicEnergyCrystalSlotComponent?> ent,
-        FixedPoint2 energy,
+        int energy,
         EntityUid? user = null)
     {
         if (!TryGetEnergyCrystalFromSlot(ent, out var energyEnt))
@@ -93,9 +92,8 @@ public abstract class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
     }
 
     public bool TryChangeEnergy(Entity<CEMagicEnergyCrystalSlotComponent?> ent,
-        FixedPoint2 energy,
-        EntityUid? user = null,
-        bool safe = false)
+        int energy,
+        EntityUid? user = null)
     {
         if (!TryGetEnergyCrystalFromSlot(ent, out var energyEnt))
         {
@@ -105,7 +103,7 @@ public abstract class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
             return false;
         }
 
-        _magicEnergy.ChangeEnergy((energyEnt.Value, energyEnt.Value), energy, out _, out _, safe);
+        _magicEnergy.ChangeEnergy((energyEnt.Value, energyEnt.Value), energy, out _, out _);
         return true;
     }
 

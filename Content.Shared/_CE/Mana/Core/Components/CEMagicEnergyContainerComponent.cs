@@ -1,4 +1,3 @@
-using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Mana.Core.Components;
@@ -10,15 +9,17 @@ namespace Content.Shared._CE.Mana.Core.Components;
 [Access(typeof(CESharedMagicEnergySystem))]
 public sealed partial class CEMagicEnergyContainerComponent : Component
 {
+    /// <summary>
+    /// How much energy has been spent (consumed) from this container.
+    /// </summary>
     [DataField, AutoNetworkedField]
-    public int Energy = 10;
+    public int SpentEnergy = 0;
 
     [DataField, AutoNetworkedField]
     public int MaxEnergy = 10;
 
     /// <summary>
-    /// Does this container support unsafe energy manipulation?
+    /// Current available energy, computed as <see cref="MaxEnergy"/> minus <see cref="SpentEnergy"/>.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public bool UnsafeSupport;
+    public int Energy => MaxEnergy - SpentEnergy;
 }

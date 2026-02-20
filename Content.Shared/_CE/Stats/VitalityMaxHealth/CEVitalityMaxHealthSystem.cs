@@ -11,9 +11,10 @@ namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 /// </summary>
 public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 {
+    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
+
     private readonly ProtoId<CECharacterStatPrototype> _vitalityStat = "Vitality";
 
-    [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;
     public override void Initialize()
     {
         base.Initialize();

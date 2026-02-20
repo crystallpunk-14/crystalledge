@@ -1,7 +1,0 @@
-- type: characterStat
-  id: Vitality
-  name: ce-stat-vitality-name
-  desc: ce-stat-vitality-desc
-  icon:
-    sprite: _CE/Interface/stats.rsi
-    state: vitality

@@ -1,7 +1,6 @@
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Audio;
 using Content.Shared.Examine;
-using Content.Shared.FixedPoint;
 using Content.Shared.Rejuvenate;
 
 namespace Content.Shared._CE.Mana.Core;
@@ -20,7 +19,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
     private void OnRejuvenate(Entity<CEMagicEnergyContainerComponent> ent, ref RejuvenateEvent args)
     {
-        ChangeEnergy((ent, ent.Comp), ent.Comp.MaxEnergy - ent.Comp.Energy, out var deltaEnergy, out var overloadEnergy, true);
+        ChangeEnergy((ent, ent.Comp), ent.Comp.MaxEnergy - ent.Comp.Energy, out _, out _);
     }
 
     private void OnExamined(Entity<CEMagicEnergyExaminableComponent> ent, ref ExaminedEvent args)
@@ -40,10 +39,9 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
     }
 
     public void ChangeEnergy(Entity<CEMagicEnergyContainerComponent?> ent,
-        FixedPoint2 energy,
-        out FixedPoint2 deltaEnergy,
-        out FixedPoint2 overloadEnergy,
-        bool safe = false)
+        int energy,
+        out int deltaEnergy,
+        out int overloadEnergy)
     {
         deltaEnergy = 0;
         overloadEnergy = 0;
@@ -51,28 +49,11 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false))
             return;
 
-        if (!safe)
-        {
-            // Overload
-            if (ent.Comp.Energy + energy > ent.Comp.MaxEnergy && ent.Comp.UnsafeSupport)
-            {
-                overloadEnergy = ent.Comp.Energy + energy - ent.Comp.MaxEnergy;
-                RaiseLocalEvent(ent, new CEMagicEnergyOverloadEvent(overloadEnergy));
-            }
-
-            // Burn out
-            if (ent.Comp.Energy + energy < 0 && ent.Comp.UnsafeSupport)
-            {
-                overloadEnergy = ent.Comp.Energy + energy;
-                RaiseLocalEvent(ent, new CEMagicEnergyBurnOutEvent(-energy - ent.Comp.Energy));
-            }
-        }
-
         var oldEnergy = ent.Comp.Energy;
         var newEnergy = (int)Math.Clamp( ent.Comp.Energy + (float) energy, 0,  ent.Comp.MaxEnergy);
 
         deltaEnergy = newEnergy - oldEnergy;
-        ent.Comp.Energy = newEnergy;
+        ent.Comp.SpentEnergy = ent.Comp.MaxEnergy - newEnergy;
         Dirty(ent);
 
         if (oldEnergy != newEnergy)
@@ -92,10 +73,9 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
     public void TransferEnergy(Entity<CEMagicEnergyContainerComponent?> sender,
         Entity<CEMagicEnergyContainerComponent?> receiver,
-        FixedPoint2 energy,
-        out FixedPoint2 deltaEnergy,
-        out FixedPoint2 overloadEnergy,
-        bool safe = false)
+        int energy,
+        out int deltaEnergy,
+        out int overloadEnergy)
     {
         deltaEnergy = 0;
         overloadEnergy = 0;
@@ -103,32 +83,25 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         if (!Resolve(sender, ref sender.Comp) || !Resolve(receiver, ref receiver.Comp))
             return;
 
-        var transferEnergy = energy;
         //We check how much space is left in the container so as not to overload it, but only if it does not support overloading
-        if (!receiver.Comp.UnsafeSupport || safe)
-        {
-            var freeSpace = receiver.Comp.MaxEnergy - receiver.Comp.Energy;
-            transferEnergy = FixedPoint2.Min(freeSpace, energy);
-        }
+        var freeSpace = receiver.Comp.MaxEnergy - receiver.Comp.Energy;
+        var transferEnergy = Math.Min(freeSpace, energy);
 
-        ChangeEnergy(sender, -transferEnergy, out var change, out var overload, safe);
-        ChangeEnergy(receiver , -(change + overload), out deltaEnergy, out overloadEnergy, safe);
+        ChangeEnergy(sender, -transferEnergy, out var change, out var overload);
+        ChangeEnergy(receiver , -(change + overload), out deltaEnergy, out overloadEnergy);
     }
 
-    public bool HasEnergy(EntityUid uid, FixedPoint2 energy, CEMagicEnergyContainerComponent? component = null, bool safe = false)
+    public bool HasEnergy(EntityUid uid, int energy, CEMagicEnergyContainerComponent? component = null)
     {
         if (!Resolve(uid, ref component))
             return false;
-
-        if (!safe && component.UnsafeSupport)
-            return true;
 
         return component.Energy >= energy;
     }
 
     public string GetEnergyExaminedText(Entity<CEMagicEnergyContainerComponent> ent)
     {
-        var power = (int) (ent.Comp.Energy / ent.Comp.MaxEnergy * 100);
+        var power = ent.Comp.Energy / ent.Comp.MaxEnergy * 100;
 
         // TODO: customization for examined
 
@@ -145,41 +118,34 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
             ("color", color));
     }
 
-    public void ChangeMaximumEnergy(Entity<CEMagicEnergyContainerComponent?> ent, int energy)
+    public void SetMaximumEnergy(Entity<CEMagicEnergyContainerComponent?> ent, int energy)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
 
-        ent.Comp.MaxEnergy += energy;
+        if (ent.Comp.MaxEnergy == energy)
+            return;
 
-        ChangeEnergy(ent, energy, out _, out _);
+        var oldEnergy = ent.Comp.Energy;
+
+        // Preserve current energy clamped to new max: SpentEnergy = newMax - min(current, newMax)
+        var clampedCurrent = Math.Min(oldEnergy, energy);
+        ent.Comp.MaxEnergy = energy;
+        ent.Comp.SpentEnergy = energy - clampedCurrent;
+        Dirty(ent);
+
+        RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, ent.Comp.Energy, ent.Comp.MaxEnergy), true);
     }
 }
 
 /// <summary>
 /// It's triggered when the energy change in MagicEnergyContainer
 /// </summary>
-public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, FixedPoint2 oldValue, FixedPoint2 newValue, FixedPoint2 maxValue)
+public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue, int newValue, int maxValue)
     : EntityEventArgs
 {
     public readonly EntityUid Tagret = target;
-    public readonly FixedPoint2 OldValue = oldValue;
-    public readonly FixedPoint2 NewValue = newValue;
-    public readonly FixedPoint2 MaxValue = maxValue;
-}
-
-/// <summary>
-/// It's triggered when more energy enters the MagicEnergyContainer than it can hold.
-/// </summary>
-public sealed class CEMagicEnergyOverloadEvent(FixedPoint2 overloadEnergy) : EntityEventArgs
-{
-    public readonly FixedPoint2 OverloadEnergy = overloadEnergy;
-}
-
-/// <summary>
-/// It's triggered they something try to get energy out of MagicEnergyContainer that is lacking there.
-/// </summary>
-public sealed class CEMagicEnergyBurnOutEvent(FixedPoint2 burnOutEnergy) : EntityEventArgs
-{
-    public readonly FixedPoint2 BurnOutEnergy = burnOutEnergy;
+    public readonly int OldValue = oldValue;
+    public readonly int NewValue = newValue;
+    public readonly int MaxValue = maxValue;
 }
