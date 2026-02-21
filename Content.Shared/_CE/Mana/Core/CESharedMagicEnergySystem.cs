@@ -129,10 +129,22 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
             return;
 
         var oldEnergy = ent.Comp.Energy;
+        var oldMax = ent.Comp.MaxEnergy;
 
         ent.Comp.MaxEnergy = energy;
-        // Clamp current energy to the new maximum without adding any
-        ent.Comp.Energy = Math.Min(ent.Comp.Energy, energy);
+
+        if (oldMax > 0)
+        {
+            // Scale current energy to preserve the ratio (floor due to ints)
+            ent.Comp.Energy = (int)((long)oldEnergy * energy / oldMax);
+            ent.Comp.Energy = Math.Clamp(ent.Comp.Energy, 0, ent.Comp.MaxEnergy);
+        }
+        else
+        {
+            // If previous max was zero or negative, fallback to clamping
+            ent.Comp.Energy = Math.Min(ent.Comp.Energy, ent.Comp.MaxEnergy);
+        }
+
         Dirty(ent);
 
         RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, ent.Comp.Energy, ent.Comp.MaxEnergy), true);
