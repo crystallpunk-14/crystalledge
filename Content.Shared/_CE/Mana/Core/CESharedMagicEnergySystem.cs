@@ -101,7 +101,9 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
     public string GetEnergyExaminedText(Entity<CEMagicEnergyContainerComponent> ent)
     {
-        var power = ent.Comp.Energy / ent.Comp.MaxEnergy * 100;
+        var power = ent.Comp.MaxEnergy <= 0
+            ? 0
+            : ent.Comp.Energy * 100 / ent.Comp.MaxEnergy;
 
         // TODO: customization for examined
 
@@ -143,7 +145,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue, int newValue, int maxValue)
     : EntityEventArgs
 {
-    public readonly EntityUid Tagret = target;
+    public readonly EntityUid Target = target;
     public readonly int OldValue = oldValue;
     public readonly int NewValue = newValue;
     public readonly int MaxValue = maxValue;

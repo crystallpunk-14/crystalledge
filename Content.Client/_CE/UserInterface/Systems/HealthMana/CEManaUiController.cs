@@ -6,8 +6,6 @@ using Content.Shared._CE.Mana.Core.Components;
 using JetBrains.Annotations;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controllers;
-using Robust.Shared.GameStates;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 
 namespace Content.Client._CE.UserInterface.Systems.HealthMana;
@@ -75,10 +73,10 @@ public sealed class CEManaUiController : UIController
 
     private void OnManaStateChanged(CEMagicEnergyLevelChangeEvent ev)
     {
-        if (_player.LocalEntity != ev.Tagret)
+        if (_player.LocalEntity != ev.Target)
             return;
 
-        UpdateMana(ev.Tagret);
+        UpdateMana(ev.Target);
     }
 
     private void UpdateMana(EntityUid uid, CEMagicEnergyContainerComponent? container = null)

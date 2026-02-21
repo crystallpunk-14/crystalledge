@@ -4,7 +4,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._CE.Mana.Core.Components;
 
 /// <summary>
-/// Allows you to examine how much energy is in that object.
+/// Allows an entity to have a slot for inserting magic energy crystals.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(CESharedMagicEnergyCrystalSlotSystem))]

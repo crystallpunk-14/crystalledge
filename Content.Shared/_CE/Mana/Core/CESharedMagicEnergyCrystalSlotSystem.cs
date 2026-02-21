@@ -77,7 +77,7 @@ public abstract class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
         if (!TryGetEnergyCrystalFromSlot(ent, out var energyEnt))
         {
             if (user is not null)
-                _popup.PopupEntity(Loc.GetString("ce-magic-energy-no-crystal"), ent,user.Value);
+                _popup.PopupEntity(Loc.GetString("ce-magic-energy-no-crystal"), ent, user.Value);
 
             return false;
         }
