@@ -2,7 +2,8 @@
     xmlns="https://spacestation14.io"
     xmlns:ce="clr-namespace:Content.Client._CE.SkillsUpgradeable.UI"
     Title="{Loc 'ce-skill-upgrade-window-title'}"
-    MinSize="800 480"
+    MinSize="800 500"
+    SetSize="1000 600"
     MaxSize="1200 600">
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
         <PanelContainer StyleClasses="AngleRect" Margin="8">

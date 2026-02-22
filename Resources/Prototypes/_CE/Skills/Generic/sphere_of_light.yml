@@ -20,7 +20,7 @@
   - type: CEActionDoAfterVisuals
     proto: CERuneSphereOfLight
   - type: Action
-    useDelay: 30
+    useDelay: 1
     icon:
       sprite: _CE/Actions/magic_light.rsi
       state: sphere_of_light
