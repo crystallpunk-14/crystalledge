@@ -1,0 +1,18 @@
+- type: job
+  id: CEWarrior
+  setPreference: true
+  name: ce-job-name-warrior
+  description: ce-job-desc-warrior
+  playTimeTracker: CEJobWarrior
+  icon: CEJobIconWarrior
+
+- type: playTimeTracker
+  id: CEJobWarrior
+
+- type: jobIcon
+  parent: CEJobIcon
+  id: CEJobIconWarrior
+  icon:
+    sprite: /Textures/_CE/Interface/job_icons.rsi
+    state: warrior
+  jobName: ce-job-name-warrior

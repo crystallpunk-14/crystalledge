@@ -15,7 +15,7 @@
   name: spawn point
   components:
   - type: SpawnPoint
-    job_id: BaselineRole
+    job_id: CEWarrior
   - type: Sprite
     layers:
       - state: green

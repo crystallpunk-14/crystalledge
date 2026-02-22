@@ -1,0 +1,10 @@
+
+
+- type: department
+  id: CEAdventurers
+  name: ce-department-adventurers
+  description: ce-department-adventurers-desc
+  color: "#27c732"
+  editorHidden: false
+  roles:
+  - CEWarrior

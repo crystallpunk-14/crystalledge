@@ -1,0 +1,6 @@
+- type: jobIcon
+  id: CEJobIcon
+  abstract: true
+  priority: 1
+  locationPreference: Right
+  isShaded: true

@@ -11,7 +11,7 @@
           mapNameTemplate: "Empty"
         - type: StationJobs
           availableJobs:
-            BaselineRole: [ -1, -1 ]
+            CEWarrior: [ -1, -1 ]
 
 - type: gameMap
   id: Dev
@@ -26,7 +26,7 @@
           mapNameTemplate: "Dev"
         - type: StationJobs
           availableJobs:
-            BaselineRole: [ -1, -1 ]
+            CEWarrior: [ -1, -1 ]
         - type: CEStationZLevels
           mapsAbove:
           - /Maps/_CE/Dev/Dev1.yml
