@@ -1,0 +1,19 @@
+- type: skill
+  id: TestSkill
+  effects:
+  - !type:AddAction
+    action: CETestActionPolymorphWizardSpider
+
+- type: entity
+  parent: BaseActionPolymorph
+  id: CETestActionPolymorphWizardSpider
+  name: Spider Polymorph
+  description: Polymorphs you into a Spider.
+  components:
+  - type: Action
+    icon:
+      sprite: Mobs/Animals/spider.rsi
+      state: tarantula
+  - type: InstantAction
+    event: !type:PolymorphActionEvent
+      protoId: WizardSpider

@@ -110,6 +110,7 @@
   - type: BypassInteractionChecks
   - type: ExplosionResistance
     damageCoefficient: 0
+  - type: CESkillScanner
 
 - type: entity
   abstract: true

@@ -1,0 +1,249 @@
+using System.Text;
+using Content.Shared._CE.Skills.Components;
+using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared.Administration.Managers;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Popups;
+using Content.Shared.Throwing;
+using Content.Shared.Whitelist;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+
+namespace Content.Shared._CE.Skills;
+
+public abstract partial class CESharedSkillSystem : EntitySystem
+{
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ISharedAdminManager _admin = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+
+    private EntityQuery<CESkillStorageComponent> _skillStorageQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _skillStorageQuery = GetEntityQuery<CESkillStorageComponent>();
+
+        SubscribeLocalEvent<CESkillStorageComponent, MapInitEvent>(OnMapInit);
+
+        InitializeAdmin();
+        InitializeScanning();
+    }
+
+    private void OnMapInit(Entity<CESkillStorageComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.PossibleSkills = GetLearnableSkills(ent);
+        Dirty(ent);
+    }
+
+    /// <summary>
+    /// Directly adds the skill to the player, bypassing any checks.
+    /// </summary>
+    public bool TryAddSkill(EntityUid target,
+        ProtoId<CESkillPrototype> skill,
+        CESkillStorageComponent? component = null,
+        bool free = false)
+    {
+        if (!Resolve(target, ref component, false))
+            return false;
+
+        if (component.LearnedSkills.Contains(skill))
+            return false;
+
+        if (!_proto.Resolve(skill, out var indexedSkill))
+            return false;
+
+        foreach (var effect in indexedSkill.Effects)
+        {
+            effect.AddSkill(EntityManager, target);
+        }
+
+        component.LearnedSkills.Add(skill);
+        Dirty(target, component);
+
+        var learnEv = new CESkillLearnedEvent(skill, target);
+        RaiseLocalEvent(target, ref learnEv);
+
+        return true;
+    }
+
+    /// <summary>
+    ///  Removes the skill from the player, bypassing any checks.
+    /// </summary>
+    public bool TryRemoveSkill(EntityUid target,
+        ProtoId<CESkillPrototype> skill,
+        CESkillStorageComponent? component = null)
+    {
+        if (!Resolve(target, ref component, false))
+            return false;
+
+        if (!component.LearnedSkills.Remove(skill))
+            return false;
+
+        if (!_proto.Resolve(skill, out var indexedSkill))
+            return false;
+
+        foreach (var effect in indexedSkill.Effects)
+        {
+            effect.RemoveSkill(EntityManager, target);
+        }
+
+        Dirty(target, component);
+        return true;
+    }
+
+    /// <summary>
+    ///  Checks if the player has the skill.
+    /// </summary>
+    public bool HaveSkill(EntityUid target,
+        ProtoId<CESkillPrototype> skill,
+        CESkillStorageComponent? component = null)
+    {
+        if (!Resolve(target, ref component, false))
+            return false;
+
+        return component.LearnedSkills.Contains(skill);
+    }
+
+    /// <summary>
+    ///  Checks if the player can learn the specified skill.
+    /// </summary>
+    public bool CanLearnSkill(
+        EntityUid target,
+        CESkillPrototype skill,
+        CESkillStorageComponent? component = null)
+    {
+        if (!Resolve(target, ref component, false))
+            return false;
+
+        //Not in possible skills list
+        if (!component.PossibleSkills.Contains(skill))
+            return false;
+
+        //Already learned
+        if (HaveSkill(target, skill, component))
+            return false;
+
+        //Restrictions check
+        foreach (var req in skill.Restrictions)
+        {
+            if (!req.Check(EntityManager, target))
+                return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    ///  Helper function to get the skill name for a given skill prototype.
+    /// </summary>
+    public string GetSkillName(ProtoId<CESkillPrototype> skill)
+    {
+        if (!_proto.Resolve(skill, out var indexedSkill))
+            return string.Empty;
+
+        if (indexedSkill.NameOverride is not null)
+            return Loc.GetString(indexedSkill.NameOverride);
+
+        foreach (var effect in indexedSkill.Effects)
+        {
+            var name = effect.GetName(EntityManager, _proto);
+            if (name != null)
+                return name;
+        }
+
+        return string.Empty;
+    }
+
+    /// <summary>
+    ///  Helper function to get the skill description for a given skill prototype.
+    /// </summary>
+    public string GetSkillDescription(ProtoId<CESkillPrototype> skill)
+    {
+        if (!_proto.Resolve(skill, out var indexedSkill))
+            return string.Empty;
+
+        var sb = new StringBuilder();
+
+        if (indexedSkill.DescOverride is not null)
+            sb.Append(Loc.GetString(indexedSkill.DescOverride));
+
+        foreach (var effect in indexedSkill.Effects)
+        {
+            sb.Append(effect.GetDescription(EntityManager, _proto, skill) + "\n");
+        }
+
+        return sb.ToString();
+    }
+
+    public SpriteSpecifier? GetSkillIcon(ProtoId<CESkillPrototype> skill)
+    {
+        if (!_proto.Resolve(skill, out var indexedSkill))
+            return null;
+
+        if (indexedSkill.IconOverride is not null)
+            return indexedSkill.IconOverride;
+
+        foreach (var effect in indexedSkill.Effects)
+        {
+            var icon = effect.GetIcon(EntityManager, _proto);
+            if (icon != null)
+                return icon;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Returns a list of all skills the entity can currently learn.
+    /// </summary>
+    private HashSet<ProtoId<CESkillPrototype>> GetLearnableSkills(Entity<CESkillStorageComponent> ent)
+    {
+        var skills = new HashSet<ProtoId<CESkillPrototype>>();
+
+        foreach (var skill in _proto.EnumeratePrototypes<CESkillPrototype>())
+        {
+            if (ent.Comp.LearnedSkills.Contains(skill))
+                continue;
+
+            if (!CanLearnSkill(ent.Owner, skill, ent.Comp))
+                continue;
+
+            skills.Add(skill);
+        }
+
+        return skills;
+    }
+
+    public bool TryResetSkills(Entity<CESkillStorageComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        for (var i = ent.Comp.LearnedSkills.Count - 1; i >= 0; i--)
+        {
+            TryRemoveSkill(ent, ent.Comp.LearnedSkills[i], ent.Comp);
+        }
+
+        return true;
+    }
+}
+
+[ByRefEvent]
+public record struct CESkillLearnedEvent(ProtoId<CESkillPrototype> Skill, EntityUid User);

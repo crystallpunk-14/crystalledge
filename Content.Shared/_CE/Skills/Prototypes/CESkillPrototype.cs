@@ -14,21 +14,21 @@ public sealed partial class CESkillPrototype : IPrototype
     /// <summary>
     /// Skill Title. If you leave null, the name will try to generate from Effect.GetName()
     /// </summary>
-    [DataField]
-    public LocId? Name = null;
+    [DataField("name")]
+    public LocId? NameOverride = null;
 
     /// <summary>
     /// Skill Description. If you leave null, the description will try to generate from Effect.GetDescription()
     /// </summary>
-    [DataField]
-    public LocId? Desc = null;
+    [DataField("desc")]
+    public LocId? DescOverride = null;
 
     /// <summary>
     ///  Icon for the skill. This is used to display the skill in the skill tree UI.
     /// If you leave null, the description will try to generate from Effect.GetIcon()
     /// </summary>
-    [DataField]
-    public SpriteSpecifier? Icon = default!;
+    [DataField("icon")]
+    public SpriteSpecifier? IconOverride = default!;
 
     /// <summary>
     ///  Skill effect. This is used to determine what happens when the player learns the skill. If you leave null, the skill will not have any effect.
