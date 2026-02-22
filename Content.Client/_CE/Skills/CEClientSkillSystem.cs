@@ -40,18 +40,4 @@ public sealed partial class CEClientSkillSystem : CESharedSkillSystem
 
         OnSkillUpdate?.Invoke(localPlayer.Value);
     }
-
-    public void RequestLearnSkill(EntityUid? target, CESkillPrototype? skill)
-    {
-        if (skill == null || target == null)
-            return;
-
-        var netEv = new CETryLearnSkillMessage(GetNetEntity(target.Value), skill.ID);
-        RaiseNetworkEvent(netEv);
-
-        //if (_proto.Resolve(skill.Tree, out var indexedTree))
-        //{
-        //    _audio.PlayGlobal(indexedTree.LearnSound, target.Value, AudioParams.Default.WithVolume(6f));
-        //}
-    }
 }

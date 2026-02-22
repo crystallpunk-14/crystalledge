@@ -18,16 +18,8 @@ public abstract partial class CESharedSkillSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CESkillStorageComponent, MapInitEvent>(OnMapInit);
-
         InitializeAdmin();
         InitializeScanning();
-    }
-
-    private void OnMapInit(Entity<CESkillStorageComponent> ent, ref MapInitEvent args)
-    {
-        ent.Comp.PossibleSkills = GetLearnableSkills(ent);
-        Dirty(ent);
     }
 
     /// <summary>
@@ -110,10 +102,6 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (!Resolve(target, ref component, false))
             return false;
 
-        //Not in possible skills list
-        if (!component.PossibleSkills.Contains(skill))
-            return false;
-
         //Already learned
         if (HaveSkill(target, skill, component))
             return false;
@@ -191,9 +179,12 @@ public abstract partial class CESharedSkillSystem : EntitySystem
     /// <summary>
     /// Returns a list of all skills the entity can currently learn.
     /// </summary>
-    private HashSet<ProtoId<CESkillPrototype>> GetLearnableSkills(Entity<CESkillStorageComponent> ent)
+    public List<ProtoId<CESkillPrototype>> GetLearnableSkills(Entity<CESkillStorageComponent?> ent)
     {
-        var skills = new HashSet<ProtoId<CESkillPrototype>>();
+        var skills = new List<ProtoId<CESkillPrototype>>();
+
+        if (!Resolve(ent, ref ent.Comp, false))
+            return skills;
 
         foreach (var skill in _proto.EnumeratePrototypes<CESkillPrototype>())
         {
