@@ -10,7 +10,7 @@ namespace Content.IntegrationTests.Tests.Preferences;
 
 [TestFixture]
 public sealed class LoadoutTests
-{
+{ /* CrystallEdge disabled - we dont have jumpsuits
     [TestPrototypes]
     private const string Prototypes = @"
 - type: playTimeTracker
@@ -90,4 +90,5 @@ public sealed class LoadoutTests
 
         await pair.CleanReturnAsync();
     }
+    */
 }
