@@ -128,7 +128,8 @@ public sealed partial class CEHealthUI : UIWidget
                 {
                     _lastHealthState = stateIndex;
                     var specifier = new SpriteSpecifier.Rsi(
-                        new ResPath(AliveRsiPath), $"health{stateIndex}");
+                        new ResPath(AliveRsiPath),
+                        $"health{stateIndex}");
                     HealthTexture.SetFromSpriteSpecifier(specifier);
                 }
 
@@ -140,7 +141,8 @@ public sealed partial class CEHealthUI : UIWidget
                 {
                     _lastHealthState = -2;
                     var specifier = new SpriteSpecifier.Rsi(
-                        new ResPath(CriticalRsiPath), "critical");
+                        new ResPath(CriticalRsiPath),
+                        "critical");
                     HealthTexture.SetFromSpriteSpecifier(specifier);
                 }
 
@@ -152,7 +154,8 @@ public sealed partial class CEHealthUI : UIWidget
                 {
                     _lastHealthState = -3;
                     var specifier = new SpriteSpecifier.Rsi(
-                        new ResPath(DeadRsiPath), "dead");
+                        new ResPath(DeadRsiPath),
+                        "dead");
                     HealthTexture.SetFromSpriteSpecifier(specifier);
                 }
 

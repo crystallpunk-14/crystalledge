@@ -47,7 +47,8 @@ public sealed partial class CEManaUI : UIWidget
         {
             _lastManaState = stateIndex;
             var specifier = new SpriteSpecifier.Rsi(
-                new ResPath(ManaRsiPath), $"mana{stateIndex}");
+                new ResPath(ManaRsiPath),
+                $"mana{stateIndex}");
             ManaTexture.SetFromSpriteSpecifier(specifier);
         }
 
