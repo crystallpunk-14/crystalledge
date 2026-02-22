@@ -2,13 +2,18 @@
     xmlns="https://spacestation14.io"
     xmlns:ce="clr-namespace:Content.Client._CE.SkillsUpgradeable.UI"
     Title="{Loc 'ce-skill-upgrade-window-title'}"
-    MinSize="420 300"
-    MaxSize="420 600">
+    MinSize="800 480"
+    MaxSize="1200 600">
     <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
-        <Label Text="{Loc 'ce-skill-upgrade-window-header'}" StyleClasses="LabelHeadingBigger"
-               HorizontalAlignment="Center" Margin="0,4,0,8" />
-        <ScrollContainer VerticalExpand="True" HScrollEnabled="False" Margin="4">
-            <BoxContainer Orientation="Vertical" Name="SkillsList" SeparationOverride="6" />
+        <PanelContainer StyleClasses="AngleRect" Margin="8">
+            <Label Text="{Loc 'ce-skill-upgrade-window-header'}"
+                   StyleClasses="LabelHeadingBigger"
+                   HorizontalAlignment="Center"
+                   Margin="12,8,12,8" />
+        </PanelContainer>
+
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="True" VScrollEnabled="False" Margin="8,4,8,8">
+            <BoxContainer Orientation="Horizontal" Name="SkillsList" SeparationOverride="12" HorizontalAlignment="Center" />
         </ScrollContainer>
     </BoxContainer>
 </ce:CESkillUpgradeWindow>

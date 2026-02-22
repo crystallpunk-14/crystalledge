@@ -33,9 +33,6 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (!Resolve(target, ref component, false))
             return false;
 
-        if (component.LearnedSkills.Contains(skill))
-            return false;
-
         if (!_proto.Resolve(skill, out var indexedSkill))
             return false;
 
@@ -102,8 +99,8 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (!Resolve(target, ref component, false))
             return false;
 
-        //Already learned
-        if (HaveSkill(target, skill, component))
+        // Check if already learned (only matters for unique skills)
+        if (skill.Unique && HaveSkill(target, skill, component))
             return false;
 
         //Restrictions check
@@ -188,9 +185,6 @@ public abstract partial class CESharedSkillSystem : EntitySystem
 
         foreach (var skill in _proto.EnumeratePrototypes<CESkillPrototype>())
         {
-            if (ent.Comp.LearnedSkills.Contains(skill))
-                continue;
-
             if (!CanLearnSkill(ent.Owner, skill, ent.Comp))
                 continue;
 

@@ -42,6 +42,12 @@ public sealed partial class CESkillPrototype : IPrototype
     /// </summary>
     [DataField]
     public List<CESkillRestriction> Restrictions = new();
+
+    /// <summary>
+    /// If true, the player can only have one instance of this skill. If false, the player can learn this skill multiple times.
+    /// </summary>
+    [DataField]
+    public bool Unique = true;
 }
 
 [ImplicitDataDefinitionForInheritors]
