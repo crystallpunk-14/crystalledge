@@ -18,8 +18,6 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CESkillUpgradeableComponent, MapInitEvent>(OnMapInit);
-
         SubscribeNetworkEvent<CETryLearnSkillMessage>(OnClientRequestLearnSkill);
     }
 
@@ -55,11 +53,6 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         {
             ClearSelection((entity, upgradeComp));
         }
-    }
-
-    private void OnMapInit(Entity<CESkillUpgradeableComponent> ent, ref MapInitEvent args)
-    {
-        RepopulatePossibleSkills(ent);
     }
 
     /// <summary>

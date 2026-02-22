@@ -8,7 +8,7 @@
   id: CEActionSpellSphereOfLight
   parent: CEActionSpellBase
   name: Sphere of Light
-  description: Materialization of a bright and safe light source.
+  description: You can make almost any object glow for a long time at will.
   components:
   - type: CEActionManaCost
     manaCost: 1
