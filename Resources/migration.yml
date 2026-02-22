@@ -8,6 +8,13 @@
 # WallSolid: Window
 # Table: null
 
+# CrystallEdge zone
+
+BaselineWall: CEWallStoneBrick
+
+# CrystallEdge zone end
+
+
 # 2023-07-03
 ClothingHeadHelmetHelmet: ClothingHeadHelmetBasic
 ClothingHeadHelmetHelmetOld: ClothingHeadHelmetBasic
