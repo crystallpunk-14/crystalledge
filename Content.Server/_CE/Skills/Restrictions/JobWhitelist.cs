@@ -16,7 +16,7 @@ public sealed partial class JobWhitelist : CESkillRestriction
         var mindSys = entManager.System<SharedMindSystem>();
         var jobSys = entManager.System<JobSystem>();
 
-        if (!mindSys.TryGetMind(target, out var mindId, out var mind))
+        if (!mindSys.TryGetMind(target, out var mindId, out _))
             return false;
 
         if (!jobSys.MindTryGetJobId(mindId, out var jobId))
