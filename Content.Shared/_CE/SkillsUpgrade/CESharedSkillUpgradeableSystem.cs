@@ -9,19 +9,6 @@ public abstract partial class CESharedSkillUpgradeableSystem : EntitySystem
 {
     [Dependency] private readonly AlertsSystem _alerts = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<CESkillUpgradeableComponent, CESkillUpgradeAlertEvent>(OnUpgradeAlertClicked);
-    }
-
-    private void OnUpgradeAlertClicked(Entity<CESkillUpgradeableComponent> ent, ref CESkillUpgradeAlertEvent args)
-    {
-        Log.Info($"TODO: skill upgrade alert clicked for user {args.User}" );
-        args.Handled = true;
-    }
-
     public void EnableUpgradeAlert(Entity<CESkillUpgradeableComponent> ent)
     {
         _alerts.ShowAlert(ent.Owner, ent.Comp.UpgradeAlert);

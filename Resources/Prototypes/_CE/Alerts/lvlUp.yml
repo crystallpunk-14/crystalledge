@@ -5,3 +5,4 @@
     state: lvlUp
   name: ce-alerts-upgrade-skill-name
   description: ce-alerts-upgrade-skill-desc
+  clickEvent: !type:CESkillUpgradeAlertEvent

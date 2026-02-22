@@ -44,6 +44,14 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         RepopulatePossibleSkills(ent);
     }
 
+    /// <summary>
+    /// Triggers a level up for the target entity, giving them skill upgrade options.
+    /// </summary>
+    public void TriggerLevelUp(Entity<CESkillUpgradeableComponent> ent)
+    {
+        RerollSelection(ent);
+    }
+
     private void RerollSelection(Entity<CESkillUpgradeableComponent> ent)
     {
         ent.Comp.CurrentUpgradeSelection.Clear();

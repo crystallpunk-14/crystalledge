@@ -1,0 +1,16 @@
+<ce:CESkillUpgradeEntry
+    xmlns="https://spacestation14.io"
+    xmlns:ce="clr-namespace:Content.Client._CE.SkillsUpgradeable.UI">
+    <PanelContainer HorizontalExpand="True" Margin="2" StyleClasses="BackgroundPanel">
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="8,6,8,6">
+            <TextureRect Name="SkillIcon" MinWidth="48" MinHeight="48" MouseFilter="Ignore"
+                         Stretch="KeepAspect" Margin="0,0,12,0" />
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center">
+                <RichTextLabel Name="SkillName" />
+                <RichTextLabel Name="SkillDesc" Margin="0,2,0,0" />
+            </BoxContainer>
+            <Button Name="SelectButton" Text="{Loc 'ce-skill-upgrade-select-button'}"
+                    MinWidth="80" VerticalAlignment="Center" Margin="8,0,0,0" />
+        </BoxContainer>
+    </PanelContainer>
+</ce:CESkillUpgradeEntry>
