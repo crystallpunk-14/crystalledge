@@ -30,7 +30,7 @@ public abstract partial class CESharedSkillSystem
             args,
             ent.Comp,
             markup,
-            Loc.GetString("ce-skill-info-title"),
+            Loc.GetString("ce-skill-examine-title"),
             "/Textures/Interface/students-cap.svg.192dpi.png");
     }
 
@@ -40,7 +40,7 @@ public abstract partial class CESharedSkillSystem
 
         var sb = new StringBuilder();
 
-        sb.Append(Loc.GetString("ce-skill-examine-title") + "\n");
+        sb.Append(Loc.GetString("ce-skill-info-title") + "\n");
 
         foreach (var skill in ent.Comp.LearnedSkills)
         {

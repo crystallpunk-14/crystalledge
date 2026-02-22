@@ -41,6 +41,7 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
 
         upgradeComp.Level++;
         upgradeComp.PendingLevels--;
+        Dirty(entity, upgradeComp);
 
         // If there are still pending levels, reroll for the next one
         if (upgradeComp.PendingLevels > 0)
