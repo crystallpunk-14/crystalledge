@@ -83,31 +83,6 @@ public abstract partial class CESharedSkillSystem : EntitySystem
     }
 
     /// <summary>
-    ///  Checks if the player can learn the specified skill.
-    /// </summary>
-    public bool CanLearnSkill(
-        EntityUid target,
-        CESkillPrototype skill,
-        CESkillStorageComponent? component = null)
-    {
-        if (!Resolve(target, ref component, false))
-            return false;
-
-        // Check if already learned (only matters for unique skills)
-        if (skill.Unique && HaveSkill(target, skill, component))
-            return false;
-
-        //Restrictions check
-        foreach (var req in skill.Restrictions)
-        {
-            if (!req.Check(EntityManager, target))
-                return false;
-        }
-
-        return true;
-    }
-
-    /// <summary>
     ///  Helper function to get the skill name for a given skill prototype.
     /// </summary>
     public string GetSkillName(ProtoId<CESkillPrototype> skill)
@@ -167,27 +142,6 @@ public abstract partial class CESharedSkillSystem : EntitySystem
             return string.Empty;
 
         return Loc.GetString(indexedSkill.Effect.SkillType);
-    }
-
-    /// <summary>
-    /// Returns a list of all skills the entity can currently learn.
-    /// </summary>
-    public List<ProtoId<CESkillPrototype>> GetLearnableSkills(Entity<CESkillStorageComponent?> ent)
-    {
-        var skills = new List<ProtoId<CESkillPrototype>>();
-
-        if (!Resolve(ent, ref ent.Comp, false))
-            return skills;
-
-        foreach (var skill in _proto.EnumeratePrototypes<CESkillPrototype>())
-        {
-            if (!CanLearnSkill(ent.Owner, skill, ent.Comp))
-                continue;
-
-            skills.Add(skill);
-        }
-
-        return skills;
     }
 
     public bool TryResetSkills(Entity<CESkillStorageComponent?> ent)

@@ -40,7 +40,7 @@ public sealed partial class CESkillPrototype : IPrototype
     /// <summary>
     /// Skill restriction. Restrictions on this skill entering the pool of possible skills when the player levels up.
     /// </summary>
-    [DataField]
+    [DataField(serverOnly: true)]
     public List<CESkillRestriction> Restrictions = new();
 
     /// <summary>
