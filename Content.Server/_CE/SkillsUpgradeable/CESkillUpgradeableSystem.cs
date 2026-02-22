@@ -56,11 +56,13 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     {
         ent.Comp.CurrentUpgradeSelection.Clear();
 
-        for (var i = 0; i < ent.Comp.MaxUpgradeSelection; i++)
+        while (ent.Comp.CurrentUpgradeSelection.Count < ent.Comp.MaxUpgradeSelection)
         {
-            ent.Comp.CurrentUpgradeSelection.Add(GetNextSkill(ent));
+            var skill = GetNextSkill(ent);
+            ent.Comp.CurrentUpgradeSelection.Add(skill);
         }
 
+        Dirty(ent);
         EnableUpgradeAlert(ent);
     }
 
@@ -74,6 +76,10 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     private void RepopulatePossibleSkills(Entity<CESkillUpgradeableComponent> ent)
     {
         ent.Comp.PossibleSkills = _skill.GetLearnableSkills(ent.Owner);
+        
+        // Remove skills that are already in the current selection
+        ent.Comp.PossibleSkills.RemoveAll(s => ent.Comp.CurrentUpgradeSelection.Contains(s));
+        
         ent.Comp.PossibleSkills.Shuffle();
         Dirty(ent);
     }
