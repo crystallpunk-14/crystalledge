@@ -63,7 +63,7 @@ public sealed partial class AddAction : CESkillEffect
         if (!entManager.TryGetComponent<MetaDataComponent>(dummyAction, out var meta))
             return null;
 
-        message.AddText(meta.EntityDescription + "\n");
+        message.AddMarkup(meta.EntityDescription + "\n");
         var ev = new ExaminedEvent(message, dummyAction, dummyAction, true, true);
         entManager.EventBus.RaiseLocalEvent(dummyAction, ev);
 

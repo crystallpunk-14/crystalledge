@@ -12,6 +12,7 @@
         - type: StationJobs
           availableJobs:
             CEWarrior: [ -1, -1 ]
+            CEMage: [ -1, -1 ]
 
 - type: gameMap
   id: Dev
@@ -27,6 +28,7 @@
         - type: StationJobs
           availableJobs:
             CEWarrior: [ -1, -1 ]
+            CEMage: [ -1, -1 ]
         - type: CEStationZLevels
           mapsAbove:
           - /Maps/_CE/Dev/Dev1.yml

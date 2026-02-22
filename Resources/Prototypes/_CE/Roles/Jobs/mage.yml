@@ -1,0 +1,18 @@
+- type: job
+  id: CEMage
+  setPreference: true
+  name: ce-job-name-mage
+  description: ce-job-desc-mage
+  playTimeTracker: CEJobMage
+  icon: CEJobIconMage
+
+- type: playTimeTracker
+  id: CEJobMage
+
+- type: jobIcon
+  parent: CEJobIcon
+  id: CEJobIconMage
+  icon:
+    sprite: /Textures/_CE/Interface/job_icons.rsi
+    state: mage
+  jobName: ce-job-name-mage

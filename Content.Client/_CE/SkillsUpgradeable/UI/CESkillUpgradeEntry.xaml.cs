@@ -32,7 +32,7 @@ public sealed partial class CESkillUpgradeEntry : PanelContainer
     {
         SkillId = skillId;
         SkillType.SetMarkup(skillType);
-        SkillName.SetMessage(name);
+        SkillName.SetMarkup(name);
         SkillDesc.SetMarkup(description);
 
         if (icon != null)

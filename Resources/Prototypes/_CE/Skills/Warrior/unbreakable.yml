@@ -1,0 +1,79 @@
+- type: skill
+  id: Unbreakable
+  unique: true
+  effect: !type:AddAction
+    action: CEActionUnbreakable
+  restrictions:
+   - !type:JobWhitelist
+     jobs:
+     - CEWarrior
+
+- type: entity
+  id: CEActionUnbreakable
+  parent: CEActionSpellBase
+  name: Unbreakable
+  description: You will temporarily receive an additional [color=#f70d0d]+4 Vitality[/color].
+  components:
+  - type: CEActionManaCost
+    manaCost: 5
+  - type: Action
+    useDelay: 30
+    icon:
+      sprite: _CE/Actions/warrior.rsi
+      state: unbreakable
+  - type: DoAfterArgs
+    delay: 1
+  - type: InstantAction
+    event: !type:CEInstantModularEffectEvent
+      telegraphyEffects:
+      - !type:CESpellSpawnEntityOnTarget
+        spawns:
+        - CEImpactEffectUnbreakable
+      effects:
+      - !type:CESpellSpawnEntityOnTarget
+        spawns:
+        - CEImpactEffectUnbreakable
+      - !type:CESpellApplyStatusEffect
+        statusEffect: CEStatusEffectUnbreakable
+        duration: 60
+
+- type: entity
+  id: CEImpactEffectUnbreakable
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    layers:
+    - state: particles_up
+      color: "#ff0c0c"
+      shader: unshaded
+
+- type: entity
+  id: CEStatusEffectUnbreakable
+  name: unbreakable
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CESpellAlertUnbreakable
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/cast_impact48.rsi
+    noRot: true
+    layers:
+    - state: particles_up
+      color: "#f70d0d"
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#f70d0d"
+  - type: CEStatusEffectModifyStats
+    modifyStats:
+      Vitality: 4
+
+- type: alert
+  id: CESpellAlertUnbreakable
+  icons:
+  - sprite:  _CE/Actions/warrior.rsi
+    state: unbreakable
