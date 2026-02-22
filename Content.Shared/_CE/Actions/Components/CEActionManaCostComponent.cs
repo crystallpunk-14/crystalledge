@@ -9,7 +9,7 @@ namespace Content.Shared._CE.Actions.Components;
 public sealed partial class CEActionManaCostComponent : Component
 {
     [DataField]
-    public FixedPoint2 ManaCost = 0f;
+    public int ManaCost = 1;
 
     /// <summary>
     /// Can the cost of casting this magic effect be changed from clothing or other sources?

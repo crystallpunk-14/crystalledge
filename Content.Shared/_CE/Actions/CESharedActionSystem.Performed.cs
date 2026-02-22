@@ -1,5 +1,6 @@
 using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Actions.Events;
+using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.Power.Components;
 
@@ -43,28 +44,19 @@ public abstract partial class CESharedActionSystem
         }
 
         //First - try to take mana from container
-        if (!innate && TryComp<BatteryComponent>(action.Container, out var battery))
+        if (!innate && TryComp<CEMagicEnergyContainerComponent>(action.Container, out var mana))
         {
             var spellEv = new CESpellFromSpellStorageUsedEvent(args.Performer, ent, manaCost);
             RaiseLocalEvent(action.Container.Value, ref spellEv);
 
-            var energyTaken = MathF.Min(battery.LastCharge, (float)manaCost);
+            var energyTaken = Math.Min(mana.Energy, manaCost);
 
-            _battery.ChangeCharge((action.Container.Value, battery), -(float)manaCost);
+            _magicEnergy.ChangeEnergy((action.Container.Value, mana), -manaCost, out _, out _);
             manaCost -= energyTaken;
         }
 
         //Second - action user
-        if (manaCost > 0 && TryComp<BatteryComponent>(args.Performer, out var playerMana))
-            _battery.ChangeCharge((args.Performer, playerMana), -(float)manaCost);
-
-        //And spawn mana trace
-        //_magicVision.SpawnMagicTrace(
-        //        Transform(args.Performer).Coordinates,
-        //        action.Icon,
-        //        Loc.GetString("ce-magic-vision-used-spell", ("name", MetaData(ent).EntityName)),
-        //        TimeSpan.FromSeconds((float)ent.Comp.ManaCost * 50),
-        //        args.Performer,
-        //        null); //TODO: We need a way to pass spell target here
+        if (manaCost > 0 && TryComp<CEMagicEnergyContainerComponent>(args.Performer, out var playerMana))
+            _magicEnergy.ChangeEnergy((args.Performer, playerMana), -manaCost, out _, out _);
     }
 }

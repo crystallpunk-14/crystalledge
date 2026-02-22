@@ -1,6 +1,6 @@
 using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Actions.Events;
-using Content.Shared._CE.Skills.Components;
+using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.CombatMode.Pacification;
@@ -56,21 +56,21 @@ public abstract partial class CESharedActionSystem
         }
 
         //First - trying get mana from item
-        if (action.Container is not null && TryComp<BatteryComponent>(action.Container, out var battery))
-            requiredMana = MathF.Max(0, (float)(requiredMana - battery.LastCharge));
+        if (action.Container is not null && TryComp<CEMagicEnergyContainerComponent>(action.Container, out var mana))
+            requiredMana = Math.Max(0, requiredMana - mana.Energy);
 
         if (requiredMana <= 0)
             return;
 
         //Second - trying get mana from performer
-        if (!TryComp<BatteryComponent>(args.User, out var playerMana))
+        if (!TryComp<CEMagicEnergyContainerComponent>(args.User, out var playerMana))
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-no-mana-component"), args.User, args.User);
             args.Cancelled = true;
             return;
         }
 
-        if (playerMana.LastCharge < requiredMana && _timing.IsFirstTimePredicted)
+        if (playerMana.Energy < requiredMana && _timing.IsFirstTimePredicted)
             Popup.PopupClient(Loc.GetString($"ce-magic-spell-not-enough-mana-cast-warning-{_random.Next(5)}"),
                 args.User,
                 args.User,
