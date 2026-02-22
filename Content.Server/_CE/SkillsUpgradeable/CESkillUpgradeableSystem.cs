@@ -77,7 +77,14 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     {
         ent.Comp.CurrentUpgradeSelection.Clear();
 
-        while (ent.Comp.CurrentUpgradeSelection.Count < ent.Comp.MaxUpgradeSelection)
+        var availableSkills = ent.Comp.PossibleSkills.Count;
+        if (availableSkills == 0)
+        {
+            RepopulatePossibleSkills(ent);
+            availableSkills = ent.Comp.PossibleSkills.Count;
+        }
+        var targetSelectionCount = Math.Min(ent.Comp.MaxUpgradeSelection, availableSkills);
+        while (ent.Comp.CurrentUpgradeSelection.Count < targetSelectionCount)
         {
             var skill = GetNextSkill(ent);
             ent.Comp.CurrentUpgradeSelection.Add(skill);
@@ -97,10 +104,10 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     private void RepopulatePossibleSkills(Entity<CESkillUpgradeableComponent> ent)
     {
         ent.Comp.PossibleSkills = _skill.GetLearnableSkills(ent.Owner);
-        
+
         // Remove skills that are already in the current selection
         ent.Comp.PossibleSkills.RemoveAll(s => ent.Comp.CurrentUpgradeSelection.Contains(s));
-        
+
         ent.Comp.PossibleSkills.Shuffle();
         Dirty(ent);
     }
@@ -108,13 +115,9 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     private ProtoId<CESkillPrototype> GetNextSkill(Entity<CESkillUpgradeableComponent> ent)
     {
         if (ent.Comp.PossibleSkills.Count == 0)
-        {
             RepopulatePossibleSkills(ent);
-        }
         if (ent.Comp.PossibleSkills.Count == 0)
-        {
-            throw new InvalidOperationException("No skills available to learn.");
-        }
+            Log.Error($"No skills available to learn for {ent.Owner}.");
 
         var skill = _random.PickAndTake(ent.Comp.PossibleSkills);
         Dirty(ent);
