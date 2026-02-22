@@ -1,4 +1,5 @@
 using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared.Alert;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -6,6 +7,30 @@ namespace Content.Shared._CE.SkillsUpgrade;
 
 public abstract partial class CESharedSkillUpgradeableSystem : EntitySystem
 {
+    [Dependency] private readonly AlertsSystem _alerts = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<CESkillUpgradeableComponent, CESkillUpgradeAlertEvent>(OnUpgradeAlertClicked);
+    }
+
+    private void OnUpgradeAlertClicked(Entity<CESkillUpgradeableComponent> ent, ref CESkillUpgradeAlertEvent args)
+    {
+        Log.Info($"TODO: skill upgrade alert clicked for user {args.User}" );
+        args.Handled = true;
+    }
+
+    public void EnableUpgradeAlert(Entity<CESkillUpgradeableComponent> ent)
+    {
+        _alerts.ShowAlert(ent.Owner, ent.Comp.UpgradeAlert);
+    }
+
+    public void DisableUpgradeAlert(Entity<CESkillUpgradeableComponent> ent)
+    {
+        _alerts.ClearAlert(ent.Owner, ent.Comp.UpgradeAlert);
+    }
 }
 
 /// <summary>
@@ -17,3 +42,5 @@ public sealed class CETryLearnSkillMessage(NetEntity entity, ProtoId<CESkillProt
     public readonly NetEntity Entity = entity;
     public readonly ProtoId<CESkillPrototype> Skill = skill;
 }
+
+public sealed partial class CESkillUpgradeAlertEvent : BaseAlertEvent;

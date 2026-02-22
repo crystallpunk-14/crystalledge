@@ -1,5 +1,6 @@
 using Content.Shared._CE.Skills;
 using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared.Alert;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -28,4 +29,7 @@ public sealed partial class CESkillUpgradeableComponent : Component
 
     [DataField, AutoNetworkedField]
     public int MaxUpgradeSelection = 3;
+
+    [DataField]
+    public ProtoId<AlertPrototype> UpgradeAlert = "CEUpgradeSkillAlert";
 }

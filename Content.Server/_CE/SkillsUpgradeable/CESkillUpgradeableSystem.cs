@@ -52,12 +52,15 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         {
             ent.Comp.CurrentUpgradeSelection.Add(GetNextSkill(ent));
         }
+
+        EnableUpgradeAlert(ent);
     }
 
     private void ClearSelection(Entity<CESkillUpgradeableComponent> ent)
     {
         ent.Comp.CurrentUpgradeSelection.Clear();
         Dirty(ent);
+        DisableUpgradeAlert(ent);
     }
 
     private void RepopulatePossibleSkills(Entity<CESkillUpgradeableComponent> ent)
