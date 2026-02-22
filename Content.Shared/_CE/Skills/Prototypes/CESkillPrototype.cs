@@ -34,8 +34,8 @@ public sealed partial class CESkillPrototype : IPrototype
     ///  Skill effect. This is used to determine what happens when the player learns the skill. If you leave null, the skill will not have any effect.
     ///  But the presence of the skill itself can affect some systems that check for the presence of certain skills.
     /// </summary>
-    [DataField]
-    public List<CESkillEffect> Effects = new();
+    [DataField(required: true)]
+    public CESkillEffect Effect = default!;
 
     /// <summary>
     /// Skill restriction. Restrictions on this skill entering the pool of possible skills when the player levels up.
@@ -54,6 +54,7 @@ public sealed partial class CESkillPrototype : IPrototype
 [MeansImplicitUse]
 public abstract partial class CESkillEffect
 {
+    public abstract LocId SkillType { get; }
     public abstract void AddSkill(IEntityManager entManager, EntityUid target);
 
     public abstract void RemoveSkill(IEntityManager entManager, EntityUid target);

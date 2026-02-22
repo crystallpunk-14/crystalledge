@@ -22,6 +22,12 @@
             <!-- Separator -->
             <customControls:HSeparator Margin="0,0,0,8"/>
 
+            <!-- Skill type (above name) -->
+            <RichTextLabel Name="SkillType"
+                          StyleClasses="LabelSubText"
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,2" />
+
             <!-- Skill name as heading -->
             <RichTextLabel Name="SkillName"
                           StyleClasses="LabelKeyText"

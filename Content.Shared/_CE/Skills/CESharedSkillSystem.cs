@@ -36,10 +36,7 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (!_proto.Resolve(skill, out var indexedSkill))
             return false;
 
-        foreach (var effect in indexedSkill.Effects)
-        {
-            effect.AddSkill(EntityManager, target);
-        }
+        indexedSkill.Effect.AddSkill(EntityManager, target);
 
         component.LearnedSkills.Add(skill);
         Dirty(target, component);
@@ -66,10 +63,7 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (!_proto.Resolve(skill, out var indexedSkill))
             return false;
 
-        foreach (var effect in indexedSkill.Effects)
-        {
-            effect.RemoveSkill(EntityManager, target);
-        }
+        indexedSkill.Effect.RemoveSkill(EntityManager, target);
 
         Dirty(target, component);
         return true;
@@ -124,12 +118,9 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (indexedSkill.NameOverride is not null)
             return Loc.GetString(indexedSkill.NameOverride);
 
-        foreach (var effect in indexedSkill.Effects)
-        {
-            var name = effect.GetName(EntityManager, _proto);
-            if (name != null)
-                return name;
-        }
+        var name = indexedSkill.Effect.GetName(EntityManager, _proto);
+        if (name != null)
+            return name;
 
         return string.Empty;
     }
@@ -147,10 +138,7 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (indexedSkill.DescOverride is not null)
             sb.Append(Loc.GetString(indexedSkill.DescOverride));
 
-        foreach (var effect in indexedSkill.Effects)
-        {
-            sb.Append(effect.GetDescription(EntityManager, _proto, skill) + "\n");
-        }
+        sb.Append(indexedSkill.Effect.GetDescription(EntityManager, _proto, skill) + "\n");
 
         return sb.ToString();
     }
@@ -163,14 +151,22 @@ public abstract partial class CESharedSkillSystem : EntitySystem
         if (indexedSkill.IconOverride is not null)
             return indexedSkill.IconOverride;
 
-        foreach (var effect in indexedSkill.Effects)
-        {
-            var icon = effect.GetIcon(EntityManager, _proto);
-            if (icon != null)
-                return icon;
-        }
+        var icon = indexedSkill.Effect.GetIcon(EntityManager, _proto);
+        if (icon != null)
+            return icon;
 
         return null;
+    }
+
+    /// <summary>
+    ///  Helper function to get the skill type for a given skill prototype.
+    /// </summary>
+    public string GetSkillType(ProtoId<CESkillPrototype> skill)
+    {
+        if (!_proto.Resolve(skill, out var indexedSkill))
+            return string.Empty;
+
+        return Loc.GetString(indexedSkill.Effect.SkillType);
     }
 
     /// <summary>

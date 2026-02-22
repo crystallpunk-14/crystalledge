@@ -25,11 +25,13 @@ public sealed partial class CESkillUpgradeEntry : PanelContainer
 
     public void SetData(
         ProtoId<CESkillPrototype> skillId,
+        string skillType,
         string name,
         string description,
         Texture? icon)
     {
         SkillId = skillId;
+        SkillType.SetMarkup(skillType);
         SkillName.SetMessage(name);
         SkillDesc.SetMarkup(description);
 

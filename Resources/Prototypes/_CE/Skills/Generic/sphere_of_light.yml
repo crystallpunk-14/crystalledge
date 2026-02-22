@@ -1,8 +1,7 @@
 - type: skill
   id: SphereOfLight
   unique: false
-  effects:
-  - !type:AddAction
+  effect: !type:AddAction
     action: CEActionSpellSphereOfLight
 
 - type: entity

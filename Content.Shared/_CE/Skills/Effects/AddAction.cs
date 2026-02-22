@@ -13,6 +13,8 @@ public sealed partial class AddAction : CESkillEffect
     [DataField(required: true)]
     public EntProtoId Action;
 
+    public override LocId SkillType => "ce-skill-effect-active";
+
     public override void AddSkill(IEntityManager entManager, EntityUid target)
     {
         var actionsSystem = entManager.System<SharedActionsSystem>();

@@ -34,6 +34,7 @@ public sealed partial class CESkillUpgradeWindow : FancyWindow
 
         foreach (var skillId in skills)
         {
+            var skillType = _skillSystem.GetSkillType(skillId);
             var name = _skillSystem.GetSkillName(skillId);
             var desc = _skillSystem.GetSkillDescription(skillId);
 
@@ -43,7 +44,7 @@ public sealed partial class CESkillUpgradeWindow : FancyWindow
                 icon = _sprite.Frame0(iconSpec);
 
             var entry = new CESkillUpgradeEntry();
-            entry.SetData(skillId, name, desc, icon);
+            entry.SetData(skillId, skillType, name, desc, icon);
             entry.OnSkillSelected += skillProtoId => OnSkillSelected?.Invoke(skillProtoId);
 
             SkillsList.AddChild(entry);
