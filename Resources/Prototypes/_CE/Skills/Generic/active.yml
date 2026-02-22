@@ -1,11 +1,13 @@
 - type: skill
   id: TestSkill
+  unique: false
   effects:
   - !type:AddAction
     action: ActionPolymorphWizardSpider
 
 - type: skill
   id: TestSkill2
+  unique: false
   effects:
   - !type:AddAction
     action: ActionAnomalyPulse

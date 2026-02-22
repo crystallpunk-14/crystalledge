@@ -27,8 +27,9 @@ public sealed partial class CESkillUpgradeWindow : FancyWindow
         _skillSystem = _entManager.System<CESharedSkillSystem>();
     }
 
-    public void Populate(HashSet<ProtoId<CESkillPrototype>> skills)
+    public void Populate(HashSet<ProtoId<CESkillPrototype>> skills, int targetLevel)
     {
+        LevelLabel.Text = Loc.GetString("ce-skill-upgrade-level-label", ("level", targetLevel));
         SkillsList.RemoveAllChildren();
 
         foreach (var skillId in skills)

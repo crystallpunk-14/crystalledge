@@ -15,6 +15,23 @@ public sealed partial class CEClientSkillUpgradeableSystem : CESharedSkillUpgrad
 
         SubscribeLocalEvent<CESkillUpgradeableComponent, CESkillUpgradeAlertEvent>(OnAlertClicked);
         SubscribeLocalEvent<CESkillUpgradeableComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<CESkillUpgradeableComponent, AfterAutoHandleStateEvent>(OnStateUpdated);
+    }
+
+    private void OnStateUpdated(Entity<CESkillUpgradeableComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        // If the window is open and we got a state update, refresh the window contents
+        if (_window is not { IsOpen: true })
+            return;
+
+        if (ent.Comp.CurrentUpgradeSelection.Count > 0)
+        {
+            _window.Populate(ent.Comp.CurrentUpgradeSelection, ent.Comp.Level + 1);
+        }
+        else
+        {
+            CloseWindow();
+        }
     }
 
     private void OnAlertClicked(Entity<CESkillUpgradeableComponent> ent, ref CESkillUpgradeAlertEvent args)
@@ -38,7 +55,7 @@ public sealed partial class CEClientSkillUpgradeableSystem : CESharedSkillUpgrad
         _window = new CESkillUpgradeWindow();
         _window.OnSkillSelected += skill => RequestLearnSkill(target, skill);
         _window.OnClose += CloseWindow;
-        _window.Populate(target.Comp.CurrentUpgradeSelection);
+        _window.Populate(target.Comp.CurrentUpgradeSelection, target.Comp.Level + 1);
         _window.OpenCentered();
     }
 
@@ -60,6 +77,6 @@ public sealed partial class CEClientSkillUpgradeableSystem : CESharedSkillUpgrad
 
         var netEv = new CETryLearnSkillMessage(GetNetEntity(target), skill);
         RaiseNetworkEvent(netEv);
-        CloseWindow();
+        // Window will be refreshed or closed by OnStateUpdated when server responds
     }
 }

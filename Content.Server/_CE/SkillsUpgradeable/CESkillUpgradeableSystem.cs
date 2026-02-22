@@ -33,10 +33,24 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         if (!upgradeComp.CurrentUpgradeSelection.Contains(ev.Skill))
             return;
 
+        if (upgradeComp.PendingLevels <= 0)
+            return;
+
         if (!_skill.TryAddSkill(entity, ev.Skill))
             return;
 
-        ClearSelection((entity, upgradeComp));
+        upgradeComp.Level++;
+        upgradeComp.PendingLevels--;
+
+        // If there are still pending levels, reroll for the next one
+        if (upgradeComp.PendingLevels > 0)
+        {
+            RerollSelection((entity, upgradeComp));
+        }
+        else
+        {
+            ClearSelection((entity, upgradeComp));
+        }
     }
 
     private void OnMapInit(Entity<CESkillUpgradeableComponent> ent, ref MapInitEvent args)
@@ -46,10 +60,17 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
 
     /// <summary>
     /// Triggers a level up for the target entity, giving them skill upgrade options.
+    /// Stacks with existing pending levels.
     /// </summary>
     public void TriggerLevelUp(Entity<CESkillUpgradeableComponent> ent)
     {
-        RerollSelection(ent);
+        ent.Comp.PendingLevels++;
+
+        // Only reroll if there's no active selection already
+        if (ent.Comp.CurrentUpgradeSelection.Count == 0)
+            RerollSelection(ent);
+        else
+            Dirty(ent);
     }
 
     private void RerollSelection(Entity<CESkillUpgradeableComponent> ent)
