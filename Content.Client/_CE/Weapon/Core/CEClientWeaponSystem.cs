@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Numerics;
 using Content.Client.Gameplay;
 using Content.Shared._CE.Weapon.Core;
 using Content.Shared._CE.Weapon.Core.Components;
@@ -16,7 +15,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Weapon.Core;
 
-public sealed class CEClientWeaponSystem : CESharedWeaponSystem
+public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
 {
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
@@ -35,6 +34,12 @@ public sealed class CEClientWeaponSystem : CESharedWeaponSystem
         _xformQuery = GetEntityQuery<TransformComponent>();
         SubscribeNetworkEvent<CEMeleeLungeEvent>(OnMeleeLunge);
         UpdatesOutsidePrediction = true;
+    }
+
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+        UpdateEffects();
     }
 
     public override void Update(float frameTime)
@@ -206,28 +211,6 @@ public sealed class CEClientWeaponSystem : CESharedWeaponSystem
     protected override void DoDamageEffect(List<EntityUid> targets, EntityUid? user, TransformComponent targetXform)
     {
         _color.RaiseEffect(Color.Red, targets, Filter.Local());
-    }
-
-    public override void DoLunge(
-        EntityUid user,
-        EntityUid weapon,
-        Angle angle,
-        Vector2 localPos,
-        string? animation,
-        bool predicted = true)
-    {
-        // Client plays lunge animations locally via the existing melee effect system.
-        // Full animation support (spawning arc entities, etc.) can be added later
-        // by subscribing to MeleeLungeEvent patterns or implementing CE-specific effects.
-    }
-
-    private void OnMeleeLunge(CEMeleeLungeEvent ev)
-    {
-        var ent = GetEntity(ev.Entity);
-        var entWeapon = GetEntity(ev.Weapon);
-
-        if (Exists(ent) && Exists(entWeapon))
-            DoLunge(ent, entWeapon, ev.Angle, ev.LocalPos, ev.Animation);
     }
 
     #endregion
