@@ -21,8 +21,8 @@
   - type: Action
     useDelay: 1
     icon:
-      sprite: _CE/Actions/magic_light.rsi
-      state: sphere_of_light
+      sprite: _CE/Skills/sphere_of_light.rsi
+      state: icon
   - type: DoAfterArgs
     delay: 0.5
   - type: TargetAction

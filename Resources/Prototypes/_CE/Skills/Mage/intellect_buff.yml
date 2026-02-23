@@ -19,8 +19,8 @@
   - type: Action
     useDelay: 30
     icon:
-      sprite: _CE/Actions/mage.rsi
-      state: intellect_buff
+      sprite: _CE/Skills/intellect_buff.rsi
+      state: icon
   - type: DoAfterArgs
     delay: 1
   - type: InstantAction

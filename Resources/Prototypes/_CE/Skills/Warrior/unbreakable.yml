@@ -19,8 +19,8 @@
   - type: Action
     useDelay: 30
     icon:
-      sprite: _CE/Actions/warrior.rsi
-      state: unbreakable
+      sprite: _CE/Skills/unbreakable.rsi
+      state: icon
   - type: DoAfterArgs
     delay: 1
   - type: InstantAction

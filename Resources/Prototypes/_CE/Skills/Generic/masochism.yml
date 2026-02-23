@@ -1,0 +1,22 @@
+- type: skill
+  id: Masochism
+  unique: false
+  effect: !type:AddStatusEffect
+    action: CEStatusEffectMasochism
+
+- type: entity
+  id: CEStatusEffectMasochism
+  name: Masochism
+  description: You restore [color=blue]1 mana[/color] each time you take damage.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEMasochism
+  - type: CEMasochismStatusEffect
+    manaRestore: 1
+
+- type: alert
+  id: CEMasochism
+  icons:
+  - sprite: _CE/Skills/masochism.rsi
+    state: icon

@@ -73,7 +73,7 @@ public sealed partial class AddAction : CESkillEffect
 
     public override SpriteSpecifier? GetIcon(IEntityManager entManager, IPrototypeManager protoManager)
     {
-        if (!protoManager.TryIndex(Action, out var actionProto))
+        if (!protoManager.Resolve(Action, out var actionProto))
             return null;
 
         var compFactory = entManager.ComponentFactory;
