@@ -1,0 +1,18 @@
+- type: job
+  id: CEPriest
+  setPreference: true
+  name: ce-job-name-priest
+  description: ce-job-desc-priest
+  playTimeTracker: CEJobPriest
+  icon: CEJobIconPriest
+
+- type: playTimeTracker
+  id: CEJobPriest
+
+- type: jobIcon
+  parent: CEJobIcon
+  id: CEJobIconPriest
+  icon:
+    sprite: /Textures/_CE/Interface/job_icons.rsi
+    state: priest
+  jobName: ce-job-name-priest
