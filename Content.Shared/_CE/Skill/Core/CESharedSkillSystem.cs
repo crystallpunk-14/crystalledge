@@ -1,12 +1,12 @@
 using System.Text;
-using Content.Shared._CE.Skills.Components;
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Components;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Examine;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CE.Skills;
+namespace Content.Shared._CE.Skill.Core;
 
 public abstract partial class CESharedSkillSystem : EntitySystem
 {

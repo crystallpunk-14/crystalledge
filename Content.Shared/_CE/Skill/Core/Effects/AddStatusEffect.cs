@@ -1,11 +1,11 @@
 using System.Linq;
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CE.Skills.Effects;
+namespace Content.Shared._CE.Skill.Core.Effects;
 
 public sealed partial class AddStatusEffect : CESkillEffect
 {

@@ -1,4 +1,4 @@
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Alert;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;

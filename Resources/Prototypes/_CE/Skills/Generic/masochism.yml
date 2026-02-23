@@ -2,7 +2,7 @@
   id: Masochism
   unique: false
   effect: !type:AddStatusEffect
-    action: CEStatusEffectMasochism
+    effect: CEStatusEffectMasochism
 
 - type: entity
   id: CEStatusEffectMasochism

@@ -1,14 +1,11 @@
-using Content.Shared._CE.Skills;
-using Content.Shared._CE.Skills.Components;
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Components;
 using Robust.Client.Player;
-using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Skills;
 
-public sealed partial class CEClientSkillSystem : CESharedSkillSystem
+public sealed partial class CEClientSkillSystem : Shared._CE.Skill.Core.CESharedSkillSystem
 {
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;

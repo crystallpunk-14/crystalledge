@@ -1,5 +1,4 @@
 using Content.Server.Administration;
-using Content.Shared._CE.SkillsUpgrade;
 using Content.Shared.Administration;
 using Robust.Server.Player;
 using Robust.Shared.Console;

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Skills.Components;
+namespace Content.Shared._CE.Skill.Core.Components;
 
 /// <summary>
 /// Allows you to see what skills the creature possesses

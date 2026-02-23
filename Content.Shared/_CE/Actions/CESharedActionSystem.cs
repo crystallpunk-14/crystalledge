@@ -1,5 +1,4 @@
 using Content.Shared._CE.Mana.Core;
-using Content.Shared._CE.Skills;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Damage.Systems;
@@ -21,7 +20,7 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly CESharedSkillSystem _skill = default!;
+    [Dependency] private readonly Skill.Core.CESharedSkillSystem _skill = default!;
     //[Dependency] private readonly CESharedMagicVisionSystem _magicVision = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
 

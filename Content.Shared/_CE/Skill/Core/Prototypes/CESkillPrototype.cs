@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CE.Skills.Prototypes;
+namespace Content.Shared._CE.Skill.Core.Prototypes;
 
 [Prototype("skill")]
 public sealed partial class CESkillPrototype : IPrototype

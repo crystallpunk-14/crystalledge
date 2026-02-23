@@ -1,25 +1,25 @@
 - type: skill
-  id: MageIntellectBuff
+  id: Unbreakable
   unique: true
   effect: !type:AddAction
-    action: CEActionMageIntellectBuff
-  restrictions:
-   - !type:JobWhitelist
-     jobs:
-     - CEMage
+    action: CEActionUnbreakable
+  #restrictions:
+  # - !type:JobWhitelist
+  #   jobs:
+  #   - CEWarrior
 
 - type: entity
-  id: CEActionMageIntellectBuff
+  id: CEActionUnbreakable
   parent: CEActionSpellBase
-  name: Arcane Intellect
-  description: You will temporarily receive an additional [color=#0d6cf7]+4 Intelligence[/color].
+  name: Unbreakable
+  description: You will temporarily receive an additional [color=#f70d0d]+4 Vitality[/color].
   components:
   - type: CEActionManaCost
     manaCost: 5
   - type: Action
     useDelay: 30
     icon:
-      sprite: _CE/Skills/intellect_buff.rsi
+      sprite: _CE/Skills/unbreakable.rsi
       state: icon
   - type: DoAfterArgs
     delay: 1
@@ -28,17 +28,17 @@
       telegraphyEffects:
       - !type:CESpellSpawnEntityOnTarget
         spawns:
-        - CEImpactEffectMageIntellectBuff
+        - CEImpactEffectUnbreakable
       effects:
       - !type:CESpellSpawnEntityOnTarget
         spawns:
-        - CEImpactEffectMageIntellectBuff
+        - CEImpactEffectUnbreakable
       - !type:CESpellApplyStatusEffect
-        statusEffect: CEStatusEffectMageIntellectBuff
+        statusEffect: CEStatusEffectUnbreakable
         duration: 60
 
 - type: entity
-  id: CEImpactEffectMageIntellectBuff
+  id: CEImpactEffectUnbreakable
   parent: CEBaseMagicImpact
   categories: [ HideSpawnMenu ]
   save: false
@@ -46,34 +46,34 @@
   - type: Sprite
     layers:
     - state: particles_up
-      color: "#0c6cff"
+      color: "#ff0c0c"
       shader: unshaded
 
 - type: entity
-  id: CEStatusEffectMageIntellectBuff
-  name: arcane intellect
+  id: CEStatusEffectUnbreakable
+  name: unbreakable
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
-    alert: CESpellAlertMageIntellectBuff
+    alert: CESpellAlertUnbreakable
   - type: Sprite
     drawdepth: Effects
     sprite: _CE/Effects/cast_impact48.rsi
     noRot: true
     layers:
     - state: particles_up
-      color: "#0c6cff"
+      color: "#f70d0d"
       shader: unshaded
   - type: PointLight
     radius: 1.5
     energy: 1
-    color: "#0c6cff"
+    color: "#f70d0d"
   - type: CEStatusEffectModifyStats
     modifyStats:
-      Intelligence: 4
+      Vitality: 4
 
 - type: alert
-  id: CESpellAlertMageIntellectBuff
+  id: CESpellAlertUnbreakable
   icons:
-  - sprite:  _CE/Actions/mage.rsi
-    state: intellect_buff
+  - sprite:  _CE/Actions/warrior.rsi
+    state: unbreakable

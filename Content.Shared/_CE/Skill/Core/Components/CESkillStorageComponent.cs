@@ -1,14 +1,14 @@
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.Skills.Components;
+namespace Content.Shared._CE.Skill.Core.Components;
 
 /// <summary>
 /// Component that stores the skills learned by a player and their progress in the skill trees.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true, fieldDeltas: true)]
-[Access(typeof(CESharedSkillSystem))]
+[Access(typeof(Skill.Core.CESharedSkillSystem))]
 public sealed partial class CESkillStorageComponent : Component
 {
     [DataField, AutoNetworkedField]

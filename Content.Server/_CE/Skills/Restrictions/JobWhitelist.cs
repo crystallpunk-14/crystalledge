@@ -1,5 +1,5 @@
 using Content.Server.Roles.Jobs;
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;

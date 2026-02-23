@@ -1,4 +1,4 @@
-using Content.Shared._CE.Skills.Prototypes;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Examine;
@@ -6,7 +6,7 @@ using Content.Shared.Mind;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
-namespace Content.Shared._CE.Skills.Effects;
+namespace Content.Shared._CE.Skill.Core.Effects;
 
 public sealed partial class AddAction : CESkillEffect
 {
