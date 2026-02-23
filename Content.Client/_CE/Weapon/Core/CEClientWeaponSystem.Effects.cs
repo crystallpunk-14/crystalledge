@@ -82,6 +82,7 @@ public sealed partial class CEClientWeaponSystem
                 {
                     length = (1 / action.AttackRate) * 0.6f;
                     offset = action.AnimationOffset;
+                    spriteRotation = action.AnimationRotation;
                     break;
                 }
             }

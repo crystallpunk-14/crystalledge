@@ -32,9 +32,9 @@
   angle: 60
   animation: WeaponArcSlash
   animationOffset: 1
+  animationRotation: -90
   hitSound:
     path: /Audio/Weapons/bladeslice.ogg
-
 
 - type: attack
   id: CEPreciseAttackSword
@@ -47,9 +47,9 @@
   angle: 60
   animation: WeaponArcThrust
   animationOffset: 1
+  animationRotation: -90
   hitSound:
     path: /Audio/Weapons/bladeslice.ogg
-
 
 - type: entity
   parent: CEBaseWeaponSword

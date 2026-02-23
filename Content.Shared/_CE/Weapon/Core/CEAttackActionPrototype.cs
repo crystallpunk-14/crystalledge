@@ -58,6 +58,12 @@ public sealed partial class CEAttackActionPrototype : IPrototype
     public EntProtoId Animation = "WeaponArcSlash";
 
     /// <summary>
+    /// Rotation applied to the animation sprite (e.g. flip/tilt the arc graphic).
+    /// </summary>
+    [DataField]
+    public Angle AnimationRotation = Angle.Zero;
+
+    /// <summary>
     /// Distance of the weapon arc animation from the player.
     /// </summary>
     [DataField]
