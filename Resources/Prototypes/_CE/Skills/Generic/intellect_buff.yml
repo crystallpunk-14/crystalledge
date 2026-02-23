@@ -11,7 +11,7 @@
   id: CEActionMageIntellectBuff
   parent: CEActionSpellBase
   name: Arcane Intellect
-  description: You will temporarily receive an additional [color=#0d6cf7]+4 Intelligence[/color].
+  description: You will temporarily receive an additional [color=#3296fa]+4 Intelligence[/color].
   components:
   - type: CEActionManaCost
     manaCost: 5

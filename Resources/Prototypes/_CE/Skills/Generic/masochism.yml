@@ -6,7 +6,7 @@
 - type: entity
   id: CEStatusEffectMasochism
   name: Masochism
-  description: You restore [color=blue]1 mana[/color] each time you take damage.
+  description: You restore [color=#3296fa]1 mana[/color] each time you take damage.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
