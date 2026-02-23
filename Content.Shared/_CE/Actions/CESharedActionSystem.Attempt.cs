@@ -71,10 +71,10 @@ public abstract partial class CESharedActionSystem
         }
 
         if (playerMana.Energy < requiredMana && _timing.IsFirstTimePredicted)
-            Popup.PopupClient(Loc.GetString($"ce-magic-spell-not-enough-mana-cast-warning-{_random.Next(5)}"),
-                args.User,
-                args.User,
-                PopupType.SmallCaution);
+        {
+            Popup.PopupClient(Loc.GetString("ce-magic-spell-not-enough-mana"), args.User, args.User);
+            args.Cancelled = true;
+        }
     }
 
     private void OnStaminaCostActionAttempt(Entity<CEActionStaminaCostComponent> ent, ref ActionAttemptEvent args)
