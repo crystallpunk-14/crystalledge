@@ -1,0 +1,47 @@
+- type: entity
+  abstract: true
+  id: CEBaseWeaponSword
+  categories: [ ForkFiltered ]
+  parent:
+  - BaseItem
+  #- CEBaseWeaponDestructible
+  #- CEBaseWeaponSelfDamage
+  #- CEBaseWeaponSharp
+  components:
+  - type: Item
+    size: Ginormous
+  - type: CEWeapon
+    attacks:
+      Primary: CEWideAttackSword
+      Secondary: CEWideAttackSword
+  - type: Clothing
+    slots:
+    - neck
+    breakOnMove: false
+    equipDelay: 1
+    unequipDelay: 1
+
+- type: attack
+  id: CEWideAttackSword
+  mode: Wide
+  damage:
+    types:
+      Slash: 2
+  attackRate: 1.5
+  range: 1.2
+  angle: 60
+  animation: WeaponArcSlash
+  animationOffset: 1
+  hitSound:
+    path: /Audio/Weapons/bladeslice.ogg
+
+
+- type: entity
+  parent: CEBaseWeaponSword
+  id: CEWeaponSwordIron
+  name: iron sword
+  description: A finely crafted sword favored by imperial officers. Its blade gleams with authority and tradition.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Sword/iron.rsi
+    state: icon
