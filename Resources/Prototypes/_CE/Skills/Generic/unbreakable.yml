@@ -74,5 +74,5 @@
 - type: alert
   id: CESpellAlertUnbreakable
   icons:
-  - sprite:  _CE/Actions/warrior.rsi
-    state: unbreakable
+  - sprite: _CE/Skills/unbreakable.rsi
+    state: icon

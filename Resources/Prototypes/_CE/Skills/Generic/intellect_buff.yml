@@ -74,5 +74,5 @@
 - type: alert
   id: CESpellAlertMageIntellectBuff
   icons:
-  - sprite:  _CE/Actions/mage.rsi
-    state: intellect_buff
+  - sprite: _CE/Skills/intellect_buff.rsi
+    state: icon

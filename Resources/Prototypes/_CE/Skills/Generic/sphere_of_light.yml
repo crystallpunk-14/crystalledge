@@ -90,5 +90,5 @@
 - type: alert
   id: CEGlowing
   icons:
-  - sprite: _CE/Actions/magic_light.rsi
-    state: sphere_of_light
+  - sprite: _CE/Skills/sphere_of_light.rsi
+    state: icon
