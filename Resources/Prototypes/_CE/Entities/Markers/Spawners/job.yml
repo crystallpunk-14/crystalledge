@@ -1,0 +1,14 @@
+- type: entity
+  id: CESpawnPointJob
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  name: Players spawnpoint
+  components:
+  - type: SpawnPoint
+    spawn_type: Unset
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - state: green
+    - sprite: _CE/Mobs/Species/Human/parts.rsi
+      state: full_f

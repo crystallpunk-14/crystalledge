@@ -11,6 +11,7 @@
 # CrystallEdge zone
 
 BaselineWall: CEWallStoneBrick
+BaselineSpawnPoint: CESpawnPointJob
 
 # CrystallEdge zone end
 

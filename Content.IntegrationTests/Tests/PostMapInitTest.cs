@@ -449,6 +449,16 @@ namespace Content.IntegrationTests.Tests
                     var comp = entManager.GetComponent<StationJobsComponent>(station);
                     var jobs = new HashSet<ProtoId<JobPrototype>>(comp.SetupAvailableJobs.Keys);
 
+                    //CrystallEdge edit spawnpointers test
+                    var unsetSpawnPoints = entManager.EntityQuery<SpawnPointComponent>()
+                        .Where(x => x.SpawnType == SpawnPointType.Unset);
+
+                    if (unsetSpawnPoints.Any())
+                    {
+                        jobs.Clear();
+                    }
+                    //CrystallEdge end
+
                     var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
                         .Where(x => x.SpawnType == SpawnPointType.Job && x.Job != null)
                         .Select(x => x.Job.Value);
@@ -490,7 +500,7 @@ namespace Content.IntegrationTests.Tests
             {
                 var spawner = (ISpawnPoint)comp;
 
-                if (spawner.SpawnType is not SpawnPointType.LateJoin
+                if (spawner.SpawnType is not (SpawnPointType.LateJoin or SpawnPointType.Unset) //CrystallEdge unset inset
                 || xform.GridUid == null
                 || !gridUids.Contains(xform.GridUid.Value))
                 {
