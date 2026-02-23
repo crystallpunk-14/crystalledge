@@ -1,6 +1,5 @@
 - type: skill
   id: Masochism
-  unique: false
   effect: !type:AddStatusEffect
     effect: CEStatusEffectMasochism
 

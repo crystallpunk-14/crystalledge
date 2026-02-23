@@ -1,6 +1,5 @@
 - type: skill
   id: Unbreakable
-  unique: true
   effect: !type:AddAction
     action: CEActionUnbreakable
   #restrictions:

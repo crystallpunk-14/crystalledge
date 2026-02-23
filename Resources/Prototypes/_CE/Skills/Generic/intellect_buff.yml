@@ -1,6 +1,5 @@
 - type: skill
   id: MageIntellectBuff
-  unique: true
   effect: !type:AddAction
     action: CEActionMageIntellectBuff
   #restrictions:

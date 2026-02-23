@@ -132,8 +132,8 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         if (!Resolve(target, ref component, false))
             return false;
 
-        // Check if already learned (only matters for unique skills)
-        if (skill.Unique && _skill.HaveSkill(target, skill, component))
+        // Check if already learned
+        if (_skill.HaveSkill(target, skill, component))
             return false;
 
         //Restrictions check
