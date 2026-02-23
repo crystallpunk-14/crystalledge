@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._CE.Skills;
+using Content.Shared._CE.Skill.Upgrade;
 using Content.Shared._CE.Skills.Components;
 using Content.Shared._CE.Skills.Prototypes;
 using Content.Shared._CE.SkillsUpgrade;
@@ -28,7 +29,7 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         if (args.SenderSession.AttachedEntity != entity)
             return;
 
-        if (!TryComp<CESkillUpgradeableComponent>(entity, out var upgradeComp))
+        if (!TryComp<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent>(entity, out var upgradeComp))
             return;
 
         if (!upgradeComp.CurrentUpgradeSelection.Contains(ev.Skill))
@@ -59,7 +60,7 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
     /// Triggers a level up for the target entity, giving them skill upgrade options.
     /// Stacks with existing pending levels.
     /// </summary>
-    public void TriggerLevelUp(Entity<CESkillUpgradeableComponent> ent)
+    public void TriggerLevelUp(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent)
     {
         ent.Comp.PendingLevels++;
 
@@ -70,7 +71,7 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
             Dirty(ent);
     }
 
-    private void RerollSelection(Entity<CESkillUpgradeableComponent> ent)
+    private void RerollSelection(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent)
     {
         ent.Comp.CurrentUpgradeSelection.Clear();
 
@@ -91,14 +92,14 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         EnableUpgradeAlert(ent);
     }
 
-    private void ClearSelection(Entity<CESkillUpgradeableComponent> ent)
+    private void ClearSelection(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent)
     {
         ent.Comp.CurrentUpgradeSelection.Clear();
         Dirty(ent);
         DisableUpgradeAlert(ent);
     }
 
-    private void RepopulatePossibleSkills(Entity<CESkillUpgradeableComponent> ent)
+    private void RepopulatePossibleSkills(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent)
     {
         ent.Comp.PossibleSkills = GetLearnableSkills(ent.Owner);
 
@@ -109,7 +110,7 @@ public sealed partial class CESkillUpgradeableSystem : CESharedSkillUpgradeableS
         Dirty(ent);
     }
 
-    private ProtoId<CESkillPrototype> GetNextSkill(Entity<CESkillUpgradeableComponent> ent)
+    private ProtoId<CESkillPrototype> GetNextSkill(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent)
     {
         if (ent.Comp.PossibleSkills.Count == 0)
             RepopulatePossibleSkills(ent);

@@ -3,7 +3,7 @@ using Content.Shared.Alert;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CE.SkillsUpgrade;
+namespace Content.Shared._CE.Skill.Upgrade;
 
 public abstract partial class CESharedSkillUpgradeableSystem : EntitySystem
 {

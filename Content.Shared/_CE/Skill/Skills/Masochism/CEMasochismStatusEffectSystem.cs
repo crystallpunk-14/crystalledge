@@ -3,7 +3,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 
-namespace Content.Shared._CE.Skills.Content.Masochism;
+namespace Content.Shared._CE.Skill.Skills.Masochism;
 
 public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
 {

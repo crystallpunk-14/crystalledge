@@ -1,10 +1,9 @@
-using Content.Shared._CE.Skills;
 using Content.Shared._CE.Skills.Prototypes;
 using Content.Shared.Alert;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.SkillsUpgrade;
+namespace Content.Shared._CE.Skill.Upgrade;
 
 /// <summary>
 /// Component that stores the skills learned by a player and their progress in the skill trees.

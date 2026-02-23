@@ -1,4 +1,5 @@
 using Content.Client._CE.SkillsUpgradeable.UI;
+using Content.Shared._CE.Skill.Upgrade;
 using Content.Shared._CE.Skills.Prototypes;
 using Content.Shared._CE.SkillsUpgrade;
 using Robust.Shared.Prototypes;
@@ -13,12 +14,12 @@ public sealed partial class CEClientSkillUpgradeableSystem : CESharedSkillUpgrad
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CESkillUpgradeableComponent, CESkillUpgradeAlertEvent>(OnAlertClicked);
-        SubscribeLocalEvent<CESkillUpgradeableComponent, ComponentShutdown>(OnShutdown);
-        SubscribeLocalEvent<CESkillUpgradeableComponent, AfterAutoHandleStateEvent>(OnStateUpdated);
+        SubscribeLocalEvent<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent, Shared._CE.Skill.Upgrade.CESkillUpgradeAlertEvent>(OnAlertClicked);
+        SubscribeLocalEvent<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent, AfterAutoHandleStateEvent>(OnStateUpdated);
     }
 
-    private void OnStateUpdated(Entity<CESkillUpgradeableComponent> ent, ref AfterAutoHandleStateEvent args)
+    private void OnStateUpdated(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         // If the window is open and we got a state update, refresh the window contents
         if (_window is not { IsOpen: true })
@@ -34,18 +35,18 @@ public sealed partial class CEClientSkillUpgradeableSystem : CESharedSkillUpgrad
         }
     }
 
-    private void OnAlertClicked(Entity<CESkillUpgradeableComponent> ent, ref CESkillUpgradeAlertEvent args)
+    private void OnAlertClicked(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent, ref Shared._CE.Skill.Upgrade.CESkillUpgradeAlertEvent args)
     {
         args.Handled = true;
         OpenWindow(ent);
     }
 
-    private void OnShutdown(Entity<CESkillUpgradeableComponent> ent, ref ComponentShutdown args)
+    private void OnShutdown(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> ent, ref ComponentShutdown args)
     {
         CloseWindow();
     }
 
-    public void OpenWindow(Entity<CESkillUpgradeableComponent> target)
+    public void OpenWindow(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> target)
     {
         if (target.Comp.CurrentUpgradeSelection.Count == 0)
             return;
@@ -70,7 +71,7 @@ public sealed partial class CEClientSkillUpgradeableSystem : CESharedSkillUpgrad
         _window = null;
     }
 
-    public void RequestLearnSkill(Entity<CESkillUpgradeableComponent> target, ProtoId<CESkillPrototype> skill)
+    public void RequestLearnSkill(Entity<Shared._CE.Skill.Upgrade.CESkillUpgradeableComponent> target, ProtoId<CESkillPrototype> skill)
     {
         if (!target.Comp.CurrentUpgradeSelection.Contains(skill))
             return;

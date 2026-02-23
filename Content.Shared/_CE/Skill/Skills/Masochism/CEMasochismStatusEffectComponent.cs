@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Skills.Content.Masochism;
+namespace Content.Shared._CE.Skill.Skills.Masochism;
 
 /// <summary>
 /// Restore mana when taking damage.
