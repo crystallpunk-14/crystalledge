@@ -17,6 +17,9 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
 
     private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<DamageChangedEvent> args)
     {
+        if (!args.Args.DamageIncreased)
+            return;
+
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect))
             return;
 
