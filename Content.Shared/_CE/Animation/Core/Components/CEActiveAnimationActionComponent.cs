@@ -22,4 +22,7 @@ public sealed partial class CEActiveAnimationActionComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public Angle? AnimationAngle;
+
+    [DataField, AutoNetworkedField]
+    public bool LockRotation;
 }

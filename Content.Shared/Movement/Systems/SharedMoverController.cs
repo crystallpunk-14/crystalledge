@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Friction;
@@ -64,6 +65,7 @@ public abstract partial class SharedMoverController : VirtualController
     protected EntityQuery<RelayInputMoverComponent> RelayQuery;
     protected EntityQuery<PullableComponent> PullableQuery;
     protected EntityQuery<TransformComponent> XformQuery;
+    protected EntityQuery<CEActiveAnimationActionComponent> CEAnimationQuery; //CrystallEdge - blocking rotation while in animation
 
     private static readonly ProtoId<TagPrototype> FootstepSoundTag = "FootstepSound";
 
@@ -100,6 +102,9 @@ public abstract partial class SharedMoverController : VirtualController
         FTLQuery = GetEntityQuery<FTLComponent>();
         PilotQuery = GetEntityQuery<PilotComponent>();
         PreventPilotQuery = GetEntityQuery<PreventPilotComponent>();
+        //CrystallEdge
+        CEAnimationQuery  = GetEntityQuery<CEActiveAnimationActionComponent>();
+        //CrystallEdge end
 
         SubscribeLocalEvent<MovementSpeedModifierComponent, TileFrictionEvent>(OnTileFriction);
         SubscribeLocalEvent<InputMoverComponent, ComponentStartup>(OnMoverStartup);
@@ -354,11 +359,16 @@ public abstract partial class SharedMoverController : VirtualController
         {
             if (!NoRotateQuery.HasComponent(uid))
             {
-                // TODO apparently this results in a duplicate move event because "This should have its event run during
-                // island solver"??. So maybe SetRotation needs an argument to avoid raising an event?
-                var worldRot = _transform.GetWorldRotation(xform);
+                //CrystallEdge - lock rotation while in animation
+                if (!CEAnimationQuery.TryComp(uid, out var animation) || !animation.LockRotation)
+                {
+                    // TODO apparently this results in a duplicate move event because "This should have its event run during
+                    // island solver"??. So maybe SetRotation needs an argument to avoid raising an event?
+                    var worldRot = _transform.GetWorldRotation(xform);
 
-                _transform.SetLocalRotation(uid, xform.LocalRotation + wishDir.ToWorldAngle() - worldRot, xform);
+                    _transform.SetLocalRotation(uid, xform.LocalRotation + wishDir.ToWorldAngle() - worldRot, xform);
+                }
+                //CrystallEdge end
             }
 
             if (!weightless && MobMoverQuery.TryGetComponent(uid, out var mobMover) &&

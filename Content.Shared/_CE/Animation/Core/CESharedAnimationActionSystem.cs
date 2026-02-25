@@ -90,6 +90,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
         controller.ActiveAnimation = animation;
         controller.StartAnimationTime = _timing.CurTime;
+        controller.LockRotation = animation.LockRotation;
         Dirty(entity, controller);
 
         var started = new CEAnimationActionStartedEvent(animation);
