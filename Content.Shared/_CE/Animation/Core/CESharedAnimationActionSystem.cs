@@ -50,7 +50,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
             {
                 var startTime = controller.StartAnimationTime.Value;
-                foreach (var (keyFrame, action) in animation.Events)
+                foreach (var (keyFrame, actions) in animation.Events)
                 {
                     // Skip events already processed
                     if (keyFrame <= controller.LastEvent)
@@ -60,7 +60,10 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     // Only trigger if event time is within this frame
                     if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
                     {
-                        action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero);
+                        foreach (var action in actions)
+                        {
+                            action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero);
+                        }
                         controller.LastEvent = keyFrame;
                         Dirty(uid, controller);
                     }
@@ -128,7 +131,6 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.StartAnimationTime = _timing.CurTime;
         controller.LockRotation = animation.LockRotation;
         controller.AnimationAngle = animationAngle ?? _transform.GetWorldRotation(entity);
-        controller.LastEvent = TimeSpan.Zero; // Reset last event for new animation
         controller.Used = used;
         Dirty(entity, controller);
 

@@ -10,8 +10,8 @@
   components:
   - type: Item
     size: Ginormous
-  - type: CEWeapon
-    attacks:
+  - type: CEItemAnimation
+    animations:
       Primary: SwordAttack1
       Secondary: SwordAttack2
   - type: Clothing
@@ -27,7 +27,8 @@
   lockRotation: true
   duration: 0.5
   events:
-    0.1: !type:Dash
+    0:
+    - !type:Dash
       distance: 0.5
 
 - type: animationAction
@@ -36,9 +37,11 @@
   lockRotation: true
   duration: 0.5
   events:
-    0.1: !type:Dash
+    0:
+    - !type:Dash
       distance: 0.7
-    0.3: !type:Dash
+    0.4:
+    - !type:Dash
       distance: -0.3
 
 - type: entity
