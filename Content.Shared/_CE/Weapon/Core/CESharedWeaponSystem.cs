@@ -77,7 +77,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         if (!weapon.Comp.Attacks.TryGetValue(attackEvent.AttackType, out var attackProtoId))
             return false;
 
-        return AnimationAction.TryPlayAnimation(user, attackProtoId, weapon);
+        return AnimationAction.TryPlayAnimation(user, attackProtoId, weapon.Owner, angle);
     }
 
     public bool TryGetWeapon(EntityUid entity, [NotNullWhen(true)] out Entity<CEWeaponComponent>? weapon)

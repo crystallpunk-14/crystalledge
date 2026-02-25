@@ -87,10 +87,10 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
         if (!_xformQuery.TryComp(user, out var userXform))
             return;
 
-        var playerPos = userXform.MapPosition.Position;
-        var targetPos = coordinates.Position;
+        var playerPos = TransformSystem.GetMapCoordinates(userXform).Position;
+        var targetPos = TransformSystem.ToMapCoordinates(coordinates).Position;
         var direction = targetPos - playerPos;
-        var angle = direction.ToAngle();
+        var angle = direction.ToAngle() + Angle.FromDegrees(90); //Uhh idk why we need this
 
         if (primaryDown == BoundKeyState.Down)
         {
