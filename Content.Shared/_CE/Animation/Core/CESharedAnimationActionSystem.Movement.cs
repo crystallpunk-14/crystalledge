@@ -6,7 +6,7 @@ namespace Content.Shared._CE.Animation.Core;
 
 public abstract partial class CESharedAnimationActionSystem
 {
-    private void InitMovementSpeed()
+    private void InitMovement()
     {
         SubscribeLocalEvent<CEActiveAnimationActionComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovementSpeedModifiers);
         SubscribeLocalEvent<CEActiveAnimationActionComponent, ChangeDirectionAttemptEvent>(OnChangeDirectionAttempt);

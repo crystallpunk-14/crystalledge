@@ -17,7 +17,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     {
         base.Initialize();
 
-        InitMovementSpeed();
+        InitMovement();
     }
 
     public override void Update(float frameTime)

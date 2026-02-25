@@ -1,24 +1,25 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.Animation.Core.Components;
 
 /// <summary>
 ///
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEActiveAnimationActionComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public ProtoId<CEAnimationActionPrototype>? ActiveAnimation;
 
-    [DataField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
     public TimeSpan? StartAnimationTime;
 
     /// <summary>
     /// Current animation angle
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public Angle? AnimationAngle;
 }

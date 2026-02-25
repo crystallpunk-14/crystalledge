@@ -1,0 +1,5 @@
+- type: animationAction
+  id: Test
+  movementSpeed: 0.3
+  lockRotation: true
+  duration: 5
