@@ -25,4 +25,7 @@ public sealed partial class CEActiveAnimationActionComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool LockRotation;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
+    public TimeSpan LastEvent = TimeSpan.Zero;
 }

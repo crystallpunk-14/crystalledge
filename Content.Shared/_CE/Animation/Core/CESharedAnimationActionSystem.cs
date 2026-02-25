@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared.Movement.Systems;
@@ -24,8 +25,8 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<CEActiveAnimationActionComponent>();
-        while (query.MoveNext(out var uid, out var controller))
+        var query = EntityQueryEnumerator<CEActiveAnimationActionComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var controller, out var xform))
         {
             if (!_proto.Resolve(controller.ActiveAnimation, out var animation))
                 continue;
@@ -42,7 +43,28 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             }
 
             //Processing animation events
+            if (_timing.ApplyingState)
+                continue; // Skip during state application to prevent duplicate events
+                
+            if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
+            {
+                var startTime = controller.StartAnimationTime.Value;
+                foreach (var (keyFrame, action) in animation.Events)
+                {
+                    // Skip events already processed
+                    if (keyFrame <= controller.LastEvent)
+                        continue;
 
+                    var eventTime = startTime + keyFrame;
+                    // Only trigger if event time is within this frame
+                    if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
+                    {
+                        action.Play(EntityManager, uid, controller.AnimationAngle ?? Angle.Zero);
+                        controller.LastEvent = keyFrame;
+                        Dirty(uid, controller); // Mark component dirty after state change
+                    }
+                }
+            }
         }
     }
 
@@ -54,7 +76,9 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <param name="forceCancel"></param>
     /// <returns></returns>
     [PublicAPI]
-    public bool TryPlayAnimation(EntityUid entity, ProtoId<CEAnimationActionPrototype> animationProto, bool forceCancel = false)
+    public bool TryPlayAnimation(EntityUid entity,
+        ProtoId<CEAnimationActionPrototype> animationProto,
+        bool forceCancel = false)
     {
         if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
         {
@@ -96,6 +120,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.ActiveAnimation = animation;
         controller.StartAnimationTime = _timing.CurTime;
         controller.LockRotation = animation.LockRotation;
+        controller.LastEvent = TimeSpan.Zero; // Reset last event for new animation
         Dirty(entity, controller);
 
         var started = new CEAnimationActionStartedEvent(animation);
@@ -120,7 +145,8 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 /// </summary>
 /// <param name="animation"></param>
 /// <param name="cancelled"></param>
-public sealed class CEAnimationActionEndedEvent(ProtoId<CEAnimationActionPrototype> animation, bool cancelled) : EntityEventArgs
+public sealed class CEAnimationActionEndedEvent(ProtoId<CEAnimationActionPrototype> animation, bool cancelled)
+    : EntityEventArgs
 {
     public ProtoId<CEAnimationActionPrototype> Animation = animation;
     public bool Cancelled = cancelled;
