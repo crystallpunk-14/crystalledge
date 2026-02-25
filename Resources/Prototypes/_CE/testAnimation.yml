@@ -3,3 +3,10 @@
   movementSpeed: 0.3
   lockRotation: true
   duration: 5
+  events:
+    2: !type:Dash
+      speed: 5
+    3: !type:Dash
+      speed: 5
+    4: !type:Dash
+      speed: 5

@@ -1,0 +1,25 @@
+
+using Content.Shared._CE.Animation.Core;
+using Content.Shared.Throwing;
+using Robust.Shared.Map;
+
+public sealed partial class Dash : CEAnimationActionEntry
+{
+    [DataField]
+    public float Speed = 10f;
+
+    [DataField]
+    public float Distance = 1f;
+
+    public override void Play(EntityManager entManager, EntityUid entity, Angle angle)
+    {
+        var throwing = entManager.System<ThrowingSystem>();
+
+        throwing.TryThrow(
+            entity,
+            angle.ToWorldVec() * Distance,
+            Speed,
+            entity,
+            doSpin: false);
+    }
+}

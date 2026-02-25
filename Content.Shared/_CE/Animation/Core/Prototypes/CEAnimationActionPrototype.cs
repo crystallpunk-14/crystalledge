@@ -28,4 +28,7 @@ public sealed partial class CEAnimationActionPrototype : IPrototype
     /// </summary>
     [DataField]
     public bool LockRotation = true;
+
+    [DataField]
+    public Dictionary<TimeSpan, CEAnimationActionEntry> Events = new();
 }
