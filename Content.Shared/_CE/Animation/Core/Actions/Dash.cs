@@ -10,7 +10,7 @@ public sealed partial class Dash : CEAnimationActionEntry
     [DataField]
     public float Distance = 1f;
 
-    public override void Play(EntityManager entManager, EntityUid entity, Angle angle)
+    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle)
     {
         var throwing = entManager.System<ThrowingSystem>();
 
@@ -19,6 +19,7 @@ public sealed partial class Dash : CEAnimationActionEntry
             angle.ToWorldVec() * Distance,
             Speed,
             entity,
+            animated: false,
             doSpin: false);
     }
 }

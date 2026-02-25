@@ -43,10 +43,10 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                 continue;
             }
 
-            //Processing animation events
             if (_timing.ApplyingState)
-                continue; // Skip during state application to prevent duplicate events
+                continue;
 
+            //Processing animation events
             if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
             {
                 var startTime = controller.StartAnimationTime.Value;
@@ -60,9 +60,9 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     // Only trigger if event time is within this frame
                     if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
                     {
-                        action.Play(EntityManager, uid, controller.AnimationAngle ?? Angle.Zero);
+                        action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero);
                         controller.LastEvent = keyFrame;
-                        Dirty(uid, controller); // Mark component dirty after state change
+                        Dirty(uid, controller);
                     }
                 }
             }
@@ -79,6 +79,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     [PublicAPI]
     public bool TryPlayAnimation(EntityUid entity,
         ProtoId<CEAnimationActionPrototype> animationProto,
+        EntityUid? used = null,
         bool forceCancel = false)
     {
         if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
@@ -92,7 +93,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         if (!_proto.Resolve(animationProto, out var indexedAnimation))
             return false;
 
-        StartAnimation(entity, indexedAnimation);
+        StartAnimation(entity, indexedAnimation, used);
         return true;
     }
 
@@ -114,7 +115,11 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <summary>
     /// Starts the specified animation, overwriting the current animations if they are playing.
     /// </summary>
-    private void StartAnimation(EntityUid entity, CEAnimationActionPrototype animation, Angle? animationAngle = null)
+    private void StartAnimation(
+        EntityUid entity,
+        CEAnimationActionPrototype animation,
+        EntityUid? used = null,
+        Angle? animationAngle = null)
     {
         var controller = EnsureComp<CEActiveAnimationActionComponent>(entity);
 
@@ -123,6 +128,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.LockRotation = animation.LockRotation;
         controller.AnimationAngle = animationAngle ?? _transform.GetWorldRotation(entity);
         controller.LastEvent = TimeSpan.Zero; // Reset last event for new animation
+        controller.Used = used;
         Dirty(entity, controller);
 
         var started = new CEAnimationActionStartedEvent(animation);
