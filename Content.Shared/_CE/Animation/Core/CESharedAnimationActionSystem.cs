@@ -80,6 +80,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     public bool TryPlayAnimation(EntityUid entity,
         ProtoId<CEAnimationActionPrototype> animationProto,
         EntityUid? used = null,
+        Angle? angle = null,
         bool forceCancel = false)
     {
         if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
@@ -93,7 +94,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         if (!_proto.Resolve(animationProto, out var indexedAnimation))
             return false;
 
-        StartAnimation(entity, indexedAnimation, used);
+        StartAnimation(entity, indexedAnimation, used, angle);
         return true;
     }
 

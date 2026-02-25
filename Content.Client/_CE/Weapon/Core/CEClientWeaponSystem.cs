@@ -1,0 +1,118 @@
+using System.Numerics;
+using Content.Client.Gameplay;
+using Content.Shared._CE.Weapon.Core;
+using Content.Shared._CE.Weapon.Core.Components;
+using Content.Shared.Effects;
+using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
+using Robust.Client.Input;
+using Robust.Client.Player;
+using Robust.Client.State;
+using Robust.Shared.Input;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+
+namespace Content.Client._CE.Weapon.Core;
+
+public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
+{
+    [Dependency] private readonly IEyeManager _eyeManager = default!;
+    [Dependency] private readonly IInputManager _inputManager = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IStateManager _stateManager = default!;
+    [Dependency] private readonly InputSystem _inputSystem = default!;
+    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+
+    private EntityQuery<TransformComponent> _xformQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _xformQuery = GetEntityQuery<TransformComponent>();
+        UpdatesOutsidePrediction = true;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (!Timing.IsFirstTimePredicted)
+            return;
+
+        var entity = _player.LocalEntity;
+
+        if (entity == null)
+            return;
+
+        var user = entity.Value;
+
+
+        if (!TryGetWeapon(user, out var weapon))
+            return;
+
+        if (!CombatMode.IsInCombatMode(user) || !CanAttack(user, weapon: weapon))
+            return;
+
+        var primaryDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.Use);
+        var secondaryDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary);
+
+        // Release detection — stop attacking when buttons are released.
+        if (primaryDown != BoundKeyState.Down && secondaryDown != BoundKeyState.Down)
+        {
+            if (weapon.Value.Comp.Attacking)
+                RaisePredictiveEvent(new CEStopAttackEvent(GetNetEntity(weapon.Value)));
+
+            return;
+        }
+
+        if (weapon.Value.Comp.Attacking)
+            return;
+
+        var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
+
+        if (mousePos.MapId == MapId.Nullspace)
+            return;
+
+
+        EntityCoordinates coordinates;
+
+        if (MapManager.TryFindGridAt(mousePos, out var gridUid, out _))
+            coordinates = TransformSystem.ToCoordinates(gridUid, mousePos);
+        else
+            coordinates = TransformSystem.ToCoordinates(_map.GetMap(mousePos.MapId), mousePos);
+
+        //Calculate angle from player to target position
+        if (!_xformQuery.TryComp(user, out var userXform))
+            return;
+
+        var playerPos = userXform.MapPosition.Position;
+        var targetPos = coordinates.Position;
+        var direction = targetPos - playerPos;
+        var angle = direction.ToAngle();
+
+        if (primaryDown == BoundKeyState.Down)
+        {
+            ClientAttack(user, weapon.Value, angle, CEAttackType.Primary);
+            return;
+        }
+
+        if (secondaryDown == BoundKeyState.Down)
+        {
+            ClientAttack(user, weapon.Value, angle, CEAttackType.Secondary);
+        }
+    }
+
+    private void ClientAttack(
+        EntityUid user,
+        Entity<CEWeaponComponent> weapon,
+        Angle angle,
+        CEAttackType attackType)
+    {
+        if (!Timing.IsFirstTimePredicted)
+            return;
+
+        RaisePredictiveEvent(new CEWeaponAttackEvent(angle, GetNetEntity(weapon), attackType));
+    }
+}
