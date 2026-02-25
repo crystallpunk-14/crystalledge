@@ -20,29 +20,62 @@
     equipWhileMoving: true
     equipDelay: 1
     unequipDelay: 1
+  - type: CEMeleeWeapon
+    damage:
+      types:
+        Slash: 2
 
 - type: animationAction
   id: SwordAttack1
   movementSpeed: 0.3
   lockRotation: true
-  duration: 0.5
+  duration: 0.3
   events:
     0:
     - !type:Dash
-      distance: 0.5
+      distance: 0.2
+    0.1:
+    - !type:ArcAttack
+      range: 0.5
+      arcWidth: 120
 
 - type: animationAction
   id: SwordAttack2
   movementSpeed: 0.3
   lockRotation: true
-  duration: 0.5
+  duration: 1.0
   events:
-    0:
+    0.2:
     - !type:Dash
-      distance: 0.7
+      distance: 4.5
+    0.3:
+    - !type:ArcAttack
+      range: 0.5
+      arcWidth: 360
     0.4:
-    - !type:Dash
-      distance: -0.3
+    - !type:ArcAttack
+      range: 0.5
+      arcWidth: 360
+    0.5:
+    - !type:ArcAttack
+      range: 0.5
+      arcWidth: 360
+
+# Example of ArcAttack usage - deals damage in a 90-degree arc
+# - type: animationAction
+#   id: SwordAttackArc
+#   movementSpeed: 0.3
+#   lockRotation: true
+#   duration: 0.5
+#   events:
+#     0:
+#     - !type:ArcAttack
+#       range: 1.5          # Attack range in meters
+#       arcWidth: 90        # Width of the arc in degrees
+#       damage:
+#         types:
+#           Slash: 10
+#           Blunt: 5
 
 - type: entity
   parent: CEBaseWeaponSword
