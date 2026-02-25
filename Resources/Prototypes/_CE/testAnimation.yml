@@ -2,11 +2,7 @@
   id: Test
   movementSpeed: 0.3
   lockRotation: true
-  duration: 5
+  duration: 1
   events:
-    2: !type:Dash
-      distance: 2
-    3: !type:Dash
-      distance: -2
-    4: !type:Dash
-      distance: 2
+    0.5: !type:Dash
+      distance: 1
