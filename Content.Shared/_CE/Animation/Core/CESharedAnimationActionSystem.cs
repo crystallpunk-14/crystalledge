@@ -12,6 +12,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public override void Initialize()
@@ -45,7 +46,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             //Processing animation events
             if (_timing.ApplyingState)
                 continue; // Skip during state application to prevent duplicate events
-                
+
             if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
             {
                 var startTime = controller.StartAnimationTime.Value;
@@ -113,13 +114,14 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <summary>
     /// Starts the specified animation, overwriting the current animations if they are playing.
     /// </summary>
-    private void StartAnimation(EntityUid entity, CEAnimationActionPrototype animation)
+    private void StartAnimation(EntityUid entity, CEAnimationActionPrototype animation, Angle? animationAngle = null)
     {
         var controller = EnsureComp<CEActiveAnimationActionComponent>(entity);
 
         controller.ActiveAnimation = animation;
         controller.StartAnimationTime = _timing.CurTime;
         controller.LockRotation = animation.LockRotation;
+        controller.AnimationAngle = animationAngle ?? _transform.GetWorldRotation(entity);
         controller.LastEvent = TimeSpan.Zero; // Reset last event for new animation
         Dirty(entity, controller);
 

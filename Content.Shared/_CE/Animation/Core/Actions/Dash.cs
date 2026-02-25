@@ -1,7 +1,6 @@
-
-using Content.Shared._CE.Animation.Core;
 using Content.Shared.Throwing;
-using Robust.Shared.Map;
+
+namespace Content.Shared._CE.Animation.Core.Actions;
 
 public sealed partial class Dash : CEAnimationActionEntry
 {
