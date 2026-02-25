@@ -2,33 +2,33 @@ using Content.Shared._CE.Animation.Core.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.Weapon.Core.Components;
+namespace Content.Shared._CE.Animation.Item.Components;
 
 /// <summary>
-///
+/// Using this item in combat mode triggers action animations on the character.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
-[Access(typeof(CESharedWeaponSystem))]
-public sealed partial class CEWeaponComponent : Component
+[Access(typeof(CESharedItemAnimationSystem))]
+public sealed partial class CEItemAnimationComponent : Component
 {
     /// <summary>
     /// Mapping from input button to attack action prototype.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public Dictionary<CEAttackType, ProtoId<CEAnimationActionPrototype>> Attacks = new();
+    public Dictionary<CEUseType, ProtoId<CEAnimationActionPrototype>> Animations = new();
 
     /// <summary>
     /// Are we currently holding down the mouse for an attack.
     /// Used so we can't just hold the mouse button and attack constantly.
     /// </summary>
     [AutoNetworkedField]
-    public bool Attacking = false;
+    public bool Using = false;
 }
 
 /// <summary>
 /// Which input button binding triggers the attack.
 /// </summary>
-public enum CEAttackType : byte
+public enum CEUseType : byte
 {
     Primary,
     Secondary,

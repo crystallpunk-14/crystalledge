@@ -1,19 +1,17 @@
-using Content.Shared._CE.Weapon.Core.Components;
-using Robust.Shared.Map;
+using Content.Shared._CE.Animation.Item.Components;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CE.Weapon.Core;
-
+namespace Content.Shared._CE.Animation.Item;
 
 /// <summary>
 /// Network event sent from client to server when performing an attack.
 /// Contains all data needed for both precise and wide attacks.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEWeaponAttackEvent(
+public sealed class CEItemAnimationUseEvent(
     Angle angle,
     NetEntity weapon,
-    CEAttackType attackType)
+    CEUseType useType)
     : EntityEventArgs
 {
     /// <summary>
@@ -29,23 +27,23 @@ public sealed class CEWeaponAttackEvent(
     /// <summary>
     /// Which button binding triggered this attack.
     /// </summary>
-    public readonly CEAttackType AttackType = attackType;
+    public readonly CEUseType UseType = useType;
 }
 
 /// <summary>
 /// Event raised on entity in GetWeapon function to allow systems to manually
 /// specify what the weapon should be.
 /// </summary>
-public sealed class CEGetMeleeWeaponEvent : HandledEntityEventArgs
+public sealed class CEGetItemAnimationEvent : HandledEntityEventArgs
 {
-    public Entity<CEWeaponComponent>? Weapon;
+    public Entity<CEItemAnimationComponent>? Weapon;
 }
 
 /// <summary>
 /// Raised when a client releases the attack button.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEStopAttackEvent(NetEntity weapon) : EntityEventArgs
+public sealed class CEStopItemAnimationUseEvent(NetEntity weapon) : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
 }
