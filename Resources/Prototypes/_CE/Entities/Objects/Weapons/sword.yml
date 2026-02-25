@@ -17,7 +17,7 @@
   - type: Clothing
     slots:
     - neck
-    breakOnMove: false
+    equipWhileMoving: true
     equipDelay: 1
     unequipDelay: 1
 
