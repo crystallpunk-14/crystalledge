@@ -1,6 +1,7 @@
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared.Movement.Systems;
+using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -47,6 +48,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <param name="animationProto"></param>
     /// <param name="forceCancel"></param>
     /// <returns></returns>
+    [PublicAPI]
     public bool TryPlayAnimation(EntityUid entity, ProtoId<CEAnimationActionPrototype> animationProto, bool forceCancel = false)
     {
         if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
@@ -67,6 +69,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <summary>
     ///
     /// </summary>
+    [PublicAPI]
     public void CancelAnimation(Entity<CEActiveAnimationActionComponent> entity)
     {
         if (!_proto.Resolve(entity.Comp.ActiveAnimation, out var animation))
@@ -89,6 +92,9 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.StartAnimationTime = _timing.CurTime;
         Dirty(entity, controller);
 
+        var started = new CEAnimationActionStartedEvent(animation);
+        RaiseLocalEvent(entity, started);
+
         _movement.RefreshMovementSpeedModifiers(entity);
     }
 
@@ -107,11 +113,11 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 ///
 /// </summary>
 /// <param name="animation"></param>
-/// <param name="cencelled"></param>
-public sealed class CEAnimationActionEndedEvent(ProtoId<CEAnimationActionPrototype> animation, bool cencelled) : EntityEventArgs
+/// <param name="cancelled"></param>
+public sealed class CEAnimationActionEndedEvent(ProtoId<CEAnimationActionPrototype> animation, bool cancelled) : EntityEventArgs
 {
     public ProtoId<CEAnimationActionPrototype> Animation = animation;
-    public bool Cencelled = cencelled;
+    public bool Cancelled = cancelled;
 }
 
 /// <summary>
