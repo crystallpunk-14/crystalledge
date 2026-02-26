@@ -1,5 +1,5 @@
+using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Actions;
-using Content.Shared._CE.Animation.Core.Events;
 using Robust.Shared.Player;
 
 namespace Content.Server._CE.Animation.Core.Actions;

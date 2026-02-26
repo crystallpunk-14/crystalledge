@@ -1,7 +1,6 @@
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Actions;
 using Content.Shared._CE.Animation.Core.Components;
-using Content.Shared._CE.Animation.Core.Events;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Animation.Core;

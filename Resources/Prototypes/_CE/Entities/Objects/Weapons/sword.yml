@@ -67,9 +67,9 @@
       - time: 0.3
         color: "#ffffff00"  # Fade out
     0.1:
-    - !type:ArcAttack
-      range: 0.5
-      arcWidth: 120
+    - !type:WeaponArcAttack
+      range: 0.7
+      arcWidth: 40
 
 - type: animationAction
   id: SwordAttack2
@@ -109,17 +109,20 @@
       - time: 0.3
         color: "#ffffff00"  # Fade out
     0.1:
-    - !type:ArcAttack
-      range: 0.5
-      arcWidth: 120
+    - !type:WeaponArcAttack
+      range: 0.7
+      arcWidth: 40
 
 
 - type: animationAction
   id: SwordAttack3
   movementSpeed: 0.3
-  duration: 0.3
+  duration: 0.5
   events:
     0:
+    - !type:WeaponArcAttack
+      range: 0.6
+      arcWidth: 180
     - !type:ItemVisualEffect
       offsetAnimation:
       - time: 0.0
@@ -155,10 +158,7 @@
         color: "#ffffff00"  # Fade out
     0.1:
     - !type:Dash
-      distance: -0.4
-    - !type:ArcAttack
-      range: 0.7
-      arcWidth: 180
+      distance: -0.1
 
 
 - type: entity

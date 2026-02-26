@@ -1,0 +1,43 @@
+- type: entity
+  id: CEAttackImpact
+  name: attack impact
+  suffix: VFX
+  categories: [ ForkFiltered ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/attack_impact.rsi
+    drawdepth: Effects
+    layers:
+    - state: impact
+      color: "#e0cd8c"
+      shader: "unshaded"
+  - type: Physics
+    canCollide: false
+  - type: Tag
+    tags:
+      - HideContextMenu
+  - type: PointLight
+    color: "#e0cd8c"
+    enabled: true
+    radius: 2
+    energy: 1
+    netsync: false
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: LightFade
+    duration: 0.2
+
+- type: entity
+  id: CEAttackImpact2
+  parent: CEAttackImpact
+  name: attack impact 2
+  suffix: VFX
+  categories: [ ForkFiltered ]
+  save: false
+  components:
+  - type: Sprite
+    layers:
+    - state: impact2
+      color: "#e0cd8c"
+      shader: "unshaded"

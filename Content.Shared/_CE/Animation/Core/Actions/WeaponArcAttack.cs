@@ -3,7 +3,7 @@ using Content.Shared._CE.Weapon;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
 
-public sealed partial class ArcAttack : CEAnimationActionEntry
+public sealed partial class WeaponArcAttack : CEAnimationActionEntry
 {
     [DataField]
     public float Range = 1.5f;
@@ -22,20 +22,25 @@ public sealed partial class ArcAttack : CEAnimationActionEntry
 
         var lookup = entManager.System<EntityLookupSystem>();
         var transform = entManager.System<SharedTransformSystem>();
-        var ceMelee = entManager.System<CEMeleeWeaponSystem>();
+        var melee = entManager.System<CEMeleeWeaponSystem>();
 
         // Get entity coordinates
         var entityCoords = transform.GetMapCoordinates(entity);
+        var direction = angle + Angle.FromDegrees(-90);
+
+        // Raise debug event for arc attack visualization
+        var debugEvent = new CEItemAttackEvent(entityCoords, direction, Range, ArcWidth);
+        entManager.EventBus.RaiseEvent(EventSource.Local, debugEvent);
 
         // Find all entities in the arc
         var targets = lookup.GetEntitiesInArc(
             entityCoords,
             Range,
-            angle + Angle.FromDegrees(-90),
+            direction,
             ArcWidth,
             LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries).ToList();
 
         targets.Remove(entity);
-        ceMelee.TryAttack(entity, (used.Value, weapon), targets);
+        melee.TryAttack(entity, (used.Value, weapon), targets);
     }
 }
