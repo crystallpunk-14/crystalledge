@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Animation.Item.Components;
 /// <summary>
 /// Using this item in combat mode triggers action animations on the character.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true), AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
 [Access(typeof(CESharedItemAnimationSystem))]
 public sealed partial class CEItemAnimationComponent : Component
 {
@@ -15,14 +15,17 @@ public sealed partial class CEItemAnimationComponent : Component
     /// Mapping from input button to attack action prototype.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public Dictionary<CEUseType, ProtoId<CEAnimationActionPrototype>> Animations = new();
+    public Dictionary<CEUseType, List<ProtoId<CEAnimationActionPrototype>>> Animations = new();
 
     /// <summary>
     /// Are we currently holding down the mouse for an attack.
     /// Used so we can't just hold the mouse button and attack constantly.
     /// </summary>
-    [AutoNetworkedField]
+    [DataField, AutoNetworkedField]
     public bool Using = false;
+
+    [DataField]
+    public TimeSpan ComboResetTime = TimeSpan.FromSeconds(0.5f);
 }
 
 /// <summary>
