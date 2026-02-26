@@ -22,7 +22,7 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
 
         var lookup = entManager.System<EntityLookupSystem>();
         var transform = entManager.System<SharedTransformSystem>();
-        var melee = entManager.System<CEMeleeWeaponSystem>();
+        var melee = entManager.System<CESharedMeleeWeaponSystem>();
 
         // Get entity coordinates
         var entityCoords = transform.GetMapCoordinates(entity);
