@@ -8,7 +8,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Animation.Core.Actions;
 
-public sealed partial class CEItemVisualEffect : CESharedItemVisualEffect
+public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 {
     private const string EffectAnimationKey = "ce-item-visual-effect";
     private const string FadeAnimationKey = "ce-item-visual-fade";

@@ -38,7 +38,7 @@
     - !type:ArcAttack
       range: 0.5
       arcWidth: 120
-    - !type:CEItemVisualEffect
+    - !type:ItemVisualEffect
       duration: 0.4
       fadeOut: true
       followUser: true

@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Animation.Core.Actions;
 /// (or with an overridden sprite), plays an animation on it, and despawns it.
 /// Server-side this is a no-op; client-side the partial method provides the visual implementation.
 /// </summary>
-public abstract partial class CESharedItemVisualEffect : CEAnimationActionEntry
+public abstract partial class SharedItemVisualEffect : CEAnimationActionEntry
 {
     /// <summary>
     /// Optional sprite override. If null, the sprite is copied from the used item entity.
