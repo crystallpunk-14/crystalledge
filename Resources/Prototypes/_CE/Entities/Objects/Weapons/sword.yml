@@ -38,6 +38,12 @@
     - !type:ArcAttack
       range: 0.5
       arcWidth: 120
+    - !type:CEItemVisualEffect
+      duration: 0.4
+      fadeOut: true
+      followUser: true
+      offset: 1.0
+      spriteRotation: -90
 
 - type: animationAction
   id: SwordAttack2
