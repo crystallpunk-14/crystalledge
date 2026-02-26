@@ -59,18 +59,27 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         var initialRotation = angle + Angle.FromDegrees(SpriteRotation);
         spriteSystem.SetRotation((effectEntity, effectSprite), initialRotation);
 
+        // Get initial offset from first keyframe or use zero
+        var initialOffset = Vector2.Zero;
+        if (OffsetAnimation.Count > 0)
+        {
+            var firstKeyframe = OffsetAnimation[0];
+            if (firstKeyframe.Time == 0)
+                initialOffset = firstKeyframe.Offset;
+        }
+
         // Set up to follow the user if enabled
         if (FollowUser)
         {
             var track = entManager.EnsureComponent<TrackUserComponent>(effectEntity);
             track.User = entity;
-            // Use initial offset unless offset animation overrides it
-            track.Offset = angle.ToWorldVec() * Offset;
+            // Use initial offset from animation keyframes
+            track.Offset = angle.RotateVec(initialOffset);
         }
         else
         {
             // Position at the offset from the user if not following
-            var worldPos = transform.GetWorldPosition(userXform) + angle.ToWorldVec() * Offset;
+            var worldPos = transform.GetWorldPosition(userXform) + angle.RotateVec(initialOffset);
             transform.SetWorldPosition(effectEntity, worldPos);
         }
 

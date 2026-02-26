@@ -41,13 +41,6 @@ public abstract partial class SharedItemVisualEffect : CEAnimationActionEntry
     public bool FollowUser = true;
 
     /// <summary>
-    /// Initial positional offset from the user in the direction of the animation angle.
-    /// This is used as the starting position if no offset animation is specified.
-    /// </summary>
-    [DataField]
-    public float Offset = 0.5f;
-
-    /// <summary>
     /// Initial rotation to apply to the sprite (in degrees), added to the animation angle.
     /// This is used as the starting rotation if no rotation animation is specified.
     /// </summary>

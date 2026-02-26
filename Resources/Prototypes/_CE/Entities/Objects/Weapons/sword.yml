@@ -16,8 +16,8 @@
       - SwordAttack1
       - SwordAttack2
       - SwordAttack3
-      Secondary:
-      - SwordAttackHeavy1
+      #Secondary:
+      #- SwordAttackHeavy1
   - type: Clothing
     slots:
     - neck
@@ -45,13 +45,13 @@
 
       offsetAnimation:
       - time: 0.0
-        offset: -0.7, 0.1
+        offset: -0.2, -0.1
         easing: QuadIn
       - time: 0.1
-        offset: 0, -0.5
+        offset: 0.3, -0.8
         easing: QuadOut
       - time: 0.25
-        offset: 0.1, -0.3
+        offset: 0.4, -0.3
         easing: QuadOut
 
       rotationAnimation:
@@ -92,13 +92,13 @@
 
       offsetAnimation:
       - time: 0.0
-        offset: 0.7, 0.1
+        offset: 0.2, -0.1
         easing: QuadIn
       - time: 0.1
-        offset: 0, -0.5
+        offset: -0.3, -0.8
         easing: QuadOut
       - time: 0.25
-        offset: -0.1, -0.3
+        offset: -0.4, -0.3
         easing: QuadOut
 
       rotationAnimation:
@@ -138,17 +138,17 @@
 
       offsetAnimation:
       - time: 0.0
-        offset: -0.8, 0.1
+        offset: -0.5, -0.1
         easing: QuadIn
-      - time: 0.05
-        offset: -0.6, -0.3
       - time: 0.1
-        offset: 0, -0.7
-        easing: QuadOut
+        offset: -0.1, -0.5
       - time: 0.2
-        offset: 0.6, -0.3
+        offset: 0, -0.9
+        easing: QuadOut
+      - time: 0.3
+        offset: 0.1, -0.5
       - time: 0.4
-        offset: 0.8, 0.1
+        offset: 0.9, -0.1
         easing: QuadOut
 
       rotationAnimation:
@@ -175,77 +175,6 @@
     - !type:ArcAttack
       range: 0.7
       arcWidth: 180
-
-- type: animationAction
-  id: SwordAttackHeavy1
-  movementSpeed: 0.3
-  lockRotation: true
-  duration: 1.0
-  events:
-    0:
-    - !type:ItemVisualEffect
-      spriteRotation: -90
-      duration: 1
-      offset: 0
-      followUser: true
-
-      offsetAnimation:
-      - time: 0.0
-        offset: -0.7, -0.7
-      - time: 0.35
-        offset: -1, 0
-      - time: 0.4
-        offset: -0.7, -0.7
-      - time: 0.45
-        offset: 0, -1
-      - time: 0.5
-        offset: 0.7, -0.7
-      - time: 0.65
-        offset: 1, 0
-      - time: 0.6
-        offset: 0.7, 0.7
-      - time: 0.65
-        offset: 0, 1
-      - time: 0.7
-        offset: -0.7, 0.7
-      - time: 0.75
-        offset: -1, 0
-
-      rotationAnimation:
-      - time: 0.0
-        rotation: -50
-      - time: 0.35
-        rotation: -90
-      - time: 0.45
-        rotation: 0
-      - time: 0.55
-        rotation: 90
-      - time: 0.65
-        rotation: 180
-      - time: 0.75
-        rotation: 270
-#
-      #colorAnimation:
-      #- time: 0.0
-      #  color: "#ffffff"
-      #  easing: Linear
-      #- time: 0.4
-      #  color: "#ffffff"
-      #  easing: QuadOut
-      #- time: 0.6
-      #  color: "#ffffff01"  # Fade out
-    0.3:
-    - !type:ArcAttack
-      range: 0.5
-      arcWidth: 360
-    0.4:
-    - !type:ArcAttack
-      range: 0.5
-      arcWidth: 360
-    0.5:
-    - !type:ArcAttack
-      range: 0.5
-      arcWidth: 360
 
 
 - type: entity
