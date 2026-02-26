@@ -24,8 +24,31 @@ public sealed partial class CEItemAnimationComponent : Component
     [DataField, AutoNetworkedField]
     public bool Using = false;
 
+    /// <summary>
+    /// Extra time after the animation ends before the combo resets.
+    /// </summary>
     [DataField]
-    public TimeSpan ComboResetTime = TimeSpan.FromSeconds(0.5f);
+    public TimeSpan ComboResetDelay = TimeSpan.FromSeconds(0.5);
+
+    /// <summary>
+    /// Which use type the current combo chain belongs to.
+    /// Switching to a different use type resets the combo.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public CEUseType? LastComboUseType;
+
+    /// <summary>
+    /// Next animation index to play in the current combo chain.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int ComboIndex;
+
+    /// <summary>
+    /// Absolute time after which the combo resets to the first animation.
+    /// Calculated as: attack time + animation duration + <see cref="ComboResetDelay"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan ComboResetDeadline = TimeSpan.Zero;
 }
 
 /// <summary>

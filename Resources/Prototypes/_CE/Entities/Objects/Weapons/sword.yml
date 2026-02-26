@@ -12,8 +12,11 @@
     size: Ginormous
   - type: CEItemAnimation
     animations:
-      Primary: SwordAttack1
-      Secondary: SwordAttack2
+      Primary:
+      - SwordAttack1
+      - SwordAttack2
+      #Secondary:
+      #- SwordAttackHeavy1
   - type: Clothing
     slots:
     - neck
@@ -29,7 +32,7 @@
   id: SwordAttack1
   movementSpeed: 0.3
   lockRotation: true
-  duration: 0.3
+  duration: 0.4
   events:
     0:
     - !type:Dash
@@ -76,6 +79,53 @@
   id: SwordAttack2
   movementSpeed: 0.3
   lockRotation: true
+  duration: 0.4
+  events:
+    0:
+    - !type:Dash
+      distance: 0.2
+    - !type:ItemVisualEffect
+      spriteRotation: -90
+      duration: 0.5
+      followUser: true
+
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.7, 0.1
+        easing: QuadIn
+      - time: 0.1
+        offset: 0, -0.5
+        easing: QuadOut
+      - time: 0.25
+        offset: -0.1, -0.3
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: -20
+      - time: 0.2
+        rotation: -20
+      - time: 0.25
+        rotation: 0
+
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.2
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.3
+        color: "#ffffff0a"  # Fade out
+    0.1:
+    - !type:ArcAttack
+      range: 0.5
+      arcWidth: 120
+
+- type: animationAction
+  id: SwordAttackHeavy1
+  movementSpeed: 0.3
+  lockRotation: true
   duration: 1.0
   events:
     0.2:
@@ -94,21 +144,6 @@
       range: 0.5
       arcWidth: 360
 
-# Example of ArcAttack usage - deals damage in a 90-degree arc
-# - type: animationAction
-#   id: SwordAttackArc
-#   movementSpeed: 0.3
-#   lockRotation: true
-#   duration: 0.5
-#   events:
-#     0:
-#     - !type:ArcAttack
-#       range: 1.5          # Attack range in meters
-#       arcWidth: 90        # Width of the arc in degrees
-#       damage:
-#         types:
-#           Slash: 10
-#           Blunt: 5
 
 - type: entity
   parent: CEBaseWeaponSword

@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.Animation.Core;
+using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
@@ -11,6 +12,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Animation.Item;
@@ -29,6 +31,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
     [Dependency] protected readonly SharedPopupSystem PopupSystem = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] protected readonly CESharedAnimationActionSystem AnimationAction = default!;
+    [Dependency] private   readonly IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -64,10 +67,32 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         if (!Blocker.CanAttack(user))
             return false;
 
-        if (!weapon.Comp.Animations.TryGetValue(attackEvent.UseType, out var attackProtoId))
+        if (!weapon.Comp.Animations.TryGetValue(attackEvent.UseType, out var animations)
+            || animations.Count == 0)
             return false;
 
-        return AnimationAction.TryPlayAnimation(user, attackProtoId, weapon.Owner, angle);
+        // Determine combo index.
+        // Reset if: different use type, or combo deadline expired.
+        var comboIndex = 0;
+        if (weapon.Comp.LastComboUseType == attackEvent.UseType
+            && curTime < weapon.Comp.ComboResetDeadline)
+        {
+            comboIndex = weapon.Comp.ComboIndex % animations.Count;
+        }
+
+        var animationProtoId = animations[comboIndex];
+
+        if (!AnimationAction.TryPlayAnimation(user, animationProtoId, weapon.Owner, angle))
+            return false;
+
+        // Calculate the deadline: animation duration + configurable delay.
+        var animDuration = _proto.Index(animationProtoId).Duration;
+        weapon.Comp.LastComboUseType = attackEvent.UseType;
+        weapon.Comp.ComboIndex = comboIndex + 1;
+        weapon.Comp.ComboResetDeadline = curTime + animDuration + weapon.Comp.ComboResetDelay;
+        Dirty(weapon);
+
+        return true;
     }
 
     public bool TryGetWeapon(EntityUid entity, [NotNullWhen(true)] out Entity<CEItemAnimationComponent>? weapon)
