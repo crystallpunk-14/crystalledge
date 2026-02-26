@@ -34,16 +34,43 @@
     0:
     - !type:Dash
       distance: 0.2
+    - !type:ItemVisualEffect
+      spriteRotation: -90
+      duration: 0.5
+      followUser: true
+
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.7, 0.1
+        easing: QuadIn
+      - time: 0.1
+        offset: 0, -0.5
+        easing: QuadOut
+      - time: 0.25
+        offset: 0.1, -0.3
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 20
+      - time: 0.2
+        rotation: 20
+      - time: 0.25
+        rotation: 0
+
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.2
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.3
+        color: "#ffffff0a"  # Fade out
     0.1:
     - !type:ArcAttack
       range: 0.5
       arcWidth: 120
-    - !type:ItemVisualEffect
-      duration: 0.4
-      fadeOut: true
-      followUser: true
-      offset: 1.0
-      spriteRotation: -90
 
 - type: animationAction
   id: SwordAttack2
