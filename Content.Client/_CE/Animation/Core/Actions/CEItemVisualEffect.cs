@@ -43,7 +43,11 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
         // Set up the sprite: either override or copy from the used item
         if (SpriteOverride != null)
-            spriteSystem.LayerSetSprite((effectEntity, effectSprite), 0, SpriteOverride);
+        {
+            // Reserve a layer first, then set the sprite on it
+            var layerIndex = spriteSystem.LayerMapReserve((effectEntity, effectSprite), "effect");
+            spriteSystem.LayerSetSprite((effectEntity, effectSprite), layerIndex, SpriteOverride);
+        }
         else if (entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
             spriteSystem.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
 

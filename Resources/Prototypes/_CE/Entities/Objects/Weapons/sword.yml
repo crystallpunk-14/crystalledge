@@ -117,7 +117,7 @@
 - type: animationAction
   id: SwordAttack3
   movementSpeed: 0.3
-  duration: 0.7
+  duration: 0.3
   events:
     0:
     - !type:ItemVisualEffect
@@ -155,7 +155,7 @@
         color: "#ffffff00"  # Fade out
     0.1:
     - !type:Dash
-      distance: 0.4
+      distance: -0.4
     - !type:ArcAttack
       range: 0.7
       arcWidth: 180
