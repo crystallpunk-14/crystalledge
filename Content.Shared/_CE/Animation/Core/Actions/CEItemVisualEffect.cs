@@ -17,35 +17,10 @@ public abstract partial class SharedItemVisualEffect : CEAnimationActionEntry
     public SpriteSpecifier? SpriteOverride;
 
     /// <summary>
-    /// The RSI path for the animation to play on the spawned entity. If null, the default item sprite is used as-is.
-    /// </summary>
-    [DataField]
-    public ResPath? AnimationRsi;
-
-    /// <summary>
-    /// The RSI state to play on the spawned entity. If null, no flick animation is played.
-    /// </summary>
-    [DataField]
-    public string? AnimationState;
-
-    /// <summary>
-    /// Duration of the visual effect in seconds.
-    /// </summary>
-    [DataField]
-    public float Duration = 0.5f;
-
-    /// <summary>
     /// Whether the spawned visual entity should follow the user's position.
     /// </summary>
     [DataField]
     public bool FollowUser = true;
-
-    /// <summary>
-    /// Initial rotation to apply to the sprite (in degrees), added to the animation angle.
-    /// This is used as the starting rotation if no rotation animation is specified.
-    /// </summary>
-    [DataField]
-    public float SpriteRotation;
 
     /// <summary>
     /// Keyframes for animating the sprite's offset position over time.

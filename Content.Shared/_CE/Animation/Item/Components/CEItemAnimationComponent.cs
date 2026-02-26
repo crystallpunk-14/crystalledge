@@ -49,6 +49,13 @@ public sealed partial class CEItemAnimationComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan ComboResetDeadline = TimeSpan.Zero;
+
+    /// <summary>
+    /// Initial rotation to apply to the sprite (in degrees), added to the animation angle.
+    /// This is used as the starting rotation if no rotation animation is specified.
+    /// </summary>
+    [DataField]
+    public float SpriteRotation;
 }
 
 /// <summary>

@@ -12,14 +12,11 @@ public sealed partial class CEAnimationActionPrototype : IPrototype
     public string ID { get; private set; } = default!;
 
     /// <summary>
-    ///
+    /// Character movement speed modifier while this animation is active
     /// </summary>
     [DataField]
     public float MovementSpeed = 1f;
 
-    /// <summary>
-    ///
-    /// </summary>
     [DataField(required: true)]
     public TimeSpan Duration = TimeSpan.Zero;
 

@@ -11,13 +11,13 @@
   - type: Item
     size: Ginormous
   - type: CEItemAnimation
+    spriteRotation: -90
     animations:
       Primary:
       - SwordAttack1
       - SwordAttack2
+      Secondary:
       - SwordAttack3
-      #Secondary:
-      #- SwordAttackHeavy1
   - type: Clothing
     slots:
     - neck
@@ -32,35 +32,30 @@
 - type: animationAction
   id: SwordAttack1
   movementSpeed: 0.3
-  lockRotation: true
   duration: 0.4
   events:
     0:
     - !type:Dash
       distance: 0.2
     - !type:ItemVisualEffect
-      spriteRotation: -90
-      duration: 0.5
-      followUser: true
-
       offsetAnimation:
       - time: 0.0
-        offset: -0.2, -0.1
+        offset: -0.3, -0.1
         easing: QuadIn
       - time: 0.1
-        offset: 0.3, -0.8
+        offset: -0.2, -1.2
         easing: QuadOut
       - time: 0.25
-        offset: 0.4, -0.3
+        offset: 0.3, -0.3
         easing: QuadOut
 
       rotationAnimation:
       - time: 0.0
         rotation: 20
-      - time: 0.2
-        rotation: 20
-      - time: 0.25
+      - time: 0.1
         rotation: 0
+      - time: 0.25
+        rotation: -20
 
       colorAnimation:
       - time: 0.0
@@ -70,7 +65,7 @@
         color: "#ffffff"
         easing: QuadOut
       - time: 0.3
-        color: "#ffffff0a"  # Fade out
+        color: "#ffffff00"  # Fade out
     0.1:
     - !type:ArcAttack
       range: 0.5
@@ -79,35 +74,30 @@
 - type: animationAction
   id: SwordAttack2
   movementSpeed: 0.3
-  lockRotation: true
   duration: 0.4
   events:
     0:
     - !type:Dash
       distance: 0.2
     - !type:ItemVisualEffect
-      spriteRotation: -90
-      duration: 0.5
-      followUser: true
-
       offsetAnimation:
       - time: 0.0
-        offset: 0.2, -0.1
+        offset: 0.3, -0.1
         easing: QuadIn
       - time: 0.1
-        offset: -0.3, -0.8
+        offset: 0.2, -1.2
         easing: QuadOut
       - time: 0.25
-        offset: -0.4, -0.3
+        offset: -0.3, -0.3
         easing: QuadOut
 
       rotationAnimation:
       - time: 0.0
         rotation: -20
-      - time: 0.2
-        rotation: -20
-      - time: 0.25
+      - time: 0.1
         rotation: 0
+      - time: 0.25
+        rotation: 20
 
       colorAnimation:
       - time: 0.0
@@ -117,7 +107,7 @@
         color: "#ffffff"
         easing: QuadOut
       - time: 0.3
-        color: "#ffffff0a"  # Fade out
+        color: "#ffffff00"  # Fade out
     0.1:
     - !type:ArcAttack
       range: 0.5
@@ -127,26 +117,20 @@
 - type: animationAction
   id: SwordAttack3
   movementSpeed: 0.3
-  lockRotation: true
   duration: 0.7
   events:
     0:
     - !type:ItemVisualEffect
-      spriteRotation: -90
-      duration: 0.5
-      followUser: true
-
       offsetAnimation:
       - time: 0.0
-        offset: -0.5, -0.1
+        offset: -0.9, -0.1
         easing: QuadIn
-      - time: 0.1
-        offset: -0.1, -0.5
+      - time: 0.05
+        offset: -0.5, -0.5
       - time: 0.2
         offset: 0, -0.9
-        easing: QuadOut
       - time: 0.3
-        offset: 0.1, -0.5
+        offset: 0.5, -0.5
       - time: 0.4
         offset: 0.9, -0.1
         easing: QuadOut
@@ -159,16 +143,16 @@
         rotation: 0
       - time: 0.5
         rotation: 90
-
+#
       colorAnimation:
       - time: 0.0
         color: "#ffffff"
         easing: Linear
-      - time: 0.4
+      - time: 0.3
         color: "#ffffff"
         easing: QuadOut
-      - time: 0.6
-        color: "#ffffff01"  # Fade out
+      - time: 0.4
+        color: "#ffffff00"  # Fade out
     0.1:
     - !type:Dash
       distance: 0.4

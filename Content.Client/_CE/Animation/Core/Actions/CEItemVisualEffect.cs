@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Numerics;
 using Content.Client.Animations;
 using Content.Shared._CE.Animation.Core.Actions;
+using Content.Shared._CE.Animation.Item.Components;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
@@ -19,6 +21,9 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
     public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame)
     {
+        if (!entManager.TryGetComponent<CEItemAnimationComponent>(used, out var itemAnim))
+            return;
+
         var timing = IoCManager.Resolve<IGameTiming>();
         if (!timing.IsFirstTimePredicted)
             return;
@@ -39,24 +44,14 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
         // Set up the sprite: either override or copy from the used item
         if (SpriteOverride != null)
-        {
             spriteSystem.LayerSetSprite((effectEntity, effectSprite), 0, SpriteOverride);
-        }
-        else if (used.HasValue && entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
-        {
+        else if (entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
             spriteSystem.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
-        }
 
         spriteSystem.SetVisible((effectEntity, effectSprite), true);
 
-        // Apply RSI override if specified
-        if (AnimationRsi != null)
-        {
-            spriteSystem.LayerSetRsi((effectEntity, effectSprite), 0, AnimationRsi.Value);
-        }
-
         // Set initial rotation
-        var initialRotation = angle + Angle.FromDegrees(SpriteRotation);
+        var initialRotation = angle + Angle.FromDegrees(itemAnim.SpriteRotation);
         spriteSystem.SetRotation((effectEntity, effectSprite), initialRotation);
 
         // Get initial offset from first keyframe or use zero
@@ -73,8 +68,6 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         {
             var track = entManager.EnsureComponent<TrackUserComponent>(effectEntity);
             track.User = entity;
-            // Use initial offset from animation keyframes
-            track.Offset = angle.RotateVec(initialOffset);
         }
         else
         {
@@ -85,7 +78,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
         // Set up timed despawn
         var despawn = entManager.EnsureComponent<TimedDespawnComponent>(effectEntity);
-        despawn.Lifetime = Duration + 0.1f;
+        despawn.Lifetime = CalculateDuration() + 0.1f;
 
         // Build and play offset animation if keyframes exist
         if (OffsetAnimation.Count > 0)
@@ -104,30 +97,8 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         // Build and play color animation if keyframes exist
         if (ColorAnimation.Count > 0)
         {
-            var colorAnim = BuildColorAnimation(effectSprite);
+            var colorAnim = BuildColorAnimation();
             animationPlayer.Play(effectEntity, colorAnim, ColorAnimationKey);
-        }
-
-        // Play flick animation if a state is specified
-        if (AnimationState != null)
-        {
-            var flickAnimation = new Robust.Client.Animations.Animation()
-            {
-                Length = TimeSpan.FromSeconds(Duration),
-                AnimationTracks =
-                {
-                    new AnimationTrackSpriteFlick
-                    {
-                        LayerKey = 0,
-                        KeyFrames =
-                        {
-                            new AnimationTrackSpriteFlick.KeyFrame(AnimationState, 0f),
-                        },
-                    },
-                },
-            };
-
-            animationPlayer.Play(effectEntity, flickAnimation, FlickAnimationKey);
         }
     }
 
@@ -138,7 +109,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     {
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(Duration),
+            Length = TimeSpan.FromSeconds(CalculateDuration()),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -155,11 +126,13 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
         foreach (var keyframe in OffsetAnimation)
         {
-            // Rotate the offset by the animation angle so it's relative to attack direction
-            var rotatedOffset = angle.RotateVec(keyframe.Offset);
+            // Calculate relative offset from the base position
+            var relativeOffset = keyframe.Offset;
 
-            var easingFunc = GetEasingFunction(keyframe.Easing);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, keyframe.Time, easingFunc));
+            // Rotate the relative offset by the animation angle
+            var rotatedOffset = angle.RotateVec(relativeOffset);
+
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, keyframe.Time, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -168,11 +141,11 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     /// <summary>
     /// Builds an animation for sprite rotation from keyframes.
     /// </summary>
-    private Robust.Client.Animations.Animation BuildRotationAnimation(Angle baseRotation)
+    private Robust.Client.Animations.Animation BuildRotationAnimation(Angle angle)
     {
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(Duration),
+            Length = TimeSpan.FromSeconds(CalculateDuration()),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -190,9 +163,8 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         foreach (var keyframe in RotationAnimation)
         {
             // Add keyframe rotation to base rotation
-            var totalRotation = baseRotation + Angle.FromDegrees(keyframe.Rotation);
-            var easingFunc = GetEasingFunction(keyframe.Easing);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, keyframe.Time, easingFunc));
+            var totalRotation = angle + Angle.FromDegrees(keyframe.Rotation);
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, keyframe.Time, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -201,11 +173,11 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     /// <summary>
     /// Builds an animation for sprite color/alpha from keyframes.
     /// </summary>
-    private Robust.Client.Animations.Animation BuildColorAnimation(SpriteComponent sprite)
+    private Robust.Client.Animations.Animation BuildColorAnimation()
     {
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(Duration),
+            Length = TimeSpan.FromSeconds(CalculateDuration()),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -222,45 +194,43 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
         foreach (var keyframe in ColorAnimation)
         {
-            var easingFunc = GetEasingFunction(keyframe.Easing);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, keyframe.Time, easingFunc));
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, keyframe.Time, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
     }
 
     /// <summary>
-    /// Helper method to get rotation at a specific time point.
+    /// Calculates the adaptive duration by finding the maximum time from all keyframe animations.
+    /// If no keyframes are present, returns a default duration of 0.5 seconds.
     /// </summary>
-    private Angle GetRotationAtTime(float time, Angle baseRotation)
+    private float CalculateDuration()
     {
-        if (RotationAnimation.Count == 0)
-            return baseRotation;
+        float maxTime = 0f;
 
-        // Find the keyframes around this time
-        CERotationKeyframe? before = null;
-        CERotationKeyframe? after = null;
-
-        foreach (var keyframe in RotationAnimation)
+        // Check offset animation keyframes
+        if (OffsetAnimation.Count > 0)
         {
-            if (keyframe.Time <= time)
-                before = keyframe;
-            else if (after == null)
-            {
-                after = keyframe;
-                break;
-            }
+            var maxOffsetTime = OffsetAnimation.Max(k => k.Time);
+            maxTime = Math.Max(maxTime, maxOffsetTime);
         }
 
-        if (before == null)
-            return baseRotation;
-        if (after == null)
-            return baseRotation + Angle.FromDegrees(before.Rotation);
+        // Check rotation animation keyframes
+        if (RotationAnimation.Count > 0)
+        {
+            var maxRotationTime = RotationAnimation.Max(k => k.Time);
+            maxTime = Math.Max(maxTime, maxRotationTime);
+        }
 
-        // Interpolate between keyframes
-        var t = (time - before.Time) / (after.Time - before.Time);
-        var interpolatedRotation = MathHelper.Lerp(before.Rotation, after.Rotation, t);
-        return baseRotation + Angle.FromDegrees(interpolatedRotation);
+        // Check color animation keyframes
+        if (ColorAnimation.Count > 0)
+        {
+            var maxColorTime = ColorAnimation.Max(k => k.Time);
+            maxTime = Math.Max(maxTime, maxColorTime);
+        }
+
+        // If no keyframes found, use default duration
+        return maxTime > 0f ? maxTime + 0.5f : 0.5f;
     }
 
     /// <summary>
