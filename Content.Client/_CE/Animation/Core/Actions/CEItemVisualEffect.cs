@@ -17,7 +17,6 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     private const string OffsetAnimationKey = "ce-item-visual-offset";
     private const string RotationAnimationKey = "ce-item-visual-rotation";
     private const string ColorAnimationKey = "ce-item-visual-color";
-    private const string FlickAnimationKey = "ce-item-visual-flick";
 
     public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame)
     {
@@ -83,7 +82,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         // Build and play offset animation if keyframes exist
         if (OffsetAnimation.Count > 0)
         {
-            var offsetAnim = BuildOffsetAnimation(angle, initialRotation);
+            var offsetAnim = BuildOffsetAnimation(angle);
             animationPlayer.Play(effectEntity, offsetAnim, OffsetAnimationKey);
         }
 
@@ -105,7 +104,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     /// <summary>
     /// Builds an animation for sprite offset from keyframes.
     /// </summary>
-    private Robust.Client.Animations.Animation BuildOffsetAnimation(Angle angle, Angle baseRotation)
+    private Robust.Client.Animations.Animation BuildOffsetAnimation(Angle angle)
     {
         var animation = new Robust.Client.Animations.Animation
         {
@@ -117,7 +116,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
                     ComponentType = typeof(SpriteComponent),
                     Property = nameof(SpriteComponent.Offset),
                     InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { }
+                    KeyFrames = { },
                 }
             }
         };
@@ -153,7 +152,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
                     ComponentType = typeof(SpriteComponent),
                     Property = nameof(SpriteComponent.Rotation),
                     InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { }
+                    KeyFrames = { },
                 }
             }
         };
@@ -185,7 +184,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
                     ComponentType = typeof(SpriteComponent),
                     Property = nameof(SpriteComponent.Color),
                     InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { }
+                    KeyFrames = { },
                 }
             }
         };
@@ -206,7 +205,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     /// </summary>
     private float CalculateDuration()
     {
-        float maxTime = 0f;
+        var maxTime = 0f;
 
         // Check offset animation keyframes
         if (OffsetAnimation.Count > 0)
