@@ -29,6 +29,8 @@ public sealed class CEClientMeleeWeaponSystem : CESharedMeleeWeaponSystem
 
     protected override void RaiseAttackEffects(EntityUid user, List<EntityUid> targets)
     {
+        base.RaiseAttackEffects(user, targets);
+
         if (!_timing.IsFirstTimePredicted)
             return;
 
@@ -41,8 +43,14 @@ public sealed class CEClientMeleeWeaponSystem : CESharedMeleeWeaponSystem
         var user = GetEntity(args.User);
         var targets = GetEntityList(args.Targets);
 
-        var userShakeRotation = new CEScreenshakeParameters() { Trauma = 0.12f, DecayRate = 1.25f, Frequency = 0.0015f };
         var otherShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.35f, DecayRate = 2f, Frequency = 0.008f };
+        var userShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.35f, DecayRate = 1.25f, Frequency = 0.008f };
+
+        // Apply screenshake to attacker if they're a local player
+        if (_player.LocalSession?.AttachedEntity == user && targets.Any())
+        {
+            _shake.Screenshake(user, userShakeTranslation, null);
+        }
 
         // Spawn visual effects for each target
         foreach (var target in targets)
@@ -66,14 +74,7 @@ public sealed class CEClientMeleeWeaponSystem : CESharedMeleeWeaponSystem
             _shake.Screenshake(target, otherShakeTranslation, null);
         }
 
-        // Apply screenshake to attacker
-        if (targets.Any())
-            _shake.Screenshake(user, userShakeRotation, null);
-
         // Apply color flash effect
-        if (_player.LocalEntity == user)
-            _color.RaiseEffect(Color.Red, targets, Filter.Local());
-        else
-            _color.RaiseEffect(Color.Red, targets, Filter.Pvs(user, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == user));
+        _color.RaiseEffect(Color.Red, targets, Filter.Local());
     }
 }

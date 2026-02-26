@@ -7,7 +7,6 @@ using System.Numerics;
 using Content.Shared.Camera;
 using Robust.Shared.Noise;
 using Robust.Shared.Player;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Camera;
@@ -18,7 +17,6 @@ namespace Content.Shared._CE.Camera;
 /// </summary>
 public sealed class CEScreenshakeSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     #region Internal
@@ -31,7 +29,6 @@ public sealed class CEScreenshakeSystem : EntitySystem
         SubscribeLocalEvent<CEScreenshakeComponent, GetEyeOffsetEvent>(OnGetEyeOffset);
         SubscribeLocalEvent<CEScreenshakeComponent, EntityUnpausedEvent>(OnEntityUnpaused);
     }
-
 
     public override void Update(float frameTime)
     {
@@ -180,6 +177,9 @@ public sealed class CEScreenshakeSystem : EntitySystem
 
     public void Screenshake(EntityUid uid, CEScreenshakeParameters? translation, CEScreenshakeParameters? rotation)
     {
+        if (!_timing.IsFirstTimePredicted)
+            return;
+
         if (!HasComp<EyeComponent>(uid))
             return;
 

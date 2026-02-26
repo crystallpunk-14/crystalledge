@@ -1,16 +1,12 @@
 using System.Linq;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
-using Robust.Shared.Network;
-using Robust.Shared.Player;
 
 namespace Content.Shared._CE.Weapon;
 
 public abstract class CESharedMeleeWeaponSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
 
     public bool TryAttack(EntityUid user, Entity<CEMeleeWeaponComponent> weapon, List<EntityUid> targets)
     {
@@ -28,7 +24,6 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
 
         if (hitted.Any())
         {
-            // Raise visual effects (overridden in client/server implementations)
             RaiseAttackEffects(user, hitted);
         }
 
@@ -38,5 +33,8 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
     /// <summary>
     /// Override this method in client/server implementations to handle visual effects.
     /// </summary>
-    protected abstract void RaiseAttackEffects(EntityUid user, List<EntityUid> targets);
+    protected virtual void RaiseAttackEffects(EntityUid user, List<EntityUid> targets)
+    {
+        // Base implementation does nothing - effects are handled in client/server implementations
+    }
 }

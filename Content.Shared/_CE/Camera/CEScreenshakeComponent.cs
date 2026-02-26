@@ -30,7 +30,7 @@ public sealed partial class CEScreenshakeComponent : Component
 }
 
 /// <summary>
-///     Represents a single screenshake command. These are stored and networked on <see cref="ESScreenshakeComponent"/>,
+///     Represents a single screenshake command. These are stored and networked on <see cref="CEScreenshakeComponent"/>,
 ///     and the client that controls that entity will use the trauma values in each command, and their start time,
 ///     to calculate multipliers on the current eye offset & rotation modifiers.
 /// </summary>
