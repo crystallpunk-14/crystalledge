@@ -17,7 +17,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     private const string ColorAnimationKey = "ce-item-visual-color";
     private const string FlickAnimationKey = "ce-item-visual-flick";
 
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle)
+    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame)
     {
         var timing = IoCManager.Resolve<IGameTiming>();
         if (!timing.IsFirstTimePredicted)

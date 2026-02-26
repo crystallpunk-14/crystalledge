@@ -62,7 +62,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     {
                         foreach (var action in actions)
                         {
-                            action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero);
+                            action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero, keyFrame);
                         }
                         controller.LastEvent = keyFrame;
                         Dirty(uid, controller);

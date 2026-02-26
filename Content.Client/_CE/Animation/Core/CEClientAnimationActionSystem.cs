@@ -1,7 +1,47 @@
 using Content.Shared._CE.Animation.Core;
+using Content.Shared._CE.Animation.Core.Actions;
+using Content.Shared._CE.Animation.Core.Components;
+using Content.Shared._CE.Animation.Core.Events;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Animation.Core;
 
-public sealed partial class CEClientAnimationActionSystem  : CESharedAnimationActionSystem
+public sealed partial class CEClientAnimationActionSystem : CESharedAnimationActionSystem
 {
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeNetworkEvent<CEItemVisualEffectEvent>(OnItemVisualEffect);
+    }
+
+    private void OnItemVisualEffect(CEItemVisualEffectEvent ev)
+    {
+        var entity = GetEntity(ev.Entity);
+        var used = GetEntity(ev.Used);
+
+        // Entity might not exist due to PVS
+        if (!Exists(entity))
+            return;
+
+        if (!TryComp<CEActiveAnimationActionComponent>(entity, out var comp))
+            return;
+
+        if (!_proto.Resolve(comp.ActiveAnimation, out var animation))
+            return;
+
+
+        // Find and execute all ItemVisualEffect actions for the specific frame
+        if (!animation.Events.TryGetValue(ev.Frame, out var actions))
+            return;
+
+        foreach (var action in actions)
+        {
+            if (action is SharedItemVisualEffect visualEffect)
+            {
+                visualEffect.Play(EntityManager, entity, used, ev.Angle, ev.Frame);
+            }
+        }
+    }
 }
