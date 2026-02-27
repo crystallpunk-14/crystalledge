@@ -1,0 +1,109 @@
+- type: animationAction
+  id: SkimitarAttackLight1
+  movementSpeed: 0.8
+  duration: 0.4
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
+    - !type:ItemVisualEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.1, -0.2
+        easing: QuadIn
+      - time: 0.05
+        offset: -0.2, -0.0
+      - time: 0.1
+        offset: -0.3, -0.2
+      - time: 0.2
+        offset: -0.2, -1.2
+        easing: QuadIn
+      - time: 0.3
+        offset: 0.1, -0.5
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 20
+      - time: 0.02
+        rotation: 90
+      - time: 0.07
+        rotation: 180
+      - time: 0.1
+        rotation: 270
+      - time: 0.2
+        rotation: 360
+      - time: 0.2
+        rotation: 400
+
+      colorAnimation:
+      - time: 0.3
+        color: "#ffffff"
+      - time: 0.4
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+
+      scaleAnimation:
+      - time: 0.0
+        scale: 1, -1
+    0.25:
+    - !type:WeaponArcAttack
+      #damageGroup: pierce
+      range: 0.7
+      arcWidth: 40
+
+- type: animationAction
+  id: SkimitarAttackLight2
+  movementSpeed: 0.8
+  duration: 0.4
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
+    - !type:ItemVisualEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.1, -0.2
+        easing: QuadIn
+      - time: 0.05
+        offset: 0.2, -0.0
+      - time: 0.1
+        offset: 0.3, -0.2
+      - time: 0.2
+        offset: 0.2, -1.2
+        easing: QuadIn
+      - time: 0.3
+        offset: -0.1, -0.5
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: -20
+      - time: 0.02
+        rotation: -90
+      - time: 0.07
+        rotation: -180
+      - time: 0.1
+        rotation: -270
+      - time: 0.2
+        rotation: -360
+      - time: 0.2
+        rotation: -400
+
+      colorAnimation:
+      - time: 0.3
+        color: "#ffffff"
+      - time: 0.4
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+
+      scaleAnimation:
+      - time: 0.0
+        scale: 1, 1
+    0.25:
+    - !type:WeaponArcAttack
+      #damageGroup: pierce
+      range: 0.7
+      arcWidth: 40

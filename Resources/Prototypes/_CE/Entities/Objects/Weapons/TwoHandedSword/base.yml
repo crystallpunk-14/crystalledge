@@ -24,10 +24,14 @@
     animations:
       Primary:
       - anim: SwordAttackHeavy1
+        speed: 0.5
       - anim: SwordAttackHeavy2
+        speed: 0.5
       Secondary:
       - anim: SwordAttackHeavy1
+        speed: 0.5
       - anim: SwordAttackHeavy2
+        speed: 0.5
   - type: Clothing
     slots:
     - neck

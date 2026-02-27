@@ -43,6 +43,13 @@ public abstract partial class SharedItemVisualEffect : CEAnimationActionEntry
     [DataField]
     public List<CEColorKeyframe> ColorAnimation = new();
 
+    /// <summary>
+    /// Keyframes for animating the sprite's scale over time.
+    /// If empty, sprite stays at default (1, 1) scale
+    /// </summary>
+    [DataField]
+    public List<CEScaleKeyFrame> ScaleAnimation = new();
+
     public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
     {
         //Check out client implementation

@@ -1,0 +1,9 @@
+- type: entity
+  parent: CEBaseWeaponSkimitar
+  id: CEWeaponSkimitarIron
+  name: iron skimitar
+  description: TODO
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
+    state: icon

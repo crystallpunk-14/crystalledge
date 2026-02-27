@@ -17,6 +17,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     private const string OffsetAnimationKey = "ce-item-visual-offset";
     private const string RotationAnimationKey = "ce-item-visual-rotation";
     private const string ColorAnimationKey = "ce-item-visual-color";
+    private const string ScaleAnimationKey = "ce-item-visual-scale";
 
     private float _animationSpeedMultiplier = 1f;
 
@@ -106,6 +107,13 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         {
             var colorAnim = BuildColorAnimation();
             animationPlayer.Play(effectEntity, colorAnim, ColorAnimationKey);
+        }
+
+        // Build and play scale animation if keyframes exist
+        if (ScaleAnimation.Count > 0)
+        {
+            var scaleAnim = BuildScaleAnimation();
+            animationPlayer.Play(effectEntity, scaleAnim, ScaleAnimationKey);
         }
     }
 
@@ -202,6 +210,36 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         foreach (var keyframe in ColorAnimation)
         {
             track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, keyframe.Time * _animationSpeedMultiplier, GetEasingFunction(keyframe.Easing)));
+        }
+
+        return animation;
+    }
+
+    /// <summary>
+    /// Builds an animation for sprite scale from keyframes.
+    /// </summary>
+    private Robust.Client.Animations.Animation BuildScaleAnimation()
+    {
+        var animation = new Robust.Client.Animations.Animation
+        {
+            Length = TimeSpan.FromSeconds(CalculateDuration()),
+            AnimationTracks =
+            {
+                new AnimationTrackComponentProperty
+                {
+                    ComponentType = typeof(SpriteComponent),
+                    Property = nameof(SpriteComponent.Scale),
+                    InterpolationMode = AnimationInterpolationMode.Linear,
+                    KeyFrames = { },
+                }
+            }
+        };
+
+        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
+
+        foreach (var keyframe in ScaleAnimation)
+        {
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Scale, keyframe.Time * _animationSpeedMultiplier, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;

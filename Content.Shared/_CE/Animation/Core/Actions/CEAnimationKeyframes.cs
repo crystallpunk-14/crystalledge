@@ -78,6 +78,28 @@ public sealed partial class CEColorKeyframe
 }
 
 /// <summary>
+/// Defines a keyframe for animating sprite scale.
+/// </summary>
+[DataDefinition]
+public sealed partial class CEScaleKeyFrame
+{
+    /// <summary>
+    /// Time in seconds from the start of the animation when this keyframe is reached.
+    /// </summary>
+    [DataField(required: true)]
+    public float Time;
+
+    [DataField]
+    public Vector2 Scale = Vector2.One;
+
+    /// <summary>
+    /// Easing function to use when transitioning to this keyframe.
+    /// </summary>
+    [DataField]
+    public CEAnimationEasing Easing = CEAnimationEasing.Linear;
+}
+
+/// <summary>
 /// Defines easing functions for animation interpolation.
 /// </summary>
 public enum CEAnimationEasing : byte
