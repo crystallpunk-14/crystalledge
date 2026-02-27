@@ -22,7 +22,7 @@ public sealed partial class CEItemAnimationComponent : Component
     /// Used so we can't just hold the mouse button and attack constantly.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool Using = false;
+    public bool Using;
 
     /// <summary>
     /// Extra time after the animation ends before the combo resets.
@@ -56,6 +56,9 @@ public sealed partial class CEItemAnimationComponent : Component
     /// </summary>
     [DataField]
     public float SpriteRotation;
+
+    [DataField, AutoNetworkedField]
+    public float AnimationSpeed = 1f;
 }
 
 /// <summary>

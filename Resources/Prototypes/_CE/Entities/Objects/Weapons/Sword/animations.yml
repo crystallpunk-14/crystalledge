@@ -1,36 +1,5 @@
-- type: entity
-  abstract: true
-  id: CEBaseWeaponSword
-  categories: [ ForkFiltered ]
-  parent:
-  - BaseItem
-  #- CEBaseWeaponDestructible
-  #- CEBaseWeaponSelfDamage
-  #- CEBaseWeaponSharp
-  components:
-  - type: Item
-    size: Ginormous
-  - type: CEItemAnimation
-    spriteRotation: -90
-    animations:
-      Primary:
-      - SwordAttack1
-      - SwordAttack2
-      Secondary:
-      - SwordAttack3
-  - type: Clothing
-    slots:
-    - neck
-    equipWhileMoving: true
-    equipDelay: 1
-    unequipDelay: 1
-  - type: CEMeleeWeapon
-    damage:
-      types:
-        Slash: 2
-
 - type: animationAction
-  id: SwordAttack1
+  id: SwordAttackLight1
   movementSpeed: 0.3
   duration: 0.4
   events:
@@ -72,7 +41,7 @@
       arcWidth: 40
 
 - type: animationAction
-  id: SwordAttack2
+  id: SwordAttackLight2
   movementSpeed: 0.3
   duration: 0.4
   events:
@@ -115,7 +84,7 @@
 
 
 - type: animationAction
-  id: SwordAttack3
+  id: SwordAttackHeavy
   movementSpeed: 0.3
   duration: 0.5
   events:
@@ -159,14 +128,3 @@
     0.1:
     - !type:Dash
       distance: -0.1
-
-
-- type: entity
-  parent: CEBaseWeaponSword
-  id: CEWeaponSwordIron
-  name: iron sword
-  description: A finely crafted sword favored by imperial officers. Its blade gleams with authority and tradition.
-  components:
-  - type: Sprite
-    sprite: _CE/Objects/Weapons/Sword/iron.rsi
-    state: icon

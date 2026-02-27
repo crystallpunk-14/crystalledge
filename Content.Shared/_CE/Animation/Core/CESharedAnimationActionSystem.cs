@@ -75,10 +75,6 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <summary>
     ///
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="animationProto"></param>
-    /// <param name="forceCancel"></param>
-    /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimation(EntityUid entity,
         ProtoId<CEAnimationActionPrototype> animationProto,

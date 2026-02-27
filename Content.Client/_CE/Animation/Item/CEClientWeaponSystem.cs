@@ -51,7 +51,10 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
             return;
 
         if (!CombatMode.IsInCombatMode(user) || !CanAttack(user, weapon: weapon))
+        {
+            weapon.Value.Comp.Using = false;
             return;
+        }
 
         var primaryDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.Use);
         var secondaryDown = _inputSystem.CmdStates.GetState(EngineKeyFunctions.UseSecondary);

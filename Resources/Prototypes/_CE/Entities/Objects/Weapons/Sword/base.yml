@@ -1,0 +1,23 @@
+- type: entity
+  abstract: true
+  id: CEBaseWeaponSword
+  categories: [ ForkFiltered ]
+  parent:
+  - BaseItem
+  components:
+  - type: Item
+    size: Ginormous
+  - type: CEItemAnimation
+    spriteRotation: -90
+    animations:
+      Primary:
+      - SwordAttackLight1
+      - SwordAttackLight2
+      Secondary:
+      - SwordAttackHeavy
+  - type: Clothing
+    slots:
+    - neck
+    equipWhileMoving: true
+    equipDelay: 1
+    unequipDelay: 1
