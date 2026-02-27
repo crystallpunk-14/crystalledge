@@ -26,6 +26,3 @@
       default:
         types:
           Slash: 2
-      pierce:
-        types:
-          Piercing: 2
