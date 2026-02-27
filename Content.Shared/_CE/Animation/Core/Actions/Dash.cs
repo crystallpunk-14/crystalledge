@@ -17,7 +17,7 @@ public sealed partial class Dash : CEAnimationActionEntry
         throwing.TryThrow(
             entity,
             angle.ToWorldVec() * Distance,
-            Speed * animationSpeed,
+            Speed,
             entity,
             animated: false,
             doSpin: false);
