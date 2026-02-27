@@ -20,7 +20,7 @@
   - type: CEWieldedItemAnimation
     animations:
       Primary:
-      - anim: SwordAttackHeavy1 #TODO: IDK why but combos from Wielded doesnt work. Something related to combo deadline i think. Fix that later. Meow
+      - anim: SwordAttackHeavy1
       - anim: SwordAttackHeavy2
       Secondary:
       - anim: SwordAttackHeavy1
