@@ -14,7 +14,8 @@
       - SwordAttackLight1
       - SwordAttackLight2
       Secondary:
-      - SwordAttackHeavy
+      - SwordAttackHeavy1
+      - SwordAttackHeavy2
   - type: Clothing
     slots:
     - neck

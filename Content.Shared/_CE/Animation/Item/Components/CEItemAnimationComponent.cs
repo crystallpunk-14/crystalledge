@@ -57,6 +57,9 @@ public sealed partial class CEItemAnimationComponent : Component
     [DataField]
     public float SpriteRotation;
 
+    /// <summary>
+    /// animation playback speed modifier
+    /// </summary>
     [DataField, AutoNetworkedField]
     public float AnimationSpeed = 1f;
 }

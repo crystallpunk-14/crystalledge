@@ -84,7 +84,7 @@
 
 
 - type: animationAction
-  id: SwordAttackHeavy
+  id: SwordAttackHeavy1
   movementSpeed: 0.3
   duration: 0.5
   events:
@@ -115,6 +115,52 @@
         rotation: 0
       - time: 0.5
         rotation: 90
+#
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.3
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.4
+        color: "#ffffff00"  # Fade out
+    0.1:
+    - !type:Dash
+      distance: -0.1
+
+- type: animationAction
+  id: SwordAttackHeavy2
+  movementSpeed: 0.3
+  duration: 0.5
+  events:
+    0:
+    - !type:WeaponArcAttack
+      range: 0.6
+      arcWidth: 180
+    - !type:ItemVisualEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.9, -0.1
+        easing: QuadIn
+      - time: 0.05
+        offset: 0.5, -0.5
+      - time: 0.2
+        offset: 0, -0.9
+      - time: 0.3
+        offset: -0.5, -0.5
+      - time: 0.4
+        offset: -0.9, -0.1
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+        easing: QuadIn
+      - time: 0.25
+        rotation: 0
+      - time: 0.5
+        rotation: -90
 #
       colorAnimation:
       - time: 0.0

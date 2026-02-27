@@ -1,4 +1,7 @@
+using Content.Shared._CE.Animation.Core.Prototypes;
+using Content.Shared._CE.Animation.Item.Components;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.Animation.Core;
@@ -26,4 +29,14 @@ public sealed class CEItemAttackEvent(MapCoordinates position, Angle direction, 
     public Angle Direction = direction;
     public float Range = range;
     public float ArcWidth = arcWidth;
+}
+
+/// <summary>
+/// Is called on the object being used to determine what animations it provides
+/// </summary>
+public sealed class CEGetItemAnimationsEvent(Entity<CEItemAnimationComponent> used, CEUseType useType) : HandledEntityEventArgs
+{
+    public Entity<CEItemAnimationComponent> Used = used;
+    public CEUseType UseType = useType;
+    public List<ProtoId<CEAnimationActionPrototype>> Animations = new();
 }
