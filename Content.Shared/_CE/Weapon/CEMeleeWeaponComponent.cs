@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Weapon;
@@ -25,4 +26,10 @@ public sealed partial class CEMeleeWeaponComponent : Component
     /// </summary>
     [DataField]
     public float RangeMultiplier = 1f;
+
+    /// <summary>
+    /// The sound played on a weapon when it hits something.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier HitSound = new SoundCollectionSpecifier("WeakHit");
 }

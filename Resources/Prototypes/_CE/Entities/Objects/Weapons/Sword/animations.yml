@@ -97,10 +97,6 @@
   duration: 0.5
   events:
     0:
-    - !type:WeaponArcAttack
-      damageGroup: default
-      range: 0.6
-      arcWidth: 180
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
@@ -134,6 +130,11 @@
         easing: QuadOut
       - time: 0.4
         color: "#ffffff00"  # Fade out
+    0.2:
+    - !type:WeaponArcAttack
+      damageGroup: default
+      range: 0.6
+      arcWidth: 180
 
 - type: animationAction
   id: SwordAttackHeavy2
@@ -141,10 +142,6 @@
   duration: 0.5
   events:
     0:
-    - !type:WeaponArcAttack
-      damageGroup: default
-      range: 0.6
-      arcWidth: 180
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
@@ -178,3 +175,8 @@
         easing: QuadOut
       - time: 0.4
         color: "#ffffff00"  # Fade out
+    0.2:
+    - !type:WeaponArcAttack
+      damageGroup: default
+      range: 0.6
+      arcWidth: 180

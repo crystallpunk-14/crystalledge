@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._CE.Weapon;
+using Robust.Shared.Map;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
 
@@ -43,7 +44,7 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
         var range = Range * weapon.RangeMultiplier;
 
         // Raise debug event for arc attack visualization
-        var debugEvent = new CEItemAttackEvent(entityCoords, direction, range, ArcWidth);
+        var debugEvent = new CEDebugArcAttackEvent(entityCoords, direction, range, ArcWidth);
         entManager.EventBus.RaiseEvent(EventSource.Local, debugEvent);
 
         // Find all entities in the arc
@@ -58,4 +59,16 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
         targets.Remove(entity);
         melee.TryAttack(entity, (used.Value, weapon), targets, Power, DamageGroup);
     }
+}
+
+/// <summary>
+/// Local event raised when an ArcAttack fires, used for debug visualization.
+/// </summary>
+public sealed class CEDebugArcAttackEvent(MapCoordinates position, Angle direction, float range, float arcWidth)
+    : EntityEventArgs
+{
+    public MapCoordinates Position = position;
+    public Angle Direction = direction;
+    public float Range = range;
+    public float ArcWidth = arcWidth;
 }

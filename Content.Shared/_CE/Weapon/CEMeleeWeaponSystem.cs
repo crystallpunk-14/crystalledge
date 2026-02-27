@@ -1,12 +1,14 @@
 using System.Linq;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared._CE.Weapon;
 
 public abstract class CESharedMeleeWeaponSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public bool TryAttack(EntityUid user, Entity<CEMeleeWeaponComponent> weapon, List<EntityUid> targets, float power, string damageGroup = "default")
     {
@@ -25,13 +27,25 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
             if (!_damageable.TryChangeDamage(target, damage * power))
                 continue;
 
+            var attackedEv = new CEAttackedEvent(user, weapon);
+            RaiseLocalEvent(target, attackedEv);
+            
             hitted.Add(target);
         }
 
-        if (hitted.Any())
-        {
-            RaiseAttackEffects(user, hitted);
-        }
+        if (!hitted.Any())
+            return false;
+
+        //Attack confirmed
+
+        RaiseAttackEffects(user, hitted);
+        _audio.PlayPredicted(weapon.Comp.HitSound, weapon, user);
+
+        var usedEv = new CEAttackUsingEvent(user, hitted);
+        RaiseLocalEvent(weapon, usedEv);
+
+        var attackerEv = new CEAfterAttackEvent(weapon, hitted);
+        RaiseLocalEvent(user, attackerEv);
 
         return true;
     }
@@ -43,4 +57,32 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
     {
         // Base implementation does nothing - effects are handled in client/server implementations
     }
+}
+
+
+/// <summary>
+/// Raised on used weapon when attack hits something.
+/// </summary>
+public sealed partial class CEAttackUsingEvent(EntityUid user, List<EntityUid> targets) : EntityEventArgs
+{
+    public EntityUid User = user;
+    public List<EntityUid> Targets = targets;
+}
+
+/// <summary>
+/// Raised on attacked entity when it gets hit by a CEMeleeWeaponComponent attack.
+/// </summary>
+public sealed partial class CEAttackedEvent(EntityUid attacker, EntityUid weapon)
+{
+    public EntityUid Attacker = attacker;
+    public EntityUid Weapon = weapon;
+}
+
+/// <summary>
+/// Raised on attacker, after it attacks something with a CEMeleeWeaponComponent
+/// </summary>
+public sealed partial class CEAfterAttackEvent(EntityUid weapon, List<EntityUid> targets)
+{
+    public EntityUid Weapon = weapon;
+    public List<EntityUid> Targets = targets;
 }

@@ -20,18 +20,6 @@ public sealed class CEItemVisualEffectEvent(NetEntity entity, NetEntity? used, A
 }
 
 /// <summary>
-/// Local event raised when an ArcAttack fires, used for debug visualization.
-/// </summary>
-public sealed class CEItemAttackEvent(MapCoordinates position, Angle direction, float range, float arcWidth)
-    : EntityEventArgs
-{
-    public MapCoordinates Position = position;
-    public Angle Direction = direction;
-    public float Range = range;
-    public float ArcWidth = arcWidth;
-}
-
-/// <summary>
 /// Is called on the object being used to determine what animations it provides
 /// </summary>
 public sealed class CEGetItemAnimationsEvent(Entity<CEItemAnimationComponent> used, CEUseType useType) : HandledEntityEventArgs
