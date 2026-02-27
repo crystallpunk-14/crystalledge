@@ -11,4 +11,10 @@ public sealed partial class CEMeleeWeaponComponent : Component
 {
     [DataField(required: true), AutoNetworkedField]
     public DamageSpecifier Damage;
+
+    /// <summary>
+    /// Modify weapon attack animations range
+    /// </summary>
+    [DataField]
+    public float RangeMultiplier = 1f;
 }

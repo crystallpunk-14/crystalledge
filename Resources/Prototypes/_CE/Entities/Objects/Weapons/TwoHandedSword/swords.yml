@@ -7,7 +7,3 @@
   - type: Sprite
     sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
     state: icon
-  - type: CEMeleeWeapon
-    damage:
-      types:
-        Slash: 2
