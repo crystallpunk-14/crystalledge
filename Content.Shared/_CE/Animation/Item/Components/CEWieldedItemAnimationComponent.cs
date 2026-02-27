@@ -15,5 +15,5 @@ public sealed partial class CEWieldedItemAnimationComponent : Component
     /// Mapping from input button to attack action prototype.
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
-    public Dictionary<CEUseType, List<ProtoId<CEAnimationActionPrototype>>> Animations = new();
+    public Dictionary<CEUseType, List<CEAnimationEntry>> Animations = new();
 }

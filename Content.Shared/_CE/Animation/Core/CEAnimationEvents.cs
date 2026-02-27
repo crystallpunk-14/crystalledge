@@ -38,5 +38,5 @@ public sealed class CEGetItemAnimationsEvent(Entity<CEItemAnimationComponent> us
 {
     public Entity<CEItemAnimationComponent> Used = used;
     public CEUseType UseType = useType;
-    public List<ProtoId<CEAnimationActionPrototype>> Animations = new();
+    public List<CEAnimationEntry> Animations = new();
 }

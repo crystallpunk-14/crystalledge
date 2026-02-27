@@ -11,11 +11,13 @@
     spriteRotation: -90
     animations:
       Primary:
-      - SwordAttackLight1
-      - SwordAttackLight2
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
       Secondary:
-      - SwordAttackHeavy1
-      - SwordAttackHeavy2
+      - anim: SwordAttackHeavy1
+        speed: 2
+      - anim: SwordAttackHeavy2
+        speed: 2
   - type: Clothing
     slots:
     - neck

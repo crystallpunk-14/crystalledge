@@ -54,11 +54,12 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                 var startTime = controller.StartAnimationTime.Value;
                 foreach (var (keyFrame, actions) in animation.Events)
                 {
+                    var realKeyFrame = keyFrame * speedMultiplier;
                     // Skip events already processed
-                    if (keyFrame <= controller.LastEvent)
+                    if (realKeyFrame <= controller.LastEvent)
                         continue;
 
-                    var eventTime = startTime + (keyFrame * speedMultiplier);
+                    var eventTime = startTime + realKeyFrame;
                     // Only trigger if event time is within this frame
                     if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
                     {
@@ -66,7 +67,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                         {
                             action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero, controller.AnimationSpeed, keyFrame);
                         }
-                        controller.LastEvent = keyFrame * speedMultiplier;
+                        controller.LastEvent = realKeyFrame;
                         Dirty(uid, controller);
                     }
                 }
@@ -75,8 +76,15 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     }
 
     /// <summary>
-    ///
+    /// Attempts to run animation on entity.
     /// </summary>
+    /// <param name="entity"></param>
+    /// <param name="animationProto"></param>
+    /// <param name="used"></param>
+    /// <param name="angle"></param>
+    /// <param name="speed">The speed at which you need to start a new animation</param>
+    /// <param name="forceCancel">Forcefully cancel the currently playing animation to start a new one</param>
+    /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimation(EntityUid entity,
         ProtoId<CEAnimationActionPrototype> animationProto,
@@ -101,7 +109,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     }
 
     /// <summary>
-    ///
+    /// Prematurely cancels animation execution
     /// </summary>
     [PublicAPI]
     public void CancelAnimation(Entity<CEActiveAnimationActionComponent> entity)

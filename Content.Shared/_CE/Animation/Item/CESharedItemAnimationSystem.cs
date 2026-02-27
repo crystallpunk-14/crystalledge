@@ -108,7 +108,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
             return false;
 
         //Get animations
-        List<ProtoId<CEAnimationActionPrototype>> animations = new();
+        List<CEAnimationEntry> animations = new();
 
         var animEv = new CEGetItemAnimationsEvent(used, attackEvent.UseType);
         RaiseLocalEvent(used, animEv);
@@ -130,9 +130,9 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         if (used.Comp.LastComboUseType == attackEvent.UseType && curTime < used.Comp.ComboResetDeadline)
             comboIndex = used.Comp.ComboIndex % animations.Count;
 
-        var animationProtoId = animations[comboIndex];
+        var animationProtoId = animations[comboIndex].Anim;
 
-        var animationSpeed = GetAnimationSpeed(user, used);
+        var animationSpeed = GetAnimationSpeed(user, used) * animations[comboIndex].Speed;
         if (!AnimationAction.TryPlayAnimation(user, animationProtoId, used.Owner, angle, animationSpeed))
             return false;
 
@@ -187,8 +187,6 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         RaiseLocalEvent(used, ev);
 
         var speed = ev.GetSpeed();
-        speed *= used.Comp.AnimationSpeed;
-
         return speed;
     }
 

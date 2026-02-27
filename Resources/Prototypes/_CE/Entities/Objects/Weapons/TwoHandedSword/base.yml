@@ -12,19 +12,19 @@
     animationSpeed: 0.5 #Slow attacks
     animations:
       Primary:
-      - SwordAttackLight1
-      - SwordAttackLight2
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
       Secondary:
-      - SwordAttackLight1
-      - SwordAttackLight2
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
   - type: CEWieldedItemAnimation
     animations:
       Primary:
-      - SwordAttackHeavy1 #TODO: IDK why but combos from Wielded doesnt work. Something related to combo deadline i think. Fix that later. Meow
-      - SwordAttackHeavy2
+      - anim: SwordAttackHeavy1 #TODO: IDK why but combos from Wielded doesnt work. Something related to combo deadline i think. Fix that later. Meow
+      - anim: SwordAttackHeavy2
       Secondary:
-      - SwordAttackHeavy1
-      - SwordAttackHeavy2
+      - anim: SwordAttackHeavy1
+      - anim: SwordAttackHeavy2
   - type: Clothing
     slots:
     - neck

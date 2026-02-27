@@ -15,7 +15,7 @@ public sealed partial class CEItemAnimationComponent : Component
     /// Mapping from input button to attack action prototype.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public Dictionary<CEUseType, List<ProtoId<CEAnimationActionPrototype>>> Animations = new();
+    public Dictionary<CEUseType, List<CEAnimationEntry>> Animations = new();
 
     /// <summary>
     /// Are we currently holding down the mouse for an attack.
@@ -56,12 +56,19 @@ public sealed partial class CEItemAnimationComponent : Component
     /// </summary>
     [DataField]
     public float SpriteRotation;
+}
+
+[DataDefinition, Serializable]
+public sealed partial class CEAnimationEntry
+{
+    [DataField(required: true)]
+    public ProtoId<CEAnimationActionPrototype> Anim;
 
     /// <summary>
     /// animation playback speed modifier
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public float AnimationSpeed = 1f;
+    [DataField]
+    public float Speed = 1f;
 }
 
 /// <summary>

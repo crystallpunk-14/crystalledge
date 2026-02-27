@@ -117,17 +117,11 @@
         rotation: 90
 #
       colorAnimation:
-      - time: 0.0
-        color: "#ffffff"
-        easing: Linear
       - time: 0.3
         color: "#ffffff"
         easing: QuadOut
       - time: 0.4
         color: "#ffffff00"  # Fade out
-    0.1:
-    - !type:Dash
-      distance: -0.1
 
 - type: animationAction
   id: SwordAttackHeavy2
@@ -163,14 +157,8 @@
         rotation: -90
 #
       colorAnimation:
-      - time: 0.0
-        color: "#ffffff"
-        easing: Linear
       - time: 0.3
         color: "#ffffff"
         easing: QuadOut
       - time: 0.4
         color: "#ffffff00"  # Fade out
-    0.1:
-    - !type:Dash
-      distance: -0.1
