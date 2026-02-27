@@ -34,7 +34,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
             var speedMultiplier = 1f / controller.AnimationSpeed;
 
-            var animationEndTime = (controller.StartAnimationTime + animation.Duration) * speedMultiplier;
+            var animationEndTime = controller.StartAnimationTime + (animation.Duration * speedMultiplier);
 
             //Finishing animation
             if (_timing.CurTime >= animationEndTime)

@@ -44,13 +44,12 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
 
         var user = entity.Value;
 
-
-        if (!TryGetWeapon(user, out var weapon))
+        if (!TryGetWeapon(user, out var used))
             return;
 
-        if (!CombatMode.IsInCombatMode(user) || !CanAttack(user, weapon: weapon))
+        if (!CombatMode.IsInCombatMode(user) || !CanAttack(user, weapon: used))
         {
-            weapon.Value.Comp.Using = false;
+            used.Value.Comp.Using = false;
             return;
         }
 
@@ -60,13 +59,13 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
         // Release detection — stop attacking when buttons are released.
         if (primaryDown != BoundKeyState.Down && secondaryDown != BoundKeyState.Down)
         {
-            if (weapon.Value.Comp.Using)
-                RaisePredictiveEvent(new CEStopItemAnimationUseEvent(GetNetEntity(weapon.Value)));
+            if (used.Value.Comp.Using)
+                RaisePredictiveEvent(new CEStopItemAnimationUseEvent(GetNetEntity(used.Value)));
 
             return;
         }
 
-        if (weapon.Value.Comp.Using)
+        if (used.Value.Comp.Using)
             return;
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
@@ -93,25 +92,25 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
 
         if (primaryDown == BoundKeyState.Down)
         {
-            ClientAttack(user, weapon.Value, angle, CEUseType.Primary);
+            ClientUseItem(user, used.Value, angle, CEUseType.Primary);
             return;
         }
 
         if (secondaryDown == BoundKeyState.Down)
         {
-            ClientAttack(user, weapon.Value, angle, CEUseType.Secondary);
+            ClientUseItem(user, used.Value, angle, CEUseType.Secondary);
         }
     }
 
-    private void ClientAttack(
+    private void ClientUseItem(
         EntityUid user,
-        Entity<CEItemAnimationComponent> weapon,
+        Entity<CEItemAnimationComponent> used,
         Angle angle,
-        CEUseType attackType)
+        CEUseType useType)
     {
         if (!Timing.IsFirstTimePredicted)
             return;
 
-        RaisePredictiveEvent(new CEItemAnimationUseEvent(angle, GetNetEntity(weapon), attackType));
+        RaisePredictiveEvent(new CEItemAnimationUseEvent(angle, GetNetEntity(used), useType));
     }
 }
