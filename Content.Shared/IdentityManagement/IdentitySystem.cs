@@ -147,6 +147,17 @@ public sealed class IdentitySystem : EntitySystem
         var representation = GetIdentityRepresentation(ent.Owner);
         var name = GetIdentityName(ent, representation);
 
+
+        //CrystallEdge override character name
+        if (TryComp<HumanoidProfileComponent>(ent, out var humanoid))
+        {
+            var species = _humanoidProfile.GetSpeciesRepresentation(humanoid.Species).ToLower();
+            var age = _humanoidProfile.GetAgeRepresentation(humanoid.Species, humanoid.Age);
+
+            name = age + " " + species;
+        }
+        //CrystallEdge end
+
         // Clone the old entity's grammar to the identity entity, for loc purposes.
         if (TryComp<GrammarComponent>(ent, out var grammar))
         {

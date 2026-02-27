@@ -257,7 +257,7 @@ namespace Content.Server.GameTicking
 
             DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);
 
-            if (lateJoin && !silent)
+            if (lateJoin && !silent && false) //CrystallEdge disable arrival announcement
             {
                 if (jobPrototype.JoinNotifyCrew)
                 {
