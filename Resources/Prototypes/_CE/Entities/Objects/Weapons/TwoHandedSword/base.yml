@@ -9,6 +9,7 @@
     size: Ginormous
   - type: CEItemAnimation
     spriteRotation: -90
+    animationSpeed: 0.5 #Slow attacks
     animations:
       Primary:
       - SwordAttackLight1

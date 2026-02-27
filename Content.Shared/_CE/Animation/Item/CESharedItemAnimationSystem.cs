@@ -101,7 +101,10 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
 
         var animationProtoId = animations[comboIndex];
 
-        if (!AnimationAction.TryPlayAnimation(user, animationProtoId, used.Owner, angle))
+        //Calculate animation speed
+        var animationSpeed = GetUseSpeed(user, used);
+
+        if (!AnimationAction.TryPlayAnimation(user, animationProtoId, used.Owner, angle, animationSpeed))
             return false;
 
         // Calculate the deadline: animation duration + configurable delay.
@@ -145,7 +148,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         return false;
     }
 
-    public float GetUseSpeed(EntityUid entity, Entity<CEItemAnimationComponent> used)
+    private float GetUseSpeed(EntityUid entity, Entity<CEItemAnimationComponent> used)
     {
         var ev = new CEGetItemAnimationSpeedEvent();
         RaiseLocalEvent(entity, ev);

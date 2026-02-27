@@ -49,7 +49,7 @@ public sealed class CEStopItemAnimationUseEvent(NetEntity weapon) : EntityEventA
 }
 
 /// <summary>
-///
+/// It is called on both the item being used and the creature using the item before the animation starts, to calculate the animation's speed.
 /// </summary>
 public sealed class CEGetItemAnimationSpeedEvent : EntityEventArgs
 {

@@ -43,7 +43,7 @@ public abstract partial class SharedItemVisualEffect : CEAnimationActionEntry
     [DataField]
     public List<CEColorKeyframe> ColorAnimation = new();
 
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame)
+    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
     {
         //Check out client implementation
     }

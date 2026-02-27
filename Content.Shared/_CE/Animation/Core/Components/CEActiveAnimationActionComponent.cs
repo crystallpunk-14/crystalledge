@@ -24,6 +24,9 @@ public sealed partial class CEActiveAnimationActionComponent : Component
     public Angle? AnimationAngle;
 
     [DataField, AutoNetworkedField]
+    public float AnimationSpeed = 1f;
+
+    [DataField, AutoNetworkedField]
     public bool LockRotation;
 
     [DataField, AutoNetworkedField]

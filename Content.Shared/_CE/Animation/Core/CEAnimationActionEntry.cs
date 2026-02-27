@@ -7,5 +7,5 @@ namespace Content.Shared._CE.Animation.Core;
 [MeansImplicitUse]
 public abstract partial class CEAnimationActionEntry
 {
-    public abstract void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame);
+    public abstract void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame);
 }

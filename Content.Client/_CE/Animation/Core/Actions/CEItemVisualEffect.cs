@@ -18,7 +18,9 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
     private const string RotationAnimationKey = "ce-item-visual-rotation";
     private const string ColorAnimationKey = "ce-item-visual-color";
 
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame)
+    private float animationSpeedMultilier = 1f;
+
+    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
     {
         if (!entManager.TryGetComponent<CEItemAnimationComponent>(used, out var itemAnim))
             return;
@@ -30,6 +32,8 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         var transform = entManager.System<TransformSystem>();
         var spriteSystem = entManager.System<SpriteSystem>();
         var animationPlayer = entManager.System<AnimationPlayerSystem>();
+
+        animationSpeedMultilier = 1f / animationSpeed;
 
         if (!entManager.TryGetComponent<TransformComponent>(entity, out var userXform)
             || userXform.MapID == MapId.Nullspace)
@@ -135,7 +139,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
             // Rotate the relative offset by the animation angle
             var rotatedOffset = angle.RotateVec(relativeOffset);
 
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, keyframe.Time, GetEasingFunction(keyframe.Easing)));
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, keyframe.Time * animationSpeedMultilier, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -167,7 +171,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
         {
             // Add keyframe rotation to base rotation
             var totalRotation = angle + Angle.FromDegrees(keyframe.Rotation);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, keyframe.Time, GetEasingFunction(keyframe.Easing)));
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, keyframe.Time * animationSpeedMultilier, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -197,7 +201,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
         foreach (var keyframe in ColorAnimation)
         {
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, keyframe.Time, GetEasingFunction(keyframe.Easing)));
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, keyframe.Time * animationSpeedMultilier, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -231,6 +235,8 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
             var maxColorTime = ColorAnimation.Max(k => k.Time);
             maxTime = Math.Max(maxTime, maxColorTime);
         }
+
+        maxTime *= animationSpeedMultilier;
 
         // If no keyframes found, use default duration
         return maxTime > 0f ? maxTime + 0.5f : 0.5f;

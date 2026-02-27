@@ -39,7 +39,7 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
         {
             if (action is SharedItemVisualEffect visualEffect)
             {
-                visualEffect.Play(EntityManager, entity, used, ev.Angle, ev.Frame);
+                visualEffect.Play(EntityManager, entity, used, ev.Angle, comp.AnimationSpeed, ev.Frame);
             }
         }
     }

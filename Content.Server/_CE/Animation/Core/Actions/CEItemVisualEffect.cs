@@ -6,7 +6,7 @@ namespace Content.Server._CE.Animation.Core.Actions;
 
 public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 {
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, TimeSpan frame)
+    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
     {
         // Server sends visual effect event to all non-predicting clients
         var filter = Filter.PvsExcept(entity, entityManager: entManager);

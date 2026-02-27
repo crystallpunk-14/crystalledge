@@ -1,6 +1,5 @@
 using Content.Shared._CE.Animation.Item;
 using Content.Shared._CE.Animation.Item.Components;
-using Content.Shared.Effects;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -19,7 +18,6 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IStateManager _stateManager = default!;
     [Dependency] private readonly InputSystem _inputSystem = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly MapSystem _map = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 

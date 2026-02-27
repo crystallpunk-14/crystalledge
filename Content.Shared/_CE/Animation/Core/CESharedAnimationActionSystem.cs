@@ -32,7 +32,9 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             if (!_proto.Resolve(controller.ActiveAnimation, out var animation))
                 continue;
 
-            var animationEndTime = controller.StartAnimationTime + animation.Duration;
+            var speedMultiplier = 1f / controller.AnimationSpeed;
+
+            var animationEndTime = (controller.StartAnimationTime + animation.Duration) * speedMultiplier;
 
             //Finishing animation
             if (_timing.CurTime >= animationEndTime)
@@ -56,15 +58,15 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     if (keyFrame <= controller.LastEvent)
                         continue;
 
-                    var eventTime = startTime + keyFrame;
+                    var eventTime = startTime + (keyFrame * speedMultiplier);
                     // Only trigger if event time is within this frame
                     if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
                     {
                         foreach (var action in actions)
                         {
-                            action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero, keyFrame);
+                            action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero, controller.AnimationSpeed, keyFrame);
                         }
-                        controller.LastEvent = keyFrame;
+                        controller.LastEvent = keyFrame * speedMultiplier;
                         Dirty(uid, controller);
                     }
                 }
@@ -80,6 +82,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         ProtoId<CEAnimationActionPrototype> animationProto,
         EntityUid? used = null,
         Angle? angle = null,
+        float speed = 1f,
         bool forceCancel = false)
     {
         if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
@@ -93,7 +96,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         if (!_proto.Resolve(animationProto, out var indexedAnimation))
             return false;
 
-        StartAnimation(entity, indexedAnimation, used, angle);
+        StartAnimation(entity, indexedAnimation, used, angle, speed);
         return true;
     }
 
@@ -119,7 +122,8 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         EntityUid entity,
         CEAnimationActionPrototype animation,
         EntityUid? used = null,
-        Angle? animationAngle = null)
+        Angle? animationAngle = null,
+        float speed = 1f)
     {
         var controller = EnsureComp<CEActiveAnimationActionComponent>(entity);
 
@@ -128,6 +132,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.LockRotation = animation.LockRotation;
         controller.AnimationAngle = animationAngle ?? _transform.GetWorldRotation(entity);
         controller.Used = used;
+        controller.AnimationSpeed = speed;
         Dirty(entity, controller);
 
         var started = new CEAnimationActionStartedEvent(animation);
