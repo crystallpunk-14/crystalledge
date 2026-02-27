@@ -13,6 +13,8 @@
       Primary:
       - anim: SkimitarAttackLight1
       - anim: SkimitarAttackLight2
+      Secondary:
+      - anim: SkimitarAttackHeavy1
   - type: Clothing
     slots:
     - neck
