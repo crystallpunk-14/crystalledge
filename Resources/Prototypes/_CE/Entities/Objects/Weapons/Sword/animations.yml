@@ -6,6 +6,9 @@
     0:
     - !type:Dash
       distance: 0.2
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash.ogg
     - !type:ItemVisualEffect
       offsetAnimation:
       - time: 0.0
@@ -49,6 +52,9 @@
     0:
     - !type:Dash
       distance: 0.2
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash.ogg
     - !type:ItemVisualEffect
       offsetAnimation:
       - time: 0.0
@@ -95,6 +101,9 @@
       damageGroup: default
       range: 0.6
       arcWidth: 180
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
     - !type:ItemVisualEffect
       offsetAnimation:
       - time: 0.0
@@ -136,6 +145,9 @@
       damageGroup: default
       range: 0.6
       arcWidth: 180
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
     - !type:ItemVisualEffect
       offsetAnimation:
       - time: 0.0
