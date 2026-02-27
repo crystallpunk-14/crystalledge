@@ -8,15 +8,18 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
 {
     [Dependency] private readonly DamageableSystem _damageable = default!;
 
-    public bool TryAttack(EntityUid user, Entity<CEMeleeWeaponComponent> weapon, List<EntityUid> targets)
+    public bool TryAttack(EntityUid user, Entity<CEMeleeWeaponComponent> weapon, List<EntityUid> targets, float power, string damageGroup = "default")
     {
+        if (!weapon.Comp.DamageGroups.TryGetValue(damageGroup, out var damage))
+            return false;
+
         List<EntityUid> hitted = new();
         foreach (var target in targets)
         {
             if (!HasComp<DamageableComponent>(target))
                 continue;
 
-            if (!_damageable.TryChangeDamage(target, weapon.Comp.Damage))
+            if (!_damageable.TryChangeDamage(target, damage * power))
                 continue;
 
             hitted.Add(target);

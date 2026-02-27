@@ -11,6 +11,18 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
     [DataField]
     public float ArcWidth = 90f;
 
+    /// <summary>
+    /// <see cref="CEMeleeWeaponComponent.DamageGroups"/>
+    /// </summary>
+    [DataField]
+    public string DamageGroup = "default";
+
+    /// <summary>
+    /// The overall damage modifier for this attack.
+    /// </summary>
+    [DataField]
+    public float Power = 1f;
+
     public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
     {
         if (used is null)
@@ -44,6 +56,6 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
             .ToList();
 
         targets.Remove(entity);
-        melee.TryAttack(entity, (used.Value, weapon), targets);
+        melee.TryAttack(entity, (used.Value, weapon), targets, Power, DamageGroup);
     }
 }

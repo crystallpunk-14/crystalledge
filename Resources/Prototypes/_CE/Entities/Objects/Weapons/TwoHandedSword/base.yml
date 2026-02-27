@@ -34,6 +34,10 @@
   - type: Wieldable
   - type: CEMeleeWeapon
     rangeMultiplier: 1.2 #Longer reach
-    damage:
-      types:
-        Slash: 4 #Higher damage
+    damageGroups:
+      default:
+        types:
+          Slash: 4
+      pierce:
+        types:
+          Piercing: 4

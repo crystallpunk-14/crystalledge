@@ -37,6 +37,7 @@
         color: "#ffffff00"  # Fade out
     0.1:
     - !type:WeaponArcAttack
+      damageGroup: pierce
       range: 0.7
       arcWidth: 40
 
@@ -79,6 +80,7 @@
         color: "#ffffff00"  # Fade out
     0.1:
     - !type:WeaponArcAttack
+      damageGroup: pierce
       range: 0.7
       arcWidth: 40
 
@@ -90,6 +92,7 @@
   events:
     0:
     - !type:WeaponArcAttack
+      damageGroup: default
       range: 0.6
       arcWidth: 180
     - !type:ItemVisualEffect
@@ -130,6 +133,7 @@
   events:
     0:
     - !type:WeaponArcAttack
+      damageGroup: default
       range: 0.6
       arcWidth: 180
     - !type:ItemVisualEffect
