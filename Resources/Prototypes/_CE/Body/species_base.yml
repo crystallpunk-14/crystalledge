@@ -89,8 +89,8 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
-      enum.CP14RememberNameUiKey.Key:
-        type: CP14IdentityRecognitionBoundUserInterface
+      enum.CERememberNameUiKey.Key:
+        type: CEIdentityRecognitionBoundUserInterface
   - type: Stripping
   - type: Puller
   - type: Speech
