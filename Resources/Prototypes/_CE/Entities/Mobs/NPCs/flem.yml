@@ -28,7 +28,7 @@
     - SimpleHostile
   - type: Sprite
     drawdepth: Mobs
-    sprite: _CE/Mobs/The Great Flem/flem.rsi
+    sprite: _CE/Mobs/flem.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
       state: alive
