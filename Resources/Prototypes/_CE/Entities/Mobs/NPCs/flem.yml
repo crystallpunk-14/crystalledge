@@ -1,0 +1,68 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - MobCombat
+  id: CEFlem
+  name: flem
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: HTN
+    rootTask:
+      task: CEFlemCompound
+    blackboard:
+      NavClimb: !type:Bool
+        true
+      NavSmash: !type:Bool
+        true
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/The Great Flem/flem.rsi
+    layers:
+    - map: [ "enum.DamageStateVisualLayers.Base" ]
+      state: alive
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+      Critical:
+        Base: dead
+      Dead:
+        Base: dead
+  - type: MovementAlwaysTouching
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1
+    baseSprintSpeed: 1.5
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      10: Dead
+  - type: CombatMode
+  - type: MeleeWeapon
+    hidden: true
+    soundHit:
+      collection: MetalThud
+    damage:
+      groups:
+        Brute: 2
+
+- type: htnCompound
+  id: CEFlemCompound
+  branches:
+    - tasks:
+        - !type:HTNPrimitiveTask
+          operator: !type:UtilityOperator
+            proto: NearbyMeleeTargets
+        - !type:HTNCompoundTask
+          task: BeforeMeleeAttackTargetCompound
+    - tasks:
+        - !type:HTNCompoundTask
+          task: IdleCompound
