@@ -56,7 +56,9 @@
     animations:
       Primary:
       - anim: FlemAttack1
+        speed: 0.5
       - anim: FlemAttack2
+        speed: 0.5
   - type: CEMeleeWeapon
     damageGroups:
       default:

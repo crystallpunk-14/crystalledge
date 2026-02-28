@@ -11,7 +11,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Animation.Item;
 
-public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationSystem
+public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
 {
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
@@ -60,7 +60,7 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
         if (primaryDown != BoundKeyState.Down && secondaryDown != BoundKeyState.Down)
         {
             if (used.Value.Comp.Using)
-                RaisePredictiveEvent(new CEStopItemAnimationUseEvent(GetNetEntity(used.Value)));
+                RaisePredictiveEvent(new CEStopWeaponseEvent(GetNetEntity(used.Value)));
 
             return;
         }
@@ -104,13 +104,13 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
 
     private void ClientUseItem(
         EntityUid user,
-        Entity<CEItemAnimationComponent> used,
+        Entity<CEWeaponComponent> used,
         Angle angle,
         CEUseType useType)
     {
         if (!Timing.IsFirstTimePredicted)
             return;
 
-        RaisePredictiveEvent(new CEItemAnimationUseEvent(angle, GetNetEntity(used), useType));
+        RaisePredictiveEvent(new CEWeaponnUseEvent(angle, GetNetEntity(used), useType));
     }
 }

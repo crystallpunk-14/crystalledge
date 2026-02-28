@@ -8,8 +8,8 @@ namespace Content.Shared._CE.Animation.Item.Components;
 /// Using this item in combat mode triggers action animations on the character.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
-[Access(typeof(CESharedItemAnimationSystem))]
-public sealed partial class CEItemAnimationComponent : Component
+[Access(typeof(CESharedWeaponSystem))]
+public sealed partial class CEWeaponComponent : Component
 {
     /// <summary>
     /// Mapping from input button to attack action prototype.

@@ -23,7 +23,7 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
 
     public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
     {
-        if (!entManager.TryGetComponent<CEItemAnimationComponent>(used, out var itemAnim))
+        if (!entManager.TryGetComponent<CEWeaponComponent>(used, out var itemAnim))
             return;
 
         var timing = IoCManager.Resolve<IGameTiming>();

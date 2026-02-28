@@ -17,7 +17,7 @@ public sealed partial class CENPCMeleeCombatSystem : EntitySystem
 {
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CEItemAnimationSystem _itemAnimation = default!;
+    [Dependency] private readonly CEWeaponSystem _weapon = default!;
     [Dependency] private readonly CEAnimationActionSystem _animation = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
 
@@ -56,7 +56,7 @@ public sealed partial class CENPCMeleeCombatSystem : EntitySystem
     {
         ent.Comp.Status = CECombatStatus.Normal;
 
-        if (!_itemAnimation.TryGetWeapon(ent, out var weapon))
+        if (!_weapon.TryGetWeapon(ent, out var weapon))
         {
             ent.Comp.Status = CECombatStatus.NoWeapon;
             return;
@@ -101,6 +101,6 @@ public sealed partial class CENPCMeleeCombatSystem : EntitySystem
         var direction = targetPos - ownerPos;
         var angle = direction == Vector2.Zero ? Angle.Zero : Angle.FromWorldVec(direction);
 
-        _itemAnimation.TryUse(ent, CEUseType.Primary, angle);
+        _weapon.TryUse(ent, CEUseType.Primary, angle);
     }
 }

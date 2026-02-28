@@ -1,6 +1,4 @@
-using Content.Shared._CE.Animation.Core.Prototypes;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Animation.Item.Components;
 
@@ -8,8 +6,8 @@ namespace Content.Shared._CE.Animation.Item.Components;
 /// Replaces attack animations for the item being used if the item is held in both hands (wielded).
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
-[Access(typeof(CESharedItemAnimationSystem))]
-public sealed partial class CEWieldedItemAnimationComponent : Component
+[Access(typeof(CESharedWeaponSystem))]
+public sealed partial class CEWieldedWeaponComponent : Component
 {
     /// <summary>
     /// Mapping from input button to attack action prototype.

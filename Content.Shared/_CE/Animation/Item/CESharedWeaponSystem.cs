@@ -18,7 +18,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Animation.Item;
 
-public abstract partial class CESharedItemAnimationSystem : EntitySystem
+public abstract partial class CESharedWeaponSystem : EntitySystem
 {
     [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] protected readonly IMapManager MapManager = default!;
@@ -38,13 +38,13 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeAllEvent<CEItemAnimationUseEvent>(OnClientAttackRequest);
-        SubscribeAllEvent<CEStopItemAnimationUseEvent>(OnClientStopRequest);
+        SubscribeAllEvent<CEWeaponnUseEvent>(OnClientAttackRequest);
+        SubscribeAllEvent<CEStopWeaponseEvent>(OnClientStopRequest);
 
-        SubscribeLocalEvent<CEWieldedItemAnimationComponent, CEGetItemAnimationsEvent>(OnGetItemAnimations);
+        SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponEvent>(OnGetWeapon);
     }
 
-    private void OnGetItemAnimations(Entity<CEWieldedItemAnimationComponent> ent, ref CEGetItemAnimationsEvent args)
+    private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponEvent args)
     {
         if (args.Handled)
             return;
@@ -62,7 +62,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnClientStopRequest(CEStopItemAnimationUseEvent ev, EntitySessionEventArgs args)
+    private void OnClientStopRequest(CEStopWeaponseEvent ev, EntitySessionEventArgs args)
     {
         var user = args.SenderSession.AttachedEntity;
 
@@ -77,10 +77,10 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
             return;
 
         weapon.Value.Comp.Using = false;
-        DirtyField(weapon.Value.Owner, weapon.Value.Comp, nameof(CEItemAnimationComponent.Using));
+        DirtyField(weapon.Value.Owner, weapon.Value.Comp, nameof(CEWeaponComponent.Using));
     }
 
-    private void OnClientAttackRequest(CEItemAnimationUseEvent ev, EntitySessionEventArgs args)
+    private void OnClientAttackRequest(CEWeaponnUseEvent ev, EntitySessionEventArgs args)
     {
         if (args.SenderSession.AttachedEntity is not {} user)
             return;
@@ -105,7 +105,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
 
     private bool TryUse(
         EntityUid user,
-        Entity<CEItemAnimationComponent> used,
+        Entity<CEWeaponComponent> used,
         CEUseType useType,
         Angle angle)
     {
@@ -117,7 +117,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         //Get animations
         List<CEAnimationEntry> animations = new();
 
-        var animEv = new CEGetItemAnimationsEvent(used, useType);
+        var animEv = new CEGetWeaponEvent(used, useType);
         RaiseLocalEvent(used, animEv);
 
         if (animEv.Handled && animEv.Animations.Count != 0)
@@ -154,7 +154,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         return true;
     }
 
-    public bool TryGetWeapon(EntityUid entity, [NotNullWhen(true)] out Entity<CEItemAnimationComponent>? used)
+    public bool TryGetWeapon(EntityUid entity, [NotNullWhen(true)] out Entity<CEWeaponComponent>? used)
     {
         used = null;
 
@@ -168,14 +168,14 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
 
         // Use in-hands entity if available.
         if (_hands.TryGetActiveItem(entity, out var held) &&
-            TryComp<CEItemAnimationComponent>(held, out var heldWeapon))
+            TryComp<CEWeaponComponent>(held, out var heldWeapon))
         {
             used = (held.Value, heldWeapon);
             return true;
         }
 
         // Use own body.
-        if (TryComp<CEItemAnimationComponent>(entity, out var melee))
+        if (TryComp<CEWeaponComponent>(entity, out var melee))
         {
             used = (entity, melee);
             return true;
@@ -187,9 +187,9 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
     /// <summary>
     /// Returns the animation playback speed, where 1 = 100% speed, 2 = 200% speed
     /// </summary>
-    private float GetAnimationSpeed(EntityUid entity, Entity<CEItemAnimationComponent> used)
+    private float GetAnimationSpeed(EntityUid entity, Entity<CEWeaponComponent> used)
     {
-        var ev = new CEGetItemAnimationSpeedEvent();
+        var ev = new CEGetWeaponSpeedEvent();
         RaiseLocalEvent(entity, ev);
         RaiseLocalEvent(used, ev);
 
@@ -201,7 +201,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
     /// Returns whether the user is allowed to attack.
     /// Checks container state and raises <see cref="CEAttackAttemptEvent"/>.
     /// </summary>
-    public bool CanAttack(EntityUid user, EntityUid? target = null, Entity<CEItemAnimationComponent>? weapon = null)
+    public bool CanAttack(EntityUid user, EntityUid? target = null, Entity<CEWeaponComponent>? weapon = null)
     {
         return Blocker.CanAttack(user, target);
 

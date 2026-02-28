@@ -8,7 +8,7 @@ namespace Content.Shared._CE.Animation.Item;
 /// Contains all data needed for both precise and wide attacks.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEItemAnimationUseEvent(
+public sealed class CEWeaponnUseEvent(
     Angle angle,
     NetEntity weapon,
     CEUseType useType)
@@ -36,14 +36,14 @@ public sealed class CEItemAnimationUseEvent(
 /// </summary>
 public sealed class CEGetAnimationItemForUseEvent : HandledEntityEventArgs
 {
-    public Entity<CEItemAnimationComponent>? Used;
+    public Entity<CEWeaponComponent>? Used;
 }
 
 /// <summary>
 /// Raised when a client releases the attack button.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEStopItemAnimationUseEvent(NetEntity weapon) : EntityEventArgs
+public sealed class CEStopWeaponseEvent(NetEntity weapon) : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
 }
@@ -51,7 +51,7 @@ public sealed class CEStopItemAnimationUseEvent(NetEntity weapon) : EntityEventA
 /// <summary>
 /// It is called on both the item being used and the creature using the item before the animation starts, to calculate the animation's speed.
 /// </summary>
-public sealed class CEGetItemAnimationSpeedEvent : EntityEventArgs
+public sealed class CEGetWeaponSpeedEvent : EntityEventArgs
 {
     private float _multiplier = 1f;
 

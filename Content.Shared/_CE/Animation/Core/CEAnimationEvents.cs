@@ -22,9 +22,9 @@ public sealed class CEItemVisualEffectEvent(NetEntity entity, NetEntity? used, A
 /// <summary>
 /// Is called on the object being used to determine what animations it provides
 /// </summary>
-public sealed class CEGetItemAnimationsEvent(Entity<CEItemAnimationComponent> used, CEUseType useType) : HandledEntityEventArgs
+public sealed class CEGetWeaponEvent(Entity<CEWeaponComponent> used, CEUseType useType) : HandledEntityEventArgs
 {
-    public Entity<CEItemAnimationComponent> Used = used;
+    public Entity<CEWeaponComponent> Used = used;
     public CEUseType UseType = useType;
     public List<CEAnimationEntry> Animations = new();
 }

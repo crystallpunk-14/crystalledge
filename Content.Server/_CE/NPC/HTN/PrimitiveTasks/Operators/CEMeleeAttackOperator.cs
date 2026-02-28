@@ -17,14 +17,14 @@ namespace Content.Server._CE.NPC.HTN.PrimitiveTasks.Operators;
 
 /// <summary>
 /// HTN operator that performs an animation-based melee attack
-/// using <see cref="CESharedAnimationActionSystem"/> and <see cref="CESharedItemAnimationSystem"/>.
+/// using <see cref="CESharedAnimationActionSystem"/> and <see cref="CESharedWeaponSystem"/>.
 /// Plays one attack animation cycle (with combo cycling) and finishes when the animation completes.
 /// </summary>
 public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditionalShutdown
 {
     [Dependency] private readonly IEntityManager _entManager = default!;
 
-    private CESharedItemAnimationSystem _itemAnimation = default!;
+    private CESharedWeaponSystem _weapon = default!;
     private CESharedAnimationActionSystem _animationAction = default!;
     private SharedCombatModeSystem _combatMode = default!;
     private SharedTransformSystem _transform = default!;
@@ -60,7 +60,7 @@ public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditional
     public override void Initialize(IEntitySystemManager sysManager)
     {
         base.Initialize(sysManager);
-        _itemAnimation = sysManager.GetEntitySystem<CESharedItemAnimationSystem>();
+        _weapon = sysManager.GetEntitySystem<CESharedWeaponSystem>();
         _animationAction = sysManager.GetEntitySystem<CESharedAnimationActionSystem>();
         _combatMode = sysManager.GetEntitySystem<SharedCombatModeSystem>();
         _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
