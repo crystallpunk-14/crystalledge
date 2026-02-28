@@ -66,10 +66,19 @@ public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditional
         _transform = sysManager.GetEntitySystem<SharedTransformSystem>();
     }
 
+    public override void Startup(NPCBlackboard blackboard)
+    {
+        base.Startup(blackboard);
+        var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
+        var comp = _entManager.EnsureComponent<CENPCMeleeCombatComponent>(owner);
+        comp.Target = blackboard.GetValue<EntityUid>(TargetKey);
+    }
+
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(
         NPCBlackboard blackboard,
         CancellationToken cancelToken)
     {
+        // Don't attack if they're already as wounded as we want them.
         if (!blackboard.TryGetValue<EntityUid>(TargetKey, out var target, _entManager))
             return (false, null);
 
@@ -80,60 +89,51 @@ public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditional
         return (true, null);
     }
 
-    public override void Startup(NPCBlackboard blackboard)
-    {
-        base.Startup(blackboard);
-
-        var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
-        var comp = _entManager.EnsureComponent<CENPCMeleeAttackComponent>(owner);
-        comp.AnimationStarted = false;
-        comp.Target = EntityUid.Invalid;
-
-        if (!blackboard.TryGetValue<EntityUid>(TargetKey, out var target, _entManager))
-            return;
-
-        comp.Target = target;
-
-        // Enable combat mode so other systems recognize us as in-combat.
-        _combatMode.SetInCombatMode(owner, true);
-
-        // Compute direction from owner to target.
-        var ownerPos = _transform.GetWorldPosition(owner);
-        var targetPos = _transform.GetWorldPosition(target);
-        var direction = targetPos - ownerPos;
-        var angle = direction == Vector2.Zero ? Angle.Zero : new Angle(direction) + Angle.FromDegrees(90);
-
-        // Attempt animation-based attack through the item animation system.
-        comp.AnimationStarted = _itemAnimation.TryUse(owner, UseType, angle);
-    }
-
     public override HTNOperatorStatus Update(NPCBlackboard blackboard, float frameTime)
     {
         base.Update(blackboard, frameTime);
+        HTNOperatorStatus status;
 
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
 
-        if (!_entManager.TryGetComponent<CENPCMeleeAttackComponent>(owner, out var comp))
-            return HTNOperatorStatus.Failed;
-
-        // Animation never started — fail immediately.
-        if (!comp.AnimationStarted)
-            return HTNOperatorStatus.Failed;
-
-        // Target died — consider attack finished.
-        if (blackboard.TryGetValue<EntityUid>(TargetKey, out var target, _entManager) &&
-            _entManager.TryGetComponent<MobStateComponent>(target, out var mobState) &&
-            mobState.CurrentState > TargetState)
+        if (_entManager.TryGetComponent<CENPCMeleeCombatComponent>(owner, out var combat) &&
+            blackboard.TryGetValue<EntityUid>(TargetKey, out var target, _entManager) &&
+            target != EntityUid.Invalid)
         {
-            return HTNOperatorStatus.Finished;
+            combat.Target = target;
+
+            //Success
+            if (_entManager.TryGetComponent<MobStateComponent>(target, out var mobState) &&
+                mobState.CurrentState > TargetState)
+            {
+                status = HTNOperatorStatus.Finished;
+            }
+            else
+            {
+                switch (combat.Status)
+                {
+                    case CECombatStatus.TargetOutOfRange:
+                    case CECombatStatus.Normal:
+                        status = HTNOperatorStatus.Continuing;
+                        break;
+                    default:
+                        status = HTNOperatorStatus.Failed;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            status = HTNOperatorStatus.Failed;
         }
 
-        // Animation still playing — keep going.
-        if (_entManager.HasComponent<CEActiveAnimationActionComponent>(owner))
-            return HTNOperatorStatus.Continuing;
+        // Mark it as finished to continue the plan.
+        if (status == HTNOperatorStatus.Continuing && ShutdownState == HTNPlanState.PlanFinished)
+        {
+            status = HTNOperatorStatus.Finished;
+        }
 
-        // Animation ended — attack cycle complete.
-        return HTNOperatorStatus.Finished;
+        return status;
     }
 
     public void ConditionalShutdown(NPCBlackboard blackboard)
@@ -148,7 +148,7 @@ public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditional
         _combatMode.SetInCombatMode(owner, false);
 
         // Remove tracking component.
-        _entManager.RemoveComponent<CENPCMeleeAttackComponent>(owner);
+        _entManager.RemoveComponent<CENPCMeleeCombatComponent>(owner);
 
         // Clean up target from blackboard.
         blackboard.Remove<EntityUid>(TargetKey);

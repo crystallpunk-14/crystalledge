@@ -39,7 +39,7 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
 
         // Get entity coordinates
         var entityCoords = transform.GetMapCoordinates(entity);
-        var direction = angle + Angle.FromDegrees(-90);
+        var direction = new Angle(angle.ToWorldVec());
 
         var range = Range * weapon.RangeMultiplier;
 

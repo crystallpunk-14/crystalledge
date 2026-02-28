@@ -88,7 +88,7 @@ public sealed partial class CEClientItemAnimationSystem : CESharedItemAnimationS
         var playerPos = TransformSystem.GetMapCoordinates(userXform).Position;
         var targetPos = TransformSystem.ToMapCoordinates(coordinates).Position;
         var direction = targetPos - playerPos;
-        var angle = direction.ToAngle() + Angle.FromDegrees(90); //Uhh idk why we need this
+        var angle = Angle.FromWorldVec(direction);
 
         if (primaryDown == BoundKeyState.Down)
         {

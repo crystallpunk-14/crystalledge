@@ -111,9 +111,6 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
     {
         var curTime = Timing.CurTime;
 
-        if (!CombatMode.IsInCombatMode(user))
-            return false;
-
         if (!Blocker.CanAttack(user))
             return false;
 

@@ -114,9 +114,6 @@
             pathfindKey: TargetPathfind
             rangeKey: MeleeRange
         - !type:HTNPrimitiveTask
-          operator: !type:JukeOperator
-            jukeType: Away
-        - !type:HTNPrimitiveTask
           operator: !type:CEMeleeAttackOperator
             targetKey: Target
             useType: Primary
@@ -130,7 +127,7 @@
           services:
             - !type:UtilityService
               id: MeleeService
-              proto: NearbyMeleeTargets
+              proto: CENearbyMeleeTargets
               key: Target
 
 # Picks a random location for the NPC to move to and idle.
@@ -176,8 +173,8 @@
 
 - type: animationAction
   id: FlemAttack1
-  movementSpeed: 0.8
-  duration: 0.4
+  movementSpeed: 0.5
+  duration: 0.8
   events:
     0:
     - !type:PlaySound
@@ -228,14 +225,15 @@
         scale: 1, -1
     0.25:
     - !type:WeaponArcAttack
-      #damageGroup: pierce
       range: 0.7
       arcWidth: 40
+    - !type:Dash
+      distance: 0.1
 
 - type: animationAction
   id: FlemAttack2
-  movementSpeed: 0.8
-  duration: 0.4
+  movementSpeed: 0.5
+  duration: 0.8
   events:
     0:
     - !type:PlaySound
@@ -286,6 +284,7 @@
         scale: 1, 1
     0.25:
     - !type:WeaponArcAttack
-      #damageGroup: pierce
       range: 0.7
       arcWidth: 40
+    - !type:Dash
+      distance: 0.1

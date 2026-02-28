@@ -56,6 +56,12 @@ public sealed partial class CEItemAnimationComponent : Component
     /// </summary>
     [DataField]
     public float SpriteRotation;
+
+    /// <summary>
+    /// Used only for NPC to calculate minimun required distance to attack
+    /// </summary>
+    [DataField]
+    public float NPCAttackRange = 2f;
 }
 
 [DataDefinition, Serializable]
