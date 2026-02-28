@@ -60,3 +60,29 @@
   - type: CEIntelligenceMaxMana
   - type: CESkillUpgradeable
   - type: CESkillStorage
+
+- type: entity
+  id: CEMobCombat
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: CombatMode
+  - type: CEItemAnimation
+    spriteRotation: -90
+    animations:
+      Primary:
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
+      Secondary:
+      - anim: SwordAttackHeavy1
+        speed: 1
+      - anim: SwordAttackHeavy2
+        speed: 1
+  - type: CEMeleeWeapon
+    damageGroups:
+      default:
+        types:
+          Slash: 2
+      pierce:
+        types:
+          Piercing: 2

@@ -2,7 +2,7 @@
   parent:
   - BaseMob
   - CEMobDamageable
-  - MobCombat
+  - CEMobCombat
   id: CEFlem
   name: flem
   description: TODO
@@ -49,14 +49,25 @@
     thresholds:
       0: Alive
       10: Dead
-  - type: CombatMode
-  - type: MeleeWeapon
-    hidden: true
-    soundHit:
-      collection: MetalThud
-    damage:
-      groups:
-        Brute: 2
+  - type: CEItemAnimation
+    spriteRotation: -90
+    animations:
+      Primary:
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
+      Secondary:
+      - anim: SwordAttackHeavy1
+        speed: 1
+      - anim: SwordAttackHeavy2
+        speed: 1
+  - type: CEMeleeWeapon
+    damageGroups:
+      default:
+        types:
+          Slash: 2
+      pierce:
+        types:
+          Piercing: 2
 
 - type: htnCompound
   id: CEFlemCompound
