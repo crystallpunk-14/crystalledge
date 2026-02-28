@@ -7,7 +7,7 @@
   components:
   - type: Item
     size: Ginormous
-  - type: CEItemAnimation
+  - type: CEWeapon
     spriteRotation: -90
     animations:
       Primary:

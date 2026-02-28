@@ -1,3 +1,6 @@
+using Content.Shared._CE.Animation.Item.Components;
+using Content.Shared.Destructible.Thresholds;
+
 namespace Content.Server._CE.NPC.Components;
 
 /// <summary>
@@ -13,6 +16,12 @@ public sealed partial class CENPCMeleeCombatComponent : Component
     /// </summary>
     [ViewVariables]
     public EntityUid Target;
+
+    [ViewVariables]
+    public CEUseType UseType = CEUseType.Primary;
+
+    [ViewVariables]
+    public float AngleVariation;
 
     [ViewVariables]
     public CECombatStatus Status = CECombatStatus.Normal;

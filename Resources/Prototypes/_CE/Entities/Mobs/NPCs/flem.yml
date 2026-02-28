@@ -1,6 +1,7 @@
 - type: entity
   parent:
   - BaseMob
+  - MobFlammable
   - CEMobDamageable
   - CEMobCombat
   id: CEFlem
@@ -51,14 +52,12 @@
     thresholds:
       0: Alive
       10: Dead
-  - type: CEItemAnimation
+  - type: CEWeapon
     spriteRotation: -90
     animations:
       Primary:
       - anim: FlemAttack1
-        speed: 0.5
       - anim: FlemAttack2
-        speed: 0.5
   - type: CEMeleeWeapon
     damageGroups:
       default:

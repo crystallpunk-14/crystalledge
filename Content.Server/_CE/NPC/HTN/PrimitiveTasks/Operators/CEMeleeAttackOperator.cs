@@ -10,6 +10,7 @@ using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Item;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared.CombatMode;
+using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 
@@ -35,27 +36,30 @@ public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditional
     /// <summary>
     /// Blackboard key containing the target entity.
     /// </summary>
-    [DataField("targetKey", required: true)]
+    [DataField( required: true)]
     public string TargetKey = default!;
 
     /// <summary>
     /// The minimum damage state the target must be in for us to attack.
     /// </summary>
-    [DataField("targetState")]
+    [DataField]
     public MobState TargetState = MobState.Alive;
 
     /// <summary>
     /// Which attack type to use (Primary or Secondary).
     /// </summary>
-    [DataField("useType")]
+    [DataField]
     public CEUseType UseType = CEUseType.Primary;
 
     /// <summary>
     /// Blackboard key for the attack range.
     /// Used by <c>TargetInRangePrecondition</c> and <c>MoveToOperator</c> as well.
     /// </summary>
-    [DataField("rangeKey")]
+    [DataField]
     public string RangeKey = "MeleeRange";
+
+    [DataField]
+    public float AngleVariation = 5f;
 
     public override void Initialize(IEntitySystemManager sysManager)
     {
@@ -72,6 +76,8 @@ public sealed partial class CEMeleeAttackOperator : HTNOperator, IHtnConditional
         var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
         var comp = _entManager.EnsureComponent<CENPCMeleeCombatComponent>(owner);
         comp.Target = blackboard.GetValue<EntityUid>(TargetKey);
+        comp.UseType = UseType;
+        comp.AngleVariation = AngleVariation;
     }
 
     public override async Task<(bool Valid, Dictionary<string, object>? Effects)> Plan(

@@ -9,6 +9,7 @@ using Content.Shared.NPC;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server._CE.NPC.Systems;
@@ -20,6 +21,7 @@ public sealed partial class CENPCMeleeCombatSystem : EntitySystem
     [Dependency] private readonly CEWeaponSystem _weapon = default!;
     [Dependency] private readonly CEAnimationActionSystem _animation = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     private const float TargetMeleeLostRange = 14f;
 
@@ -101,6 +103,7 @@ public sealed partial class CENPCMeleeCombatSystem : EntitySystem
         var direction = targetPos - ownerPos;
         var angle = direction == Vector2.Zero ? Angle.Zero : Angle.FromWorldVec(direction);
 
-        _weapon.TryUse(ent, CEUseType.Primary, angle);
+        angle += Angle.FromDegrees(_random.NextFloat(-ent.Comp.AngleVariation, ent.Comp.AngleVariation));
+        _weapon.TryUse(ent, ent.Comp.UseType, angle);
     }
 }
