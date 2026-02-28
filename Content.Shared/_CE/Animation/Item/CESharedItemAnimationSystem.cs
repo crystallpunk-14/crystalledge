@@ -89,14 +89,24 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
             weapon.Value.Owner != GetEntity(ev.Weapon))
             return;
 
-        TryUse(user, weapon.Value, ev, args.SenderSession, ev.Angle);
+        TryUse(user, weapon.Value, ev.UseType, ev.Angle);
+    }
+
+    public bool TryUse(
+        EntityUid user,
+        CEUseType useType,
+        Angle angle)
+    {
+        if (!TryGetWeapon(user, out var weapon))
+            return false;
+
+        return TryUse(user, weapon.Value, useType, angle);
     }
 
     private bool TryUse(
         EntityUid user,
         Entity<CEItemAnimationComponent> used,
-        CEItemAnimationUseEvent attackEvent,
-        ICommonSession? session,
+        CEUseType useType,
         Angle angle)
     {
         var curTime = Timing.CurTime;
@@ -110,14 +120,14 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         //Get animations
         List<CEAnimationEntry> animations = new();
 
-        var animEv = new CEGetItemAnimationsEvent(used, attackEvent.UseType);
+        var animEv = new CEGetItemAnimationsEvent(used, useType);
         RaiseLocalEvent(used, animEv);
 
         if (animEv.Handled && animEv.Animations.Count != 0)
             animations = animEv.Animations;
         else //Get default animations
         {
-            if (used.Comp.Animations.TryGetValue(attackEvent.UseType, out var a))
+            if (used.Comp.Animations.TryGetValue(useType, out var a))
                 animations = a;
         }
 
@@ -127,7 +137,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
         // Determine combo index.
         // Reset if: different use type, or combo deadline expired.
         var comboIndex = 0;
-        if (used.Comp.LastComboUseType == attackEvent.UseType && curTime < used.Comp.ComboResetDeadline)
+        if (used.Comp.LastComboUseType == useType && curTime < used.Comp.ComboResetDeadline)
             comboIndex = used.Comp.ComboIndex % animations.Count;
 
         var animationProtoId = animations[comboIndex].Anim;
@@ -138,7 +148,7 @@ public abstract partial class CESharedItemAnimationSystem : EntitySystem
 
         // Calculate the deadline: animation duration + configurable delay.
         var animDuration = _proto.Index(animationProtoId).Duration;
-        used.Comp.LastComboUseType = attackEvent.UseType;
+        used.Comp.LastComboUseType = useType;
         used.Comp.ComboIndex = comboIndex + 1;
         used.Comp.ComboResetDeadline = curTime + (animDuration * animationSpeed) + used.Comp.ComboResetDelay;
         used.Comp.Using = true;

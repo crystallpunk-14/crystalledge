@@ -143,6 +143,11 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.AnimationSpeed = speed;
         Dirty(entity, controller);
 
+        // Face the animation direction before locking rotation.
+        // For players this points toward the mouse; for NPCs toward the target.
+        if (animation.LockRotation && animationAngle != null)
+            _transform.SetWorldRotation(entity, animationAngle.Value);
+
         var started = new CEAnimationActionStartedEvent(animation);
         RaiseLocalEvent(entity, started);
 
