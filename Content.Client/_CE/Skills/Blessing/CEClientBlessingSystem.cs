@@ -8,6 +8,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Client.Utility;
 using Robust.Shared.Animations;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Skills.Blessing;
@@ -27,6 +28,19 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
         SubscribeLocalEvent<CEBlessingComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleState);
         SubscribeLocalEvent<CEBlessingComponent, AnimationCompletedEvent>(OnAnimationComplete);
         SubscribeLocalEvent<CEBlessingComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(HandlePlayerAttached);
+    }
+
+    private void HandlePlayerAttached(LocalPlayerAttachedEvent ev)
+    {
+        if (ev.Entity != _player.LocalEntity)
+            return;
+
+        var query = EntityQueryEnumerator<CEBlessingComponent>();
+        while (query.MoveNext(out var ent, out var blessing))
+        {
+            UpdateVisuals((ent, blessing));
+        }
     }
 
     private void OnStartup(Entity<CEBlessingComponent> ent, ref ComponentStartup args)
@@ -80,7 +94,7 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
         _light.SetColor(entity, proto.Color);
 
         if (_player.LocalEntity != ent.Comp.ForPlayer)
-            _sprite.SetColor(entity, Color.White.WithAlpha(0.4f));
+            _sprite.SetColor(entity, Color.White.WithAlpha(0.2f));
         else
             _sprite.SetColor(entity, Color.White.WithAlpha(1f));
     }
