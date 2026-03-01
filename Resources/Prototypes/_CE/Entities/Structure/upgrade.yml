@@ -1,0 +1,40 @@
+- type: entity
+  id: CEUpgradeStatue
+  parent: BaseStructure
+  name: Level up statue
+  description: "Interact to level up. TODO: immersive name and description"
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    offset: "0.0,0.8"
+    sprite: _CE/Structures/upgrade_statue.rsi
+    layers:
+    - state: statue
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+
+- type: entity
+  id: CEUpgradePostament
+  parent: BaseStructure
+  name: Level up postament
+  description: "Select one of the upgrade options to apply it. TODO: immersive name and description"
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    #offset: "0.0,0.8"
+    sprite: _CE/Structures/upgrade_postament.rsi
+    layers:
+    - state: postament
