@@ -1,0 +1,28 @@
+- type: skill
+  id: BaseNeutralSkill
+  abstract: true
+  vfx:
+    sprite: _CE/Effects/upgrade.rsi
+    state: neutral
+
+- type: skill
+  id: BaseMageSkill
+  abstract: true
+  vfx:
+    sprite: _CE/Effects/upgrade.rsi
+    state: mage
+  restrictions:
+   - !type:JobWhitelist
+     jobs:
+     - CEMage
+
+- type: skill
+  id: BaseWarriorSkill
+  abstract: true
+  vfx:
+    sprite: _CE/Effects/upgrade.rsi
+    state: warrior
+  restrictions:
+   - !type:JobWhitelist
+     jobs:
+     - CEWarrior

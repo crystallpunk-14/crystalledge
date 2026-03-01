@@ -1,11 +1,8 @@
 - type: skill
-  id: MageIntellectBuff
+  parent: BaseMageSkill
+  id: IntellectBuff
   effect: !type:AddAction
     action: CEActionMageIntellectBuff
-  #restrictions:
-  # - !type:JobWhitelist
-  #   jobs:
-  #   - CEMage
 
 - type: entity
   id: CEActionMageIntellectBuff

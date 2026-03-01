@@ -1,11 +1,8 @@
 - type: skill
+  parent: BaseWarriorSkill
   id: Unbreakable
   effect: !type:AddAction
     action: CEActionUnbreakable
-  #restrictions:
-  # - !type:JobWhitelist
-  #   jobs:
-  #   - CEWarrior
 
 - type: entity
   id: CEActionUnbreakable

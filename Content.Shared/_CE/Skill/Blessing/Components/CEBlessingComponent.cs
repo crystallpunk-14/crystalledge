@@ -31,6 +31,12 @@ public sealed partial class CEBlessingComponent : Component
     public string MapLayer = "blessing";
 
     /// <summary>
+    /// Sprite layer map for visualising skill icon
+    /// </summary>
+    [DataField]
+    public string MapVFXLayer = "vfx";
+
+    /// <summary>
     /// How long it takes to go from the bottom of the animation to the top.
     /// </summary>
     [DataField]

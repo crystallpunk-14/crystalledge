@@ -6,6 +6,7 @@ using Content.Shared._CE.Skill.Core;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Skills.Blessing;
 
@@ -14,6 +15,8 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly CESharedSkillSystem _skill = default!;
     [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly PointLightSystem _light = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -50,8 +53,12 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
         if (ent.Comp.Skill == null)
         {
             _sprite.LayerSetVisible(entity, ent.Comp.MapLayer, false);
+            _sprite.LayerSetVisible(entity, ent.Comp.MapVFXLayer, false);
             return;
         }
+
+        if (!_proto.Resolve(ent.Comp.Skill.Value, out var proto))
+            return;
 
         var icon = _skill.GetSkillIcon(ent.Comp.Skill.Value);
 
@@ -60,9 +67,14 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
 
         _sprite.LayerSetSprite(entity, ent.Comp.MapLayer, icon);
         _sprite.LayerSetVisible(entity, ent.Comp.MapLayer, true);
+
+        _sprite.LayerSetSprite(entity,  ent.Comp.MapVFXLayer, proto.VFX);
+        _sprite.LayerSetVisible(entity, ent.Comp.MapVFXLayer, true);
+
+        _light.SetColor(entity, proto.Color);
     }
 
-    public void FloatAnimation(Entity<CEBlessingComponent> ent, bool stop = false)
+    private void FloatAnimation(Entity<CEBlessingComponent> ent, bool stop = false)
     {
         if (stop)
         {

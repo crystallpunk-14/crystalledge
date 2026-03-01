@@ -1,4 +1,5 @@
 - type: skill
+  parent: BaseNeutralSkill
   id: Masochism
   effect: !type:AddStatusEffect
     effect: CEStatusEffectMasochism

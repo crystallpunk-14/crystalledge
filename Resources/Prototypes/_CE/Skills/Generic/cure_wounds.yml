@@ -1,4 +1,5 @@
 - type: skill
+  parent: BaseNeutralSkill
   id: CureWounds
   effect: !type:AddAction
     action: CEActionSpellCureWounds

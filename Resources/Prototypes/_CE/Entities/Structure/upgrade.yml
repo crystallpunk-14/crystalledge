@@ -40,9 +40,9 @@
     - state: postament
 
 - type: entity
-  id: CEBlessingTest
+  id: CEBlessingRandom
   parent: BaseStructure
-  name: Blessing
+  name: Random Blessing
   categories: [ ForkFiltered ]
   components:
   - type: Sprite
@@ -51,18 +51,18 @@
     drawdepth: Mobs
     sprite: _CE/Effects/upgrade.rsi
     layers:
-    - state: mage
+    - map: ["vfx"]
+      state: neutral
       shader: unshaded
       color: "#ffffff38"
     - map: ["blessing"]
       shader: unshaded
   - type: CEBlessing
-    skill: Masochism
     floatingStartOffset: "0.0,0.4"
     floatingOffset: "0.0,0.45"
+  - type: CERandomBlessing
   - type: InteractionOutline
   - type: PointLight
-    color: "#199bec"
     enabled: true
     energy: 3
     radius: 5
@@ -77,21 +77,3 @@
         property: Energy
         isLooped: true
         enabled: true
-
-- type: entity
-  parent: CEBlessingTest
-  id: CEBlessingTest2
-  components:
-  - type: Sprite
-    layers:
-    - state: warrior
-      shader: unshaded
-      color: "#ffffff38"
-    - map: ["blessing"]
-      shader: unshaded
-  - type: CEBlessing
-    skill: Unbreakable
-    floatingStartOffset: "0.0,0.4"
-    floatingOffset: "0.0,0.45"
-  - type: PointLight
-    color: "#ec2e19"
