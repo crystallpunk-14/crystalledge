@@ -34,7 +34,64 @@
   components:
   - type: Sprite
     noRot: true
-    #offset: "0.0,0.8"
+    offset: "0.0,0.1"
     sprite: _CE/Structures/upgrade_postament.rsi
     layers:
     - state: postament
+
+- type: entity
+  id: CEBlessingTest
+  parent: BaseStructure
+  name: Blessing
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    offset: "0.0,0.2"
+    drawdepth: Mobs
+    sprite: _CE/Effects/upgrade.rsi
+    layers:
+    - state: mage
+      shader: unshaded
+      color: "#ffffff38"
+    - map: ["blessing"]
+      shader: unshaded
+  - type: CEBlessing
+    skill: Masochism
+    floatingStartOffset: "0.0,0.4"
+    floatingOffset: "0.0,0.45"
+  - type: InteractionOutline
+  - type: PointLight
+    color: "#199bec"
+    enabled: true
+    energy: 3
+    radius: 5
+    netsync: true
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Cubic
+        maxDuration: 4
+        startValue: 1.5
+        endValue: 3.0
+        property: Energy
+        isLooped: true
+        enabled: true
+
+- type: entity
+  parent: CEBlessingTest
+  id: CEBlessingTest2
+  components:
+  - type: Sprite
+    layers:
+    - state: warrior
+      shader: unshaded
+      color: "#ffffff38"
+    - map: ["blessing"]
+      shader: unshaded
+  - type: CEBlessing
+    skill: Unbreakable
+    floatingStartOffset: "0.0,0.4"
+    floatingOffset: "0.0,0.45"
+  - type: PointLight
+    color: "#ec2e19"

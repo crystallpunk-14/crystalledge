@@ -58,7 +58,7 @@
       Intelligence: 5
   - type: CEVitalityMaxHealth
   - type: CEIntelligenceMaxMana
-  - type: CESkillUpgradeable
+  - type: CEBlessingReceiver
   - type: CESkillStorage
 
 - type: entity
