@@ -5,6 +5,7 @@ using Content.Shared._CE.Skill.Blessing.Components;
 using Content.Shared._CE.Skill.Core;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
+using Robust.Client.Player;
 using Robust.Client.Utility;
 using Robust.Shared.Animations;
 using Robust.Shared.Prototypes;
@@ -18,6 +19,7 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
     [Dependency] private readonly AnimationPlayerSystem _animation = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly PointLightSystem _light = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -76,6 +78,11 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
         }
 
         _light.SetColor(entity, proto.Color);
+
+        if (_player.LocalEntity != ent.Comp.ForPlayer)
+            _sprite.SetColor(entity, Color.White.WithAlpha(0.4f));
+        else
+            _sprite.SetColor(entity, Color.White.WithAlpha(1f));
     }
 
     private void FloatAnimation(Entity<CEBlessingComponent> ent, bool stop = false)

@@ -24,6 +24,7 @@
         layer:
         - MachineLayer
   - type: InteractionOutline
+  - type: CEBlessingStatue
 
 - type: entity
   id: CEUpgradePostament
@@ -38,6 +39,7 @@
     sprite: _CE/Structures/upgrade_postament.rsi
     layers:
     - state: postament
+  - type: CEBlessingTable
 
 - type: entity
   id: CEBlessingRandom
@@ -77,3 +79,31 @@
         property: Energy
         isLooped: true
         enabled: true
+
+- type: entity
+  id: CEBlessingTrigger
+  name: Blessing trigger
+  description: "A stone platform with glowing runes. TODO: immersive name and description"
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: _CE/Structures/upgrade_postament.rsi # TODO: replace with proper trigger sprite
+    layers:
+    - state: postament
+  - type: CEBlessingTrigger
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeCircle
+          radius: 3
+        hard: false
+        layer: []
+        mask:
+        - MobLayer

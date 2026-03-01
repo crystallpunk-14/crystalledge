@@ -33,6 +33,9 @@ public abstract partial class CESharedBlessingSystem : EntitySystem
         if (!_skill.TryAddSkill(args.User, ent.Comp.Skill.Value))
             return;
 
+        var ev = new CEBlessingClaimedEvent(args.User);
+        RaiseLocalEvent(ent.Owner, ref ev);
+
         PredictedDel(ent.Owner);
     }
 

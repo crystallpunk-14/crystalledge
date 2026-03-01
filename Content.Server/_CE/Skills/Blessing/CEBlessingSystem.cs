@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Shared._CE.Skill.Blessing;
 using Content.Shared._CE.Skill.Blessing.Components;
 using Content.Shared._CE.Skill.Core.Prototypes;
@@ -14,6 +13,9 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
     public override void Initialize()
     {
         base.Initialize();
+
+        InitializeLinking();
+        InitializeTrigger();
 
         SubscribeLocalEvent<CERandomBlessingComponent, MapInitEvent>(OnRandomInit);
     }

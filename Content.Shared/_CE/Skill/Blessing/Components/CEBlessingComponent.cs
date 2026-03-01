@@ -49,4 +49,10 @@ public sealed partial class CEBlessingComponent : Component
     public Vector2 FloatingOffset = new(0, 0.45f);
 
     public readonly string AnimationKey = "blessingfloat";
+
+    /// <summary>
+    /// Reference to the statue that spawned this blessing dynamically.
+    /// Set by the server when spawning; not networked.
+    /// </summary>
+    public EntityUid? SourceStatue;
 }
