@@ -5,6 +5,7 @@ using Content.Shared._CE.Skill.Blessing.Components;
 using Content.Shared._CE.Skill.Core;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
+using Robust.Client.Utility;
 using Robust.Shared.Animations;
 using Robust.Shared.Prototypes;
 
@@ -68,8 +69,11 @@ public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
         _sprite.LayerSetSprite(entity, ent.Comp.MapLayer, icon);
         _sprite.LayerSetVisible(entity, ent.Comp.MapLayer, true);
 
-        _sprite.LayerSetSprite(entity,  ent.Comp.MapVFXLayer, proto.VFX);
-        _sprite.LayerSetVisible(entity, ent.Comp.MapVFXLayer, true);
+        if (proto.Vfx is not null)
+        {
+            _sprite.LayerSetSprite(entity,  ent.Comp.MapVFXLayer, proto.Vfx);
+            _sprite.LayerSetVisible(entity, ent.Comp.MapVFXLayer, true);
+        }
 
         _light.SetColor(entity, proto.Color);
     }

@@ -26,7 +26,11 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         if (blessing.Skill is not null)
             return;
 
-        var skills = _proto.EnumeratePrototypes<CESkillPrototype>().ToList();
+        List<ProtoId<CESkillPrototype>> skills = new();
+        foreach (var s in _proto.EnumeratePrototypes<CESkillPrototype>())
+        {
+            skills.Add(s);
+        }
         if (skills.Count == 0)
             return;
 

@@ -16,6 +16,7 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     public string[]? Parents { get; private set; }
 
     [AbstractDataField]
+    [NeverPushInheritance]
     public bool Abstract { get; private set; }
 
     /// <summary>
@@ -54,7 +55,7 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     /// The visual effect visible around the skill while it is in the world as a pickable enhancement.
     /// </summary>
     [DataField]
-    public SpriteSpecifier VFX = default!;
+    public SpriteSpecifier? Vfx;
 
     /// <summary>
     /// Light color for the skill while it is in the world as a pickable enhancement.

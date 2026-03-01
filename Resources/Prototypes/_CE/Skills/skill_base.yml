@@ -1,6 +1,7 @@
 - type: skill
   id: BaseNeutralSkill
   abstract: true
+  color: "#868686"
   vfx:
     sprite: _CE/Effects/upgrade.rsi
     state: neutral
@@ -11,6 +12,7 @@
   vfx:
     sprite: _CE/Effects/upgrade.rsi
     state: mage
+  color: "#1d97ef"
   restrictions:
    - !type:JobWhitelist
      jobs:
@@ -22,6 +24,7 @@
   vfx:
     sprite: _CE/Effects/upgrade.rsi
     state: warrior
+  color: "#f70d0d"
   restrictions:
    - !type:JobWhitelist
      jobs:
