@@ -1,3 +1,4 @@
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Skills.Blessing.Components;
@@ -15,18 +16,13 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// Search radius (in tiles) for linking trigger and tables on initialization.
     /// </summary>
     [DataField]
-    public float LinkRadius = 8f;
+    public float LinkRadius = 4f;
 
     /// <summary>
     /// Prototype ID for the blessing entity to spawn on tables.
     /// </summary>
     [DataField]
-    public EntProtoId BlessingPrototype = "CEBlessingRandom";
-
-    /// <summary>
-    /// Reference to the linked trigger entity, found during initialization.
-    /// </summary>
-    public EntityUid? LinkedTrigger;
+    public EntProtoId BlessingPrototype = "CEUpgradeBlank";
 
     /// <summary>
     /// References to linked table (pedestal) entities, found during initialization.
@@ -49,4 +45,11 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// Currently spawned blessing entities on the pedestals for the active player.
     /// </summary>
     public List<EntityUid> ActiveBlessings = new();
+
+    /// <summary>
+    /// Per-player cache of skill offerings for this statue.
+    /// Preserved when a player leaves the trigger zone so re-entry shows the same skills.
+    /// Cleared when the player claims a blessing (non-chosen become skipped).
+    /// </summary>
+    public Dictionary<EntityUid, List<ProtoId<CESkillPrototype>>> OfferedSkills = new();
 }

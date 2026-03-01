@@ -12,9 +12,10 @@ namespace Content.Shared._CE.Skill.Blessing.Components;
 public sealed partial class CEBlessingReceiverComponent : Component
 {
     /// <summary>
-    /// Which skills were skipped and not selected when offered to the player?
-    /// These skills will no longer be offered to the player.
+    /// All skills that have been proposed to the player on any pedestal.
+    /// New statues avoid generating these to prevent cross-statue duplicates.
+    /// Cleared when the pool is exhausted and must restart.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public List<ProtoId<CESkillPrototype>> SkippedSkills = new();
+    public List<ProtoId<CESkillPrototype>> ProposedSkills = new();
 }

@@ -51,6 +51,13 @@ public sealed partial class CEBlessingComponent : Component
     public readonly string AnimationKey = "blessingfloat";
 
     /// <summary>
+    /// Sibling blessing entities spawned alongside this one.
+    /// Used for predicted cleanup when one blessing is claimed.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<EntityUid> SiblingBlessings = new();
+
+    /// <summary>
     /// Reference to the statue that spawned this blessing dynamically.
     /// Set by the server when spawning; not networked.
     /// </summary>

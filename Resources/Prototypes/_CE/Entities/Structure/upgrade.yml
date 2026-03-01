@@ -23,6 +23,14 @@
         - MachineMask
         layer:
         - MachineLayer
+      trigger:
+        shape:
+          !type:PhysShapeCircle
+          radius: 3
+        hard: false
+        layer: []
+        mask:
+        - MobLayer
   - type: InteractionOutline
   - type: CEBlessingStatue
 
@@ -42,9 +50,9 @@
   - type: CEBlessingTable
 
 - type: entity
-  id: CEBlessingRandom
+  id: CEUpgradeBlank
   parent: BaseStructure
-  name: Random Blessing
+  name: blessing
   categories: [ ForkFiltered ]
   components:
   - type: Sprite
@@ -62,7 +70,6 @@
   - type: CEBlessing
     floatingStartOffset: "0.0,0.4"
     floatingOffset: "0.0,0.45"
-  - type: CERandomBlessing
   - type: InteractionOutline
   - type: PointLight
     enabled: true
@@ -81,29 +88,8 @@
         enabled: true
 
 - type: entity
-  id: CEBlessingTrigger
-  name: Blessing trigger
-  description: "A stone platform with glowing runes. TODO: immersive name and description"
-  categories: [ ForkFiltered ]
+  id: CEUpgradeRandom
+  parent: CEUpgradeBlank
+  name: Random Blessing
   components:
-  - type: Transform
-    anchored: true
-  - type: Sprite
-    noRot: true
-    drawdepth: FloorObjects
-    sprite: _CE/Structures/upgrade_postament.rsi # TODO: replace with proper trigger sprite
-    layers:
-    - state: postament
-  - type: CEBlessingTrigger
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      trigger:
-        shape:
-          !type:PhysShapeCircle
-          radius: 3
-        hard: false
-        layer: []
-        mask:
-        - MobLayer
+  - type: CERandomBlessing

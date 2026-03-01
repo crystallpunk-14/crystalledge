@@ -3,3 +3,5 @@ ce-skill-info-title = Этот персонаж владеет следующи�
 
 ce-skill-effect-active = [color=gold]Активная способность[/color]
 ce-skill-effect-passive = [color=aqua]Пассивная способность[/color]
+
+ce-blessing-wrong-player = [color=red]Вы не можете поглотить благословение, предназначенное другому.[/color]

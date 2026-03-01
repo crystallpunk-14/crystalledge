@@ -17,6 +17,7 @@ public abstract partial class CESharedBlessingSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEBlessingComponent, ActivateInWorldEvent>(OnActivate);
+        InitializeExamine();
     }
 
     private void OnActivate(Entity<CEBlessingComponent> ent, ref ActivateInWorldEvent args)
@@ -32,6 +33,13 @@ public abstract partial class CESharedBlessingSystem : EntitySystem
 
         if (!_skill.TryAddSkill(args.User, ent.Comp.Skill.Value))
             return;
+
+        // Predicted-delete all sibling blessings so they disappear instantly
+        foreach (var sibling in ent.Comp.SiblingBlessings)
+        {
+            if (Exists(sibling))
+                PredictedDel(sibling);
+        }
 
         var ev = new CEBlessingClaimedEvent(args.User);
         RaiseLocalEvent(ent.Owner, ref ev);

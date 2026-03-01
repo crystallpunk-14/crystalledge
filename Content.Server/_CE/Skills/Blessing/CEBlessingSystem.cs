@@ -1,6 +1,8 @@
 using Content.Shared._CE.Skill.Blessing;
 using Content.Shared._CE.Skill.Blessing.Components;
+using Content.Shared._CE.Skill.Core;
 using Content.Shared._CE.Skill.Core.Prototypes;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -10,6 +12,8 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly CESharedSkillSystem _skill = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
     public override void Initialize()
     {
         base.Initialize();

@@ -1,10 +1,9 @@
 using Content.Server._CE.Skills.Blessing.Components;
-using Robust.Shared.GameObjects;
 
 namespace Content.Server._CE.Skills.Blessing;
 
 /// <summary>
-/// Handles linking statues to triggers and tables on MapInit via EntityLookup.
+/// Handles linking statues to pedestal tables on MapInit via EntityLookup.
 /// </summary>
 public sealed partial class CEBlessingSystem
 {
@@ -22,20 +21,8 @@ public sealed partial class CEBlessingSystem
 
         foreach (var uid in entities)
         {
-            // Link the first available trigger
-            if (ent.Comp.LinkedTrigger is null
-                && TryComp<CEBlessingTriggerComponent>(uid, out var triggerComp)
-                && triggerComp.LinkedStatue is null)
-            {
-                ent.Comp.LinkedTrigger = uid;
-                triggerComp.LinkedStatue = ent.Owner;
-            }
-
-            // Link all tables in range
             if (HasComp<CEBlessingTableComponent>(uid))
-            {
                 ent.Comp.LinkedTables.Add(uid);
-            }
         }
     }
 }
