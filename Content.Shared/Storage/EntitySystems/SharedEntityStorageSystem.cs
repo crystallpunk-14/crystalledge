@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared._CE.Health.Components;
 using Content.Shared.Destructible;
 using Content.Shared.Foldable;
 using Content.Shared.Hands.Components;
@@ -382,8 +383,9 @@ public abstract class SharedEntityStorageSystem : EntitySystem
             return _whitelistSystem.IsValid(component.Whitelist, toInsert);
 
         // The inserted entity must be a mob or an item.
-        return HasComp<MobStateComponent>(toInsert) || HasComp<ItemComponent>(toInsert);
-    }
+        return HasComp<MobStateComponent>(toInsert) || HasComp<ItemComponent>(toInsert) || HasComp<CEHealthComponent>(toInsert); //CrystallEdge - Allow entities with health component to be stored
+
+}
 
     public bool TryOpenStorage(EntityUid user, EntityUid target, bool silent = false)
     {
