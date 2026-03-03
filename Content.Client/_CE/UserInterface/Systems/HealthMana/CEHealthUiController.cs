@@ -98,14 +98,13 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
-        if (!EntityManager.TryGetComponent<CEHealthComponent>(uid, out var health) ||
-            !EntityManager.TryGetComponent<CEMobStateComponent>(uid, out var mobState))
+        if (!EntityManager.TryGetComponent<CEHealthComponent>(uid, out var health))
         {
             _healthBar.Visible = false;
             return;
         }
 
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(health, mobState);
+        _healthBar.UpdateHealthDisplay(health);
     }
 }

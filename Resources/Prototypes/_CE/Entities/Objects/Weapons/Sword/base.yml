@@ -27,8 +27,8 @@
   - type: CEMeleeWeapon
     damageGroups:
       default:
-        types:
-          Slash: 2
+        damage:
+          Physical: 2
       pierce:
-        types:
-          Piercing: 2
+        damage:
+          Physical: 2

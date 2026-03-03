@@ -21,9 +21,6 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
         List<EntityUid> hitted = new();
         foreach (var target in targets)
         {
-            if (!HasComp<CEHealthComponent>(target))
-                continue;
-
             if (!_health.TakeDamage(target, damage * power, user))
                 continue;
 

@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.Health.Components;
 
@@ -12,6 +13,9 @@ namespace Content.Shared._CE.Health.Components;
 public sealed partial class CEHealthComponent : Component
 {
     [DataField, AutoNetworkedField]
+    public CEMobState CurrentState = CEMobState.Alive;
+
+    [DataField, AutoNetworkedField]
     public int Health = 10;
 
     [DataField, AutoNetworkedField]
@@ -22,4 +26,12 @@ public sealed partial class CEHealthComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int DeathThreshold = -20;
+}
+
+[Serializable, NetSerializable]
+public enum CEMobState : byte
+{
+    Alive,
+    Critical,
+    Dead,
 }

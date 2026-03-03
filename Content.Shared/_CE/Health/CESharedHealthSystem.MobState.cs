@@ -9,23 +9,19 @@ namespace Content.Shared._CE.Health;
 /// Manages CE mob states (Alive, Critical, Dead) based on <see cref="CEHealthComponent"/> values.
 /// Critical state is entered when health reaches 0, Dead when health reaches DeathThreshold.
 /// </summary>
-public abstract partial class CESharedMobStateSystem : EntitySystem
+public abstract partial class CESharedHealthSystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
 
-    public override void Initialize()
+    private void InitMobState()
     {
-        base.Initialize();
-
-        SubscribeLocalEvent<CEMobStateComponent, CEHealthChangedEvent>(OnHealthChanged);
-        SubscribeLocalEvent<CEMobStateComponent, ComponentStartup>(OnStartup);
-
-        SubscribeActionBlockerEvents();
+        SubscribeLocalEvent<CEHealthComponent, CEHealthChangedEvent>(OnHealthChanged);
+        SubscribeLocalEvent<CEHealthComponent, ComponentStartup>(OnStartup);
     }
 
-    private void OnStartup(Entity<CEMobStateComponent> ent, ref ComponentStartup args)
+    private void OnStartup(Entity<CEHealthComponent> ent, ref ComponentStartup args)
     {
         if (!TryComp<CEHealthComponent>(ent, out var health))
             return;
@@ -33,7 +29,7 @@ public abstract partial class CESharedMobStateSystem : EntitySystem
         UpdateState(ent, health);
     }
 
-    private void OnHealthChanged(Entity<CEMobStateComponent> ent, ref CEHealthChangedEvent args)
+    private void OnHealthChanged(Entity<CEHealthComponent> ent, ref CEHealthChangedEvent args)
     {
         if (!TryComp<CEHealthComponent>(ent, out var health))
             return;
@@ -41,7 +37,7 @@ public abstract partial class CESharedMobStateSystem : EntitySystem
         UpdateState(ent, health);
     }
 
-    private void UpdateState(Entity<CEMobStateComponent> ent, CEHealthComponent health)
+    private void UpdateState(Entity<CEHealthComponent> ent, CEHealthComponent health)
     {
         var newState = CalculateState(health);
 
@@ -106,7 +102,7 @@ public abstract partial class CESharedMobStateSystem : EntitySystem
         }
     }
 
-    public bool IsAlive(EntityUid uid, CEMobStateComponent? component = null)
+    public bool IsAlive(EntityUid uid, CEHealthComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;
@@ -114,7 +110,7 @@ public abstract partial class CESharedMobStateSystem : EntitySystem
         return component.CurrentState == CEMobState.Alive;
     }
 
-    public bool IsCritical(EntityUid uid, CEMobStateComponent? component = null)
+    public bool IsCritical(EntityUid uid, CEHealthComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;
@@ -122,7 +118,7 @@ public abstract partial class CESharedMobStateSystem : EntitySystem
         return component.CurrentState == CEMobState.Critical;
     }
 
-    public bool IsDead(EntityUid uid, CEMobStateComponent? component = null)
+    public bool IsDead(EntityUid uid, CEHealthComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;
@@ -130,7 +126,7 @@ public abstract partial class CESharedMobStateSystem : EntitySystem
         return component.CurrentState == CEMobState.Dead;
     }
 
-    public bool IsIncapacitated(EntityUid uid, CEMobStateComponent? component = null)
+    public bool IsIncapacitated(EntityUid uid, CEHealthComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;

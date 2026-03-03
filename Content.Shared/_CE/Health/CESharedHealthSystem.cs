@@ -1,5 +1,4 @@
 using Content.Shared._CE.Health.Components;
-using Content.Shared.Examine;
 using Content.Shared.Rejuvenate;
 
 namespace Content.Shared._CE.Health;
@@ -9,27 +8,21 @@ namespace Content.Shared._CE.Health;
 /// Health is a single int value. Damage is specified via <see cref="CEDamageSpecifier"/>
 /// and flows through <see cref="CEBeforeDamageEvent"/> for modification before application.
 /// </summary>
-public abstract class CESharedHealthSystem : EntitySystem
+public abstract partial class CESharedHealthSystem : EntitySystem
 {
     public override void Initialize()
     {
         base.Initialize();
 
+        InitBlocker();
+        InitMobState();
+
         SubscribeLocalEvent<CEHealthComponent, RejuvenateEvent>(OnRejuvenate);
-        SubscribeLocalEvent<CEHealthComponent, ExaminedEvent>(OnExamined);
     }
 
     private void OnRejuvenate(Entity<CEHealthComponent> ent, ref RejuvenateEvent args)
     {
         ChangeHealth((ent, ent.Comp), ent.Comp.MaxHealth - ent.Comp.Health, out _);
-    }
-
-    private void OnExamined(Entity<CEHealthComponent> ent, ref ExaminedEvent args)
-    {
-        if (!args.IsInDetailsRange)
-            return;
-
-        args.PushMarkup(GetHealthExaminedText((ent, ent.Comp)));
     }
 
     /// <summary>
@@ -62,15 +55,15 @@ public abstract class CESharedHealthSystem : EntitySystem
     /// Raises <see cref="CEBeforeDamageEvent"/> for modification by other systems (armor, buffs, etc.).
     /// The total damage (sum of all types) is subtracted from health.
     /// </summary>
-    public bool TakeDamage(EntityUid target, CEDamageSpecifier damage, EntityUid? source = null)
+    public bool TakeDamage(Entity<CEHealthComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null)
     {
-        if (!TryComp<CEHealthComponent>(target, out var health))
+        if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
         var modifiedDamage = new CEDamageSpecifier(damage);
 
         var beforeEv = new CEBeforeDamageEvent(modifiedDamage, source);
-        RaiseLocalEvent(target, beforeEv);
+        RaiseLocalEvent(ent, beforeEv);
 
         if (beforeEv.Cancelled)
             return false;
@@ -79,7 +72,7 @@ public abstract class CESharedHealthSystem : EntitySystem
         if (totalDamage <= 0)
             return false;
 
-        ChangeHealth((target, health), -totalDamage, out var actualDelta);
+        ChangeHealth(ent, -totalDamage, out var actualDelta);
         return actualDelta != 0;
     }
 
@@ -133,28 +126,6 @@ public abstract class CESharedHealthSystem : EntitySystem
     public bool HasHealth(EntityUid uid, CEHealthComponent? component = null)
     {
         return Resolve(uid, ref component, false);
-    }
-
-    public string GetHealthExaminedText(Entity<CEHealthComponent> ent)
-    {
-        var maxHp = ent.Comp.MaxHealth;
-        var percent = maxHp <= 0
-            ? 0
-            : ent.Comp.Health * 100 / maxHp;
-
-        var color = "#3fc488";
-        if (percent < 66)
-            color = "#f2a93a";
-
-        if (percent < 33)
-            color = "#c23030";
-
-        return Loc.GetString("ce-health-scan-result",
-            ("target", MetaData(ent).EntityName),
-            ("health", ent.Comp.Health),
-            ("maxHealth", maxHp),
-            ("percent", percent),
-            ("color", color));
     }
 }
 

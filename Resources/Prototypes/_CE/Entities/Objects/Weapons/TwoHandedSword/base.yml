@@ -43,8 +43,8 @@
     rangeMultiplier: 1.2 #Longer reach
     damageGroups:
       default:
-        types:
-          Slash: 4
+        damage:
+          Physical: 4
       pierce:
-        types:
-          Piercing: 4
+        damage:
+          Physical: 4
