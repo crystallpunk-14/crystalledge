@@ -30,16 +30,15 @@
     drawdepth: Mobs
     sprite: _CE/Mobs/flem.rsi
     layers:
-    - map: [ "enum.DamageStateVisualLayers.Base" ]
+    - map: [ "livingState" ]
       state: alive
-  #- type: DamageStateVisuals
-  #  states:
-  #    Alive:
-  #      Base: alive
-  #    Critical:
-  #      Base: dead
-  #    Dead:
-  #      Base: dead
+  - type: GenericVisualizer
+    visuals:
+      enum.CEHealthState.State:
+        livingState:
+          Alive: { state: alive }
+          Critical: { state: dead }
+          State: { state: dead }
   - type: MovementAlwaysTouching
   - type: MovementSpeedModifier
     baseWalkSpeed: 1

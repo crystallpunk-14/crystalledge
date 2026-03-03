@@ -25,7 +25,7 @@ public sealed partial class CEHealthComponent : Component
     /// Health value at or below which the entity is considered dead.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int DeathThreshold = -20;
+    public int DeathThreshold = 0;
 }
 
 [Serializable, NetSerializable]
@@ -34,4 +34,10 @@ public enum CEMobState : byte
     Alive,
     Critical,
     Dead,
+}
+
+[Serializable, NetSerializable]
+public enum CEHealthState : byte
+{
+    State,
 }

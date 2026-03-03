@@ -14,6 +14,7 @@ public abstract partial class CESharedHealthSystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly StandingStateSystem _standing = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
 
     private void InitMobState()
     {
@@ -47,6 +48,8 @@ public abstract partial class CESharedHealthSystem
         var oldState = ent.Comp.CurrentState;
         ent.Comp.CurrentState = newState;
         Dirty(ent);
+
+        _appearance.SetData(ent, CEHealthState.State, newState);
 
         if (!_timing.ApplyingState)
         {
