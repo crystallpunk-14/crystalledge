@@ -1,4 +1,4 @@
-using Content.Shared.Damage;
+using Content.Shared._CE.Health;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
@@ -19,7 +19,7 @@ public sealed partial class CEMeleeWeaponComponent : Component
     /// uses the specified damage type.
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
-    public Dictionary<string, DamageSpecifier> DamageGroups = new();
+    public Dictionary<string, CEDamageSpecifier> DamageGroups = new();
 
     /// <summary>
     /// Modify weapon attack animations range

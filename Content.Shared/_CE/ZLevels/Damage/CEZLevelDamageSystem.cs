@@ -3,11 +3,10 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Prototypes;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.CCVar;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.Stunnable;
 using Robust.Shared.Configuration;
@@ -22,8 +21,7 @@ namespace Content.Shared._CE.ZLevels.Damage;
 public sealed class CEZLevelDamageSystem : EntitySystem
 {
     [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly CESharedHealthSystem _health = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -35,7 +33,7 @@ public sealed class CEZLevelDamageSystem : EntitySystem
     public float BaseFallingStunTime { get; private set; }
     public float BaseFallingOtherStunTime { get; private set; }
 
-    private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
+    private static readonly ProtoId<CEDamageTypePrototype> PhysicalDamageType = "Physical";
     private static readonly EntProtoId FallVFX = "CEDustEffect";
 
     public override void Initialize()
@@ -91,7 +89,8 @@ public sealed class CEZLevelDamageSystem : EntitySystem
                 _stun.TryKnockdown(victim, TimeSpan.FromSeconds(otherStun));
             if (otherDamage > 0)
             {
-                if (_damage.TryChangeDamage(victim, new DamageSpecifier(_proto.Index(BluntDamageType), otherDamage)) && _net.IsClient)
+                var otherDmgSpec = new CEDamageSpecifier(PhysicalDamageType, (int)otherDamage);
+                if (_health.TakeDamage(victim, otherDmgSpec, ent) && _net.IsClient)
                     redDamageFlash.Add(victim);
             }
         }
@@ -99,7 +98,8 @@ public sealed class CEZLevelDamageSystem : EntitySystem
         var damageAmount = args.ImpactPower * args.ImpactPower * BaseFallingDamage * damageModifier;
         if (damageAmount > 0)
         {
-            if (_damage.TryChangeDamage(ent.Owner, new DamageSpecifier(_proto.Index(BluntDamageType), damageAmount)) && _net.IsClient)
+            var selfDmgSpec = new CEDamageSpecifier(PhysicalDamageType, (int)damageAmount);
+            if (_health.TakeDamage(ent.Owner, selfDmgSpec) && _net.IsClient)
                 redDamageFlash.Add(ent.Owner);
         }
 

@@ -12,21 +12,6 @@
   id: CEBaseSpeciesMob
   save: false
   components:
-  - type: DamageVisuals
-    thresholds: [ 1, 2, 3, 5, 7, 10 ]
-    targetLayers:
-    - "enum.HumanoidVisualLayers.Chest"
-    - "enum.HumanoidVisualLayers.Head"
-    - "enum.HumanoidVisualLayers.LArm"
-    - "enum.HumanoidVisualLayers.LLeg"
-    - "enum.HumanoidVisualLayers.RArm"
-    - "enum.HumanoidVisualLayers.RLeg"
-    damageOverlayGroups:
-      Brute:
-        sprite: _CE/Mobs/Effects/brute_damage.rsi
-        color: "#FF0000"
-      Burn:
-        sprite: _CE/Mobs/Effects/burn_damage.rsi
   - type: StatusIcon
     bounds: -0.5,-0.5,0.5,0.5
   - type: RotationVisuals
@@ -47,29 +32,11 @@
         layer:
         - MobLayer
   - type: FloorOcclusion
-  - type: RangedDamageSound
-    soundGroups:
-      Brute:
-        collection:
-          MeatBulletImpact
-    soundTypes:
-      Heat:
-        collection:
-          MeatLaserImpact
   - type: Identity
   - type: Climbing
   - type: Cuffable
   - type: AnimationPlayer
   - type: Buckle
-  - type: MeleeWeapon
-    soundHit:
-      collection: Punch
-    angle: 30
-    animation: WeaponArcFist
-    attackRate: 1
-    damage:
-      types:
-        Blunt: 1
   - type: SleepEmitSound
   - type: SSDIndicator
   - type: StandingState

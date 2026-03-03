@@ -1,13 +1,13 @@
 using System.Linq;
-using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Systems;
+using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared._CE.Weapon;
 
 public abstract class CESharedMeleeWeaponSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly CESharedHealthSystem _health = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public bool TryAttack(EntityUid user, Entity<CEMeleeWeaponComponent> weapon, List<EntityUid> targets, float power, string damageGroup = "default")
@@ -21,15 +21,15 @@ public abstract class CESharedMeleeWeaponSystem : EntitySystem
         List<EntityUid> hitted = new();
         foreach (var target in targets)
         {
-            if (!HasComp<DamageableComponent>(target))
+            if (!HasComp<CEHealthComponent>(target))
                 continue;
 
-            if (!_damageable.TryChangeDamage(target, damage * power))
+            if (!_health.TakeDamage(target, damage * power, user))
                 continue;
 
             var attackedEv = new CEAttackedEvent(user, weapon);
             RaiseLocalEvent(target, attackedEv);
-            
+
             hitted.Add(target);
         }
 
