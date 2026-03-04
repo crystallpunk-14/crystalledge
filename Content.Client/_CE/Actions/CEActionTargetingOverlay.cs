@@ -87,6 +87,7 @@ public sealed class CEActionTargetingOverlay : Overlay
                 radiusVis.Sprite.ToString(),
                 radiusVis.State,
                 radiusVis.SpriteSize,
+                radiusVis.SpriteSpacing,
                 Color.White,
                 radiusVis.FillAlpha);
         }
@@ -94,7 +95,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         // 2) Wide-line trajectory.
         if (_entManager.TryGetComponent<CEVisualizeWideLineActionComponent>(actionUid, out var lineVis))
         {
-            DrawWideLine(handle, playerPos, mousePos, range, lineVis);
+            DrawWideLine(handle, playerUid, actionUid, playerPos, mousePos, range, hasEntityTarget, lineVis);
         }
 
         // 3) AoE zone.
@@ -125,6 +126,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         string spritePath,
         string state,
         float spriteSize,
+        float spriteSpacing,
         Color color,
         float fillAlpha)
     {
@@ -144,7 +146,8 @@ public sealed class CEActionTargetingOverlay : Overlay
         }
 
         var circumference = MathF.Tau * radius;
-        var count = Math.Max(8, (int)(circumference / spriteSize));
+        var spacing = spriteSpacing > 0f ? spriteSpacing : spriteSize;
+        var count = Math.Max(8, (int)(circumference / spacing));
         var angleStep = MathF.Tau / count;
 
         for (var i = 0; i < count; i++)
@@ -187,22 +190,105 @@ public sealed class CEActionTargetingOverlay : Overlay
 
     #endregion
 
+    #region Entity-snap helper
+
+    /// <summary>
+    /// Finds the best valid target entity near <paramref name="mousePos"/> that also lies within <paramref name="range"/> of <paramref name="playerPos"/>.
+    /// Returns the entity's world position, or null when no valid entity is found.
+    /// </summary>
+    private Vector2? FindSnapTarget(
+        EntityUid playerUid,
+        EntityUid actionUid,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float range)
+    {
+        EntityWhitelist? whitelist = null;
+        EntityWhitelist? blacklist = null;
+
+        if (_entManager.TryGetComponent<EntityTargetActionComponent>(actionUid, out var entityTarget))
+        {
+            whitelist = entityTarget.Whitelist;
+            blacklist = entityTarget.Blacklist;
+        }
+
+        var mapId = _eye.CurrentEye.Position.MapId;
+        // Tight point-sized box so the cursor must actually be over the entity's broadphase AABB.
+        var lookupSize = new Vector2(0.1f, 0.1f);
+        var bounds = new Box2(mousePos - lookupSize, mousePos + lookupSize);
+        var candidates = _lookup.GetEntitiesIntersecting(mapId,
+            bounds,
+            LookupFlags.Approximate | LookupFlags.Dynamic | LookupFlags.Static);
+
+        EntityUid? bestTarget = null;
+        var bestDist = float.MaxValue;
+
+        foreach (var ent in candidates)
+        {
+            if (ent == playerUid)
+                continue;
+
+            if (!_entManager.TryGetComponent<SpriteComponent>(ent, out var sprite) || !sprite.Visible)
+                continue;
+
+            if (whitelist != null && !_whitelist.IsWhitelistPass(whitelist, ent))
+                continue;
+
+            if (blacklist != null && _whitelist.IsWhitelistPass(blacklist, ent))
+                continue;
+
+            var entPos = _transform.GetWorldPosition(ent);
+
+            // Must be within cast range.
+            if (range > 0f && (entPos - playerPos).Length() > range)
+                continue;
+
+            var d = (entPos - mousePos).Length();
+            if (d < bestDist)
+            {
+                bestDist = d;
+                bestTarget = ent;
+            }
+        }
+
+        if (bestTarget == null)
+            return null;
+
+        return _transform.GetWorldPosition(bestTarget.Value);
+    }
+
+    #endregion
+
     #region Wide-line drawing
 
     private void DrawWideLine(
         DrawingHandleWorld handle,
+        EntityUid playerUid,
+        EntityUid actionUid,
         Vector2 playerPos,
         Vector2 mousePos,
         float range,
+        bool hasEntityTarget,
         CEVisualizeWideLineActionComponent vis)
     {
-        var direction = mousePos - playerPos;
+        // Snap line end to a valid entity when in entity-target mode.
+        Vector2 targetPos;
+        if (hasEntityTarget)
+        {
+            targetPos = FindSnapTarget(playerUid, actionUid, playerPos, mousePos, range) ?? mousePos;
+        }
+        else
+        {
+            targetPos = mousePos;
+        }
+
+        var direction = targetPos - playerPos;
         var distance = direction.Length();
         if (distance < 0.01f)
             return;
 
         var dirNorm = direction / distance;
-        var lineLength = MathF.Min(distance, range);
+        var lineLength = range > 0f ? MathF.Min(distance, range) : distance;
         var endPos = playerPos + dirNorm * lineLength;
 
         // Perpendicular vector for width offset.
@@ -257,52 +343,47 @@ public sealed class CEActionTargetingOverlay : Overlay
         bool mirrored)
     {
         var capSize = 0.5f; // Size of start/end caps in world units.
-        var midLength = MathF.Max(0f, length - capSize * 2f);
-        var dir = (end - start);
+        var halfCap = capSize / 2f;
+        // Middle fills exactly the space between the inner edges of the two caps:
+        //   start cap spans [-halfCap, +halfCap] around 'start+offset'
+        //   end   cap spans [-halfCap, +halfCap] around 'end+offset'
+        // → middle span: [+halfCap, length-halfCap]  length = length-capSize
+        var midLength = MathF.Max(0f, length - capSize);
+        var dir = end - start;
         if (dir.Length() < 0.01f)
             return;
 
         var dirNorm = dir / dir.Length();
 
         var color = Color.White;
+        var endCapRotation = rotation + Angle.FromDegrees(180);
 
-        // Mirror angle for the right side.
-        var flipRotation = mirrored
-            ? rotation + Angle.FromDegrees(180)
-            : rotation;
-
-        // Start cap.
+        // Start cap — centred at start+offset.
         var startTex = GetTexture(vis.BorderStartSprite.ToString(), vis.BorderStartState);
         if (startTex != null)
         {
             var startPos = start + offset;
-            var halfCap = capSize / 2f;
             var box = new Box2(-halfCap, -halfCap, halfCap, halfCap).Translated(startPos);
-            handle.DrawTextureRect(startTex, new Box2Rotated(box, flipRotation, startPos), color);
+            handle.DrawTextureRect(startTex, new Box2Rotated(box, rotation, startPos), color);
         }
 
-        // Stretched middle.
+        // Stretched middle — starts at halfCap from 'start', ends at halfCap before 'end'.
         var midTex = GetTexture(vis.BorderMidSprite.ToString(), vis.BorderMidState);
         if (midTex != null && midLength > 0f)
         {
-            var midCenter = start + offset + dirNorm * (capSize + midLength / 2f);
-            // The box is elongated along the direction.
+            var midCenter = start + offset + dirNorm * (halfCap + midLength / 2f);
             var halfMid = midLength / 2f;
-            var halfW = capSize / 2f;
-            // In local space, X = along direction, Y = perpendicular.
-            var box = new Box2(-halfMid, -halfW, halfMid, halfW).Translated(midCenter);
+            var box = new Box2(-halfMid, -halfCap, halfMid, halfCap).Translated(midCenter);
             handle.DrawTextureRect(midTex, new Box2Rotated(box, rotation, midCenter), color);
         }
 
-        // End cap.
+        // End cap — centred at end+offset.
         var endTex = GetTexture(vis.BorderEndSprite.ToString(), vis.BorderEndState);
         if (endTex != null)
         {
             var endPos = end + offset;
-            var halfCap = capSize / 2f;
             var box = new Box2(-halfCap, -halfCap, halfCap, halfCap).Translated(endPos);
-            var endRotation = mirrored ? rotation : rotation + Angle.FromDegrees(180);
-            handle.DrawTextureRect(endTex, new Box2Rotated(box, endRotation, endPos), color);
+            handle.DrawTextureRect(endTex, new Box2Rotated(box, endCapRotation, endPos), color);
         }
     }
 
@@ -364,6 +445,7 @@ public sealed class CEActionTargetingOverlay : Overlay
             vis.Sprite.ToString(),
             vis.State,
             vis.SpriteSize,
+            vis.SpriteSpacing,
             color,
             vis.FillAlpha);
     }
@@ -377,68 +459,23 @@ public sealed class CEActionTargetingOverlay : Overlay
         float range,
         CEVisualizeAoEZoneActionComponent vis)
     {
-        // Try to find a valid entity under the cursor.
-        EntityWhitelist? whitelist = null;
-        EntityWhitelist? blacklist = null;
+        var snapPos = FindSnapTarget(playerUid, actionUid, playerPos, mousePos, range);
 
-        if (_entManager.TryGetComponent<EntityTargetActionComponent>(actionUid, out var entityTarget))
+        if (snapPos != null)
         {
-            whitelist = entityTarget.Whitelist;
-            blacklist = entityTarget.Blacklist;
-        }
-
-        var mapId = _eye.CurrentEye.Position.MapId;
-        var lookupSize = new Vector2(1f, 1f);
-        var bounds = new Box2(mousePos - lookupSize, mousePos + lookupSize);
-        var candidates = _lookup.GetEntitiesIntersecting(mapId,
-            bounds,
-            LookupFlags.Approximate | LookupFlags.Static);
-
-        EntityUid? bestTarget = null;
-        var bestDist = float.MaxValue;
-
-        foreach (var ent in candidates)
-        {
-            if (ent == playerUid)
-                continue;
-
-            if (!_entManager.TryGetComponent<SpriteComponent>(ent, out var sprite) || !sprite.Visible)
-                continue;
-
-            if (whitelist != null && !_whitelist.IsWhitelistPass(whitelist, ent))
-                continue;
-
-            if (blacklist != null && _whitelist.IsWhitelistPass(blacklist, ent))
-                continue;
-
-            var entPos = _transform.GetWorldPosition(ent);
-            var d = (entPos - mousePos).Length();
-            if (d < bestDist)
-            {
-                bestDist = d;
-                bestTarget = ent;
-            }
-        }
-
-        if (bestTarget != null)
-        {
-            var targetPos = _transform.GetWorldPosition(bestTarget.Value);
-            var distToPlayer = (targetPos - playerPos).Length();
-            var inRange = distToPlayer <= range || range <= 0f;
-            var color = inRange ? Color.White : Color.Red;
-
             DrawRing(handle,
-                targetPos,
+                snapPos.Value,
                 vis.Radius,
                 vis.Sprite.ToString(),
                 vis.State,
                 vis.SpriteSize,
-                color,
+                vis.SpriteSpacing,
+                Color.White,
                 vis.FillAlpha);
         }
         else
         {
-            // No valid entity — draw red zone at cursor.
+            // No valid in-range entity — draw red zone clamped to cast boundary.
             var offset = mousePos - playerPos;
             var dist = offset.Length();
             var zoneCenter = dist <= range || range <= 0f
@@ -451,6 +488,7 @@ public sealed class CEActionTargetingOverlay : Overlay
                 vis.Sprite.ToString(),
                 vis.State,
                 vis.SpriteSize,
+                vis.SpriteSpacing,
                 Color.Red,
                 vis.FillAlpha);
         }

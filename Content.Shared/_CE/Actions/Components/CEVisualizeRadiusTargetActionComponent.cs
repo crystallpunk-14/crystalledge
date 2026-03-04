@@ -23,10 +23,17 @@ public sealed partial class CEVisualizeRadiusTargetActionComponent : Component
     public string State = "border";
 
     /// <summary>
-    /// Size of each ring sprite in world units.
+    /// Visual size of each ring sprite in world units.
     /// </summary>
     [DataField]
     public float SpriteSize = 0.5f;
+
+    /// <summary>
+    /// Distance between the centres of adjacent ring sprites along the circumference (world units).
+    /// Lower value = more sprites, higher density.
+    /// </summary>
+    [DataField]
+    public float SpriteSpacing = 1f;
 
     /// <summary>
     /// Opacity of the filled interior (0–1).

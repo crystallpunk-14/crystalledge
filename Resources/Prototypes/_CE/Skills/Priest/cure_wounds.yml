@@ -12,6 +12,9 @@
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeWideLineAction
+    width: 1.5
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
   - type: CEActionDoAfterSlowdown
     speedMultiplier: 0.5
   - type: CEActionManaCost
