@@ -1,3 +1,4 @@
+using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Damage.Systems;
@@ -13,12 +14,12 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEMasochismStatusEffectComponent, StatusEffectRelayedEvent<DamageChangedEvent>>(OnDamageTaken);
+        SubscribeLocalEvent<CEMasochismStatusEffectComponent, StatusEffectRelayedEvent<CEHealthChangedEvent>>(OnDamageTaken);
     }
 
-    private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<DamageChangedEvent> args)
+    private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEHealthChangedEvent> args)
     {
-        if (!args.Args.DamageIncreased)
+        if (args.Args.NewHealth >= args.Args.OldHealth)
             return;
 
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect))
