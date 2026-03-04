@@ -13,13 +13,10 @@ namespace Content.IntegrationTests.Tests._CE.Health;
 [TestOf(typeof(CESharedHealthSystem))]
 public sealed class CEHealthSystemTest
 {
-    private static readonly ProtoId<CEDamageTypePrototype> TestDamageType = "TestPhysical";
+    private static readonly ProtoId<CEDamageTypePrototype> TestDamageType = "Physical";
 
     [TestPrototypes]
     private const string Prototypes = @"
-- type: CEDamageType
-  id: TestPhysical
-
 - type: entity
   id: CEHealthTestDummy
   components:
