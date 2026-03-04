@@ -3,7 +3,7 @@ using Robust.Shared.Map;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellArea : CESpellEffect
+public sealed partial class AreaEffect : CESpellEffect
 {
     [DataField(required: true)]
     public List<CESpellEffect> Effects { get; set; } = new();

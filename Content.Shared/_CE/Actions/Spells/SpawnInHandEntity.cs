@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellSpawnInHandEntity : CESpellEffect
+public sealed partial class SpawnInHandEntity : CESpellEffect
 {
     [DataField]
     public List<EntProtoId> Spawns = new();

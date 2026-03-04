@@ -3,7 +3,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellApplyStatusEffect : CESpellEffect
+public sealed partial class ApplyStatusEffect : CESpellEffect
 {
     [DataField(required: true)]
     public EntProtoId StatusEffect;

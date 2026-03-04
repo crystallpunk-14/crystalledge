@@ -2,7 +2,7 @@ using Content.Shared.Damage.Systems;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellStaminaDamage : CESpellEffect
+public sealed partial class StaminaDamage : CESpellEffect
 {
     [DataField]
     public float Damage = 10f;

@@ -2,7 +2,7 @@ using Content.Shared.Throwing;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellThrowUserTo : CESpellEffect
+public sealed partial class ThrowUserTo : CESpellEffect
 {
     [DataField]
     public float ThrowPower = 10f;

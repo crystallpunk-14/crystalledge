@@ -4,7 +4,7 @@ using Content.Shared.Throwing;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellThrowFromUser : CESpellEffect
+public sealed partial class ThrowFromUser : CESpellEffect
 {
     [DataField]
     public float ThrowPower = 10f;

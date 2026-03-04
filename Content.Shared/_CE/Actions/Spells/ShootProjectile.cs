@@ -7,7 +7,7 @@ using Robust.Shared.Random;
 
 namespace Content.Shared._CE.Actions.Spells;
 
-public sealed partial class CESpellProjectile : CESpellEffect
+public sealed partial class ShootProjectile : CESpellEffect
 {
     [DataField(required: true)]
     public EntProtoId Prototype;
