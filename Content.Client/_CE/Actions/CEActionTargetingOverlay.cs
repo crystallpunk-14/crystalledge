@@ -1,0 +1,487 @@
+using System.Numerics;
+using Content.Client.UserInterface.Systems.Actions;
+using Content.Shared._CE.Actions.Components;
+using Content.Shared.Actions.Components;
+using Content.Shared.Whitelist;
+using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
+using Robust.Client.Input;
+using Robust.Client.Player;
+using Robust.Client.ResourceManagement;
+using Robust.Client.UserInterface;
+using Robust.Shared.Enums;
+using Robust.Shared.Utility;
+
+namespace Content.Client._CE.Actions;
+
+/// <summary>
+/// Draws spell targeting visuals: cast-radius circle, wide-line trajectory, and AoE zone.
+/// All visuals are drawn below entities but above the grid.
+/// </summary>
+public sealed class CEActionTargetingOverlay : Overlay
+{
+    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
+
+    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private readonly IEyeManager _eye = default!;
+    [Dependency] private readonly IInputManager _input = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+
+    private readonly SharedTransformSystem _transform;
+    private readonly EntityLookupSystem _lookup;
+    private readonly EntityWhitelistSystem _whitelist;
+
+    // Cached textures per RSI path+state — loaded lazily.
+    private readonly Dictionary<(string path, string state), Texture> _textureCache = new();
+
+    public CEActionTargetingOverlay()
+    {
+        IoCManager.InjectDependencies(this);
+        _transform = _entManager.System<SharedTransformSystem>();
+        _lookup = _entManager.System<EntityLookupSystem>();
+        _whitelist = _entManager.System<EntityWhitelistSystem>();
+    }
+
+    protected override void Draw(in OverlayDrawArgs args)
+    {
+        var handle = args.WorldHandle;
+
+        if (_player.LocalEntity is not { } playerUid)
+            return;
+
+        var controller = _uiManager.GetUIController<ActionUIController>();
+        if (controller.SelectingTargetFor is not { } actionUid)
+            return;
+
+        if (!_entManager.TryGetComponent<TransformComponent>(playerUid, out var playerXform))
+            return;
+
+        var playerMapPos = _transform.GetMapCoordinates(playerUid, xform: playerXform);
+        if (playerMapPos.MapId != args.MapId)
+            return;
+
+        var mouseScreenPos = _input.MouseScreenPosition;
+        var mouseMapPos = _eye.PixelToMap(mouseScreenPos);
+        if (mouseMapPos.MapId != args.MapId)
+            mouseMapPos = playerMapPos;
+
+        var playerPos = playerMapPos.Position;
+        var mousePos = mouseMapPos.Position;
+
+        // Read TargetActionComponent for range.
+        var range = 0f;
+        if (_entManager.TryGetComponent<TargetActionComponent>(actionUid, out var targetComp))
+            range = targetComp.Range;
+
+        var hasEntityTarget = _entManager.HasComponent<EntityTargetActionComponent>(actionUid);
+        var hasWorldTarget = _entManager.HasComponent<WorldTargetActionComponent>(actionUid);
+
+        // 1) Cast-radius ring.
+        if (_entManager.TryGetComponent<CEVisualizeRadiusTargetActionComponent>(actionUid, out var radiusVis))
+        {
+            DrawRing(handle,
+                playerPos,
+                range,
+                radiusVis.Sprite.ToString(),
+                radiusVis.State,
+                radiusVis.SpriteSize,
+                Color.White,
+                radiusVis.FillAlpha);
+        }
+
+        // 2) Wide-line trajectory.
+        if (_entManager.TryGetComponent<CEVisualizeWideLineActionComponent>(actionUid, out var lineVis))
+        {
+            DrawWideLine(handle, playerPos, mousePos, range, lineVis);
+        }
+
+        // 3) AoE zone.
+        if (_entManager.TryGetComponent<CEVisualizeAoEZoneActionComponent>(actionUid, out var aoeVis))
+        {
+            DrawAoEZone(handle,
+                playerUid,
+                actionUid,
+                playerPos,
+                mousePos,
+                range,
+                hasEntityTarget,
+                hasWorldTarget,
+                aoeVis);
+        }
+    }
+
+    #region Ring drawing
+
+    /// <summary>
+    /// Draws a ring of sprites around <paramref name="center"/> at <paramref name="radius"/>,
+    /// each sprite facing inward toward center. A filled circle with low alpha is drawn inside.
+    /// </summary>
+    private void DrawRing(
+        DrawingHandleWorld handle,
+        Vector2 center,
+        float radius,
+        string spritePath,
+        string state,
+        float spriteSize,
+        Color color,
+        float fillAlpha)
+    {
+        if (radius <= 0f)
+            return;
+
+        // Filled interior.
+        handle.DrawCircle(center, radius, color.WithAlpha(fillAlpha));
+
+        // Sprites around circumference.
+        var texture = GetTexture(spritePath, state);
+        if (texture == null)
+        {
+            // Fallback: just draw a thin circle outline.
+            DrawCircleOutline(handle, center, radius, color.WithAlpha(0.6f), 48);
+            return;
+        }
+
+        var circumference = MathF.Tau * radius;
+        var count = Math.Max(8, (int)(circumference / spriteSize));
+        var angleStep = MathF.Tau / count;
+
+        for (var i = 0; i < count; i++)
+        {
+            var angle = angleStep * i;
+            var dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
+            var pos = center + dir * radius;
+
+            // Sprite faces inward = rotation pointing from pos to center.
+            var inwardAngle = MathF.Atan2(-dir.Y, -dir.X);
+            var halfSize = spriteSize / 2f;
+            var box = new Box2(-halfSize, -halfSize, halfSize, halfSize).Translated(pos);
+            var rotated = new Box2Rotated(box, new Angle(inwardAngle), pos);
+
+            handle.DrawTextureRect(texture, rotated, color);
+        }
+    }
+
+    /// <summary>
+    /// Draws a circle outline using line segments.
+    /// </summary>
+    private static void DrawCircleOutline(
+        DrawingHandleWorld handle,
+        Vector2 center,
+        float radius,
+        Color color,
+        int segments)
+    {
+        var step = MathF.Tau / segments;
+        var prev = center + new Vector2(radius, 0);
+
+        for (var i = 1; i <= segments; i++)
+        {
+            var angle = step * i;
+            var next = center + new Vector2(MathF.Cos(angle) * radius, MathF.Sin(angle) * radius);
+            handle.DrawLine(prev, next, color);
+            prev = next;
+        }
+    }
+
+    #endregion
+
+    #region Wide-line drawing
+
+    private void DrawWideLine(
+        DrawingHandleWorld handle,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float range,
+        CEVisualizeWideLineActionComponent vis)
+    {
+        var direction = mousePos - playerPos;
+        var distance = direction.Length();
+        if (distance < 0.01f)
+            return;
+
+        var dirNorm = direction / distance;
+        var lineLength = MathF.Min(distance, range);
+        var endPos = playerPos + dirNorm * lineLength;
+
+        // Perpendicular vector for width offset.
+        var perp = new Vector2(-dirNorm.Y, dirNorm.X);
+        var halfWidth = vis.Width / 2f;
+
+        // Draw filled interior as a thin rectangle.
+        {
+            var bl = playerPos + perp * halfWidth;
+            var br = playerPos - perp * halfWidth;
+            var tl = endPos + perp * halfWidth;
+            var tr = endPos - perp * halfWidth;
+            var fillColor = Color.White.WithAlpha(vis.FillAlpha);
+
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList,
+                new[] { bl, br, tl, br, tr, tl },
+                fillColor);
+        }
+
+        var angle = MathF.Atan2(dirNorm.Y, dirNorm.X);
+        var rotation = new Angle(angle);
+
+        // Draw border sprites — left side (start, stretched mid, end).
+        DrawBorderStrip(handle,
+            playerPos,
+            endPos,
+            lineLength,
+            perp * halfWidth,
+            rotation,
+            vis,
+            false);
+
+        // Draw border sprites — right side (mirrored, start, stretched mid, end).
+        DrawBorderStrip(handle,
+            playerPos,
+            endPos,
+            lineLength,
+            perp * (-halfWidth),
+            rotation,
+            vis,
+            true);
+    }
+
+    private void DrawBorderStrip(
+        DrawingHandleWorld handle,
+        Vector2 start,
+        Vector2 end,
+        float length,
+        Vector2 offset,
+        Angle rotation,
+        CEVisualizeWideLineActionComponent vis,
+        bool mirrored)
+    {
+        var capSize = 0.5f; // Size of start/end caps in world units.
+        var midLength = MathF.Max(0f, length - capSize * 2f);
+        var dir = (end - start);
+        if (dir.Length() < 0.01f)
+            return;
+
+        var dirNorm = dir / dir.Length();
+
+        var color = Color.White;
+
+        // Mirror angle for the right side.
+        var flipRotation = mirrored
+            ? rotation + Angle.FromDegrees(180)
+            : rotation;
+
+        // Start cap.
+        var startTex = GetTexture(vis.BorderStartSprite.ToString(), vis.BorderStartState);
+        if (startTex != null)
+        {
+            var startPos = start + offset;
+            var halfCap = capSize / 2f;
+            var box = new Box2(-halfCap, -halfCap, halfCap, halfCap).Translated(startPos);
+            handle.DrawTextureRect(startTex, new Box2Rotated(box, flipRotation, startPos), color);
+        }
+
+        // Stretched middle.
+        var midTex = GetTexture(vis.BorderMidSprite.ToString(), vis.BorderMidState);
+        if (midTex != null && midLength > 0f)
+        {
+            var midCenter = start + offset + dirNorm * (capSize + midLength / 2f);
+            // The box is elongated along the direction.
+            var halfMid = midLength / 2f;
+            var halfW = capSize / 2f;
+            // In local space, X = along direction, Y = perpendicular.
+            var box = new Box2(-halfMid, -halfW, halfMid, halfW).Translated(midCenter);
+            handle.DrawTextureRect(midTex, new Box2Rotated(box, rotation, midCenter), color);
+        }
+
+        // End cap.
+        var endTex = GetTexture(vis.BorderEndSprite.ToString(), vis.BorderEndState);
+        if (endTex != null)
+        {
+            var endPos = end + offset;
+            var halfCap = capSize / 2f;
+            var box = new Box2(-halfCap, -halfCap, halfCap, halfCap).Translated(endPos);
+            var endRotation = mirrored ? rotation : rotation + Angle.FromDegrees(180);
+            handle.DrawTextureRect(endTex, new Box2Rotated(box, endRotation, endPos), color);
+        }
+    }
+
+    #endregion
+
+    #region AoE zone drawing
+
+    private void DrawAoEZone(
+        DrawingHandleWorld handle,
+        EntityUid playerUid,
+        EntityUid actionUid,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float range,
+        bool hasEntityTarget,
+        bool hasWorldTarget,
+        CEVisualizeAoEZoneActionComponent vis)
+    {
+        if (hasWorldTarget)
+        {
+            DrawAoEZoneWorld(handle, playerPos, mousePos, range, vis);
+        }
+        else if (hasEntityTarget)
+        {
+            DrawAoEZoneEntity(handle, playerUid, actionUid, playerPos, mousePos, range, vis);
+        }
+    }
+
+    private void DrawAoEZoneWorld(
+        DrawingHandleWorld handle,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float range,
+        CEVisualizeAoEZoneActionComponent vis)
+    {
+        var offset = mousePos - playerPos;
+        var dist = offset.Length();
+
+        Vector2 zoneCenter;
+        bool inRange;
+
+        if (dist <= range || range <= 0f)
+        {
+            zoneCenter = mousePos;
+            inRange = true;
+        }
+        else
+        {
+            // Clamp to range.
+            zoneCenter = playerPos + (offset / dist) * range;
+            inRange = false;
+        }
+
+        var color = inRange ? Color.White : Color.Red;
+
+        DrawRing(handle,
+            zoneCenter,
+            vis.Radius,
+            vis.Sprite.ToString(),
+            vis.State,
+            vis.SpriteSize,
+            color,
+            vis.FillAlpha);
+    }
+
+    private void DrawAoEZoneEntity(
+        DrawingHandleWorld handle,
+        EntityUid playerUid,
+        EntityUid actionUid,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float range,
+        CEVisualizeAoEZoneActionComponent vis)
+    {
+        // Try to find a valid entity under the cursor.
+        EntityWhitelist? whitelist = null;
+        EntityWhitelist? blacklist = null;
+
+        if (_entManager.TryGetComponent<EntityTargetActionComponent>(actionUid, out var entityTarget))
+        {
+            whitelist = entityTarget.Whitelist;
+            blacklist = entityTarget.Blacklist;
+        }
+
+        var mapId = _eye.CurrentEye.Position.MapId;
+        var lookupSize = new Vector2(1f, 1f);
+        var bounds = new Box2(mousePos - lookupSize, mousePos + lookupSize);
+        var candidates = _lookup.GetEntitiesIntersecting(mapId,
+            bounds,
+            LookupFlags.Approximate | LookupFlags.Static);
+
+        EntityUid? bestTarget = null;
+        var bestDist = float.MaxValue;
+
+        foreach (var ent in candidates)
+        {
+            if (ent == playerUid)
+                continue;
+
+            if (!_entManager.TryGetComponent<SpriteComponent>(ent, out var sprite) || !sprite.Visible)
+                continue;
+
+            if (whitelist != null && !_whitelist.IsWhitelistPass(whitelist, ent))
+                continue;
+
+            if (blacklist != null && _whitelist.IsWhitelistPass(blacklist, ent))
+                continue;
+
+            var entPos = _transform.GetWorldPosition(ent);
+            var d = (entPos - mousePos).Length();
+            if (d < bestDist)
+            {
+                bestDist = d;
+                bestTarget = ent;
+            }
+        }
+
+        if (bestTarget != null)
+        {
+            var targetPos = _transform.GetWorldPosition(bestTarget.Value);
+            var distToPlayer = (targetPos - playerPos).Length();
+            var inRange = distToPlayer <= range || range <= 0f;
+            var color = inRange ? Color.White : Color.Red;
+
+            DrawRing(handle,
+                targetPos,
+                vis.Radius,
+                vis.Sprite.ToString(),
+                vis.State,
+                vis.SpriteSize,
+                color,
+                vis.FillAlpha);
+        }
+        else
+        {
+            // No valid entity — draw red zone at cursor.
+            var offset = mousePos - playerPos;
+            var dist = offset.Length();
+            var zoneCenter = dist <= range || range <= 0f
+                ? mousePos
+                : playerPos + (offset / dist) * range;
+
+            DrawRing(handle,
+                zoneCenter,
+                vis.Radius,
+                vis.Sprite.ToString(),
+                vis.State,
+                vis.SpriteSize,
+                Color.Red,
+                vis.FillAlpha);
+        }
+    }
+
+    #endregion
+
+    #region Texture helpers
+
+    private Texture? GetTexture(string rsiPath, string state)
+    {
+        var key = (rsiPath, state);
+        if (_textureCache.TryGetValue(key, out var cached))
+            return cached;
+
+        if (!_cache.TryGetResource<RSIResource>(new ResPath(rsiPath), out var rsi))
+        {
+            _textureCache[key] = null!;
+            return null;
+        }
+
+        if (!rsi.RSI.TryGetState(state, out var rsiState))
+        {
+            _textureCache[key] = null!;
+            return null;
+        }
+
+        var tex = rsiState.Frame0;
+        _textureCache[key] = tex;
+        return tex;
+    }
+
+    #endregion
+}

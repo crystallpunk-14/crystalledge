@@ -10,6 +10,9 @@
   name: Prayer for health
   description: You restore [color=#1defa9]2 health[/color] to all creatures in a small area.
   components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 2 #Healing radius
   - type: CEActionDoAfterSlowdown
     speedMultiplier: 0.5
   - type: CEActionManaCost

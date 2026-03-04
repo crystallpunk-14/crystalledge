@@ -10,6 +10,9 @@
   name: Sphere of Light
   description: You can make almost any object glow for a long time at will.
   components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 3 #Light radius
   - type: CEActionManaCost
     manaCost: 1
   - type: CEActionSpeaking
@@ -30,7 +33,7 @@
   - type: EntityTargetAction
     whitelist:
       components:
-      - MobState
+      - CEHealth
       - Item
       - Anchorable
     event: !type:CEEntityTargetModularEffectEvent
