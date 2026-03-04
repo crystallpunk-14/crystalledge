@@ -31,7 +31,7 @@
         - CEImpactEffectUnbreakable
       - !type:CESpellApplyStatusEffect
         statusEffect: CEStatusEffectUnbreakable
-        duration: 60
+        duration: 10
 
 - type: entity
   id: CEImpactEffectUnbreakable
@@ -88,7 +88,8 @@
     - sprite: _CE/Skills/unbreakable.rsi
       state: icon
     - map: [ "1" ]
-      offset: 0.25, 0
+      offset: 0.65, 0
     - map: [ "10" ]
-      offset: 0.125, 0
+      offset: 0.45, 0
     - map: [ "100" ]
+      offset: 0.25, 0

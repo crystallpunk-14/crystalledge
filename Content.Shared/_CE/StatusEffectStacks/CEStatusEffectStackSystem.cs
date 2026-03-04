@@ -14,10 +14,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEStatusEffectStackComponent, CEStatusEffectBeforeEndingEvent>(OnBeforeEnded);
+        SubscribeLocalEvent<CEStatusEffectStackComponent, CEStatusEffectEndingAttemptEvent>(OnBeforeEnded);
     }
 
-    private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectBeforeEndingEvent args)
+    private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectEndingAttemptEvent args)
     {
         if (ent.Comp.Stack <= 1)
             return;
@@ -29,11 +29,13 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect) || statusEffect.AppliedTo is null)
             return;
 
-        var duration = statusEffect.EndEffectTime - statusEffect.StartEffectTime;
+        // Use the stored base duration instead of calculating from time difference
+        var duration = ent.Comp.BaseDuration;
         if (duration is null)
             return;
 
-        _statusEffect.TryAddTime(ent, proto, duration.Value);
+        _statusEffect.TryAddTime(statusEffect.AppliedTo.Value, proto, duration.Value);
+        args.Cancelled = true;
         TryRemoveStack(statusEffect.AppliedTo.Value, proto, 1);
     }
 
@@ -57,6 +59,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
                 return false;
 
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
+            stackComp.BaseDuration = duration;
             SetStack(target, (statusEnt.Value, stackComp), stack);
             return true;
         }
@@ -65,7 +68,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
             SetStack(target, (statusEnt.Value, stackComp), stackComp.Stack + stack);
             if (duration != null)
-                _statusEffect.TrySetStatusEffectDuration(target, statusEffect, out _, duration);
+            {
+                stackComp.BaseDuration = duration;
+                Dirty(statusEnt.Value, stackComp);
+            }
             return true;
         }
     }
@@ -130,7 +136,12 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         RaiseLocalEvent(ent.Owner, ref ev);
 
         if (TryComp<StatusEffectAlertComponent>(ent, out var alertComp))
-            _alerts.UpdateAlert(target, alertComp.Alert);
+        {
+            TimeSpan? cooldown = null;
+            if (alertComp.ShowDuration && TryComp<StatusEffectComponent>(ent, out var effectComp))
+                cooldown = effectComp.EndEffectTime;
+            _alerts.UpdateAlert(target, alertComp.Alert, cooldown: cooldown);
+        }
     }
 }
 

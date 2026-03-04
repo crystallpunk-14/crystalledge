@@ -64,6 +64,14 @@ public sealed partial class StatusEffectsSystem : EntitySystem
             if (effect.AppliedTo is null)
                 continue;
 
+            //CrystallEdge - Raise an event before the status effect is removed to allow systems like CEStatusEffectStackSystem to extend the duration if needed.
+            var ev = new CEStatusEffectEndingAttemptEvent(effect.AppliedTo.Value);
+            RaiseLocalEvent(ent, ref ev);
+
+            if (ev.Cancelled)
+                continue;
+            //CrystallEdge end
+
             PredictedQueueDel(ent);
         }
     }
@@ -370,4 +378,4 @@ public record struct StatusEffectStartTimeUpdatedEvent(EntityUid Target, TimeSpa
 /// </summary>
 /// <param name="Target">The entity the effect is attached to.</param>
 [ByRefEvent]
-public record struct CEStatusEffectBeforeEndingEvent(EntityUid Target);
+public record struct CEStatusEffectEndingAttemptEvent(EntityUid Target, bool Cancelled = false);
