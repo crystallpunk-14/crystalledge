@@ -1,5 +1,6 @@
 using Content.Shared._CE.Stats.Core.Components;
 using Content.Shared._CE.Stats.Core.Prototypes;
+using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 
@@ -13,12 +14,22 @@ public sealed partial class CEStatsSystem
 
         SubscribeLocalEvent<CEStatusEffectModifyStatsComponent, StatusEffectAppliedEvent>(OnAppliedEffectApplied);
         SubscribeLocalEvent<CEStatusEffectModifyStatsComponent, StatusEffectRemovedEvent>(OnAppliedEffectRemoved);
+        SubscribeLocalEvent<CEStatusEffectModifyStatsComponent, CEStatusEffectStackEditedEvent>(OnStackEdit);
     }
 
     private void OnCalculateStatusEffectStat(Entity<CEStatusEffectModifyStatsComponent> ent, ref StatusEffectRelayedEvent<CECalculateStatEvent> args)
     {
-        args.Args.AffectValue(ent.Comp.ModifyStats.GetValueOrDefault(args.Args.StatType, 0));
-        args.Args.AffectMultiplier(ent.Comp.MultiplyStats.GetValueOrDefault(args.Args.StatType, 1f));
+        var stack = 1;
+
+        if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
+            stack = stackComp.Stack;
+
+        args.Args.AffectValue(ent.Comp.ModifyStats.GetValueOrDefault(args.Args.StatType, 0) * stack);
+
+        for (int i = 0; i < stack; i++)
+        {
+            args.Args.AffectMultiplier(ent.Comp.MultiplyStats.GetValueOrDefault(args.Args.StatType, 1f));
+        }
     }
 
     private void OnAppliedEffectApplied(Entity<CEStatusEffectModifyStatsComponent> ent, ref StatusEffectAppliedEvent args)
@@ -31,7 +42,12 @@ public sealed partial class CEStatsSystem
         UpdateEffectStats(ent, args.Target);
     }
 
-    private void UpdateEffectStats(Entity<CEStatusEffectModifyStatsComponent> ent, EntityUid wearer)
+    private void OnStackEdit(Entity<CEStatusEffectModifyStatsComponent> ent, ref CEStatusEffectStackEditedEvent args)
+    {
+        UpdateEffectStats(ent, args.Target);
+    }
+
+    private void UpdateEffectStats(Entity<CEStatusEffectModifyStatsComponent> ent, EntityUid owner)
     {
         HashSet<ProtoId<CECharacterStatPrototype>> updatedStats = new();
 
@@ -47,7 +63,7 @@ public sealed partial class CEStatsSystem
 
         foreach (var stat in updatedStats)
         {
-            RecalculateStat(wearer, stat);
+            RecalculateStat(owner, stat);
         }
     }
 }

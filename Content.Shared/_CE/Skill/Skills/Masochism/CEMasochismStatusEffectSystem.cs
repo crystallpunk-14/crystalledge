@@ -1,4 +1,5 @@
 using Content.Shared._CE.Mana.Core;
+using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Damage.Systems;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -26,6 +27,11 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
         if (statusEffect.AppliedTo is null)
             return;
 
-        _magic.ChangeEnergy(statusEffect.AppliedTo.Value, ent.Comp.ManaRestore, out _, out _);
+        var count = ent.Comp.ManaRestore;
+
+        if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
+            count *= stackComp.Stack;
+
+        _magic.ChangeEnergy(statusEffect.AppliedTo.Value, count, out _, out _);
     }
 }

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._CE.Skill.Core.Prototypes;
+using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Prototypes;
@@ -12,18 +13,21 @@ public sealed partial class AddStatusEffect : CESkillEffect
     [DataField(required: true)]
     public EntProtoId Effect;
 
+    [DataField]
+    public int Stack = 1;
+
     public override LocId SkillType => "ce-skill-effect-passive";
 
     public override void AddSkill(IEntityManager entManager, EntityUid target)
     {
-        var statusEffectSystem = entManager.System<StatusEffectsSystem>();
-        statusEffectSystem.TrySetStatusEffectDuration(target, Effect);
+        var statusEffectSystem = entManager.System<CEStatusEffectStackSystem>();
+        statusEffectSystem.TryAddStack(target, Effect, Stack);
     }
 
     public override void RemoveSkill(IEntityManager entManager, EntityUid target)
     {
-        var statusEffectSystem = entManager.System<StatusEffectsSystem>();
-        statusEffectSystem.TryRemoveStatusEffect(target, Effect);
+        var statusEffectSystem = entManager.System<CEStatusEffectStackSystem>();
+        statusEffectSystem.TryRemoveStack(target, Effect, Stack);
     }
 
     public override string? GetName(IEntityManager entManager, IPrototypeManager protoManager)

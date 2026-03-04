@@ -1,83 +1,84 @@
-- type: skill
-  parent: BaseNeutralSkill
-  id: CureWounds
-  effect: !type:AddAction
-    action: CEActionSpellCureWounds
-
-- type: entity
-  id: CEActionSpellCureWounds
-  parent: CEActionSpellBase
-  name: Cure wounds
-  description: You restore [color=#f70d0d]3 health[/color] to the creature you touch.
-  components:
-  - type: CEActionDoAfterSlowdown
-    speedMultiplier: 0.5
-  - type: CEActionManaCost
-    manaCost: 5
-  - type: DoAfterArgs
-    delay: 1.5
-    breakOnDamage: true
-  - type: CEActionSpeaking
-    startSpeech: "Et curabuntur..."
-    endSpeech: "vulnera tua"
-  - type: CEActionTargetMobStatusRequired
-    allowedStates:
-    - Alive
-    - Critical
-  - type: CEActionDoAfterVisuals
-    proto: CERuneCureWounds
-  - type: Action
-    useDelay: 5
-    icon:
-      sprite: _CE/Skills/cure_wounds.rsi
-      state: icon
-  - type: TargetAction
-    range: 3
-    interactOnMiss: false
-  - type: EntityTargetAction
-    whitelist:
-      components:
-      - MobState
-    event: !type:CEEntityTargetModularEffectEvent
-      telegraphyEffects:
-      - !type:CESpellSpawnEntityOnTarget
-        spawns:
-        - CEImpactEffectCureWounds
-      effects:
-      - !type:CESpellSpawnEntityOnTarget
-        spawns:
-        - CEImpactEffectCureWounds
-      - !type:CESpellApplyEntityEffect
-        effects:
-        - !type:EvenHealthChange
-          damage:
-            Burn: -3
-            Brute: -3
-            Toxin: -3
-        - !type:Jitter
-
-- type: entity
-  id: CERuneCureWounds
-  parent: CEBaseMagicRune
-  categories: [ HideSpawnMenu ]
-  save: false
-  components:
-  - type: PointLight
-    color: "#cedcdd"
-  - type: Sprite
-    layers:
-    - state: sun
-      color: "#cedcdd"
-      shader: unshaded
-
-- type: entity
-  id: CEImpactEffectCureWounds
-  parent: CEBaseMagicImpact
-  categories: [ HideSpawnMenu ]
-  save: false
-  components:
-  - type: Sprite
-    layers:
-    - state: particles_up
-      color: "#cedcdd"
-      shader: unshaded
+#- type: skill
+#  parent: BaseNeutralSkill
+#  id: CureWounds
+#  effect: !type:AddAction
+#    action: CEActionSpellCureWounds
+#
+#- type: entity
+#  id: CEActionSpellCureWounds
+#  parent: CEActionSpellBase
+#  name: Cure wounds
+#  description: You restore [color=#f70d0d]3 health[/color] to the creature you touch.
+#  components:
+#  - type: CEActionDoAfterSlowdown
+#    speedMultiplier: 0.5
+#  - type: CEActionManaCost
+#    manaCost: 5
+#  - type: DoAfterArgs
+#    delay: 1.5
+#    breakOnDamage: true
+#  - type: CEActionSpeaking
+#    startSpeech: "Et curabuntur..."
+#    endSpeech: "vulnera tua"
+#  - type: CEActionTargetMobStatusRequired
+#    allowedStates:
+#    - Alive
+#    - Critical
+#  - type: CEActionDoAfterVisuals
+#    proto: CERuneCureWounds
+#  - type: Action
+#    useDelay: 5
+#    icon:
+#      sprite: _CE/Skills/cure_wounds.rsi
+#      state: icon
+#  - type: TargetAction
+#    range: 3
+#    interactOnMiss: false
+#  - type: EntityTargetAction
+#    whitelist:
+#      components:
+#      - MobState
+#    event: !type:CEEntityTargetModularEffectEvent
+#      telegraphyEffects:
+#      - !type:CESpellSpawnEntityOnTarget
+#        spawns:
+#        - CEImpactEffectCureWounds
+#      effects:
+#      - !type:CESpellSpawnEntityOnTarget
+#        spawns:
+#        - CEImpactEffectCureWounds
+#      - !type:CESpellApplyEntityEffect
+#        effects:
+#        - !type:EvenHealthChange
+#          damage:
+#            Burn: -3
+#            Brute: -3
+#            Toxin: -3
+#        - !type:Jitter
+#
+#- type: entity
+#  id: CERuneCureWounds
+#  parent: CEBaseMagicRune
+#  categories: [ HideSpawnMenu ]
+#  save: false
+#  components:
+#  - type: PointLight
+#    color: "#cedcdd"
+#  - type: Sprite
+#    layers:
+#    - state: sun
+#      color: "#cedcdd"
+#      shader: unshaded
+#
+#- type: entity
+#  id: CEImpactEffectCureWounds
+#  parent: CEBaseMagicImpact
+#  categories: [ HideSpawnMenu ]
+#  save: false
+#  components:
+#  - type: Sprite
+#    layers:
+#    - state: particles_up
+#      color: "#cedcdd"
+#      shader: unshaded
+#

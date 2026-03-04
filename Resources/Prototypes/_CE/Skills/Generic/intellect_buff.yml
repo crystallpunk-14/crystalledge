@@ -13,7 +13,7 @@
   - type: CEActionManaCost
     manaCost: 5
   - type: Action
-    useDelay: 30
+    useDelay: 5
     icon:
       sprite: _CE/Skills/intellect_buff.rsi
       state: icon
@@ -66,10 +66,30 @@
     color: "#0c6cff"
   - type: CEStatusEffectModifyStats
     modifyStats:
-      Intelligence: 4
+      Intelligence: 2
 
 - type: alert
   id: CESpellAlertMageIntellectBuff
+  alertViewEntity: CEIntellectBuffAlertSpriteView
   icons:
   - sprite: _CE/Skills/intellect_buff.rsi
     state: icon
+
+- type: entity
+  id: CEIntellectBuffAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/intellect_buff.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

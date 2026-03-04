@@ -17,6 +17,26 @@
 
 - type: alert
   id: CEMasochism
+  alertViewEntity: CEMasochismAlertSpriteView
   icons:
   - sprite: _CE/Skills/masochism.rsi
     state: icon
+
+- type: entity
+  id: CEMasochismAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/masochism.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0
