@@ -383,20 +383,23 @@ public sealed class CEHealthSystemTest
     /// Verify CEDamageSpecifier multiplication operator.
     /// </summary>
     [Test]
-    public async Task DamageSpecifierMultiply()
+    [TestCase(10, 2.0f, 20)]
+    [TestCase(10, 0.5f, 5)]
+    [TestCase(10, 0f, 0)]
+    [TestCase(9, 0.5f, 4)]
+    [TestCase(9, 0.4f, 3)]
+    [TestCase(8, 0.4f, 3)]
+    public async Task DamageSpecifierMultiplyFloat(int a, float b, int result)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
 
         await server.WaitAssertion(() =>
         {
-            var spec = new CEDamageSpecifier(TestDamageType, 10);
+            var spec = new CEDamageSpecifier(TestDamageType, a);
 
-            var doubled = spec * 2.0f;
-            Assert.That(doubled.Total, Is.EqualTo(20));
-
-            var halved = spec * 0.5f;
-            Assert.That(halved.Total, Is.EqualTo(5));
+            var multiplied = spec * b;
+            Assert.That(multiplied.Total, Is.EqualTo(result));
         });
 
         await pair.CleanReturnAsync();
