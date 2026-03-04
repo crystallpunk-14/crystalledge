@@ -4,7 +4,6 @@ using Content.Client.UserInterface.Systems.Actions;
 using Content.Shared._CE.Actions.Components;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
@@ -205,9 +204,7 @@ public sealed class CEActionTargetingOverlay : Overlay
     private Vector2? FindSnapTarget(
         EntityUid playerUid,
         EntityUid actionUid,
-        Vector2 playerPos,
-        Vector2 mousePos,
-        float range)
+        Vector2 mousePos)
     {
         // 1) Use the engine's sprite-picking to find the entity under the cursor — same as click.
         if (_stateManager.CurrentState is not GameplayStateBase screen)
@@ -248,7 +245,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         Vector2 targetPos;
         if (hasEntityTarget)
         {
-            targetPos = FindSnapTarget(playerUid, actionUid, playerPos, mousePos, range) ?? mousePos;
+            targetPos = FindSnapTarget(playerUid, actionUid, mousePos) ?? mousePos;
         }
         else
         {
@@ -291,8 +288,7 @@ public sealed class CEActionTargetingOverlay : Overlay
             lineLength,
             perp * halfWidth,
             rotation,
-            vis,
-            false);
+            vis);
 
         // Draw border sprites — right side (mirrored, start, stretched mid, end).
         DrawBorderStrip(handle,
@@ -301,8 +297,7 @@ public sealed class CEActionTargetingOverlay : Overlay
             lineLength,
             perp * (-halfWidth),
             rotation,
-            vis,
-            true);
+            vis);
     }
 
     private void DrawBorderStrip(
@@ -312,8 +307,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         float length,
         Vector2 offset,
         Angle rotation,
-        CEVisualizeWideLineActionComponent vis,
-        bool mirrored)
+        CEVisualizeWideLineActionComponent vis)
     {
         var capSize = 0.5f; // Size of start/end caps in world units.
         var halfCap = capSize / 2f;
@@ -432,7 +426,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         float range,
         CEVisualizeAoEZoneActionComponent vis)
     {
-        var snapPos = FindSnapTarget(playerUid, actionUid, playerPos, mousePos, range);
+        var snapPos = FindSnapTarget(playerUid, actionUid, mousePos);
 
         if (snapPos != null)
         {
