@@ -9,7 +9,6 @@ namespace Content.Shared._CE.Skill.Skills.Masochism;
 public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly CESharedMagicEnergySystem _magic = default!;
-    [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
     public override void Initialize()
     {
         base.Initialize();
