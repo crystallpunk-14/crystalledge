@@ -31,11 +31,12 @@ public sealed class CEDivineShieldSystem : EntitySystem
 
     private void BreakShield(Entity<CEDivineShieldStatusEffectComponent> ent)
     {
-        if (!_timing.IsFirstTimePredicted)
-            return;
-        var pos = Transform(ent).Coordinates;
-        Spawn(ent.Comp.BreakVfx, pos);
-        _audio.PlayPvs(ent.Comp.BreakSound, pos);
+        if (_timing.IsFirstTimePredicted && _net.IsClient)
+        {
+            var pos = Transform(ent).Coordinates;
+            SpawnAtPosition(ent.Comp.BreakVfx, pos);
+            _audio.PlayPvs(ent.Comp.BreakSound, pos);
+        }
 
         _status.TryRemoveStack(ent.Owner);
     }

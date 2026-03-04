@@ -1,0 +1,44 @@
+- type: skill
+  parent: BasePriestSkill
+  id: DivineShield
+  effect: !type:AddAction
+    action: CEActionSpellDivineShield
+
+- type: entity
+  id: CEActionSpellDivineShield
+  parent: CEActionSpellBase
+  name: Divine Shield
+  description: You apply a [color=#1defa9]1 divine shield[/color] on the target.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: CEActionDoAfterSlowdown
+    speedMultiplier: 0.5
+  - type: CEActionManaCost
+    manaCost: 5
+  - type: DoAfterArgs
+    delay: 1.5
+    breakOnDamage: true
+  - type: CEActionSpeaking
+    startSpeech: "Et in necessitate..."
+    endSpeech: "vos protegant"
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Interface/divine_shield.rsi
+      state: shield
+  - type: TargetAction
+    range: 1
+    interactOnMiss: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CEHealth
+    event: !type:CEEntityTargetModularEffectEvent
+      telegraphyEffects:
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEImpactEffectCureWounds
+      effects:
+      - !type:AddDivineShield

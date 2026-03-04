@@ -25,6 +25,8 @@
 - type: alert
   id: CEDivineShield
   alertViewEntity: CEDivineShieldAlertSpriteView
+  name: ce-alert-divine-shield-name
+  description: ce-alert-divine-shield-desc
   icons:
   - sprite: _CE/Interface/divine_shield.rsi
     state: shield
@@ -60,6 +62,6 @@
     - state: break
       shader: unshaded
   - type: LightFade
-    duration: 6
+    duration: 2
   - type: TimedDespawn
-    lifetime: 6
+    lifetime: 2

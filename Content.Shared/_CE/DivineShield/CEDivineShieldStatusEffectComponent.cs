@@ -11,5 +11,8 @@ public sealed partial class CEDivineShieldStatusEffectComponent : Component
     public EntProtoId? BreakVfx = "CEEffectBreakDivineShield";
 
     [DataField]
-    public SoundSpecifier? BreakSound;
+    public SoundSpecifier? BreakSound = new SoundPathSpecifier("/Audio/_CE/Effects/divine_shield_break.ogg")
+    {
+        Params = AudioParams.Default.WithVariation(0.1f)
+    };
 }
