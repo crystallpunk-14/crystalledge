@@ -52,7 +52,6 @@ public abstract partial class CESharedHealthSystem : EntitySystem
 
     /// <summary>
     /// Applies damage specified by <see cref="CEDamageSpecifier"/>.
-    /// Raises <see cref="CEBeforeDamageEvent"/> for modification by other systems (armor, buffs, etc.).
     /// The total damage (sum of all types) is subtracted from health.
     /// </summary>
     public bool TakeDamage(Entity<CEHealthComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null)

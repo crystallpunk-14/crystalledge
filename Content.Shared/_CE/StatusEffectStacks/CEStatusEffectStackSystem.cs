@@ -106,6 +106,39 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     }
 
     /// <summary>
+    /// Attempt to remove status effect stacks from an entity.
+    /// This either edits the number of status effect stacks or removes the status effect.
+    /// </summary>
+    /// <param name="effect">Status effect entity</param>
+    /// <param name="stack">Optional, default 1. Number of stacks. Cannot be a negative number.</param>
+    /// <returns>True if the status effect was successfully removed or its number of stacks was reduced. False if for some reason this could not be done.</returns>
+    public bool TryRemoveStack(Entity<CEStatusEffectStackComponent?> effect, int stack = 1)
+    {
+        if (stack <= 0)
+            return false;
+
+        if (!Resolve(effect, ref effect.Comp, false))
+            return false;
+
+        if (!TryComp<StatusEffectComponent>(effect, out var statusEffect) || statusEffect.AppliedTo is null)
+            return false;
+
+        var proto = MetaData(effect).EntityPrototype;
+
+        if (proto is null)
+            return false;
+
+        if (effect.Comp.Stack <= stack)
+        {
+            _statusEffect.TryRemoveStatusEffect(statusEffect.AppliedTo.Value, proto);
+            return true;
+        }
+
+        SetStack(statusEffect.AppliedTo.Value, (effect, effect.Comp), effect.Comp.Stack - stack);
+        return true;
+    }
+
+    /// <summary>
     /// Returns the number of stacks of a specific status effect from an entity.
     /// Returns 0 if the status effect does not exist or if there is any other problem.
     /// </summary>

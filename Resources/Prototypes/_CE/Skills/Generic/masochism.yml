@@ -4,6 +4,12 @@
   effect: !type:AddStatusEffect
     effect: CEStatusEffectMasochism
 
+- type: skill
+  parent: BaseNeutralSkill
+  id: DivineShield
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectDivineShield
+
 - type: entity
   id: CEStatusEffectMasochism
   name: Masochism
