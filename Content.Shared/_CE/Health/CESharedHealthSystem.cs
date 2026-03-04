@@ -79,15 +79,24 @@ public abstract partial class CESharedHealthSystem : EntitySystem
     /// <summary>
     /// Heals the entity by the specified amount.
     /// </summary>
-    public void Heal(EntityUid target, int amount, CEHealthComponent? health = null)
+    public void Heal(Entity<CEHealthComponent?> target, int amount, EntityUid? source = null)
     {
-        if (!Resolve(target, ref health, false))
+        if (!Resolve(target, ref target.Comp, false))
             return;
 
-        if (amount <= 0)
+        var finalAmount = amount;
+        if (source is not null)
+        {
+            var getHealEv = new CEGetHealAmountEvent(target, amount);
+            RaiseLocalEvent(source.Value, getHealEv);
+
+            finalAmount = getHealEv.HealAmount;
+        }
+
+        if (finalAmount <= 0)
             return;
 
-        ChangeHealth((target, health), amount, out _);
+        ChangeHealth(target, finalAmount, out _);
     }
 
     /// <summary>
@@ -123,9 +132,9 @@ public abstract partial class CESharedHealthSystem : EntitySystem
         RaiseLocalEvent(ent, ev, true);
     }
 
-    public bool HasHealth(EntityUid uid, CEHealthComponent? component = null)
+    public bool HasHealth(Entity<CEHealthComponent?> target)
     {
-        return Resolve(uid, ref component, false);
+        return Resolve(target, ref target.Comp, false);
     }
 }
 
@@ -149,4 +158,13 @@ public sealed class CEBeforeDamageEvent(CEDamageSpecifier damage, EntityUid? sou
     public CEDamageSpecifier Damage = damage;
     public EntityUid? Source = source;
     public bool Cancelled;
+}
+
+/// <summary>
+/// Called on healing source entity to calculate the amount to heal. Systems can modify the heal amount.
+/// </summary>
+public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : EntityEventArgs
+{
+    public EntityUid Target = target;
+    public int HealAmount = healAmount;
 }

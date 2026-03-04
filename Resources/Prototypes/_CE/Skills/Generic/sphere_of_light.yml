@@ -35,10 +35,10 @@
       - Anchorable
     event: !type:CEEntityTargetModularEffectEvent
       effects:
-      - !type:CESpellSpawnEntityOnTarget
+      - !type:SpawnEntityOnTarget
         spawns:
         - CEImpactEffectSphereOfLight
-      - !type:CESpellApplyStatusEffect
+      - !type:ApplyStatusEffect
         statusEffect: CEStatusEffectGlowing
         duration: 60
 

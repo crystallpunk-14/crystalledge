@@ -12,7 +12,7 @@
   vfx:
     sprite: _CE/Effects/upgrade.rsi
     state: mage
-  color: "#1d97ef"
+  color: "#a91def"
   restrictions:
    - !type:JobWhitelist
      jobs:
@@ -29,3 +29,15 @@
    - !type:JobWhitelist
      jobs:
      - CEWarrior
+
+- type: skill
+  id: BasePriestSkill
+  abstract: true
+  vfx:
+      sprite: _CE/Effects/upgrade.rsi
+      state: priest
+  color: "#1defa9"
+  restrictions:
+   - !type:JobWhitelist
+     jobs:
+     - CEPriest

@@ -22,14 +22,14 @@
   - type: InstantAction
     event: !type:CEInstantModularEffectEvent
       telegraphyEffects:
-      - !type:CESpellSpawnEntityOnTarget
+      - !type:SpawnEntityOnTarget
         spawns:
         - CEImpactEffectMageIntellectBuff
       effects:
-      - !type:CESpellSpawnEntityOnTarget
+      - !type:SpawnEntityOnTarget
         spawns:
         - CEImpactEffectMageIntellectBuff
-      - !type:CESpellApplyStatusEffect
+      - !type:ApplyStatusEffect
         statusEffect: CEStatusEffectMageIntellectBuff
         duration: 60
 

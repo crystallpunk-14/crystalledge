@@ -1,0 +1,48 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: AreaHealing
+  effect: !type:AddAction
+    action: CEActionSpellAreaHealing
+
+- type: entity
+  id: CEActionSpellAreaHealing
+  parent: CEActionSpellBase
+  name: Prayer for health
+  description: You restore [color=#f70d0d]2 health[/color] to all creatures in a small area.
+  components:
+  - type: CEActionDoAfterSlowdown
+    speedMultiplier: 0.5
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: DoAfterArgs
+    delay: 1.5
+    breakOnDamage: true
+  - type: CEActionSpeaking
+    startSpeech: "Et curabuntur..."
+    endSpeech: "vulnera tua"
+  - type: CEActionDoAfterVisuals
+    proto: CERuneCureWounds
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/cure_wounds.rsi
+      state: icon
+  - type: TargetAction
+    range: 3
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetModularEffectEvent
+      telegraphyEffects:
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEImpactEffectCureWounds
+      effects:
+      - !type:AreaEffect
+        range: 2
+        affectCaster: true
+        effects:
+        - !type:SpawnEntityOnTarget
+          spawns:
+          - CEImpactEffectCureWounds
+        - !type:Heal
+          amount: 2

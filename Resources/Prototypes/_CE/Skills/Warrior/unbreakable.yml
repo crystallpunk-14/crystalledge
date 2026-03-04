@@ -22,14 +22,14 @@
   - type: InstantAction
     event: !type:CEInstantModularEffectEvent
       telegraphyEffects:
-      - !type:CESpellSpawnEntityOnTarget
+      - !type:SpawnEntityOnTarget
         spawns:
         - CEImpactEffectUnbreakable
       effects:
-      - !type:CESpellSpawnEntityOnTarget
+      - !type:SpawnEntityOnTarget
         spawns:
         - CEImpactEffectUnbreakable
-      - !type:CESpellApplyStatusEffect
+      - !type:ApplyStatusEffect
         statusEffect: CEStatusEffectUnbreakable
         duration: 10
 
