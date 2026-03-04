@@ -11,7 +11,6 @@
   description: You restore [color=#1defa9]2 health[/color] to all creatures in a small area.
   components:
   - type: CEVisualizeRadiusTargetAction
-    spriteSpacing: 1
   - type: CEVisualizeAoEZoneAction
     radius: 1.5 #Healing radius
   - type: CEActionDoAfterSlowdown

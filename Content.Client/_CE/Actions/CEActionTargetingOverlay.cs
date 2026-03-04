@@ -1,15 +1,18 @@
 using System.Numerics;
+using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Actions;
 using Content.Shared._CE.Actions.Components;
+using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
-using Content.Shared.Whitelist;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
+using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Shared.Enums;
+using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
 namespace Content.Client._CE.Actions;
@@ -29,9 +32,10 @@ public sealed class CEActionTargetingOverlay : Overlay
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
 
+    [Dependency] private readonly IStateManager _stateManager = default!;
+
     private readonly SharedTransformSystem _transform;
-    private readonly EntityLookupSystem _lookup;
-    private readonly EntityWhitelistSystem _whitelist;
+    private readonly SharedActionsSystem _actions;
 
     // Cached textures per RSI path+state — loaded lazily.
     private readonly Dictionary<(string path, string state), Texture> _textureCache = new();
@@ -40,8 +44,7 @@ public sealed class CEActionTargetingOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
         _transform = _entManager.System<SharedTransformSystem>();
-        _lookup = _entManager.System<EntityLookupSystem>();
-        _whitelist = _entManager.System<EntityWhitelistSystem>();
+        _actions = _entManager.System<SharedActionsSystem>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -193,8 +196,11 @@ public sealed class CEActionTargetingOverlay : Overlay
     #region Entity-snap helper
 
     /// <summary>
-    /// Finds the best valid target entity near <paramref name="mousePos"/> that also lies within <paramref name="range"/> of <paramref name="playerPos"/>.
-    /// Returns the entity's world position, or null when no valid entity is found.
+    /// Resolves the entity directly under the cursor using the exact same pixel-perfect
+    /// sprite-picking that the engine uses for click input (<see cref="GameplayStateBase.GetClickedEntity"/>),
+    /// then validates it through <see cref="SharedActionsSystem.ValidateEntityTarget"/> — the
+    /// exact same codepath as the vanilla <c>OnEntityTargetAttempt</c>.
+    /// Returns the entity's world position when it passes validation, <c>null</c> otherwise.
     /// </summary>
     private Vector2? FindSnapTarget(
         EntityUid playerUid,
@@ -203,58 +209,25 @@ public sealed class CEActionTargetingOverlay : Overlay
         Vector2 mousePos,
         float range)
     {
-        EntityWhitelist? whitelist = null;
-        EntityWhitelist? blacklist = null;
-
-        if (_entManager.TryGetComponent<EntityTargetActionComponent>(actionUid, out var entityTarget))
-        {
-            whitelist = entityTarget.Whitelist;
-            blacklist = entityTarget.Blacklist;
-        }
-
-        var mapId = _eye.CurrentEye.Position.MapId;
-        // Tight point-sized box so the cursor must actually be over the entity's broadphase AABB.
-        var lookupSize = new Vector2(0.1f, 0.1f);
-        var bounds = new Box2(mousePos - lookupSize, mousePos + lookupSize);
-        var candidates = _lookup.GetEntitiesIntersecting(mapId,
-            bounds,
-            LookupFlags.Approximate | LookupFlags.Dynamic | LookupFlags.Static);
-
-        EntityUid? bestTarget = null;
-        var bestDist = float.MaxValue;
-
-        foreach (var ent in candidates)
-        {
-            if (ent == playerUid)
-                continue;
-
-            if (!_entManager.TryGetComponent<SpriteComponent>(ent, out var sprite) || !sprite.Visible)
-                continue;
-
-            if (whitelist != null && !_whitelist.IsWhitelistPass(whitelist, ent))
-                continue;
-
-            if (blacklist != null && _whitelist.IsWhitelistPass(blacklist, ent))
-                continue;
-
-            var entPos = _transform.GetWorldPosition(ent);
-
-            // Must be within cast range.
-            if (range > 0f && (entPos - playerPos).Length() > range)
-                continue;
-
-            var d = (entPos - mousePos).Length();
-            if (d < bestDist)
-            {
-                bestDist = d;
-                bestTarget = ent;
-            }
-        }
-
-        if (bestTarget == null)
+        // 1) Use the engine's sprite-picking to find the entity under the cursor — same as click.
+        if (_stateManager.CurrentState is not GameplayStateBase screen)
             return null;
 
-        return _transform.GetWorldPosition(bestTarget.Value);
+        var mapId = _eye.CurrentEye.Position.MapId;
+        var mouseMapCoords = new MapCoordinates(mousePos, mapId);
+        var entityUnderCursor = screen.GetClickedEntity(mouseMapCoords);
+
+        if (entityUnderCursor is not { Valid: true } target)
+            return null;
+
+        // 2) Validate through the exact same method the ActionSystem uses.
+        if (!_entManager.TryGetComponent<EntityTargetActionComponent>(actionUid, out var entityTargetComp))
+            return null;
+
+        if (!_actions.ValidateEntityTarget(playerUid, target, (actionUid, entityTargetComp)))
+            return null;
+
+        return _transform.GetWorldPosition(target);
     }
 
     #endregion
