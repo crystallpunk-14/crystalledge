@@ -13,7 +13,7 @@
   - type: CEActionManaCost
     manaCost: 5
   - type: Action
-    useDelay: 30
+    useDelay: 5
     icon:
       sprite: _CE/Skills/unbreakable.rsi
       state: icon
@@ -66,10 +66,29 @@
     color: "#f70d0d"
   - type: CEStatusEffectModifyStats
     modifyStats:
-      Vitality: 4
+      Vitality: 2
 
 - type: alert
   id: CESpellAlertUnbreakable
+  alertViewEntity: CEUnbreakableAlertSpriteView
   icons:
   - sprite: _CE/Skills/unbreakable.rsi
     state: icon
+
+- type: entity
+  id: CEUnbreakableAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/unbreakable.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.25, 0
+    - map: [ "10" ]
+      offset: 0.125, 0
+    - map: [ "100" ]

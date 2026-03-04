@@ -118,12 +118,24 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
     private void SetStack(EntityUid target, Entity<CEStatusEffectStackComponent> ent, int newStack)
     {
+        if (ent.Comp.Stack == newStack)
+            return;
+
+        var oldStack = ent.Comp.Stack;
+
         ent.Comp.Stack = newStack;
         Dirty(ent);
 
+        var ev = new CEStatusEffectStackEditedEvent(target, oldStack, newStack);
+        RaiseLocalEvent(ent.Owner, ref ev);
+
         if (TryComp<StatusEffectAlertComponent>(ent, out var alertComp))
-        {
             _alerts.UpdateAlert(target, alertComp.Alert);
-        }
     }
 }
+
+/// <summary>
+/// Calls on effect entity, when a status effect stack is edited
+/// </summary>
+[ByRefEvent]
+public readonly record struct CEStatusEffectStackEditedEvent(EntityUid Target, int oldStack, int newStack);

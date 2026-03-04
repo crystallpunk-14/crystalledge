@@ -25,8 +25,6 @@
 - type: entity
   id: CEMasochismAlertSpriteView
   categories: [ HideSpawnMenu ]
-  name: test
-  description: test desc
   components:
   - type: GenericCounterAlert
     centerGlyph: false
