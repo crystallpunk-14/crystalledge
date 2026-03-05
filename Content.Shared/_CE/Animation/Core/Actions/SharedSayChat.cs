@@ -19,10 +19,10 @@ public abstract partial class SharedSayChat : CEAnimationActionEntry
         EntityUid entity,
         EntityUid? used,
         Angle angle,
-        float animationSpeed,
+        float speed,
         TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         //Only server side logic
     }

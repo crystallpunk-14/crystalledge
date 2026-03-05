@@ -5,7 +5,7 @@ using Content.Shared.Examine;
 
 namespace Content.Shared._CE.Actions2;
 
-public abstract partial class CESharedAction2System
+public abstract partial class CESharedActionSystem
 {
     private void InitializeExamine()
     {

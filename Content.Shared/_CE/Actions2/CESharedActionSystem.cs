@@ -1,5 +1,6 @@
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Prototypes;
+using Content.Shared._CE.Mana.Core;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -9,13 +10,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Actions2;
 
-public abstract partial class CESharedAction2System : EntitySystem
+public abstract partial class CESharedActionSystem : EntitySystem
 {
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
     [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hand = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
 
     private EntityQuery<ActionComponent> _actionQuery;
 
@@ -27,6 +29,7 @@ public abstract partial class CESharedAction2System : EntitySystem
 
         InitializeAttempts();
         InitializeExamine();
+        InitializePerformed();
 
         SubscribeLocalEvent<TransformComponent, CEInstantActionAnimationEvent>(OnInstantAction);
         SubscribeLocalEvent<TransformComponent, CEWorldTargetActionAnimationEvent>(OnWorldTargetAction);

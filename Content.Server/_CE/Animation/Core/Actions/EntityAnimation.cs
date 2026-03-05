@@ -12,10 +12,10 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         EntityUid entity,
         EntityUid? used,
         Angle angle,
-        float animationSpeed,
+        float speed,
         TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         // Server sends visual effect event to all non-predicting clients
         var filter = Filter.PvsExcept(entity, entityManager: entManager);

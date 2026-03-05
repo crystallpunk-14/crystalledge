@@ -17,10 +17,10 @@ public sealed partial class Dash : CEAnimationActionEntry
         EntityUid entity,
         EntityUid? used,
         Angle angle,
-        float animationSpeed,
+        float speed,
         TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         var throwing = entManager.System<ThrowingSystem>();
 

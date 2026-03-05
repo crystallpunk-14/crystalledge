@@ -13,10 +13,10 @@ public sealed partial class SayChat : SharedSayChat
         EntityUid entity,
         EntityUid? used,
         Angle angle,
-        float animationSpeed,
+        float speed,
         TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         // If we can't speak, we can't speak
         if (!entManager.HasComponent<SpeechComponent>(entity) || entManager.HasComponent<MutedComponent>(entity))

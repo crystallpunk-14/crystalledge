@@ -13,10 +13,10 @@ public sealed partial class PlaySound : CEAnimationActionEntry
         EntityUid entity,
         EntityUid? used,
         Angle angle,
-        float animationSpeed,
+        float speed,
         TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         var audio = entManager.System<SharedAudioSystem>();
 

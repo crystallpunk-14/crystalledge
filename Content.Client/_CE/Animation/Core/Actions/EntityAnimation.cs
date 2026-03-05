@@ -26,10 +26,10 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         EntityUid entity,
         EntityUid? used,
         Angle angle,
-        float animationSpeed,
+        float speed,
         TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         if (!entManager.TryGetComponent<CEWeaponComponent>(used, out var itemAnim))
             return;
@@ -42,7 +42,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         var spriteSystem = entManager.System<SpriteSystem>();
         var animationPlayer = entManager.System<AnimationPlayerSystem>();
 
-        _animationSpeedMultiplier = 1f / animationSpeed;
+        _animationSpeedMultiplier = 1f / speed;
 
         if (!entManager.TryGetComponent<TransformComponent>(entity, out var userXform)
             || userXform.MapID == MapId.Nullspace)
