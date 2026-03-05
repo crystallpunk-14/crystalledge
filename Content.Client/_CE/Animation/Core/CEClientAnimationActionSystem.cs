@@ -12,10 +12,10 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeNetworkEvent<CEItemVisualEffectEvent>(OnItemVisualEffect);
+        SubscribeNetworkEvent<CEEntityAnimationEvent>(OnEntityAnimation);
     }
 
-    private void OnItemVisualEffect(CEItemVisualEffectEvent ev)
+    private void OnEntityAnimation(CEEntityAnimationEvent ev)
     {
         var entity = GetEntity(ev.Entity);
         var used = GetEntity(ev.Used);
@@ -38,7 +38,7 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
         {
             if (action is SharedEntityAnimation visualEffect)
             {
-                visualEffect.Play(EntityManager, entity, used, ev.Angle, comp.AnimationSpeed, ev.Frame);
+                visualEffect.Play(EntityManager, entity, used, ev.Angle, comp.AnimationSpeed, ev.Frame, comp.TargetEntity, comp.TargetCoordinates);
             }
         }
     }

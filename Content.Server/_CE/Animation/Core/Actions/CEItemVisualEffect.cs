@@ -19,7 +19,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
     {
         // Server sends visual effect event to all non-predicting clients
         var filter = Filter.PvsExcept(entity, entityManager: entManager);
-        var effectEvent = new CEItemVisualEffectEvent(
+        var effectEvent = new CEEntityAnimationEvent(
             entManager.GetNetEntity(entity),
             used.HasValue ? entManager.GetNetEntity(used.Value) : null,
             angle,

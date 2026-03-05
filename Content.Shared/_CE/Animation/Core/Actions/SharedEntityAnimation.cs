@@ -1,5 +1,6 @@
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
 
@@ -62,4 +63,17 @@ public abstract partial class SharedEntityAnimation : CEAnimationActionEntry
     {
         //Check out client implementation
     }
+}
+
+/// <summary>
+/// Network event sent to non-predicting clients to display visual effects
+/// that were already processed on the predicting client.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CEEntityAnimationEvent(NetEntity entity, NetEntity? used, Angle angle, TimeSpan frame) : EntityEventArgs
+{
+    public NetEntity Entity = entity;
+    public NetEntity? Used = used;
+    public Angle Angle = angle;
+    public TimeSpan Frame = frame;
 }
