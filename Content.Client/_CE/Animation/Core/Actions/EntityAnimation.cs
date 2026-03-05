@@ -23,7 +23,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
     public override void Play(
         EntityManager entManager,
-        EntityUid entity,
+        EntityUid user,
         EntityUid? used,
         Angle angle,
         float speed,
@@ -44,7 +44,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
         _animationSpeedMultiplier = 1f / speed;
 
-        if (!entManager.TryGetComponent<TransformComponent>(entity, out var userXform)
+        if (!entManager.TryGetComponent<TransformComponent>(user, out var userXform)
             || userXform.MapID == MapId.Nullspace)
             return;
 
@@ -87,7 +87,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         if (FollowUser)
         {
             var track = entManager.EnsureComponent<TrackUserComponent>(effectEntity);
-            track.User = entity;
+            track.User = user;
         }
         else
         {

@@ -10,7 +10,7 @@ public sealed partial class SayChat : SharedSayChat
 {
     public override void Play(
         EntityManager entManager,
-        EntityUid entity,
+        EntityUid user,
         EntityUid? used,
         Angle angle,
         float speed,
@@ -19,13 +19,13 @@ public sealed partial class SayChat : SharedSayChat
         EntityCoordinates? position)
     {
         // If we can't speak, we can't speak
-        if (!entManager.HasComponent<SpeechComponent>(entity) || entManager.HasComponent<MutedComponent>(entity))
+        if (!entManager.HasComponent<SpeechComponent>(user) || entManager.HasComponent<MutedComponent>(user))
             return;
         if (string.IsNullOrWhiteSpace(Sentence))
             return;
 
         var chat = entManager.System<ChatSystem>();
 
-        chat.TrySendInGameICMessage(entity, Loc.GetString(Sentence), ChatType, true);
+        chat.TrySendInGameICMessage(user, Loc.GetString(Sentence), ChatType, true);
     }
 }

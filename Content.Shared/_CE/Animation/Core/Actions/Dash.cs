@@ -14,7 +14,7 @@ public sealed partial class Dash : CEAnimationActionEntry
 
     public override void Play(
         EntityManager entManager,
-        EntityUid entity,
+        EntityUid user,
         EntityUid? used,
         Angle angle,
         float speed,
@@ -25,10 +25,10 @@ public sealed partial class Dash : CEAnimationActionEntry
         var throwing = entManager.System<ThrowingSystem>();
 
         throwing.TryThrow(
-            entity,
+            user,
             angle.ToWorldVec() * Distance,
             Speed,
-            entity,
+            user,
             animated: false,
             doSpin: false);
     }

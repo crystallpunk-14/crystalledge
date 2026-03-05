@@ -9,7 +9,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 {
     public override void Play(
         EntityManager entManager,
-        EntityUid entity,
+        EntityUid user,
         EntityUid? used,
         Angle angle,
         float speed,
@@ -18,9 +18,9 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         EntityCoordinates? position)
     {
         // Server sends visual effect event to all non-predicting clients
-        var filter = Filter.PvsExcept(entity, entityManager: entManager);
+        var filter = Filter.PvsExcept(user, entityManager: entManager);
         var effectEvent = new CEEntityAnimationEvent(
-            entManager.GetNetEntity(entity),
+            entManager.GetNetEntity(user),
             used.HasValue ? entManager.GetNetEntity(used.Value) : null,
             angle,
             frame);

@@ -1,9 +1,9 @@
-using Content.Shared._CE.DivineShield;
+using Content.Shared._CE.Health;
 using Robust.Shared.Map;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
 
-public sealed partial class AddDivineShield : CEAnimationActionEntry
+public sealed partial class Heal: CEAnimationActionEntry
 {
     [DataField]
     public int Amount = 1;
@@ -20,7 +20,7 @@ public sealed partial class AddDivineShield : CEAnimationActionEntry
         if (target is null)
             return;
 
-        var divine = entManager.System<CEDivineShieldSystem>();
-        divine.TryAddShield(target.Value, Amount);
+        var health = entManager.System<CESharedHealthSystem>();
+        health.Heal(target.Value, Amount, user);
     }
 }

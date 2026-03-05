@@ -16,7 +16,7 @@ public abstract partial class SharedSayChat : CEAnimationActionEntry
 
     public override void Play(
         EntityManager entManager,
-        EntityUid entity,
+        EntityUid user,
         EntityUid? used,
         Angle angle,
         float speed,
