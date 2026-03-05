@@ -44,7 +44,6 @@
         scale: 1, -1
     0.1:
     - !type:WeaponArcAttack
-      damageGroup: pierce
       range: 0.7
       arcWidth: 40
 
@@ -94,7 +93,6 @@
         scale: 1, 1
     0.1:
     - !type:WeaponArcAttack
-      damageGroup: pierce
       range: 0.7
       arcWidth: 40
 
@@ -144,7 +142,6 @@
         scale: 1, -1
     0.2:
     - !type:WeaponArcAttack
-      damageGroup: default
       range: 0.6
       arcWidth: 180
 
@@ -193,6 +190,5 @@
         scale: 1, 1
     0.2:
     - !type:WeaponArcAttack
-      damageGroup: default
       range: 0.6
       arcWidth: 180

@@ -36,6 +36,8 @@
   - type: CombatMode
   - type: CEWeapon
     spriteRotation: -90
+    damage:
+      Physical: 1
     animations:
       Primary:
       - anim: SwordAttackLight1
@@ -45,8 +47,3 @@
         speed: 1
       - anim: SwordAttackHeavy2
         speed: 1
-  - type: CEMeleeWeapon
-    damageGroups:
-      default:
-        damage:
-          Physical: 1

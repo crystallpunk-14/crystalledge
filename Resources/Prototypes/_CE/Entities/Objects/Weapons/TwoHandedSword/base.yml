@@ -9,6 +9,9 @@
     size: Ginormous
   - type: CEWeapon
     spriteRotation: -90
+    rangeMultiplier: 1.2 #Longer reach
+    damage:
+      Physical: 4
     animations:
       Primary:
       - anim: SwordAttackLight1
@@ -39,12 +42,3 @@
     equipDelay: 1
     unequipDelay: 1
   - type: Wieldable
-  - type: CEMeleeWeapon
-    rangeMultiplier: 1.2 #Longer reach
-    damageGroups:
-      default:
-        damage:
-          Physical: 4
-      pierce:
-        damage:
-          Physical: 4

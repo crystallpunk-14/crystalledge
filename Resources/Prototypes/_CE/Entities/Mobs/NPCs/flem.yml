@@ -45,15 +45,12 @@
     baseSprintSpeed: 1.5
   - type: CEWeapon
     spriteRotation: -90
+    damage:
+      Physical: 2
     animations:
       Primary:
       - anim: FlemAttack1
       - anim: FlemAttack2
-  - type: CEMeleeWeapon
-    damageGroups:
-      default:
-        damage:
-          Physical: 2
 
 - type: htnCompound
   id: CEFlemCompound
