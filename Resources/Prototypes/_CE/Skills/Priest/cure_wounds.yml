@@ -21,7 +21,7 @@
       sprite: _CE/Skills/cure_wounds.rsi
       state: icon
   - type: TargetAction
-    range: 3
+    range: 1.5
     interactOnMiss: false
   - type: EntityTargetAction
     whitelist:
@@ -33,39 +33,27 @@
 - type: animationAction
   id: AnimationCureWounds
   movementSpeed: 0.5
-  duration: 1.5
+  duration: 2
   events:
     0:
     - !type:SpawnEntityOnTarget
       spawns:
-      - CEImpactEffectCureWounds
+      - CEEffectHealingGeneric
     - !type:SayChat
       sentence: "Et curabuntur"
-    0.4:
+    0.5:
     - !type:SpawnEntityOnTarget
       spawns:
-      - CEImpactEffectCureWounds
-    0.8:
+      - CEEffectHealingGeneric
+    1.0:
     - !type:SpawnEntityOnTarget
       spawns:
-      - CEImpactEffectCureWounds
-    1.2:
+      - CEEffectHealingGeneric
+    1.5:
     - !type:SpawnEntityOnTarget
       spawns:
-      - CEImpactEffectCureWounds
+      - CEEffectHealingGeneric
     - !type:Heal
       amount: 5
     - !type:SayChat
       sentence: "vulnera tua"
-
-- type: entity
-  id: CEImpactEffectCureWounds
-  parent: CEBaseMagicImpact
-  categories: [ HideSpawnMenu ]
-  save: false
-  components:
-  - type: Sprite
-    layers:
-    - state: particles_up
-      color: "#cedcdd"
-      shader: unshaded
