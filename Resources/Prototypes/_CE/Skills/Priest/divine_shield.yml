@@ -36,15 +36,15 @@
   duration: 1.5
   events:
     0:
-    - !type:SpawnEntityOnTarget
-      spawns:
-      - CEImpactEffectCureWounds
+    #- !type:SpawnEntityOnTarget
+    #  spawns:
+    #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat
       sentence: "Et in necessitate"
     0.2:
-    - !type:SpawnEntityOnTarget
-      spawns:
-      - CEImpactEffectCureWounds
+    #- !type:SpawnEntityOnTarget
+    #  spawns:
+    #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat
       sentence: "vos protegant"
     - !type:AddDivineShield

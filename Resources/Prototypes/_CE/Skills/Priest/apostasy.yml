@@ -37,7 +37,7 @@
     color: "#ffd46e"
     radius: 1.5
   - type: TimedDespawn
-    delay: 1.5
+    lifetime: 1.5
   - type: LightBehaviour
     behaviours:
       - !type:PulseBehaviour

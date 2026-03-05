@@ -70,7 +70,7 @@
     color: "#8dd0e8"
     radius: 2.5
   - type: TimedDespawn
-    delay: 2
+    lifetime: 2
   - type: LightBehaviour
     behaviours:
       - !type:PulseBehaviour
