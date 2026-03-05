@@ -21,7 +21,9 @@ public abstract partial class CESharedAction2System
 
     private void OnActionExamined(Entity<ActionComponent> ent, ref ExaminedEvent args)
     {
-        args.PushMarkup($"{Loc.GetString("ce-magic-cooldown")}: [color=#5da9e8]{ent.Comp.UseDelay}[/color]", priority: 9);
+        if (ent.Comp.UseDelay is null)
+            return;
+        args.PushMarkup($"{Loc.GetString("ce-magic-cooldown")}: [color=#5da9e8]{ent.Comp.UseDelay.Value.TotalSeconds}s[/color]", priority: 9);
     }
 
     private void OnManacostExamined(Entity<CEActionManaCostComponent> ent, ref ExaminedEvent args)
