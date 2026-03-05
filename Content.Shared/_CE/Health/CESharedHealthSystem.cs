@@ -175,10 +175,12 @@ public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : Ent
 }
 
 /// <summary>
-/// Systems can inspect the potential healing amount and the target and cancel the heal.
+/// Raised on an entity that is trying to heal another entity.
+/// Systems can inspect the potential healing amount and the target entity that is getting healed.
+/// Systems can cancel the heal.
 /// </summary>
 /// <remarks>
-/// Raised when <see cref="CESharedHealthSystem.Heal"/> when a source is supplied.
+/// Raised when <see cref="CESharedHealthSystem.Heal"/>is called and a source is supplied.
 /// </remarks>
 public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : CancellableEntityEventArgs
 {
