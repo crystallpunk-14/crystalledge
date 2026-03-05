@@ -11,7 +11,8 @@
     spriteRotation: -90
     rangeMultiplier: 1.2 #Longer reach
     damage:
-      Physical: 4
+      types:
+        Physical: 4
     animations:
       Primary:
       - anim: SwordAttackLight1

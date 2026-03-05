@@ -81,7 +81,7 @@ public sealed class CEHealthSystemTest
             var health = entManager.GetComponent<CEHealthComponent>(ent);
 
             var damage = new CEDamageSpecifier();
-            damage.Damage[TestDamageType] = 20;
+            damage.Types[TestDamageType] = 20;
 
             healthSystem.TakeDamage(ent, damage);
 
@@ -421,7 +421,7 @@ public sealed class CEHealthSystemTest
 
             var sum = a + b;
             Assert.That(sum.Total, Is.EqualTo(35));
-            Assert.That(sum.Damage[TestDamageType], Is.EqualTo(35));
+            Assert.That(sum.Types[TestDamageType], Is.EqualTo(35));
         });
 
         await pair.CleanReturnAsync();
@@ -441,7 +441,7 @@ public sealed class CEHealthSystemTest
             var original = new CEDamageSpecifier(TestDamageType, 50);
             var copy = new CEDamageSpecifier(original);
 
-            copy.Damage[TestDamageType] = 999;
+            copy.Types[TestDamageType] = 999;
 
             Assert.Multiple(() =>
             {

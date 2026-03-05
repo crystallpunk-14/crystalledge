@@ -37,7 +37,8 @@
   - type: CEWeapon
     spriteRotation: -90
     damage:
-      Physical: 1
+      types:
+        Physical: 1
     animations:
       Primary:
       - anim: SwordAttackLight1

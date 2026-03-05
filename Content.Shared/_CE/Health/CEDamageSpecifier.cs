@@ -14,7 +14,7 @@ namespace Content.Shared._CE.Health;
 public sealed partial class CEDamageSpecifier
 {
     [DataField]
-    public Dictionary<ProtoId<CEDamageTypePrototype>, int> Damage = new();
+    public Dictionary<ProtoId<CEDamageTypePrototype>, int> Types = new();
 
     public CEDamageSpecifier()
     {
@@ -22,34 +22,34 @@ public sealed partial class CEDamageSpecifier
 
     public CEDamageSpecifier(ProtoId<CEDamageTypePrototype> type, int amount)
     {
-        Damage[type] = amount;
+        Types[type] = amount;
     }
 
     public CEDamageSpecifier(CEDamageSpecifier other)
     {
-        Damage = new Dictionary<ProtoId<CEDamageTypePrototype>, int>(other.Damage);
+        Types = new Dictionary<ProtoId<CEDamageTypePrototype>, int>(other.Types);
     }
 
     /// <summary>
     /// Total damage across all types.
     /// </summary>
-    public int Total => Damage.Values.Sum();
+    public int Total => Types.Values.Sum();
 
     public static CEDamageSpecifier operator *(CEDamageSpecifier spec, float multiplier)
     {
         var result = new CEDamageSpecifier();
-        foreach (var (type, value) in spec.Damage)
-            result.Damage[type] = (int)(value * multiplier);
+        foreach (var (type, value) in spec.Types)
+            result.Types[type] = (int)(value * multiplier);
         return result;
     }
 
     public static CEDamageSpecifier operator +(CEDamageSpecifier a, CEDamageSpecifier b)
     {
         var result = new CEDamageSpecifier(a);
-        foreach (var (type, value) in b.Damage)
+        foreach (var (type, value) in b.Types)
         {
-            result.Damage.TryGetValue(type, out var existing);
-            result.Damage[type] = existing + value;
+            result.Types.TryGetValue(type, out var existing);
+            result.Types[type] = existing + value;
         }
 
         return result;

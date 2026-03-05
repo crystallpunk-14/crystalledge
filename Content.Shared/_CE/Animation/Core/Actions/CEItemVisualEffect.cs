@@ -1,6 +1,4 @@
-using System.Numerics;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
 

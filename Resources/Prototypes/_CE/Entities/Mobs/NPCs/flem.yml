@@ -46,7 +46,8 @@
   - type: CEWeapon
     spriteRotation: -90
     damage:
-      Physical: 2
+      types:
+        Physical: 2
     animations:
       Primary:
       - anim: FlemAttack1
