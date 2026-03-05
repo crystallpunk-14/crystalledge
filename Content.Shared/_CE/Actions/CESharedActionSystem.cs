@@ -1,22 +1,15 @@
 using Content.Shared._CE.Mana.Core;
-using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Damage.Systems;
-using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
-using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Actions;
 
 public abstract partial class CESharedActionSystem : EntitySystem
 {
     [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] private readonly SharedHandsSystem _hand = default!;
     [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
 
     private EntityQuery<ActionComponent> _actionQuery;
 
@@ -27,16 +20,5 @@ public abstract partial class CESharedActionSystem : EntitySystem
         _actionQuery = GetEntityQuery<ActionComponent>();
 
         InitializePerformed();
-        InitializeModularEffects();
-        InitializeDoAfter();
     }
-}
-
-/// <summary>
-/// Called on an action when an attempt to start doAfter using this action begins.
-/// </summary>
-public sealed class CEActionStartDoAfterEvent(NetEntity performer, RequestPerformActionEvent input) : EntityEventArgs
-{
-    public NetEntity Performer = performer;
-    public readonly RequestPerformActionEvent Input = input;
 }

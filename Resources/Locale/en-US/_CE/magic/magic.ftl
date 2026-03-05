@@ -7,7 +7,6 @@ ce-magic-cooldown = Cooldown
 ce-magic-spell-not-enough-mana = Not enough mana!
 ce-magic-spell-no-mana-component = You're not using magical energy.
 
-ce-magic-verbal-aspect = Requires the ability to speak
 ce-magic-somatic-aspect = Requires a free hand:
 ce-magic-material-aspect = The following material components are required:
 ce-magic-music-aspect = You must play a musical instrument

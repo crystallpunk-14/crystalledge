@@ -13,7 +13,6 @@ public abstract partial class CESharedAction2System
         SubscribeLocalEvent<CEActionManaCostComponent, ExaminedEvent>(OnManacostExamined);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ExaminedEvent>(OnStaminaCostExamined);
 
-        SubscribeLocalEvent<CEActionSpeakingComponent, ExaminedEvent>(OnVerbalExamined);
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ExaminedEvent>(OnSomaticExamined);
         SubscribeLocalEvent<CEActionRequiredMusicToolComponent, ExaminedEvent>(OnMusicExamined);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ExaminedEvent>(OnMobStateExamined);
@@ -34,11 +33,6 @@ public abstract partial class CESharedAction2System
     private void OnStaminaCostExamined(Entity<CEActionStaminaCostComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup($"{Loc.GetString("ce-magic-staminacost")}: [color=#3fba54]{ent.Comp.Stamina}[/color]", priority: 9);
-    }
-
-    private void OnVerbalExamined(Entity<CEActionSpeakingComponent> ent, ref ExaminedEvent args)
-    {
-        args.PushMarkup(Loc.GetString("ce-magic-verbal-aspect"), 8);
     }
 
     private void OnSomaticExamined(Entity<CEActionFreeHandsRequiredComponent> ent, ref ExaminedEvent args)
