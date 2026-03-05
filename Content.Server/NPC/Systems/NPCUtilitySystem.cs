@@ -30,6 +30,7 @@ using Content.Shared.Atmos.Components;
 using System.Linq;
 using Content.Shared.Damage.Components;
 using Content.Shared.Temperature.Components;
+using Content.Server._CE.Health;
 
 namespace Content.Server.NPC.Systems;
 
@@ -45,6 +46,7 @@ public sealed class NPCUtilitySystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly IngestionSystem _ingestion = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly CEHealthSystem _ceMobState = default!; //CE
     [Dependency] private readonly NpcFactionSystem _npcFaction = default!;
     [Dependency] private readonly PuddleSystem _puddle = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -335,15 +337,15 @@ public sealed class NPCUtilitySystem : EntitySystem
             }
             case TargetIsAliveCon:
             {
-                return _mobState.IsAlive(targetUid) ? 1f : 0f;
+                return _mobState.IsAlive(targetUid) /*CE Begin */|| _ceMobState.IsAlive(targetUid) /*CE End*/ ? 1f : 0f;
             }
             case TargetIsCritCon:
             {
-                return _mobState.IsCritical(targetUid) ? 1f : 0f;
+                return _mobState.IsCritical(targetUid) /*CE Begin */|| _ceMobState.IsCritical(targetUid) /*CE End*/ ? 1f : 0f;
             }
             case TargetIsDeadCon:
             {
-                return _mobState.IsDead(targetUid) ? 1f : 0f;
+                return _mobState.IsDead(targetUid) /*CE Begin */|| _ceMobState.IsDead(targetUid) /*CE End*/ ? 1f : 0f;
             }
             case TargetMeleeCon:
             {
