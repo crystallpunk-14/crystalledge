@@ -166,7 +166,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
-    - !type:ItemVisualEffect
+    - !type:EntityAnimation
       spriteOverride:
         sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
         state: icon
@@ -225,7 +225,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
-    - !type:ItemVisualEffect
+    - !type:EntityAnimation
       spriteOverride:
         sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
         state: icon

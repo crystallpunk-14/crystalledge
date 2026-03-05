@@ -7,12 +7,13 @@ using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Animation.Core.Actions;
 
-public sealed partial class ItemVisualEffect : SharedItemVisualEffect
+public sealed partial class EntityAnimation : SharedEntityAnimation
 {
     private const string OffsetAnimationKey = "ce-item-visual-offset";
     private const string RotationAnimationKey = "ce-item-visual-rotation";
@@ -47,14 +48,18 @@ public sealed partial class ItemVisualEffect : SharedItemVisualEffect
             return;
 
         // Set up the sprite: either override or copy from the used item
-        if (SpriteOverride != null)
+        if (DummyEntity != null)
         {
-            // Reserve a layer first, then set the sprite on it
-            var layerIndex = spriteSystem.LayerMapReserve((effectEntity, effectSprite), "effect");
-            spriteSystem.LayerSetSprite((effectEntity, effectSprite), layerIndex, SpriteOverride);
+            var dummy = entManager.Spawn(DummyEntity);
+            if (entManager.TryGetComponent<SpriteComponent>(dummy, out var dummySprite))
+                spriteSystem.CopySprite((dummy, dummySprite), (effectEntity, effectSprite));
+            entManager.DeleteEntity(dummy);
         }
-        else if (entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
-            spriteSystem.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
+        else
+        {
+            if (entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
+                spriteSystem.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
+        }
 
         spriteSystem.SetVisible((effectEntity, effectSprite), true);
 

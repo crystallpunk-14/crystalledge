@@ -1,4 +1,5 @@
 using System.Numerics;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
@@ -8,13 +9,13 @@ namespace Content.Shared._CE.Animation.Core.Actions;
 /// (or with an overridden sprite), plays a customizable animation on it, and despawns it.
 /// Server-side this is a no-op; client-side the partial method provides the visual implementation.
 /// </summary>
-public abstract partial class SharedItemVisualEffect : CEAnimationActionEntry
+public abstract partial class SharedEntityAnimation : CEAnimationActionEntry
 {
     /// <summary>
-    /// Optional sprite override. If null, the sprite is copied from the used item entity.
+    /// Clientside VFX entity that visuals we spawn and animate. If null, the sprite is copied from the used item entity.
     /// </summary>
     [DataField]
-    public SpriteSpecifier? SpriteOverride;
+    public EntProtoId? DummyEntity;
 
     /// <summary>
     /// Whether the spawned visual entity should follow the user's position.
