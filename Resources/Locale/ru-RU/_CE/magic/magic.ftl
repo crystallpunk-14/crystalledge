@@ -9,7 +9,6 @@ ce-magic-spell-no-mana-component = Вы не используете магиче
 
 ce-magic-somatic-aspect = Требуется свободные руки:
 ce-magic-material-aspect = Требуются следующие материальные компоненты:
-ce-magic-music-aspect = Вы должны играть на музыкальном инструменте
 
 ce-magic-spell-need-verbal-component = Вы не можете произнести заклинание вслух.
 ce-magic-spell-need-somatic-component = Ваши руки заняты.

@@ -1,6 +1,7 @@
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
@@ -16,9 +17,13 @@ public abstract partial class CESharedAction2System : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hand = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
+    private EntityQuery<ActionComponent> _actionQuery;
+
     public override void Initialize()
     {
         base.Initialize();
+
+        _actionQuery = GetEntityQuery<ActionComponent>();
 
         InitializeAttempts();
         InitializeExamine();

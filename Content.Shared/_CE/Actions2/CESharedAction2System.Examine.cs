@@ -14,7 +14,6 @@ public abstract partial class CESharedAction2System
         SubscribeLocalEvent<CEActionStaminaCostComponent, ExaminedEvent>(OnStaminaCostExamined);
 
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ExaminedEvent>(OnSomaticExamined);
-        SubscribeLocalEvent<CEActionRequiredMusicToolComponent, ExaminedEvent>(OnMusicExamined);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ExaminedEvent>(OnMobStateExamined);
     }
 
@@ -38,11 +37,6 @@ public abstract partial class CESharedAction2System
     private void OnSomaticExamined(Entity<CEActionFreeHandsRequiredComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup(Loc.GetString("ce-magic-somatic-aspect") + " " + ent.Comp.FreeHandRequired, 8);
-    }
-
-    private void OnMusicExamined(Entity<CEActionRequiredMusicToolComponent> ent, ref ExaminedEvent args)
-    {
-        args.PushMarkup(Loc.GetString("ce-magic-music-aspect"));
     }
 
     private void OnMobStateExamined(Entity<CEActionTargetMobStatusRequiredComponent> ent, ref ExaminedEvent args)

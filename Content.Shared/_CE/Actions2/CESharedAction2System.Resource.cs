@@ -3,19 +3,13 @@ using Content.Shared._CE.Actions.Events;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Events;
 
-namespace Content.Shared._CE.Actions;
+namespace Content.Shared._CE.Actions2;
 
-public abstract partial class CESharedActionSystem
+public abstract partial class CESharedAction2System
 {
     private void InitializePerformed()
     {
-        SubscribeLocalEvent<CEActionStaminaCostComponent, ActionPerformedEvent>(OnStaminaCostActionPerformed);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionPerformedEvent>(OnManaCostActionPerformed);
-    }
-
-    private void OnStaminaCostActionPerformed(Entity<CEActionStaminaCostComponent> ent, ref ActionPerformedEvent args)
-    {
-        _stamina.TakeStaminaDamage(args.Performer, ent.Comp.Stamina, visual: false);
     }
 
     private void OnManaCostActionPerformed(Entity<CEActionManaCostComponent> ent, ref ActionPerformedEvent args)
