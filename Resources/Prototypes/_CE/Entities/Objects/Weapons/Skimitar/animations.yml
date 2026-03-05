@@ -166,4 +166,4 @@
     - !type:WeaponArcAttack
       range: 0.6
       arcWidth: 360
-      power: 0.45
+      power: 0.5
