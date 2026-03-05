@@ -1,12 +1,12 @@
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 
-namespace Content.Shared._CE.Actions.Spells;
+namespace Content.Shared._CE.Animation.Core.Actions;
 
-public sealed partial class AreaEffect : CESpellEffect
+public sealed partial class AreaEffect : CEAnimationActionEntry
 {
     [DataField(required: true)]
-    public List<CESpellEffect> Effects { get; set; } = new();
+    public List<CEAnimationActionEntry> Effects { get; set; } = new();
 
     [DataField]
     public EntityWhitelist? Whitelist;
@@ -18,23 +18,31 @@ public sealed partial class AreaEffect : CESpellEffect
     /// How many entities can be subject to EntityEffect? Leave 0 to remove the restriction.
     /// </summary>
     [DataField]
-    public int MaxTargets = 0;
+    public int MaxTargets;
 
     [DataField(required: true)]
     public float Range = 1f;
 
     [DataField]
-    public bool AffectCaster = false;
+    public bool AffectCaster;
 
-    public override void Effect(EntityManager entManager, CESpellEffectBaseArgs args)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid user,
+        EntityUid? used,
+        Angle angle,
+        float speed,
+        TimeSpan frame,
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         EntityCoordinates? targetPoint = null;
 
-        if (args.Target is not null &&
-            entManager.TryGetComponent<TransformComponent>(args.Target.Value, out var transformComponent))
+        if (target is not null &&
+            entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
             targetPoint = transformComponent.Coordinates;
-        else if (args.Position is not null)
-            targetPoint = args.Position;
+        else if (position is not null)
+            targetPoint = position;
 
         if (targetPoint is null)
             return;
@@ -47,7 +55,7 @@ public sealed partial class AreaEffect : CESpellEffect
         var count = 0;
         foreach (var entity in entitiesAround)
         {
-            if (entity == args.User && !AffectCaster)
+            if (entity == user && !AffectCaster)
                 continue;
 
             if (!whitelist.CheckBoth(entity, Whitelist, Blacklist))
@@ -55,7 +63,7 @@ public sealed partial class AreaEffect : CESpellEffect
 
             foreach (var effect in Effects)
             {
-                effect.Effect(entManager, new CESpellEffectBaseArgs(args.User, null, entity,  targetPoint));
+                effect.Play(entManager, user, used, angle, speed, frame, target, position);
             }
 
             count++;

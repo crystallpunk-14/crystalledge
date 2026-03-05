@@ -1,23 +1,32 @@
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
+using Robust.Shared.Map;
 
-namespace Content.Shared._CE.Actions.Spells;
+namespace Content.Shared._CE.Animation.Core.Actions;
 
-public sealed partial class ThrowToUser : CESpellEffect
+public sealed partial class ThrowToUser : CEAnimationActionEntry
 {
     [DataField]
     public float ThrowPower = 10f;
 
-    public override void Effect(EntityManager entManager, CESpellEffectBaseArgs args)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid user,
+        EntityUid? used,
+        Angle angle,
+        float speed,
+        TimeSpan frame,
+        EntityUid? target,
+        EntityCoordinates? position)
     {
-        if (args.Target is null)
+        if (target is null)
             return;
 
-        var targetEntity = args.Target.Value;
+        var targetEntity = target.Value;
 
         var throwing = entManager.System<ThrowingSystem>();
 
-        if (!entManager.TryGetComponent<TransformComponent>(args.User, out var xform))
+        if (!entManager.TryGetComponent<TransformComponent>(user, out var xform))
             return;
 
         if (entManager.TryGetComponent<EmbeddableProjectileComponent>(targetEntity, out var embeddable))

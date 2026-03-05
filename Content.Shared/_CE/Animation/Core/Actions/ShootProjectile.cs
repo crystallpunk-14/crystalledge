@@ -5,9 +5,9 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Shared._CE.Actions.Spells;
+namespace Content.Shared._CE.Animation.Core.Actions;
 
-public sealed partial class ShootProjectile : CESpellEffect
+public sealed partial class ShootProjectile : CEAnimationActionEntry
 {
     [DataField(required: true)]
     public EntProtoId Prototype;
@@ -24,15 +24,23 @@ public sealed partial class ShootProjectile : CESpellEffect
     [DataField]
     public bool SaveVelocity;
 
-    public override void Effect(EntityManager entManager, CESpellEffectBaseArgs args)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid user,
+        EntityUid? used,
+        Angle angle,
+        float speed,
+        TimeSpan frame,
+        EntityUid? target,
+        EntityCoordinates? position)
     {
         EntityCoordinates? targetPoint = null;
 
-        if (args.Target is not null &&
-            entManager.TryGetComponent<TransformComponent>(args.Target.Value, out var transformComponent))
+        if (target is not null &&
+            entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
             targetPoint = transformComponent.Coordinates;
-        else if (args.Position is not null)
-            targetPoint = args.Position;
+        else if (position is not null)
+            targetPoint = position;
 
         if (targetPoint is null)
             return;
@@ -43,11 +51,11 @@ public sealed partial class ShootProjectile : CESpellEffect
         var mapManager = IoCManager.Resolve<IMapManager>();
         var random = IoCManager.Resolve<IRobustRandom>();
 
-        if (!entManager.TryGetComponent<TransformComponent>(args.User, out var xform))
+        if (!entManager.TryGetComponent<TransformComponent>(user, out var xform))
             return;
 
         var fromCoords = xform.Coordinates;
-        var userVelocity = physics.GetMapLinearVelocity(args.User.Value);
+        var userVelocity = physics.GetMapLinearVelocity(user);
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
         var fromMap = transform.ToMapCoordinates(fromCoords);
@@ -71,7 +79,7 @@ public sealed partial class ShootProjectile : CESpellEffect
             var direction = offsetedTargetPoint.ToMapPos(entManager, transform) -
                             spawnCoords.ToMapPos(entManager, transform);
 
-            gunSystem.ShootProjectile(ent, direction, SaveVelocity ? userVelocity : new Vector2(), args.User.Value, args.User, ProjectileSpeed);
+            gunSystem.ShootProjectile(ent, direction, SaveVelocity ? userVelocity : new Vector2(), user, user, ProjectileSpeed);
         }
     }
 }

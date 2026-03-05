@@ -1,10 +1,11 @@
 using System.Numerics;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
+using Robust.Shared.Map;
 
-namespace Content.Shared._CE.Actions.Spells;
+namespace Content.Shared._CE.Animation.Core.Actions;
 
-public sealed partial class ThrowFromUser : CESpellEffect
+public sealed partial class ThrowFromUser : CEAnimationActionEntry
 {
     [DataField]
     public float ThrowPower = 10f;
@@ -12,18 +13,26 @@ public sealed partial class ThrowFromUser : CESpellEffect
     [DataField]
     public float Distance = 2.5f;
 
-    public override void Effect(EntityManager entManager, CESpellEffectBaseArgs args)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid user,
+        EntityUid? used,
+        Angle angle,
+        float speed,
+        TimeSpan frame,
+        EntityUid? target,
+        EntityCoordinates? position)
     {
-        if (args.Target is null || args.User is null)
+        if (target is null)
             return;
 
-        var targetEntity = args.Target.Value;
+        var targetEntity = target.Value;
 
         var throwing = entManager.System<ThrowingSystem>();
         var xform = entManager.System<SharedTransformSystem>();
 
-        var worldPos = xform.GetWorldPosition(args.User.Value);
-        var dir = xform.GetWorldPosition(args.Target.Value) - worldPos;
+        var worldPos = xform.GetWorldPosition(user);
+        var dir = xform.GetWorldPosition(target.Value) - worldPos;
         if (dir == Vector2.Zero)
             return;
 
@@ -36,6 +45,6 @@ public sealed partial class ThrowFromUser : CESpellEffect
             projectile.EmbedDetach(targetEntity, embeddable);
         }
 
-        throwing.TryThrow(targetEntity, foo * Distance, ThrowPower, args.User, doSpin: true);
+        throwing.TryThrow(targetEntity, foo * Distance, ThrowPower, user, doSpin: true);
     }
 }
