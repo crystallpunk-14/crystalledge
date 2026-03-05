@@ -26,8 +26,6 @@ public abstract partial class CESharedActionSystem : EntitySystem
 
         _actionQuery = GetEntityQuery<ActionComponent>();
 
-        InitializeAttempts();
-        InitializeExamine();
         InitializePerformed();
         InitializeModularEffects();
         InitializeDoAfter();

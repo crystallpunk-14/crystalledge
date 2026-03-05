@@ -2,7 +2,6 @@ using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Actions.Events;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Events;
-using Content.Shared.Power.Components;
 
 namespace Content.Shared._CE.Actions;
 
@@ -41,18 +40,6 @@ public abstract partial class CESharedActionSystem
                 RaiseLocalEvent(action.Container.Value, manaEv);
 
             manaCost = manaEv.TotalManacost;
-        }
-
-        //First - try to take mana from container
-        if (!innate && TryComp<CEMagicEnergyContainerComponent>(action.Container, out var mana))
-        {
-            var spellEv = new CESpellFromSpellStorageUsedEvent(args.Performer, ent, manaCost);
-            RaiseLocalEvent(action.Container.Value, ref spellEv);
-
-            var energyTaken = Math.Min(mana.Energy, manaCost);
-
-            _magicEnergy.ChangeEnergy((action.Container.Value, mana), -manaCost, out _, out _);
-            manaCost -= energyTaken;
         }
 
         //Second - action user

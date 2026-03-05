@@ -2,6 +2,7 @@ ce-energy-overcharge-popup = Too much energy!
 ce-energy-deficit-popup = Not enough mana!
 
 ce-magic-manacost = Mana cost
+ce-magic-cooldown = Cooldown
 
 ce-magic-spell-not-enough-mana = Not enough mana!
 ce-magic-spell-no-mana-component = You're not using magical energy.

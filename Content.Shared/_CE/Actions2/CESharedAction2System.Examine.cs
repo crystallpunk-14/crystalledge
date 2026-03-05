@@ -1,13 +1,15 @@
 using Content.Shared._CE.Actions.Components;
+using Content.Shared._CE.Health.Components;
+using Content.Shared.Actions.Components;
 using Content.Shared.Examine;
-using Content.Shared.Mobs;
 
-namespace Content.Shared._CE.Actions;
+namespace Content.Shared._CE.Actions2;
 
-public abstract partial class CESharedActionSystem
+public abstract partial class CESharedAction2System
 {
     private void InitializeExamine()
     {
+        SubscribeLocalEvent<ActionComponent, ExaminedEvent>(OnActionExamined);
         SubscribeLocalEvent<CEActionManaCostComponent, ExaminedEvent>(OnManacostExamined);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ExaminedEvent>(OnStaminaCostExamined);
 
@@ -15,6 +17,11 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ExaminedEvent>(OnSomaticExamined);
         SubscribeLocalEvent<CEActionRequiredMusicToolComponent, ExaminedEvent>(OnMusicExamined);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ExaminedEvent>(OnMobStateExamined);
+    }
+
+    private void OnActionExamined(Entity<ActionComponent> ent, ref ExaminedEvent args)
+    {
+        args.PushMarkup($"{Loc.GetString("ce-magic-cooldown")}: [color=#5da9e8]{ent.Comp.UseDelay}[/color]", priority: 9);
     }
 
     private void OnManacostExamined(Entity<CEActionManaCostComponent> ent, ref ExaminedEvent args)
@@ -52,13 +59,13 @@ public abstract partial class CESharedActionSystem
 
             switch (state)
             {
-                case MobState.Alive:
+                case CEMobState.Alive:
                     states += Loc.GetString("ce-magic-spell-target-mob-state-live");
                     break;
-                case MobState.Dead:
+                case CEMobState.Dead:
                     states += Loc.GetString("ce-magic-spell-target-mob-state-dead");
                     break;
-                case MobState.Critical:
+                case CEMobState.Critical:
                     states += Loc.GetString("ce-magic-spell-target-mob-state-critical");
                     break;
             }
