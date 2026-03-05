@@ -1,4 +1,4 @@
-using Content.Shared._CE.Actions2;
+using Content.Shared._CE.Actions;
 
 namespace Content.Client._CE.Actions;
 

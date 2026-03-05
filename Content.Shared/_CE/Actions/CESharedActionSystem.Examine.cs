@@ -3,7 +3,7 @@ using Content.Shared._CE.Health.Components;
 using Content.Shared.Actions.Components;
 using Content.Shared.Examine;
 
-namespace Content.Shared._CE.Actions2;
+namespace Content.Shared._CE.Actions;
 
 public abstract partial class CESharedActionSystem
 {

@@ -1,5 +1,4 @@
 using Content.Shared._CE.Actions.Components;
-using Content.Shared._CE.Actions.Events;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Components;
@@ -9,7 +8,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.SSDIndicator;
 
-namespace Content.Shared._CE.Actions2;
+namespace Content.Shared._CE.Actions;
 
 public abstract partial class CESharedActionSystem
 {

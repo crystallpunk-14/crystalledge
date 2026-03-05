@@ -4,11 +4,12 @@ using Content.Shared._CE.Mana.Core;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.Actions2;
+namespace Content.Shared._CE.Actions;
 
 public abstract partial class CESharedActionSystem : EntitySystem
 {
@@ -126,4 +127,20 @@ public sealed partial class CEEntityTargetActionAnimationEvent : EntityTargetAct
 
     [DataField]
     public bool CancelAnimation;
+}
+
+/// <summary>
+/// An event that checks all sorts of conditions, and calculates the total cost of casting a spell. Called before the spell is cast.
+/// </summary>
+/// <remarks>TODO: This call is duplicated at the beginning of the cast for checks, and at the end of the cast for mana subtraction.</remarks>
+public sealed class CECalculateManacostEvent(EntityUid? performer, int initialManacost) : EntityEventArgs, IInventoryRelayEvent
+{
+    public EntityUid? Performer = performer;
+    public int Manacost = initialManacost;
+
+    public float Multiplier = 1f;
+
+    public int TotalManacost => (int)Math.Ceiling(Manacost * Multiplier);
+
+    public SlotFlags TargetSlots { get; } = SlotFlags.All;
 }

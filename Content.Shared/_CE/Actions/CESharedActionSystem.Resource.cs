@@ -1,9 +1,8 @@
 using Content.Shared._CE.Actions.Components;
-using Content.Shared._CE.Actions.Events;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Events;
 
-namespace Content.Shared._CE.Actions2;
+namespace Content.Shared._CE.Actions;
 
 public abstract partial class CESharedActionSystem
 {
