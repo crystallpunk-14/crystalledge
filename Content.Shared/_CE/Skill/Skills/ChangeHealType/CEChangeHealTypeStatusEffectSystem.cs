@@ -12,15 +12,15 @@ public sealed partial class CEChangeHealTypeStatusEffectSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEChangeHealTypeStatusEffectComponent, StatusEffectRelayedEvent<CEGetHealAmountEvent>>(OnGetHealAmount);
+        SubscribeLocalEvent<CEChangeHealTypeStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptHealEvent>>(OnAttemptHeal);
     }
 
-    private void OnGetHealAmount(Entity<CEChangeHealTypeStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEGetHealAmountEvent> args)
+    private void OnAttemptHeal(Entity<CEChangeHealTypeStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAttemptHealEvent> args)
     {
         var targetType = ent.Comp.Target;
 
         var damage = new CEDamageSpecifier(targetType, args.Args.HealAmount);
-        args.Args.HealAmount = 0;
+        args.Args.Cancel();
 
         _health.TakeDamage(args.Args.Target, damage, ent);
     }
