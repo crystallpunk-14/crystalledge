@@ -4,8 +4,8 @@ meta:
   engineVersion: 272.0.0
   forkId: ""
   forkVersion: ""
-  time: 03/05/2026 21:15:59
-  entityCount: 159
+  time: 03/05/2026 21:38:18
+  entityCount: 185
 maps:
 - 1
 grids:
@@ -87,17 +87,17 @@ entities:
         0,-2: 18374686479671623680
         1,-2: 216172782113783808
         1,-1: 217020518514230019
-        0,1: 255
-        1,1: 3
-        1,0: 217020518514164227
+        0,1: 859128464384
+        1,1: 12918456322
+        1,0: 144680345676153347
         -2,-2: 16140901064495857664
         -2,-1: 16204198715729174752
         -1,-2: 18374686479671623680
         -2,0: 2314885530818453728
-        -2,1: 224
-        -1,1: 255
+        -2,1: 412855836704
+        -1,1: 541300621312
         0,-1: 16204198715731214335
-        0,0: 16204162565511577824
+        0,0: 224
         -1,-1: 217020518530809855
         -1,0: 3
     - type: ExplosionAirtightGrid
@@ -106,31 +106,10 @@ entities:
       chunkHistory: {}
 - proto: BaselineLight
   entities:
-  - uid: 15
-    components:
-    - type: Transform
-      pos: -0.5,-0.5
-      parent: 1
   - uid: 16
     components:
     - type: Transform
-      pos: -7.5,-4.5
-      parent: 1
-  - uid: 92
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 6.5,-4.5
-      parent: 1
-  - uid: 128
-    components:
-    - type: Transform
-      pos: 6.5,3.5
-      parent: 1
-  - uid: 132
-    components:
-    - type: Transform
-      pos: -7.5,3.5
+      pos: -0.5,-0.5
       parent: 1
 - proto: CEClothingCloakCapeBarbarian
   entities:
@@ -152,6 +131,166 @@ entities:
     components:
     - type: Transform
       pos: 0.055590987,2.5281954
+      parent: 1
+- proto: CECrystalQuartzBlue
+  entities:
+  - uid: 145
+    components:
+    - type: Transform
+      pos: 8.5,-7.5
+      parent: 1
+  - uid: 146
+    components:
+    - type: Transform
+      pos: 7.5,-7.5
+      parent: 1
+  - uid: 147
+    components:
+    - type: Transform
+      pos: 8.5,-6.5
+      parent: 1
+  - uid: 148
+    components:
+    - type: Transform
+      pos: 8.5,10.5
+      parent: 1
+  - uid: 149
+    components:
+    - type: Transform
+      pos: 4.5,11.5
+      parent: 1
+  - uid: 150
+    components:
+    - type: Transform
+      pos: 5.5,11.5
+      parent: 1
+  - uid: 151
+    components:
+    - type: Transform
+      pos: 4.5,9.5
+      parent: 1
+  - uid: 152
+    components:
+    - type: Transform
+      pos: 7.5,11.5
+      parent: 1
+  - uid: 153
+    components:
+    - type: Transform
+      pos: 8.5,8.5
+      parent: 1
+  - uid: 154
+    components:
+    - type: Transform
+      pos: 3.5,8.5
+      parent: 1
+- proto: CECrystalQuartzGreen
+  entities:
+  - uid: 155
+    components:
+    - type: Transform
+      pos: 1.5,8.5
+      parent: 1
+  - uid: 156
+    components:
+    - type: Transform
+      pos: 1.5,10.5
+      parent: 1
+  - uid: 157
+    components:
+    - type: Transform
+      pos: 0.5,11.5
+      parent: 1
+  - uid: 158
+    components:
+    - type: Transform
+      pos: -2.5,10.5
+      parent: 1
+  - uid: 159
+    components:
+    - type: Transform
+      pos: -3.5,7.5
+      parent: 1
+- proto: CECrystalQuartzPurple
+  entities:
+  - uid: 168
+    components:
+    - type: Transform
+      pos: -7.5,-1.5
+      parent: 1
+  - uid: 169
+    components:
+    - type: Transform
+      pos: -7.5,1.5
+      parent: 1
+  - uid: 182
+    components:
+    - type: Transform
+      pos: -7.5,3.5
+      parent: 1
+  - uid: 183
+    components:
+    - type: Transform
+      pos: -8.5,5.5
+      parent: 1
+  - uid: 184
+    components:
+    - type: Transform
+      pos: -9.5,-7.5
+      parent: 1
+  - uid: 185
+    components:
+    - type: Transform
+      pos: -6.5,-7.5
+      parent: 1
+- proto: CECrystalQuartzRed
+  entities:
+  - uid: 15
+    components:
+    - type: Transform
+      pos: 4.5,1.5
+      parent: 1
+  - uid: 160
+    components:
+    - type: Transform
+      pos: -5.5,10.5
+      parent: 1
+  - uid: 161
+    components:
+    - type: Transform
+      pos: -6.5,11.5
+      parent: 1
+  - uid: 162
+    components:
+    - type: Transform
+      pos: -9.5,10.5
+      parent: 1
+  - uid: 167
+    components:
+    - type: Transform
+      pos: -9.5,8.5
+      parent: 1
+- proto: CECrystalQuartzWhite
+  entities:
+  - uid: 92
+    components:
+    - type: Transform
+      pos: 0.5,-7.5
+      parent: 1
+  - uid: 128
+    components:
+    - type: Transform
+      pos: -3.5,-6.5
+      parent: 1
+  - uid: 132
+    components:
+    - type: Transform
+      pos: -6.5,-3.5
+      parent: 1
+  - uid: 144
+    components:
+    - type: Transform
+      pos: 3.5,-6.5
       parent: 1
 - proto: CESpawnPointJob
   entities:

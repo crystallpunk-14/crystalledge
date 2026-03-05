@@ -38,7 +38,7 @@
         livingState:
           Alive: { state: alive }
           Critical: { state: dead }
-          State: { state: dead }
+          Dead: { state: dead }
   - type: MovementAlwaysTouching
   - type: MovementSpeedModifier
     baseWalkSpeed: 1

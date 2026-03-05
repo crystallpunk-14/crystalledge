@@ -1,0 +1,5 @@
+- type: soundCollection
+  id: CECrystalDings
+  files:
+  - /Audio/_CE/Effects/crystal_ding.ogg
+  - /Audio/_CE/Effects/crystal_ding2.ogg

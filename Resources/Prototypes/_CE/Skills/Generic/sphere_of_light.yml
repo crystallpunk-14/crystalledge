@@ -21,8 +21,6 @@
     icon:
       sprite: _CE/Skills/sphere_of_light.rsi
       state: icon
-  - type: DoAfterArgs
-    delay: 0.5
   - type: TargetAction
     range: 5
   - type: EntityTargetAction
