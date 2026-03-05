@@ -30,7 +30,6 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
         if (!_proto.Resolve(comp.ActiveAnimation, out var animation))
             return;
 
-
         // Find and execute all ItemVisualEffect actions for the specific frame
         if (!animation.Events.TryGetValue(ev.Frame, out var actions))
             return;

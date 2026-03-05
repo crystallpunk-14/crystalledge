@@ -21,7 +21,15 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
     private float _animationSpeedMultiplier = 1f;
 
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid entity,
+        EntityUid? used,
+        Angle angle,
+        float animationSpeed,
+        TimeSpan frame,
+        EntityUid? targetEntity,
+        EntityCoordinates? targetCoordinates)
     {
         if (!entManager.TryGetComponent<CEWeaponComponent>(used, out var itemAnim))
             return;

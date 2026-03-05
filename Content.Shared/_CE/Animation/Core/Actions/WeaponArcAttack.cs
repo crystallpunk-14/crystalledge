@@ -19,7 +19,15 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
     [DataField]
     public float Power = 1f;
 
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid entity,
+        EntityUid? used,
+        Angle angle,
+        float animationSpeed,
+        TimeSpan frame,
+        EntityUid? targetEntity,
+        EntityCoordinates? targetCoordinates)
     {
         if (used is null)
             return;

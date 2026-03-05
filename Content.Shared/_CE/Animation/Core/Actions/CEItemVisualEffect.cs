@@ -1,3 +1,4 @@
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
@@ -49,7 +50,15 @@ public abstract partial class SharedEntityAnimation : CEAnimationActionEntry
     [DataField]
     public List<CEScaleKeyFrame> ScaleAnimation = new();
 
-    public override void Play(EntityManager entManager, EntityUid entity, EntityUid? used, Angle angle, float animationSpeed, TimeSpan frame)
+    public override void Play(
+        EntityManager entManager,
+        EntityUid entity,
+        EntityUid? used,
+        Angle angle,
+        float animationSpeed,
+        TimeSpan frame,
+        EntityUid? targetEntity,
+        EntityCoordinates? targetCoordinates)
     {
         //Check out client implementation
     }

@@ -1,8 +1,10 @@
 using System.Linq;
+using System.Numerics;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared.Movement.Systems;
 using JetBrains.Annotations;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -48,6 +50,25 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             if (_timing.ApplyingState)
                 continue;
 
+            // Rotate towards the target if LockRotation is active with a TargetEntity or TargetPosition.
+            if (controller.LockRotation)
+            {
+                Vector2? targetWorldPos = null;
+
+                if (controller.TargetEntity.HasValue)
+                    targetWorldPos = _transform.GetWorldPosition(Transform(controller.TargetEntity.Value));
+                else if (controller.TargetCoordinates.HasValue)
+                    targetWorldPos = _transform.ToMapCoordinates(controller.TargetCoordinates.Value).Position;
+
+                if (targetWorldPos.HasValue)
+                {
+                    var myPos = _transform.GetWorldPosition(xform);
+                    var diff = targetWorldPos.Value - myPos;
+                    if (diff.LengthSquared() > 0.0001f)
+                        _transform.SetWorldRotation(uid, diff.ToWorldAngle());
+                }
+            }
+
             //Processing animation events
             if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
             {
@@ -65,7 +86,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     {
                         foreach (var action in actions)
                         {
-                            action.Play(EntityManager, uid, controller.Used, controller.AnimationAngle ?? Angle.Zero, controller.AnimationSpeed, keyFrame);
+                            action.Play(EntityManager, uid, controller.Used, _transform.GetWorldRotation(uid), controller.AnimationSpeed, keyFrame, controller.TargetEntity, controller.TargetCoordinates);
                         }
                         controller.LastEvent = realKeyFrame;
                         Dirty(uid, controller);
@@ -76,20 +97,20 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     }
 
     /// <summary>
-    /// Attempts to run animation on entity.
+    /// Starts an animation rotated by a specific angle.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="animationProto"></param>
-    /// <param name="used"></param>
-    /// <param name="angle"></param>
+    /// <param name="entity">The entity we animate</param>
+    /// <param name="animationProto">Animation we play</param>
+    /// <param name="angle">The angle at which the animation is rotated. If null, the character's current rotation angle is used.</param>
+    /// <param name="used">The entity used for animation (object in hands?)</param>
     /// <param name="speed">The speed at which you need to start a new animation</param>
     /// <param name="forceCancel">Forcefully cancel the currently playing animation to start a new one</param>
     /// <returns></returns>
     [PublicAPI]
-    public bool TryPlayAnimation(EntityUid entity,
+    public bool TryPlayAnimationToAngle(EntityUid entity,
         ProtoId<CEAnimationActionPrototype> animationProto,
-        EntityUid? used = null,
         Angle? angle = null,
+        EntityUid? used = null,
         float speed = 1f,
         bool forceCancel = false)
     {
@@ -104,7 +125,73 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         if (!_proto.Resolve(animationProto, out var indexedAnimation))
             return false;
 
-        StartAnimation(entity, indexedAnimation, used, angle, speed);
+        StartAnimation(entity, indexedAnimation, used, angle ?? _transform.GetWorldRotation(entity), speed: speed);
+        return true;
+    }
+
+    /// <summary>
+    /// Triggers an animation aimed at another entity.
+    /// </summary>
+    /// <param name="entity">The entity we animate</param>
+    /// <param name="animationProto">Animation we play</param>
+    /// <param name="target">The target entity we are aiming for</param>
+    /// <param name="used">The entity used for animation (object in hands?)</param>
+    /// <param name="speed">The speed at which you need to start a new animation</param>
+    /// <param name="forceCancel">Forcefully cancel the currently playing animation to start a new one</param>
+    /// <returns></returns>
+    [PublicAPI]
+    public bool TryPlayAnimationToEntity(EntityUid entity,
+        ProtoId<CEAnimationActionPrototype> animationProto,
+        EntityUid target,
+        EntityUid? used = null,
+        float speed = 1f,
+        bool forceCancel = false)
+    {
+        if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
+        {
+            if (forceCancel)
+                CancelAnimation((entity, controller));
+            else
+                return false;
+        }
+
+        if (!_proto.Resolve(animationProto, out var indexedAnimation))
+            return false;
+
+        StartAnimation(entity, indexedAnimation, used, targetEntity: target, speed: speed);
+        return true;
+    }
+
+    /// <summary>
+    /// Triggers an animation aimed at specific coordinates in the world
+    /// </summary>
+    /// <param name="entity">The entity we animate</param>
+    /// <param name="animationProto">Animation we play</param>
+    /// <param name="target">The coordinates we are targeting.</param>
+    /// <param name="used">The entity used for animation (object in hands?)</param>
+    /// <param name="speed">The speed at which you need to start a new animation</param>
+    /// <param name="forceCancel">Forcefully cancel the currently playing animation to start a new one</param>
+    /// <returns></returns>
+    [PublicAPI]
+    public bool TryPlayAnimationToCoordinates(EntityUid entity,
+        ProtoId<CEAnimationActionPrototype> animationProto,
+        EntityCoordinates target,
+        EntityUid? used = null,
+        float speed = 1f,
+        bool forceCancel = false)
+    {
+        if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller))
+        {
+            if (forceCancel)
+                CancelAnimation((entity, controller));
+            else
+                return false;
+        }
+
+        if (!_proto.Resolve(animationProto, out var indexedAnimation))
+            return false;
+
+        StartAnimation(entity, indexedAnimation, used, targetCoordinates: target, speed: speed);
         return true;
     }
 
@@ -130,7 +217,9 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         EntityUid entity,
         CEAnimationActionPrototype animation,
         EntityUid? used = null,
-        Angle? animationAngle = null,
+        Angle? rotateTo = null,
+        EntityUid? targetEntity = null,
+        EntityCoordinates? targetCoordinates = null,
         float speed = 1f)
     {
         var controller = EnsureComp<CEActiveAnimationActionComponent>(entity);
@@ -138,15 +227,16 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         controller.ActiveAnimation = animation;
         controller.StartAnimationTime = _timing.CurTime;
         controller.LockRotation = animation.LockRotation;
-        controller.AnimationAngle = animationAngle ?? _transform.GetWorldRotation(entity);
+        controller.TargetEntity = targetEntity;
+        controller.TargetCoordinates = targetCoordinates;
         controller.Used = used;
         controller.AnimationSpeed = speed;
         Dirty(entity, controller);
 
         // Face the animation direction before locking rotation.
         // For players this points toward the mouse; for NPCs toward the target.
-        if (animation.LockRotation && animationAngle != null)
-            _transform.SetWorldRotation(entity, animationAngle.Value);
+        if (animation.LockRotation && rotateTo != null)
+            _transform.SetWorldRotation(entity, rotateTo.Value);
 
         var started = new CEAnimationActionStartedEvent(animation);
         RaiseLocalEvent(entity, started);

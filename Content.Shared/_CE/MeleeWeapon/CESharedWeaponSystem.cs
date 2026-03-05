@@ -140,7 +140,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         var animationProtoId = animations[comboIndex].Anim;
 
         var animationSpeed = GetAnimationSpeed(user, used) * animations[comboIndex].Speed;
-        if (!AnimationAction.TryPlayAnimation(user, animationProtoId, used.Owner, angle, animationSpeed))
+        if (!AnimationAction.TryPlayAnimationToAngle(user, animationProtoId, angle, used.Owner, animationSpeed))
             return false;
 
         // Calculate the deadline: animation duration + configurable delay.
