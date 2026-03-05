@@ -50,19 +50,6 @@ public abstract partial class SharedEntityAnimation : CEAnimationActionEntry
     /// </summary>
     [DataField]
     public List<CEScaleKeyFrame> ScaleAnimation = new();
-
-    public override void Play(
-        EntityManager entManager,
-        EntityUid entity,
-        EntityUid? used,
-        Angle angle,
-        float animationSpeed,
-        TimeSpan frame,
-        EntityUid? targetEntity,
-        EntityCoordinates? targetCoordinates)
-    {
-        //Check out client implementation
-    }
 }
 
 /// <summary>
