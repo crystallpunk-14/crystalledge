@@ -214,7 +214,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         //return !ev.Cancelled;
     }
 
-    public bool TryAttack(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power, string damageGroup = "default")
+    public bool TryAttack(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)
     {
         List<EntityUid> hitted = new();
         foreach (var target in targets)
