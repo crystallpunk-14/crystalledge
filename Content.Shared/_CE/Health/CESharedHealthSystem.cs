@@ -90,6 +90,12 @@ public abstract partial class CESharedHealthSystem : EntitySystem
             RaiseLocalEvent(source.Value, getHealEv);
 
             finalAmount = getHealEv.HealAmount;
+
+            var attemptHealEv = new CEAttemptHealEvent(target, finalAmount);
+            RaiseLocalEvent(source.Value, attemptHealEv);
+
+            if (attemptHealEv.Cancelled)
+                return;
         }
 
         if (finalAmount <= 0)
@@ -166,4 +172,16 @@ public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : Ent
 {
     public EntityUid Target = target;
     public int HealAmount = healAmount;
+}
+
+/// <summary>
+/// Systems can inspect the potential healing amount and the target and cancel the heal.
+/// </summary>
+/// <remarks>
+/// Raised when <see cref="CESharedHealthSystem.Heal"/> when a source is supplied.
+/// </remarks>
+public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : CancellableEntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly int HealAmount = healAmount;
 }

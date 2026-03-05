@@ -21,6 +21,7 @@ public sealed partial class StatusEffectsSystem
         //CrystallEdge zone
         SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateStatEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEGetHealAmountEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptHealEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEHealthChangedEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEBeforeDamageEvent>(RelayStatusEffectEvent);
         //CrystallEdge zone end
