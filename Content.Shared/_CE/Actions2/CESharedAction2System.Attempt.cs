@@ -7,7 +7,6 @@ using Content.Shared.Actions.Events;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage.Components;
 using Content.Shared.Hands.Components;
-using Content.Shared.Speech.Muting;
 using Content.Shared.SSDIndicator;
 
 namespace Content.Shared._CE.Actions2;
@@ -17,7 +16,6 @@ public abstract partial class CESharedAction2System
     private void InitializeAttempts()
     {
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
-        SubscribeLocalEvent<CEActionSpeakingComponent, ActionAttemptEvent>(OnVerbalActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
         SubscribeLocalEvent<CEActionDangerousComponent, ActionAttemptEvent>(OnDangerousActionAttempt);
@@ -89,15 +87,6 @@ public abstract partial class CESharedAction2System
             return;
 
         Popup.PopupClient(Loc.GetString("ce-magic-spell-need-somatic-component"), args.User, args.User);
-        args.Cancelled = true;
-    }
-
-    private void OnVerbalActionAttempt(Entity<CEActionSpeakingComponent> ent, ref ActionAttemptEvent args)
-    {
-        if (!HasComp<MutedComponent>(args.User))
-            return;
-
-        Popup.PopupClient(Loc.GetString("ce-magic-spell-need-verbal-component"), args.User, args.User);
         args.Cancelled = true;
     }
 

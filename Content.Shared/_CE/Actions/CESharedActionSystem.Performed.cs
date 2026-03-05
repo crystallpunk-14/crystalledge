@@ -42,7 +42,6 @@ public abstract partial class CESharedActionSystem
             manaCost = manaEv.TotalManacost;
         }
 
-        //Second - action user
         if (manaCost > 0 && TryComp<CEMagicEnergyContainerComponent>(args.Performer, out var playerMana))
             _magicEnergy.ChangeEnergy((args.Performer, playerMana), -manaCost, out _, out _);
     }
