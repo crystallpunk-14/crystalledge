@@ -1,0 +1,23 @@
+- type: skill
+  parent: BasePriestSkill
+  id: Apostasy
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectApostasy
+
+- type: entity
+  id: CEStatusEffectApostasy
+  name: Apostasy
+  description: All your healing now deals [color=#E1341E]Fire[/color] damage instead.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEChangeHealType
+  - type: CEChangeHealTypeStatusEffect
+    target: Fire
+
+- type: alert
+  id: CEChangeHealType
+  icons:
+  - sprite: _CE/Skills/apostasy.rsi
+    state: icon
+
