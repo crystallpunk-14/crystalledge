@@ -15,12 +15,7 @@
     radius: 3 #Light radius
   - type: CEActionManaCost
     manaCost: 1
-  - type: CEActionSpeaking
-    startSpeech: "Appare in manu tua..."
-    endSpeech: "sphaera lucis"
   - type: CEActionFreeHandsRequired
-  - type: CEActionDoAfterVisuals
-    proto: CERuneSphereOfLight
   - type: Action
     useDelay: 1
     icon:
@@ -48,10 +43,14 @@
     - !type:SpawnEntityOnTarget
       spawns:
       - CEImpactEffectSphereOfLight
+    - !type:SayChat
+      sentence: "Appare in manu tua"
     0.5:
     - !type:ApplyStatusEffect
       statusEffect: CEStatusEffectGlowing
       duration: 60
+    - !type:SayChat
+      sentence: "sphaera lucis"
 
 - type: entity
   id: CEImpactEffectSphereOfLight
