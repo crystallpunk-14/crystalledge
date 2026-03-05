@@ -45,9 +45,6 @@
     - !type:SayChat
       sentence: "vulnera tua"
     - !type:AreaEffect
-      whitelist:
-        components:
-        - Actor
       range: 1.2
       affectCaster: true
       effects:

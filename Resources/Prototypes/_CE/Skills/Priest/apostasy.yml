@@ -21,3 +21,30 @@
   - sprite: _CE/Skills/apostasy.rsi
     state: icon
 
+- type: entity
+  id: CEEffectApostasyFire
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/apostasy.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ffd46e"
+    radius: 1.5
+  - type: TimedDespawn
+    delay: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
