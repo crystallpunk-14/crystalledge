@@ -386,9 +386,9 @@ public sealed class CEHealthSystemTest
     [TestCase(10, 2.0f, 20)]
     [TestCase(10, 0.5f, 5)]
     [TestCase(10, 0f, 0)]
-    [TestCase(9, 0.5f, 4)]
-    [TestCase(9, 0.4f, 3)]
-    [TestCase(8, 0.4f, 3)]
+    [TestCase(9, 0.5f, 4)]  // 4.5 rounds down to 4
+    [TestCase(9, 0.4f, 3)]  // 3.6 rounds down to 3
+    [TestCase(8, 0.4f, 3)]  // 3.4 rounds down to 3
     public async Task DamageSpecifierMultiplyFloat(int a, float b, int result)
     {
         await using var pair = await PoolManager.GetServerClient();
