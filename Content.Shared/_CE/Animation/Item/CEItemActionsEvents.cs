@@ -8,7 +8,7 @@ namespace Content.Shared._CE.Animation.Item;
 /// Contains all data needed for both precise and wide attacks.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEWeaponnUseEvent(
+public sealed class CEWeaponUseEvent(
     Angle angle,
     NetEntity weapon,
     CEUseType useType)
@@ -43,7 +43,7 @@ public sealed class CEGetAnimationItemForUseEvent : HandledEntityEventArgs
 /// Raised when a client releases the attack button.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEStopWeaponseEvent(NetEntity weapon) : EntityEventArgs
+public sealed class CEStopWeaponUseEvent(NetEntity weapon) : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
 }

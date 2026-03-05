@@ -1,4 +1,6 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
+using Content.Shared._CE.Health;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -16,6 +18,12 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public Dictionary<CEUseType, List<CEAnimationEntry>> Animations = new();
+
+    /// <summary>
+    ///
+    /// </summary>
+    [DataField(required: true), AutoNetworkedField]
+    public CEDamageSpecifier Damage = new();
 
     /// <summary>
     /// Are we currently holding down the mouse for an attack.
@@ -62,6 +70,18 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField]
     public float NPCAttackRange = 2f;
+
+    /// <summary>
+    /// The sound played on a weapon when it hits something.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier HitSound = new SoundCollectionSpecifier("WeakHit");
+
+    /// <summary>
+    /// Modify weapon attack animations range
+    /// </summary>
+    [DataField]
+    public float RangeMultiplier = 1f;
 }
 
 [DataDefinition, Serializable]

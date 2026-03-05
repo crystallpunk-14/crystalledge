@@ -1,7 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared._CE.Animation.Core;
-using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Animation.Item.Components;
+using Content.Shared._CE.Health;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
@@ -9,9 +10,10 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Wieldable.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Animation.Item;
@@ -29,13 +31,15 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] protected readonly CESharedAnimationActionSystem AnimationAction = default!;
     [Dependency] private   readonly IPrototypeManager _proto = default!;
+    [Dependency] private   readonly CESharedHealthSystem _health = default!;
+    [Dependency] private   readonly SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeAllEvent<CEWeaponnUseEvent>(OnClientAttackRequest);
-        SubscribeAllEvent<CEStopWeaponseEvent>(OnClientStopRequest);
+        SubscribeAllEvent<CEWeaponUseEvent>(OnClientAttackRequest);
+        SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
 
         SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponEvent>(OnGetWeapon);
     }
@@ -58,7 +62,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnClientStopRequest(CEStopWeaponseEvent ev, EntitySessionEventArgs args)
+    private void OnClientStopRequest(CEStopWeaponUseEvent ev, EntitySessionEventArgs args)
     {
         var user = args.SenderSession.AttachedEntity;
 
@@ -76,7 +80,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         DirtyField(weapon.Value.Owner, weapon.Value.Comp, nameof(CEWeaponComponent.Using));
     }
 
-    private void OnClientAttackRequest(CEWeaponnUseEvent ev, EntitySessionEventArgs args)
+    private void OnClientAttackRequest(CEWeaponUseEvent ev, EntitySessionEventArgs args)
     {
         if (args.SenderSession.AttachedEntity is not {} user)
             return;
@@ -209,4 +213,87 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 //
         //return !ev.Cancelled;
     }
+
+    public bool TryAttack(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power, string damageGroup = "default")
+    {
+        List<EntityUid> hitted = new();
+        foreach (var target in targets)
+        {
+            if (!_health.TakeDamage(target, weapon.Comp.Damage * power, user))
+                continue;
+
+            var attackedEv = new CEAttackedEvent(user, weapon);
+            RaiseLocalEvent(target, attackedEv);
+
+            hitted.Add(target);
+        }
+
+        if (!hitted.Any())
+            return false;
+
+        //Attack confirmed
+
+        RaiseAttackEffects(user, hitted);
+        _audio.PlayPredicted(weapon.Comp.HitSound, weapon, user);
+
+        var usedEv = new CEAttackUsingEvent(user, hitted);
+        RaiseLocalEvent(weapon, usedEv);
+
+        var attackerEv = new CEAfterAttackEvent(weapon, hitted);
+        RaiseLocalEvent(user, attackerEv);
+
+        return true;
+    }
+
+    /// <summary>
+    /// Override this method in client/server implementations to handle visual effects.
+    /// </summary>
+    protected virtual void RaiseAttackEffects(EntityUid user, List<EntityUid> targets)
+    {
+        // Base implementation does nothing - effects are handled in client/server implementations
+    }
+}
+
+/// <summary>
+/// Raised on used weapon when attack hits something.
+/// </summary>
+public sealed partial class CEAttackUsingEvent(EntityUid user, List<EntityUid> targets) : EntityEventArgs
+{
+    public EntityUid User = user;
+    public List<EntityUid> Targets = targets;
+}
+
+/// <summary>
+/// Raised on attacked entity when it gets hit by a CEMeleeWeaponComponent attack.
+/// </summary>
+public sealed partial class CEAttackedEvent(EntityUid attacker, EntityUid weapon)
+{
+    public EntityUid Attacker = attacker;
+    public EntityUid Weapon = weapon;
+}
+
+/// <summary>
+/// Raised on attacker, after it attacks something with a CEMeleeWeaponComponent
+/// </summary>
+public sealed partial class CEAfterAttackEvent(EntityUid weapon, List<EntityUid> targets)
+{
+    public EntityUid Weapon = weapon;
+    public List<EntityUid> Targets = targets;
+}
+
+/// <summary>
+/// Raised on the server and sent to clients to play melee attack visual effects.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CEMeleeAttackEffectEvent(NetEntity user, List<NetEntity> targets) : EntityEventArgs
+{
+    /// <summary>
+    /// The user who performed the attack.
+    /// </summary>
+    public NetEntity User = user;
+
+    /// <summary>
+    /// List of entities that were hit by the attack.
+    /// </summary>
+    public List<NetEntity> Targets = targets;
 }

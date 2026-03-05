@@ -1,5 +1,6 @@
 using System.Linq;
-using Content.Shared._CE.Weapon;
+using Content.Shared._CE.Animation.Item;
+using Content.Shared._CE.Animation.Item.Components;
 using Robust.Shared.Map;
 
 namespace Content.Shared._CE.Animation.Core.Actions;
@@ -30,12 +31,12 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
             return;
 
         // Try to use the 'used' weapon if it has a CEMeleeWeaponComponent
-        if (!entManager.TryGetComponent<CEMeleeWeaponComponent>(used.Value, out var weapon))
+        if (!entManager.TryGetComponent<CEWeaponComponent>(used.Value, out var weapon))
             return;
 
         var lookup = entManager.System<EntityLookupSystem>();
         var transform = entManager.System<SharedTransformSystem>();
-        var melee = entManager.System<CESharedMeleeWeaponSystem>();
+        var melee = entManager.System<CESharedWeaponSystem>();
 
         // Get entity coordinates
         var entityCoords = transform.GetMapCoordinates(entity);
