@@ -1,52 +1,63 @@
-#- type: skill
-#  parent: BasePriestSkill
-#  id: AreaHealing
-#  effect: !type:AddAction
-#    action: CEActionSpellAreaHealing
-#
-#- type: entity
-#  id: CEActionSpellAreaHealing
-#  parent: CEActionSpellBase
-#  name: Prayer for health
-#  description: You restore [color=#1defa9]2 health[/color] to all creatures in a small area.
-#  components:
-#  - type: CEVisualizeRadiusTargetAction
-#  - type: CEVisualizeAoEZoneAction
-#    radius: 1.5 #Healing radius
-#  - type: CEActionDoAfterSlowdown
-#    speedMultiplier: 0.5
-#  - type: CEActionManaCost
-#    manaCost: 2
-#  - type: DoAfterArgs
-#    delay: 1.5
-#    breakOnDamage: true
-#  - type: CEActionSpeaking
-#    startSpeech: "Et curabuntur..."
-#    endSpeech: "vulnera tua"
-#  - type: CEActionDoAfterVisuals
-#    proto: CERuneCureWounds
-#  - type: Action
-#    useDelay: 5
-#    icon:
-#      sprite: _CE/Skills/area_healing.rsi
-#      state: icon
-#  - type: TargetAction
-#    range: 3
-#    interactOnMiss: false
-#  - type: WorldTargetAction
-#    event: !type:CEWorldTargetModularEffectEvent
-#      telegraphyEffects:
-#      - !type:SpawnEntityOnTarget
-#        spawns:
-#        - CEImpactEffectCureWounds
-#      effects:
-#      - !type:AreaEffect
-#        range: 1.5
-#        affectCaster: true
-#        effects:
-#        - !type:SpawnEntityOnTarget
-#          spawns:
-#          - CEImpactEffectCureWounds
-#        - !type:Heal
-#          amount: 2
-#
+- type: skill
+  parent: BasePriestSkill
+  id: AreaHealing
+  effect: !type:AddAction
+    action: CEActionSpellAreaHealing
+
+- type: entity
+  id: CEActionSpellAreaHealing
+  parent: CEActionSpellBase
+  name: Prayer for health
+  description: You restore [color=1defa9]2 health[/color] to all creatures in a small area.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 1.5 # Healing radius
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/area_healing.rsi
+      state: icon
+  - type: TargetAction
+    range: 3
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationAreaHealing
+
+- type: animationAction
+  id: AnimationAreaHealing
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectCureWounds
+    - !type:SayChat
+      sentence: "Et curabuntur"
+    0.4:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectCureWounds
+    0.8:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectCureWounds
+    1.2:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectCureWounds
+    - !type:SayChat
+      sentence: "vulnera tua"
+    - !type:AreaEffect
+      range: 1.5
+      affectCaster: true
+      effects:
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEImpactEffectCureWounds
+      - !type:Heal
+        amount: 2

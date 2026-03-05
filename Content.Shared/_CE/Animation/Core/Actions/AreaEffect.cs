@@ -63,7 +63,7 @@ public sealed partial class AreaEffect : CEAnimationActionEntry
 
             foreach (var effect in Effects)
             {
-                effect.Play(entManager, user, used, angle, speed, frame, target, position);
+                effect.Play(entManager, user, used, angle, speed, frame, entity, null);
             }
 
             count++;

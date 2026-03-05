@@ -39,7 +39,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             var animationEndTime = controller.StartAnimationTime + (animation.Duration * speedMultiplier);
 
             //Finishing animation
-            if (_timing.CurTime >= animationEndTime)
+            if (_timing.CurTime > animationEndTime)
             {
                 var finishedEv = new CEAnimationActionEndedEvent(animation, false);
                 RaiseLocalEvent(uid, finishedEv);
@@ -51,7 +51,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                 continue;
 
             // Rotate towards the target if LockRotation is active with a TargetEntity or TargetPosition.
-            if (controller.LockRotation)
+            if (controller.LockRotation && controller.TargetEntity != uid)
             {
                 Vector2? targetWorldPos = null;
 
@@ -125,7 +125,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         if (!_proto.Resolve(animationProto, out var indexedAnimation))
             return false;
 
-        StartAnimation(entity, indexedAnimation, used, angle ?? _transform.GetWorldRotation(entity), speed: speed);
+        StartAnimation(entity, indexedAnimation, used, angle ?? _transform.GetWorldRotation(entity), speed: speed, targetEntity: entity);
         return true;
     }
 

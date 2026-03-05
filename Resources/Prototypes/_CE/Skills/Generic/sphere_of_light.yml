@@ -1,99 +1,92 @@
-#- type: skill
-#  parent: BaseNeutralSkill
-#  id: SphereOfLight
-#  effect: !type:AddAction
-#    action: CEActionSpellSphereOfLight
-#
-#- type: entity
-#  id: CEActionSpellSphereOfLight
-#  parent: CEActionSpellBase
-#  name: Sphere of Light
-#  description: You can make almost any object glow for a long time at will.
-#  components:
-#  - type: CEVisualizeRadiusTargetAction
-#  - type: CEVisualizeAoEZoneAction
-#    radius: 3 #Light radius
-#  - type: CEActionManaCost
-#    manaCost: 1
-#  - type: CEActionSpeaking
-#    startSpeech: "Appare in manu tua..."
-#    endSpeech: "sphaera lucis"
-#  - type: CEActionFreeHandsRequired
-#  - type: CEActionDoAfterVisuals
-#    proto: CERuneSphereOfLight
-#  - type: Action
-#    useDelay: 1
-#    icon:
-#      sprite: _CE/Skills/sphere_of_light.rsi
-#      state: icon
-#  - type: DoAfterArgs
-#    delay: 0.5
-#  - type: TargetAction
-#    range: 5
-#  - type: EntityTargetAction
-#    whitelist:
-#      components:
-#      - CEHealth
-#      - Item
-#      - Anchorable
-#    event: !type:CEEntityTargetModularEffectEvent
-#      effects:
-#      - !type:SpawnEntityOnTarget
-#        spawns:
-#        - CEImpactEffectSphereOfLight
-#      - !type:ApplyStatusEffect
-#        statusEffect: CEStatusEffectGlowing
-#        duration: 60
-#
-#- type: entity
-#  id: CERuneSphereOfLight
-#  parent: CEBaseMagicRune
-#  categories: [ HideSpawnMenu ]
-#  save: false
-#  components:
-#  - type: PointLight
-#    color: "#efedff"
-#  - type: Sprite
-#    layers:
-#    - state: sun
-#      color: "#efedff"
-#      shader: unshaded
-#
-#- type: entity
-#  id: CEImpactEffectSphereOfLight
-#  parent: CEBaseMagicImpact
-#  categories: [ HideSpawnMenu ]
-#  save: false
-#  components:
-#  - type: Sprite
-#    layers:
-#    - state: particles_up
-#      color: "#efedff"
-#      shader: unshaded
-#
-#- type: entity
-#  id: CEStatusEffectGlowing
-#  name: glowing
-#  components:
-#  - type: StatusEffect
-#  - type: StatusEffectAlert
-#    alert: CEGlowing
-#  - type: Sprite
-#    drawdepth: Effects
-#    sprite: _CE/Effects/sphere_of_light.rsi
-#    offset: 0, 1
-#    noRot: true
-#    layers:
-#    - state: icon
-#      shader: unshaded
-#  - type: PointLight
-#    radius: 5.0
-#    energy: 1
-#    color: "#efedff"
-#
-#- type: alert
-#  id: CEGlowing
-#  icons:
-#  - sprite: _CE/Skills/sphere_of_light.rsi
-#    state: icon
-#
+- type: skill
+  parent: BaseNeutralSkill
+  id: SphereOfLight
+  effect: !type:AddAction
+    action: CEActionSpellSphereOfLight
+
+- type: entity
+  id: CEActionSpellSphereOfLight
+  parent: CEActionSpellBase
+  name: Sphere of Light
+  description: You can make almost any object glow for a long time at will.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 3 #Light radius
+  - type: CEActionManaCost
+    manaCost: 1
+  - type: CEActionSpeaking
+    startSpeech: "Appare in manu tua..."
+    endSpeech: "sphaera lucis"
+  - type: CEActionFreeHandsRequired
+  - type: CEActionDoAfterVisuals
+    proto: CERuneSphereOfLight
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/sphere_of_light.rsi
+      state: icon
+  - type: DoAfterArgs
+    delay: 0.5
+  - type: TargetAction
+    range: 5
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CEHealth
+      - Item
+      - Anchorable
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationSphereOfLight
+
+- type: animationAction
+  id: AnimationSphereOfLight
+  movementSpeed: 0.5
+  duration: 1.0
+  events:
+    0:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectSphereOfLight
+    0.5:
+    - !type:ApplyStatusEffect
+      statusEffect: CEStatusEffectGlowing
+      duration: 60
+
+- type: entity
+  id: CEImpactEffectSphereOfLight
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    layers:
+    - state: particles_up
+      color: "#efedff"
+      shader: unshaded
+
+- type: entity
+  id: CEStatusEffectGlowing
+  name: glowing
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEGlowing
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/sphere_of_light.rsi
+    offset: 0, 1
+    noRot: true
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: PointLight
+    radius: 5.0
+    energy: 1
+    color: "#efedff"
+
+- type: alert
+  id: CEGlowing
+  icons:
+  - sprite: _CE/Skills/sphere_of_light.rsi
+    state: icon
