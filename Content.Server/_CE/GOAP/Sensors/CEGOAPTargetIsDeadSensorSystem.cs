@@ -19,6 +19,6 @@ public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<
             return;
         }
 
-        SetState(ref args, _health.IsAlive(target));
+        SetState(ref args, !_health.IsAlive(target));
     }
 }
