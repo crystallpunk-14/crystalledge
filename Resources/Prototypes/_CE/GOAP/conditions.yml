@@ -1,0 +1,14 @@
+# GOAP Condition prototypes
+# These define the named boolean conditions used in GOAP world state, goals, and actions.
+
+- type: ceGoapCondition
+  id: CEEnemyVisible
+
+- type: ceGoapCondition
+  id: CEEnemyInMeleeRange
+
+- type: ceGoapCondition
+  id: CEEnemyNeutralized
+
+- type: ceGoapCondition
+  id: CELowHealth
