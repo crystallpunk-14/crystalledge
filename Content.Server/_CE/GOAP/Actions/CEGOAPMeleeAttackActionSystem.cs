@@ -24,6 +24,12 @@ public sealed partial class CEGOAPMeleeAttackAction : CEGOAPActionBase<CEGOAPMel
     /// </summary>
     [DataField]
     public float AngleVariation = 15f;
+
+    /// <summary>
+    /// Minimal distance to the target to perform the attack.
+    /// </summary>
+    [DataField]
+    public float Range = 1.5f;
 }
 
 public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<CEGOAPMeleeAttackAction>
@@ -85,7 +91,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         // Keep steering towards target during combat
         _steering.Register(ent, new EntityCoordinates(target, Vector2.Zero));
 
-        if (distance > weapon.Value.Comp.NPCAttackRange)
+        if (distance > args.Action.Range)
         {
             // Out of range, keep moving
             args.Status = CEGOAPActionStatus.Running;

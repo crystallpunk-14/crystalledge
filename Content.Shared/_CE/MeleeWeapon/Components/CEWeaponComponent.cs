@@ -66,12 +66,6 @@ public sealed partial class CEWeaponComponent : Component
     public float SpriteRotation;
 
     /// <summary>
-    /// Used only for NPC to calculate minimun required distance to attack
-    /// </summary>
-    [DataField]
-    public float NPCAttackRange = 2f;
-
-    /// <summary>
     /// The sound played on a weapon when it hits something.
     /// </summary>
     [DataField]
