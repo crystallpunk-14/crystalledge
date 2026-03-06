@@ -19,7 +19,7 @@ public sealed partial class CEGOAPHasStatusEffectSensor : CEGOAPSensorBase<CEGOA
     /// Which condition key this sensor updates.
     /// </summary>
     [DataField(required: true)]
-    public ProtoId<CEGOAPConditionPrototype> ConditionKey;
+    public string ConditionKey = string.Empty;
 }
 
 public sealed partial class CEGOAPHasStatusEffectSensorSystem : CEGOAPSensorSystem<CEGOAPHasStatusEffectSensor>
@@ -28,7 +28,6 @@ public sealed partial class CEGOAPHasStatusEffectSensorSystem : CEGOAPSensorSyst
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPHasStatusEffectSensor> args)
     {
-        var conditionKey = (string) args.Sensor.ConditionKey;
-        args.WorldState[conditionKey] = _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect);
+        args.WorldState[args.Sensor.ConditionKey] = _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect);
     }
 }

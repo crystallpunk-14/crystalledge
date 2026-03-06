@@ -2,7 +2,6 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -16,14 +15,14 @@ public sealed partial class CEGOAPEnemyStateSensor : CEGOAPSensorBase<CEGOAPEnem
     /// Which condition key this sensor updates.
     /// </summary>
     [DataField]
-    public ProtoId<CEGOAPConditionPrototype> ConditionKey = "CEEnemyNeutralized";
+    public string ConditionKey = "CEEnemyNeutralized";
 }
 
 public sealed partial class CEGOAPEnemyStateSensorSystem : CEGOAPSensorSystem<CEGOAPEnemyStateSensor>
 {
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPEnemyStateSensor> args)
     {
-        var conditionKey = (string) args.Sensor.ConditionKey;
+        var conditionKey = args.Sensor.ConditionKey;
 
         if (ent.Comp.Target is not { } target)
         {

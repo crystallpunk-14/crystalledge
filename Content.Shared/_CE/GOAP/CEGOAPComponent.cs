@@ -61,10 +61,10 @@ public sealed partial class CEGOAPComponent : Component
     public bool CurrentActionStarted;
 
     /// <summary>
-    /// The currently active goal being pursued.
+    /// The currently active goal being pursued (index into Goals list, -1 if none).
     /// </summary>
     [ViewVariables]
-    public CEGOAPGoal? ActiveGoal;
+    public int ActiveGoalIndex = -1;
 
     /// <summary>
     /// Time between re-planning attempts in seconds.
@@ -83,5 +83,11 @@ public sealed partial class CEGOAPComponent : Component
     /// </summary>
     [DataField]
     public bool Enabled = true;
+
+    /// <summary>
+    /// Accumulator for sensor update interval.
+    /// </summary>
+    [ViewVariables]
+    public float SensorAccumulator;
 }
 

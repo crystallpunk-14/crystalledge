@@ -1,14 +1,15 @@
 using System.Numerics;
 using Content.Shared._CE.GOAP;
+using Content.Shared.Examine;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// GOAP sensor that finds the nearest hostile entity within vision range.
 /// Sets the target on the GOAP component and updates the visibility condition.
+/// Includes line-of-sight check: entities behind walls are not detected.
 /// </summary>
 public sealed partial class CEGOAPFindEnemySensor : CEGOAPSensorBase<CEGOAPFindEnemySensor>
 {
@@ -22,13 +23,14 @@ public sealed partial class CEGOAPFindEnemySensor : CEGOAPSensorBase<CEGOAPFindE
     /// Which condition key this sensor updates.
     /// </summary>
     [DataField]
-    public ProtoId<CEGOAPConditionPrototype> ConditionKey = "CEEnemyVisible";
+    public string ConditionKey = "CEEnemyVisible";
 }
 
 public sealed partial class CEGOAPFindEnemySensorSystem : CEGOAPSensorSystem<CEGOAPFindEnemySensor>
 {
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -40,7 +42,7 @@ public sealed partial class CEGOAPFindEnemySensorSystem : CEGOAPSensorSystem<CEG
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFindEnemySensor> args)
     {
-        var conditionKey = (string) args.Sensor.ConditionKey;
+        var conditionKey = args.Sensor.ConditionKey;
 
         if (!_xformQuery.TryGetComponent(ent, out var xform))
         {
@@ -64,11 +66,15 @@ public sealed partial class CEGOAPFindEnemySensorSystem : CEGOAPSensorSystem<CEG
             var targetWorldPos = _transform.GetWorldPosition(targetXform);
             var distance = Vector2.Distance(npcWorldPos, targetWorldPos);
 
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestTarget = targetUid;
-            }
+            if (distance >= closestDistance)
+                continue;
+
+            // Line-of-sight check: can we see this target through walls?
+            if (!_examine.InRangeUnOccluded(ent.Owner, targetUid, args.Sensor.VisionRadius + 0.5f))
+                continue;
+
+            closestDistance = distance;
+            closestTarget = targetUid;
         }
 
         if (closestTarget != null)

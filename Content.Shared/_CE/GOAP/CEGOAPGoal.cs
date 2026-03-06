@@ -1,5 +1,3 @@
-using Robust.Shared.Prototypes;
-
 namespace Content.Shared._CE.GOAP;
 
 /// <summary>
@@ -12,14 +10,14 @@ public sealed partial class CEGOAPGoal
     /// The desired world state that constitutes achieving this goal.
     /// </summary>
     [DataField(required: true)]
-    public Dictionary<ProtoId<CEGOAPConditionPrototype>, bool> DesiredState = new();
+    public Dictionary<string, bool> DesiredState = new();
 
     /// <summary>
     /// Conditions in the current world state that must match for this goal to be active.
     /// If empty, the goal is always considered.
     /// </summary>
     [DataField]
-    public Dictionary<ProtoId<CEGOAPConditionPrototype>, bool> ActivationConditions = new();
+    public Dictionary<string, bool> ActivationConditions = new();
 
     /// <summary>
     /// Higher priority goals are preferred when multiple goals are active.

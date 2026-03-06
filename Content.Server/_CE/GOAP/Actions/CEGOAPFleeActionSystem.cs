@@ -3,6 +3,7 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server._CE.GOAP.Actions;
 
@@ -16,15 +17,23 @@ public sealed partial class CEGOAPFleeAction : CEGOAPActionBase<CEGOAPFleeAction
     /// </summary>
     [DataField]
     public float FleeDistance = 15f;
+
+    /// <summary>
+    /// How often (in seconds) to recalculate the flee direction.
+    /// </summary>
+    [DataField]
+    public float RecalcInterval = 1f;
 }
 
 /// <summary>
 /// Handles CEGOAPFleeAction execution.
-/// Steers the NPC away from its current target.
+/// Steers the NPC away from its current target with periodic direction recalculation.
 /// </summary>
 public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFleeAction>
 {
+    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
@@ -44,18 +53,59 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
     {
         if (ent.Comp.Target is not { } target)
         {
-            // Target lost, flee succeeded
             args.Status = CEGOAPActionStatus.Finished;
             return;
         }
 
-        // Check if steering has no path (arrived at flee point or blocked)
-        if (TryComp<NPCSteeringComponent>(ent, out var steering) &&
-            steering.Status == SteeringStatus.NoPath)
+        if (!_xformQuery.TryGetComponent(ent, out var xform) ||
+            !_xformQuery.TryGetComponent(target, out var targetXform))
+        {
+            args.Status = CEGOAPActionStatus.Finished;
+            return;
+        }
+
+        if (!TryComp<NPCSteeringComponent>(ent, out var steering))
         {
             args.Status = CEGOAPActionStatus.Failed;
             return;
         }
+
+        // Arrived at flee point — finish so planner re-evaluates
+        if (steering.Status == SteeringStatus.NoPath)
+        {
+            // Check if we're close to the target destination (arrived)
+            if (xform.Coordinates.TryDistance(EntityManager, steering.Coordinates, out var distToTarget)
+                && distToTarget < 2f)
+            {
+                args.Status = CEGOAPActionStatus.Finished;
+                return;
+            }
+
+            // Genuinely no path — fail to try replanning
+            args.Status = CEGOAPActionStatus.Failed;
+            return;
+        }
+
+        // Check if flee direction is still valid:
+        // If the enemy is now between us and our flee target, we're running toward danger
+        var npcPos = _transform.GetWorldPosition(xform);
+        var enemyPos = _transform.GetWorldPosition(targetXform);
+        var fleeTargetPos = _transform.ToMapCoordinates(steering.Coordinates);
+
+        var dirToFlee = fleeTargetPos.Position - npcPos;
+        var dirFromEnemy = npcPos - enemyPos;
+
+        var needsRecalc = false;
+
+        // If flee target is in the enemy's direction (dot < 0), path is invalid
+        if (dirToFlee.LengthSquared() > 0.01f && dirFromEnemy.LengthSquared() > 0.01f)
+        {
+            if (Vector2.Dot(Vector2.Normalize(dirToFlee), Vector2.Normalize(dirFromEnemy)) < 0f)
+                needsRecalc = true;
+        }
+
+        if (needsRecalc)
+            UpdateFleeTarget(ent, args.Action.FleeDistance);
 
         args.Status = CEGOAPActionStatus.Running;
     }
@@ -82,13 +132,33 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
             dir = new Vector2(1, 0);
 
         dir = Vector2.Normalize(dir);
-        var fleeWorldPos = npcWorldPos + dir * fleeDistance;
 
-        // Convert world position to parent-local coordinates
-        var invMatrix = _transform.GetInvWorldMatrix(xform.ParentUid);
-        var localFleePos = Vector2.Transform(fleeWorldPos, invMatrix);
-        var fleeCoords = new EntityCoordinates(xform.ParentUid, localFleePos);
+        // Try progressively shorter distances until we find a valid (non-space) tile
+        var mapId = xform.MapID;
+        for (var dist = fleeDistance; dist >= 2f; dist -= 2f)
+        {
+            var fleeWorldPos = npcWorldPos + dir * dist;
+            var mapCoords = new MapCoordinates(fleeWorldPos, mapId);
 
-        _steering.Register(ent, fleeCoords);
+            if (!_mapManager.TryFindGridAt(mapCoords, out var gridUid, out var grid))
+                continue;
+
+            var tileIndices = _mapSystem.WorldToTile(gridUid, grid, fleeWorldPos);
+            if (!_mapSystem.TryGetTileRef(gridUid, grid, tileIndices, out var tileRef) || tileRef.Tile.IsEmpty)
+                continue;
+
+            // Valid tile found — register as flee destination
+            var invMatrix = _transform.GetInvWorldMatrix(xform.ParentUid);
+            var localFleePos = Vector2.Transform(fleeWorldPos, invMatrix);
+            var fleeCoords = new EntityCoordinates(xform.ParentUid, localFleePos);
+            _steering.Register(ent, fleeCoords);
+            return;
+        }
+
+        // Fallback: use a short distance from current position
+        var fallbackPos = npcWorldPos + dir * 2f;
+        var fallbackInv = _transform.GetInvWorldMatrix(xform.ParentUid);
+        var fallbackLocal = Vector2.Transform(fallbackPos, fallbackInv);
+        _steering.Register(ent, new EntityCoordinates(xform.ParentUid, fallbackLocal));
     }
 }

@@ -1,5 +1,4 @@
 using Content.Shared._CE.GOAP;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -18,7 +17,7 @@ public sealed partial class CEGOAPEnemyRangeSensor : CEGOAPSensorBase<CEGOAPEnem
     /// Which condition key this sensor updates.
     /// </summary>
     [DataField]
-    public ProtoId<CEGOAPConditionPrototype> ConditionKey = "CEEnemyInMeleeRange";
+    public string ConditionKey = "CEEnemyInMeleeRange";
 }
 
 public sealed partial class CEGOAPEnemyRangeSensorSystem : CEGOAPSensorSystem<CEGOAPEnemyRangeSensor>
@@ -33,7 +32,7 @@ public sealed partial class CEGOAPEnemyRangeSensorSystem : CEGOAPSensorSystem<CE
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPEnemyRangeSensor> args)
     {
-        var conditionKey = (string) args.Sensor.ConditionKey;
+        var conditionKey = args.Sensor.ConditionKey;
 
         if (ent.Comp.Target is not { } target)
         {

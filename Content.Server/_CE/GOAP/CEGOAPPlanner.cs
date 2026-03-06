@@ -1,5 +1,4 @@
 using Content.Shared._CE.GOAP;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP;
 
@@ -104,7 +103,7 @@ public static class CEGOAPPlanner
 
     private static bool PreconditionsMet(
         Dictionary<string, bool> state,
-        Dictionary<ProtoId<CEGOAPConditionPrototype>, bool> preconditions)
+        Dictionary<string, bool> preconditions)
     {
         foreach (var (key, value) in preconditions)
         {
@@ -117,7 +116,7 @@ public static class CEGOAPPlanner
 
     private static Dictionary<string, bool> ApplyEffects(
         Dictionary<string, bool> state,
-        Dictionary<ProtoId<CEGOAPConditionPrototype>, bool> effects)
+        Dictionary<string, bool> effects)
     {
         var newState = new Dictionary<string, bool>(state);
         foreach (var (key, value) in effects)

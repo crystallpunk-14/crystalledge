@@ -1,6 +1,5 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health.Components;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -20,14 +19,14 @@ public sealed partial class CEGOAPHealthSensor : CEGOAPSensorBase<CEGOAPHealthSe
     /// Which condition key this sensor updates.
     /// </summary>
     [DataField]
-    public ProtoId<CEGOAPConditionPrototype> ConditionKey = "CELowHealth";
+    public string ConditionKey = "CELowHealth";
 }
 
 public sealed partial class CEGOAPHealthSensorSystem : CEGOAPSensorSystem<CEGOAPHealthSensor>
 {
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPHealthSensor> args)
     {
-        var conditionKey = (string) args.Sensor.ConditionKey;
+        var conditionKey = args.Sensor.ConditionKey;
 
         if (!TryComp<CEHealthComponent>(ent, out var health))
         {

@@ -1,5 +1,8 @@
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.Health.Components;
+using Content.Shared.CCVar;
 using Content.Shared.NPC;
+using Robust.Shared.Configuration;
 
 namespace Content.Server._CE.GOAP;
 
@@ -9,42 +12,104 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public sealed partial class CEGOAPSystem : EntitySystem
 {
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+
+    private bool _enabled = true;
+    private int _maxUpdates = 128;
+    private float _sensorInterval = 0.2f;
+
+    private EntityQuery<CEHealthComponent> _healthQuery;
+
     public override void Initialize()
     {
         base.Initialize();
+
+        Subs.CVar(_cfg, CCVars.CEGOAPEnabled, v => _enabled = v, true);
+        Subs.CVar(_cfg, CCVars.CEGOAPMaxUpdates, v => _maxUpdates = v, true);
+        Subs.CVar(_cfg, CCVars.CEGOAPSensorInterval, v => _sensorInterval = v, true);
+
+        _healthQuery = GetEntityQuery<CEHealthComponent>();
+
         SubscribeLocalEvent<CEGOAPComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEGOAPComponent, ComponentShutdown>(OnShutdown);
     }
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
-        EnsureComp<ActiveNPCComponent>(ent);
+        WakeGOAP(ent);
     }
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
         ClearPlan(ent, ent.Comp);
+        RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
+    }
+
+    /// <summary>
+    /// Activates GOAP processing for this entity.
+    /// </summary>
+    public void WakeGOAP(EntityUid uid, CEGOAPComponent? goap = null)
+    {
+        if (!Resolve(uid, ref goap, false))
+            return;
+
+        EnsureComp<CEActiveGOAPComponent>(uid);
+        EnsureComp<ActiveNPCComponent>(uid);
+    }
+
+    /// <summary>
+    /// Deactivates GOAP processing for this entity.
+    /// </summary>
+    public void SleepGOAP(EntityUid uid, CEGOAPComponent? goap = null)
+    {
+        if (!Resolve(uid, ref goap, false))
+            return;
+
+        ClearPlan(uid, goap);
+        RemCompDeferred<CEActiveGOAPComponent>(uid);
+        RemCompDeferred<ActiveNPCComponent>(uid);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<CEGOAPComponent>();
-        while (query.MoveNext(out var uid, out var goap))
+        if (!_enabled)
+            return;
+
+        var count = 0;
+        var query = EntityQueryEnumerator<CEActiveGOAPComponent, CEGOAPComponent>();
+        while (query.MoveNext(out var uid, out _, out var goap))
         {
+            if (count >= _maxUpdates)
+                break;
+
             if (!goap.Enabled)
                 continue;
 
+            // Skip dead or critical entities
+            if (_healthQuery.TryComp(uid, out var health) &&
+                health.CurrentState >= CEMobState.Critical)
+            {
+                SleepGOAP(uid, goap);
+                continue;
+            }
+
             UpdateAgent(uid, goap, frameTime);
+            count++;
         }
     }
 
     private void UpdateAgent(EntityUid uid, CEGOAPComponent goap, float frameTime)
     {
-        // 1. Update sensors to get current world state
-        UpdateSensors(uid, goap);
+        // 1. Update sensors with interval
+        goap.SensorAccumulator += frameTime;
+        if (goap.SensorAccumulator >= _sensorInterval)
+        {
+            goap.SensorAccumulator -= _sensorInterval;
+            UpdateSensors(uid, goap);
+        }
 
         // 2. Check if we need to re-plan
         goap.PlanAccumulator -= frameTime;
@@ -72,31 +137,26 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void TryReplan(EntityUid uid, CEGOAPComponent goap)
     {
-        var bestGoal = SelectBestGoal(goap);
+        var bestGoalIndex = SelectBestGoal(goap);
 
-        if (bestGoal == null)
+        if (bestGoalIndex < 0)
         {
             ClearPlan(uid, goap);
             return;
         }
 
         // If same goal and plan is still valid, keep it
-        if (bestGoal == goap.ActiveGoal && goap.CurrentPlan != null)
+        if (bestGoalIndex == goap.ActiveGoalIndex && goap.CurrentPlan != null)
             return;
 
-        // Build goal state dictionary with string keys
-        var goalState = new Dictionary<string, bool>();
-        foreach (var (key, value) in bestGoal.DesiredState)
-        {
-            goalState[(string) key] = value;
-        }
+        var bestGoal = goap.Goals[bestGoalIndex];
 
-        var plan = CEGOAPPlanner.Plan(goap.WorldState, goalState, goap.Actions);
+        var plan = CEGOAPPlanner.Plan(goap.WorldState, bestGoal.DesiredState, goap.Actions);
 
         if (plan != null && plan.Count > 0)
         {
             ShutdownCurrentAction(uid, goap);
-            goap.ActiveGoal = bestGoal;
+            goap.ActiveGoalIndex = bestGoalIndex;
             goap.CurrentPlan = plan;
             goap.CurrentActionIndex = 0;
             goap.CurrentActionStarted = false;
@@ -107,18 +167,20 @@ public sealed partial class CEGOAPSystem : EntitySystem
         }
     }
 
-    private CEGOAPGoal? SelectBestGoal(CEGOAPComponent goap)
+    private int SelectBestGoal(CEGOAPComponent goap)
     {
-        CEGOAPGoal? best = null;
+        var bestIndex = -1;
         var bestPriority = float.MinValue;
 
-        foreach (var goal in goap.Goals)
+        for (var i = 0; i < goap.Goals.Count; i++)
         {
+            var goal = goap.Goals[i];
+
             // Check activation conditions against current world state
             var active = true;
             foreach (var (key, value) in goal.ActivationConditions)
             {
-                if (!goap.WorldState.TryGetValue((string) key, out var current) || current != value)
+                if (!goap.WorldState.TryGetValue(key, out var current) || current != value)
                 {
                     active = false;
                     break;
@@ -132,7 +194,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
             var satisfied = true;
             foreach (var (key, value) in goal.DesiredState)
             {
-                if (!goap.WorldState.TryGetValue((string) key, out var current) || current != value)
+                if (!goap.WorldState.TryGetValue(key, out var current) || current != value)
                 {
                     satisfied = false;
                     break;
@@ -144,12 +206,12 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
             if (goal.Priority > bestPriority)
             {
-                best = goal;
+                bestIndex = i;
                 bestPriority = goal.Priority;
             }
         }
 
-        return best;
+        return bestIndex;
     }
 
     private void ExecuteCurrentAction(EntityUid uid, CEGOAPComponent goap, float frameTime)
@@ -203,6 +265,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
         goap.CurrentPlan = null;
         goap.CurrentActionIndex = 0;
         goap.CurrentActionStarted = false;
-        goap.ActiveGoal = null;
+        goap.ActiveGoalIndex = -1;
     }
 }

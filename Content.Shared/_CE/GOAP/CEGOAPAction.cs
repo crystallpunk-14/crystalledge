@@ -1,5 +1,3 @@
-using Robust.Shared.Prototypes;
-
 namespace Content.Shared._CE.GOAP;
 
 /// <summary>
@@ -23,13 +21,13 @@ public abstract partial class CEGOAPAction
     /// World state conditions required before this action can execute.
     /// </summary>
     [DataField]
-    public Dictionary<ProtoId<CEGOAPConditionPrototype>, bool> Preconditions = new();
+    public Dictionary<string, bool> Preconditions = new();
 
     /// <summary>
     /// World state changes produced when this action completes successfully.
     /// </summary>
     [DataField]
-    public Dictionary<ProtoId<CEGOAPConditionPrototype>, bool> Effects = new();
+    public Dictionary<string, bool> Effects = new();
 
     /// <summary>
     /// Cost of performing this action. Lower cost actions are preferred by the planner.
