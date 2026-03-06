@@ -49,17 +49,7 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
             return;
         }
 
-        if (!_xformQuery.TryGetComponent(ent, out var xform) ||
-            !_xformQuery.TryGetComponent(target, out var targetXform))
-        {
-            args.Status = CEGOAPActionStatus.Finished;
-            return;
-        }
-
-        // Update flee direction
-        UpdateFleeTarget(ent, args.Action.FleeDistance);
-
-        // Check if steering has no path
+        // Check if steering has no path (arrived at flee point or blocked)
         if (TryComp<NPCSteeringComponent>(ent, out var steering) &&
             steering.Status == SteeringStatus.NoPath)
         {

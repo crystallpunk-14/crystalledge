@@ -15,22 +15,28 @@
     planCooldown: 0.5
 
     goals:
-    # Атакуем
+    # Buff self
+    - desiredState:
+        CEHasDivineShield: true
+      activationConditions:
+        CEHasDivineShield: false
+        CEEnemyVisible: true
+      priority: 4
+    # First - attack
     - desiredState:
         CEEnemyNeutralized: true
       activationConditions:
         CELowHealth: false
         CEEnemyVisible: true
-        CEHasDivineShield: true
       priority: 3
-    # Валим от врага
+    # Second - run away
     - desiredState:
         CEEnemyVisible: false
       activationConditions:
         CELowHealth: true
         CEEnemyVisible: true
       priority: 2
-    # Лечим себя
+    # Last - healing
     - desiredState:
         CELowHealth: false
       activationConditions:
