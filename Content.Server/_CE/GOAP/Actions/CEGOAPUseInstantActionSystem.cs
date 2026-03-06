@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
-/// GOAP action that triggers an InstantAction (spell) on the NPC.
+/// Triggers an InstantAction on the NPC.
 /// The action entity is granted on startup if not already present.
 /// </summary>
 public sealed partial class CEGOAPUseInstantAction : CEGOAPActionBase<CEGOAPUseInstantAction>
@@ -18,17 +18,9 @@ public sealed partial class CEGOAPUseInstantAction : CEGOAPActionBase<CEGOAPUseI
     public EntProtoId ActionPrototype;
 }
 
-/// <summary>
-/// Handles CEGOAPUseInstantAction execution.
-/// Grants the action if needed, then performs it immediately.
-/// </summary>
 public sealed partial class CEGOAPUseInstantActionSystem : CEGOAPActionSystem<CEGOAPUseInstantAction>
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-
-    protected override void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<CEGOAPUseInstantAction> args)
-    {
-    }
 
     protected override void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<CEGOAPUseInstantAction> args)
     {

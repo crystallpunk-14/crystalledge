@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server._CE.Animation.Item;
+using Content.Server._CE.Health;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.GOAP;
@@ -11,13 +12,10 @@ using Robust.Shared.Random;
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
-/// GOAP action that performs a melee attack on the current target.
+/// Performs a melee attack on the current target.
 /// </summary>
 public sealed partial class CEGOAPMeleeAttackAction : CEGOAPActionBase<CEGOAPMeleeAttackAction>
 {
-    /// <summary>
-    /// Which attack type to use (Primary or Secondary).
-    /// </summary>
     [DataField]
     public CEUseType UseType = CEUseType.Primary;
 
@@ -25,13 +23,9 @@ public sealed partial class CEGOAPMeleeAttackAction : CEGOAPActionBase<CEGOAPMel
     /// Random angle spread for attacks in degrees.
     /// </summary>
     [DataField]
-    public float AngleVariation = 5f;
+    public float AngleVariation = 15f;
 }
 
-/// <summary>
-/// Handles CEGOAPMeleeAttackAction execution.
-/// Steers to target and attacks with the equipped CE weapon.
-/// </summary>
 public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<CEGOAPMeleeAttackAction>
 {
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
@@ -39,15 +33,14 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly CEHealthSystem _health = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
-    private EntityQuery<CEHealthComponent> _healthQuery;
 
     public override void Initialize()
     {
         base.Initialize();
         _xformQuery = GetEntityQuery<TransformComponent>();
-        _healthQuery = GetEntityQuery<CEHealthComponent>();
     }
 
     protected override void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<CEGOAPMeleeAttackAction> args)
@@ -64,7 +57,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         }
 
         // Check if target is neutralized
-        if (IsTargetNeutralized(target))
+        if (!_health.IsAlive(target))
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;
@@ -114,13 +107,5 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     {
         _combatMode.SetInCombatMode(ent, false);
         _steering.Unregister(ent);
-    }
-
-    private bool IsTargetNeutralized(EntityUid target)
-    {
-        if (_healthQuery.TryComp(target, out var ceHealth))
-            return ceHealth.CurrentState >= CEMobState.Critical;
-
-        return true;
     }
 }

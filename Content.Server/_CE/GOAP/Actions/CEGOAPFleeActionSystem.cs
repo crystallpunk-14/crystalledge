@@ -8,7 +8,7 @@ using Robust.Shared.Map.Components;
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
-/// GOAP action that makes the NPC flee away from its current target.
+/// Flee away from its current target.
 /// </summary>
 public sealed partial class CEGOAPFleeAction : CEGOAPActionBase<CEGOAPFleeAction>
 {
@@ -16,19 +16,9 @@ public sealed partial class CEGOAPFleeAction : CEGOAPActionBase<CEGOAPFleeAction
     /// How far ahead to set the flee waypoint (in tiles).
     /// </summary>
     [DataField]
-    public float FleeDistance = 15f;
-
-    /// <summary>
-    /// How often (in seconds) to recalculate the flee direction.
-    /// </summary>
-    [DataField]
-    public float RecalcInterval = 1f;
+    public float FleeDistance = 10f;
 }
 
-/// <summary>
-/// Handles CEGOAPFleeAction execution.
-/// Steers the NPC away from its current target with periodic direction recalculation.
-/// </summary>
 public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFleeAction>
 {
     [Dependency] private readonly IMapManager _mapManager = default!;
@@ -85,27 +75,6 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
             args.Status = CEGOAPActionStatus.Failed;
             return;
         }
-
-        // Check if flee direction is still valid:
-        // If the enemy is now between us and our flee target, we're running toward danger
-        var npcPos = _transform.GetWorldPosition(xform);
-        var enemyPos = _transform.GetWorldPosition(targetXform);
-        var fleeTargetPos = _transform.ToMapCoordinates(steering.Coordinates);
-
-        var dirToFlee = fleeTargetPos.Position - npcPos;
-        var dirFromEnemy = npcPos - enemyPos;
-
-        var needsRecalc = false;
-
-        // If flee target is in the enemy's direction (dot < 0), path is invalid
-        if (dirToFlee.LengthSquared() > 0.01f && dirFromEnemy.LengthSquared() > 0.01f)
-        {
-            if (Vector2.Dot(Vector2.Normalize(dirToFlee), Vector2.Normalize(dirFromEnemy)) < 0f)
-                needsRecalc = true;
-        }
-
-        if (needsRecalc)
-            UpdateFleeTarget(ent, args.Action.FleeDistance);
 
         args.Status = CEGOAPActionStatus.Running;
     }

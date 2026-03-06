@@ -7,7 +7,7 @@ using Robust.Shared.Map;
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
-/// GOAP action that moves the NPC towards its current target entity.
+/// Moves the NPC towards its current target entity.
 /// </summary>
 public sealed partial class CEGOAPMoveToTargetAction : CEGOAPActionBase<CEGOAPMoveToTargetAction>
 {
@@ -18,10 +18,6 @@ public sealed partial class CEGOAPMoveToTargetAction : CEGOAPActionBase<CEGOAPMo
     public float Range = 1.5f;
 }
 
-/// <summary>
-/// Handles CEGOAPMoveToTargetAction execution.
-/// Steers the NPC towards the current target until within range.
-/// </summary>
 public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<CEGOAPMoveToTargetAction>
 {
     [Dependency] private readonly NPCSteeringSystem _steering = default!;

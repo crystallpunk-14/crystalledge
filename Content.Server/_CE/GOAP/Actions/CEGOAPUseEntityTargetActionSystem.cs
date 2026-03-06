@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
-/// GOAP action that triggers an EntityTargetAction (spell) targeting the GOAP target entity.
+/// Triggers an EntityTargetAction targeting the GOAP target entity.
 /// The action entity is granted on startup if not already present.
 /// </summary>
 public sealed partial class CEGOAPUseEntityTargetAction : CEGOAPActionBase<CEGOAPUseEntityTargetAction>
@@ -24,17 +24,9 @@ public sealed partial class CEGOAPUseEntityTargetAction : CEGOAPActionBase<CEGOA
     public bool TargetSelf;
 }
 
-/// <summary>
-/// Handles CEGOAPUseEntityTargetAction execution.
-/// Grants the action if needed, sets the entity target, then performs it.
-/// </summary>
 public sealed partial class CEGOAPUseEntityTargetActionSystem : CEGOAPActionSystem<CEGOAPUseEntityTargetAction>
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-
-    protected override void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<CEGOAPUseEntityTargetAction> args)
-    {
-    }
 
     protected override void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<CEGOAPUseEntityTargetAction> args)
     {

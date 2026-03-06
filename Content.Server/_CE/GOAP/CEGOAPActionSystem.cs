@@ -17,9 +17,13 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionShutdownEvent<T>>(OnActionShutdown);
     }
 
-    protected abstract void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<T> args);
+    protected virtual void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<T> args)
+    {
+    }
 
-    protected abstract void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<T> args);
+    protected virtual void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<T> args)
+    {
+    }
 
     protected virtual void OnActionShutdown(Entity<CEGOAPComponent> ent, ref CEGOAPActionShutdownEvent<T> args)
     {

@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
-/// GOAP action that triggers a WorldTargetAction (spell) at a world position.
+/// Triggers a WorldTargetAction at a world position.
 /// By default targets the NPC's own position.
 /// </summary>
 public sealed partial class CEGOAPUseWorldTargetAction : CEGOAPActionBase<CEGOAPUseWorldTargetAction>
@@ -24,17 +24,9 @@ public sealed partial class CEGOAPUseWorldTargetAction : CEGOAPActionBase<CEGOAP
     public bool TargetSelf = true;
 }
 
-/// <summary>
-/// Handles CEGOAPUseWorldTargetAction execution.
-/// Grants the action if needed, sets the world target, then performs it.
-/// </summary>
 public sealed partial class CEGOAPUseWorldTargetActionSystem : CEGOAPActionSystem<CEGOAPUseWorldTargetAction>
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
-
-    protected override void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<CEGOAPUseWorldTargetAction> args)
-    {
-    }
 
     protected override void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<CEGOAPUseWorldTargetAction> args)
     {
