@@ -28,43 +28,20 @@ public sealed partial class CEGOAPSystem : EntitySystem
         Subs.CVar(_cfg, CCVars.CEGOAPMaxUpdates, v => _maxUpdates = v, true);
         Subs.CVar(_cfg, CCVars.CEGOAPSensorInterval, v => _sensorInterval = v, true);
 
+        InitWake();
+
         SubscribeLocalEvent<CEGOAPComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEGOAPComponent, ComponentShutdown>(OnShutdown);
     }
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
-        Wake((ent, ent.Comp));
+        UpdateAwakeStatus((ent, ent.Comp));
     }
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
         ClearPlan(ent);
-        RemCompDeferred<CEActiveGOAPComponent>(ent);
-        RemCompDeferred<ActiveNPCComponent>(ent);
-    }
-
-    /// <summary>
-    /// Activates GOAP processing for this entity.
-    /// </summary>
-    public void Wake(Entity<CEGOAPComponent?> ent)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return;
-
-        EnsureComp<CEActiveGOAPComponent>(ent);
-        EnsureComp<ActiveNPCComponent>(ent);
-    }
-
-    /// <summary>
-    /// Deactivates GOAP processing for this entity.
-    /// </summary>
-    public void Sleep(Entity<CEGOAPComponent?> ent)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return;
-
-        ClearPlan((ent, ent.Comp));
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
     }
