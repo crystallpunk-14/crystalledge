@@ -1,5 +1,6 @@
 ﻿
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.GOAP;
 
@@ -67,27 +68,21 @@ public sealed partial class CEGOAPComponent : Component
     public int ActiveGoalIndex = -1;
 
     /// <summary>
-    /// Time between re-planning attempts in seconds.
+    /// Time between re-planning attempts.
     /// </summary>
     [DataField]
-    public float PlanCooldown = 0.5f;
+    public TimeSpan PlanCooldown = TimeSpan.FromSeconds(0.5);
 
     /// <summary>
-    /// Accumulator for plan cooldown.
+    /// The next game time at which re-planning is allowed.
     /// </summary>
-    [ViewVariables]
-    public float PlanAccumulator;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan NextPlanTime;
 
     /// <summary>
-    /// Whether this GOAP agent is enabled.
+    /// The next game time at which sensors are updated.
     /// </summary>
-    [DataField]
-    public bool Enabled = true;
-
-    /// <summary>
-    /// Accumulator for sensor update interval.
-    /// </summary>
-    [ViewVariables]
-    public float SensorAccumulator;
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
+    public TimeSpan NextSensorTime;
 }
 

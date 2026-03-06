@@ -18,12 +18,6 @@ public sealed partial class CEGOAPFindEnemySensor : CEGOAPSensorBase<CEGOAPFindE
     /// </summary>
     [DataField]
     public float VisionRadius = 10f;
-
-    /// <summary>
-    /// Which condition key this sensor updates.
-    /// </summary>
-    [DataField]
-    public string ConditionKey = "CEEnemyVisible";
 }
 
 public sealed partial class CEGOAPFindEnemySensorSystem : CEGOAPSensorSystem<CEGOAPFindEnemySensor>

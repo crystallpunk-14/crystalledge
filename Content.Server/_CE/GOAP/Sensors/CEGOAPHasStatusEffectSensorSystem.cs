@@ -14,12 +14,6 @@ public sealed partial class CEGOAPHasStatusEffectSensor : CEGOAPSensorBase<CEGOA
     /// </summary>
     [DataField(required: true)]
     public EntProtoId StatusEffect;
-
-    /// <summary>
-    /// Which condition key this sensor updates.
-    /// </summary>
-    [DataField(required: true)]
-    public string ConditionKey = string.Empty;
 }
 
 public sealed partial class CEGOAPHasStatusEffectSensorSystem : CEGOAPSensorSystem<CEGOAPHasStatusEffectSensor>

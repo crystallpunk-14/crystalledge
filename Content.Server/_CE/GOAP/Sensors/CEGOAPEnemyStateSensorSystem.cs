@@ -9,14 +9,7 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// GOAP sensor that checks if the current target is neutralized (critical or dead).
 /// Checks both CEHealthComponent and vanilla MobStateComponent.
 /// </summary>
-public sealed partial class CEGOAPEnemyStateSensor : CEGOAPSensorBase<CEGOAPEnemyStateSensor>
-{
-    /// <summary>
-    /// Which condition key this sensor updates.
-    /// </summary>
-    [DataField]
-    public string ConditionKey = "CEEnemyNeutralized";
-}
+public sealed partial class CEGOAPEnemyStateSensor : CEGOAPSensorBase<CEGOAPEnemyStateSensor>;
 
 public sealed partial class CEGOAPEnemyStateSensorSystem : CEGOAPSensorSystem<CEGOAPEnemyStateSensor>
 {

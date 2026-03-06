@@ -12,12 +12,6 @@ public sealed partial class CEGOAPEnemyRangeSensor : CEGOAPSensorBase<CEGOAPEnem
     /// </summary>
     [DataField]
     public float Range = 1.5f;
-
-    /// <summary>
-    /// Which condition key this sensor updates.
-    /// </summary>
-    [DataField]
-    public string ConditionKey = "CEEnemyInMeleeRange";
 }
 
 public sealed partial class CEGOAPEnemyRangeSensorSystem : CEGOAPSensorSystem<CEGOAPEnemyRangeSensor>

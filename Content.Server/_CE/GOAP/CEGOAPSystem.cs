@@ -3,6 +3,7 @@ using Content.Shared._CE.Health.Components;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
 using Robust.Shared.Configuration;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP;
 
@@ -13,6 +14,7 @@ namespace Content.Server._CE.GOAP;
 public sealed partial class CEGOAPSystem : EntitySystem
 {
     [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private bool _enabled = true;
     private int _maxUpdates = 128;
@@ -85,9 +87,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
             if (count >= _maxUpdates)
                 break;
 
-            if (!goap.Enabled)
-                continue;
-
             // Skip dead or critical entities
             if (_healthQuery.TryComp(uid, out var health) &&
                 health.CurrentState >= CEMobState.Critical)
@@ -103,20 +102,19 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(EntityUid uid, CEGOAPComponent goap, float frameTime)
     {
+        var curTime = _timing.CurTime;
+
         // 1. Update sensors with interval
-        goap.SensorAccumulator += frameTime;
-        if (goap.SensorAccumulator >= _sensorInterval)
+        if (curTime >= goap.NextSensorTime)
         {
-            goap.SensorAccumulator -= _sensorInterval;
+            goap.NextSensorTime = curTime + TimeSpan.FromSeconds(_sensorInterval);
             UpdateSensors(uid, goap);
         }
 
         // 2. Check if we need to re-plan
-        goap.PlanAccumulator -= frameTime;
-
-        if (goap.CurrentPlan == null || goap.PlanAccumulator <= 0)
+        if (goap.CurrentPlan == null || curTime >= goap.NextPlanTime)
         {
-            goap.PlanAccumulator = goap.PlanCooldown;
+            goap.NextPlanTime = curTime + goap.PlanCooldown;
             TryReplan(uid, goap);
         }
 
@@ -244,7 +242,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
             case CEGOAPActionStatus.Failed:
                 action.RaiseShutdown(uid, EntityManager);
                 ClearPlan(uid, goap);
-                goap.PlanAccumulator = 0; // Re-plan immediately
+                goap.NextPlanTime = TimeSpan.Zero; // Re-plan immediately
                 break;
         }
     }

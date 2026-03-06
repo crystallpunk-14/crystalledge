@@ -7,6 +7,12 @@ namespace Content.Shared._CE.GOAP;
 public abstract partial class CEGOAPSensor
 {
     /// <summary>
+    /// The world state key this sensor writes its result to.
+    /// </summary>
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
+    /// <summary>
     /// Raises the sensor update event to evaluate world state conditions.
     /// </summary>
     public abstract void RaiseUpdate(EntityUid uid, Dictionary<string, bool> worldState, IEntityManager entMan);

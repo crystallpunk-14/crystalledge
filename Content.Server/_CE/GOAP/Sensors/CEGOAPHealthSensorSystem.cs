@@ -14,12 +14,6 @@ public sealed partial class CEGOAPHealthSensor : CEGOAPSensorBase<CEGOAPHealthSe
     /// </summary>
     [DataField]
     public float Threshold = 0.5f;
-
-    /// <summary>
-    /// Which condition key this sensor updates.
-    /// </summary>
-    [DataField]
-    public string ConditionKey = "CELowHealth";
 }
 
 public sealed partial class CEGOAPHealthSensorSystem : CEGOAPSensorSystem<CEGOAPHealthSensor>
