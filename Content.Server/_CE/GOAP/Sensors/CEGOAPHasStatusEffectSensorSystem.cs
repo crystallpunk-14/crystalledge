@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// GOAP sensor that checks if the entity has a specific status effect active.
+/// Checks if the entity has a specific status effect active.
 /// </summary>
 public sealed partial class CEGOAPHasStatusEffectSensor : CEGOAPSensorBase<CEGOAPHasStatusEffectSensor>
 {
@@ -22,6 +22,6 @@ public sealed partial class CEGOAPHasStatusEffectSensorSystem : CEGOAPSensorSyst
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPHasStatusEffectSensor> args)
     {
-        args.WorldState[args.Sensor.ConditionKey] = _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect);
+        SetState(ref args, _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect));
     }
 }

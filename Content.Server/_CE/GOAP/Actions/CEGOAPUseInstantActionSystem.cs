@@ -51,7 +51,6 @@ public sealed partial class CEGOAPUseInstantActionSystem : CEGOAPActionSystem<CE
 
     private EntityUid? FindOrGrantAction(Entity<CEGOAPComponent> ent, EntProtoId actionProto)
     {
-        // Look for an existing action matching the prototype
         foreach (var action in _actions.GetActions(ent))
         {
             var meta = MetaData(action);
@@ -59,7 +58,6 @@ public sealed partial class CEGOAPUseInstantActionSystem : CEGOAPActionSystem<CE
                 return action;
         }
 
-        // Grant the action
         return _actions.AddAction(ent, actionProto);
     }
 }

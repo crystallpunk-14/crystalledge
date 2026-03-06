@@ -7,9 +7,8 @@ using Content.Shared.NPC.Systems;
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// GOAP sensor that finds the nearest hostile entity within vision range.
+/// Finds the nearest hostile entity within vision range.
 /// Sets the target on the GOAP component and updates the visibility condition.
-/// Includes line-of-sight check: entities behind walls are not detected.
 /// </summary>
 public sealed partial class CEGOAPFindEnemySensor : CEGOAPSensorBase<CEGOAPFindEnemySensor>
 {
@@ -36,11 +35,9 @@ public sealed partial class CEGOAPFindEnemySensorSystem : CEGOAPSensorSystem<CEG
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFindEnemySensor> args)
     {
-        var conditionKey = args.Sensor.ConditionKey;
-
         if (!_xformQuery.TryGetComponent(ent, out var xform))
         {
-            args.WorldState[conditionKey] = false;
+            SetState(ref args, false);
             ent.Comp.Target = null;
             return;
         }
@@ -74,12 +71,12 @@ public sealed partial class CEGOAPFindEnemySensorSystem : CEGOAPSensorSystem<CEG
         if (closestTarget != null)
         {
             ent.Comp.Target = closestTarget;
-            args.WorldState[conditionKey] = true;
+            SetState(ref args, true);
         }
         else
         {
             ent.Comp.Target = null;
-            args.WorldState[conditionKey] = false;
+            SetState(ref args, false);
         }
     }
 }

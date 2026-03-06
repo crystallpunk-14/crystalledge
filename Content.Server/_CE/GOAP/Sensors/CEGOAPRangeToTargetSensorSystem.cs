@@ -3,18 +3,18 @@ using Content.Shared._CE.GOAP;
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// GOAP sensor that checks if the current target is within a specified range.
+/// Checks if the current target is within a specified range.
 /// </summary>
-public sealed partial class CEGOAPEnemyRangeSensor : CEGOAPSensorBase<CEGOAPEnemyRangeSensor>
+public sealed partial class CEGOAPRangeToTargetSensor : CEGOAPSensorBase<CEGOAPRangeToTargetSensor>
 {
     /// <summary>
     /// Range threshold in tiles.
     /// </summary>
-    [DataField]
-    public float Range = 1.5f;
+    [DataField(required: true)]
+    public float Range = 1f;
 }
 
-public sealed partial class CEGOAPEnemyRangeSensorSystem : CEGOAPSensorSystem<CEGOAPEnemyRangeSensor>
+public sealed partial class CEGOAPRangeToTargetSensorSystem : CEGOAPSensorSystem<CEGOAPRangeToTargetSensor>
 {
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -24,29 +24,27 @@ public sealed partial class CEGOAPEnemyRangeSensorSystem : CEGOAPSensorSystem<CE
         _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPEnemyRangeSensor> args)
+    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
     {
-        var conditionKey = args.Sensor.ConditionKey;
-
         if (ent.Comp.Target is not { } target)
         {
-            args.WorldState[conditionKey] = false;
+            SetState(ref args, false);
             return;
         }
 
         if (!_xformQuery.TryGetComponent(ent, out var xform) ||
             !_xformQuery.TryGetComponent(target, out var targetXform))
         {
-            args.WorldState[conditionKey] = false;
+            SetState(ref args, false);
             return;
         }
 
         if (!xform.Coordinates.TryDistance(EntityManager, targetXform.Coordinates, out var distance))
         {
-            args.WorldState[conditionKey] = false;
+            SetState(ref args, false);
             return;
         }
 
-        args.WorldState[conditionKey] = distance <= args.Sensor.Range;
+        SetState(ref args, distance <= args.Sensor.Range);
     }
 }

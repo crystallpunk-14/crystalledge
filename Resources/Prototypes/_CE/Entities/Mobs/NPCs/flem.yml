@@ -17,105 +17,94 @@
     goals:
     # Buff self
     #- desiredState:
-    #    CEHasDivineShield: true
+    #    HasDivineShield: true
     #  activationConditions:
-    #    CEHasDivineShield: false
-    #    CEEnemyVisible: true
+    #    HasDivineShield: false
+    #    EnemyVisible: true
     #  priority: 4
     # First - attack
     - desiredState:
-        CEEnemyNeutralized: true
+        EnemyDead: true
       activationConditions:
-        CELowHealth: false
-        CEEnemyVisible: true
+        LowHealth: false
+        EnemyVisible: true
       priority: 3
     # Second - run away
     - desiredState:
-        CEEnemyVisible: false
+        EnemyVisible: false
       activationConditions:
-        CELowHealth: true
-        CEEnemyVisible: true
+        LowHealth: true
+        EnemyVisible: true
       priority: 2
     # Last - healing
     - desiredState:
-        CELowHealth: false
+        LowHealth: false
       activationConditions:
-        CELowHealth: true
-        CEEnemyVisible: false
+        LowHealth: true
+        EnemyVisible: false
       priority: 1
 
     actions:
     # Move to target
     - !type:CEGOAPMoveToTargetAction
       preconditions:
-        CEEnemyVisible: true
+        EnemyVisible: true
       effects:
-        CEEnemyInMeleeRange: true
+        EnemyInMeleeRange: true
       cost: 2
       range: 1.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
       preconditions:
-        CEEnemyInMeleeRange: true
+        EnemyInMeleeRange: true
       effects:
-        CEEnemyNeutralized: true
+        EnemyDead: true
       cost: 1
       useType: Primary
       angleVariation: 5
     # Run away from target
     - !type:CEGOAPFleeAction
       preconditions:
-        CELowHealth: true
-        CEEnemyVisible: true
+        LowHealth: true
+        EnemyVisible: true
       effects:
-        CEEnemyVisible: false
+        EnemyVisible: false
       cost: 1
       fleeDistance: 15
     # Divine Shield - self-target entity action, use when no shield active
     - !type:CEGOAPUseEntityTargetAction
       preconditions:
-        CEHasDivineShield: false
+        HasDivineShield: false
       effects:
-        CEHasDivineShield: true
+        HasDivineShield: true
       cost: 1
       actionPrototype: CEActionSpellDivineShield
       targetSelf: true
-    # Intellect Buff - instant action, use when chasing and no buff
-    - !type:CEGOAPUseInstantAction
-      preconditions:
-        CEHasIntellectBuff: false
-      effects:
-        CEHasIntellectBuff: true
-      cost: 1
-      actionPrototype: CEActionMageIntellectBuff
     # Area Healing - world target under self, use when low health
     - !type:CEGOAPUseWorldTargetAction
       preconditions:
-        CELowHealth: true
+        LowHealth: true
       effects:
-        CELowHealth: false
+        LowHealth: false
       cost: 2
       actionPrototype: CEActionSpellAreaHealing
       targetSelf: true
 
     sensors:
     - !type:CEGOAPFindEnemySensor
-      conditionKey: CEEnemyVisible
+      conditionKey: EnemyVisible
       visionRadius: 10
-    - !type:CEGOAPHealthSensor
-      conditionKey: CELowHealth
+    - !type:CEGOAPCheckHealthLevelSensor
+      conditionKey: LowHealth
       threshold: 0.5
-    - !type:CEGOAPEnemyRangeSensor
-      conditionKey: CEEnemyInMeleeRange
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
       range: 1.5
-    - !type:CEGOAPEnemyStateSensor
-      conditionKey: CEEnemyNeutralized
+    - !type:CEGOAPTargetIsDeadSensor
+      conditionKey: EnemyDead
     - !type:CEGOAPHasStatusEffectSensor
-      conditionKey: CEHasDivineShield
+      conditionKey: HasDivineShield
       statusEffect: CEStatusEffectDivineShield
-    - !type:CEGOAPHasStatusEffectSensor
-      conditionKey: CEHasIntellectBuff
-      statusEffect: CEStatusEffectMageIntellectBuff
   - type: NpcFactionMember
     factions:
     - SimpleHostile

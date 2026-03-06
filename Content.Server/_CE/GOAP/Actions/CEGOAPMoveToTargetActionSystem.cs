@@ -23,11 +23,13 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
+    private EntityQuery<NPCSteeringComponent> _steeringQuery;
 
     public override void Initialize()
     {
         base.Initialize();
         _xformQuery = GetEntityQuery<TransformComponent>();
+        _steeringQuery = GetEntityQuery<NPCSteeringComponent>();
     }
 
     protected override void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<CEGOAPMoveToTargetAction> args)
@@ -59,17 +61,17 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
             return;
         }
 
-        // Update steering target in case it moved
-        _steering.Register(ent, new EntityCoordinates(target, Vector2.Zero));
-
         if (distance <= args.Action.Range)
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;
         }
 
+        // Update steering target in case it moved
+        _steering.Register(ent, new EntityCoordinates(target, Vector2.Zero));
+
         // Check if steering has no path
-        if (TryComp<NPCSteeringComponent>(ent, out var steering) &&
+        if (_steeringQuery.TryComp(ent, out var steering) &&
             steering.Status == SteeringStatus.NoPath)
         {
             args.Status = CEGOAPActionStatus.Failed;
