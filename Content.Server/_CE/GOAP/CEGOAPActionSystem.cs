@@ -17,14 +17,23 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionShutdownEvent<T>>(OnActionShutdown);
     }
 
+    /// <summary>
+    /// Called once when the action has just started to be performed.
+    /// </summary>
     protected virtual void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<T> args)
     {
     }
 
+    /// <summary>
+    /// Called each tick while the action is being performed. The action should update the status of the action in args.Status.
+    /// </summary>
     protected virtual void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<T> args)
     {
     }
 
+    /// <summary>
+    /// Called once when the action has finished performing, regardless of whether it succeeded, failed, or was interrupted.
+    /// </summary>
     protected virtual void OnActionShutdown(Entity<CEGOAPComponent> ent, ref CEGOAPActionShutdownEvent<T> args)
     {
     }

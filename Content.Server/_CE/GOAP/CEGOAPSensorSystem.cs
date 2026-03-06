@@ -15,6 +15,7 @@ public abstract partial class CEGOAPSensorSystem<T> : EntitySystem where T : CEG
     }
 
     /// <summary>
+    /// Called with each sensor update tick (default 0.2s).
     /// The sensor scans information about the world and sets the key to which this sensor is bound to true or false.
     /// The sensor MUST NOT affect the world around it or influence the entity itself in any way,
     /// except by setting GOAP state via <see cref="SetState"/>.

@@ -67,41 +67,33 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        var curTime = _timing.CurTime;
-
-        // 1. Update sensors with interval
-        if (curTime >= ent.Comp.NextSensorTime)
-        {
-            ent.Comp.NextSensorTime = curTime + TimeSpan.FromSeconds(_sensorInterval);
+        // 1. Update sensors
+        if (_timing.CurTime >= ent.Comp.NextSensorTime)
             UpdateSensors(ent);
-        }
 
         // 2. Check if we need to re-plan
-        if (ent.Comp.CurrentPlan == null || curTime >= ent.Comp.NextPlanTime)
-        {
-            ent.Comp.NextPlanTime = curTime + ent.Comp.PlanCooldown;
-            Replan(ent);
-        }
+        if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
+            UpdatePlan(ent);
 
         // 3. Execute current action
         if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
-        {
             ExecuteCurrentAction(ent, frameTime);
-        }
     }
 
     private void UpdateSensors(Entity<CEGOAPComponent> ent)
     {
+        ent.Comp.NextSensorTime = _timing.CurTime + TimeSpan.FromSeconds(_sensorInterval);
         foreach (var sensor in ent.Comp.Sensors)
         {
             sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
         }
     }
 
-    private void Replan(Entity<CEGOAPComponent> ent)
+    private void UpdatePlan(Entity<CEGOAPComponent> ent)
     {
-        var bestGoalIndex = SelectBestGoal(ent.Comp);
+        ent.Comp.NextPlanTime = _timing.CurTime + ent.Comp.PlanCooldown;
 
+        var bestGoalIndex = SelectBestGoal(ent.Comp);
         if (bestGoalIndex < 0)
         {
             ClearPlan(ent);
@@ -130,6 +122,10 @@ public sealed partial class CEGOAPSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Return the index of the highest priority goal that has not yet been completed,
+    /// for which the requirements have been met.
+    /// </summary>
     private int SelectBestGoal(CEGOAPComponent goap)
     {
         var bestIndex = -1;
@@ -139,7 +135,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
         {
             var goal = goap.Goals[i];
 
-            // Check activation conditions against current world state
+            // We skip goals for which the requirements have not been met.
             var active = true;
             foreach (var (key, value) in goal.ActivationConditions)
             {
