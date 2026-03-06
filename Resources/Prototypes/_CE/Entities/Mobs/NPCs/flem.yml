@@ -15,8 +15,10 @@
     planCooldown: 0.5
 
     targetProviders:
-      enemy: !type:CEGOAPNearestHostileTargetProvider
+      enemy: !type:CEGOAPCrossZLevelTargetProvider
         visionRadius: 10
+        zLevelsUp: 1
+        zLevelsDown: 1
       self: !type:CEGOAPSelfTargetProvider
 
     goals:
