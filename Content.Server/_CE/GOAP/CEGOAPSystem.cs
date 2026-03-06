@@ -20,8 +20,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private int _maxUpdates = 128;
     private float _sensorInterval = 0.2f;
 
-    private EntityQuery<CEHealthComponent> _healthQuery;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -30,20 +28,18 @@ public sealed partial class CEGOAPSystem : EntitySystem
         Subs.CVar(_cfg, CCVars.CEGOAPMaxUpdates, v => _maxUpdates = v, true);
         Subs.CVar(_cfg, CCVars.CEGOAPSensorInterval, v => _sensorInterval = v, true);
 
-        _healthQuery = GetEntityQuery<CEHealthComponent>();
-
         SubscribeLocalEvent<CEGOAPComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEGOAPComponent, ComponentShutdown>(OnShutdown);
     }
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
-        WakeGOAP(ent);
+        Wake((ent, ent.Comp));
     }
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
-        ClearPlan(ent, ent.Comp);
+        ClearPlan(ent);
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
     }
@@ -51,26 +47,26 @@ public sealed partial class CEGOAPSystem : EntitySystem
     /// <summary>
     /// Activates GOAP processing for this entity.
     /// </summary>
-    public void WakeGOAP(EntityUid uid, CEGOAPComponent? goap = null)
+    public void Wake(Entity<CEGOAPComponent?> ent)
     {
-        if (!Resolve(uid, ref goap, false))
+        if (!Resolve(ent, ref ent.Comp, false))
             return;
 
-        EnsureComp<CEActiveGOAPComponent>(uid);
-        EnsureComp<ActiveNPCComponent>(uid);
+        EnsureComp<CEActiveGOAPComponent>(ent);
+        EnsureComp<ActiveNPCComponent>(ent);
     }
 
     /// <summary>
     /// Deactivates GOAP processing for this entity.
     /// </summary>
-    public void SleepGOAP(EntityUid uid, CEGOAPComponent? goap = null)
+    public void Sleep(Entity<CEGOAPComponent?> ent)
     {
-        if (!Resolve(uid, ref goap, false))
+        if (!Resolve(ent, ref ent.Comp, false))
             return;
 
-        ClearPlan(uid, goap);
-        RemCompDeferred<CEActiveGOAPComponent>(uid);
-        RemCompDeferred<ActiveNPCComponent>(uid);
+        ClearPlan((ent, ent.Comp));
+        RemCompDeferred<CEActiveGOAPComponent>(ent);
+        RemCompDeferred<ActiveNPCComponent>(ent);
     }
 
     public override void Update(float frameTime)
@@ -87,81 +83,73 @@ public sealed partial class CEGOAPSystem : EntitySystem
             if (count >= _maxUpdates)
                 break;
 
-            // Skip dead or critical entities
-            if (_healthQuery.TryComp(uid, out var health) &&
-                health.CurrentState >= CEMobState.Critical)
-            {
-                SleepGOAP(uid, goap);
-                continue;
-            }
-
-            UpdateAgent(uid, goap, frameTime);
+            UpdateAgent((uid, goap), frameTime);
             count++;
         }
     }
 
-    private void UpdateAgent(EntityUid uid, CEGOAPComponent goap, float frameTime)
+    private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
         var curTime = _timing.CurTime;
 
         // 1. Update sensors with interval
-        if (curTime >= goap.NextSensorTime)
+        if (curTime >= ent.Comp.NextSensorTime)
         {
-            goap.NextSensorTime = curTime + TimeSpan.FromSeconds(_sensorInterval);
-            UpdateSensors(uid, goap);
+            ent.Comp.NextSensorTime = curTime + TimeSpan.FromSeconds(_sensorInterval);
+            UpdateSensors(ent);
         }
 
         // 2. Check if we need to re-plan
-        if (goap.CurrentPlan == null || curTime >= goap.NextPlanTime)
+        if (ent.Comp.CurrentPlan == null || curTime >= ent.Comp.NextPlanTime)
         {
-            goap.NextPlanTime = curTime + goap.PlanCooldown;
-            TryReplan(uid, goap);
+            ent.Comp.NextPlanTime = curTime + ent.Comp.PlanCooldown;
+            Replan(ent);
         }
 
         // 3. Execute current action
-        if (goap.CurrentPlan != null && goap.CurrentActionIndex < goap.CurrentPlan.Count)
+        if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
         {
-            ExecuteCurrentAction(uid, goap, frameTime);
+            ExecuteCurrentAction(ent, frameTime);
         }
     }
 
-    private void UpdateSensors(EntityUid uid, CEGOAPComponent goap)
+    private void UpdateSensors(Entity<CEGOAPComponent> ent)
     {
-        foreach (var sensor in goap.Sensors)
+        foreach (var sensor in ent.Comp.Sensors)
         {
-            sensor.RaiseUpdate(uid, goap.WorldState, EntityManager);
+            sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
         }
     }
 
-    private void TryReplan(EntityUid uid, CEGOAPComponent goap)
+    private void Replan(Entity<CEGOAPComponent> ent)
     {
-        var bestGoalIndex = SelectBestGoal(goap);
+        var bestGoalIndex = SelectBestGoal(ent.Comp);
 
         if (bestGoalIndex < 0)
         {
-            ClearPlan(uid, goap);
+            ClearPlan(ent);
             return;
         }
 
         // If same goal and plan is still valid, keep it
-        if (bestGoalIndex == goap.ActiveGoalIndex && goap.CurrentPlan != null)
+        if (bestGoalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan != null)
             return;
 
-        var bestGoal = goap.Goals[bestGoalIndex];
+        var bestGoal = ent.Comp.Goals[bestGoalIndex];
 
-        var plan = CEGOAPPlanner.Plan(goap.WorldState, bestGoal.DesiredState, goap.Actions);
+        var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, bestGoal.DesiredState, ent.Comp.Actions);
 
         if (plan != null && plan.Count > 0)
         {
-            ShutdownCurrentAction(uid, goap);
-            goap.ActiveGoalIndex = bestGoalIndex;
-            goap.CurrentPlan = plan;
-            goap.CurrentActionIndex = 0;
-            goap.CurrentActionStarted = false;
+            ShutdownCurrentAction(ent);
+            ent.Comp.ActiveGoalIndex = bestGoalIndex;
+            ent.Comp.CurrentPlan = plan;
+            ent.Comp.CurrentActionIndex = 0;
+            ent.Comp.CurrentActionStarted = false;
         }
         else
         {
-            ClearPlan(uid, goap);
+            ClearPlan(ent);
         }
     }
 
@@ -212,17 +200,17 @@ public sealed partial class CEGOAPSystem : EntitySystem
         return bestIndex;
     }
 
-    private void ExecuteCurrentAction(EntityUid uid, CEGOAPComponent goap, float frameTime)
+    private void ExecuteCurrentAction(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        var action = goap.CurrentPlan![goap.CurrentActionIndex];
+        var action = ent.Comp.CurrentPlan![ent.Comp.CurrentActionIndex];
 
-        if (!goap.CurrentActionStarted)
+        if (!ent.Comp.CurrentActionStarted)
         {
-            action.RaiseStartup(uid, EntityManager);
-            goap.CurrentActionStarted = true;
+            action.RaiseStartup(ent, EntityManager);
+            ent.Comp.CurrentActionStarted = true;
         }
 
-        var status = action.RaiseUpdate(uid, frameTime, EntityManager);
+        var status = action.RaiseUpdate(ent, frameTime, EntityManager);
 
         switch (status)
         {
@@ -230,39 +218,39 @@ public sealed partial class CEGOAPSystem : EntitySystem
                 break;
 
             case CEGOAPActionStatus.Finished:
-                action.RaiseShutdown(uid, EntityManager);
-                goap.CurrentActionIndex++;
-                goap.CurrentActionStarted = false;
+                action.RaiseShutdown(ent, EntityManager);
+                ent.Comp.CurrentActionIndex++;
+                ent.Comp.CurrentActionStarted = false;
 
                 // Plan completed
-                if (goap.CurrentActionIndex >= goap.CurrentPlan.Count)
-                    ClearPlan(uid, goap);
+                if (ent.Comp.CurrentActionIndex >= ent.Comp.CurrentPlan.Count)
+                    ClearPlan(ent);
                 break;
 
             case CEGOAPActionStatus.Failed:
-                action.RaiseShutdown(uid, EntityManager);
-                ClearPlan(uid, goap);
-                goap.NextPlanTime = TimeSpan.Zero; // Re-plan immediately
+                action.RaiseShutdown(ent, EntityManager);
+                ClearPlan(ent);
+                ent.Comp.NextPlanTime = TimeSpan.Zero; // Re-plan immediately
                 break;
         }
     }
 
-    private void ShutdownCurrentAction(EntityUid uid, CEGOAPComponent goap)
+    private void ShutdownCurrentAction(Entity<CEGOAPComponent> ent)
     {
-        if (goap.CurrentPlan != null &&
-            goap.CurrentActionStarted &&
-            goap.CurrentActionIndex < goap.CurrentPlan.Count)
+        if (ent.Comp.CurrentPlan != null &&
+            ent.Comp.CurrentActionStarted &&
+            ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
         {
-            goap.CurrentPlan[goap.CurrentActionIndex].RaiseShutdown(uid, EntityManager);
+            ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
         }
     }
 
-    private void ClearPlan(EntityUid uid, CEGOAPComponent goap)
+    private void ClearPlan(Entity<CEGOAPComponent> ent)
     {
-        ShutdownCurrentAction(uid, goap);
-        goap.CurrentPlan = null;
-        goap.CurrentActionIndex = 0;
-        goap.CurrentActionStarted = false;
-        goap.ActiveGoalIndex = -1;
+        ShutdownCurrentAction(ent);
+        ent.Comp.CurrentPlan = null;
+        ent.Comp.CurrentActionIndex = 0;
+        ent.Comp.CurrentActionStarted = false;
+        ent.Comp.ActiveGoalIndex = -1;
     }
 }

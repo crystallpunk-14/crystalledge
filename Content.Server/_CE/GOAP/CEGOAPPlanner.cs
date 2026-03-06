@@ -8,28 +8,19 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public static class CEGOAPPlanner
 {
-    private sealed class PlanNode
+    private sealed class PlanNode(
+        Dictionary<string, bool> state,
+        CEGOAPAction? action,
+        PlanNode? parent,
+        float gCost,
+        float hCost)
     {
-        public readonly Dictionary<string, bool> State;
-        public readonly CEGOAPAction? Action;
-        public readonly PlanNode? Parent;
-        public readonly float GCost;
-        public readonly float HCost;
+        public readonly Dictionary<string, bool> State = state;
+        public readonly CEGOAPAction? Action = action;
+        public readonly PlanNode? Parent = parent;
+        public readonly float GCost = gCost;
+        public readonly float HCost = hCost;
         public float FCost => GCost + HCost;
-
-        public PlanNode(
-            Dictionary<string, bool> state,
-            CEGOAPAction? action,
-            PlanNode? parent,
-            float gCost,
-            float hCost)
-        {
-            State = state;
-            Action = action;
-            Parent = parent;
-            GCost = gCost;
-            HCost = hCost;
-        }
     }
 
     /// <summary>
