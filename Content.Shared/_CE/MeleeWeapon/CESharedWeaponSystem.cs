@@ -103,7 +103,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         return TryUse(user, weapon.Value, useType, angle);
     }
 
-    private bool TryUse(
+    public bool TryUse(
         EntityUid user,
         Entity<CEWeaponComponent> used,
         CEUseType useType,

@@ -13,7 +13,7 @@ public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<
     [Dependency] private readonly CEHealthSystem _health = default!;
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDeadSensor> args)
     {
-        var target = ent.Comp.GetTarget(args.Sensor.TargetProviderKey);
+        var target = GetTarget(ent.Comp, args.Sensor.TargetProviderKey);
         if (target == null)
         {
             SetState(ref args, false);

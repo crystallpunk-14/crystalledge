@@ -1,4 +1,5 @@
 using Content.Shared._CE.GOAP;
+using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP;
 
@@ -28,5 +29,27 @@ public abstract partial class CEGOAPSensorSystem<T> : EntitySystem where T : CEG
     protected void SetState(ref CEGOAPSensorUpdateEvent<T> args, bool newState)
     {
         args.WorldState[args.Sensor.ConditionKey] = newState;
+    }
+
+    /// <summary>
+    /// Returns the resolved entity target from the named target provider, or null if the key is absent or unresolved.
+    /// </summary>
+    protected EntityUid? GetTarget(CEGOAPComponent goap, string? providerKey)
+    {
+        if (providerKey == null)
+            return null;
+
+        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetEntity : null;
+    }
+
+    /// <summary>
+    /// Returns the resolved coordinate target from the named target provider, or null if the key is absent or unresolved.
+    /// </summary>
+    protected EntityCoordinates? GetTargetCoordinates(CEGOAPComponent goap, string? providerKey)
+    {
+        if (providerKey == null)
+            return null;
+
+        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetCoordinates : null;
     }
 }

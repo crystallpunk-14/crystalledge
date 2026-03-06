@@ -43,12 +43,10 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPMoveToTargetAction> args)
     {
-        var target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
+        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
         if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
             return;
 
-        // Use absolute coordinates (not EntityCoordinates(target, Zero)) so
-        // the pathfinding system computes a real path avoiding space tiles.
         var comp = _steering.Register(ent, targetXform.Coordinates);
         comp.Range = args.Action.Range;
     }
@@ -57,7 +55,7 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMoveToTargetAction> args)
     {
-        var target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
+        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
         if (target == null)
         {
             args.Status = CEGOAPActionStatus.Failed;

@@ -26,7 +26,7 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : CEGOAPSensorSystem
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
     {
-        var target = ent.Comp.GetTarget(args.Sensor.TargetProviderKey);
+        var target = GetTarget(ent.Comp, args.Sensor.TargetProviderKey);
         if (target == null)
         {
             SetState(ref args, false);

@@ -17,6 +17,7 @@
     targetProviders:
       enemy: !type:CEGOAPNearestHostileTargetProvider
         visionRadius: 10
+      self: !type:CEGOAPSelfTargetProvider
 
     goals:
     # Buff self
@@ -78,18 +79,18 @@
       occlusionBonus: 2
     # Divine Shield - self-target action, use when no shield active
     - !type:CEGOAPUseAction
+      targetProviderKey: self
       effects:
         HasDivineShield: true
       cost: 1
       actionPrototype: CEActionSpellDivineShield
-      targetSelf: true
     # Area Healing - world target under self, use when low health
     - !type:CEGOAPUseAction
+      targetProviderKey: self
       effects:
         LowHealth: false
       cost: 2
       actionPrototype: CEActionSpellAreaHealing
-      targetSelf: true
 
     sensors:
     - !type:CEGOAPTargetExistsSensor

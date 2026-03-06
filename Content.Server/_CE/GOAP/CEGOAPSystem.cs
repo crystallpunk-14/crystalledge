@@ -25,6 +25,11 @@ public sealed partial class CEGOAPSystem : EntitySystem
     /// </summary>
     private readonly List<CEGOAPAction> _executableActions = new();
 
+    /// <summary>
+    /// Reusable list for candidate goal indices, sorted by descending priority, to avoid per-frame allocations.
+    /// </summary>
+    private readonly List<int> _candidateGoals = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -109,20 +114,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
     {
         ent.Comp.NextPlanTime = _timing.CurTime + ent.Comp.PlanCooldown;
 
-        var bestGoalIndex = SelectBestGoal(ent.Comp);
-        if (bestGoalIndex < 0)
-        {
-            ClearPlan(ent);
-            return;
-        }
-
-        // If same goal and plan is still valid, keep it
-        if (bestGoalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan != null)
-            return;
-
-        var bestGoal = ent.Comp.Goals[bestGoalIndex];
-
-        // Filter actions by feasibility (CanExecute) before planning
+        // Filter actions by feasibility (CanExecute) before planning — done once for all goals
         _executableActions.Clear();
         foreach (var action in ent.Comp.Actions)
         {
@@ -130,36 +122,45 @@ public sealed partial class CEGOAPSystem : EntitySystem
                 _executableActions.Add(action);
         }
 
-        var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, bestGoal.DesiredState, _executableActions);
-
-        if (plan != null && plan.Count > 0)
+        // Try active goals in descending priority order; adopt the first one that yields a valid plan
+        GetActiveGoalIndicesByPriority(ent.Comp);
+        foreach (var goalIndex in _candidateGoals)
         {
+            // If this is already the active goal and plan is still valid, keep it
+            if (goalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan != null)
+                return;
+
+            var goal = ent.Comp.Goals[goalIndex];
+            var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions);
+
+            if (plan == null || plan.Count == 0)
+                continue;
+
             ShutdownCurrentAction(ent);
-            ent.Comp.ActiveGoalIndex = bestGoalIndex;
+            ent.Comp.ActiveGoalIndex = goalIndex;
             ent.Comp.CurrentPlan = plan;
             ent.Comp.CurrentActionIndex = 0;
             ent.Comp.CurrentActionStarted = false;
+            return;
         }
-        else
-        {
-            ClearPlan(ent);
-        }
+
+        // No goal could be planned with the currently feasible actions
+        ClearPlan(ent);
     }
 
     /// <summary>
-    /// Return the index of the highest priority goal that has not yet been completed,
-    /// for which the requirements have been met.
+    /// Fills <see cref="_candidateGoals"/> with indices of goals that are active (activation conditions met)
+    /// and not yet satisfied, sorted by descending priority.
     /// </summary>
-    private int SelectBestGoal(CEGOAPComponent goap)
+    private void GetActiveGoalIndicesByPriority(CEGOAPComponent goap)
     {
-        var bestIndex = -1;
-        var bestPriority = float.MinValue;
+        _candidateGoals.Clear();
 
         for (var i = 0; i < goap.Goals.Count; i++)
         {
             var goal = goap.Goals[i];
 
-            // We skip goals for which the requirements have not been met.
+            // Skip goals whose activation conditions are not currently met
             var active = true;
             foreach (var (key, value) in goal.ActivationConditions)
             {
@@ -173,7 +174,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
             if (!active)
                 continue;
 
-            // Skip goals already satisfied
+            // Skip goals that are already satisfied
             var satisfied = true;
             foreach (var (key, value) in goal.DesiredState)
             {
@@ -187,14 +188,10 @@ public sealed partial class CEGOAPSystem : EntitySystem
             if (satisfied)
                 continue;
 
-            if (goal.Priority > bestPriority)
-            {
-                bestIndex = i;
-                bestPriority = goal.Priority;
-            }
+            _candidateGoals.Add(i);
         }
 
-        return bestIndex;
+        _candidateGoals.Sort((a, b) => goap.Goals[b].Priority.CompareTo(goap.Goals[a].Priority));
     }
 
     private void ExecuteCurrentAction(Entity<CEGOAPComponent> ent, float frameTime)

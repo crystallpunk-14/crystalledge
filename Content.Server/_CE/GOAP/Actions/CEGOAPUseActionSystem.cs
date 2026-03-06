@@ -16,14 +16,6 @@ public sealed partial class CEGOAPUseAction : CEGOAPActionBase<CEGOAPUseAction>
     /// </summary>
     [DataField(required: true)]
     public EntProtoId ActionPrototype;
-
-    /// <summary>
-    /// If true, targets self instead of using the TargetProvider.
-    /// For EntityTarget actions, targets the NPC entity itself.
-    /// For WorldTarget actions, targets the NPC's own position.
-    /// </summary>
-    [DataField]
-    public bool TargetSelf;
 }
 
 public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUseAction>
@@ -91,15 +83,7 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
         }
 
         // Determine the target entity for EntityTarget / WorldTarget actions
-        EntityUid? target = null;
-        if (args.Action.TargetSelf)
-        {
-            target = ent.Owner;
-        }
-        else
-        {
-            target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
-        }
+        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
 
         // Set target on the action event based on auto-detected type
         if (_entityTargetQuery.HasComponent(actionEntity.Value) ||

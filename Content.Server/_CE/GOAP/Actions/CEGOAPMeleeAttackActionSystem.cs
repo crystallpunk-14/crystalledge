@@ -65,7 +65,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     {
         _combatMode.SetInCombatMode(ent, true);
 
-        var target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
+        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
         if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
             return;
 
@@ -78,7 +78,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMeleeAttackAction> args)
     {
-        var target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
+        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
         if (target == null)
         {
             args.Status = CEGOAPActionStatus.Failed;
@@ -115,7 +115,9 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         if (_steeringQuery.TryComp(ent, out var steeringComp))
         {
             if (steeringComp.Coordinates.TryDistance(
-                    EntityManager, targetXform.Coordinates, out var delta)
+                    EntityManager,
+                    targetXform.Coordinates,
+                    out var delta)
                 && delta > args.Action.ReregisterThreshold)
             {
                 var comp = _steering.Register(ent, targetXform.Coordinates);
@@ -141,7 +143,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
             angle += Angle.FromDegrees(
                 _random.NextFloat(-args.Action.AngleVariation, args.Action.AngleVariation));
 
-            _weapon.TryUse(ent, args.Action.UseType, angle);
+            _weapon.TryUse(ent, weapon.Value, args.Action.UseType, angle);
         }
 
         args.Status = CEGOAPActionStatus.Running;

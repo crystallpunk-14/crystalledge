@@ -1,5 +1,4 @@
 ﻿using Robust.Shared.GameStates;
-using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.GOAP;
@@ -85,26 +84,5 @@ public sealed partial class CEGOAPComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextSensorTime;
 
-    /// <summary>
-    /// Gets the resolved entity target from a named target provider.
-    /// </summary>
-    public EntityUid? GetTarget(string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
-
-        return TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetEntity : null;
-    }
-
-    /// <summary>
-    /// Gets the resolved coordinate target from a named target provider.
-    /// </summary>
-    public EntityCoordinates? GetTargetCoordinates(string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
-
-        return TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetCoordinates : null;
-    }
 }
 
