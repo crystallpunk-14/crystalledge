@@ -12,3 +12,9 @@
 
 - type: ceGoapCondition
   id: CELowHealth
+
+- type: ceGoapCondition
+  id: CEHasDivineShield
+
+- type: ceGoapCondition
+  id: CEHasIntellectBuff

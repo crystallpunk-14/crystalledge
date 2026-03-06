@@ -1,4 +1,5 @@
 using Content.Shared._CE.GOAP;
+using Content.Shared.NPC;
 
 namespace Content.Server._CE.GOAP;
 
@@ -11,12 +12,19 @@ public sealed partial class CEGOAPSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<CEGOAPComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEGOAPComponent, ComponentShutdown>(OnShutdown);
+    }
+
+    private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
+    {
+        EnsureComp<ActiveNPCComponent>(ent);
     }
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
         ClearPlan(ent, ent.Comp);
+        RemCompDeferred<ActiveNPCComponent>(ent);
     }
 
     public override void Update(float frameTime)

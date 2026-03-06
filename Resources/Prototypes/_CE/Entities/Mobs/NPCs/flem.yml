@@ -9,22 +9,37 @@
   description: TODO
   categories: [ ForkFiltered ]
   components:
+  - type: CEMagicEnergyContainer
+    maxEnergy: 100
   - type: CEGOAP
     planCooldown: 0.5
+
     goals:
+    # Атакуем
     - desiredState:
         CEEnemyNeutralized: true
       activationConditions:
         CELowHealth: false
         CEEnemyVisible: true
-      priority: 1
+        CEHasDivineShield: true
+      priority: 3
+    # Валим от врага
     - desiredState:
         CEEnemyVisible: false
       activationConditions:
         CELowHealth: true
         CEEnemyVisible: true
       priority: 2
+    # Лечим себя
+    - desiredState:
+        CELowHealth: false
+      activationConditions:
+        CELowHealth: true
+        CEEnemyVisible: false
+      priority: 1
+
     actions:
+    # Move to target
     - !type:CEGOAPMoveToTargetAction
       preconditions:
         CEEnemyVisible: true
@@ -32,6 +47,7 @@
         CEEnemyInMeleeRange: true
       cost: 2
       range: 1.5
+    # Attack target
     - !type:CEGOAPMeleeAttackAction
       preconditions:
         CEEnemyInMeleeRange: true
@@ -40,6 +56,7 @@
       cost: 1
       useType: Primary
       angleVariation: 5
+    # Run away from target
     - !type:CEGOAPFleeAction
       preconditions:
         CELowHealth: true
@@ -48,6 +65,33 @@
         CEEnemyVisible: false
       cost: 1
       fleeDistance: 15
+    # Divine Shield - self-target entity action, use when no shield active
+    - !type:CEGOAPUseEntityTargetAction
+      preconditions:
+        CEHasDivineShield: false
+      effects:
+        CEHasDivineShield: true
+      cost: 1
+      actionPrototype: CEActionSpellDivineShield
+      targetSelf: true
+    # Intellect Buff - instant action, use when chasing and no buff
+    - !type:CEGOAPUseInstantAction
+      preconditions:
+        CEHasIntellectBuff: false
+      effects:
+        CEHasIntellectBuff: true
+      cost: 1
+      actionPrototype: CEActionMageIntellectBuff
+    # Area Healing - world target under self, use when low health
+    - !type:CEGOAPUseWorldTargetAction
+      preconditions:
+        CELowHealth: true
+      effects:
+        CELowHealth: false
+      cost: 2
+      actionPrototype: CEActionSpellAreaHealing
+      targetSelf: true
+
     sensors:
     - !type:CEGOAPFindEnemySensor
       conditionKey: CEEnemyVisible
@@ -60,6 +104,12 @@
       range: 1.5
     - !type:CEGOAPEnemyStateSensor
       conditionKey: CEEnemyNeutralized
+    - !type:CEGOAPHasStatusEffectSensor
+      conditionKey: CEHasDivineShield
+      statusEffect: CEStatusEffectDivineShield
+    - !type:CEGOAPHasStatusEffectSensor
+      conditionKey: CEHasIntellectBuff
+      statusEffect: CEStatusEffectMageIntellectBuff
   - type: NpcFactionMember
     factions:
     - SimpleHostile
