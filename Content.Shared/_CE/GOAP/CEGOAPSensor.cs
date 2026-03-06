@@ -13,6 +13,13 @@ public abstract partial class CEGOAPSensor
     public string ConditionKey = string.Empty;
 
     /// <summary>
+    /// Optional key into CEGOAPComponent.TargetProviders.
+    /// Sensors that need to check something about a specific target reference a provider by this key.
+    /// </summary>
+    [DataField]
+    public string? TargetProviderKey;
+
+    /// <summary>
     /// Raises the sensor update event to evaluate world state conditions.
     /// </summary>
     public abstract void RaiseUpdate(EntityUid uid, Dictionary<string, bool> worldState, IEntityManager entMan);

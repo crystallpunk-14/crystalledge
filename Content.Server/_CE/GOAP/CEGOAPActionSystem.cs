@@ -12,9 +12,19 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionCanExecuteEvent<T>>(OnCanExecute);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionStartupEvent<T>>(OnActionStartup);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionUpdateEvent<T>>(OnActionUpdate);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionShutdownEvent<T>>(OnActionShutdown);
+    }
+
+    /// <summary>
+    /// Called during planning to check if this action can be executed.
+    /// Override to add feasibility checks (e.g., cooldowns, resource availability).
+    /// Set args.CanExecute = false to exclude this action from the current planning cycle.
+    /// </summary>
+    protected virtual void OnCanExecute(Entity<CEGOAPComponent> ent, ref CEGOAPActionCanExecuteEvent<T> args)
+    {
     }
 
     /// <summary>

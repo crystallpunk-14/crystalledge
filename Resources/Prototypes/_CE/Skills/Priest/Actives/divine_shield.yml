@@ -16,7 +16,7 @@
   - type: CEActionManaCost
     manaCost: 5
   - type: Action
-    useDelay: 1
+    useDelay: 5
     icon:
       sprite: _CE/Interface/divine_shield.rsi
       state: shield

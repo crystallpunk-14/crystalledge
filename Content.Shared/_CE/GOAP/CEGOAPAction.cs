@@ -5,8 +5,17 @@ namespace Content.Shared._CE.GOAP;
 /// </summary>
 public enum CEGOAPActionStatus : byte
 {
+    /// <summary>
+    /// Nothing happens, we continue to perform the current action
+    /// </summary>
     Running,
+    /// <summary>
+    /// Starts the next action in the plan
+    /// </summary>
     Finished,
+    /// <summary>
+    /// Immediately triggers re-planning.
+    /// </summary>
     Failed,
 }
 
@@ -36,6 +45,19 @@ public abstract partial class CEGOAPAction
     public float Cost = 1f;
 
     /// <summary>
+    /// Key into the CEGOAPComponent.TargetProviders dictionary.
+    /// Actions that need a target read from this provider.
+    /// </summary>
+    [DataField]
+    public string? TargetProviderKey;
+
+    /// <summary>
+    /// Checks whether this action can currently be executed (e.g. not on cooldown).
+    /// Called by the planner to filter unavailable actions before planning.
+    /// </summary>
+    public abstract bool RaiseCanExecute(EntityUid uid, IEntityManager entMan);
+
+    /// <summary>
     /// Raises the startup event on the entity to begin action execution.
     /// </summary>
     public abstract void RaiseStartup(EntityUid uid, IEntityManager entMan);
@@ -56,6 +78,16 @@ public abstract partial class CEGOAPAction
 /// </summary>
 public abstract partial class CEGOAPActionBase<T> : CEGOAPAction where T : CEGOAPActionBase<T>
 {
+    public override bool RaiseCanExecute(EntityUid uid, IEntityManager entMan)
+    {
+        if (this is not T self)
+            return false;
+
+        var ev = new CEGOAPActionCanExecuteEvent<T>(self);
+        entMan.EventBus.RaiseLocalEvent(uid, ref ev);
+        return ev.CanExecute;
+    }
+
     public override void RaiseStartup(EntityUid uid, IEntityManager entMan)
     {
         if (this is not T self)
@@ -105,3 +137,13 @@ public record struct CEGOAPActionUpdateEvent<T>(T Action, float FrameTime) where
 /// </summary>
 [ByRefEvent]
 public record struct CEGOAPActionShutdownEvent<T>(T Action) where T : CEGOAPActionBase<T>;
+
+/// <summary>
+/// Raised during planning to check if this action can currently be executed.
+/// Set CanExecute to false to exclude the action from the current plan.
+/// </summary>
+[ByRefEvent]
+public record struct CEGOAPActionCanExecuteEvent<T>(T Action) where T : CEGOAPActionBase<T>
+{
+    public bool CanExecute = true;
+}

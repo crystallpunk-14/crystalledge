@@ -20,6 +20,11 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private int _maxUpdates = 128;
     private float _sensorInterval = 0.2f;
 
+    /// <summary>
+    /// Reusable list for executable actions to avoid allocations during planning.
+    /// </summary>
+    private readonly List<CEGOAPAction> _executableActions = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -67,9 +72,12 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 1. Update sensors
+        // 1. Resolve target providers, then update sensors
         if (_timing.CurTime >= ent.Comp.NextSensorTime)
+        {
+            ResolveTargetProviders(ent);
             UpdateSensors(ent);
+        }
 
         // 2. Check if we need to re-plan
         if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
@@ -78,6 +86,14 @@ public sealed partial class CEGOAPSystem : EntitySystem
         // 3. Execute current action
         if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
+    }
+
+    private void ResolveTargetProviders(Entity<CEGOAPComponent> ent)
+    {
+        foreach (var (_, provider) in ent.Comp.TargetProviders)
+        {
+            provider.RaiseResolve(ent, EntityManager);
+        }
     }
 
     private void UpdateSensors(Entity<CEGOAPComponent> ent)
@@ -106,7 +122,15 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
         var bestGoal = ent.Comp.Goals[bestGoalIndex];
 
-        var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, bestGoal.DesiredState, ent.Comp.Actions);
+        // Filter actions by feasibility (CanExecute) before planning
+        _executableActions.Clear();
+        foreach (var action in ent.Comp.Actions)
+        {
+            if (action.RaiseCanExecute(ent, EntityManager))
+                _executableActions.Add(action);
+        }
+
+        var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, bestGoal.DesiredState, _executableActions);
 
         if (plan != null && plan.Count > 0)
         {

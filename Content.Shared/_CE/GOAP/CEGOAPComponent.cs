@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.GOAP;
@@ -29,18 +30,18 @@ public sealed partial class CEGOAPComponent : Component
     public List<CEGOAPSensor> Sensors = new();
 
     /// <summary>
+    /// Named target providers that resolve entity/coordinate targets.
+    /// Resolved each sensor tick before sensors update.
+    /// </summary>
+    [DataField(serverOnly: true)]
+    public Dictionary<string, CEGOAPTargetProvider> TargetProviders = new();
+
+    /// <summary>
     /// Current world state as perceived by this entity.
     /// Keys are condition prototype IDs, values are boolean states.
     /// </summary>
     [ViewVariables]
     public Dictionary<string, bool> WorldState = new();
-
-    /// <summary>
-    /// The current target entity (e.g., enemy to attack or flee from).
-    /// Set by sensors, used by actions.
-    /// </summary>
-    [ViewVariables]
-    public EntityUid? Target;
 
     /// <summary>
     /// Current plan being executed. Null if no plan.
@@ -83,5 +84,27 @@ public sealed partial class CEGOAPComponent : Component
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextSensorTime;
+
+    /// <summary>
+    /// Gets the resolved entity target from a named target provider.
+    /// </summary>
+    public EntityUid? GetTarget(string? providerKey)
+    {
+        if (providerKey == null)
+            return null;
+
+        return TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetEntity : null;
+    }
+
+    /// <summary>
+    /// Gets the resolved coordinate target from a named target provider.
+    /// </summary>
+    public EntityCoordinates? GetTargetCoordinates(string? providerKey)
+    {
+        if (providerKey == null)
+            return null;
+
+        return TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetCoordinates : null;
+    }
 }
 

@@ -14,14 +14,17 @@
   - type: CEGOAP
     planCooldown: 0.5
 
+    targetProviders:
+      enemy: !type:CEGOAPNearestHostileTargetProvider
+        visionRadius: 10
+
     goals:
     # Buff self
-    #- desiredState:
-    #    HasDivineShield: true
-    #  activationConditions:
-    #    HasDivineShield: false
-    #    EnemyVisible: true
-    #  priority: 4
+    - desiredState:
+        HasDivineShield: true
+      activationConditions:
+        HasDivineShield: false
+      priority: 4
     # First - attack
     - desiredState:
         EnemyDead: true
@@ -47,6 +50,7 @@
     actions:
     # Move to target
     - !type:CEGOAPMoveToTargetAction
+      targetProviderKey: enemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -55,6 +59,7 @@
       range: 1.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
+      targetProviderKey: enemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -64,26 +69,22 @@
       angleVariation: 5
     # Run away from target
     - !type:CEGOAPFleeAction
-      preconditions:
-        LowHealth: true
-        EnemyVisible: true
+      targetProviderKey: enemy
       effects:
         EnemyVisible: false
       cost: 1
       fleeDistance: 15
-    # Divine Shield - self-target entity action, use when no shield active
-    - !type:CEGOAPUseEntityTargetAction
-      preconditions:
-        HasDivineShield: false
+      visionRadius: 10
+      occlusionBonus: 2
+    # Divine Shield - self-target action, use when no shield active
+    - !type:CEGOAPUseAction
       effects:
         HasDivineShield: true
       cost: 1
       actionPrototype: CEActionSpellDivineShield
       targetSelf: true
     # Area Healing - world target under self, use when low health
-    - !type:CEGOAPUseWorldTargetAction
-      preconditions:
-        LowHealth: true
+    - !type:CEGOAPUseAction
       effects:
         LowHealth: false
       cost: 2
@@ -91,20 +92,23 @@
       targetSelf: true
 
     sensors:
-    - !type:CEGOAPFindEnemySensor
+    - !type:CEGOAPTargetExistsSensor
       conditionKey: EnemyVisible
-      visionRadius: 10
+      targetProviderKey: enemy
     - !type:CEGOAPCheckHealthLevelSensor
       conditionKey: LowHealth
       threshold: 0.5
     - !type:CEGOAPRangeToTargetSensor
       conditionKey: EnemyInMeleeRange
+      targetProviderKey: enemy
       range: 1.5
     - !type:CEGOAPTargetIsDeadSensor
       conditionKey: EnemyDead
+      targetProviderKey: enemy
     - !type:CEGOAPHasStatusEffectSensor
       conditionKey: HasDivineShield
       statusEffect: CEStatusEffectDivineShield
+
   - type: NpcFactionMember
     factions:
     - SimpleHostile

@@ -1,13 +1,13 @@
-using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
-using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
 /// Moves the NPC towards its current target entity.
+/// Uses absolute grid coordinates for proper pathfinding (avoiding space tiles).
+/// Only re-registers steering when the target moves significantly.
 /// </summary>
 public sealed partial class CEGOAPMoveToTargetAction : CEGOAPActionBase<CEGOAPMoveToTargetAction>
 {
@@ -16,6 +16,13 @@ public sealed partial class CEGOAPMoveToTargetAction : CEGOAPActionBase<CEGOAPMo
     /// </summary>
     [DataField]
     public float Range = 1.5f;
+
+    /// <summary>
+    /// How far the target must move before re-registering the steering destination.
+    /// Prevents constant pathfinding recalculation while still tracking moving targets.
+    /// </summary>
+    [DataField]
+    public float ReregisterThreshold = 1.5f;
 }
 
 public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<CEGOAPMoveToTargetAction>
@@ -32,56 +39,64 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         _steeringQuery = GetEntityQuery<NPCSteeringComponent>();
     }
 
-    protected override void OnActionStartup(Entity<CEGOAPComponent> ent, ref CEGOAPActionStartupEvent<CEGOAPMoveToTargetAction> args)
+    protected override void OnActionStartup(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionStartupEvent<CEGOAPMoveToTargetAction> args)
     {
-        if (ent.Comp.Target is not { } target || !_xformQuery.HasComponent(target))
+        var target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
+        if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
             return;
 
-        _steering.Register(ent, new EntityCoordinates(target, Vector2.Zero));
+        // Use absolute coordinates (not EntityCoordinates(target, Zero)) so
+        // the pathfinding system computes a real path avoiding space tiles.
+        var comp = _steering.Register(ent, targetXform.Coordinates);
+        comp.Range = args.Action.Range;
     }
 
-    protected override void OnActionUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPActionUpdateEvent<CEGOAPMoveToTargetAction> args)
+    protected override void OnActionUpdate(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionUpdateEvent<CEGOAPMoveToTargetAction> args)
     {
-        if (ent.Comp.Target is not { } target)
+        var target = ent.Comp.GetTarget(args.Action.TargetProviderKey);
+        if (target == null)
         {
             args.Status = CEGOAPActionStatus.Failed;
             return;
         }
 
-        if (!_xformQuery.TryGetComponent(ent, out var xform) ||
-            !_xformQuery.TryGetComponent(target, out var targetXform))
+        if (!_xformQuery.TryGetComponent(target.Value, out var targetXform))
         {
             args.Status = CEGOAPActionStatus.Failed;
             return;
         }
 
-        if (!xform.Coordinates.TryDistance(EntityManager, targetXform.Coordinates, out var distance))
+        // Re-register steering if target has moved significantly
+        if (_steeringQuery.TryComp(ent, out var steering))
         {
-            args.Status = CEGOAPActionStatus.Failed;
-            return;
-        }
+            if (steering.Coordinates.TryDistance(EntityManager, targetXform.Coordinates, out var delta)
+                && delta > args.Action.ReregisterThreshold)
+            {
+                var comp = _steering.Register(ent, targetXform.Coordinates);
+                comp.Range = args.Action.Range;
+            }
 
-        if (distance <= args.Action.Range)
-        {
-            args.Status = CEGOAPActionStatus.Finished;
-            return;
-        }
-
-        // Update steering target in case it moved
-        _steering.Register(ent, new EntityCoordinates(target, Vector2.Zero));
-
-        // Check if steering has no path
-        if (_steeringQuery.TryComp(ent, out var steering) &&
-            steering.Status == SteeringStatus.NoPath)
-        {
-            args.Status = CEGOAPActionStatus.Failed;
-            return;
+            switch (steering.Status)
+            {
+                case SteeringStatus.InRange:
+                    args.Status = CEGOAPActionStatus.Finished;
+                    return;
+                case SteeringStatus.NoPath:
+                    args.Status = CEGOAPActionStatus.Failed;
+                    return;
+            }
         }
 
         args.Status = CEGOAPActionStatus.Running;
     }
 
-    protected override void OnActionShutdown(Entity<CEGOAPComponent> ent, ref CEGOAPActionShutdownEvent<CEGOAPMoveToTargetAction> args)
+    protected override void OnActionShutdown(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionShutdownEvent<CEGOAPMoveToTargetAction> args)
     {
         _steering.Unregister(ent);
     }

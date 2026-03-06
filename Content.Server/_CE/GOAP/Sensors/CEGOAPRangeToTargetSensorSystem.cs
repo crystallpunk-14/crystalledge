@@ -26,14 +26,15 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : CEGOAPSensorSystem
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
     {
-        if (ent.Comp.Target is not { } target)
+        var target = ent.Comp.GetTarget(args.Sensor.TargetProviderKey);
+        if (target == null)
         {
             SetState(ref args, false);
             return;
         }
 
         if (!_xformQuery.TryGetComponent(ent, out var xform) ||
-            !_xformQuery.TryGetComponent(target, out var targetXform))
+            !_xformQuery.TryGetComponent(target.Value, out var targetXform))
         {
             SetState(ref args, false);
             return;
