@@ -221,9 +221,6 @@ public readonly record struct CEStatusEffectStackEditedEvent(EntityUid Target, i
 [ByRefEvent]
 public readonly record struct CEStatusEffectStackEffectEvent(int Stack);
 
-
-
-
 [NetSerializable, Serializable]
 public enum CEStatusEffectStackVisuals
 {
