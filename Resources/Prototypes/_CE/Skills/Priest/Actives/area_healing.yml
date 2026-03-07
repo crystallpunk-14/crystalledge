@@ -57,7 +57,9 @@
 - type: entity
   id: CEEffectAreaHealingTelegraphy
   parent: CEBaseMagicImpact
-  categories: [ HideSpawnMenu ]
+  categories: [ ForkFiltered ]
+  name: area healing telegraphy
+  suffix: VFX
   save: false
   components:
   - type: Sprite
@@ -85,6 +87,7 @@
 - type: entity
   parent: CEEffectAreaHealingTelegraphy
   id: CEEffectAreaHealingEffect
+  name: area healing impact
   components:
   - type: Sprite
     sprite: _CE/Effects/area_healing_effect.rsi
@@ -97,6 +100,7 @@
 - type: entity
   parent: CEEffectAreaHealingTelegraphy
   id: CEEffectHealingGeneric
+  name: healing impact
   components:
   - type: Sprite
     drawdepth: Effects

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Network;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -49,7 +50,11 @@ public sealed partial class ShootProjectile : CEAnimationActionEntry
         var physics = entManager.System<SharedPhysicsSystem>();
         var gunSystem = entManager.System<SharedGunSystem>();
         var mapManager = IoCManager.Resolve<IMapManager>();
+        var netManager = IoCManager.Resolve<INetManager>();
         var random = IoCManager.Resolve<IRobustRandom>();
+
+        if (!netManager.IsServer)
+            return;
 
         if (!entManager.TryGetComponent<TransformComponent>(user, out var xform))
             return;
@@ -68,18 +73,23 @@ public sealed partial class ShootProjectile : CEAnimationActionEntry
         {
             //Apply spread to target point
             var offsetedTargetPoint = targetPoint.Value.Offset(new Vector2(
-                (float) (random.NextDouble() * 2 - 1) * Spread,
-                (float) (random.NextDouble() * 2 - 1) * Spread));
+                (float)(random.NextDouble() * 2 - 1) * Spread,
+                (float)(random.NextDouble() * 2 - 1) * Spread));
 
             if (fromCoords == offsetedTargetPoint)
                 continue;
 
-            var ent = entManager.PredictedSpawnAtPosition(Prototype, spawnCoords);
+            var ent = entManager.SpawnAtPosition(Prototype, spawnCoords);
 
             var direction = offsetedTargetPoint.ToMapPos(entManager, transform) -
                             spawnCoords.ToMapPos(entManager, transform);
 
-            gunSystem.ShootProjectile(ent, direction, SaveVelocity ? userVelocity : new Vector2(), user, user, ProjectileSpeed);
+            gunSystem.ShootProjectile(ent,
+                direction,
+                SaveVelocity ? userVelocity : new Vector2(),
+                user,
+                user,
+                ProjectileSpeed);
         }
     }
 }

@@ -1,4 +1,3 @@
-using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Actions;
 using Robust.Shared.Map;
 using Robust.Shared.Player;

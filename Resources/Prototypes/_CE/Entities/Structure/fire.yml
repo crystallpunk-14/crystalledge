@@ -60,6 +60,8 @@
         low_3: ""
   - type: AmbientSound
     volume: -15
+  - type: CEFire
+    intensity: Low
 
 
 - type: entity
@@ -84,6 +86,8 @@
     prototype: CEFireTileLow
   - type: AmbientSound
     volume: -10
+  - type: CEFire
+    intensity: Medium
 
 - type: entity
   parent: CEFireTileBase
@@ -107,4 +111,5 @@
     prototype: CEFireTileMedium
   - type: AmbientSound
     volume: -5
-
+  - type: CEFire
+    intensity: High

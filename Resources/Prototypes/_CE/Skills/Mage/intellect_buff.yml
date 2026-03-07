@@ -17,8 +17,6 @@
     icon:
       sprite: _CE/Skills/intellect_buff.rsi
       state: icon
-  - type: DoAfterArgs
-    delay: 1
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
       animation: AnimationIntellectBuff
