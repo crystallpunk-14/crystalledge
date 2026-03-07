@@ -6,7 +6,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared._CE.Health;
 
 /// <summary>
-/// Manages CE mob states (Alive, Critical, Dead) based on <see cref="CEHealthComponent"/> values.
+/// Manages CrystallEdge mob states (Alive, Critical, Dead) based on <see cref="CEHealthComponent"/> values.
 /// Critical state is entered when health reaches 0, Dead when health reaches DeathThreshold.
 /// </summary>
 public abstract partial class CESharedHealthSystem
@@ -24,18 +24,12 @@ public abstract partial class CESharedHealthSystem
 
     private void OnStartup(Entity<CEHealthComponent> ent, ref ComponentStartup args)
     {
-        if (!TryComp<CEHealthComponent>(ent, out var health))
-            return;
-
-        UpdateState(ent, health);
+        UpdateState(ent, ent.Comp);
     }
 
     private void OnHealthChanged(Entity<CEHealthComponent> ent, ref CEHealthChangedEvent args)
     {
-        if (!TryComp<CEHealthComponent>(ent, out var health))
-            return;
-
-        UpdateState(ent, health);
+        UpdateState(ent, ent.Comp);
     }
 
     private void UpdateState(Entity<CEHealthComponent> ent, CEHealthComponent health)
@@ -105,41 +99,44 @@ public abstract partial class CESharedHealthSystem
         }
     }
 
-    public bool IsAlive(EntityUid uid, CEHealthComponent? component = null)
+    public bool IsAlive(Entity<CEHealthComponent?> ent)
     {
-        if (!Resolve(uid, ref component, false))
+        if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        return component.CurrentState == CEMobState.Alive;
+        return ent.Comp.CurrentState == CEMobState.Alive;
     }
 
-    public bool IsCritical(EntityUid uid, CEHealthComponent? component = null)
+    public bool IsCritical(Entity<CEHealthComponent?> ent)
     {
-        if (!Resolve(uid, ref component, false))
+        if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        return component.CurrentState == CEMobState.Critical;
+        return ent.Comp.CurrentState == CEMobState.Critical;
     }
 
-    public bool IsDead(EntityUid uid, CEHealthComponent? component = null)
+    public bool IsDead(Entity<CEHealthComponent?> ent)
     {
-        if (!Resolve(uid, ref component, false))
+        if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        return component.CurrentState == CEMobState.Dead;
+        return ent.Comp.CurrentState == CEMobState.Dead;
     }
 
-    public bool IsIncapacitated(EntityUid uid, CEHealthComponent? component = null)
+    /// <summary>
+    /// Is dead or critical
+    /// </summary>
+    public bool IsIncapacitated(Entity<CEHealthComponent?> ent)
     {
-        if (!Resolve(uid, ref component, false))
+        if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        return component.CurrentState is CEMobState.Critical or CEMobState.Dead;
+        return ent.Comp.CurrentState is CEMobState.Critical or CEMobState.Dead;
     }
 }
 
 /// <summary>
-/// Raised when a CE mob state changes.
+/// Raised when a mob state changes.
 /// </summary>
 public sealed class CEMobStateChangedEvent(EntityUid target, CEMobState oldState, CEMobState newState)
     : EntityEventArgs

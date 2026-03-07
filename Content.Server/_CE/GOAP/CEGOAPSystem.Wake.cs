@@ -27,7 +27,7 @@ public sealed partial class CEGOAPSystem
         if (args.Handled)
             return;
 
-        if (_health.IsAlive(ent))
+        if (_health.IsAlive((ent, ent.Comp)))
             args.WakeUp();
     }
 
@@ -71,7 +71,7 @@ public sealed partial class CEGOAPSystem
 
 public sealed class CECheckGOAPAwakeEvent : HandledEntityEventArgs
 {
-    private bool _awake = false;
+    private bool _awake;
     public bool Awake => _awake;
 
     public void WakeUp()

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server._CE.Health;
 using Content.Shared._CE.GOAP;
 using Content.Shared.Examine;
 using Content.Shared.NPC.Components;
@@ -25,6 +26,7 @@ public sealed partial class CEGOAPNearestHostileTargetProviderSystem
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly CEHealthSystem _health = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -42,9 +44,7 @@ public sealed partial class CEGOAPNearestHostileTargetProviderSystem
             return;
 
         var npcWorldPos = _transform.GetWorldPosition(xform);
-        Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> factionEnt =
-            (ent.Owner, null, null);
-        var hostiles = _faction.GetNearbyHostiles(factionEnt, args.Provider.VisionRadius);
+        var hostiles = _faction.GetNearbyHostiles(ent.Owner, args.Provider.VisionRadius);
 
         EntityUid? closestTarget = null;
         var closestDistance = float.MaxValue;
@@ -58,6 +58,9 @@ public sealed partial class CEGOAPNearestHostileTargetProviderSystem
             var distance = Vector2.Distance(npcWorldPos, targetWorldPos);
 
             if (distance >= closestDistance)
+                continue;
+
+            if (_health.IsIncapacitated(targetUid))
                 continue;
 
             // Line-of-sight check
