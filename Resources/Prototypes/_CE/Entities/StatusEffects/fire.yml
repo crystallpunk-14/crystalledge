@@ -1,0 +1,70 @@
+- type: entity
+  id: CEStatusEffectFire
+  name: "Fire!"
+  description: "On fire!"
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEHealth
+  - type: StatusEffectAlert
+    alert: CEFire
+  - type: RejuvenateRemovedStatusEffect
+  - type: CEDamageStatusEffect
+    damage:
+      types:
+        Fire: 1
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/fire_status.rsi
+    noRot: true
+    layers:
+    - state: effect
+      shader: unshaded
+      map: [ "fire" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CEStatusEffectStackVisuals.Level:
+        fire:
+          Low: { state: effect }
+          Medium: { state: effect_2 }
+          High: { state: effect_3 }
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#f59c30"
+  - type: AmbientSound
+    enabled: true
+    volume: -5
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+
+- type: alert
+  id: CEFire
+  alertViewEntity: CEFireAlertSpriteView
+  name: ce-alert-fire-name
+  description: ce-alert-fire-desc
+  icons:
+  - sprite: _CE/Interface/fire.rsi
+    state: fire
+
+- type: entity
+  id: CEFireAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/fire.rsi
+      state: fire
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

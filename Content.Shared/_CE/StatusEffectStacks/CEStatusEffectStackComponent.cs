@@ -20,4 +20,16 @@ public sealed partial class CEStatusEffectStackComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan? BaseDuration = null;
+
+    /// <summary>
+    /// Used for Appearance system to modify visuals of status effect
+    /// </summary>
+    [DataField]
+    public int MediumAppearance = 5;
+
+    /// <summary>
+    /// Used for Appearance system to modify visuals of status effect
+    /// </summary>
+    [DataField]
+    public int HighAppearance = 10;
 }
