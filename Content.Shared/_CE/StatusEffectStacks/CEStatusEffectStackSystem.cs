@@ -28,7 +28,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         //We disable prediction because status effects has bugs with constatn deletion and respawns, causes bucnh mispredicts calls
         if (_net.IsClient)
             return;
-        
+
         var ev = new CEStatusEffectStackEffectEvent(1);
         RaiseLocalEvent(ent, ref ev);
     }
