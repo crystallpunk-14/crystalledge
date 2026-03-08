@@ -13,6 +13,10 @@
     drawdepth: Mobs
     noRot: true
     sprite: _CE/Effects/fire_tile.rsi
+    layers:
+    - state: low_1
+      shader: unshaded
+      map: [ "fire" ]
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -31,85 +35,46 @@
     anchored: true
   - type: AmbientSound
     enabled: true
-    volume: -5
+    volume: -15
     range: 5
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg #TODO more aggressive sound
   - type: Appearance
-  - type: CERandomTimedDespawn
-    minLifetime: 20
-    maxLifetime: 30
+  - type: GenericVisualizer
+    visuals:
+      enum.CEFireTileVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }
+  - type: TileEmission
+    color: "#ff4800"
+  - type: CEFire
+    stacks: 1
 
+# Low fire template — 1 stack, small flame for testing
 - type: entity
   parent: CEFireTileBase
   id: CEFireTileLow
   name: small fire
   components:
-  - type: Sprite
-    layers:
-    - state: low_1
-      shader: unshaded
-      map: [ "fire" ]
-  - type: TileEmission
-    color: "#ff4800"
-  - type: RandomSprite
-    available:
-    - fire:
-        low_1: ""
-        low_2: ""
-        low_3: ""
-  - type: AmbientSound
-    volume: -15
   - type: CEFire
-    intensity: Low
+    stacks: 1
 
-
+# Medium fire template — 5 stacks, medium flame for testing
 - type: entity
   parent: CEFireTileBase
   id: CEFireTileMedium
   name: medium fire
   components:
-  - type: Sprite
-    layers:
-    - state: medium_1
-      shader: unshaded
-      map: [ "fire" ]
-  - type: TileEmission
-    color: "#ff8000"
-  - type: RandomSprite
-    available:
-    - fire:
-        medium_1: ""
-        medium_2: ""
-        medium_3: ""
-  - type: SpawnOnDespawn
-    prototype: CEFireTileLow
-  - type: AmbientSound
-    volume: -10
   - type: CEFire
-    intensity: Medium
+    stacks: 5
 
+# High fire template — 10 stacks, large flame for testing
 - type: entity
   parent: CEFireTileBase
   id: CEFireTileHigh
   name: large fire
   components:
-  - type: Sprite
-    layers:
-    - state: high_1
-      shader: unshaded
-      map: [ "fire" ]
-  - type: TileEmission
-    color: "#ffd900"
-  - type: RandomSprite
-    available:
-    - fire:
-        high_1: ""
-        high_2: ""
-        high_3: ""
-  - type: SpawnOnDespawn
-    prototype: CEFireTileMedium
-  - type: AmbientSound
-    volume: -5
   - type: CEFire
-    intensity: High
+    stacks: 10

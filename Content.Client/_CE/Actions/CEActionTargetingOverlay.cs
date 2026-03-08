@@ -258,7 +258,18 @@ public sealed class CEActionTargetingOverlay : Overlay
             return;
 
         var dirNorm = direction / distance;
-        var lineLength = range > 0f ? MathF.Min(distance, range) : distance;
+
+        float lineLength;
+        if (vis.ProjectileMode)
+        {
+            // In projectile mode, always draw full range in the cursor direction.
+            lineLength = range > 0f ? range : distance;
+        }
+        else
+        {
+            lineLength = range > 0f ? MathF.Min(distance, range) : distance;
+        }
+
         var endPos = playerPos + dirNorm * lineLength;
 
         // Perpendicular vector for width offset.
@@ -392,7 +403,20 @@ public sealed class CEActionTargetingOverlay : Overlay
         Vector2 zoneCenter;
         bool inRange;
 
-        if (dist <= range || range <= 0f)
+        if (vis.ProjectileMode)
+        {
+            // In projectile mode, the zone is always at max range in the cursor direction.
+            if (dist < 0.01f)
+            {
+                zoneCenter = playerPos;
+            }
+            else
+            {
+                zoneCenter = playerPos + (offset / dist) * (range > 0f ? range : dist);
+            }
+            inRange = true;
+        }
+        else if (dist <= range || range <= 0f)
         {
             zoneCenter = mousePos;
             inRange = true;

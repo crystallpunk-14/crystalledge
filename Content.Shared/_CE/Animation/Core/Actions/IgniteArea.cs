@@ -9,6 +9,8 @@ public sealed partial class IgniteArea : CEAnimationActionEntry
     public float Radius = 3;
     [DataField]
     public float FallOffFactor = 0.5f;
+    [DataField]
+    public int MaxStacks = 10;
 
     public override void Play(EntityManager entManager,
         EntityUid user,
@@ -32,6 +34,6 @@ public sealed partial class IgniteArea : CEAnimationActionEntry
 
         var fire = entManager.System<CEFireSystem>();
 
-        fire.IgniteArea(targetPoint.Value, Radius, FallOffFactor);
+        fire.IgniteArea(targetPoint.Value, Radius, FallOffFactor, MaxStacks);
     }
 }

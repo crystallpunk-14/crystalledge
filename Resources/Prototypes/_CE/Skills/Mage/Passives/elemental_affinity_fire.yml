@@ -1,0 +1,25 @@
+- type: skill
+  parent: BaseMageSkill
+  id: AffinityFire
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectAffinityFire
+
+- type: entity
+  id: CEStatusEffectAffinityFire
+  name: Elemental Affinity Fire
+  description: You are fully immune to [color=#ff8a05]Fire[/color] damage.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEAffinityFire
+  - type: CEDamageModifierStatusEffect
+    multipliers:
+      Fire: 0
+
+- type: alert
+  id: CEAffinityFire
+  name: ce-alert-elemental-affinity-fire-name
+  description: ce-alert-elemental-affinity-fire-desc
+  icons:
+  - sprite: _CE/Skills/affinity_fire.rsi
+    state: icon

@@ -35,11 +35,15 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
     private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectEndingAttemptEvent args)
     {
-        //We disable prediction because status effects has bugs with constatn deletion and respawns, causes bucnh mispredicts calls
-        if (_net.IsClient)
+        if (ent.Comp.Stack <= 1)
             return;
 
-        if (ent.Comp.Stack <= 1)
+        // Always cancel the ending on both client and server to prevent visual flicker.
+        // The client predicts the same cancellation, avoiding a brief deletion-then-reappear cycle.
+        args.Cancelled = true;
+
+        // Server handles the actual stack removal and timer extension.
+        if (_net.IsClient)
             return;
 
         var proto = MetaData(ent).EntityPrototype;
@@ -58,7 +62,6 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         RaiseLocalEvent(ent, ref ev);
 
         _statusEffect.TryAddTime(statusEffect.AppliedTo.Value, proto, duration.Value);
-        args.Cancelled = true;
         TryRemoveStack(statusEffect.AppliedTo.Value, proto, 1);
     }
 
