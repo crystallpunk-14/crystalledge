@@ -1,5 +1,5 @@
+using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Animation.Item;
-using Robust.Shared.Player;
 
 namespace Content.Server._CE.Animation.Item;
 
@@ -9,7 +9,7 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
     {
         base.RaiseAttackEffects(user, targets);
 
-        var filter = Filter.PvsExcept(user, entityManager: EntityManager);
+        var filter = CEFilter.ZPvsExcept(user, EntityManager);
         RaiseNetworkEvent(new CEMeleeAttackEffectEvent(GetNetEntity(user), GetNetEntityList(targets)), filter);
     }
 }

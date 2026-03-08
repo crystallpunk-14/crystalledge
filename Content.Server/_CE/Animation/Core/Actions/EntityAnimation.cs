@@ -1,6 +1,6 @@
+using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Animation.Core.Actions;
 using Robust.Shared.Map;
-using Robust.Shared.Player;
 
 namespace Content.Server._CE.Animation.Core.Actions;
 
@@ -16,8 +16,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         EntityUid? target,
         EntityCoordinates? position)
     {
-        // Server sends visual effect event to all non-predicting clients
-        var filter = Filter.PvsExcept(user, entityManager: entManager);
+        var filter = CEFilter.ZPvsExcept(user, entManager);
         var effectEvent = new CEEntityAnimationEvent(
             entManager.GetNetEntity(user),
             used.HasValue ? entManager.GetNetEntity(used.Value) : null,

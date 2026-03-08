@@ -7,19 +7,17 @@
 - type: entity
   id: CEStatusEffectAffinityFire
   name: Elemental Affinity Fire
-  description: You are fully immune to [color=#ff8a05]Fire[/color] damage.
+  description: You take 3 less [color=#ff8a05]fire damage[/color] from all sources.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEAffinityFire
   - type: CEDamageModifierStatusEffect
-    multipliers:
-      Fire: 0
+    flatModifiers:
+      Fire: -3
 
 - type: alert
   id: CEAffinityFire
-  name: ce-alert-elemental-affinity-fire-name
-  description: ce-alert-elemental-affinity-fire-desc
   icons:
   - sprite: _CE/Skills/affinity_fire.rsi
     state: icon

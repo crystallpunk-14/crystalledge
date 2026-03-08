@@ -34,7 +34,7 @@
   events:
     0:
     - !type:EntityAnimation
-      dummyEntity: CEEffectFirewallCharge
+      dummyEntity: CEEffectFirewallTelegraphy
       offsetAnimation:
       - time: 0.0
         offset: -0.5, 0
@@ -116,3 +116,5 @@
     effects:
     - !type:IgniteArea
       radius: 1.5
+      maxStacks: 3
+      fallOffFactor: 1

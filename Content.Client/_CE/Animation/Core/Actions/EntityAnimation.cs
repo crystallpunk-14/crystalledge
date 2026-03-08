@@ -6,7 +6,9 @@ using Content.Shared._CE.Animation.Item.Components;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
 
@@ -31,9 +33,6 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         EntityUid? target,
         EntityCoordinates? position)
     {
-        if (!entManager.TryGetComponent<CEWeaponComponent>(used, out var itemAnim))
-            return;
-
         var timing = IoCManager.Resolve<IGameTiming>();
         if (!timing.IsFirstTimePredicted)
             return;
@@ -61,17 +60,23 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
             if (entManager.TryGetComponent<SpriteComponent>(dummy, out var dummySprite))
                 spriteSystem.CopySprite((dummy, dummySprite), (effectEntity, effectSprite));
             entManager.DeleteEntity(dummy);
+
+            var proto = IoCManager.Resolve<IPrototypeManager>().Index(DummyEntity.Value);
+            entManager.AddComponents(effectEntity, proto, false);
         }
         else
         {
-            if (entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
+            if (used is not null && entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
                 spriteSystem.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
         }
 
         spriteSystem.SetVisible((effectEntity, effectSprite), true);
 
         // Set initial rotation
-        var initialRotation = angle + Angle.FromDegrees(itemAnim.SpriteRotation);
+        var initialRotation = angle;
+        if (entManager.TryGetComponent<CEWeaponComponent>(used, out var itemAnim))
+            initialRotation += Angle.FromDegrees(itemAnim.SpriteRotation);
+
         spriteSystem.SetRotation((effectEntity, effectSprite), initialRotation);
 
         // Get initial offset from first keyframe or use zero
