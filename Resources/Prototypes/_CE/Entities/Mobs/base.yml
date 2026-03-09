@@ -3,40 +3,7 @@
   save: false
   abstract: true
   components:
-  - type: Damageable
-    damageContainer: Biological
-  - type: Destructible
-  - type: Stamina
-  - type: StunVisuals
-  - type: MobState
-  - type: MobThresholds
-    thresholds:
-      0: Alive
-      10: Critical
-      20: Dead
-  - type: MobStateActions
-    actions:
-      Critical:
-      - ActionCritSuccumb
-      - ActionCritFakeDeath
-      - ActionCritLastWords
-  - type: HealthExaminable
-    examinableTypes:
-    - Blunt
-    - Slash
-    - Piercing
-    - Heat
-    - Shock
-    - Cold
-    - Caustic
-    - Asphyxiation
-    - Radiation
-  - type: DamageOnHighSpeedImpact
-    damage:
-      types:
-        Blunt: 5
-    soundHit:
-      path: /Audio/Effects/hit_kick.ogg
+  - type: CEHealth
   - type: Pullable
 
 - type: entity
@@ -58,5 +25,26 @@
       Intelligence: 5
   - type: CEVitalityMaxHealth
   - type: CEIntelligenceMaxMana
-  - type: CESkillUpgradeable
+  - type: CEBlessingReceiver
   - type: CESkillStorage
+
+- type: entity
+  id: CEMobCombat
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: CombatMode
+  - type: CEWeapon
+    spriteRotation: -90
+    damage:
+      types:
+        Physical: 1
+    animations:
+      Primary:
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
+      Secondary:
+      - anim: SwordAttackHeavy1
+        speed: 1
+      - anim: SwordAttackHeavy2
+        speed: 1

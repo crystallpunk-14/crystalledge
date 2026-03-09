@@ -1,0 +1,95 @@
+- type: entity
+  id: CEUpgradeStatue
+  parent: BaseStructure
+  name: Level up statue
+  description: "Interact to level up. TODO: immersive name and description"
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    offset: "0.0,0.8"
+    sprite: _CE/Structures/upgrade_statue.rsi
+    layers:
+    - state: statue
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+      trigger:
+        shape:
+          !type:PhysShapeCircle
+          radius: 3
+        hard: false
+        layer: []
+        mask:
+        - MobLayer
+  - type: InteractionOutline
+  - type: CEBlessingStatue
+
+- type: entity
+  id: CEUpgradePostament
+  parent: BaseStructure
+  name: Level up postament
+  description: "Select one of the upgrade options to apply it. TODO: immersive name and description"
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    offset: "0.0,0.1"
+    sprite: _CE/Structures/upgrade_postament.rsi
+    layers:
+    - state: postament
+  - type: CEBlessingTable
+
+- type: entity
+  id: CEUpgradeBlank
+  parent: BaseStructure
+  name: blessing
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    offset: "0.0,0.2"
+    drawdepth: Mobs
+    sprite: _CE/Effects/upgrade.rsi
+    layers:
+    - map: ["vfx"]
+      state: neutral
+      shader: unshaded
+      color: "#ffffff38"
+    - map: ["blessing"]
+      shader: unshaded
+  - type: CEBlessing
+    floatingStartOffset: "0.0,0.4"
+    floatingOffset: "0.0,0.45"
+  - type: InteractionOutline
+  - type: PointLight
+    enabled: true
+    energy: 3
+    radius: 5
+    netsync: true
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Cubic
+        maxDuration: 4
+        startValue: 1.5
+        endValue: 3.0
+        property: Energy
+        isLooped: true
+        enabled: true
+
+- type: entity
+  id: CEUpgradeRandom
+  parent: CEUpgradeBlank
+  name: Random Blessing
+  components:
+  - type: CERandomBlessing

@@ -3,13 +3,13 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
-using Content.Shared.Damage.Systems;
+using Content.Shared._CE.Health;
 
 namespace Content.Shared._CE.ZLevels.Damage.FallingDamage;
 
 public sealed class CEFallingDamageSystem : EntitySystem
 {
-    [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly CESharedHealthSystem _health = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -19,6 +19,6 @@ public sealed class CEFallingDamageSystem : EntitySystem
 
     private void OnFallOnMe(Entity<CEFallingDamageComponent> ent, ref CEZFellOnMeEvent args)
     {
-        _damage.TryChangeDamage(args.Fallen, ent.Comp.Damage * args.Speed);
+        _health.TakeDamage(args.Fallen, ent.Comp.Damage * args.Speed);
     }
 }

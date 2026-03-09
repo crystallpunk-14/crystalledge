@@ -7,8 +7,12 @@
   components:
   - type: Item
     size: Ginormous
-  - type: CEItemAnimation
+  - type: CEWeapon
     spriteRotation: -90
+    rangeMultiplier: 1.2 #Longer reach
+    damage:
+      types:
+        Physical: 4
     animations:
       Primary:
       - anim: SwordAttackLight1
@@ -20,14 +24,18 @@
         speed: 0.5
       - anim: SwordAttackLight2
         speed: 0.5
-  - type: CEWieldedItemAnimation
+  - type: CEWieldedWeapon
     animations:
       Primary:
       - anim: SwordAttackHeavy1
+        speed: 0.5
       - anim: SwordAttackHeavy2
+        speed: 0.5
       Secondary:
       - anim: SwordAttackHeavy1
+        speed: 0.5
       - anim: SwordAttackHeavy2
+        speed: 0.5
   - type: Clothing
     slots:
     - neck
@@ -35,12 +43,3 @@
     equipDelay: 1
     unequipDelay: 1
   - type: Wieldable
-  - type: CEMeleeWeapon
-    rangeMultiplier: 1.2 #Longer reach
-    damageGroups:
-      default:
-        types:
-          Slash: 4
-      pierce:
-        types:
-          Piercing: 4

@@ -1,15 +1,23 @@
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.Skill.Core.Prototypes;
 
 [Prototype("skill")]
-public sealed partial class CESkillPrototype : IPrototype
+public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
 {
     /// <inheritdoc/>
     [IdDataField]
     public string ID { get; private set; } = default!;
+
+    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<CESkillPrototype>))]
+    public string[]? Parents { get; private set; }
+
+    [AbstractDataField]
+    [NeverPushInheritance]
+    public bool Abstract { get; private set; }
 
     /// <summary>
     /// Skill Title. If you leave null, the name will try to generate from Effect.GetName()
@@ -42,6 +50,18 @@ public sealed partial class CESkillPrototype : IPrototype
     /// </summary>
     [DataField(serverOnly: true)]
     public List<CESkillRestriction> Restrictions = new();
+
+    /// <summary>
+    /// The visual effect visible around the skill while it is in the world as a pickable enhancement.
+    /// </summary>
+    [DataField]
+    public SpriteSpecifier? Vfx;
+
+    /// <summary>
+    /// Light color for the skill while it is in the world as a pickable enhancement.
+    /// </summary>
+    [DataField]
+    public Color Color = Color.White;
 }
 
 [ImplicitDataDefinitionForInheritors]

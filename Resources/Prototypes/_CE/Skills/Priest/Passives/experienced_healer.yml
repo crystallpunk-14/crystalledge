@@ -1,0 +1,42 @@
+- type: skill
+  parent: BasePriestSkill
+  id: ExperiencedHealer
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectExperiencedHealer
+
+- type: entity
+  id: CEStatusEffectExperiencedHealer
+  name: Experienced Healer
+  description: When you heal something, you heal [color=#1defa9]2 health[/color] more.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEExperiencedHealer
+  - type: CEEffectiveHealingStatusEffect
+    additionalHeal: 2
+
+- type: alert
+  id: CEExperiencedHealer
+  alertViewEntity: CEExperiencedHealerAlertSpriteView
+  icons:
+  - sprite: _CE/Skills/experienced_healer.rsi
+    state: icon
+
+- type: entity
+  id: CEExperiencedHealerAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/experienced_healer.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

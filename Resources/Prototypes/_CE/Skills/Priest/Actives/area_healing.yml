@@ -1,0 +1,112 @@
+- type: skill
+  parent: BasePriestSkill
+  id: AreaHealing
+  effect: !type:AddAction
+    action: CEActionSpellAreaHealing
+
+- type: entity
+  id: CEActionSpellAreaHealing
+  parent: CEActionSpellBase
+  name: Prayer for health
+  description: You restore [color=1defa9]2 health[/color] to all creatures in a small area.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 1.2 # Healing radius
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/area_healing.rsi
+      state: icon
+  - type: TargetAction
+    range: 3
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationAreaHealing
+
+- type: animationAction
+  id: AnimationAreaHealing
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectAreaHealingTelegraphy
+    - !type:SayChat
+      sentence: "Et curabuntur"
+    1.2:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectAreaHealingEffect
+    - !type:SayChat
+      sentence: "vulnera tua"
+    - !type:AreaEffect
+      range: 1.2
+      affectCaster: true
+      effects:
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEEffectHealingGeneric
+      - !type:Heal
+        amount: 2
+
+- type: entity
+  id: CEEffectAreaHealingTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: area healing telegraphy
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/area_healing_telegraphy.rsi
+    layers:
+    - state: area
+      shader: unshaded
+  - type: PointLight
+    color: "#8dd0e8"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  parent: CEEffectAreaHealingTelegraphy
+  id: CEEffectAreaHealingEffect
+  name: area healing impact
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/area_healing_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 4
+
+- type: entity
+  parent: CEEffectAreaHealingTelegraphy
+  id: CEEffectHealingGeneric
+  name: healing impact
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/healing_generic.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5

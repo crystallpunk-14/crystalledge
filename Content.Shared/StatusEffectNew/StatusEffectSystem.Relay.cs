@@ -1,3 +1,4 @@
+using Content.Shared._CE.Health;
 using Content.Shared._CE.Stats.Core;
 using Content.Shared.Body.Events;
 using Content.Shared.Damage.Events;
@@ -19,7 +20,10 @@ public sealed partial class StatusEffectsSystem
     {
         //CrystallEdge zone
         SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateStatEvent>(RelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, DamageChangedEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEGetHealAmountEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptHealEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEHealthChangedEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEBeforeDamageEvent>(RelayStatusEffectEvent);
         //CrystallEdge zone end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);

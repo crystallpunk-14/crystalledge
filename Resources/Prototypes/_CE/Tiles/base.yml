@@ -20,7 +20,6 @@
   - 1.0
   - 1.0
   baseTurf: Space
-  #deconstructTools: [ CEPickaxe ]
   isSubfloor: true
   footstepSounds:
     collection: FootstepAsteroid

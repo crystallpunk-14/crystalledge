@@ -1,4 +1,4 @@
-using Content.Shared.Mobs;
+using Content.Shared._CE.Health.Components;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Actions.Components;
@@ -10,5 +10,5 @@ namespace Content.Shared._CE.Actions.Components;
 public sealed partial class CEActionTargetMobStatusRequiredComponent : Component
 {
     [DataField]
-    public HashSet<MobState> AllowedStates = new() { MobState.Alive };
+    public HashSet<CEMobState> AllowedStates = [CEMobState.Alive];
 }

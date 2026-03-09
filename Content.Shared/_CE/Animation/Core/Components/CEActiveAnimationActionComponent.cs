@@ -1,5 +1,6 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -17,17 +18,27 @@ public sealed partial class CEActiveAnimationActionComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
     public TimeSpan? StartAnimationTime;
 
-    /// <summary>
-    /// Current animation angle
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public Angle? AnimationAngle;
-
     [DataField, AutoNetworkedField]
     public float AnimationSpeed = 1f;
 
+    /// <summary>
+    /// If true, it fixes the caster's rotation towards TargetEntity or TargetCoordinates,
+    /// if they are not null. If they are null, it simply does not allow rotation.
+    /// </summary>
     [DataField, AutoNetworkedField]
     public bool LockRotation;
+
+    /// <summary>
+    /// The entity targeted by the current action
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? TargetEntity;
+
+    /// <summary>
+    /// Coordinates to which the current action is directed.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityCoordinates? TargetCoordinates;
 
     [DataField, AutoNetworkedField]
     public EntityUid? Used;

@@ -1,0 +1,115 @@
+- type: entity
+  id: CECrystalBase
+  abstract: true
+  parent: BaseStructure
+  name: crystals
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Structures/crystal.rsi
+    layers:
+      - state: medium1
+        map: ["random"]
+        shader: unshaded
+    offset: 0, 0.25
+    noRot: true
+  - type: InteractionPopup
+    interactSuccessString: ce-popup-crystal-ding
+    messagePerceivedByOthers: ce-popup-crystal-ding
+    interactSuccessSound:
+      collection: CECrystalDings
+      params:
+        variation: 0.03
+  #- type: MeleeSound
+  #  soundGroups:
+  #    Brute:
+  #      collection: GlassSmash
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.30
+        density: 60
+        mask:
+          - MachineMask
+        layer:
+          - MidImpassable
+          - LowImpassable
+          - BulletImpassable
+          - Opaque
+  - type: RandomSprite
+    available:
+    - random:
+        big0: Inherit
+        big1: Inherit
+        big2: Inherit
+        medium0: Inherit
+        medium1: Inherit
+        medium2: Inherit
+        medium3: Inherit
+        medium4: Inherit
+        small0: Inherit
+        small1: Inherit
+        small2: Inherit
+        small3: Inherit
+        small4: Inherit
+        small5: Inherit
+  - type: PointLight
+    netSync: false
+    radius: 2.5
+    energy: 1
+
+# Normal
+
+- type: entity
+  id: CECrystalQuartzWhite
+  suffix: White
+  parent: CECrystalBase
+  components:
+  - type: Sprite
+    color: "#ffffff"
+  - type: PointLight
+    color: "#ffffff"
+
+- type: entity
+  id: CECrystalQuartzRed
+  suffix: Red
+  parent: CECrystalBase
+  components:
+  - type: Sprite
+    color: "#e42d2d"
+  - type: PointLight
+    color: "#e42d2d"
+
+- type: entity
+  id: CECrystalQuartzBlue
+  suffix: Blue
+  parent: CECrystalBase
+  components:
+  - type: Sprite
+    color: "#2d9ee4"
+  - type: PointLight
+    color: "#2d9ee4"
+
+- type: entity
+  id: CECrystalQuartzGreen
+  suffix: Green
+  parent: CECrystalBase
+  components:
+  - type: Sprite
+    color: "#3fe42d"
+  - type: PointLight
+    color: "#3fe42d"
+
+- type: entity
+  id: CECrystalQuartzPurple
+  suffix: Purple
+  parent: CECrystalBase
+  components:
+  - type: Sprite
+    color: "#a42de4"
+  - type: PointLight
+    color: "#a42de4"

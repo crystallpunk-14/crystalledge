@@ -1,5 +1,7 @@
+using Content.Shared._CE.Skill.Core;
+
 namespace Content.Server._CE.Skills;
 
-public sealed partial class CESkillSystem : Shared._CE.Skill.Core.CESharedSkillSystem
+public sealed partial class CESkillSystem : CESharedSkillSystem
 {
 }

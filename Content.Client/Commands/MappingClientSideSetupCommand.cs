@@ -9,7 +9,7 @@ namespace Content.Client.Commands;
 internal sealed class MappingClientSideSetupCommand : LocalizedEntityCommands
 {
     [Dependency] private readonly ILightManager _lightManager = default!;
-    [Dependency] private readonly ActionsSystem _actionSystem = default!;
+    //[Dependency] private readonly ActionsSystem _actionSystem = default!;
     [Dependency] private readonly MarkerSystem _markerSystem = default!;
     [Dependency] private readonly SubFloorHideSystem _subfloorSystem = default!;
 

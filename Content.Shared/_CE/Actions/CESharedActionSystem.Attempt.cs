@@ -1,16 +1,11 @@
 using Content.Shared._CE.Actions.Components;
-using Content.Shared._CE.Actions.Events;
+using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage.Components;
 using Content.Shared.Hands.Components;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Popups;
-using Content.Shared.Power.Components;
-using Content.Shared.Speech.Muting;
 using Content.Shared.SSDIndicator;
 
 namespace Content.Shared._CE.Actions;
@@ -20,7 +15,6 @@ public abstract partial class CESharedActionSystem
     private void InitializeAttempts()
     {
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
-        SubscribeLocalEvent<CEActionSpeakingComponent, ActionAttemptEvent>(OnVerbalActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
         SubscribeLocalEvent<CEActionDangerousComponent, ActionAttemptEvent>(OnDangerousActionAttempt);
@@ -55,14 +49,7 @@ public abstract partial class CESharedActionSystem
             requiredMana = manaEv.TotalManacost;
         }
 
-        //First - trying get mana from item
-        if (action.Container is not null && TryComp<CEMagicEnergyContainerComponent>(action.Container, out var mana))
-            requiredMana = Math.Max(0, requiredMana - mana.Energy);
-
-        if (requiredMana <= 0)
-            return;
-
-        //Second - trying get mana from performer
+        //Trying get mana from performer
         if (!TryComp<CEMagicEnergyContainerComponent>(args.User, out var playerMana))
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-no-mana-component"), args.User, args.User);
@@ -102,15 +89,6 @@ public abstract partial class CESharedActionSystem
         args.Cancelled = true;
     }
 
-    private void OnVerbalActionAttempt(Entity<CEActionSpeakingComponent> ent, ref ActionAttemptEvent args)
-    {
-        if (!HasComp<MutedComponent>(args.User))
-            return;
-
-        Popup.PopupClient(Loc.GetString("ce-magic-spell-need-verbal-component"), args.User, args.User);
-        args.Cancelled = true;
-    }
-
     private void OnDangerousActionAttempt(Entity<CEActionDangerousComponent> ent, ref ActionAttemptEvent args)
     {
         if (args.Cancelled)
@@ -131,14 +109,14 @@ public abstract partial class CESharedActionSystem
 
         var target = GetEntity(args.Input.EntityTarget);
 
-        if (!TryComp<MobStateComponent>(target, out var mobStateComp))
+        if (!TryComp<CEHealthComponent>(target, out var healthComp))
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-target-not-mob"), args.User, args.User);
             args.Invalid = true;
             return;
         }
 
-        if (!ent.Comp.AllowedStates.Contains(mobStateComp.CurrentState))
+        if (!ent.Comp.AllowedStates.Contains(healthComp.CurrentState))
         {
             var states = "";
             foreach (var state in ent.Comp.AllowedStates)
@@ -146,11 +124,11 @@ public abstract partial class CESharedActionSystem
                 if (states.Length > 0)
                     states += ", ";
 
-                if (state == MobState.Alive)
+                if (state == CEMobState.Alive)
                     states += Loc.GetString("ce-magic-spell-target-mob-state-live");
-                else if (state == MobState.Dead)
+                else if (state == CEMobState.Dead)
                     states += Loc.GetString("ce-magic-spell-target-mob-state-dead");
-                else if (state == MobState.Critical)
+                else if (state == CEMobState.Critical)
                     states += Loc.GetString("ce-magic-spell-target-mob-state-critical");
             }
 

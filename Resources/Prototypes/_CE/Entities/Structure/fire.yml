@@ -1,0 +1,80 @@
+- type: entity
+  id: CEFireTileBase
+  abstract: true
+  description: A scorching hot flame. You definitely shouldn't touch it just like that.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Clickable
+  - type: PlacementReplacement
+    key: fire
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+    sprite: _CE/Effects/fire_tile.rsi
+    layers:
+    - state: low_1
+      shader: unshaded
+      map: [ "fire" ]
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 1000
+        mask:
+          - ItemMask
+        layer:
+          - SlipLayer
+  - type: Transform
+    anchored: true
+  - type: AmbientSound
+    enabled: true
+    volume: -15
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg #TODO more aggressive sound
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CEFireTileVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }
+  - type: TileEmission
+    color: "#ff4800"
+  - type: CEFire
+    stacks: 1
+
+# Low fire template — 1 stack, small flame for testing
+- type: entity
+  parent: CEFireTileBase
+  id: CEFireTileLow
+  name: small fire
+  components:
+  - type: CEFire
+    stacks: 1
+
+# Medium fire template — 5 stacks, medium flame for testing
+- type: entity
+  parent: CEFireTileBase
+  id: CEFireTileMedium
+  name: medium fire
+  components:
+  - type: CEFire
+    stacks: 5
+
+# High fire template — 10 stacks, large flame for testing
+- type: entity
+  parent: CEFireTileBase
+  id: CEFireTileHigh
+  name: large fire
+  components:
+  - type: CEFire
+    stacks: 10

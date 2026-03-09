@@ -1,0 +1,73 @@
+- type: loadoutGroup
+  id: CEPriestShirt
+  name: ce-loadout-shirt
+  minLimit: 1
+  loadouts:
+  - CEClothingPriestShirtDark
+  - CEClothingPriestShirtWhite
+  - CEClothingPriestShirtWhiteWide
+
+- type: loadout
+  id: CEClothingPriestShirtDark
+  equipment:
+    shirt: CEClothingPriestShirtDark
+
+- type: loadout
+  id: CEClothingPriestShirtWhite
+  equipment:
+    shirt: CEClothingPriestShirtWhite
+
+- type: loadout
+  id: CEClothingPriestShirtWhiteWide
+  equipment:
+    shirt: CEClothingPriestShirtWhiteWide
+
+
+- type: loadoutGroup
+  id: CEPriestPants
+  name: ce-loadout-pants
+  minLimit: 1
+  loadouts:
+  - CEClothingPriestPantsDark
+  - CEClothingPriestPantsDark2
+  - CEClothingPriestPantsWhite
+
+- type: loadout
+  id: CEClothingPriestPantsDark
+  equipment:
+    pants: CEClothingPriestPantsDark
+
+- type: loadout
+  id: CEClothingPriestPantsDark2
+  equipment:
+    pants: CEClothingPriestPantsDark2
+
+- type: loadout
+  id: CEClothingPriestPantsWhite
+  equipment:
+    pants: CEClothingPriestPantsWhite
+
+
+- type: loadoutGroup
+  id: CEPriestCloak
+  name: ce-loadout-cloak
+  minLimit: 1
+  loadouts:
+  - CEClothingPriestCloakDark
+  - CEClothingPriestCloakWhite
+  - CEClothingPriestCloakWhite2
+
+- type: loadout
+  id: CEClothingPriestCloakDark
+  equipment:
+    cloak: CEClothingPriestCloakDark
+
+- type: loadout
+  id: CEClothingPriestCloakWhite
+  equipment:
+    cloak: CEClothingPriestCloakWhite
+
+- type: loadout
+  id: CEClothingPriestCloakWhite2
+  equipment:
+    cloak: CEClothingPriestCloakWhite2

@@ -1,10 +1,8 @@
 using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared.Damage.Components;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
-using Content.Shared.Mobs.Systems;
+using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 using JetBrains.Annotations;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controllers;
@@ -28,8 +26,8 @@ public sealed class CEHealthUiController : UIController
 
         SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
-        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
-        SubscribeLocalEvent<MobThresholdChecked>(OnMobThresholdChecked);
+        SubscribeLocalEvent<CEHealthChangedEvent>(OnHealthChanged);
+        SubscribeLocalEvent<CEMobStateChangedEvent>(OnMobStateChanged);
     }
 
     private void OnScreenLoad()
@@ -73,27 +71,23 @@ public sealed class CEHealthUiController : UIController
             _healthBar.Visible = false;
     }
 
-    private void OnMobStateChanged(MobStateChangedEvent args)
+    private void OnHealthChanged(CEHealthChangedEvent args)
     {
         if (_player.LocalEntity != args.Target)
             return;
 
-        UpdateHealth(args.Target, args.Component);
+        UpdateHealth(args.Target);
     }
 
-    private void OnMobThresholdChecked(ref MobThresholdChecked args)
+    private void OnMobStateChanged(CEMobStateChangedEvent args)
     {
         if (_player.LocalEntity != args.Target)
             return;
 
-        UpdateHealth(args.Target, args.MobState, args.Damageable, args.Threshold);
+        UpdateHealth(args.Target);
     }
 
-    private void UpdateHealth(
-        EntityUid uid,
-        MobStateComponent? mobState = null,
-        DamageableComponent? damageable = null,
-        MobThresholdsComponent? thresholds = null)
+    private void UpdateHealth(EntityUid uid)
     {
         if (_healthBar == null)
             return;
@@ -104,15 +98,13 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
-        if (mobState == null && !EntityManager.TryGetComponent(uid, out mobState) ||
-            damageable == null && !EntityManager.TryGetComponent(uid, out damageable) ||
-            thresholds == null && !EntityManager.TryGetComponent(uid, out thresholds))
+        if (!EntityManager.TryGetComponent<CEHealthComponent>(uid, out var health))
         {
             _healthBar.Visible = false;
             return;
         }
 
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(uid, mobState, damageable, thresholds);
+        _healthBar.UpdateHealthDisplay(health);
     }
 }

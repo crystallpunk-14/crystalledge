@@ -1,0 +1,101 @@
+- type: skill
+  parent: BaseMageSkill
+  id: IntellectBuff
+  effect: !type:AddAction
+    action: CEActionMageIntellectBuff
+
+- type: entity
+  id: CEActionMageIntellectBuff
+  parent: CEActionSpellBase
+  name: Arcane Intellect
+  description: You will temporarily receive an additional [color=#3296fa]+2 Intelligence[/color].
+  components:
+  - type: CEActionManaCost
+    manaCost: 5
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/intellect_buff.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationIntellectBuff
+
+- type: animationAction
+  id: AnimationIntellectBuff
+  movementSpeed: 0.3
+  duration: 0.6
+  lockRotation: false
+  events:
+    0:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectMageIntellectBuff
+    0.5:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectMageIntellectBuff
+    - !type:ApplyStatusEffect
+      statusEffect: CEStatusEffectMageIntellectBuff
+      duration: 10
+
+- type: entity
+  id: CEImpactEffectMageIntellectBuff
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    layers:
+    - state: particles_up
+      color: "#0c6cff"
+      shader: unshaded
+
+- type: entity
+  id: CEStatusEffectMageIntellectBuff
+  name: arcane intellect
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CESpellAlertMageIntellectBuff
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/cast_impact48.rsi
+    noRot: true
+    layers:
+    - state: particles_up
+      color: "#0c6cff"
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#0c6cff"
+  - type: CEStatusEffectModifyStats
+    modifyStats:
+      Intelligence: 2
+
+- type: alert
+  id: CESpellAlertMageIntellectBuff
+  alertViewEntity: CEIntellectBuffAlertSpriteView
+  icons:
+  - sprite: _CE/Skills/intellect_buff.rsi
+    state: icon
+
+- type: entity
+  id: CEIntellectBuffAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/intellect_buff.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

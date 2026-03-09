@@ -1,4 +1,5 @@
 - type: skill
+  parent: BaseNeutralSkill
   id: SphereOfLight
   effect: !type:AddAction
     action: CEActionSpellSphereOfLight
@@ -9,51 +10,45 @@
   name: Sphere of Light
   description: You can make almost any object glow for a long time at will.
   components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 3 #Light radius
   - type: CEActionManaCost
     manaCost: 1
-  - type: CEActionSpeaking
-    startSpeech: "Appare in manu tua..."
-    endSpeech: "sphaera lucis"
   - type: CEActionFreeHandsRequired
-  - type: CEActionDoAfterVisuals
-    proto: CERuneSphereOfLight
   - type: Action
     useDelay: 1
     icon:
       sprite: _CE/Skills/sphere_of_light.rsi
       state: icon
-  - type: DoAfterArgs
-    delay: 0.5
   - type: TargetAction
     range: 5
   - type: EntityTargetAction
     whitelist:
       components:
-      - MobState
+      - CEHealth
       - Item
       - Anchorable
-    event: !type:CEEntityTargetModularEffectEvent
-      effects:
-      - !type:CESpellSpawnEntityOnTarget
-        spawns:
-        - CEImpactEffectSphereOfLight
-      - !type:CESpellApplyStatusEffect
-        statusEffect: CEStatusEffectGlowing
-        duration: 60
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationSphereOfLight
 
-- type: entity
-  id: CERuneSphereOfLight
-  parent: CEBaseMagicRune
-  categories: [ HideSpawnMenu ]
-  save: false
-  components:
-  - type: PointLight
-    color: "#efedff"
-  - type: Sprite
-    layers:
-    - state: sun
-      color: "#efedff"
-      shader: unshaded
+- type: animationAction
+  id: AnimationSphereOfLight
+  movementSpeed: 0.5
+  duration: 1.0
+  events:
+    0:
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEImpactEffectSphereOfLight
+    - !type:SayChat
+      sentence: "Appare in manu tua"
+    0.5:
+    - !type:ApplyStatusEffect
+      statusEffect: CEStatusEffectGlowing
+      duration: 60
+    - !type:SayChat
+      sentence: "sphaera lucis"
 
 - type: entity
   id: CEImpactEffectSphereOfLight

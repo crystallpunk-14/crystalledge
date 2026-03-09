@@ -1,0 +1,67 @@
+- type: entity
+  id: CEStatusEffectDivineShield
+  name: Divine Shield
+  description: When you heal something, you heal [color=#1defa9]2 health[/color] more.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEHealth
+  - type: StatusEffectAlert
+    alert: CEDivineShield
+  - type: CEDivineShieldStatusEffect
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/divine_shield.rsi
+    noRot: true
+    layers:
+    - state: divine_shield
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#3d93d9"
+
+- type: alert
+  id: CEDivineShield
+  alertViewEntity: CEDivineShieldAlertSpriteView
+  name: ce-alert-divine-shield-name
+  description: ce-alert-divine-shield-desc
+  icons:
+  - sprite: _CE/Interface/divine_shield.rsi
+    state: shield
+
+- type: entity
+  id: CEDivineShieldAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/divine_shield.rsi
+      state: shield
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0
+
+- type: entity
+  id: CEEffectBreakDivineShield
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/divine_shield_break.rsi
+    layers:
+    - state: break
+      shader: unshaded
+  - type: LightFade
+    duration: 2
+  - type: TimedDespawn
+    lifetime: 2

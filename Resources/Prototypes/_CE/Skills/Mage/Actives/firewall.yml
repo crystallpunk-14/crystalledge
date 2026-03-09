@@ -1,0 +1,153 @@
+- type: skill
+  parent: BaseMageSkill
+  id: Firewall
+  effect: !type:AddAction
+    action: CEActionFirewall
+
+- type: entity
+  id: CEActionFirewall
+  parent: CEActionSpellBase
+  name: Firewall
+  description: You create a wall of fire that sets creatures and the ground [color=#ff8a05]on fire[/color].
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 2.5
+    projectileMode: true
+  - type: CEActionManaCost
+    manaCost: 5
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/firewall.rsi
+      state: icon
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationFirewall
+
+- type: animationAction
+  id: AnimationFirewall
+  movementSpeed: 0.3
+  duration: 1.8
+  lockRotation: true
+  events:
+    0:
+    - !type:EntityAnimation
+      dummyEntity: CEEffectFireballCharge
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0.5
+      - time: 1.7
+        offset: 0, -1
+    1.7:
+    - !type:ShootProjectile
+      projectileSpeed: 8
+      prototype: CEProjectileFirewall
+
+- type: entity
+  id: CEEffectFirewallTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: firewall telegraphy
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/firewall_telegraphy.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff8a05"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectFireballCharge
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: fireball charge
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/fireball_charge.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff8a05"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+
+- type: entity
+  id: CEProjectileFirewall
+  name: firewall
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/fireball.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff9603"
+    radius: 2.0
+    energy: 5.0
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.10,0.1,0.30"
+        hard: false
+        mask:
+        - Impassable
+      fly-by:
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: false
+  - type: Projectile
+    damage:
+      types:
+        Heat: 0
+  - type: CEAnimationActionsSpawner
+    frequency: 0.2
+    firstDelay: 0.3
+    effects:
+    - !type:IgniteArea
+      radius: 1.5
+      maxStacks: 3
+      fallOffFactor: 1
