@@ -1,0 +1,26 @@
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingPriestShirtDark
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Priest/dark.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Priest/dark.rsi
+
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingPriestShirtWhite
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Priest/white.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Priest/white.rsi
+
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingPriestShirtWhiteWide
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Priest/white_wide.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Priest/white_wide.rsi

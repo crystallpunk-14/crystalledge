@@ -1,0 +1,5 @@
+- type: roleLoadout
+  id: JobCEPriest
+  groups:
+  - CEPriestShirt
+  - CEPriestPants

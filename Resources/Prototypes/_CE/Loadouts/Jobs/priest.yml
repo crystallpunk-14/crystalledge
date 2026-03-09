@@ -1,0 +1,48 @@
+- type: loadoutGroup
+  id: CEPriestShirt
+  name: ce-loadout-shirt
+  minLimit: 1
+  loadouts:
+  - CEClothingPriestShirtDark
+  - CEClothingPriestShirtWhite
+  - CEClothingPriestShirtWhiteWide
+
+- type: loadout
+  id: CEClothingPriestShirtDark
+  equipment:
+    shirt: CEClothingPriestShirtDark
+
+- type: loadout
+  id: CEClothingPriestShirtWhite
+  equipment:
+    shirt: CEClothingPriestShirtWhite
+
+- type: loadout
+  id: CEClothingPriestShirtWhiteWide
+  equipment:
+    shirt: CEClothingPriestShirtWhiteWide
+
+
+- type: loadoutGroup
+  id: CEPriestPants
+  name: ce-loadout-pants
+  minLimit: 1
+  loadouts:
+  - CEClothingPriestPantsDark
+  - CEClothingPriestPantsDark2
+  - CEClothingPriestPantsWhite
+
+- type: loadout
+  id: CEClothingPriestPantsDark
+  equipment:
+    pants: CEClothingPriestPantsDark
+
+- type: loadout
+  id: CEClothingPriestPantsDark2
+  equipment:
+    pants: CEClothingPriestPantsDark2
+
+- type: loadout
+  id: CEClothingPriestPantsWhite
+  equipment:
+    pants: CEClothingPriestPantsWhite

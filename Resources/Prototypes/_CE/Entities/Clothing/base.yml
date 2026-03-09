@@ -1,0 +1,40 @@
+- type: entity
+  abstract: true
+  parent: Clothing
+  id: CEClothingShirtBase
+  categories: [ ForkFiltered ]
+  name: shirt
+  description: Cover up your nakedness!
+  components:
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 1
+    slots:
+    - shirt
+  - type: Sprite
+    state: icon
+
+- type: entity
+  abstract: true
+  parent: Clothing
+  id: CEClothingPantsBase
+  categories: [ ForkFiltered ]
+  name: pants
+  description: Pants to cover my thighs from the cold.
+  components:
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 1
+    slots:
+    - pants
+  - type: Sprite
+    state: icon
+
+- type: entity
+  parent: CEClothingPantsBase
+  id: CEClothingPantsDress
+  abstract: true
+  description: A roomy, feminine skirt
+  components:
+  - type: Clothing
+    equipDelay: 1.5
