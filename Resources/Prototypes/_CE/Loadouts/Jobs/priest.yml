@@ -46,3 +46,28 @@
   id: CEClothingPriestPantsWhite
   equipment:
     pants: CEClothingPriestPantsWhite
+
+
+- type: loadoutGroup
+  id: CEPriestCloak
+  name: ce-loadout-cloak
+  minLimit: 1
+  loadouts:
+  - CEClothingPriestCloakDark
+  - CEClothingPriestCloakWhite
+  - CEClothingPriestCloakWhite2
+
+- type: loadout
+  id: CEClothingPriestCloakDark
+  equipment:
+    cloak: CEClothingPriestCloakDark
+
+- type: loadout
+  id: CEClothingPriestCloakWhite
+  equipment:
+    cloak: CEClothingPriestCloakWhite
+
+- type: loadout
+  id: CEClothingPriestCloakWhite2
+  equipment:
+    cloak: CEClothingPriestCloakWhite2
