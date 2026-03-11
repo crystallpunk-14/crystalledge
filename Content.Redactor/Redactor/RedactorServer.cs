@@ -21,6 +21,7 @@ public static class RedactorServer
     private static string _solutionRoot = "";
     private static string _redactorDir = "";
     private static string _prototypesDir = "";
+    private static string _texturesDir = "";
     private static Dictionary<string, List<ProtoIndexEntry>> _protoIndex = new();
 
     public static async Task StartAsync(string solutionRoot, int port)
@@ -28,6 +29,7 @@ public static class RedactorServer
         _solutionRoot = solutionRoot;
         _redactorDir = Path.Combine(solutionRoot, "Redactor");
         _prototypesDir = Path.Combine(solutionRoot, "Resources", "Prototypes");
+        _texturesDir = Path.Combine(solutionRoot, "Resources", "Textures");
 
         Console.WriteLine("[Redactor] Building prototype index...");
         _protoIndex = BuildProtoIndex(_prototypesDir);
@@ -336,6 +338,12 @@ public static class RedactorServer
                 break;
             }
 
+            case "/api/texture":
+            {
+                await ServeTextureAsync(req, res);
+                break;
+            }
+
             default:
                 Console.Error.WriteLine($"[Redactor] Unknown API endpoint: {path}");
                 res.StatusCode = 404;
@@ -408,6 +416,45 @@ public static class RedactorServer
             return;
         }
         var bytes = await File.ReadAllBytesAsync(metaPath);
+        res.ContentLength64 = bytes.Length;
+        await res.OutputStream.WriteAsync(bytes);
+    }
+
+    /// <summary>
+    /// Serves files from Resources/Textures/ (RSI meta.json, PNGs, etc.).
+    /// GET /api/texture?path=Clothing/Uniforms/Shorts/Color/red.rsi/meta.json
+    /// </summary>
+    private static async Task ServeTextureAsync(HttpListenerRequest req, HttpListenerResponse res)
+    {
+        var relPath = req.QueryString["path"];
+        if (string.IsNullOrEmpty(relPath))
+        {
+            res.StatusCode = 400;
+            await WriteJsonAsync(res, new { error = "Missing 'path' query parameter" });
+            return;
+        }
+
+        // Normalize path separators and strip leading slashes/Textures prefix
+        relPath = relPath.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
+
+        var fullPath = Path.GetFullPath(Path.Combine(_texturesDir, relPath));
+        if (!fullPath.StartsWith(Path.GetFullPath(_texturesDir)))
+        {
+            res.StatusCode = 403;
+            await WriteJsonAsync(res, new { error = "Access denied" });
+            return;
+        }
+
+        if (!File.Exists(fullPath))
+        {
+            res.StatusCode = 404;
+            await WriteJsonAsync(res, new { error = "File not found" });
+            return;
+        }
+
+        res.ContentType = MimeType(fullPath);
+        res.AddHeader("Cache-Control", "public, max-age=300");
+        var bytes = await File.ReadAllBytesAsync(fullPath);
         res.ContentLength64 = bytes.Length;
         await res.OutputStream.WriteAsync(bytes);
     }

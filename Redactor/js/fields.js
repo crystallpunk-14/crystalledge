@@ -119,6 +119,7 @@ function controlFor(meta, value, dis, onChange) {
         case 'vector3':       return vectorCtrl(value, ['x', 'y', 'z'], dis, onChange);
         case 'vector4':       return vectorCtrl(value, ['x', 'y', 'z', 'w'], dis, onChange);
         case 'box2':          return vectorCtrl(value, ['l', 'b', 'r', 't'], dis, onChange);
+        case 'spriteSpecifier': return spriteSpecifierCtrl(value, dis, onChange);
         default:
             if (meta.isDataDefinition && meta.dataDefinitionType) return dataDefCtrl(value, meta.dataDefinitionType, dis, onChange);
             return autoControl(value, dis, onChange);
@@ -224,6 +225,114 @@ function flagsCtrl(val, opts, dis, cb) {
         if (!w.contains(e.target)) dd.classList.remove('visible');
     });
     w.append(toggle, dd); return w;
+}
+
+// ======================== SPRITE SPECIFIER =============================
+/**
+ * SpriteSpecifier field control.
+ * Handles both formats:
+ *   - RSI: { sprite: "path.rsi", state: "icon" }
+ *   - Texture: "path/to/texture.png" (string)
+ */
+function spriteSpecifierCtrl(val, dis, cb) {
+    const w = _div('field-control sprite-specifier-ctrl');
+
+    // Parse current value
+    let rsiPath = '', stateName = '', isTexture = false;
+    if (typeof val === 'string') {
+        // Could be "path.rsi" (bare RSI path) or "path.png" (texture)
+        if (val.endsWith('.rsi')) { rsiPath = val; }
+        else { isTexture = true; rsiPath = val; }
+    } else if (val && typeof val === 'object') {
+        rsiPath   = val.sprite || '';
+        stateName = val.state  || '';
+    }
+
+    // ── Preview area ──
+    const preview = _div('sprite-preview');
+    let view = null;
+    function updatePreview() {
+        if (view) view.destroy();
+        view = null;
+        preview.innerHTML = '';
+        if (!rsiPath) return;
+        if (isTexture) {
+            // Plain texture — show as <img>
+            const img = _el('img');
+            img.className = 'sprite-canvas';
+            img.src = `/api/texture?path=${encodeURIComponent(rsiPath)}`;
+            img.width = 64; img.height = 64;
+            img.style.imageRendering = 'pixelated';
+            img.onerror = () => { img.alt = '!'; };
+            preview.appendChild(img);
+        } else if (stateName) {
+            view = SpriteView.create(preview, rsiPath, stateName, { size: 64 });
+        }
+    }
+    updatePreview();
+
+    // ── Inputs ──
+    const fields = _div('sprite-fields');
+
+    // Sprite (RSI path) input
+    const spriteRow = _div('sprite-field-row');
+    const spriteLbl = _el('label'); spriteLbl.className = 'sprite-input-label'; spriteLbl.textContent = 'sprite';
+    const spriteInp = _el('input'); spriteInp.type = 'text'; spriteInp.className = 'field-input sprite-input';
+    spriteInp.value = rsiPath; spriteInp.disabled = dis; spriteInp.placeholder = 'Path/to/sprite.rsi';
+    spriteRow.append(spriteLbl, spriteInp);
+    fields.appendChild(spriteRow);
+
+    // State input (only for RSI, not for bare textures)
+    const stateRow = _div('sprite-field-row');
+    const stateLbl = _el('label'); stateLbl.className = 'sprite-input-label'; stateLbl.textContent = 'state';
+    const stateInp = _el('input'); stateInp.type = 'text'; stateInp.className = 'field-input sprite-input';
+    stateInp.value = stateName; stateInp.disabled = dis; stateInp.placeholder = 'State name';
+    stateRow.append(stateLbl, stateInp);
+    fields.appendChild(stateRow);
+
+    function emit() {
+        rsiPath   = spriteInp.value.trim();
+        stateName = stateInp.value.trim();
+        isTexture = rsiPath && !rsiPath.endsWith('.rsi') && !stateName;
+        updatePreview();
+        if (isTexture) cb(rsiPath);
+        else if (rsiPath && stateName) cb({ sprite: rsiPath, state: stateName });
+        else if (rsiPath) cb({ sprite: rsiPath });
+    }
+
+    // Load state dropdown suggestions from RSI meta.json
+    const stateDD = _div('sprite-state-dropdown');
+    stateRow.appendChild(stateDD);
+
+    async function loadStates() {
+        stateDD.innerHTML = '';
+        if (!rsiPath || !rsiPath.endsWith('.rsi')) return;
+        try {
+            const meta = await SpriteView.loadMeta(rsiPath);
+            if (!meta?.states?.length) return;
+            stateDD.classList.add('visible');
+            for (const s of meta.states) {
+                const opt = _div('dropdown-item');
+                opt.textContent = s.name;
+                if (s.name === stateName) opt.classList.add('selected');
+                opt.addEventListener('mousedown', e => {
+                    e.preventDefault();
+                    stateInp.value = s.name;
+                    stateDD.classList.remove('visible');
+                    emit();
+                });
+                stateDD.appendChild(opt);
+            }
+        } catch { /* RSI not found */ }
+    }
+
+    spriteInp.addEventListener('change', () => { emit(); loadStates(); });
+    stateInp.addEventListener('focus', loadStates);
+    stateInp.addEventListener('blur', () => setTimeout(() => stateDD.classList.remove('visible'), 180));
+    stateInp.addEventListener('change', emit);
+
+    w.append(preview, fields);
+    return w;
 }
 
 function vectorCtrl(val, axes, dis, cb) {

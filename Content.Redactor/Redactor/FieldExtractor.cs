@@ -205,6 +205,7 @@ public sealed class FieldExtractor
             "Single" or "Double" or "Decimal" => ("float", null, null),
             "EntProtoId" => ("entityProtoId", null, null),
             "Color" => ("color", null, null),
+            "SpriteSpecifier" => ("spriteSpecifier", null, null),
             "Vector2" or "Vector2i" => ("vector2", null, null),
             "Vector3" or "Vector3i" => ("vector3", null, null),
             "Vector4" => ("vector4", null, null),
