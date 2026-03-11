@@ -22,30 +22,56 @@ public sealed class FieldExtractor
 
     public List<FieldMetadata> ExtractDataFields(Type type)
     {
-        var fields = new List<FieldMetadata>();
+        var fields = new List<(int order, FieldMetadata meta)>();
         var seen = new HashSet<string>();
 
         var current = type;
+        var baseOrder = 0;
         while (current != null)
         {
-            foreach (var member in current.GetMembers(
+            // Get all backing field tokens for proper source-order interleaving
+            var fieldDefs = current.GetFields(
+                BindingFlags.Public | BindingFlags.NonPublic |
+                BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            var backingTokens = new Dictionary<string, int>();
+            foreach (var f in fieldDefs)
+                backingTokens[f.Name] = f.MetadataToken & 0x00FFFFFF;
+
+            // Collect explicit fields (non-backing)
+            var members = new List<(int token, MemberInfo member)>();
+            foreach (var f in fieldDefs)
+            {
+                if (f.Name.EndsWith("k__BackingField")) continue;
+                members.Add((f.MetadataToken & 0x00FFFFFF, f));
+            }
+
+            // Collect properties, using backing field token for ordering
+            foreach (var p in current.GetProperties(
                          BindingFlags.Public | BindingFlags.NonPublic |
                          BindingFlags.Instance | BindingFlags.DeclaredOnly))
             {
-                if (member is not (FieldInfo or PropertyInfo))
-                    continue;
+                var bfName = $"<{p.Name}>k__BackingField";
+                var token = backingTokens.GetValueOrDefault(bfName, int.MaxValue);
+                members.Add((token, p));
+            }
+
+            members.Sort((a, b) => a.token.CompareTo(b.token));
+
+            foreach (var (token, member) in members)
+            {
                 if (!seen.Add(member.Name))
                     continue;
 
                 var meta = TryBuildFieldMeta(member);
                 if (meta != null)
-                    fields.Add(meta);
+                    fields.Add((baseOrder + token, meta));
             }
 
+            baseOrder += 100_000;
             current = current.BaseType;
         }
 
-        return fields;
+        return fields.OrderBy(f => f.order).Select(f => f.meta).ToList();
     }
 
     private FieldMetadata? TryBuildFieldMeta(MemberInfo member)
@@ -190,6 +216,8 @@ public sealed class FieldExtractor
             _ when (name.Contains("List") || name.Contains("HashSet")) && type.IsGenericType
                 => ("list", null, null),
             _ when name.Contains("Dictionary") && type.IsGenericType => ("map", null, null),
+            _ when type.IsEnum && type.CustomAttributes.Any(a => a.AttributeType.Name == "FlagsAttribute")
+                => ("flags", SafeEnumValues(type), null),
             _ when type.IsEnum => ("enum", SafeEnumValues(type), null),
             _ when type.IsArray => ("list", null, null),
             _ => ("text", null, null),

@@ -188,6 +188,7 @@ body {
     flex-shrink: 0; /* CRITICAL: prevents cards from compressing in flex column */
 }
 .proto-card:hover { border-color: var(--accent); }
+.proto-card.proto-error { border-color: var(--warning); opacity: .8; }
 .proto-card.collapsed .proto-body { display: none; }
 
 .proto-header {
@@ -212,12 +213,6 @@ body {
     color: var(--text-primary); padding: 2px 6px; border-radius: var(--radius-sm);
     width: 250px; outline: none;
 }
-.collapse-btn {
-    background: none; border: none;
-    color: var(--text-muted); cursor: pointer; font-size: 12px;
-    padding: 4px 8px; border-radius: var(--radius-sm); transition: .2s;
-}
-.collapse-btn:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
 
 /* Abstract prototype styling */
 .proto-abstract .proto-header {
@@ -256,8 +251,11 @@ body {
 }
 .field-row:last-child { border-bottom: none; }
 
-/* Inherited (non-local) fields – dimmed */
-.field-row.inherited { opacity: .55; }
+/* Inherited (non-local) fields – dimmed via color, not opacity (keeps dropdowns readable) */
+.field-row.inherited { color: var(--text-muted); }
+.field-row.inherited .field-input,
+.field-row.inherited .field-select,
+.field-row.inherited .toggle-label { color: var(--text-muted); }
 .field-row.inherited .field-label { color: var(--text-inherited); font-style: italic; }
 .field-row.inherited .field-label::after {
     content: ' ↑'; font-size: 9px; color: var(--text-muted);
@@ -292,6 +290,14 @@ body {
     flex-shrink: 0; margin-top: 2px;
 }
 .field-reset-btn:hover { background: var(--warning); color: #000; border-color: var(--warning); }
+
+.field-default-placeholder {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+    font-style: italic; cursor: pointer; padding: 4px 8px;
+    border: 1px dashed var(--border-subtle); border-radius: var(--radius-sm);
+    transition: border-color .15s, color .15s;
+}
+.field-default-placeholder:hover { border-color: var(--accent); color: var(--accent); }
 
 .field-label {
     width: 170px; min-width: 170px;
@@ -374,6 +380,33 @@ body {
 }
 .vector-input { width: 70px; }
 
+/* ======================== Flags Dropdown ================ */
+.flags-control { position: relative; }
+.flags-toggle {
+    font-family: var(--font-mono); font-size: 12px;
+    background: var(--bg-input); border: 1px solid var(--border-subtle);
+    color: var(--text-primary); padding: 4px 8px;
+    border-radius: var(--radius-sm); cursor: pointer;
+    text-align: left; min-width: 140px; max-width: 300px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.flags-toggle:hover { border-color: var(--accent); }
+.flags-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; z-index: 100;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); box-shadow: var(--shadow);
+    max-height: 200px; overflow-y: auto; min-width: 160px;
+    padding: 4px 0;
+}
+.flags-dropdown.visible { display: block; }
+.flags-option {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px; cursor: pointer; font-family: var(--font-mono);
+    font-size: 12px; color: var(--text-secondary);
+}
+.flags-option:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
+.flags-option input[type="checkbox"] { accent-color: var(--accent); }
+
 /* ======================== Search Dropdown =============== */
 .search-dropdown { position: relative; }
 .dropdown-list {
@@ -418,7 +451,8 @@ body {
     transition: border-color .2s; position: relative;
 }
 .component-card:hover { border-color: var(--border); }
-.component-card.inherited { opacity: .45; border-style: dashed; }
+.component-card.inherited { border-style: dashed; color: var(--text-muted); }
+.component-card.inherited .component-header { opacity: .65; }
 .component-card.comp-local { border-left: 3px solid var(--accent); }
 .component-card.collapsed .component-body { display: none; }
 

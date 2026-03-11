@@ -114,13 +114,49 @@ function deepMerge(a, b) {
     const out = { ...a };
     for (const [k, v] of Object.entries(b)) {
         if (k.startsWith('__')) continue;
-        if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object' && !Array.isArray(a[k])) {
+        // Special case: 'components' arrays merge by component 'type'
+        if (k === 'components' && Array.isArray(v) && Array.isArray(a[k])) {
+            out[k] = mergeComponentArrays(a[k], v);
+        } else if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object' && !Array.isArray(a[k])) {
             out[k] = deepMerge(a[k], v);
         } else if (v !== undefined) {
             out[k] = v;
         }
     }
     return out;
+}
+
+/**
+ * Merge two component arrays by component type.
+ * Parent components are inherited; child components override fields of matching types.
+ */
+function mergeComponentArrays(parentComps, childComps) {
+    // Build map from parent, keyed by 'type'
+    const map = new Map();
+    for (const c of parentComps) {
+        if (c && c.type) map.set(c.type, { ...c });
+    }
+    // Merge child components
+    for (const c of childComps) {
+        if (!c || !c.type) continue;
+        if (map.has(c.type)) {
+            // Merge child fields into parent component
+            const parent = map.get(c.type);
+            const merged = { ...parent };
+            for (const [fk, fv] of Object.entries(c)) {
+                if (fk === 'type') continue;
+                if (fv && typeof fv === 'object' && !Array.isArray(fv) && parent[fk] && typeof parent[fk] === 'object' && !Array.isArray(parent[fk])) {
+                    merged[fk] = deepMerge(parent[fk], fv);
+                } else if (fv !== undefined) {
+                    merged[fk] = fv;
+                }
+            }
+            map.set(c.type, merged);
+        } else {
+            map.set(c.type, { ...c });
+        }
+    }
+    return [...map.values()];
 }
 
 /**

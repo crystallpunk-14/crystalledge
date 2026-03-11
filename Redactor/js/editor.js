@@ -31,11 +31,23 @@ function renderEditor() {
         const collapseState = saveCollapseState(area);
 
         area.innerHTML = '';
-        for (let i = 0; i < protos.length; i++) area.appendChild(buildCard(protos[i], i));
+        for (let i = 0; i < protos.length; i++) {
+            try {
+                area.appendChild(buildCard(protos[i], i));
+            } catch (e) {
+                console.error('[Editor] Error building card:', protos[i]?.id || i, e);
+                const errCard = _div('proto-card proto-error');
+                errCard.innerHTML = `<div class="proto-header"><span class="proto-type-badge">${esc(protos[i]?.type || '?')}</span><span class="proto-id-text">${esc(protos[i]?.id || '?')}</span></div><div class="proto-body" style="color:var(--warning);padding:8px">${esc(e.message)}</div>`;
+                area.appendChild(errCard);
+            }
+        }
         area.appendChild(buildAddProtoFooter());
 
         // Restore collapse state
         restoreCollapseState(area, collapseState);
+    }).catch(e => {
+        console.error('[Editor] preloadParents failed:', e);
+        area.innerHTML = `<div class="empty-state"><p style="color:var(--warning)">Render error: ${esc(e.message)}</p></div>`;
     });
 }
 
@@ -107,7 +119,7 @@ function buildCard(proto, idx) {
     // Apply abstract styling
     if (isAbstract) card.classList.add('proto-abstract');
 
-    // header: (type badge) (abstract checkbox) (ID)  [collapse] [delete]
+    // header: (type badge) (abstract checkbox) (ID)  [delete]
     const hdr = _div('proto-header');
     hdr.innerHTML = `<span class="proto-type-badge" title="${esc(meta?.summary || '')}">${esc(type)}</span>
         <label class="proto-abstract-toggle" title="Abstract prototype (not instantiated)">
@@ -115,7 +127,6 @@ function buildCard(proto, idx) {
             <span class="abstract-icon">👻</span>
         </label>
         <span class="proto-id-text" title="Double-click to rename ID">${esc(String(id))}</span>
-        <button class="collapse-btn">▼</button>
         <button class="delete-proto-btn" title="Delete prototype">×</button>`;
 
     // Abstract checkbox
@@ -141,11 +152,6 @@ function buildCard(proto, idx) {
         startIdRename(idSpan, proto, idx);
     });
 
-    hdr.querySelector('.collapse-btn').addEventListener('click', e => {
-        e.stopPropagation();
-        const c = card.classList.toggle('collapsed');
-        hdr.querySelector('.collapse-btn').textContent = c ? '▶' : '▼';
-    });
     hdr.querySelector('.delete-proto-btn').addEventListener('click', e => {
         e.stopPropagation();
         if (!confirm(`Delete prototype "${id}"?`)) return;
@@ -155,6 +161,11 @@ function buildCard(proto, idx) {
             commitChange(fs);
             renderEditor();
         }
+    });
+    // Click on empty header area toggles collapse
+    hdr.addEventListener('click', e => {
+        if (e.target.closest('.abstract-cb, .proto-id-text, .delete-proto-btn, a, button, input, label')) return;
+        card.classList.toggle('collapsed');
     });
     hdr.addEventListener('contextmenu', e => {
         e.preventDefault(); e.stopPropagation();
@@ -307,15 +318,11 @@ function restoreCollapseState(area, saved) {
     area.querySelectorAll('.proto-card').forEach((card, i) => {
         if (saved.protos[i] !== undefined) {
             card.classList.toggle('collapsed', saved.protos[i]);
-            const btn = card.querySelector(':scope > .proto-header .collapse-btn');
-            if (btn) btn.textContent = saved.protos[i] ? '▶' : '▼';
         }
         if (saved.comps[i]) {
             card.querySelectorAll('.component-card').forEach((comp, j) => {
                 if (saved.comps[i][j] !== undefined) {
                     comp.classList.toggle('collapsed', saved.comps[i][j]);
-                    const btn = comp.querySelector('.collapse-btn');
-                    if (btn) btn.textContent = saved.comps[i][j] ? '▶' : '▼';
                 }
             });
         }
@@ -326,8 +333,6 @@ function collapseAllProtos(collapse) {
     const area = document.getElementById('editor-area');
     area.querySelectorAll('.proto-card').forEach(card => {
         card.classList.toggle('collapsed', collapse);
-        const btn = card.querySelector('.collapse-btn');
-        if (btn) btn.textContent = collapse ? '▶' : '▼';
     });
 }
 
@@ -407,14 +412,35 @@ function showAddComponentModal(proto, protoIdx) {
     overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 }
 
+/** Copy an inherited component to local YAML so it can be edited. Returns new compIdx. */
+function localizeComponent(protoIdx, compType) {
+    const fs = state.openFiles.get(state.currentFile);
+    if (!fs || !fs.yaml[protoIdx]) return -1;
+    if (!fs.yaml[protoIdx].components) fs.yaml[protoIdx].components = [];
+    fs.yaml[protoIdx].components.push({ type: compType });
+    return fs.yaml[protoIdx].components.length - 1;
+}
+
 function compCard(compType, data, isInh, protoIdx, compIdx, inherited) {
     const card = _div('component-card collapsed' + (isInh ? ' inherited' : ' comp-local'));
     const cMeta = state.metadata?.components?.[compType];
     const hdr = _div('component-header');
-    hdr.innerHTML = `<span class="component-type" title="${esc(cMeta?.summary || '')}">${esc(compType)}</span><button class="collapse-btn">▶</button>`;
-    hdr.addEventListener('click', () => {
-        const c = card.classList.toggle('collapsed');
-        hdr.querySelector('.collapse-btn').textContent = c ? '▶' : '▼';
+    hdr.innerHTML = `<span class="component-type" title="${esc(cMeta?.summary || '')}">${esc(compType)}</span>`;
+    if (!isInh && compIdx >= 0) {
+        const rmBtn = _el('button'); rmBtn.className = 'field-reset-btn'; rmBtn.title = 'Remove component'; rmBtn.textContent = '×';
+        rmBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            const fs = state.openFiles.get(state.currentFile);
+            if (fs && fs.yaml[protoIdx]?.components) {
+                fs.yaml[protoIdx].components.splice(compIdx, 1);
+                commitChange(fs); renderEditor();
+            }
+        });
+        hdr.appendChild(rmBtn);
+    }
+    hdr.addEventListener('click', e => {
+        if (e.target.closest('button')) return;
+        card.classList.toggle('collapsed');
     });
     hdr.addEventListener('contextmenu', e => {
         e.preventDefault(); e.stopPropagation();
@@ -447,14 +473,26 @@ function compCard(compType, data, isInh, protoIdx, compIdx, inherited) {
         if (inhC) inhCompData = inhC;
     }
 
+    // For inherited components, editing any field "localizes" the component first
+    function compOnChange(tag, nv) {
+        if (isInh) {
+            const newIdx = localizeComponent(protoIdx, compType);
+            if (newIdx < 0) return;
+            setFieldValue([protoIdx, 'components', newIdx], tag, nv);
+        } else {
+            setFieldValue([protoIdx, 'components', compIdx], tag, nv);
+        }
+    }
+    function compOnReset(tag) {
+        if (!isInh && compIdx >= 0) deleteField([protoIdx, 'components', compIdx], tag);
+    }
+
     if (cMeta) {
         for (const f of cMeta.fields) {
             renderedTags.add(f.tag);
 
-            // Determine source: local (in data), inherited (from parent component), or default
             let source, value;
             if (isInh) {
-                // Entire component inherited
                 source = 'inherited';
                 value = data[f.tag];
             } else if (Object.prototype.hasOwnProperty.call(data, f.tag)) {
@@ -468,8 +506,8 @@ function compCard(compType, data, isInh, protoIdx, compIdx, inherited) {
                 value = undefined;
             }
 
-            const onReset = (!isInh && source === 'local') ? () => deleteField([protoIdx, 'components', compIdx], f.tag) : null;
-            body.appendChild(fieldRow(f.tag, f, value, source, nv => setFieldValue([protoIdx, 'components', compIdx], f.tag, nv), onReset));
+            const onReset = (!isInh && source === 'local') ? () => compOnReset(f.tag) : null;
+            body.appendChild(fieldRow(f.tag, f, value, source, nv => compOnChange(f.tag, nv), onReset));
         }
     }
 
@@ -477,8 +515,8 @@ function compCard(compType, data, isInh, protoIdx, compIdx, inherited) {
     for (const [k, v] of Object.entries(data)) {
         if (k === 'type' || k.startsWith('__') || renderedTags.has(k)) continue;
         const source = isInh ? 'inherited' : 'local';
-        const onReset = (!isInh) ? () => deleteField([protoIdx, 'components', compIdx], k) : null;
-        body.appendChild(genericRow(k, v, source, nv => setFieldValue([protoIdx, 'components', compIdx], k, nv), onReset));
+        const onReset = (!isInh) ? () => compOnReset(k) : null;
+        body.appendChild(genericRow(k, v, source, nv => compOnChange(k, nv), onReset));
     }
 
     card.appendChild(body);
@@ -489,8 +527,6 @@ function collapseAllComponents(collapse) {
     const area = document.getElementById('editor-area');
     area.querySelectorAll('.component-card').forEach(card => {
         card.classList.toggle('collapsed', collapse);
-        const btn = card.querySelector('.collapse-btn');
-        if (btn) btn.textContent = collapse ? '▶' : '▼';
     });
 }
 
@@ -527,6 +563,7 @@ function deleteField(path, tag) {
 
 function commitChange(fs) {
     const nc = dumpYaml(fs.yaml);
+    state.resolvedCache.clear();
     fs.pushHistory(nc); renderTabs(); scheduleAutosave(fs);
 }
 

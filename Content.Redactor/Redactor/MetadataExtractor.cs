@@ -22,42 +22,48 @@ public static class MetadataExtractor
         Directory.CreateDirectory(outputDir);
 
         var serverBinDir = Path.Combine(solutionRoot, "bin", "Content.Server");
-        if (!Directory.Exists(serverBinDir))
+        var clientBinDir = Path.Combine(solutionRoot, "bin", "Content.Client");
+
+        // Collect all bin directories to scan (server + client)
+        var binDirs = new List<string>();
+        if (Directory.Exists(serverBinDir)) binDirs.Add(serverBinDir);
+        if (Directory.Exists(clientBinDir)) binDirs.Add(clientBinDir);
+
+        if (binDirs.Count == 0)
         {
-            Console.Error.WriteLine($"[Redactor] ERROR: Server bin directory not found: {serverBinDir}");
-            Console.Error.WriteLine("[Redactor] Build Content.Server first (dotnet build).");
+            Console.Error.WriteLine($"[Redactor] ERROR: No bin directories found.");
+            Console.Error.WriteLine("[Redactor] Build Content.Server and Content.Client first (dotnet build).");
             return;
         }
 
+        Console.WriteLine($"[Redactor] Scanning {binDirs.Count} bin directories: {string.Join(", ", binDirs.Select(Path.GetFileName))}");
         Console.WriteLine("[Redactor] Extracting prototype metadata...");
 
         var runtimeDir = RuntimeEnvironment.GetRuntimeDirectory();
         var runtimeDlls = Directory.GetFiles(runtimeDir, "*.dll");
-        var projectDlls = Directory.GetFiles(serverBinDir, "*.dll", SearchOption.TopDirectoryOnly);
 
-        // Build path map: project DLLs take precedence over runtime
+        // Collect DLLs from all bin directories, dedup by filename (server takes precedence for shared DLLs)
         var pathMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (var p in runtimeDlls)
             pathMap[Path.GetFileName(p)] = p;
-        foreach (var p in projectDlls)
-            pathMap[Path.GetFileName(p)] = p;
+        foreach (var dir in binDirs)
+            foreach (var p in Directory.GetFiles(dir, "*.dll", SearchOption.TopDirectoryOnly))
+                pathMap.TryAdd(Path.GetFileName(p), p);
 
         var resolver = new PathAssemblyResolver(pathMap.Values);
         using var mlc = new MetadataLoadContext(resolver, "System.Runtime");
 
-        // Load XML documentation (optional — gracefully handle missing docs)
+        // Load XML documentation from all bin directories
         var xmlDocs = new XmlDocReader();
-        var xmlFiles = Directory.GetFiles(serverBinDir, "*.xml", SearchOption.TopDirectoryOnly);
-        if (xmlFiles.Length > 0)
+        foreach (var dir in binDirs)
         {
-            xmlDocs.LoadFromDirectory(serverBinDir);
+            var xmlFiles = Directory.GetFiles(dir, "*.xml", SearchOption.TopDirectoryOnly);
+            if (xmlFiles.Length > 0) xmlDocs.LoadFromDirectory(dir);
+        }
+        if (xmlDocs.Count > 0)
             Console.WriteLine($"[Redactor] Loaded {xmlDocs.Count} XML doc entries");
-        }
         else
-        {
             Console.WriteLine("[Redactor] No XML documentation files found (summaries will be empty).");
-            Console.WriteLine("[Redactor] To enable summaries, add <GenerateDocumentationFile>true</GenerateDocumentationFile> to server .csproj");
-        }
 
         var dataDefinitions = new Dictionary<string, DataDefinitionMetadata>();
         var fieldExtractor = new FieldExtractor(xmlDocs, dataDefinitions);
@@ -67,17 +73,25 @@ public static class MetadataExtractor
         var skippedAssemblies = 0;
         var skippedTypes = 0;
 
-        foreach (var dllPath in projectDlls)
+        // Scan unique DLLs from all bin directories (avoid scanning the same DLL twice)
+        var scannedDlls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var dir in binDirs)
         {
-            try
+            foreach (var dllPath in Directory.GetFiles(dir, "*.dll", SearchOption.TopDirectoryOnly))
             {
-                var assembly = mlc.LoadFromAssemblyPath(dllPath);
-                ScanAssembly(assembly, prototypes, components, dataDefinitions, fieldExtractor, xmlDocs, ref skippedTypes);
-            }
-            catch (Exception ex)
-            {
-                skippedAssemblies++;
-                Console.Error.WriteLine($"[Redactor] Warning: Could not load assembly {Path.GetFileName(dllPath)}: {ex.Message}");
+                var fileName = Path.GetFileName(dllPath);
+                if (!scannedDlls.Add(fileName)) continue; // already scanned from another dir
+
+                try
+                {
+                    var assembly = mlc.LoadFromAssemblyPath(dllPath);
+                    ScanAssembly(assembly, prototypes, components, dataDefinitions, fieldExtractor, xmlDocs, ref skippedTypes);
+                }
+                catch (Exception ex)
+                {
+                    skippedAssemblies++;
+                    Console.Error.WriteLine($"[Redactor] Warning: Could not load assembly {fileName}: {ex.Message}");
+                }
             }
         }
 

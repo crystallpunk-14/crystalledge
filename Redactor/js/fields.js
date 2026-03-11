@@ -49,7 +49,14 @@ function fieldRow(key, meta, value, source, onChange, onReset) {
     row.appendChild(lbl);
 
     const controlWrap = _div('field-control-wrap');
-    controlWrap.appendChild(controlFor(meta, value, false, onChange));
+    if (source === 'default' && (value === undefined || value === null)) {
+        const ph = _el('span'); ph.className = 'field-default-placeholder'; ph.textContent = '(default)';
+        ph.title = 'Click to set a value';
+        ph.addEventListener('click', () => onChange(defaultValueForMeta(meta)));
+        controlWrap.appendChild(ph);
+    } else {
+        controlWrap.appendChild(controlFor(meta, value, false, onChange));
+    }
 
     // Reset button for locally-defined fields
     if (isLocal && onReset) {
@@ -103,6 +110,7 @@ function controlFor(meta, value, dis, onChange) {
         case 'text':          return textCtrl(value, dis, onChange);
         case 'color':         return colorCtrl(value, dis, onChange);
         case 'enum':          return enumCtrl(value, meta.enumValues || [], dis, onChange);
+        case 'flags':         return flagsCtrl(value, meta.enumValues || [], dis, onChange);
         case 'entityProtoId': return searchDropdown(value, 'entity', dis, onChange);
         case 'protoId':       return searchDropdown(value, meta.protoTypeArg || 'entity', dis, onChange);
         case 'list':          return listCtrl(value, meta, dis, onChange);
@@ -173,6 +181,49 @@ function enumCtrl(val, opts, dis, cb) {
     sel.innerHTML = `<option value="">-- select --</option>` + opts.map(o => `<option value="${esc(o)}"${o === val ? ' selected' : ''}>${esc(o)}</option>`).join('');
     sel.addEventListener('change', () => cb(sel.value));
     w.appendChild(sel); return w;
+}
+
+function flagsCtrl(val, opts, dis, cb) {
+    // Parse current value: could be comma-separated string or array
+    let selected = new Set();
+    if (Array.isArray(val)) val.forEach(v => selected.add(String(v)));
+    else if (typeof val === 'string' && val) val.split(',').map(s => s.trim()).filter(Boolean).forEach(v => selected.add(v));
+
+    const w = _div('field-control flags-control');
+    const toggle = _el('button'); toggle.className = 'flags-toggle'; toggle.disabled = dis;
+    toggle.type = 'button';
+    function updateLabel() {
+        const sel = [...selected].filter(f => f !== 'NONE' && f !== 'None' && f !== '0');
+        toggle.textContent = sel.length ? sel.join(', ') : '(none)';
+    }
+    updateLabel();
+
+    const dd = _div('flags-dropdown');
+    // Filter out NONE/0 from options
+    const validOpts = opts.filter(o => o !== 'NONE' && o !== 'None' && o !== '0');
+    for (const o of validOpts) {
+        const row = _el('label'); row.className = 'flags-option';
+        const chk = _el('input'); chk.type = 'checkbox'; chk.checked = selected.has(o); chk.disabled = dis;
+        const lbl = _el('span'); lbl.textContent = o;
+        chk.addEventListener('change', () => {
+            if (chk.checked) selected.add(o); else selected.delete(o);
+            updateLabel();
+            const arr = [...selected].filter(f => f !== 'NONE' && f !== 'None' && f !== '0');
+            cb(arr.length ? arr : 'None');
+        });
+        row.append(chk, lbl);
+        dd.appendChild(row);
+    }
+
+    toggle.addEventListener('click', e => {
+        e.stopPropagation();
+        dd.classList.toggle('visible');
+    });
+    // Close dropdown when clicking outside
+    document.addEventListener('click', e => {
+        if (!w.contains(e.target)) dd.classList.remove('visible');
+    });
+    w.append(toggle, dd); return w;
 }
 
 function vectorCtrl(val, axes, dis, cb) {
@@ -277,7 +328,7 @@ function listCtrl(val, meta, dis, onChange) {
         if (!dis) {
             const addRow = _div('list-add-row');
             const addBtn = _el('button'); addBtn.className = 'list-add-btn'; addBtn.textContent = '+ Add item';
-            addBtn.addEventListener('click', () => { arr.push(defaultForKind(meta.elementKind)); onChange([...arr]); rebuild(); });
+            addBtn.addEventListener('click', () => { arr.push(defaultForKind(meta.elementKind)); rebuild(); });
             addRow.appendChild(addBtn);
             w.appendChild(addRow);
         }
@@ -381,6 +432,10 @@ function defaultForKind(kind) {
         case 'object':  return {};
         default: return '';
     }
+}
+
+function defaultValueForMeta(meta) {
+    return defaultForKind(meta.fieldKind);
 }
 
 function autoControl(val, dis, cb) {
