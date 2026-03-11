@@ -68,6 +68,7 @@ const api = {
     refreshIndex()    { return this.get('/api/refresh-index'); },
     openInExplorer(p) { return this.get(`/api/open-in-explorer?path=${encodeURIComponent(p)}`); },
     openDefault(p)     { return this.get(`/api/open-default?path=${encodeURIComponent(p)}`); },
+    openSource(cls)    { return this.get(`/api/open-source?class=${encodeURIComponent(cls)}`); },
     renameFile(old,n) { return this.post('/api/rename-file', { oldPath: old, newName: n }); },
     deleteFile(p)     { return this.get(`/api/delete-file?path=${encodeURIComponent(p)}`); },
     createFile(dir,n,c){ return this.post('/api/create-file', { dir, name: n, content: c || '' }); },
@@ -80,6 +81,12 @@ function parseYaml(text) {
     catch (e) { console.error('YAML parse error', e); return []; }
 }
 function dumpYaml(data) {
+    if (Array.isArray(data)) {
+        // Dump each prototype separately and join with blank line
+        return data.map(item =>
+            jsyaml.dump([item], { schema: SCHEMA, indent: 2, lineWidth: -1, noRefs: true, quotingType: "'", forceQuotes: false, sortKeys: false }).trimEnd()
+        ).join('\n\n') + '\n';
+    }
     return jsyaml.dump(data, { schema: SCHEMA, indent: 2, lineWidth: -1, noRefs: true, quotingType: "'", forceQuotes: false, sortKeys: false });
 }
 
@@ -223,6 +230,7 @@ function renderTabs() {
         tab.innerHTML = `<span class="tab-name">${esc(shortName)}</span><button class="tab-close">×</button>`;
         tab.querySelector('.tab-name').addEventListener('click', () => switchTab(path));
         tab.querySelector('.tab-close').addEventListener('click', e => { e.stopPropagation(); closeTab(path); });
+        tab.addEventListener('mousedown', e => { if (e.button === 1) { e.preventDefault(); closeTab(path); } });
         tab.addEventListener('contextmenu', e => {
             e.preventDefault();
             showContextMenu(e.clientX, e.clientY, [
@@ -361,10 +369,10 @@ function buildCard(proto, idx) {
 
     // header
     const hdr = _div('proto-header');
-    hdr.innerHTML = `<span class="proto-type-badge">${esc(type)}</span>
+    hdr.innerHTML = `<span class="proto-type-badge" title="${esc(meta?.summary || '')}">${esc(type)}</span>
         <span class="proto-id-text">${esc(String(id))}</span>
-        <button class="delete-proto-btn" title="Delete prototype">×</button>
-        <button class="collapse-btn">▼</button>`;
+        <button class="collapse-btn">▼</button>
+        <button class="delete-proto-btn" title="Delete prototype">×</button>`;
     hdr.querySelector('.collapse-btn').addEventListener('click', e => {
         e.stopPropagation();
         const c = card.classList.toggle('collapsed');
@@ -379,6 +387,15 @@ function buildCard(proto, idx) {
             commitChange(fs);
             renderEditor();
         }
+    });
+    hdr.addEventListener('contextmenu', e => {
+        e.preventDefault(); e.stopPropagation();
+        const items = [
+            { label: 'Collapse / Expand', action: () => hdr.querySelector('.collapse-btn').click() },
+        ];
+        if (meta?.className) items.push({ label: 'Open .cs source', action: () => api.openSource(meta.className) });
+        items.push('---', { label: 'Delete prototype', danger: true, action: () => hdr.querySelector('.delete-proto-btn').click() });
+        showContextMenu(e.clientX, e.clientY, items);
     });
     card.appendChild(hdr);
 
@@ -434,6 +451,7 @@ function buildCard(proto, idx) {
 function buildComponentsSection(proto, protoIdx, inherited) {
     const sec = _div('components-section');
     sec.innerHTML = `<div class="components-header"><span>Components</span><button class="add-component-btn" title="Add component">+</button></div>`;
+    sec.querySelector('.add-component-btn').addEventListener('click', () => showAddComponentModal(proto, protoIdx));
 
     const localComps = proto.components || [];
     const inhComps   = inherited.components || [];
@@ -447,18 +465,75 @@ function buildComponentsSection(proto, protoIdx, inherited) {
     return sec;
 }
 
+function showAddComponentModal(proto, protoIdx) {
+    const overlay = _div('modal-overlay');
+    const modal = _div('modal');
+    modal.innerHTML = `<div class="modal-header"><h3>Add Component</h3><button class="modal-close">\u00d7</button></div>
+        <div class="modal-body">
+            <input type="text" class="field-input modal-search" placeholder="Search component\u2026" autocomplete="off">
+            <div class="modal-list"></div>
+        </div>`;
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    const searchInp = modal.querySelector('.modal-search');
+    const listEl = modal.querySelector('.modal-list');
+    const existing = new Set((proto.components || []).map(c => c?.type).filter(Boolean));
+    const types = state.metadata?.components ? Object.keys(state.metadata.components).sort().filter(t => !existing.has(t)) : [];
+
+    function renderList(q) {
+        listEl.innerHTML = '';
+        const lq = (q || '').toLowerCase();
+        const filtered = lq ? types.filter(t => t.toLowerCase().includes(lq)) : types;
+        if (!filtered.length) { listEl.innerHTML = '<div class="dropdown-empty">No components found</div>'; return; }
+        for (const t of filtered.slice(0, 100)) {
+            const el = _div('modal-list-item');
+            el.textContent = t;
+            el.addEventListener('click', () => {
+                overlay.remove();
+                const fs = state.openFiles.get(state.currentFile);
+                if (!fs || !fs.yaml[protoIdx]) return;
+                if (!fs.yaml[protoIdx].components) fs.yaml[protoIdx].components = [];
+                fs.yaml[protoIdx].components.push({ type: t });
+                commitChange(fs); renderEditor();
+            });
+            listEl.appendChild(el);
+        }
+    }
+    renderList('');
+    searchInp.addEventListener('input', () => renderList(searchInp.value));
+    searchInp.focus();
+    modal.querySelector('.modal-close').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+}
+
 function compCard(compType, data, isInh, protoIdx, compIdx) {
     const card = _div('component-card' + (isInh ? ' inherited' : ''));
+    const cMeta = state.metadata?.components?.[compType];
     const hdr = _div('component-header');
-    hdr.innerHTML = `<span class="component-type">${esc(compType)}</span><button class="collapse-btn">▼</button>`;
+    hdr.innerHTML = `<span class="component-type" title="${esc(cMeta?.summary || '')}">${esc(compType)}</span><button class="collapse-btn">▼</button>`;
     hdr.addEventListener('click', () => {
         const c = card.classList.toggle('collapsed');
         hdr.querySelector('.collapse-btn').textContent = c ? '▶' : '▼';
     });
+    hdr.addEventListener('contextmenu', e => {
+        e.preventDefault(); e.stopPropagation();
+        const items = [];
+        if (cMeta?.className) items.push({ label: 'Open .cs source', action: () => api.openSource(cMeta.className) });
+        if (!isInh && compIdx >= 0) {
+            items.push('---', { label: 'Remove component', danger: true, action: () => {
+                const fs = state.openFiles.get(state.currentFile);
+                if (fs && fs.yaml[protoIdx]?.components) {
+                    fs.yaml[protoIdx].components.splice(compIdx, 1);
+                    commitChange(fs); renderEditor();
+                }
+            }});
+        }
+        if (items.length) showContextMenu(e.clientX, e.clientY, items);
+    });
     card.appendChild(hdr);
 
     const body = _div('component-body');
-    const cMeta = state.metadata?.components?.[compType];
     const renderedTags = new Set(['type']);
 
     // Render ALL metadata fields for this component
@@ -487,6 +562,11 @@ function fieldRow(key, meta, value, isInh, onChange) {
     const row = _div('field-row' + (isInh ? ' inherited' : ''));
     const lbl = _el('label'); lbl.className = 'field-label' + (meta.required ? ' required' : '');
     lbl.textContent = key;
+    // Tooltip: summary + type
+    const tipParts = [];
+    if (meta.summary) tipParts.push(meta.summary);
+    tipParts.push(`Type: ${meta.fullType || meta.type || meta.fieldKind || 'unknown'}`);
+    lbl.title = tipParts.join('\n');
     row.appendChild(lbl);
     row.appendChild(controlFor(meta, value, isInh, onChange));
     return row;
@@ -707,11 +787,13 @@ function dataDefCtrl(val, ddType, dis, onChange) {
 
 // ======================== ELEMENT HELPERS ===============================
 function elementControl(kind, fullType, protoArg, val, dis, cb) {
-    // Build a synthetic meta for the element
-    const fakeMeta = { fieldKind: kind || 'text', protoTypeArg: protoArg, isDataDefinition: false };
     // Check if the fullType is a DataDefinition
     if (fullType && state.metadata?.dataDefinitions?.[fullType]) {
         return dataDefCtrl(val, fullType, dis, cb);
+    }
+    // If the value is actually an object, render as auto (YAML textarea) regardless of kind
+    if (val !== null && typeof val === 'object' && !Array.isArray(val) && (kind === 'text' || kind === 'object')) {
+        return autoControl(val, dis, cb);
     }
     switch (kind) {
         case 'boolean':       return boolCtrl(val, dis, cb);
@@ -721,6 +803,7 @@ function elementControl(kind, fullType, protoArg, val, dis, cb) {
         case 'color':         return colorCtrl(val, dis, cb);
         case 'entityProtoId': return searchDropdown(val, 'entity', dis, cb);
         case 'protoId':       return searchDropdown(val, protoArg || 'entity', dis, cb);
+        case 'object':        return autoControl(val, dis, cb);
         default:              return autoControl(val, dis, cb);
     }
 }
@@ -731,6 +814,7 @@ function defaultForKind(kind) {
         case 'integer': return 0;
         case 'float':   return 0.0;
         case 'text': case 'entityProtoId': case 'protoId': case 'color': return '';
+        case 'object':  return {};
         default: return '';
     }
 }
@@ -762,6 +846,7 @@ function inferKindFromArray(arr) {
     const first = arr[0];
     if (typeof first === 'boolean') return 'boolean';
     if (typeof first === 'number')  return Number.isInteger(first) ? 'integer' : 'float';
+    if (typeof first === 'object' && first !== null) return 'object';
     return 'text';
 }
 

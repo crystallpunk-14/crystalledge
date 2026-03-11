@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace Content.Redactor.Redactor;
 
@@ -44,6 +45,28 @@ public static class MetadataExtractor
 
         var resolver = new PathAssemblyResolver(pathMap.Values);
         using var mlc = new MetadataLoadContext(resolver, "System.Runtime");
+
+        // Load XML documentation files
+        _xmlDocs.Clear();
+        foreach (var xmlPath in Directory.GetFiles(serverBinDir, "*.xml", SearchOption.TopDirectoryOnly))
+        {
+            try
+            {
+                var xdoc = XDocument.Load(xmlPath);
+                foreach (var member in xdoc.Descendants("member"))
+                {
+                    var nameAttr = member.Attribute("name")?.Value;
+                    if (string.IsNullOrEmpty(nameAttr)) continue;
+                    var summary = member.Element("summary")?.Value;
+                    if (!string.IsNullOrWhiteSpace(summary))
+                    {
+                        _xmlDocs[nameAttr] = summary.Trim().Replace("\r\n", " ").Replace("\n", " ");
+                    }
+                }
+            }
+            catch { /* skip malformed XML docs */ }
+        }
+        Console.WriteLine($"[Redactor] Loaded {_xmlDocs.Count} XML doc entries");
 
         var prototypes = new Dictionary<string, PrototypeMetadata>();
         var components = new Dictionary<string, ComponentMetadata>();
@@ -114,6 +137,9 @@ public static class MetadataExtractor
     /// <summary>Collected DataDefinition types (type fullName → fields).</summary>
     private static readonly Dictionary<string, DataDefinitionMetadata> _dataDefinitions = new();
 
+    /// <summary>XML documentation summaries keyed by member doc-id (T:, P:, F:, etc.).</summary>
+    private static readonly Dictionary<string, string> _xmlDocs = new(StringComparer.Ordinal);
+
     private static void ScanType(
         Type type,
         Dictionary<string, PrototypeMetadata> prototypes,
@@ -136,6 +162,7 @@ public static class MetadataExtractor
                     {
                         ClassName = fullName,
                         ShortName = type.Name,
+                        Summary = GetTypeSummary(type),
                         Fields = fields,
                     };
                 }
@@ -156,6 +183,7 @@ public static class MetadataExtractor
                 ClassName = type.FullName ?? type.Name,
                 YamlType = yamlType,
                 Inheriting = inheriting,
+                Summary = GetTypeSummary(type),
                 Fields = fields,
             });
         }
@@ -172,6 +200,7 @@ public static class MetadataExtractor
             {
                 ClassName = type.FullName ?? type.Name,
                 Name = compName,
+                Summary = GetTypeSummary(type),
                 Fields = fields,
             });
         }
@@ -294,6 +323,7 @@ public static class MetadataExtractor
             NeverPushInheritance = neverPush ? true : null,
             ProtoTypeArg = protoTypeArg,
             EnumValues = enumValues,
+            Summary = GetMemberSummary(member),
         };
 
         // Enrich with element/key/value type info for lists, maps, and DataDefinition references
@@ -488,6 +518,23 @@ public static class MetadataExtractor
             return null;
         }
     }
+
+    /// <summary>Look up XML doc summary for a type.</summary>
+    private static string? GetTypeSummary(Type type)
+    {
+        var fullName = type.FullName?.Replace('+', '.');
+        if (fullName == null) return null;
+        return _xmlDocs.GetValueOrDefault($"T:{fullName}");
+    }
+
+    /// <summary>Look up XML doc summary for a field or property.</summary>
+    private static string? GetMemberSummary(MemberInfo member)
+    {
+        var typeName = member.DeclaringType?.FullName?.Replace('+', '.');
+        if (typeName == null) return null;
+        var prefix = member is PropertyInfo ? "P" : "F";
+        return _xmlDocs.GetValueOrDefault($"{prefix}:{typeName}.{member.Name}");
+    }
 }
 
 // ====================================================================== //
@@ -506,6 +553,7 @@ public sealed class PrototypeMetadata
     public string ClassName { get; set; } = "";
     public string YamlType { get; set; } = "";
     public bool Inheriting { get; set; }
+    public string? Summary { get; set; }
     public List<FieldMetadata> Fields { get; set; } = new();
 }
 
@@ -513,6 +561,7 @@ public sealed class ComponentMetadata
 {
     public string ClassName { get; set; } = "";
     public string Name { get; set; } = "";
+    public string? Summary { get; set; }
     public List<FieldMetadata> Fields { get; set; } = new();
 }
 
@@ -520,6 +569,7 @@ public sealed class DataDefinitionMetadata
 {
     public string ClassName { get; set; } = "";
     public string ShortName { get; set; } = "";
+    public string? Summary { get; set; }
     public List<FieldMetadata> Fields { get; set; } = new();
 }
 
@@ -555,4 +605,7 @@ public sealed class FieldMetadata
     // DataDefinition reference
     public bool? IsDataDefinition { get; set; }
     public string? DataDefinitionType { get; set; }
+
+    // XML doc summary
+    public string? Summary { get; set; }
 }

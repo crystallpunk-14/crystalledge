@@ -170,6 +170,32 @@ public static class RedactorServer
                 break;
             }
 
+            case "/api/open-source":
+            {
+                var className = req.QueryString["class"];
+                if (!string.IsNullOrEmpty(className))
+                {
+                    // Search for .cs file containing this class in the solution
+                    var found = FindSourceFile(className);
+                    if (found != null)
+                    {
+                        try
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = found,
+                                UseShellExecute = true,
+                            });
+                        }
+                        catch { /* non-critical */ }
+                        await WriteJsonAsync(res, new { success = true, path = found });
+                        break;
+                    }
+                }
+                await WriteJsonAsync(res, new { success = false, error = "Source file not found" });
+                break;
+            }
+
             case "/api/rename-file":
             {
                 using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
@@ -241,7 +267,9 @@ public static class RedactorServer
                     break;
                 }
                 Directory.CreateDirectory(dirFull);
-                await File.WriteAllTextAsync(fileFull, content, Encoding.UTF8);
+                // Normalize line endings to LF
+                content = content.Replace("\r\n", "\n").Replace("\r", "\n");
+                await File.WriteAllTextAsync(fileFull, content, new UTF8Encoding(false));
                 var rel = Path.GetRelativePath(_prototypesDir, fileFull).Replace('\\', '/');
                 RefreshIndexForFile(fileFull, rel);
                 await WriteJsonAsync(res, new { success = true, path = rel });
@@ -319,8 +347,10 @@ public static class RedactorServer
             }
 
             var content = contentEl.GetString()!;
+            // Normalize line endings to LF to match repository convention
+            content = content.Replace("\r\n", "\n").Replace("\r", "\n");
             Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-            await File.WriteAllTextAsync(fullPath, content, Encoding.UTF8);
+            await File.WriteAllTextAsync(fullPath, content, new UTF8Encoding(false));
 
             RefreshIndexForFile(fullPath, relPath);
 
@@ -559,6 +589,38 @@ public static class RedactorServer
         var bytes = Encoding.UTF8.GetBytes(json);
         res.ContentLength64 = bytes.Length;
         await res.OutputStream.WriteAsync(bytes);
+    }
+
+    /// <summary>
+    /// Finds a .cs source file for a fully-qualified class name by scanning Content.* and RobustToolbox dirs.
+    /// </summary>
+    private static string? FindSourceFile(string className)
+    {
+        // className is like "Content.Shared.Inventory.InventoryTemplatePrototype"
+        // The file is likely named after the last segment, e.g. InventoryTemplatePrototype.cs
+        var shortName = className.Contains('.') ? className[(className.LastIndexOf('.') + 1)..] : className;
+        // Handle nested types: "Outer+Inner" → just use "Outer"
+        if (shortName.Contains('+'))
+            shortName = shortName[..shortName.IndexOf('+')];
+
+        var fileName = shortName + ".cs";
+
+        // Search in Content.* folders and RobustToolbox
+        var searchDirs = new[] { "Content.Server", "Content.Client", "Content.Shared", "RobustToolbox" };
+
+        foreach (var dir in searchDirs)
+        {
+            var fullDir = Path.Combine(_solutionRoot, dir);
+            if (!Directory.Exists(fullDir)) continue;
+            try
+            {
+                var files = Directory.GetFiles(fullDir, fileName, SearchOption.AllDirectories);
+                if (files.Length > 0) return files[0];
+            }
+            catch { /* ignore */ }
+        }
+
+        return null;
     }
 
     private static void TryOpenBrowser(string url)
