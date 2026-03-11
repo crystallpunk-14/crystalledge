@@ -1,0 +1,58 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                HorizontalExpand="True">
+    <!-- Outer card: styled programmatically in code-behind -->
+    <BoxContainer Orientation="Vertical" SeparationOverride="0">
+        <!-- Card header: type badge + ID + collapse -->
+        <PanelContainer Name="HeaderPanel" Access="Public" MinSize="0 36">
+            <BoxContainer Orientation="Horizontal" Margin="12 6 12 6" SeparationOverride="8">
+                <PanelContainer Name="TypeBadgePanel" Access="Public" MinSize="0 22">
+                    <Label Name="TypeBadge" Access="Public" Margin="8 2 8 2" />
+                </PanelContainer>
+                <LineEdit Name="IdEdit" Access="Public" PlaceHolder="prototype id"
+                          HorizontalExpand="True" />
+                <!-- Abstract toggle: only visible for IInheritingPrototype -->
+                <CheckBox Name="AbstractToggle" Access="Public" Text="Abstract"
+                          Visible="False" />
+                <Button Name="CollapseButton" Access="Public" Text="v"
+                        MinSize="28 24" ToolTip="Collapse/Expand" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Parent sub-header: only visible for IInheritingPrototype -->
+        <PanelContainer Name="ParentPanel" Access="Public" MinSize="0 28"
+                         Visible="False">
+            <BoxContainer Orientation="Horizontal" Margin="12 4 12 4" SeparationOverride="8">
+                <Label Text="parent:" MinSize="80 0" />
+                <LineEdit Name="ParentEdit" Access="Public" HorizontalExpand="True"
+                          PlaceHolder="(none)" />
+                <Button Name="ApplyParentButton" Access="Public" Text="Apply"
+                        MinSize="50 22" ToolTip="Apply parent and refresh inherited fields" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Collapsible body -->
+        <BoxContainer Name="BodyContainer" Access="Public" Orientation="Vertical"
+                       Margin="12 6 12 12" SeparationOverride="0">
+            <!-- Fields section -->
+            <BoxContainer Name="FieldsContainer" Access="Public" Orientation="Vertical"
+                           SeparationOverride="0" HorizontalExpand="True" />
+
+            <!-- Components section: visible for any prototype with ComponentRegistry -->
+            <BoxContainer Name="ComponentsSection" Access="Public" Orientation="Vertical"
+                           SeparationOverride="0" HorizontalExpand="True" Visible="False"
+                           Margin="0 14 0 0">
+                <PanelContainer Name="CompHeaderPanel" Access="Public" MinSize="0 32">
+                    <BoxContainer Orientation="Horizontal" Margin="0 8 0 4" SeparationOverride="8">
+                        <Label Name="CompHeaderLabel" Access="Public" Text="COMPONENTS"
+                               HorizontalExpand="True" />
+                        <Button Name="AddComponentButton" Access="Public" Text="+ Add"
+                                MinSize="60 22" />
+                    </BoxContainer>
+                </PanelContainer>
+                <BoxContainer Name="ComponentsList" Access="Public" Orientation="Vertical"
+                               SeparationOverride="8" Margin="0 8 0 0" />
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</PanelContainer>

@@ -1,0 +1,68 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:editor="clr-namespace:Content.Editor.UI;assembly=Content.Editor">
+    <!-- Main split: fixed sidebar + flexible editor -->
+    <BoxContainer Name="RootLayout" Orientation="Horizontal">
+        <!-- Left sidebar: fixed 280px -->
+        <PanelContainer Name="SidebarPanel" Access="Public" MinSize="280 0" MaxSize="280 99999">
+            <BoxContainer Orientation="Vertical" Margin="0">
+                <!-- Sidebar header -->
+                <PanelContainer Name="SidebarHeader" Access="Public" MinSize="0 48">
+                    <BoxContainer Orientation="Horizontal" Margin="14 10 14 10">
+                        <Label Name="TitleLabel" Text="SS14 Editor" StyleClasses="LabelHeading"
+                               HorizontalExpand="True" />
+                        <Button Name="RefreshButton" Access="Public" Text="R"
+                                ToolTip="Refresh file tree" MinSize="30 30" />
+                    </BoxContainer>
+                </PanelContainer>
+                <!-- Search -->
+                <BoxContainer Margin="8 8 8 4">
+                    <LineEdit Name="SearchBox" Access="Public"
+                              PlaceHolder="Search files..."
+                              HorizontalExpand="True" />
+                </BoxContainer>
+                <!-- File tree -->
+                <ScrollContainer Name="TreeScroll" VerticalExpand="True" HorizontalExpand="True"
+                                  Margin="4 0 0 0">
+                    <editor:FileTreeControl Name="FileTree" Access="Public"
+                                             VerticalExpand="True" HorizontalExpand="True" />
+                </ScrollContainer>
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Right: main area (tabs + editor + status) -->
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+            <!-- Tab bar -->
+            <PanelContainer Name="TabBarPanel" Access="Public" MinSize="0 38">
+                <ScrollContainer HScrollEnabled="True" VScrollEnabled="False"
+                                  HorizontalExpand="True" MinSize="0 38">
+                    <BoxContainer Name="TabBar" Access="Public" Orientation="Horizontal"
+                                  Margin="4 4 4 0" SeparationOverride="2" />
+                </ScrollContainer>
+            </PanelContainer>
+
+            <!-- Editor content area -->
+            <PanelContainer Name="EditorPanel" Access="Public"
+                             HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+                    <BoxContainer Name="EditorContent" Access="Public" Orientation="Vertical"
+                                  HorizontalExpand="True" Margin="24 24 24 24"
+                                  SeparationOverride="18">
+                        <!-- Filled dynamically with prototype cards -->
+                    </BoxContainer>
+                </ScrollContainer>
+            </PanelContainer>
+
+            <!-- Status bar -->
+            <PanelContainer Name="StatusBarPanel" Access="Public" MinSize="0 26">
+                <BoxContainer Orientation="Horizontal" Margin="12 4 12 4">
+                    <Label Name="StatusLabel" Access="Public" Text="Ready"
+                           HorizontalExpand="True" />
+                    <Button Name="SaveButton" Access="Public" Text="Save (Ctrl+S)"
+                            MinSize="100 20" ToolTip="Save current file to disk" />
+                    <Label Name="ValidationLabel" Access="Public" Text="" />
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+    </BoxContainer>
+</Control>

@@ -38,7 +38,7 @@
   <Project Path="Content.Shared.Database/Content.Shared.Database.csproj" />
   <Project Path="Content.Shared/Content.Shared.csproj" />
   <Project Path="Content.Tests/Content.Tests.csproj" />
-  <Project Path="Content.Redactor/Content.Redactor.csproj">
+  <Project Path="Content.Editor/Content.Editor.csproj">
     <BuildType Solution="Release|*" Project="false" />
   </Project>
   <Project Path="Content.Tools/Content.Tools.csproj" />
