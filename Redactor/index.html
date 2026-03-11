@@ -17,7 +17,7 @@
                 <button id="refresh-btn" title="Refresh file tree &amp; index">&#x21bb;</button>
             </div>
             <div class="sidebar-search">
-                <input type="text" id="file-search" placeholder="Search files…" spellcheck="false">
+                <input type="text" id="file-search" placeholder="Search files & prototype IDs…" spellcheck="false">
             </div>
             <div id="file-tree" class="file-tree"></div>
         </aside>
@@ -40,6 +40,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"
             integrity="sha512-CSBhVREyzHAjAFfBlIBakjoRUKp5h7VSweP0InR/pAJyptH7peuhCsqAI/snV+TwZmXZqoUklpXp6R6wMnYf5Q=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="js/app.js"></script>
+    <!-- Modular JS – loaded in dependency order -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/yaml.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/context-menu.js"></script>
+    <script src="js/inheritance.js"></script>
+    <script src="js/fields.js"></script>
+    <script src="js/tabs.js"></script>
+    <script src="js/file-tree.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/init.js"></script>
 </body>
 </html>

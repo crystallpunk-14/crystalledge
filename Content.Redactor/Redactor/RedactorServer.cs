@@ -69,12 +69,16 @@ public static class RedactorServer
         {
             var path = req.Url?.AbsolutePath ?? "/";
             if (path.StartsWith("/api/"))
+            {
+                Console.WriteLine($"[Redactor] {req.HttpMethod} {path}");
                 await HandleApiAsync(path, req, res);
+            }
             else
                 await ServeStaticAsync(path, res);
         }
         catch (Exception ex)
         {
+            Console.Error.WriteLine($"[Redactor] ERROR handling {req.HttpMethod} {req.Url}: {ex}");
             res.StatusCode = 500;
             res.ContentType = "application/json";
             var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new { error = ex.Message }));
@@ -220,6 +224,7 @@ public static class RedactorServer
                     break;
                 }
                 File.Move(oldFull, newFull);
+                Console.WriteLine($"[Redactor] File renamed: {oldRel} -> {newName}");
                 await WriteJsonAsync(res, new { success = true, newPath = Path.GetRelativePath(_prototypesDir, newFull).Replace('\\', '/') });
                 break;
             }
@@ -241,7 +246,10 @@ public static class RedactorServer
                     break;
                 }
                 if (File.Exists(fullPath))
+                {
                     File.Delete(fullPath);
+                    Console.WriteLine($"[Redactor] File deleted: {relPath}");
+                }
                 await WriteJsonAsync(res, new { success = true });
                 break;
             }
@@ -297,7 +305,39 @@ public static class RedactorServer
                 break;
             }
 
+            case "/api/rename-proto-id":
+            {
+                using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
+                var bodyStr = await reader.ReadToEndAsync();
+                var doc = JsonSerializer.Deserialize<JsonElement>(bodyStr);
+                var filePath = doc.GetProperty("path").GetString()!;
+                var oldId = doc.GetProperty("oldId").GetString()!;
+                var newId = doc.GetProperty("newId").GetString()!;
+                var protoType = doc.GetProperty("type").GetString()!;
+
+                var fullPath = Path.GetFullPath(Path.Combine(_prototypesDir, filePath));
+                if (!fullPath.StartsWith(Path.GetFullPath(_prototypesDir)))
+                {
+                    res.StatusCode = 403;
+                    await WriteJsonAsync(res, new { error = "Access denied" });
+                    break;
+                }
+                if (!File.Exists(fullPath))
+                {
+                    res.StatusCode = 404;
+                    await WriteJsonAsync(res, new { error = "File not found" });
+                    break;
+                }
+
+                // Update the index
+                RefreshIndexForFile(fullPath, filePath);
+                Console.WriteLine($"[Redactor] Renamed prototype ID: {protoType}/{oldId} -> {newId} in {filePath}");
+                await WriteJsonAsync(res, new { success = true });
+                break;
+            }
+
             default:
+                Console.Error.WriteLine($"[Redactor] Unknown API endpoint: {path}");
                 res.StatusCode = 404;
                 await WriteJsonAsync(res, new { error = "Unknown API endpoint" });
                 break;

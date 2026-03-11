@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Xml.Linq;
 
 namespace Content.Redactor.Redactor;
 
@@ -25,8 +24,8 @@ public static class MetadataExtractor
         var serverBinDir = Path.Combine(solutionRoot, "bin", "Content.Server");
         if (!Directory.Exists(serverBinDir))
         {
-            Console.Error.WriteLine($"[Redactor] Server bin directory not found: {serverBinDir}");
-            Console.Error.WriteLine("[Redactor] Build Content.Server first.");
+            Console.Error.WriteLine($"[Redactor] ERROR: Server bin directory not found: {serverBinDir}");
+            Console.Error.WriteLine("[Redactor] Build Content.Server first (dotnet build).");
             return;
         }
 
@@ -46,41 +45,39 @@ public static class MetadataExtractor
         var resolver = new PathAssemblyResolver(pathMap.Values);
         using var mlc = new MetadataLoadContext(resolver, "System.Runtime");
 
-        // Load XML documentation files
-        _xmlDocs.Clear();
-        foreach (var xmlPath in Directory.GetFiles(serverBinDir, "*.xml", SearchOption.TopDirectoryOnly))
+        // Load XML documentation (optional — gracefully handle missing docs)
+        var xmlDocs = new XmlDocReader();
+        var xmlFiles = Directory.GetFiles(serverBinDir, "*.xml", SearchOption.TopDirectoryOnly);
+        if (xmlFiles.Length > 0)
         {
-            try
-            {
-                var xdoc = XDocument.Load(xmlPath);
-                foreach (var member in xdoc.Descendants("member"))
-                {
-                    var nameAttr = member.Attribute("name")?.Value;
-                    if (string.IsNullOrEmpty(nameAttr)) continue;
-                    var summary = member.Element("summary")?.Value;
-                    if (!string.IsNullOrWhiteSpace(summary))
-                    {
-                        _xmlDocs[nameAttr] = summary.Trim().Replace("\r\n", " ").Replace("\n", " ");
-                    }
-                }
-            }
-            catch { /* skip malformed XML docs */ }
+            xmlDocs.LoadFromDirectory(serverBinDir);
+            Console.WriteLine($"[Redactor] Loaded {xmlDocs.Count} XML doc entries");
         }
-        Console.WriteLine($"[Redactor] Loaded {_xmlDocs.Count} XML doc entries");
+        else
+        {
+            Console.WriteLine("[Redactor] No XML documentation files found (summaries will be empty).");
+            Console.WriteLine("[Redactor] To enable summaries, add <GenerateDocumentationFile>true</GenerateDocumentationFile> to server .csproj");
+        }
+
+        var dataDefinitions = new Dictionary<string, DataDefinitionMetadata>();
+        var fieldExtractor = new FieldExtractor(xmlDocs, dataDefinitions);
 
         var prototypes = new Dictionary<string, PrototypeMetadata>();
         var components = new Dictionary<string, ComponentMetadata>();
+        var skippedAssemblies = 0;
+        var skippedTypes = 0;
 
         foreach (var dllPath in projectDlls)
         {
             try
             {
                 var assembly = mlc.LoadFromAssemblyPath(dllPath);
-                ScanAssembly(assembly, prototypes, components);
+                ScanAssembly(assembly, prototypes, components, dataDefinitions, fieldExtractor, xmlDocs, ref skippedTypes);
             }
-            catch
+            catch (Exception ex)
             {
-                // Skip assemblies that can't be loaded (native libs, etc.)
+                skippedAssemblies++;
+                Console.Error.WriteLine($"[Redactor] Warning: Could not load assembly {Path.GetFileName(dllPath)}: {ex.Message}");
             }
         }
 
@@ -88,7 +85,7 @@ public static class MetadataExtractor
         {
             Prototypes = prototypes,
             Components = components,
-            DataDefinitions = new Dictionary<string, DataDefinitionMetadata>(_dataDefinitions),
+            DataDefinitions = dataDefinitions,
         };
 
         var options = new JsonSerializerOptions
@@ -102,14 +99,22 @@ public static class MetadataExtractor
         var outputPath = Path.Combine(outputDir, "metadata.json");
         File.WriteAllText(outputPath, json);
 
-        Console.WriteLine($"[Redactor] Extracted {prototypes.Count} prototypes, {components.Count} components");
+        Console.WriteLine($"[Redactor] Extracted {prototypes.Count} prototypes, {components.Count} components, {dataDefinitions.Count} data definitions");
+        if (skippedAssemblies > 0)
+            Console.WriteLine($"[Redactor] Skipped {skippedAssemblies} unloadable assemblies (native libs, etc.)");
+        if (skippedTypes > 0)
+            Console.WriteLine($"[Redactor] Skipped {skippedTypes} problematic types");
         Console.WriteLine($"[Redactor] Metadata written to: {outputPath}");
     }
 
     private static void ScanAssembly(
         Assembly assembly,
         Dictionary<string, PrototypeMetadata> prototypes,
-        Dictionary<string, ComponentMetadata> components)
+        Dictionary<string, ComponentMetadata> components,
+        Dictionary<string, DataDefinitionMetadata> dataDefinitions,
+        FieldExtractor fieldExtractor,
+        XmlDocReader xmlDocs,
+        ref int skippedTypes)
     {
         Type[] types;
         try
@@ -119,33 +124,32 @@ public static class MetadataExtractor
         catch (ReflectionTypeLoadException ex)
         {
             types = ex.Types.Where(t => t != null).ToArray()!;
+            Console.Error.WriteLine($"[Redactor] Warning: Partial type load for {assembly.GetName().Name} ({types.Length} types loaded)");
         }
 
         foreach (var type in types)
         {
             try
             {
-                ScanType(type, prototypes, components);
+                ScanType(type, prototypes, components, dataDefinitions, fieldExtractor, xmlDocs);
             }
-            catch
+            catch (Exception ex)
             {
-                // Skip problematic types silently
+                skippedTypes++;
+                Console.Error.WriteLine($"[Redactor] Warning: Could not scan type {type.FullName}: {ex.Message}");
             }
         }
     }
 
-    /// <summary>Collected DataDefinition types (type fullName → fields).</summary>
-    private static readonly Dictionary<string, DataDefinitionMetadata> _dataDefinitions = new();
-
-    /// <summary>XML documentation summaries keyed by member doc-id (T:, P:, F:, etc.).</summary>
-    private static readonly Dictionary<string, string> _xmlDocs = new(StringComparer.Ordinal);
-
     private static void ScanType(
         Type type,
         Dictionary<string, PrototypeMetadata> prototypes,
-        Dictionary<string, ComponentMetadata> components)
+        Dictionary<string, ComponentMetadata> components,
+        Dictionary<string, DataDefinitionMetadata> dataDefinitions,
+        FieldExtractor fieldExtractor,
+        XmlDocReader xmlDocs)
     {
-        // Scan DataDefinition types (standalone serializable classes used as field values)
+        // Scan DataDefinition types
         var hasDataDef = type.CustomAttributes
             .Any(a => a.AttributeType.Name is "DataDefinitionAttribute"
                 or "ImplicitDataDefinitionForInheritorsAttribute");
@@ -153,22 +157,23 @@ public static class MetadataExtractor
         if (hasDataDef && !type.IsAbstract)
         {
             var fullName = type.FullName ?? type.Name;
-            if (!_dataDefinitions.ContainsKey(fullName))
+            if (!dataDefinitions.ContainsKey(fullName))
             {
-                var fields = ExtractDataFields(type);
+                var fields = fieldExtractor.ExtractDataFields(type);
                 if (fields.Count > 0)
                 {
-                    _dataDefinitions[fullName] = new DataDefinitionMetadata
+                    dataDefinitions[fullName] = new DataDefinitionMetadata
                     {
                         ClassName = fullName,
                         ShortName = type.Name,
-                        Summary = GetTypeSummary(type),
+                        Summary = xmlDocs.GetTypeSummary(type),
                         Fields = fields,
                     };
                 }
             }
         }
 
+        // Scan Prototype types
         var protoAttr = type.CustomAttributes
             .FirstOrDefault(a => a.AttributeType.Name is "PrototypeAttribute" or "PrototypeRecordAttribute");
 
@@ -176,31 +181,32 @@ public static class MetadataExtractor
         {
             var yamlType = InferPrototypeYamlType(protoAttr, type);
             var inheriting = type.GetInterfaces().Any(i => i.Name == "IInheritingPrototype");
-            var fields = ExtractDataFields(type);
+            var fields = fieldExtractor.ExtractDataFields(type);
 
             prototypes.TryAdd(yamlType, new PrototypeMetadata
             {
                 ClassName = type.FullName ?? type.Name,
                 YamlType = yamlType,
                 Inheriting = inheriting,
-                Summary = GetTypeSummary(type),
+                Summary = xmlDocs.GetTypeSummary(type),
                 Fields = fields,
             });
         }
 
+        // Scan Component types
         var compAttr = type.CustomAttributes
             .FirstOrDefault(a => a.AttributeType.Name == "RegisterComponentAttribute");
 
         if (compAttr != null)
         {
             var compName = InferComponentName(type);
-            var fields = ExtractDataFields(type);
+            var fields = fieldExtractor.ExtractDataFields(type);
 
             components.TryAdd(compName, new ComponentMetadata
             {
                 ClassName = type.FullName ?? type.Name,
                 Name = compName,
-                Summary = GetTypeSummary(type),
+                Summary = xmlDocs.GetTypeSummary(type),
                 Fields = fields,
             });
         }
@@ -229,383 +235,4 @@ public static class MetadataExtractor
             name = name[..^"Component".Length];
         return name;
     }
-
-    private static List<FieldMetadata> ExtractDataFields(Type type)
-    {
-        var fields = new List<FieldMetadata>();
-        var seen = new HashSet<string>();
-
-        var current = type;
-        while (current != null)
-        {
-            foreach (var member in current.GetMembers(
-                         BindingFlags.Public | BindingFlags.NonPublic |
-                         BindingFlags.Instance | BindingFlags.DeclaredOnly))
-            {
-                if (member is not (FieldInfo or PropertyInfo))
-                    continue;
-                if (!seen.Add(member.Name))
-                    continue;
-
-                var meta = TryBuildFieldMeta(member);
-                if (meta != null)
-                    fields.Add(meta);
-            }
-
-            current = current.BaseType;
-        }
-
-        return fields;
-    }
-
-    private static FieldMetadata? TryBuildFieldMeta(MemberInfo member)
-    {
-        CustomAttributeData? dfAttr = null;
-        bool isId = false, isParent = false, isAbstract = false;
-        bool alwaysPush = false, neverPush = false;
-
-        foreach (var a in member.CustomAttributes)
-        {
-            switch (a.AttributeType.Name)
-            {
-                case "DataFieldAttribute":
-                    dfAttr = a;
-                    break;
-                case "IdDataFieldAttribute":
-                    dfAttr = a;
-                    isId = true;
-                    break;
-                case "ParentDataFieldAttribute":
-                    dfAttr = a;
-                    isParent = true;
-                    break;
-                case "AbstractDataFieldAttribute":
-                    dfAttr = a;
-                    isAbstract = true;
-                    break;
-                case "AlwaysPushInheritanceAttribute":
-                    alwaysPush = true;
-                    break;
-                case "NeverPushInheritanceAttribute":
-                    neverPush = true;
-                    break;
-            }
-        }
-
-        if (dfAttr == null)
-            return null;
-
-        Type? memberType = member switch
-        {
-            FieldInfo fi => fi.FieldType,
-            PropertyInfo pi => pi.PropertyType,
-            _ => null,
-        };
-        if (memberType == null)
-            return null;
-
-        var tag = ResolveTag(dfAttr, member.Name, isId, isParent, isAbstract);
-        var required = ResolveRequired(dfAttr);
-        var (fieldKind, enumValues, protoTypeArg) = ClassifyType(memberType);
-
-        var meta = new FieldMetadata
-        {
-            Name = member.Name,
-            Tag = tag,
-            Type = memberType.Name,
-            FullType = memberType.FullName ?? memberType.Name,
-            FieldKind = fieldKind,
-            Required = required,
-            IsId = isId,
-            IsParent = isParent,
-            IsAbstract = isAbstract,
-            AlwaysPushInheritance = alwaysPush ? true : null,
-            NeverPushInheritance = neverPush ? true : null,
-            ProtoTypeArg = protoTypeArg,
-            EnumValues = enumValues,
-            Summary = GetMemberSummary(member),
-        };
-
-        // Enrich with element/key/value type info for lists, maps, and DataDefinition references
-        EnrichFieldTypeInfo(meta, memberType);
-
-        return meta;
-    }
-
-    private static string ResolveTag(CustomAttributeData attr, string memberName,
-        bool isId, bool isParent, bool isAbstract)
-    {
-        if (isId) return "id";
-        if (isParent) return "parent";
-        if (isAbstract) return "abstract";
-
-        if (attr.ConstructorArguments.Count > 0 &&
-            attr.ConstructorArguments[0].Value is string tag &&
-            !string.IsNullOrWhiteSpace(tag))
-        {
-            return tag;
-        }
-
-        return char.ToLowerInvariant(memberName[0]) + memberName[1..];
-    }
-
-    private static bool ResolveRequired(CustomAttributeData attr)
-    {
-        foreach (var named in attr.NamedArguments)
-        {
-            if (named.MemberName == "Required" && named.TypedValue.Value is bool r)
-                return r;
-        }
-
-        if (attr.AttributeType.Name == "DataFieldAttribute" &&
-            attr.ConstructorArguments.Count >= 4 &&
-            attr.ConstructorArguments[3].Value is bool reqArg)
-        {
-            return reqArg;
-        }
-
-        return false;
-    }
-
-    private static (string kind, string[]? enumValues, string? protoTypeArg) ClassifyType(Type type)
-    {
-        var name = type.Name;
-
-        if (name.StartsWith("Nullable") && type.IsGenericType)
-        {
-            try
-            {
-                var inner = type.GetGenericArguments();
-                if (inner.Length > 0)
-                    return ClassifyType(inner[0]);
-            }
-            catch { /* fall through */ }
-        }
-
-        return name switch
-        {
-            "Boolean" => ("boolean", null, null),
-            "String" => ("text", null, null),
-            "Int32" or "Int16" or "Int64" or "Byte" or "SByte"
-                or "UInt16" or "UInt32" or "UInt64" => ("integer", null, null),
-            "Single" or "Double" or "Decimal" => ("float", null, null),
-            "EntProtoId" => ("entityProtoId", null, null),
-            "Color" => ("color", null, null),
-            "TimeSpan" => ("text", null, null),
-            "LocId" => ("text", null, null),
-            _ when name.StartsWith("ProtoId") && type.IsGenericType => ExtractProtoIdInfo(type),
-            _ when name.StartsWith("EntProtoId") && type.IsGenericType => ("entityProtoId", null, null),
-            _ when (name.Contains("List") || name.Contains("HashSet")) && type.IsGenericType
-                => ("list", null, null),
-            _ when name.Contains("Dictionary") && type.IsGenericType => ("map", null, null),
-            _ when type.IsEnum => ("enum", SafeEnumValues(type), null),
-            _ when type.IsArray => ("list", null, null),
-            _ => ("text", null, null),
-        };
-    }
-
-    /// <summary>
-    /// Extended classification for FieldMetadata with element/key/value types.
-    /// </summary>
-    private static void EnrichFieldTypeInfo(FieldMetadata field, Type memberType)
-    {
-        var name = memberType.Name;
-
-        // Unwrap Nullable
-        if (name.StartsWith("Nullable") && memberType.IsGenericType)
-        {
-            try
-            {
-                var inner = memberType.GetGenericArguments();
-                if (inner.Length > 0) { EnrichFieldTypeInfo(field, inner[0]); return; }
-            }
-            catch { /* fall through */ }
-        }
-
-        // List / HashSet
-        if ((name.Contains("List") || name.Contains("HashSet")) && memberType.IsGenericType)
-        {
-            try
-            {
-                var args = memberType.GetGenericArguments();
-                if (args.Length > 0)
-                {
-                    var (ek, _, ep) = ClassifyType(args[0]);
-                    field.ElementKind = ek;
-                    field.ElementFullType = args[0].FullName ?? args[0].Name;
-                    if (ep != null) field.ElementProtoTypeArg = ep;
-                }
-            }
-            catch { /* ignore */ }
-        }
-
-        // Array (T[])
-        if (memberType.IsArray)
-        {
-            try
-            {
-                var elemType = memberType.GetElementType();
-                if (elemType != null)
-                {
-                    var (ek, _, ep) = ClassifyType(elemType);
-                    field.ElementKind = ek;
-                    field.ElementFullType = elemType.FullName ?? elemType.Name;
-                    if (ep != null) field.ElementProtoTypeArg = ep;
-                }
-            }
-            catch { /* ignore */ }
-        }
-
-        // Dictionary
-        if (name.Contains("Dictionary") && memberType.IsGenericType)
-        {
-            try
-            {
-                var args = memberType.GetGenericArguments();
-                if (args.Length >= 2)
-                {
-                    var (kk, _, kp) = ClassifyType(args[0]);
-                    var (vk, _, vp) = ClassifyType(args[1]);
-                    field.KeyKind = kk;
-                    field.KeyFullType = args[0].FullName ?? args[0].Name;
-                    field.ValueKind = vk;
-                    field.ValueFullType = args[1].FullName ?? args[1].Name;
-                    if (kp != null) field.KeyProtoTypeArg = kp;
-                    if (vp != null) field.ValueProtoTypeArg = vp;
-                }
-            }
-            catch { /* ignore */ }
-        }
-
-        // DataDefinition reference
-        var fullName = memberType.FullName ?? memberType.Name;
-        if (_dataDefinitions.ContainsKey(fullName))
-        {
-            field.IsDataDefinition = true;
-            field.DataDefinitionType = fullName;
-        }
-    }
-
-    private static (string, string[]?, string?) ExtractProtoIdInfo(Type type)
-    {
-        try
-        {
-            var args = type.GetGenericArguments();
-            if (args.Length > 0)
-            {
-                var argName = args[0].Name;
-                if (argName.EndsWith("Prototype"))
-                    argName = argName[..^"Prototype".Length];
-                var yamlType = char.ToLowerInvariant(argName[0]) + argName[1..];
-                return ("protoId", null, yamlType);
-            }
-        }
-        catch { /* fallback */ }
-
-        return ("protoId", null, null);
-    }
-
-    private static string[]? SafeEnumValues(Type type)
-    {
-        try
-        {
-            return type.GetFields(BindingFlags.Public | BindingFlags.Static)
-                .Select(f => f.Name)
-                .ToArray();
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    /// <summary>Look up XML doc summary for a type.</summary>
-    private static string? GetTypeSummary(Type type)
-    {
-        var fullName = type.FullName?.Replace('+', '.');
-        if (fullName == null) return null;
-        return _xmlDocs.GetValueOrDefault($"T:{fullName}");
-    }
-
-    /// <summary>Look up XML doc summary for a field or property.</summary>
-    private static string? GetMemberSummary(MemberInfo member)
-    {
-        var typeName = member.DeclaringType?.FullName?.Replace('+', '.');
-        if (typeName == null) return null;
-        var prefix = member is PropertyInfo ? "P" : "F";
-        return _xmlDocs.GetValueOrDefault($"{prefix}:{typeName}.{member.Name}");
-    }
-}
-
-// ====================================================================== //
-// JSON data models
-// ====================================================================== //
-
-public sealed class MetadataRoot
-{
-    public Dictionary<string, PrototypeMetadata> Prototypes { get; set; } = new();
-    public Dictionary<string, ComponentMetadata> Components { get; set; } = new();
-    public Dictionary<string, DataDefinitionMetadata> DataDefinitions { get; set; } = new();
-}
-
-public sealed class PrototypeMetadata
-{
-    public string ClassName { get; set; } = "";
-    public string YamlType { get; set; } = "";
-    public bool Inheriting { get; set; }
-    public string? Summary { get; set; }
-    public List<FieldMetadata> Fields { get; set; } = new();
-}
-
-public sealed class ComponentMetadata
-{
-    public string ClassName { get; set; } = "";
-    public string Name { get; set; } = "";
-    public string? Summary { get; set; }
-    public List<FieldMetadata> Fields { get; set; } = new();
-}
-
-public sealed class DataDefinitionMetadata
-{
-    public string ClassName { get; set; } = "";
-    public string ShortName { get; set; } = "";
-    public string? Summary { get; set; }
-    public List<FieldMetadata> Fields { get; set; } = new();
-}
-
-public sealed class FieldMetadata
-{
-    public string Name { get; set; } = "";
-    public string Tag { get; set; } = "";
-    public string Type { get; set; } = "";
-    public string FullType { get; set; } = "";
-    public string FieldKind { get; set; } = "text";
-    public bool Required { get; set; }
-    public bool IsId { get; set; }
-    public bool IsParent { get; set; }
-    public bool IsAbstract { get; set; }
-    public bool? AlwaysPushInheritance { get; set; }
-    public bool? NeverPushInheritance { get; set; }
-    public string? ProtoTypeArg { get; set; }
-    public string[]? EnumValues { get; set; }
-
-    // List element info
-    public string? ElementKind { get; set; }
-    public string? ElementFullType { get; set; }
-    public string? ElementProtoTypeArg { get; set; }
-
-    // Map key/value info
-    public string? KeyKind { get; set; }
-    public string? KeyFullType { get; set; }
-    public string? KeyProtoTypeArg { get; set; }
-    public string? ValueKind { get; set; }
-    public string? ValueFullType { get; set; }
-    public string? ValueProtoTypeArg { get; set; }
-
-    // DataDefinition reference
-    public bool? IsDataDefinition { get; set; }
-    public string? DataDefinitionType { get; set; }
-
-    // XML doc summary
-    public string? Summary { get; set; }
 }
