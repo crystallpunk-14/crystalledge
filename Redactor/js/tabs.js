@@ -37,9 +37,10 @@ function renderTabs() {
 async function openFile(path) {
     if (!state.openFiles.has(path)) {
         try {
-            const { content } = await api.loadFile(path);
-            const fs = new FileState(path, content);
-            fs.yaml = parseYaml(content);
+            const resp = await api.loadFile(path);
+            const fs = new FileState(path, resp.content);
+            fs.yaml = parseYaml(resp.content);
+            fs.readOnly = !!resp.readOnly || path.startsWith('__engine__/');
             state.openFiles.set(path, fs);
             try {
                 const stamps = await api.fileStamps([path]);

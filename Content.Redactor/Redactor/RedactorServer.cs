@@ -22,6 +22,7 @@ public static class RedactorServer
     private static string _redactorDir = "";
     private static string _prototypesDir = "";
     private static string _texturesDir = "";
+    private static string _enginePrototypesDir = "";
     private static Dictionary<string, List<ProtoIndexEntry>> _protoIndex = new();
 
     public static async Task StartAsync(string solutionRoot, int port)
@@ -30,9 +31,20 @@ public static class RedactorServer
         _redactorDir = Path.Combine(solutionRoot, "Redactor");
         _prototypesDir = Path.Combine(solutionRoot, "Resources", "Prototypes");
         _texturesDir = Path.Combine(solutionRoot, "Resources", "Textures");
+        _enginePrototypesDir = Path.Combine(solutionRoot, "RobustToolbox", "Resources", "EnginePrototypes");
 
         Console.WriteLine("[Redactor] Building prototype index...");
         _protoIndex = BuildProtoIndex(_prototypesDir);
+        // Merge engine prototypes (read-only)
+        if (Directory.Exists(_enginePrototypesDir))
+        {
+            var engineIndex = BuildProtoIndex(_enginePrototypesDir, readOnly: true, pathPrefix: "__engine__/");
+            foreach (var (type, entries) in engineIndex)
+            {
+                if (!_protoIndex.ContainsKey(type)) _protoIndex[type] = new List<ProtoIndexEntry>();
+                _protoIndex[type].AddRange(entries);
+            }
+        }
         Console.WriteLine($"[Redactor] Indexed {_protoIndex.Values.Sum(l => l.Count)} prototypes across {_protoIndex.Count} types");
 
         var listener = new HttpListener();
@@ -99,8 +111,25 @@ public static class RedactorServer
         switch (path)
         {
             case "/api/tree":
-                await WriteJsonAsync(res, BuildFileTree(_prototypesDir, ""));
+            {
+                var tree = BuildFileTree(_prototypesDir, "");
+                // Append engine prototypes as a read-only subtree
+                if (Directory.Exists(_enginePrototypesDir))
+                {
+                    var engineTree = BuildFileTree(_enginePrototypesDir, "", "__engine__/");
+                    MarkReadOnly(engineTree);
+                    tree.Add(new FileTreeNode
+                    {
+                        Name = "⚙ Engine (read-only)",
+                        Path = "__engine__",
+                        IsDir = true,
+                        ReadOnly = true,
+                        Children = engineTree,
+                    });
+                }
+                await WriteJsonAsync(res, tree);
                 break;
+            }
 
             case "/api/file":
                 await HandleFileEndpointAsync(req, res);
@@ -344,6 +373,12 @@ public static class RedactorServer
                 break;
             }
 
+            case "/api/texture-browse":
+            {
+                await HandleTextureBrowseAsync(req, res);
+                break;
+            }
+
             default:
                 Console.Error.WriteLine($"[Redactor] Unknown API endpoint: {path}");
                 res.StatusCode = 404;
@@ -362,8 +397,13 @@ public static class RedactorServer
             return;
         }
 
-        var fullPath = Path.GetFullPath(Path.Combine(_prototypesDir, relPath));
-        if (!fullPath.StartsWith(Path.GetFullPath(_prototypesDir)))
+        // Resolve engine prototype paths
+        bool isEngine = relPath.StartsWith("__engine__/");
+        var baseDir = isEngine ? _enginePrototypesDir : _prototypesDir;
+        var actualRel = isEngine ? relPath["__engine__/".Length..] : relPath;
+
+        var fullPath = Path.GetFullPath(Path.Combine(baseDir, actualRel));
+        if (!fullPath.StartsWith(Path.GetFullPath(baseDir)))
         {
             res.StatusCode = 403;
             await WriteJsonAsync(res, new { error = "Access denied" });
@@ -379,10 +419,16 @@ public static class RedactorServer
                 return;
             }
             var content = await File.ReadAllTextAsync(fullPath, Encoding.UTF8);
-            await WriteJsonAsync(res, new { content, path = relPath });
+            await WriteJsonAsync(res, new { content, path = relPath, readOnly = isEngine });
         }
         else if (req.HttpMethod == "POST")
         {
+            if (isEngine)
+            {
+                res.StatusCode = 403;
+                await WriteJsonAsync(res, new { error = "Engine prototypes are read-only" });
+                return;
+            }
             using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
             var body = await reader.ReadToEndAsync();
             var doc = JsonSerializer.Deserialize<JsonElement>(body);
@@ -459,6 +505,38 @@ public static class RedactorServer
         await res.OutputStream.WriteAsync(bytes);
     }
 
+    private static async Task HandleTextureBrowseAsync(HttpListenerRequest req, HttpListenerResponse res)
+    {
+        var relPath = (req.QueryString["path"] ?? "").Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
+
+        var fullPath = Path.GetFullPath(Path.Combine(_texturesDir, relPath));
+        if (!fullPath.StartsWith(Path.GetFullPath(_texturesDir)))
+        {
+            res.StatusCode = 403;
+            await WriteJsonAsync(res, new { error = "Access denied" });
+            return;
+        }
+
+        if (!Directory.Exists(fullPath))
+        {
+            await WriteJsonAsync(res, new { dirs = Array.Empty<string>(), files = Array.Empty<string>() });
+            return;
+        }
+
+        var dirs = Directory.GetDirectories(fullPath)
+            .Select(d => Path.GetFileName(d))
+            .OrderBy(n => n)
+            .ToList();
+
+        var files = Directory.GetFiles(fullPath)
+            .Select(f => Path.GetFileName(f))
+            .Where(n => !n.StartsWith('.'))
+            .OrderBy(n => n)
+            .ToList();
+
+        await WriteJsonAsync(res, new { dirs, files });
+    }
+
     private static async Task ServeStaticAsync(string urlPath, HttpListenerResponse res)
     {
         if (urlPath == "/") urlPath = "/index.html";
@@ -480,6 +558,15 @@ public static class RedactorServer
         await res.OutputStream.WriteAsync(content);
     }
 
+    private static void MarkReadOnly(List<FileTreeNode> nodes)
+    {
+        foreach (var n in nodes)
+        {
+            n.ReadOnly = true;
+            if (n.Children != null) MarkReadOnly(n.Children);
+        }
+    }
+
     private static string MimeType(string path) => Path.GetExtension(path).ToLowerInvariant() switch
     {
         ".html" => "text/html; charset=utf-8",
@@ -493,7 +580,7 @@ public static class RedactorServer
         _ => "application/octet-stream",
     };
 
-    private static List<FileTreeNode> BuildFileTree(string baseDir, string relativePath)
+    private static List<FileTreeNode> BuildFileTree(string baseDir, string relativePath, string pathPrefix = "")
     {
         var fullPath = string.IsNullOrEmpty(relativePath) ? baseDir : Path.Combine(baseDir, relativePath);
         if (!Directory.Exists(fullPath))
@@ -508,9 +595,9 @@ public static class RedactorServer
             nodes.Add(new FileTreeNode
             {
                 Name = name,
-                Path = rel,
+                Path = pathPrefix + rel,
                 IsDir = true,
-                Children = BuildFileTree(baseDir, rel),
+                Children = BuildFileTree(baseDir, rel, pathPrefix),
             });
         }
 
@@ -521,13 +608,13 @@ public static class RedactorServer
         {
             var name = Path.GetFileName(file);
             var rel = string.IsNullOrEmpty(relativePath) ? name : $"{relativePath}/{name}";
-            nodes.Add(new FileTreeNode { Name = name, Path = rel, IsDir = false });
+            nodes.Add(new FileTreeNode { Name = name, Path = pathPrefix + rel, IsDir = false });
         }
 
         return nodes;
     }
 
-    private static Dictionary<string, List<ProtoIndexEntry>> BuildProtoIndex(string prototypesDir)
+    private static Dictionary<string, List<ProtoIndexEntry>> BuildProtoIndex(string prototypesDir, bool readOnly = false, string pathPrefix = "")
     {
         var index = new Dictionary<string, List<ProtoIndexEntry>>();
         if (!Directory.Exists(prototypesDir))
@@ -540,8 +627,8 @@ public static class RedactorServer
         {
             try
             {
-                var rel = Path.GetRelativePath(prototypesDir, file).Replace('\\', '/');
-                ScanYamlFile(file, rel, index);
+                var rel = pathPrefix + Path.GetRelativePath(prototypesDir, file).Replace('\\', '/');
+                ScanYamlFile(file, rel, index, readOnly);
             }
             catch { /* skip unreadable files */ }
         }
@@ -550,7 +637,7 @@ public static class RedactorServer
     }
 
     private static void ScanYamlFile(string filePath, string relativePath,
-        Dictionary<string, List<ProtoIndexEntry>> index)
+        Dictionary<string, List<ProtoIndexEntry>> index, bool readOnly = false)
     {
         var lines = File.ReadAllLines(filePath);
         string? curType = null, curId = null, curName = null;
@@ -571,6 +658,7 @@ public static class RedactorServer
                 File = relativePath,
                 Parents = curParents?.ToArray(),
                 Abstract = curAbstract,
+                ReadOnly = readOnly,
             });
         }
 
@@ -725,6 +813,7 @@ public sealed class FileTreeNode
     public string Name { get; set; } = "";
     public string Path { get; set; } = "";
     public bool IsDir { get; set; }
+    public bool ReadOnly { get; set; }
     public List<FileTreeNode>? Children { get; set; }
 }
 
@@ -735,6 +824,7 @@ public sealed class ProtoIndexEntry
     public string File { get; set; } = "";
     public string[]? Parents { get; set; }
     public bool Abstract { get; set; }
+    public bool ReadOnly { get; set; }
 }
 
 public sealed class ProtoSearchResult

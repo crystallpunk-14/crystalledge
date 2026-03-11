@@ -54,10 +54,24 @@ const SpriteView = (() => {
         return meta.states.find(s => s.name === stateName) || null;
     }
 
-    /** Get the number of frames for direction 0 from a state def. */
-    function frameCount(stateDef) {
+    /** Get the number of frames for a given direction from a state def. */
+    function frameCount(stateDef, dir) {
         if (!stateDef?.delays?.length) return 1;
-        return stateDef.delays[0].length || 1;
+        const d = Math.min(dir ?? 0, stateDef.delays.length - 1);
+        return stateDef.delays[d]?.length || 1;
+    }
+
+    /**
+     * Get the global frame index offset for a given direction.
+     * Frames are laid out sequentially: dir0 frames, then dir1 frames, etc.
+     */
+    function dirFrameOffset(stateDef, dir) {
+        if (!stateDef?.delays) return 0;
+        let offset = 0;
+        for (let d = 0; d < Math.min(dir, stateDef.delays.length); d++) {
+            offset += (stateDef.delays[d]?.length || 1);
+        }
+        return offset;
     }
 
     // ─── SpriteView instance ─────────────────────────────────────
@@ -98,12 +112,14 @@ const SpriteView = (() => {
 
             const sw = _meta.size.x;
             const sh = _meta.size.y;
-            const nFrames = frameCount(_state);
-            const nDirs   = _state.directions || 1;
+            const nDirs = _state.directions || 1;
             const d = Math.min(dir, nDirs - 1);
 
-            const sx = (_frame % nFrames) * sw;
-            const sy = d * sh;
+            // Sequential layout: compute global frame index
+            const globalIdx = dirFrameOffset(_state, d) + _frame;
+            const cols = Math.max(1, Math.floor(_img.width / sw));
+            const sx = (globalIdx % cols) * sw;
+            const sy = Math.floor(globalIdx / cols) * sh;
 
             // Scale to fill canvas, centered
             const scale = Math.min(size / sw, size / sh);
@@ -121,7 +137,9 @@ const SpriteView = (() => {
                 _elapsed += dt;
 
                 if (_state && _state.delays && _state.delays.length > 0) {
-                    const dirDelays = _state.delays[Math.min(dir, _state.delays.length - 1)];
+                    const nDirs = _state.directions || 1;
+                    const d = Math.min(dir, nDirs - 1);
+                    const dirDelays = _state.delays[Math.min(d, _state.delays.length - 1)];
                     if (dirDelays && dirDelays.length > 1) {
                         const frameDelay = dirDelays[_frame % dirDelays.length];
                         if (_elapsed >= frameDelay) {
@@ -148,7 +166,7 @@ const SpriteView = (() => {
                 _img = await loadImage(rsi, st);
                 draw();
                 // Start animation loop only if animated
-                if (frameCount(_state) > 1) {
+                if (frameCount(_state, dir) > 1) {
                     cancelAnimationFrame(_raf);
                     _raf = requestAnimationFrame(tick);
                 }

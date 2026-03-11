@@ -61,19 +61,20 @@ function buildTreeDom(nodes, parent, depth) {
             buildTreeDom(n.children || [], childBox, depth + 1);
             parent.appendChild(childBox);
         } else {
-            el.innerHTML = `<span class="tree-icon">📄</span><span class="tree-name">${esc(n.name)}</span>`;
+            el.innerHTML = `<span class="tree-icon">${n.readOnly ? '🔒' : '📄'}</span><span class="tree-name">${esc(n.name)}</span>`;
             el.addEventListener('click', () => openFile(n.path));
             el.addEventListener('contextmenu', e => {
                 e.preventDefault(); e.stopPropagation();
-                showContextMenu(e.clientX, e.clientY, [
-                    { label: 'Open', action: () => openFile(n.path) },
-                    { label: 'Open in Explorer', action: () => api.openInExplorer(n.path) },
-                    '---',
-                    { label: 'New File…', action: () => promptCreateFile(n.path.includes('/') ? n.path.substring(0, n.path.lastIndexOf('/')) : '') },
-                    '---',
-                    { label: 'Rename…', action: () => promptRenameFile(n.path) },
-                    { label: 'Delete', danger: true, action: () => promptDeleteFile(n.path) },
-                ]);
+                const items = [{ label: 'Open', action: () => openFile(n.path) }];
+                if (!n.readOnly) {
+                    items.push({ label: 'Open in Explorer', action: () => api.openInExplorer(n.path) });
+                    items.push('---');
+                    items.push({ label: 'New File…', action: () => promptCreateFile(n.path.includes('/') ? n.path.substring(0, n.path.lastIndexOf('/')) : '') });
+                    items.push('---');
+                    items.push({ label: 'Rename…', action: () => promptRenameFile(n.path) });
+                    items.push({ label: 'Delete', danger: true, action: () => promptDeleteFile(n.path) });
+                }
+                showContextMenu(e.clientX, e.clientY, items);
             });
             parent.appendChild(el);
         }

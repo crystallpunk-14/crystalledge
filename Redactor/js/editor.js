@@ -384,6 +384,11 @@ function showAddComponentModal(proto, protoIdx) {
     const searchInp = modal.querySelector('.modal-search');
     const listEl = modal.querySelector('.modal-list');
     const existing = new Set((proto.components || []).map(c => c?.type).filter(Boolean));
+    // Also exclude inherited components
+    if (proto.parent) {
+        const inh = resolveInheritance(proto.type, proto.parent);
+        if (inh?.components) for (const c of inh.components) { if (c?.type) existing.add(c.type); }
+    }
     const types = state.metadata?.components ? Object.keys(state.metadata.components).sort().filter(t => !existing.has(t)) : [];
 
     function renderList(q) {
@@ -417,6 +422,9 @@ function localizeComponent(protoIdx, compType) {
     const fs = state.openFiles.get(state.currentFile);
     if (!fs || !fs.yaml[protoIdx]) return -1;
     if (!fs.yaml[protoIdx].components) fs.yaml[protoIdx].components = [];
+    // Check if already localized
+    const existing = fs.yaml[protoIdx].components.findIndex(c => c && c.type === compType);
+    if (existing >= 0) return existing;
     fs.yaml[protoIdx].components.push({ type: compType });
     return fs.yaml[protoIdx].components.length - 1;
 }
@@ -569,6 +577,7 @@ function commitChange(fs) {
 
 // ======================== AUTOSAVE =====================================
 function scheduleAutosave(fs) {
+    if (fs.readOnly) return;
     clearTimeout(fs._saveTimer);
     fs._saveTimer = setTimeout(async () => {
         try {

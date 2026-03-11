@@ -442,6 +442,23 @@ body {
 }
 .sprite-state-dropdown.visible { display: block; }
 
+/* ======================== ResPath Autocomplete ========== */
+.respath-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    z-index: 110; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); box-shadow: var(--shadow);
+    max-height: 200px; overflow-y: auto; padding: 2px 0;
+}
+.respath-dropdown.visible { display: block; }
+.respath-item {
+    padding: 4px 10px; cursor: pointer; font-size: 12px;
+    font-family: var(--font-mono); transition: background .1s;
+}
+.respath-item:hover, .respath-item.selected { background: var(--accent-dim); }
+.respath-dir  { color: var(--text-link); }
+.respath-dir::before  { content: '📁 '; }
+.respath-file::before { content: '📄 '; }
+
 /* ======================== Search Dropdown =============== */
 .search-dropdown { position: relative; }
 .dropdown-list {
