@@ -1,4 +1,5 @@
 - type: skill
+  parent: BaseWarriorSkill
   id: Thorns
   effect: !type:AddStatusEffect
     effect: CEStatusEffectThorns
