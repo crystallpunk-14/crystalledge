@@ -43,10 +43,10 @@ public sealed partial class CEReactOnDamageStatusEffectSystem : EntitySystem
         switch (ent.Comp.Reaction)
         {
             case ReactionType.Damage:
-                _health.TakeDamage(target.Value, new(damageType, amount));
+                _health.TakeDamage(target!.Value, new(damageType, amount));
                 break;
             case ReactionType.Heal:
-                _health.Heal(target.Value, amount);
+                _health.Heal(target!.Value, amount);
                 break;
             default:
                 Log.Warning("No case Defined for this %1", nameof(ReactionType));
