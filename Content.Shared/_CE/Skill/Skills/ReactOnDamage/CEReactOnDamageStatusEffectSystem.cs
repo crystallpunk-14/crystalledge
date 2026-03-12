@@ -8,7 +8,6 @@ namespace Content.Shared._CE.Skill.Skills.ReactOnDamage;
 public sealed partial class CEReactOnDamageStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly CESharedHealthSystem _health = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
 
     public override void Initialize()
     {
