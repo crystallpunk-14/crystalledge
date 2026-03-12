@@ -25,6 +25,9 @@ public sealed partial class CEReactOnDamageStatusEffectSystem : EntitySystem
         var damageType = ent.Comp.DamageType;
         var amount = ent.Comp.Amount;
 
+        if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
+            amount *= stackComp.Stack;
+
         switch (ent.Comp.Target)
         {
             case TargetType.Source:
