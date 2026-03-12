@@ -1,12 +1,15 @@
 using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._CE.Skill.Skills.ReactOnDamage;
 
 public sealed partial class CEReactOnDamageStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly CESharedHealthSystem _health = default!;
+    [Dependency] private readonly StatusEffectsSystem _statusEffects = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -31,13 +34,13 @@ public sealed partial class CEReactOnDamageStatusEffectSystem : EntitySystem
                 target = args.Args.Source;
                 break;
             case TargetType.Self:
-                target = ent;
+                if (!TryComp<StatusEffectComponent>(ent, out var statusEffectComp)) return;
+                target = statusEffectComp.AppliedTo;
                 break;
             default:
                 Log.Warning("No case Defined for this %1", nameof(TargetType));
                 return;
         }
-
         switch (ent.Comp.Reaction)
         {
             case ReactionType.Damage:
