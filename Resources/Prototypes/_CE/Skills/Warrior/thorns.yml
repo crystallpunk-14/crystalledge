@@ -1,0 +1,13 @@
+- type: skill
+  id: Thorns
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectThorns
+
+- type: entity
+  id: CEStatusEffectThorns
+  name: Thorns
+  description: Everytime you get hit deal Physical damage to the attacker.
+  components:
+  - type: StatusEffect
+  - type: CEReactOnDamageStatusEffect
+    amount: 1
