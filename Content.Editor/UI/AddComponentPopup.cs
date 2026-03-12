@@ -1,28 +1,30 @@
-using Content.Editor.Prototype;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Prototypes;
+using Robust.Shared.GameObjects;
 
 namespace Content.Editor.UI;
 
 /// <summary>
-/// Popup window for adding a new prototype to the current file.
-/// Shows a searchable list of all registered prototype types.
+/// Popup window for adding a new component to a prototype.
+/// Shows a searchable list of all registered component types, excluding already-present ones.
 /// </summary>
-public sealed class AddPrototypePopup : DefaultWindow
+public sealed class AddComponentPopup : DefaultWindow
 {
     /// <summary>
-    /// Fired when the user selects a prototype type. Argument is the YAML type string.
+    /// Fired when the user selects a component type. Argument is the component name string.
     /// </summary>
-    public event Action<string>? OnTypeSelected;
+    public event Action<string>? OnComponentSelected;
 
     private readonly LineEdit _searchBox;
-    private readonly List<(string TypeName, Button Button)> _allTypes = new();
+    private readonly List<(string Name, Button Button)> _allComponents = new();
 
-    public AddPrototypePopup(IPrototypeManager prototypeManager)
+    public AddComponentPopup(IComponentFactory componentFactory, IEnumerable<string>? excludeTypes = null)
     {
-        Title = "Add Prototype";
+        Title = "Add Component";
         SetSize = new Vector2(400, 500);
+
+        var exclude = new HashSet<string>(excludeTypes ?? Array.Empty<string>(),
+            StringComparer.OrdinalIgnoreCase);
 
         var vbox = new BoxContainer
         {
@@ -32,7 +34,7 @@ public sealed class AddPrototypePopup : DefaultWindow
 
         _searchBox = new LineEdit
         {
-            PlaceHolder = "Search prototype type...",
+            PlaceHolder = "Search component...",
             HorizontalExpand = true,
         };
         _searchBox.OnTextChanged += OnSearchChanged;
@@ -50,17 +52,18 @@ public sealed class AddPrototypePopup : DefaultWindow
             SeparationOverride = 2,
         };
 
-        // Populate with all known prototype kinds
-        var kinds = new List<(string name, Type type)>();
-        foreach (var kindType in prototypeManager.EnumeratePrototypeKinds())
+        // Populate with all registered component names
+        var names = new List<string>();
+        foreach (var reg in componentFactory.AllRegisteredTypes)
         {
-            var name = PrototypeParser.ResolvePrototypeTypeName(kindType);
-            kinds.Add((name, kindType));
+            var name = componentFactory.GetComponentName(reg);
+            if (!exclude.Contains(name))
+                names.Add(name);
         }
 
-        kinds.Sort((a, b) => string.Compare(a.name, b.name, StringComparison.OrdinalIgnoreCase));
+        names.Sort(StringComparer.OrdinalIgnoreCase);
 
-        foreach (var (name, type) in kinds)
+        foreach (var name in names)
         {
             var btn = new Button
             {
@@ -69,15 +72,15 @@ public sealed class AddPrototypePopup : DefaultWindow
                 HorizontalExpand = true,
             };
 
-            var typeName = name;
+            var compName = name;
             btn.OnPressed += _ =>
             {
-                OnTypeSelected?.Invoke(typeName);
+                OnComponentSelected?.Invoke(compName);
                 Close();
             };
 
             typeList.AddChild(btn);
-            _allTypes.Add((name, btn));
+            _allComponents.Add((name, btn));
         }
 
         scroll.AddChild(typeList);
@@ -88,9 +91,11 @@ public sealed class AddPrototypePopup : DefaultWindow
     private void OnSearchChanged(LineEdit.LineEditEventArgs args)
     {
         var filter = args.Text.Trim();
-        foreach (var (name, btn) in _allTypes)
+        var hasFilter = !string.IsNullOrEmpty(filter);
+
+        foreach (var (name, btn) in _allComponents)
         {
-            btn.Visible = string.IsNullOrEmpty(filter)
+            btn.Visible = !hasFilter
                           || name.Contains(filter, StringComparison.OrdinalIgnoreCase);
         }
     }

@@ -3,6 +3,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Input;
 using Robust.Shared.Utility;
 
 namespace Content.Editor.UI;
@@ -17,6 +18,11 @@ public sealed class FileTreeControl : BoxContainer
     /// Fired when a file (not a folder) is selected. Argument is the relative path from the prototypes root.
     /// </summary>
     public event Action<string>? OnFileSelected;
+
+    /// <summary>
+    /// Fired when a file or folder is right-clicked. Args: (relativePath, isDirectory, screenPosition).
+    /// </summary>
+    public event Action<string, bool, Vector2>? OnItemRightClick;
 
     private readonly Dictionary<string, TreeEntry> _allEntries = new();
     private string _filterText = "";
@@ -67,10 +73,16 @@ public sealed class FileTreeControl : BoxContainer
         RemoveAllChildren();
 
         BuildTreeRecursive(resourceManager, rootPath, "", 0);
+
+        // Start with all folders collapsed — hide children
+        UpdateVisibility();
     }
 
-    private void BuildTreeRecursive(IResourceManager resourceManager, ResPath dirPath,
-        string relativePath, int depth)
+    private void BuildTreeRecursive(
+        IResourceManager resourceManager,
+        ResPath dirPath,
+        string relativePath,
+        int depth)
     {
         var dirs = new List<string>();
         var files = new List<string>();
@@ -89,7 +101,21 @@ public sealed class FileTreeControl : BoxContainer
             }
         }
 
-        dirs.Sort(StringComparer.OrdinalIgnoreCase);
+        dirs.Sort((a, b) =>
+        {
+            // Underscore-prefixed dirs sort first (For forks)
+            var aUnder = a.StartsWith('_');
+            var bUnder = b.StartsWith('_');
+
+            if (aUnder && !bUnder)
+                return -1;
+
+            if (!aUnder && bUnder)
+                return 1;
+
+            return string.Compare(a, b, StringComparison.OrdinalIgnoreCase);
+        });
+
         files.Sort(StringComparer.OrdinalIgnoreCase);
 
         foreach (var dir in dirs)
@@ -181,6 +207,15 @@ public sealed class FileTreeControl : BoxContainer
                 btn.StyleBoxOverride = NormalStyle;
         };
 
+        btn.OnKeyBindDown += args =>
+        {
+            if (args.Function == EngineKeyFunctions.UIRightClick)
+            {
+                args.Handle();
+                OnItemRightClick?.Invoke(relativePath, true, args.PointerLocation.Position);
+            }
+        };
+
         return entry;
     }
 
@@ -224,7 +259,7 @@ public sealed class FileTreeControl : BoxContainer
         {
             // Deselect previous
             if (_selectedPath != null && _allEntries.TryGetValue(_selectedPath, out var prev))
-                ((ContainerButton) prev.Container).StyleBoxOverride = NormalStyle;
+                ((ContainerButton)prev.Container).StyleBoxOverride = NormalStyle;
 
             _selectedPath = relativePath;
             btn.StyleBoxOverride = SelectedStyle;
@@ -243,6 +278,15 @@ public sealed class FileTreeControl : BoxContainer
         {
             if (_selectedPath != relativePath)
                 btn.StyleBoxOverride = NormalStyle;
+        };
+
+        btn.OnKeyBindDown += args =>
+        {
+            if (args.Function == EngineKeyFunctions.UIRightClick)
+            {
+                args.Handle();
+                OnItemRightClick?.Invoke(relativePath, false, args.PointerLocation.Position);
+            }
         };
 
         return entry;
@@ -287,14 +331,7 @@ public sealed class FileTreeControl : BoxContainer
 
         foreach (var (path, entry) in _allEntries)
         {
-            if (hasFilter)
-            {
-                entry.Container.Visible = visiblePaths.Contains(path);
-            }
-            else
-            {
-                entry.Container.Visible = IsEntryVisible(path);
-            }
+            entry.Container.Visible = hasFilter ? visiblePaths.Contains(path) : IsEntryVisible(path);
         }
     }
 

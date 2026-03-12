@@ -2,7 +2,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Editor.UI;
+namespace Content.Editor.UI.FieldControls;
 
 /// <summary>
 /// Color-specific control: hex text entry with live-preview swatch.

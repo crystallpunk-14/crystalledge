@@ -33,14 +33,7 @@ public static class InheritanceResolver
                 if (!prototypeManager.TryGetMapping(entry.PrototypeType, parentId, out var parentMapping))
                     continue;
 
-                if (merged == null)
-                {
-                    merged = parentMapping.Copy() as MappingDataNode;
-                }
-                else
-                {
-                    merged = DeepMerge(merged!, parentMapping);
-                }
+                merged = merged is null ? parentMapping.Copy() : DeepMerge(merged, parentMapping);
             }
             catch
             {
@@ -90,9 +83,9 @@ public static class InheritanceResolver
     /// Mappings are recursively merged. Sequences from source replace target.
     /// Special handling for "components" key (merge by type).
     /// </summary>
-    public static MappingDataNode DeepMerge(MappingDataNode target, MappingDataNode source)
+    private static MappingDataNode DeepMerge(MappingDataNode target, MappingDataNode source)
     {
-        var result = target.Copy() as MappingDataNode ?? new MappingDataNode();
+        var result = target.Copy();
 
         foreach (var (key, sourceValue) in source)
         {

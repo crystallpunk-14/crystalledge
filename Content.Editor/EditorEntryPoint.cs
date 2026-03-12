@@ -1,10 +1,8 @@
-using Content.Client.Stylesheets;
 using Content.Editor.UI;
 using JetBrains.Annotations;
 using Robust.Client;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
-using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 
 namespace Content.Editor;
@@ -20,13 +18,18 @@ public sealed class EditorEntryPoint : GameClient
 {
     [Dependency] private readonly IBaseClient _client = default!;
     [Dependency] private readonly IStateManager _stateManager = default!;
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
-    [Dependency] private readonly IConfigurationManager _configManager = default!;
 
     public override void Init()
     {
         base.Init();
+
+        // IMPORTANT: This reference ensures Content.Client appears in our assembly
+        // metadata, so the engine's topological sort loads Content.Client before Content.Editor.
+        // Without it, the compiler strips the unused ProjectReference and load-order becomes
+        // undefined, causing "Subscription locked" crashes in Content.Client overlays.
+        GC.KeepAlive(typeof(Content.Client.Entry.EntryPoint));
+
         Dependencies.BuildGraph();
         Dependencies.InjectDependencies(this);
     }

@@ -111,7 +111,7 @@ public sealed class InheritanceWindow : DefaultWindow
         var childHeader = new Label
         {
             Text = "--- Children ---",
-            HorizontalAlignment = Robust.Client.UserInterface.Control.HAlignment.Center,
+            HorizontalAlignment = HAlignment.Center,
             Margin = new Thickness(0, 8, 0, 4),
             StyleClasses = { "LabelSubText" },
         };

@@ -43,7 +43,8 @@
 
             <!-- Editor content area -->
             <PanelContainer Name="EditorPanel" Access="Public"
-                             HorizontalExpand="True" VerticalExpand="True">
+                             HorizontalExpand="True" VerticalExpand="True"
+                             MouseFilter="Stop">
                 <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
                     <BoxContainer Name="EditorContent" Access="Public" Orientation="Vertical"
                                   HorizontalExpand="True" Margin="24 24 24 24"

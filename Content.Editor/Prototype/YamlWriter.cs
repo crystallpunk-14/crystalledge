@@ -1,11 +1,9 @@
 using System.IO;
 using System.Text;
-using Robust.Shared.ContentPack;
-using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
-using Robust.Shared.Utility;
+using static System.Text.RegularExpressions.Regex;
 
 namespace Content.Editor.Prototype;
 
@@ -39,7 +37,7 @@ public static class YamlWriter
     /// </summary>
     public static void SaveToFile(string absolutePath, string yamlContent)
     {
-        // Normalize line endings to LF (consistent with SS14 convention)
+        // Normalize line endings to LF
         yamlContent = yamlContent.Replace("\r\n", "\n");
         File.WriteAllText(absolutePath, yamlContent, new UTF8Encoding(false));
     }
@@ -171,12 +169,7 @@ public static class YamlWriter
             return true;
 
         // Quote if it contains special YAML characters
-        if (value.Contains(':') || value.Contains('#') || value.Contains('{') ||
-            value.Contains('}') || value.Contains('[') || value.Contains(']') ||
-            value.Contains(',') || value.Contains('&') || value.Contains('*') ||
-            value.Contains('!') || value.Contains('|') || value.Contains('>') ||
-            value.Contains('\'') || value.Contains('"') || value.Contains('%') ||
-            value.Contains('@') || value.Contains('`'))
+        if (IsMatch(value, @"[:#{}\[\],&*!|>'""%@`]"))
             return true;
 
         // Quote if it starts or ends with whitespace

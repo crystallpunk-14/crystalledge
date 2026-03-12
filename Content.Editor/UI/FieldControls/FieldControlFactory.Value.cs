@@ -1,7 +1,7 @@
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Editor.UI;
+namespace Content.Editor.UI.FieldControls;
 
 /// <summary>
 /// Value-type controls: boolean toggle, integer/float inputs, text entry.
@@ -21,23 +21,32 @@ public static partial class FieldControlFactory
         // Integer detection
         if (int.TryParse(val, out _))
         {
-            return CreateTextControl(val, newVal =>
-            {
-                if (int.TryParse(newVal, out var intResult))
-                    onChanged(intResult);
-            }, 200);
+            return CreateTextControl(
+                val,
+                newVal =>
+                {
+                    if (int.TryParse(newVal, out var intResult))
+                        onChanged(intResult);
+                },
+                200);
         }
 
         // Float detection
-        if (float.TryParse(val, System.Globalization.NumberStyles.Float,
-                System.Globalization.CultureInfo.InvariantCulture, out _))
+        if (float.TryParse(val,
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out _))
         {
-            return CreateTextControl(val, newVal =>
-            {
-                if (float.TryParse(newVal, System.Globalization.NumberStyles.Float,
-                        System.Globalization.CultureInfo.InvariantCulture, out var floatResult))
-                    onChanged(floatResult);
-            }, 200);
+            return CreateTextControl(val,
+                newVal =>
+                {
+                    if (float.TryParse(newVal,
+                            System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture,
+                            out var floatResult))
+                        onChanged(floatResult);
+                },
+                200);
         }
 
         // Color detection (hex format)
@@ -45,7 +54,7 @@ public static partial class FieldControlFactory
             return CreateColorControl(val, onChanged);
 
         // Default: text entry
-        return CreateTextControl(val, newVal => onChanged(newVal));
+        return CreateTextControl(val, onChanged);
     }
 
     private static Control CreateBoolControl(bool currentValue, Action<object?> onChanged)
@@ -77,7 +86,8 @@ public static partial class FieldControlFactory
         return container;
     }
 
-    private static Control CreateTextControl(string currentValue, Action<string> onChanged,
+    private static Control CreateTextControl(string currentValue,
+        Action<string> onChanged,
         int maxWidth = 0)
     {
         var lineEdit = new LineEdit

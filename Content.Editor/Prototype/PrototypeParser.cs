@@ -45,7 +45,7 @@ public static class PrototypeParser
 
     private static PrototypeEntry? ExtractEntry(MappingDataNode mapping, IPrototypeManager prototypeManager)
     {
-        // Read "type" field — required for all prototypes
+        // Read "type" field -- required for all prototypes
         if (!mapping.TryGet("type", out var typeNode) || typeNode is not ValueDataNode typeValue)
             return null;
 
@@ -55,12 +55,11 @@ public static class PrototypeParser
         Type? prototypeType = null;
         try
         {
-            // Try to find the type by iterating known prototype kinds
             foreach (var kindType in prototypeManager.EnumeratePrototypeKinds())
             {
-                var attr = (PrototypeAttribute?) Attribute.GetCustomAttribute(kindType, typeof(PrototypeAttribute));
+                var name = ResolvePrototypeTypeName(kindType);
 
-                if (attr?.Type == typeString)
+                if (name == typeString)
                 {
                     prototypeType = kindType;
                     break;
@@ -69,7 +68,7 @@ public static class PrototypeParser
         }
         catch
         {
-            // Fall through — type stays null
+            // Fall through -- type stays null
         }
 
         // Read "id" field
@@ -83,7 +82,7 @@ public static class PrototypeParser
         {
             parents = parentNode switch
             {
-                ValueDataNode valueNode => new[] { valueNode.Value },
+                ValueDataNode valueNode => [valueNode.Value],
                 SequenceDataNode seqNode => seqNode.Sequence
                     .OfType<ValueDataNode>()
                     .Select(v => v.Value)
@@ -106,6 +105,16 @@ public static class PrototypeParser
             IsAbstract = isAbstract,
             Mapping = mapping,
         };
+    }
+
+    /// <summary>
+    /// Resolves the YAML type name for a prototype C# type,
+    /// matching the engine's own logic: attr.Type ?? CalculatePrototypeName.
+    /// </summary>
+    public static string ResolvePrototypeTypeName(Type kindType)
+    {
+        var attr = (PrototypeAttribute?)Attribute.GetCustomAttribute(kindType, typeof(PrototypeAttribute));
+        return attr?.Type ?? PrototypeUtility.CalculatePrototypeName(kindType.Name);
     }
 }
 
@@ -147,6 +156,8 @@ public sealed class PrototypeEntry
 
     /// <summary>
     /// Updates a field in the mapping.
+    /// Creates DataNodes directly for common types to match YAML conventions
+    /// (lowercase booleans, unquoted numbers, etc.).
     /// </summary>
     public void UpdateField(string fieldTag, object? newValue, ISerializationManager serializationManager)
     {
@@ -159,7 +170,41 @@ public sealed class PrototypeEntry
             return;
         }
 
-        // Use engine's serialization to write the value back to a DataNode
+        // If already a DataNode, use directly
+        if (newValue is DataNode dataNode)
+        {
+            Mapping[fieldTag] = dataNode;
+            return;
+        }
+
+        // Common types: create ValueDataNode with YAML-correct formatting
+        if (newValue is bool boolVal)
+        {
+            Mapping[fieldTag] = new ValueDataNode(boolVal ? "true" : "false");
+            return;
+        }
+
+        if (newValue is int or long or short or byte)
+        {
+            Mapping[fieldTag] = new ValueDataNode(
+                Convert.ToString(newValue, System.Globalization.CultureInfo.InvariantCulture) ?? "0");
+            return;
+        }
+
+        if (newValue is float or double or decimal)
+        {
+            Mapping[fieldTag] = new ValueDataNode(
+                Convert.ToString(newValue, System.Globalization.CultureInfo.InvariantCulture) ?? "0");
+            return;
+        }
+
+        if (newValue is string strVal)
+        {
+            Mapping[fieldTag] = new ValueDataNode(strVal);
+            return;
+        }
+
+        // Fallback: use engine serialization for complex types
         var valueNode = serializationManager.WriteValue(newValue.GetType(), newValue);
         Mapping[fieldTag] = valueNode;
     }

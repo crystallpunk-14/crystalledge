@@ -14,15 +14,14 @@ namespace Content.Editor.UI;
 /// </summary>
 public sealed class ValidationWindow : DefaultWindow
 {
-    private readonly IPrototypeManager _prototypeManager;
     private readonly ISerializationManager _serializationManager;
     private readonly BoxContainer _errorsContainer;
     private readonly Label _summaryLabel;
 
-    public ValidationWindow(IPrototypeManager prototypeManager,
-        ISerializationManager serializationManager)
+    public ValidationWindow(
+        ISerializationManager serializationManager
+    )
     {
-        _prototypeManager = prototypeManager;
         _serializationManager = serializationManager;
 
         Title = "Prototype Validation";

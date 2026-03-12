@@ -6,7 +6,7 @@ using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 
-namespace Content.Editor.UI;
+namespace Content.Editor.UI.FieldControls;
 
 /// <summary>
 /// Complex (nested) controls: collapsible mapping blocks, sequence lists, and fallback.
@@ -59,8 +59,11 @@ public static partial class FieldControlFactory
 
         foreach (var (key, value) in mapping)
         {
-            var fieldRow = CreateFieldRow(key, value, serializationManager,
-                newValue => onChanged(newValue));
+            var fieldRow = CreateFieldRow(
+                key,
+                value,
+                serializationManager,
+                onChanged);
             fieldsContainer.AddChild(fieldRow);
         }
 
@@ -125,8 +128,11 @@ public static partial class FieldControlFactory
         for (var i = 0; i < sequence.Count; i++)
         {
             var itemNode = sequence[i];
-            var itemRow = CreateFieldRow($"[{i}]", itemNode, serializationManager,
-                newValue => onChanged(newValue));
+            var itemRow = CreateFieldRow(
+                $"[{i}]",
+                itemNode,
+                serializationManager,
+                onChanged);
             itemsContainer.AddChild(itemRow);
         }
 
@@ -149,7 +155,7 @@ public static partial class FieldControlFactory
     {
         return new Label
         {
-            Text = value.ToString() ?? "(unknown)",
+            Text = value.ToString(),
         };
     }
 }

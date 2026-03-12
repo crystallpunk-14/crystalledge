@@ -8,7 +8,7 @@ using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
 using Robust.Shared.Serialization.Markdown.Value;
 
-namespace Content.Editor.UI;
+namespace Content.Editor.UI.FieldControls;
 
 /// <summary>
 /// Factory that creates styled UI controls for editing DataNode values.
@@ -26,7 +26,10 @@ public static partial class FieldControlFactory
         FieldSource source,
         ISerializationManager serializationManager,
         Action<object?> onChanged,
-        Action? onReset = null)
+        Action? onReset = null,
+        string? errorMessage = null,
+        bool isRequired = false,
+        Action<object?>? onOverride = null)
     {
         // Outer panel for the entire row
         var rowPanel = new PanelContainer
@@ -83,11 +86,17 @@ public static partial class FieldControlFactory
             row.AddChild(overrideBar);
         }
 
-        // Field label
+        // Field label + optional required asterisk
+        var labelContainer = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            MinSize = new Vector2(170, 0),
+            SeparationOverride = 2,
+        };
+
         var label = new Label
         {
             Text = key,
-            MinSize = new Vector2(170, 0),
             HorizontalAlignment = Control.HAlignment.Left,
             Margin = new Thickness(source == FieldSource.Local ? 4 : 8, 4, 0, 0),
         };
@@ -107,7 +116,21 @@ public static partial class FieldControlFactory
                 break;
         }
 
-        row.AddChild(label);
+        labelContainer.AddChild(label);
+
+        if (isRequired)
+        {
+            var asterisk = new Label
+            {
+                Text = "*",
+                FontColorOverride = EditorMainControl.ErrorColor,
+                Margin = new Thickness(0, 4, 0, 0),
+                ToolTip = "Required field",
+            };
+            labelContainer.AddChild(asterisk);
+        }
+
+        row.AddChild(labelContainer);
 
         // Control area
         if (value != null)
@@ -117,20 +140,41 @@ public static partial class FieldControlFactory
 
             // Dim inherited/default controls
             if (source is FieldSource.Inherited or FieldSource.Default)
-                control.Modulate = new Color(0.6f, 0.6f, 0.7f, 1f);
+                control.Modulate = new Color(0.6f, 0.6f, 0.7f);
 
             row.AddChild(control);
         }
         else
         {
-            // No value — show placeholder
-            var placeholder = new Label
+            // No value yet — show muted "(default)" text that acts as a clickable button.
+            // Clicking it initializes an empty field value in the YAML so the user can override.
+            var defaultBtn = new ContainerButton
+            {
+                HorizontalExpand = true,
+                ToolTip = "Click to override this field",
+            };
+
+            var defaultLabel = new Label
             {
                 Text = "(default)",
                 FontColorOverride = EditorMainControl.TextMuted,
-                Margin = new Thickness(0, 4, 0, 0),
             };
-            row.AddChild(placeholder);
+
+            defaultBtn.AddChild(defaultLabel);
+
+            var normalBox = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+            var hoverBox = new StyleBoxFlat { BackgroundColor = EditorMainControl.BgSurfaceHover };
+            defaultBtn.StyleBoxOverride = normalBox;
+            defaultBtn.OnMouseEntered += _ => defaultBtn.StyleBoxOverride = hoverBox;
+            defaultBtn.OnMouseExited += _ => defaultBtn.StyleBoxOverride = normalBox;
+
+            defaultBtn.OnPressed += _ =>
+            {
+                // Initialize with empty string so the card re-renders this field as Local
+                var callback = onOverride ?? onChanged;
+                callback("");
+            };
+            row.AddChild(defaultBtn);
         }
 
         // Reset button for local fields
@@ -145,6 +189,20 @@ public static partial class FieldControlFactory
             };
             resetBtn.OnPressed += _ => onReset();
             row.AddChild(resetBtn);
+        }
+
+        // Error indicator: red "!" with tooltip
+        if (errorMessage != null)
+        {
+            var errorLabel = new Label
+            {
+                Text = "!",
+                FontColorOverride = EditorMainControl.ErrorColor,
+                ToolTip = errorMessage,
+                MinSize = new Vector2(16, 0),
+                HorizontalAlignment = Control.HAlignment.Center,
+            };
+            row.AddChild(errorLabel);
         }
 
         rowPanel.AddChild(row);
@@ -171,7 +229,7 @@ public static partial class FieldControlFactory
     /// <summary>
     /// Legacy overload without source info — treats all fields as local.
     /// </summary>
-    public static Control CreateFieldRow(
+    private static Control CreateFieldRow(
         string key,
         DataNode value,
         ISerializationManager serializationManager,

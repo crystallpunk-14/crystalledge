@@ -1,7 +1,5 @@
 using System.Reflection;
-using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Editor.Prototype;
 
@@ -33,14 +31,6 @@ public static class PrototypeReflector
     public static bool SupportsInheritance(Type prototypeType)
     {
         return typeof(IInheritingPrototype).IsAssignableFrom(prototypeType);
-    }
-
-    /// <summary>
-    /// Checks whether the given prototype C# type has a ComponentRegistry field.
-    /// </summary>
-    public static bool HasComponents(Type prototypeType)
-    {
-        return GetFields(prototypeType).Exists(f => f.IsComponentRegistry);
     }
 
     private static List<FieldMetadata> ExtractFields(Type type)
@@ -164,7 +154,7 @@ public static class PrototypeReflector
     {
         var kind = ClassifyType(fieldType);
         var isCompRegistry = fieldType.Name == "ComponentRegistry"
-                          || (fieldType.BaseType != null && fieldType.BaseType.Name == "ComponentRegistry");
+                          || fieldType.BaseType is { Name: "ComponentRegistry" };
 
         var meta = new FieldMetadata
         {
@@ -175,12 +165,13 @@ public static class PrototypeReflector
             IsReadOnly = attr.ReadOnly,
             IsServerOnly = attr.ServerOnly,
             IsComponentRegistry = isCompRegistry,
+            IsRequired = attr.Required,
         };
 
         // Extra info for enums
         if (fieldType.IsEnum)
         {
-            meta.EnumValues = System.Enum.GetNames(fieldType);
+            meta.EnumValues = Enum.GetNames(fieldType);
             if (fieldType.GetCustomAttribute<FlagsAttribute>() != null)
                 meta.Kind = FieldKind.Flags;
         }

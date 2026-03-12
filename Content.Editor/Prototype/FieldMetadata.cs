@@ -1,5 +1,3 @@
-using Robust.Shared.Prototypes;
-
 namespace Content.Editor.Prototype;
 
 /// <summary>
@@ -78,4 +76,7 @@ public sealed class FieldMetadata
 
     /// <summary>If true, this field holds a ComponentRegistry.</summary>
     public bool IsComponentRegistry;
+
+    /// <summary>If true, this field is marked as required in the [DataField] attribute.</summary>
+    public bool IsRequired;
 }
