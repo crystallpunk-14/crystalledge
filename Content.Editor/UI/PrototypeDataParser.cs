@@ -1,0 +1,300 @@
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager.Attributes;
+using Robust.Shared.Serialization.Manager.Definition;
+using Robust.Shared.Serialization.Markdown;
+using Robust.Shared.Serialization.Markdown.Mapping;
+using Robust.Shared.Serialization.Markdown.Sequence;
+using Robust.Shared.Serialization.Markdown.Value;
+
+namespace Content.Editor.UI;
+
+/// <summary>
+/// Parses YAML prototype files into structured data suitable for rendering as cards.
+/// Resolves inheritance by comparing local YAML fields against the post-inheritance
+/// mapping from <see cref="IPrototypeManager"/>.
+/// </summary>
+public static class PrototypeDataParser
+{
+    /// <summary>
+    /// Meta-keys that live in the prototype header, not in DataField rows.
+    /// </summary>
+    private static readonly HashSet<string> MetaKeys = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "type",
+        ParentDataFieldAttribute.Name,
+        IdDataFieldAttribute.Name,
+        AbstractDataFieldAttribute.Name
+    };
+
+    /// <summary>
+    /// Parses a YAML file from disk into a list of prototype card data.
+    /// </summary>
+    /// <param name="absolutePath">Absolute filesystem path to the .yml file.</param>
+    /// <param name="protoManager">Optional prototype manager for inheritance resolution.</param>
+    /// <returns>List of parsed prototype data, one per prototype entry in the file.</returns>
+    public static List<ParsedPrototype> ParseFile(string absolutePath, IPrototypeManager? protoManager)
+    {
+        var results = new List<ParsedPrototype>();
+
+        string yamlText;
+        try
+        {
+            yamlText = File.ReadAllText(absolutePath);
+        }
+        catch (Exception)
+        {
+            return results;
+        }
+
+        using var reader = new StringReader(yamlText);
+        IEnumerable<DataNodeDocument> documents;
+
+        try
+        {
+            documents = DataNodeParser.ParseYamlStream(reader);
+        }
+        catch (Exception)
+        {
+            // Malformed YAML – return empty
+            return results;
+        }
+
+        foreach (var document in documents)
+        {
+            if (document.Root is not SequenceDataNode sequence)
+                continue;
+
+            foreach (var node in sequence)
+            {
+                if (node is not MappingDataNode localMapping)
+                    continue;
+
+                var parsed = ParsePrototype(localMapping, protoManager);
+                if (parsed != null)
+                    results.Add(parsed);
+            }
+        }
+
+        return results;
+    }
+
+    private static ParsedPrototype? ParsePrototype(
+        MappingDataNode protoNode,
+        IPrototypeManager? protoManager)
+    {
+        // Extract meta fields
+        if (!protoNode.TryGet<ValueDataNode>("type", out var typeNode))
+            return null;
+
+        var kind = typeNode.Value;
+
+        var id = protoNode.TryGet<ValueDataNode>(IdDataFieldAttribute.Name, out var idNode)
+            ? idNode.Value
+            : "<no id>";
+
+        string? parentStr = null;
+        if (protoNode.TryGet<ValueDataNode>(ParentDataFieldAttribute.Name, out var parentValueNode))
+        {
+            parentStr = parentValueNode.Value;
+        }
+        else if (protoNode.TryGet<SequenceDataNode>(ParentDataFieldAttribute.Name, out var parentSeqNode))
+        {
+            var parents = new List<string>();
+            foreach (var pNode in parentSeqNode)
+            {
+                if (pNode is ValueDataNode pv)
+                    parents.Add(pv.Value);
+            }
+
+            parentStr = string.Join(", ", parents);
+        }
+
+        var isAbstract = protoNode.TryGet<ValueDataNode>(AbstractDataFieldAttribute.Name, out var absNode)
+                         && absNode.AsBool();
+
+        // Collect local field keys (the ones explicitly written in this YAML entry)
+        var localKeys = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var (key, _) in protoNode)
+        {
+            if (!MetaKeys.Contains(key))
+                localKeys.Add(key);
+        }
+
+        // Try to get the resolved (post-inheritance) mapping from the prototype manager
+        MappingDataNode? resolvedMapping = null;
+        Type? protoType = null;
+        if (protoManager != null)
+        {
+            if (protoManager.TryGetKindType(kind, out protoType))
+            {
+                try
+                {
+                    protoManager.TryGetMapping(protoType, id, out resolvedMapping);
+                }
+                catch
+                {
+                    // Prototype not loaded or abstract-only – that's fine
+                }
+            }
+        }
+
+        // Build field list
+        var fields = new List<EditorFieldData>();
+
+        // 1) Fields from the resolved mapping (includes inherited)
+        if (resolvedMapping != null)
+        {
+            foreach (var (key, value) in resolvedMapping)
+            {
+                if (MetaKeys.Contains(key))
+                    continue;
+
+                fields.Add(new EditorFieldData
+                {
+                    Name = key,
+                    Value = DataNodeToString(value),
+                    IsOverridden = localKeys.Contains(key),
+                });
+            }
+        }
+
+        // 2) If we have the C# type, add any DataField-annotated members that
+        //    aren't in the resolved mapping (still at C# default).
+        if (protoType != null)
+        {
+            var existingKeys = new HashSet<string>(fields.Select(f => f.Name), StringComparer.Ordinal);
+            var dataFields = GetDataFieldTags(protoType);
+
+            foreach (var tag in dataFields)
+            {
+                if (existingKeys.Contains(tag) || MetaKeys.Contains(tag))
+                    continue;
+
+                fields.Add(new EditorFieldData
+                {
+                    Name = tag,
+                    Value = "",
+                    IsOverridden = false,
+                });
+            }
+        }
+
+        return new ParsedPrototype
+        {
+            Kind = kind,
+            Id = id,
+            Parent = parentStr,
+            IsAbstract = isAbstract,
+            Fields = fields,
+        };
+    }
+
+    /// <summary>
+    /// Uses reflection to find all [DataField] tags on a prototype type and its base types.
+    /// </summary>
+    private static List<string> GetDataFieldTags(Type type)
+    {
+        var tags = new List<string>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+
+        // Walk the type hierarchy
+        var current = type;
+        while (current != null && current != typeof(object))
+        {
+            const BindingFlags flags =
+                BindingFlags.Instance |
+                BindingFlags.Public |
+                BindingFlags.NonPublic |
+                BindingFlags.DeclaredOnly;
+
+            foreach (var field in current.GetFields(flags))
+            {
+                var attr = field.GetCustomAttribute<DataFieldAttribute>();
+                if (attr == null)
+                    continue;
+
+                var tag = attr.Tag ?? AutoGenerateTag(field.Name);
+                if (seen.Add(tag))
+                    tags.Add(tag);
+            }
+
+            foreach (var prop in current.GetProperties(flags))
+            {
+                var attr = prop.GetCustomAttribute<DataFieldAttribute>();
+                if (attr == null)
+                    continue;
+
+                var tag = attr.Tag ?? AutoGenerateTag(prop.Name);
+                if (seen.Add(tag))
+                    tags.Add(tag);
+            }
+
+            current = current.BaseType;
+        }
+
+        return tags;
+    }
+
+    /// <summary>
+    /// Mirrors <see cref="DataDefinitionUtility.AutoGenerateTag"/> – lowercase first char.
+    /// </summary>
+    private static string AutoGenerateTag(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return name;
+
+        return $"{char.ToLowerInvariant(name[0])}{name.AsSpan(1).ToString()}";
+    }
+
+    /// <summary>
+    /// Converts a DataNode tree to a human-readable text representation.
+    /// For now all values are shown as plain text.
+    /// </summary>
+    private static string DataNodeToString(DataNode node)
+    {
+        return node switch
+        {
+            ValueDataNode valueNode => valueNode.Value,
+            MappingDataNode mappingNode => MappingToString(mappingNode),
+            SequenceDataNode seqNode => SequenceToString(seqNode),
+            _ => node.ToString() ?? "",
+        };
+    }
+
+    private static string MappingToString(MappingDataNode mapping)
+    {
+        var parts = new List<string>();
+        foreach (var (key, value) in mapping)
+        {
+            parts.Add($"{key}: {DataNodeToString(value)}");
+        }
+
+        return $"{{ {string.Join(", ", parts)} }}";
+    }
+
+    private static string SequenceToString(SequenceDataNode sequence)
+    {
+        var parts = new List<string>();
+        foreach (var item in sequence)
+        {
+            parts.Add(DataNodeToString(item));
+        }
+
+        return $"[{string.Join(", ", parts)}]";
+    }
+}
+
+/// <summary>
+/// Parsed prototype data ready for rendering as a card.
+/// </summary>
+public sealed class ParsedPrototype
+{
+    public string Kind { get; init; } = "";
+    public string Id { get; init; } = "";
+    public string? Parent { get; init; }
+    public bool IsAbstract { get; init; }
+    public List<EditorFieldData> Fields { get; init; } = new();
+}

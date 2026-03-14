@@ -1,0 +1,31 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                StyleClasses="PanelDark"
+                HorizontalExpand="True"
+                Margin="0 0 0 8">
+  <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+    <!-- Card header: kind badge + prototype ID + parent info -->
+    <PanelContainer Name="HeaderPanel"
+                    StyleClasses="PanelLight"
+                    HorizontalExpand="True">
+      <BoxContainer Orientation="Horizontal"
+                    Margin="8 4 8 4"
+                    SeparationOverride="8"
+                    HorizontalExpand="True">
+        <Label Name="KindBadge"
+               StyleClasses="LabelSubText"
+               VerticalAlignment="Center" />
+        <Label Name="IdLabel"
+               StyleClasses="LabelHeading"
+               VerticalAlignment="Center" />
+        <Label Name="ParentLabel"
+               StyleClasses="LabelWeak"
+               VerticalAlignment="Center" />
+      </BoxContainer>
+    </PanelContainer>
+    <!-- Field rows container -->
+    <BoxContainer Name="FieldsContainer"
+                  Orientation="Vertical"
+                  HorizontalExpand="True"
+                  Margin="0 4 0 4" />
+  </BoxContainer>
+</PanelContainer>

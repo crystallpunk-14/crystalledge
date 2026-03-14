@@ -2,6 +2,7 @@ using System.IO;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Prototypes;
 
 namespace Content.Editor.UI;
 
@@ -13,6 +14,7 @@ namespace Content.Editor.UI;
 public sealed class EditorState : State
 {
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private readonly IPrototypeManager _protoManager = default!;
 
     private BoxContainer _root = default!;
     private PrototypeBrowserControl _browser = default!;
@@ -76,9 +78,6 @@ public sealed class EditorState : State
         try
         {
             _editorView.OpenFile(filePath);
-            var fileName = Path.GetFileName(filePath);
-            var lineCount = File.ReadAllLines(filePath).Length;
-            _statusBar.ShowMessage($"{fileName} - {lineCount} lines");
         }
         catch (Exception ex)
         {

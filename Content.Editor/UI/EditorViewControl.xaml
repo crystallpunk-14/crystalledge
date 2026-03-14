@@ -7,14 +7,14 @@
            StyleClasses="LabelWeak"
            HorizontalAlignment="Center" VerticalAlignment="Center"
            HorizontalExpand="True" VerticalExpand="True" />
-    <!-- Scrollable YAML content -->
+    <!-- Scrollable prototype cards -->
     <ScrollContainer Name="ContentScroll"
                      HorizontalExpand="True" VerticalExpand="True"
                      Visible="False">
-        <Label Name="ContentLabel"
-               StyleClasses="monospace"
-               Margin="24 24 24 24"
-               HorizontalExpand="True"
-               ClipText="False" />
+        <BoxContainer Name="CardsContainer"
+                      Orientation="Vertical"
+                      Margin="16 16 16 16"
+                      HorizontalExpand="True"
+                      SeparationOverride="12" />
     </ScrollContainer>
 </PanelContainer>
