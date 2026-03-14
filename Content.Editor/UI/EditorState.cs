@@ -145,8 +145,10 @@ public sealed class EditorState : State
         {
             session.MarkSaved();
 
-            // Re-open the file to refresh the view with the saved data
-            _editorView.OpenFile(session.FilePath);
+            // Rebuild cards from the current in-memory prototypes (which already
+            // have the correct values).  Do NOT re-parse from disk because the
+            // prototype manager's resolved mapping is stale until a hot-reload.
+            _editorView.RefreshCards();
             _statusBar.ShowMessage($"Saved {Path.GetFileName(session.FilePath)}");
         }
         else
@@ -185,16 +187,16 @@ public sealed class EditorState : State
     /// </summary>
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        if (_currentPath == null)
+        if (CurrentPath == null)
             return;
 
         // Refresh the current view so it picks up any reloaded definitions
         var session = _editorView.CurrentSession;
         if (session != null && !session.IsDirty)
         {
-            _editorView.OpenFile(_currentPath);
+            _editorView.OpenFile(CurrentPath);
         }
     }
 
-    private string? _currentPath => _editorView.CurrentPath;
+    private string? CurrentPath => _editorView.CurrentPath;
 }

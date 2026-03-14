@@ -115,7 +115,7 @@ public static class PrototypeYamlWriter
         string protoId,
         FileEditSession session)
     {
-        // Apply resets — remove keys from the mapping
+        // ── Prototype-level field resets — remove keys from the mapping ──
         var keysToRemove = new List<string>();
         foreach (var (key, _) in mapping)
         {
@@ -131,13 +131,12 @@ public static class PrototypeYamlWriter
             mapping.Remove(key);
         }
 
-        // Apply edits — update or insert keys in the mapping
+        // ── Prototype-level field edits — update or insert keys ──
         foreach (var ((pendingProtoId, fieldName), newValue) in session.PendingEdits)
         {
             if (pendingProtoId != protoId)
                 continue;
 
-            // Remove existing key first (to replace), then add
             mapping.Remove(fieldName);
             mapping.Add(fieldName, ParseValueToDataNode(newValue));
         }

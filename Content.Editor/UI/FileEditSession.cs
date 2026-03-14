@@ -1,11 +1,22 @@
 namespace Content.Editor.UI;
 
 /// <summary>
-/// Represents a single edit operation on a prototype field.
+/// The kind of edit operation stored in the undo/redo stack.
+/// </summary>
+public enum EditKind
+{
+    FieldEdit,
+    FieldReset,
+}
+
+/// <summary>
+/// Represents a single edit operation on a prototype field or component.
 /// Used for undo/redo history tracking.
 /// </summary>
 public sealed class FieldEdit
 {
+    public EditKind Kind { get; init; }
+
     /// <summary>
     /// Prototype ID this edit belongs to.
     /// </summary>
@@ -31,10 +42,8 @@ public sealed class FieldEdit
     /// </summary>
     public bool WasOverridden { get; init; }
 
-    /// <summary>
-    /// Whether this edit is a "reset to inherited" operation.
-    /// </summary>
-    public bool IsReset { get; init; }
+    // Legacy convenience
+    public bool IsReset => Kind == EditKind.FieldReset;
 }
 
 /// <summary>
@@ -55,9 +64,10 @@ public sealed class FileEditSession(string filePath)
     /// </summary>
     public List<ParsedPrototype> Prototypes { get; set; } = new();
 
+    // ── Prototype-level field edits ──
+
     /// <summary>
     /// Local field overrides: (protoId, fieldName) → current value.
-    /// Tracks all edits the user has made since last save.
     /// </summary>
     public Dictionary<(string ProtoId, string FieldName), string> PendingEdits { get; } = new();
 
@@ -71,14 +81,7 @@ public sealed class FileEditSession(string filePath)
     /// </summary>
     public bool IsDirty => _undoStack.Count > 0;
 
-    /// <summary>
-    /// Whether undo is available.
-    /// </summary>
     public bool CanUndo => _undoStack.Count > 0;
-
-    /// <summary>
-    /// Whether redo is available.
-    /// </summary>
     public bool CanRedo => _redoStack.Count > 0;
 
     /// <summary>
@@ -86,63 +89,47 @@ public sealed class FileEditSession(string filePath)
     /// </summary>
     public event Action<bool>? OnDirtyChanged;
 
-    /// <summary>
-    /// Records a field value edit.
-    /// </summary>
+    // ── Prototype field operations ──
+
     public void RecordEdit(string protoId, string fieldName, string oldValue, string newValue, bool wasOverridden)
     {
         var edit = new FieldEdit
         {
+            Kind = EditKind.FieldEdit,
             PrototypeId = protoId,
             FieldName = fieldName,
             OldValue = oldValue,
             NewValue = newValue,
             WasOverridden = wasOverridden,
-            IsReset = false,
         };
 
-        var wasDirty = IsDirty;
-        _undoStack.Add(edit);
-        _redoStack.Clear();
+        Push(edit);
 
         var key = (protoId, fieldName);
         PendingResets.Remove(key);
         PendingEdits[key] = newValue;
-
-        if (!wasDirty)
-            OnDirtyChanged?.Invoke(true);
     }
 
-    /// <summary>
-    /// Records a field reset (remove local override).
-    /// </summary>
     public void RecordReset(string protoId, string fieldName, string oldValue, bool wasOverridden)
     {
         var edit = new FieldEdit
         {
+            Kind = EditKind.FieldReset,
             PrototypeId = protoId,
             FieldName = fieldName,
             OldValue = oldValue,
-            NewValue = "",
             WasOverridden = wasOverridden,
-            IsReset = true,
         };
 
-        var wasDirty = IsDirty;
-        _undoStack.Add(edit);
-        _redoStack.Clear();
+        Push(edit);
 
         var key = (protoId, fieldName);
         PendingEdits.Remove(key);
         PendingResets.Add(key);
-
-        if (!wasDirty)
-            OnDirtyChanged?.Invoke(true);
     }
 
-    /// <summary>
-    /// Undoes the last edit. Returns the edit that was undone, or null.
-    /// </summary>
+    // ── Undo / Redo ──
+
     public FieldEdit? Undo()
     {
         if (_undoStack.Count == 0)
@@ -152,28 +139,7 @@ public sealed class FileEditSession(string filePath)
         _undoStack.RemoveAt(_undoStack.Count - 1);
         _redoStack.Add(edit);
 
-        // Restore previous state
-        var key = (edit.PrototypeId, edit.FieldName);
-
-        if (edit.IsReset)
-        {
-            // Undo a reset → restore the old value edit
-            PendingResets.Remove(key);
-            if (edit.WasOverridden)
-                PendingEdits[key] = edit.OldValue;
-        }
-        else
-        {
-            // Undo a value edit → restore previous value or remove pending
-            if (!edit.WasOverridden)
-            {
-                PendingEdits.Remove(key);
-            }
-            else
-            {
-                PendingEdits[key] = edit.OldValue;
-            }
-        }
+        UndoEdit(edit);
 
         if (!IsDirty)
             OnDirtyChanged?.Invoke(false);
@@ -181,9 +147,6 @@ public sealed class FileEditSession(string filePath)
         return edit;
     }
 
-    /// <summary>
-    /// Redoes the last undone edit. Returns the edit that was redone, or null.
-    /// </summary>
     public FieldEdit? Redo()
     {
         if (_redoStack.Count == 0)
@@ -193,18 +156,7 @@ public sealed class FileEditSession(string filePath)
         _redoStack.RemoveAt(_redoStack.Count - 1);
         _undoStack.Add(edit);
 
-        var key = (edit.PrototypeId, edit.FieldName);
-
-        if (edit.IsReset)
-        {
-            PendingEdits.Remove(key);
-            PendingResets.Add(key);
-        }
-        else
-        {
-            PendingResets.Remove(key);
-            PendingEdits[key] = edit.NewValue;
-        }
+        RedoEdit(edit);
 
         if (_undoStack.Count == 1)
             OnDirtyChanged?.Invoke(true);
@@ -225,5 +177,61 @@ public sealed class FileEditSession(string filePath)
 
         if (wasDirty)
             OnDirtyChanged?.Invoke(false);
+    }
+
+    // ── Private ──
+
+    private void Push(FieldEdit edit)
+    {
+        var wasDirty = IsDirty;
+        _undoStack.Add(edit);
+        _redoStack.Clear();
+        if (!wasDirty)
+            OnDirtyChanged?.Invoke(true);
+    }
+
+    private void UndoEdit(FieldEdit edit)
+    {
+        switch (edit.Kind)
+        {
+            case EditKind.FieldEdit:
+            {
+                var key = (edit.PrototypeId, edit.FieldName);
+                if (!edit.WasOverridden)
+                    PendingEdits.Remove(key);
+                else
+                    PendingEdits[key] = edit.OldValue;
+                break;
+            }
+            case EditKind.FieldReset:
+            {
+                var key = (edit.PrototypeId, edit.FieldName);
+                PendingResets.Remove(key);
+                if (edit.WasOverridden)
+                    PendingEdits[key] = edit.OldValue;
+                break;
+            }
+        }
+    }
+
+    private void RedoEdit(FieldEdit edit)
+    {
+        switch (edit.Kind)
+        {
+            case EditKind.FieldEdit:
+            {
+                var key = (edit.PrototypeId, edit.FieldName);
+                PendingResets.Remove(key);
+                PendingEdits[key] = edit.NewValue;
+                break;
+            }
+            case EditKind.FieldReset:
+            {
+                var key = (edit.PrototypeId, edit.FieldName);
+                PendingEdits.Remove(key);
+                PendingResets.Add(key);
+                break;
+            }
+        }
     }
 }

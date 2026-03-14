@@ -30,6 +30,13 @@ public interface IFieldEditor
     /// Argument is the new text value.
     /// </summary>
     event Action<string>? OnValueChanged;
+
+    /// <summary>
+    /// For editors that distinguish local vs resolved values (e.g. ComponentRegistry).
+    /// Provides the full post-inheritance value for display purposes.
+    /// Default implementation: no-op.
+    /// </summary>
+    void SetResolvedValue(string resolvedValue) { }
 }
 
 /// <summary>
@@ -74,5 +81,14 @@ public abstract class FieldEditorBase : IFieldEditor
     {
         if (!_isSettingValue)
             OnValueChanged?.Invoke(value);
+    }
+
+    /// <summary>
+    /// For editors that distinguish local vs resolved values (e.g. ComponentRegistry).
+    /// Provides the full post-inheritance value for display purposes.
+    /// Default: no-op. Override in specialized editors.
+    /// </summary>
+    public virtual void SetResolvedValue(string resolvedValue)
+    {
     }
 }

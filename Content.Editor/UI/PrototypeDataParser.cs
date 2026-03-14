@@ -1,7 +1,9 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.Serialization.Manager.Definition;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
@@ -143,10 +145,10 @@ public static class PrototypeDataParser
         // Build field list
         var fields = new List<EditorFieldData>();
 
-        // Build a mapping of tag → (C# field type, required, order) from reflection
+        // Build a mapping of tag → (C# field type, required, order, inheritance) from reflection
         var fieldTypeMap = protoType != null
             ? GetDataFieldInfo(protoType)
-            : new Dictionary<string, (Type Type, bool Required, int Order)>();
+            : new Dictionary<string, (Type Type, bool Required, int Order, InheritanceBehavior Inheritance)>();
 
         // 1) Fields from the resolved mapping (includes inherited)
         if (resolvedMapping != null)
@@ -181,22 +183,39 @@ public static class PrototypeDataParser
                 Type? fieldType = null;
                 var isRequired = false;
                 var fieldOrder = int.MaxValue;
+                var inheritance = InheritanceBehavior.Default;
                 if (fieldTypeMap.TryGetValue(key, out var fieldInfo))
                 {
                     fieldType = fieldInfo.Type;
                     isRequired = fieldInfo.Required;
                     fieldOrder = fieldInfo.Order;
+                    inheritance = fieldInfo.Inheritance;
+                }
+
+                // For AlwaysPushInheritance fields (e.g. ComponentRegistry),
+                // use the LOCAL value rather than the resolved (merged) value
+                // to preserve correct inheritance semantics.
+                var effectiveValue = displayValue;
+                var resolvedDisplayValue = (string?)null;
+                if (inheritance == InheritanceBehavior.Always && isOverridden)
+                {
+                    effectiveValue = protoNode.TryGet(key, out var localNode)
+                        ? DataNodeToString(localNode)
+                        : "";
+                    resolvedDisplayValue = displayValue;
                 }
 
                 fields.Add(new EditorFieldData
                 {
                     Name = key,
-                    Value = displayValue,
+                    Value = effectiveValue,
                     IsOverridden = isOverridden,
                     FieldType = fieldType,
                     IsRequired = isRequired,
                     Order = fieldOrder,
+                    Inheritance = inheritance,
                     InheritedValue = inheritedValue,
+                    ResolvedValue = resolvedDisplayValue,
                 });
             }
         }
@@ -207,7 +226,7 @@ public static class PrototypeDataParser
         {
             var existingKeys = new HashSet<string>(fields.Select(f => f.Name), StringComparer.Ordinal);
 
-            foreach (var (tag, (type, required, tagOrder)) in fieldTypeMap)
+            foreach (var (tag, (type, required, tagOrder, tagInheritance)) in fieldTypeMap)
             {
                 if (existingKeys.Contains(tag) || MetaKeys.Contains(tag))
                     continue;
@@ -220,6 +239,7 @@ public static class PrototypeDataParser
                     FieldType = type,
                     IsRequired = required,
                     Order = tagOrder,
+                    Inheritance = tagInheritance,
                     InheritedValue = "",
                 });
             }
@@ -243,13 +263,13 @@ public static class PrototypeDataParser
     /// Returns (Type fieldType, bool isRequired, int order) per tag.
     /// Order follows C# declaration: base class members first, then derived.
     /// </summary>
-    private static Dictionary<string, (Type Type, bool Required, int Order)> GetDataFieldInfo(Type type)
+    public static Dictionary<string, (Type Type, bool Required, int Order, InheritanceBehavior Inheritance)> GetDataFieldInfo(Type type)
     {
-        var result = new Dictionary<string, (Type, bool, int)>(StringComparer.Ordinal);
+        var result = new Dictionary<string, (Type, bool, int, InheritanceBehavior)>(StringComparer.Ordinal);
 
         // Walk the hierarchy bottom-up and collect members per level,
         // then assign indices top-down so base class members come first.
-        var levels = new List<List<(string Tag, Type FieldType, bool Required)>>();
+        var levels = new List<List<(string Tag, Type FieldType, bool Required, InheritanceBehavior Inheritance)>>();
 
         var current = type;
         while (current != null && current != typeof(object))
@@ -260,7 +280,7 @@ public static class PrototypeDataParser
                 BindingFlags.NonPublic |
                 BindingFlags.DeclaredOnly;
 
-            var level = new List<(string, Type, bool)>();
+            var level = new List<(string, Type, bool, InheritanceBehavior)>();
 
             foreach (var field in current.GetFields(flags))
             {
@@ -269,7 +289,8 @@ public static class PrototypeDataParser
                     continue;
 
                 var tag = attr.Tag ?? AutoGenerateTag(field.Name);
-                level.Add((tag, field.FieldType, attr.Required));
+                var inh = GetInheritanceBehavior(field);
+                level.Add((tag, field.FieldType, attr.Required, inh));
             }
 
             foreach (var prop in current.GetProperties(flags))
@@ -279,7 +300,8 @@ public static class PrototypeDataParser
                     continue;
 
                 var tag = attr.Tag ?? AutoGenerateTag(prop.Name);
-                level.Add((tag, prop.PropertyType, attr.Required));
+                var inh = GetInheritanceBehavior(prop);
+                level.Add((tag, prop.PropertyType, attr.Required, inh));
             }
 
             levels.Add(level);
@@ -292,15 +314,29 @@ public static class PrototypeDataParser
         var order = 0;
         foreach (var level in levels)
         {
-            foreach (var (tag, fieldType, required) in level)
+            foreach (var (tag, fieldType, required, inheritance) in level)
             {
-                result.TryAdd(tag, (fieldType, required, order++));
+                result.TryAdd(tag, (fieldType, required, order++, inheritance));
             }
         }
 
         return result;
     }
 
+    /// <summary>
+    /// Determines the inheritance behavior for a field/property member
+    /// based on [AlwaysPushInheritance] and [NeverPushInheritance] attributes.
+    /// </summary>
+    private static InheritanceBehavior GetInheritanceBehavior(MemberInfo member)
+    {
+        if (member.GetCustomAttribute<AlwaysPushInheritanceAttribute>() != null)
+            return InheritanceBehavior.Always;
+        if (member.GetCustomAttribute<NeverPushInheritanceAttribute>() != null)
+            return InheritanceBehavior.Never;
+        return InheritanceBehavior.Default;
+    }
+
+    /// <summary>
     /// <summary>
     /// Mirrors <see cref="DataDefinitionUtility.AutoGenerateTag"/> – lowercase first char.
     /// </summary>
@@ -316,7 +352,7 @@ public static class PrototypeDataParser
     /// Converts a DataNode tree to a human-readable text representation.
     /// For now all values are shown as plain text.
     /// </summary>
-    private static string DataNodeToString(DataNode node)
+    public static string DataNodeToString(DataNode node)
     {
         return node switch
         {

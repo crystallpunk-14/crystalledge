@@ -4,9 +4,21 @@ using Content.Editor.UI.FieldEditors.Fields;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager.Attributes;
 using Color = Robust.Shared.Maths.Color;
 
 namespace Content.Editor.UI.FieldEditors;
+
+/// <summary>
+/// Optional context for creating field editors that need prototype-level info.
+/// </summary>
+public sealed class EditorContext
+{
+    /// <summary>Prototype kind string (e.g. "entity").</summary>
+    public string? PrototypeKind { get; init; }
+    /// <summary>Prototype ID.</summary>
+    public string? PrototypeId { get; init; }
+}
 
 /// <summary>
 /// Factory that creates the appropriate <see cref="IFieldEditor"/> based on field type.
@@ -20,14 +32,19 @@ public static class FieldEditorFactory
     /// <param name="fieldType">
     /// The C# <see cref="Type"/> of the field, or null if unknown.
     /// </param>
+    /// <param name="context">Optional prototype context for editors that need it.</param>
     /// <returns>An appropriate <see cref="IFieldEditor"/> implementation.</returns>
-    public static IFieldEditor Create(Type? fieldType)
+    public static IFieldEditor Create(Type? fieldType, EditorContext? context = null)
     {
         if (fieldType == null)
             return new DefaultFieldEditor();
 
         // Unwrap Nullable<T>
         var underlying = Nullable.GetUnderlyingType(fieldType) ?? fieldType;
+
+        // ComponentRegistry — specialized component list editor
+        if (underlying == typeof(ComponentRegistry))
+            return new ComponentRegistryFieldEditor(context?.PrototypeKind, context?.PrototypeId);
 
         if (underlying == typeof(string))
             return new StringFieldEditor();
@@ -91,6 +108,10 @@ public static class FieldEditorFactory
         // Enums — dropdown with all enum values
         if (underlying.IsEnum)
             return new EnumFieldEditor(underlying);
+
+        // DataDefinition / DataRecord — expandable sub-field editor
+        if (IsDataDefinition(underlying))
+            return new DataDefinitionFieldEditor(underlying);
 
         return new DefaultFieldEditor();
     }
@@ -209,5 +230,42 @@ public static class FieldEditorFactory
         }
 
         return "";
+    }
+
+    /// <summary>
+    /// Checks if a type is a DataDefinition (has [DataDefinition], [DataRecord],
+    /// inherits from an [ImplicitDataDefinitionForInheritors] base, or has any
+    /// attribute decorated with [MeansDataDefinition]).
+    /// </summary>
+    public static bool IsDataDefinition(Type type)
+    {
+        // Direct attributes
+        if (type.IsDefined(typeof(DataDefinitionAttribute), false))
+            return true;
+        if (type.IsDefined(typeof(DataRecordAttribute), false))
+            return true;
+
+        // Any custom attribute that carries [MeansDataDefinition]
+        foreach (var attr in type.GetCustomAttributes(false))
+        {
+            if (attr.GetType().IsDefined(typeof(MeansDataDefinitionAttribute), false))
+                return true;
+        }
+
+        // Walk base type chain for [ImplicitDataDefinitionForInheritors]
+        for (var baseType = type.BaseType; baseType != null; baseType = baseType.BaseType)
+        {
+            if (baseType.IsDefined(typeof(ImplicitDataDefinitionForInheritorsAttribute), false))
+                return true;
+        }
+
+        // Check interfaces for [ImplicitDataDefinitionForInheritors]
+        foreach (var iface in type.GetInterfaces())
+        {
+            if (iface.IsDefined(typeof(ImplicitDataDefinitionForInheritorsAttribute), false))
+                return true;
+        }
+
+        return false;
     }
 }
