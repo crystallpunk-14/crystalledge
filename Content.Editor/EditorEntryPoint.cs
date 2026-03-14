@@ -1,12 +1,12 @@
 using Content.Client.Stylesheets;
 using Content.Editor.UI;
+using Content.Editor.UI.EditotState;
 using JetBrains.Annotations;
 using Robust.Client;
 using Robust.Client.Input;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Shared.ContentPack;
-using Robust.Shared.Input;
 
 namespace Content.Editor;
 

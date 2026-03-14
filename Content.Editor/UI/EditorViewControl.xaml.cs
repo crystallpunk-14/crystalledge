@@ -200,6 +200,9 @@ public sealed partial class EditorViewControl : PanelContainer
         // Update in-memory state
         field.Value = newValue;
         field.IsOverridden = true;
+
+        // Rebuild cards to reflect override visual state (bar, label style, reset button)
+        RebuildCards(session);
     }
 
     private void HandleFieldReset(FileEditSession session, string protoId, string fieldName)

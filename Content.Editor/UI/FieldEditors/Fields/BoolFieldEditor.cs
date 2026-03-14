@@ -5,16 +5,13 @@ namespace Content.Editor.UI.FieldEditors.Fields;
 
 /// <summary>
 /// Editable boolean field editor using a <see cref="CheckBox"/> control.
-/// Displays a checkbox whose label shows the current bool value.
+/// Commits immediately on toggle (no intermediate state).
 /// </summary>
-public sealed class BoolFieldEditor : IFieldEditor
+public sealed class BoolFieldEditor : FieldEditorBase
 {
     private readonly CheckBox _checkBox;
-    private bool _suppressEvent;
 
-    public Control Control => _checkBox;
-
-    public event Action<string>? OnValueChanged;
+    public override Control Control => _checkBox;
 
     public BoolFieldEditor()
     {
@@ -22,27 +19,23 @@ public sealed class BoolFieldEditor : IFieldEditor
         _checkBox.OnToggled += OnToggled;
     }
 
-    public string GetValue()
+    public override string GetValue()
     {
         return _checkBox.Pressed ? "True" : "False";
     }
 
-    public void SetValue(string value)
+    protected override void SetValueCore(string value)
     {
-        _suppressEvent = true;
         var isTruthy = value.Equals("True", StringComparison.OrdinalIgnoreCase)
                        || value.Equals("true", StringComparison.OrdinalIgnoreCase)
                        || value == "1";
         _checkBox.Pressed = isTruthy;
         _checkBox.Text = isTruthy ? "True" : "False";
-        _suppressEvent = false;
     }
 
     private void OnToggled(BaseButton.ButtonToggledEventArgs args)
     {
         _checkBox.Text = args.Pressed ? "True" : "False";
-
-        if (!_suppressEvent)
-            OnValueChanged?.Invoke(args.Pressed ? "True" : "False");
+        RaiseValueChanged(args.Pressed ? "True" : "False");
     }
 }

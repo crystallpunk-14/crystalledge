@@ -5,15 +5,13 @@ namespace Content.Editor.UI.FieldEditors.Fields;
 
 /// <summary>
 /// Editable string field editor using a <see cref="LineEdit"/> control.
+/// Commits value on Enter or focus lost.
 /// </summary>
-public sealed class StringFieldEditor : IFieldEditor
+public sealed class StringFieldEditor : FieldEditorBase
 {
     private readonly LineEdit _lineEdit;
-    private bool _suppressEvent;
 
-    public Control Control => _lineEdit;
-
-    public event Action<string>? OnValueChanged;
+    public override Control Control => _lineEdit;
 
     public StringFieldEditor()
     {
@@ -22,24 +20,17 @@ public sealed class StringFieldEditor : IFieldEditor
             HorizontalExpand = true,
         };
 
-        _lineEdit.OnTextChanged += OnTextChanged;
+        _lineEdit.OnTextEntered += args => RaiseValueChanged(args.Text);
+        _lineEdit.OnFocusExit += args => RaiseValueChanged(args.Text);
     }
 
-    public string GetValue()
+    public override string GetValue()
     {
         return _lineEdit.Text;
     }
 
-    public void SetValue(string value)
+    protected override void SetValueCore(string value)
     {
-        _suppressEvent = true;
         _lineEdit.SetText(value);
-        _suppressEvent = false;
-    }
-
-    private void OnTextChanged(LineEdit.LineEditEventArgs args)
-    {
-        if (!_suppressEvent)
-            OnValueChanged?.Invoke(args.Text);
     }
 }

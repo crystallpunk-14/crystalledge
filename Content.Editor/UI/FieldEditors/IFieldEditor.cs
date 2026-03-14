@@ -20,13 +20,59 @@ public interface IFieldEditor
 
     /// <summary>
     /// Sets the displayed value from text.
-    /// Should NOT fire <see cref="OnValueChanged"/>.
+    /// Must NOT fire <see cref="OnValueChanged"/>.
     /// </summary>
     void SetValue(string value);
 
     /// <summary>
-    /// Fired when the user changes the value through the UI.
+    /// Fired when the user commits a new value through the UI
+    /// (e.g. Enter key, focus lost, toggle).
     /// Argument is the new text value.
     /// </summary>
     event Action<string>? OnValueChanged;
+}
+
+/// <summary>
+/// Base class for field editors that automatically suppresses
+/// <see cref="OnValueChanged"/> during programmatic <see cref="SetValue"/> calls.
+/// Subclasses implement <see cref="SetValueCore"/> and call
+/// <see cref="RaiseValueChanged"/> from UI event handlers.
+/// </summary>
+public abstract class FieldEditorBase : IFieldEditor
+{
+    private bool _isSettingValue;
+
+    public abstract Control Control { get; }
+
+    public event Action<string>? OnValueChanged;
+
+    public abstract string GetValue();
+
+    /// <summary>
+    /// Sets the value without firing <see cref="OnValueChanged"/>.
+    /// Subclasses should NOT override this — override <see cref="SetValueCore"/> instead.
+    /// </summary>
+    public void SetValue(string value)
+    {
+        _isSettingValue = true;
+        SetValueCore(value);
+        _isSettingValue = false;
+    }
+
+    /// <summary>
+    /// Update the UI control to display the given value.
+    /// Called inside the suppression guard — event handlers that
+    /// call <see cref="RaiseValueChanged"/> are automatically silenced.
+    /// </summary>
+    protected abstract void SetValueCore(string value);
+
+    /// <summary>
+    /// Call this from UI event handlers to fire <see cref="OnValueChanged"/>.
+    /// Automatically suppressed during <see cref="SetValue"/> calls.
+    /// </summary>
+    protected void RaiseValueChanged(string value)
+    {
+        if (!_isSettingValue)
+            OnValueChanged?.Invoke(value);
+    }
 }
