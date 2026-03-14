@@ -67,16 +67,41 @@ public static class PrototypeYamlWriter
         // 4. Serialize back to YAML and write to disk
         try
         {
-            using var writer = new StreamWriter(filePath, append: false);
-
+            // Serialize each prototype entry individually, strip YAML document
+            // markers (--- / ...), and join with blank lines between prototypes.
+            var protoTexts = new List<string>();
             foreach (var document in documents)
             {
-                if (document.Root != null)
+                if (document.Root is not SequenceDataNode sequence)
+                    continue;
+
+                for (var i = 0; i < sequence.Count; i++)
                 {
-                    document.Root.Write(writer);
+                    var entry = sequence[i];
+                    using var sw = new StringWriter();
+
+                    // Wrap single mapping in a sequence so Write() produces "- type: ..." format
+                    var wrapper = new SequenceDataNode();
+                    wrapper.Add(entry);
+                    wrapper.Write(sw);
+
+                    var text = sw.ToString().Trim();
+
+                    // DataNode.Write() emits YAML document markers — strip them
+                    if (text.EndsWith("..."))
+                        text = text[..^3].TrimEnd();
+                    if (text.StartsWith("---"))
+                        text = text[3..].TrimStart('\r', '\n');
+
+                    protoTexts.Add(text);
                 }
             }
 
+            var result = string.Join("\n\n", protoTexts);
+            // Ensure single trailing newline
+            result = result.TrimEnd() + "\n";
+
+            File.WriteAllText(filePath, result);
             return true;
         }
         catch
@@ -114,7 +139,99 @@ public static class PrototypeYamlWriter
 
             // Remove existing key first (to replace), then add
             mapping.Remove(fieldName);
-            mapping.Add(fieldName, new ValueDataNode(newValue));
+            mapping.Add(fieldName, ParseValueToDataNode(newValue));
         }
+    }
+
+    /// <summary>
+    /// Converts an editor value string into the appropriate DataNode.
+    /// Strings starting with '[' become SequenceDataNode,
+    /// strings starting with '{' become MappingDataNode,
+    /// everything else becomes ValueDataNode.
+    /// </summary>
+    private static DataNode ParseValueToDataNode(string value)
+    {
+        var trimmed = value.Trim();
+
+        // Sequence: [item1, item2, ...]
+        if (trimmed.StartsWith('[') && trimmed.EndsWith(']'))
+        {
+            var inner = trimmed[1..^1].Trim();
+            var sequence = new SequenceDataNode();
+
+            if (!string.IsNullOrEmpty(inner))
+            {
+                var elements = SplitRespectingNesting(inner, ',');
+                foreach (var element in elements)
+                {
+                    var el = element.Trim();
+                    if (!string.IsNullOrEmpty(el))
+                        sequence.Add(ParseValueToDataNode(el));
+                }
+            }
+
+            return sequence;
+        }
+
+        // Mapping: { key1: val1, key2: val2 }
+        if (trimmed.StartsWith('{') && trimmed.EndsWith('}'))
+        {
+            var inner = trimmed[1..^1].Trim();
+            var mappingNode = new MappingDataNode();
+
+            if (!string.IsNullOrEmpty(inner))
+            {
+                var entries = SplitRespectingNesting(inner, ',');
+                foreach (var entry in entries)
+                {
+                    var colonIdx = entry.IndexOf(':');
+                    if (colonIdx >= 0)
+                    {
+                        var k = entry[..colonIdx].Trim();
+                        var v = entry[(colonIdx + 1)..].Trim();
+                        if (!string.IsNullOrEmpty(k))
+                            mappingNode.Add(k, ParseValueToDataNode(v));
+                    }
+                }
+            }
+
+            return mappingNode;
+        }
+
+        return new ValueDataNode(trimmed);
+    }
+
+    /// <summary>
+    /// Splits a string by a delimiter while respecting nested brackets and braces.
+    /// </summary>
+    private static List<string> SplitRespectingNesting(string text, char delimiter)
+    {
+        var result = new List<string>();
+        var depth = 0;
+        var current = new System.Text.StringBuilder();
+
+        foreach (var ch in text)
+        {
+            if (ch is '[' or '{')
+                depth++;
+            else if (ch is ']' or '}')
+                depth--;
+
+            if (ch == delimiter && depth == 0)
+            {
+                result.Add(current.ToString().Trim());
+                current.Clear();
+            }
+            else
+            {
+                current.Append(ch);
+            }
+        }
+
+        var last = current.ToString().Trim();
+        if (!string.IsNullOrEmpty(last))
+            result.Add(last);
+
+        return result;
     }
 }

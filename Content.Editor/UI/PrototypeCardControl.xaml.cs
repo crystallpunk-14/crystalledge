@@ -103,19 +103,38 @@ public sealed partial class PrototypeCardControl : PanelContainer
 
         rowBox.AddChild(bar);
 
-        // Field name label
+        // Field name label + required asterisk
+        var nameBox = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            MinWidth = 180,
+            MaxWidth = 180,
+            SeparationOverride = 0,
+        };
+
         var nameLabel = new Label
         {
             Text = field.Name,
-            MinWidth = 180,
-            MaxWidth = 180,
-            Margin = new Thickness(8, 3, 4, 3),
+            HorizontalExpand = true,
+            Margin = new Thickness(field.IsRequired ? 2 : 8, 3, 4, 3),
             ClipText = true,
         };
 
         nameLabel.AddStyleClass(field.IsOverridden ? StyleClass.Highlight : StyleClass.LabelWeak);
 
-        rowBox.AddChild(nameLabel);
+        nameBox.AddChild(nameLabel);
+        rowBox.AddChild(nameBox);
+
+        if (field.IsRequired)
+        {
+            var asterisk = new Label
+            {
+                Text = "*",
+                Margin = new Thickness(4, 3, 0, 3),
+                FontColorOverride = Color.Red,
+            };
+            nameBox.AddChild(asterisk);
+        }
 
         // Value editor — created by factory based on field type
         var editor = FieldEditorFactory.Create(field.FieldType);
@@ -188,6 +207,17 @@ public sealed class EditorFieldData
     /// The C# <see cref="Type"/> of the field for editor selection, or null if unknown.
     /// </summary>
     public Type? FieldType { get; init; }
+
+    /// <summary>
+    /// Whether this field has <c>[DataField(required: true)]</c>.
+    /// </summary>
+    public bool IsRequired { get; init; }
+
+    /// <summary>
+    /// Declaration order from C# reflection (base class first).
+    /// Used to keep a stable field order in the editor.
+    /// </summary>
+    public int Order { get; init; } = int.MaxValue;
 
     /// <summary>
     /// The inherited value (from parents or C# default), used for reset.

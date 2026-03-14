@@ -4,6 +4,7 @@ using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Prototypes;
 
 namespace Content.Editor.UI;
 
@@ -16,6 +17,7 @@ public sealed class EditorState : State
 {
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
     private BoxContainer _root = default!;
     private PrototypeBrowserControl _browser = default!;
@@ -59,6 +61,7 @@ public sealed class EditorState : State
         _tabBar.OnTabSelected += OnFileSelected;
         _tabBar.OnTabClosed += OnTabClosed;
         _editorView.OnDirtyChanged += OnDirtyChanged;
+        _prototypeManager.PrototypesReloaded += OnPrototypesReloaded;
 
         // Wire keybinds
         _inputManager.SetInputCommand(EditorKeyFunctions.EditorSave,
@@ -79,6 +82,8 @@ public sealed class EditorState : State
         _inputManager.SetInputCommand(EditorKeyFunctions.EditorSave, null);
         _inputManager.SetInputCommand(EditorKeyFunctions.EditorUndo, null);
         _inputManager.SetInputCommand(EditorKeyFunctions.EditorRedo, null);
+
+        _prototypeManager.PrototypesReloaded -= OnPrototypesReloaded;
 
         _uiManager.StateRoot.RemoveChild(_root);
     }
@@ -171,4 +176,25 @@ public sealed class EditorState : State
         var dirty = session?.IsDirty == true ? " *" : "";
         _statusBar.ShowMessage($"{fileName}{dirty}");
     }
+
+    // ── Prototype reload ──
+
+    /// <summary>
+    /// Called by the engine when prototypes are hot-reloaded.
+    /// Refreshes the currently open file if its prototypes were affected.
+    /// </summary>
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        if (_currentPath == null)
+            return;
+
+        // Refresh the current view so it picks up any reloaded definitions
+        var session = _editorView.CurrentSession;
+        if (session != null && !session.IsDirty)
+        {
+            _editorView.OpenFile(_currentPath);
+        }
+    }
+
+    private string? _currentPath => _editorView.CurrentPath;
 }

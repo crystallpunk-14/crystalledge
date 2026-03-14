@@ -41,6 +41,11 @@ public sealed partial class EditorViewControl : PanelContainer
         _currentPath != null && _sessions.TryGetValue(_currentPath, out var s) ? s : null;
 
     /// <summary>
+    /// Gets the currently open file path, or null.
+    /// </summary>
+    public string? CurrentPath => _currentPath;
+
+    /// <summary>
     /// Parses the YAML file at the given path and renders prototype cards.
     /// </summary>
     public void OpenFile(string filePath)

@@ -143,10 +143,10 @@ public static class PrototypeDataParser
         // Build field list
         var fields = new List<EditorFieldData>();
 
-        // Build a mapping of tag → C# field type from reflection
+        // Build a mapping of tag → (C# field type, required, order) from reflection
         var fieldTypeMap = protoType != null
             ? GetDataFieldInfo(protoType)
-            : new Dictionary<string, Type>();
+            : new Dictionary<string, (Type Type, bool Required, int Order)>();
 
         // 1) Fields from the resolved mapping (includes inherited)
         if (resolvedMapping != null)
@@ -178,7 +178,15 @@ public static class PrototypeDataParser
                     inheritedValue = "";
                 }
 
-                fieldTypeMap.TryGetValue(key, out var fieldType);
+                Type? fieldType = null;
+                var isRequired = false;
+                var fieldOrder = int.MaxValue;
+                if (fieldTypeMap.TryGetValue(key, out var fieldInfo))
+                {
+                    fieldType = fieldInfo.Type;
+                    isRequired = fieldInfo.Required;
+                    fieldOrder = fieldInfo.Order;
+                }
 
                 fields.Add(new EditorFieldData
                 {
@@ -186,6 +194,8 @@ public static class PrototypeDataParser
                     Value = displayValue,
                     IsOverridden = isOverridden,
                     FieldType = fieldType,
+                    IsRequired = isRequired,
+                    Order = fieldOrder,
                     InheritedValue = inheritedValue,
                 });
             }
@@ -197,7 +207,7 @@ public static class PrototypeDataParser
         {
             var existingKeys = new HashSet<string>(fields.Select(f => f.Name), StringComparer.Ordinal);
 
-            foreach (var (tag, type) in fieldTypeMap)
+            foreach (var (tag, (type, required, tagOrder)) in fieldTypeMap)
             {
                 if (existingKeys.Contains(tag) || MetaKeys.Contains(tag))
                     continue;
@@ -208,10 +218,15 @@ public static class PrototypeDataParser
                     Value = "",
                     IsOverridden = false,
                     FieldType = type,
+                    IsRequired = required,
+                    Order = tagOrder,
                     InheritedValue = "",
                 });
             }
         }
+
+        // Sort fields by C# declaration order
+        fields.Sort((a, b) => a.Order.CompareTo(b.Order));
 
         return new ParsedPrototype
         {
@@ -225,10 +240,16 @@ public static class PrototypeDataParser
 
     /// <summary>
     /// Uses reflection to find all [DataField] tags and their C# types on a prototype type.
+    /// Returns (Type fieldType, bool isRequired, int order) per tag.
+    /// Order follows C# declaration: base class members first, then derived.
     /// </summary>
-    private static Dictionary<string, Type> GetDataFieldInfo(Type type)
+    private static Dictionary<string, (Type Type, bool Required, int Order)> GetDataFieldInfo(Type type)
     {
-        var result = new Dictionary<string, Type>(StringComparer.Ordinal);
+        var result = new Dictionary<string, (Type, bool, int)>(StringComparer.Ordinal);
+
+        // Walk the hierarchy bottom-up and collect members per level,
+        // then assign indices top-down so base class members come first.
+        var levels = new List<List<(string Tag, Type FieldType, bool Required)>>();
 
         var current = type;
         while (current != null && current != typeof(object))
@@ -239,6 +260,8 @@ public static class PrototypeDataParser
                 BindingFlags.NonPublic |
                 BindingFlags.DeclaredOnly;
 
+            var level = new List<(string, Type, bool)>();
+
             foreach (var field in current.GetFields(flags))
             {
                 var attr = field.GetCustomAttribute<DataFieldAttribute>();
@@ -246,7 +269,7 @@ public static class PrototypeDataParser
                     continue;
 
                 var tag = attr.Tag ?? AutoGenerateTag(field.Name);
-                result.TryAdd(tag, field.FieldType);
+                level.Add((tag, field.FieldType, attr.Required));
             }
 
             foreach (var prop in current.GetProperties(flags))
@@ -256,10 +279,23 @@ public static class PrototypeDataParser
                     continue;
 
                 var tag = attr.Tag ?? AutoGenerateTag(prop.Name);
-                result.TryAdd(tag, prop.PropertyType);
+                level.Add((tag, prop.PropertyType, attr.Required));
             }
 
+            levels.Add(level);
             current = current.BaseType;
+        }
+
+        // Reverse so base classes come first
+        levels.Reverse();
+
+        var order = 0;
+        foreach (var level in levels)
+        {
+            foreach (var (tag, fieldType, required) in level)
+            {
+                result.TryAdd(tag, (fieldType, required, order++));
+            }
         }
 
         return result;

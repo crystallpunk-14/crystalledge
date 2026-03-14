@@ -68,18 +68,26 @@ public sealed class ColorFieldEditor : FieldEditorBase
         _colorSelector = new ColorSelectorSliders
         {
             IsAlphaVisible = false,
-            MinWidth = 250,
-            MinHeight = 200,
         };
 
         _colorSelector.OnColorChanged += OnPickerColorChanged;
+
+        var pickerContainer = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            MinWidth = 300,
+            MinHeight = 220,
+            MaxWidth = 300,
+            MaxHeight = 220,
+        };
+        pickerContainer.AddChild(_colorSelector);
 
         _popup = new Popup
         {
             CloseOnClick = true,
             CloseOnEscape = true,
         };
-        _popup.AddChild(_colorSelector);
+        _popup.AddChild(pickerContainer);
 
         _root.AddChild(_swatch);
         _root.AddChild(_hexInput);
@@ -142,8 +150,8 @@ public sealed class ColorFieldEditor : FieldEditorBase
         var box = UIBox2.FromDimensions(
             globalPos.X,
             globalPos.Y + _swatch.Height + 4,
-            260,
-            210);
+            310,
+            230);
 
         var uiManager = IoCManager.Resolve<IUserInterfaceManager>();
         uiManager.ModalRoot.AddChild(_popup);
