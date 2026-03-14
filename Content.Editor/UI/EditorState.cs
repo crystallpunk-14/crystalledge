@@ -5,16 +5,17 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input.Binding;
 
-namespace Content.Editor.UI.EditotState;
+namespace Content.Editor.UI;
 
 /// <summary>
 /// Main editor state that assembles four independent UI controls
 /// (PrototypeBrowser, TabBar, EditorView, StatusBar) and wires them
 /// together through events.
 /// </summary>
-public sealed partial class EditorState : State
+public sealed class EditorState : State
 {
     [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private readonly IInputManager _inputManager = default!;
 
     private BoxContainer _root = default!;
     private PrototypeBrowserControl _browser = default!;
@@ -59,7 +60,13 @@ public sealed partial class EditorState : State
         _tabBar.OnTabClosed += OnTabClosed;
         _editorView.OnDirtyChanged += OnDirtyChanged;
 
-        StartupInput();
+        // Wire keybinds
+        _inputManager.SetInputCommand(EditorKeyFunctions.EditorSave,
+            InputCmdHandler.FromDelegate(_ => OnSaveRequested()));
+        _inputManager.SetInputCommand(EditorKeyFunctions.EditorUndo,
+            InputCmdHandler.FromDelegate(_ => OnUndoRequested()));
+        _inputManager.SetInputCommand(EditorKeyFunctions.EditorRedo,
+            InputCmdHandler.FromDelegate(_ => OnRedoRequested()));
     }
 
     protected override void Shutdown()
@@ -69,9 +76,11 @@ public sealed partial class EditorState : State
         _tabBar.OnTabClosed -= OnTabClosed;
         _editorView.OnDirtyChanged -= OnDirtyChanged;
 
-        _uiManager.StateRoot.RemoveChild(_root);
+        _inputManager.SetInputCommand(EditorKeyFunctions.EditorSave, null);
+        _inputManager.SetInputCommand(EditorKeyFunctions.EditorUndo, null);
+        _inputManager.SetInputCommand(EditorKeyFunctions.EditorRedo, null);
 
-        ShutdownInput();
+        _uiManager.StateRoot.RemoveChild(_root);
     }
 
     // ── File navigation ──
@@ -117,6 +126,40 @@ public sealed partial class EditorState : State
         // Update tab display to show dirty indicator
         _tabBar.SetDirty(filePath, isDirty);
         UpdateStatusForFile(filePath);
+    }
+
+    // ── Keybind handlers ──
+
+    private void OnSaveRequested()
+    {
+        var session = _editorView.CurrentSession;
+        if (session == null || !session.IsDirty)
+            return;
+
+        if (PrototypeYamlWriter.Save(session.FilePath, session))
+        {
+            session.MarkSaved();
+
+            // Re-open the file to refresh the view with the saved data
+            _editorView.OpenFile(session.FilePath);
+            _statusBar.ShowMessage($"Saved {Path.GetFileName(session.FilePath)}");
+        }
+        else
+        {
+            _statusBar.ShowError("Failed to save file");
+        }
+    }
+
+    private void OnUndoRequested()
+    {
+        if (_editorView.Undo())
+            _statusBar.ShowMessage("Undo");
+    }
+
+    private void OnRedoRequested()
+    {
+        if (_editorView.Redo())
+            _statusBar.ShowMessage("Redo");
     }
 
     // ── Status bar ──

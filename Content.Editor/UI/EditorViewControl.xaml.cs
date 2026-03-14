@@ -142,6 +142,14 @@ public sealed partial class EditorViewControl : PanelContainer
 
     private void ApplyPendingEdits(FileEditSession session)
     {
+        // Build a map of protoId → ParsedPrototype for parent lookup
+        var protoById = new Dictionary<string, ParsedPrototype>(StringComparer.Ordinal);
+        foreach (var proto in session.Prototypes)
+        {
+            protoById[proto.Id] = proto;
+        }
+
+        // First pass: apply direct edits and resets
         foreach (var proto in session.Prototypes)
         {
             foreach (var field in proto.Fields)
@@ -150,7 +158,6 @@ public sealed partial class EditorViewControl : PanelContainer
 
                 if (session.PendingResets.Contains(key))
                 {
-                    // Reset: show inherited value, mark as not overridden
                     field.Value = field.InheritedValue;
                     field.IsOverridden = false;
                 }
@@ -158,6 +165,34 @@ public sealed partial class EditorViewControl : PanelContainer
                 {
                     field.Value = editedValue;
                     field.IsOverridden = true;
+                }
+            }
+        }
+
+        // Second pass: propagate parent edits to children's inherited (non-overridden) fields
+        foreach (var proto in session.Prototypes)
+        {
+            if (proto.Parent == null)
+                continue;
+
+            // Support single parent (first in comma-separated list)
+            var parentId = proto.Parent.Split(',')[0].Trim();
+            if (!protoById.TryGetValue(parentId, out var parentProto))
+                continue;
+
+            foreach (var field in proto.Fields)
+            {
+                // Skip fields that are locally overridden or have local pending edits
+                var key = (proto.Id, field.Name);
+                if (field.IsOverridden || session.PendingEdits.ContainsKey(key))
+                    continue;
+
+                // Check if the parent has an edited value for this field
+                var parentField = parentProto.Fields.FirstOrDefault(f => f.Name == field.Name);
+                if (parentField != null)
+                {
+                    // Show the parent's current value (which may be edited)
+                    field.Value = parentField.Value;
                 }
             }
         }
