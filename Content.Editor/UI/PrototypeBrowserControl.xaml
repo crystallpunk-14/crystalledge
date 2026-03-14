@@ -1,0 +1,25 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                StyleClasses="BackgroundPanelDark"
+                MinWidth="280" MaxWidth="280" VerticalExpand="True">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+        <!-- Header -->
+        <PanelContainer StyleClasses="PanelLight" MinSize="0 48" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal" Margin="14 10 14 10">
+                <Label Name="TitleLabel" Text="SS14 Editor" StyleClasses="LabelHeading"
+                       HorizontalExpand="True" />
+                <Button Name="RefreshButton" Text="↻" ToolTip="Refresh file tree"
+                        MinSize="30 30" />
+            </BoxContainer>
+        </PanelContainer>
+        <!-- Search -->
+        <BoxContainer Margin="8 8 8 4" HorizontalExpand="True">
+            <LineEdit Name="SearchBox" PlaceHolder="Search files..."
+                      HorizontalExpand="True" />
+        </BoxContainer>
+        <!-- File tree -->
+        <ScrollContainer Name="TreeScroll" VerticalExpand="True" HorizontalExpand="True">
+            <BoxContainer Name="FileList" Orientation="Vertical"
+                          HorizontalExpand="True" />
+        </ScrollContainer>
+    </BoxContainer>
+</PanelContainer>

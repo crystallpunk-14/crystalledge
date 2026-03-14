@@ -1,0 +1,9 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                StyleClasses="PanelDark"
+                MinSize="0 38" HorizontalExpand="True">
+    <ScrollContainer HScrollEnabled="True" VScrollEnabled="False"
+                     HorizontalExpand="True" MinSize="0 38">
+        <BoxContainer Name="TabStrip" Orientation="Horizontal"
+                      Margin="4 4 4 0" SeparationOverride="2" />
+    </ScrollContainer>
+</PanelContainer>

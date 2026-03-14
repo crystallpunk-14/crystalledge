@@ -1,0 +1,20 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                StyleClasses="PanelDark"
+                HorizontalExpand="True" VerticalExpand="True">
+    <!-- Placeholder shown when no file is open -->
+    <Label Name="PlaceholderLabel"
+           Text="Open a .yml file from the browser to view it here."
+           StyleClasses="LabelWeak"
+           HorizontalAlignment="Center" VerticalAlignment="Center"
+           HorizontalExpand="True" VerticalExpand="True" />
+    <!-- Scrollable YAML content -->
+    <ScrollContainer Name="ContentScroll"
+                     HorizontalExpand="True" VerticalExpand="True"
+                     Visible="False">
+        <Label Name="ContentLabel"
+               StyleClasses="monospace"
+               Margin="24 24 24 24"
+               HorizontalExpand="True"
+               ClipText="False" />
+    </ScrollContainer>
+</PanelContainer>

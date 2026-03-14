@@ -1,0 +1,9 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                StyleClasses="PanelLight"
+                MinSize="0 26" HorizontalExpand="True">
+    <BoxContainer Orientation="Horizontal" Margin="12 4 12 4">
+        <Label Name="FileLabel" Text="Ready" StyleClasses="LabelSubText"
+               HorizontalExpand="True" />
+        <Label Name="MessageLabel" Text="" StyleClasses="LabelSubText" />
+    </BoxContainer>
+</PanelContainer>
