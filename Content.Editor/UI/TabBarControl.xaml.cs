@@ -25,6 +25,7 @@ public sealed partial class TabBarControl : PanelContainer
     public event Action<string>? OnTabClosed;
 
     private readonly List<string> _openPaths = new();
+    private readonly HashSet<string> _dirtyPaths = new(StringComparer.OrdinalIgnoreCase);
     private string? _activePath;
 
     public TabBarControl()
@@ -55,6 +56,19 @@ public sealed partial class TabBarControl : PanelContainer
     }
 
     /// <summary>
+    /// Sets or clears the dirty indicator for the given file path.
+    /// </summary>
+    public void SetDirty(string filePath, bool isDirty)
+    {
+        if (isDirty)
+            _dirtyPaths.Add(filePath);
+        else
+            _dirtyPaths.Remove(filePath);
+
+        RebuildTabs();
+    }
+
+    /// <summary>
     /// Closes the tab for the given file path and activates an adjacent tab.
     /// </summary>
     public void CloseTab(string filePath)
@@ -64,6 +78,7 @@ public sealed partial class TabBarControl : PanelContainer
             return;
 
         _openPaths.RemoveAt(idx);
+        _dirtyPaths.Remove(filePath);
 
         if (_openPaths.Count > 0)
         {
@@ -85,7 +100,8 @@ public sealed partial class TabBarControl : PanelContainer
         foreach (var path in _openPaths)
         {
             var isActive = string.Equals(path, _activePath, StringComparison.OrdinalIgnoreCase);
-            var fileName = Path.GetFileName(path);
+            var isDirty = _dirtyPaths.Contains(path);
+            var fileName = Path.GetFileName(path) + (isDirty ? " *" : "");
 
             var tabPanel = new PanelContainer
             {

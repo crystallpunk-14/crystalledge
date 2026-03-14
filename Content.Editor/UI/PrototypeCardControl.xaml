@@ -1,31 +1,40 @@
 <PanelContainer xmlns="https://spacestation14.io"
-                StyleClasses="PanelDark"
-                HorizontalExpand="True"
-                Margin="0 0 0 8">
-  <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-    <!-- Card header: kind badge + prototype ID + parent info -->
+                HorizontalExpand="True">
+  <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="0">
+    <!-- Card header: type badge + ID + parent + collapse -->
     <PanelContainer Name="HeaderPanel"
-                    StyleClasses="PanelLight"
-                    HorizontalExpand="True">
+                    MinSize="0 36"
+                    HorizontalExpand="True"
+                    MouseFilter="Stop">
       <BoxContainer Orientation="Horizontal"
-                    Margin="8 4 8 4"
+                    Margin="12 6 12 6"
                     SeparationOverride="8"
                     HorizontalExpand="True">
-        <Label Name="KindBadge"
-               StyleClasses="LabelSubText"
-               VerticalAlignment="Center" />
+        <PanelContainer Name="TypeBadgePanel" MinSize="0 22">
+          <Label Name="KindBadge"
+                 Margin="8 2 8 2"
+                 StyleClasses="FontSmall"
+                 VerticalAlignment="Center" />
+        </PanelContainer>
         <Label Name="IdLabel"
                StyleClasses="LabelHeading"
-               VerticalAlignment="Center" />
+               VerticalAlignment="Center"
+               HorizontalExpand="True" />
         <Label Name="ParentLabel"
-               StyleClasses="LabelWeak"
+               StyleClasses="LabelWeak FontSmall"
                VerticalAlignment="Center" />
+        <Label Name="AbstractLabel"
+               Text="abstract"
+               StyleClasses="Italic LabelWeak FontSmall"
+               VerticalAlignment="Center"
+               Visible="False" />
       </BoxContainer>
     </PanelContainer>
     <!-- Field rows container -->
     <BoxContainer Name="FieldsContainer"
                   Orientation="Vertical"
                   HorizontalExpand="True"
-                  Margin="0 4 0 4" />
+                  SeparationOverride="0"
+                  Margin="12 6 12 12" />
   </BoxContainer>
 </PanelContainer>

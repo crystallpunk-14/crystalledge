@@ -57,7 +57,7 @@ public sealed partial class PrototypeBrowserControl : PanelContainer
             return;
         }
 
-        var filter = SearchBox.Text?.Trim() ?? "";
+        var filter = SearchBox.Text.Trim() ?? "";
         BuildTree(_prototypesRoot, 0, filter);
     }
 
@@ -83,7 +83,7 @@ public sealed partial class PrototypeBrowserControl : PanelContainer
 
         foreach (var dir in dirs)
         {
-            var dirName = Path.GetFileName(dir) ?? dir;
+            var dirName = Path.GetFileName(dir);
 
             if (!string.IsNullOrEmpty(filter))
             {

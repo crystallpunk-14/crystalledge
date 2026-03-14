@@ -2,7 +2,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.Serialization.Manager.Definition;
 using Robust.Shared.Serialization.Markdown;
 using Robust.Shared.Serialization.Markdown.Mapping;
@@ -144,6 +143,11 @@ public static class PrototypeDataParser
         // Build field list
         var fields = new List<EditorFieldData>();
 
+        // Build a mapping of tag → C# field type from reflection
+        var fieldTypeMap = protoType != null
+            ? GetDataFieldInfo(protoType)
+            : new Dictionary<string, Type>();
+
         // 1) Fields from the resolved mapping (includes inherited)
         if (resolvedMapping != null)
         {
@@ -152,11 +156,37 @@ public static class PrototypeDataParser
                 if (MetaKeys.Contains(key))
                     continue;
 
+                var isOverridden = localKeys.Contains(key);
+                var displayValue = DataNodeToString(value);
+
+                // Inherited value = value from resolved mapping if NOT overridden,
+                // otherwise we need to figure out what the parent provides.
+                // For simplicity: inherited = resolved value when not overridden,
+                // otherwise inherited = resolved value with local removed (approximate).
+                string inheritedValue;
+                if (!isOverridden)
+                {
+                    inheritedValue = displayValue;
+                }
+                else
+                {
+                    // Try to find the value from resolved mapping minus local override.
+                    // Since resolved = parents + local merged, the "inherited" part
+                    // would be the resolved value if we removed the local key.
+                    // For now we approximate: if the field exists in resolved, use empty
+                    // as "unknown inherited" — a better approach would diff parent mappings.
+                    inheritedValue = "";
+                }
+
+                fieldTypeMap.TryGetValue(key, out var fieldType);
+
                 fields.Add(new EditorFieldData
                 {
                     Name = key,
-                    Value = DataNodeToString(value),
-                    IsOverridden = localKeys.Contains(key),
+                    Value = displayValue,
+                    IsOverridden = isOverridden,
+                    FieldType = fieldType,
+                    InheritedValue = inheritedValue,
                 });
             }
         }
@@ -166,9 +196,8 @@ public static class PrototypeDataParser
         if (protoType != null)
         {
             var existingKeys = new HashSet<string>(fields.Select(f => f.Name), StringComparer.Ordinal);
-            var dataFields = GetDataFieldTags(protoType);
 
-            foreach (var tag in dataFields)
+            foreach (var (tag, type) in fieldTypeMap)
             {
                 if (existingKeys.Contains(tag) || MetaKeys.Contains(tag))
                     continue;
@@ -178,6 +207,8 @@ public static class PrototypeDataParser
                     Name = tag,
                     Value = "",
                     IsOverridden = false,
+                    FieldType = type,
+                    InheritedValue = "",
                 });
             }
         }
@@ -193,14 +224,12 @@ public static class PrototypeDataParser
     }
 
     /// <summary>
-    /// Uses reflection to find all [DataField] tags on a prototype type and its base types.
+    /// Uses reflection to find all [DataField] tags and their C# types on a prototype type.
     /// </summary>
-    private static List<string> GetDataFieldTags(Type type)
+    private static Dictionary<string, Type> GetDataFieldInfo(Type type)
     {
-        var tags = new List<string>();
-        var seen = new HashSet<string>(StringComparer.Ordinal);
+        var result = new Dictionary<string, Type>(StringComparer.Ordinal);
 
-        // Walk the type hierarchy
         var current = type;
         while (current != null && current != typeof(object))
         {
@@ -217,8 +246,7 @@ public static class PrototypeDataParser
                     continue;
 
                 var tag = attr.Tag ?? AutoGenerateTag(field.Name);
-                if (seen.Add(tag))
-                    tags.Add(tag);
+                result.TryAdd(tag, field.FieldType);
             }
 
             foreach (var prop in current.GetProperties(flags))
@@ -228,14 +256,13 @@ public static class PrototypeDataParser
                     continue;
 
                 var tag = attr.Tag ?? AutoGenerateTag(prop.Name);
-                if (seen.Add(tag))
-                    tags.Add(tag);
+                result.TryAdd(tag, prop.PropertyType);
             }
 
             current = current.BaseType;
         }
 
-        return tags;
+        return result;
     }
 
     /// <summary>
