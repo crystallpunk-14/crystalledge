@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
@@ -189,8 +190,26 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         var rng = new Random(_random.Next());
         SpawnRooms(comp, mapUid, grid, rng, _reservedTiles);
 
+        // Resolve the grid at MainZLevel for corridor placement.
+        // The base grid (mapUid) is at depth 0; corridors go on the main playable z-level.
+        var corridorGridUid = mapUid;
+        var corridorGrid = grid;
+
+        if (config.MainZLevel != 0)
+        {
+            if (_zLevels.TryMapOffset((mapUid, EnsureComp<CEZLevelMapComponent>(mapUid)), config.MainZLevel, out var mainLevelMap))
+            {
+                corridorGridUid = mainLevelMap.Value;
+                corridorGrid = EnsureComp<MapGridComponent>(corridorGridUid);
+            }
+            else
+            {
+                Log.Warning($"CEProceduralGeneratorSystem: could not resolve MainZLevel {config.MainZLevel} for corridors.");
+            }
+        }
+
         // Build corridors between connected rooms.
-        BuildCorridors(comp, config, mapUid, grid, rng, _reservedTiles);
+        BuildCorridors(comp, config, corridorGridUid, corridorGrid, rng, _reservedTiles);
 
         Dirty(mapUid, comp);
 

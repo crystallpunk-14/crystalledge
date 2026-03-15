@@ -20,7 +20,7 @@ public sealed class CEDungeonAtlasVisualizeCommand : LocalizedCommands
     {
         if (args.Length > 1)
         {
-            shell.WriteError(Loc.GetString("cmd-dungen-atlas-visualize-error-args"));
+            shell.WriteError(Loc.GetString("cmd-ce-dungen-atlas-visualize-error-args"));
             return;
         }
 
@@ -30,11 +30,11 @@ public sealed class CEDungeonAtlasVisualizeCommand : LocalizedCommands
             if (_overlay.HasOverlay<CEDungeonAtlasOverlay>())
             {
                 _overlay.RemoveOverlay<CEDungeonAtlasOverlay>();
-                shell.WriteLine(Loc.GetString("cmd-dungen-atlas-visualize-disabled"));
+                shell.WriteLine(Loc.GetString("cmd-ce-dungen-atlas-visualize-disabled"));
             }
             else
             {
-                shell.WriteLine(Loc.GetString("cmd-dungen-atlas-visualize-already-disabled"));
+                shell.WriteLine(Loc.GetString("cmd-ce-dungen-atlas-visualize-already-disabled"));
             }
             return;
         }
@@ -42,7 +42,7 @@ public sealed class CEDungeonAtlasVisualizeCommand : LocalizedCommands
         var protoId = args[0];
         if (!_proto.HasIndex<CEZLevelMapPrototype>(protoId))
         {
-            shell.WriteError(Loc.GetString("cmd-dungen-atlas-visualize-error-unknown", ("id", protoId)));
+            shell.WriteError(Loc.GetString("cmd-ce-dungen-atlas-visualize-error-unknown", ("id", protoId)));
             return;
         }
 
@@ -54,7 +54,7 @@ public sealed class CEDungeonAtlasVisualizeCommand : LocalizedCommands
         }
 
         existing.ZMapProtoId = protoId;
-        shell.WriteLine(Loc.GetString("cmd-dungen-atlas-visualize-enabled", ("id", protoId)));
+        shell.WriteLine(Loc.GetString("cmd-ce-dungen-atlas-visualize-enabled", ("id", protoId)));
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
@@ -63,7 +63,7 @@ public sealed class CEDungeonAtlasVisualizeCommand : LocalizedCommands
         {
             return CompletionResult.FromHintOptions(
                 CompletionHelper.PrototypeIDs<CEZLevelMapPrototype>(proto: _proto),
-                Loc.GetString("cmd-dungen-atlas-visualize-hint-zmap"));
+                Loc.GetString("cmd-ce-dungen-atlas-visualize-hint-zmap"));
         }
 
         return CompletionResult.Empty;

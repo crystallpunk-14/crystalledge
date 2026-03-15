@@ -18,12 +18,12 @@ public sealed class CEProceduralGenerationVisualizeCommand : LocalizedCommands
         if (_overlay.HasOverlay<CEProceduralGenerationOverlay>())
         {
             _overlay.RemoveOverlay<CEProceduralGenerationOverlay>();
-            shell.WriteLine(Loc.GetString("cmd-dungen-generation-visualize-disabled"));
+            shell.WriteLine(Loc.GetString("cmd-ce-dungen-generation-visualize-disabled"));
         }
         else
         {
             _overlay.AddOverlay(new CEProceduralGenerationOverlay());
-            shell.WriteLine(Loc.GetString("cmd-dungen-generation-visualize-enabled"));
+            shell.WriteLine(Loc.GetString("cmd-ce-dungen-generation-visualize-enabled"));
         }
     }
 }

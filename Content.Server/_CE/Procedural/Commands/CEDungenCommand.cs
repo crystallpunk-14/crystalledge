@@ -18,7 +18,7 @@ public sealed class CEDungenCommand : LocalizedCommands
     {
         if (args.Length < 1)
         {
-            shell.WriteError(Loc.GetString("cmd-dungen-error-args"));
+            shell.WriteError(Loc.GetString("cmd-ce-dungen-error-args"));
             return;
         }
 
@@ -26,7 +26,7 @@ public sealed class CEDungenCommand : LocalizedCommands
 
         if (!_proto.TryIndex(protoId, out var proto))
         {
-            shell.WriteError(Loc.GetString("cmd-dungen-error-unknown-level", ("level", args[0])));
+            shell.WriteError(Loc.GetString("cmd-ce-dungen-error-unknown-level", ("level", args[0])));
             return;
         }
 
@@ -35,11 +35,11 @@ public sealed class CEDungenCommand : LocalizedCommands
 
         if (!result.Success)
         {
-            shell.WriteError(Loc.GetString("cmd-dungen-error-failed", ("level", args[0])));
+            shell.WriteError(Loc.GetString("cmd-ce-dungen-error-failed", ("level", args[0])));
             return;
         }
 
-        shell.WriteLine(Loc.GetString("cmd-dungen-success",
+        shell.WriteLine(Loc.GetString("cmd-ce-dungen-success",
             ("level", args[0]),
             ("mapId", result.MapId?.ToString() ?? "?")));
     }
@@ -50,7 +50,7 @@ public sealed class CEDungenCommand : LocalizedCommands
         {
             return CompletionResult.FromHintOptions(
                 CompletionHelper.PrototypeIDs<CEDungeonLevelPrototype>(proto: _proto),
-                Loc.GetString("cmd-dungen-hint-level"));
+                Loc.GetString("cmd-ce-dungen-hint-level"));
         }
 
         return CompletionResult.Empty;
