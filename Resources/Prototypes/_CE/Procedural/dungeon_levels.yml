@@ -15,3 +15,14 @@
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: Atlas
+
+- type: dungeonLevel
+  id: CEDungeonTestProcedural
+  name: Test Procedural Dungeon
+  config:
+    !type:CEProceduralConfig
+    generalRooms:
+      size:
+        min: 5
+        max: 15
+      roomCount: 10
