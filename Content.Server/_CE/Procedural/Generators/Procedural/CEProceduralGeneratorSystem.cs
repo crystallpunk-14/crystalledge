@@ -2,7 +2,9 @@ using System.Numerics;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Destructible.Thresholds;
+using Content.Shared.Maps;
 using Content.Shared.Whitelist;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -52,6 +54,20 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     /// </summary>
     [DataField]
     public ComponentRegistry Components = new();
+
+    /// <summary>
+    /// Tile prototype used for corridors between rooms.
+    /// Only placed on empty tiles — existing room tiles are never overwritten.
+    /// </summary>
+    [DataField]
+    public ProtoId<ContentTileDefinition> CorridorTile = "CEStone";
+
+    /// <summary>
+    /// How much the corridor A* path is allowed to wander (0 = straight, higher = more winding).
+    /// Added as a random cost multiplier to each pathfinding step.
+    /// </summary>
+    [DataField]
+    public float CorridorWander = 3f;
 }
 
 [DataDefinition]
@@ -78,9 +94,17 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly CEDungeonSystem _dungeon = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
+
+    /// <summary>
+    /// Cached set of reserved (occupied) tile positions.
+    /// Re-used across generation steps to avoid repeated allocations.
+    /// Cleared at the start of each <see cref="Generate"/> call.
+    /// </summary>
+    private HashSet<Vector2i> _reservedTiles = new();
 
     /// <summary>
     /// Cardinal directions on the logical grid: right, left, up, down.
@@ -158,9 +182,15 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         // Ensure the map has a grid for tile/entity placement.
         var grid = EnsureComp<MapGridComponent>(mapUid);
 
+        // Clear and re-use the cached reserved tile set.
+        _reservedTiles.Clear();
+
         // Spawn each room's 3D prototype onto the grid.
         var rng = new Random(_random.Next());
-        SpawnRooms(comp, mapUid, grid, rng);
+        SpawnRooms(comp, mapUid, grid, rng, _reservedTiles);
+
+        // Build corridors between connected rooms.
+        BuildCorridors(comp, config, mapUid, grid, rng, _reservedTiles);
 
         Dirty(mapUid, comp);
 
@@ -179,11 +209,9 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         CEGeneratingProceduralDungeonComponent comp,
         EntityUid gridUid,
         MapGridComponent grid,
-        Random random)
+        Random random,
+        HashSet<Vector2i> reservedTiles)
     {
-        // Track all placed tiles to prevent overlapping writes that trigger
-        // duplicate-key errors in downstream event handlers (e.g. ExplosionSystem).
-        var reservedTiles = new HashSet<Vector2i>();
 
         foreach (var room in comp.Rooms)
         {
@@ -231,6 +259,208 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// For each graph connection, finds the closest pair of facing passway markers
+    /// between the two rooms and lays a slightly wandering A* corridor of tiles between them.
+    /// Only empty tiles are filled — existing room tiles are never overwritten.
+    /// </summary>
+    private void BuildCorridors(
+        CEGeneratingProceduralDungeonComponent comp,
+        CEProceduralConfig config,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Random random,
+        HashSet<Vector2i> reservedTiles)
+    {
+        // Index rooms.
+        var roomByIndex = new Dictionary<int, CEProceduralAbstractRoom>();
+        foreach (var room in comp.Rooms)
+            roomByIndex[room.Index] = room;
+
+        // Resolve the corridor tile.
+        var tileDef = _tileDef[config.CorridorTile];
+        var corridorTile = new Tile(tileDef.TileId);
+
+        var mainZLevel = config.MainZLevel;
+
+        foreach (var conn in comp.Connections)
+        {
+            if (!roomByIndex.TryGetValue(conn.RoomA, out var roomA) ||
+                !roomByIndex.TryGetValue(conn.RoomB, out var roomB))
+                continue;
+
+            // Compute world-space exit positions for each room.
+            var exitsA = GetWorldPassways(roomA, grid, mainZLevel);
+            var exitsB = GetWorldPassways(roomB, grid, mainZLevel);
+
+            if (exitsA.Count == 0 || exitsB.Count == 0)
+                continue;
+
+            // Find the closest pair of facing exits.
+            // Exit A must face toward room B and vice versa.
+            var dirAtoB = GridCoordToDirection(roomB.GridCoord - roomA.GridCoord);
+            var dirBtoA = GridCoordToDirection(roomA.GridCoord - roomB.GridCoord);
+
+            Vector2i? bestStartTile = null;
+            Vector2i? bestEndTile = null;
+            var bestDist = int.MaxValue;
+
+            foreach (var (posA, dirA) in exitsA)
+            {
+                if (dirA != dirAtoB)
+                    continue;
+
+                // The corridor starts one tile outside the room boundary.
+                var startTile = posA + dirA.ToIntVec();
+
+                foreach (var (posB, dirB) in exitsB)
+                {
+                    if (dirB != dirBtoA)
+                        continue;
+
+                    var endTile = posB + dirB.ToIntVec();
+
+                    var dist = Math.Abs(startTile.X - endTile.X) + Math.Abs(startTile.Y - endTile.Y);
+                    if (dist < bestDist)
+                    {
+                        bestDist = dist;
+                        bestStartTile = startTile;
+                        bestEndTile = endTile;
+                    }
+                }
+            }
+
+            if (bestStartTile == null || bestEndTile == null)
+                continue;
+
+            // Run weighted A* with wandering.
+            var path = FindWanderingPath(bestStartTile.Value, bestEndTile.Value, reservedTiles, random, config.CorridorWander);
+
+            // Place corridor tiles along the path.
+            var tiles = new List<(Vector2i, Tile)>();
+            foreach (var pos in path)
+            {
+                if (reservedTiles.Contains(pos))
+                    continue;
+
+                tiles.Add((pos, corridorTile));
+                reservedTiles.Add(pos);
+            }
+
+            if (tiles.Count > 0)
+                _maps.SetTiles(gridUid, grid, tiles);
+        }
+    }
+
+    /// <summary>
+    /// Gets the world-space tile positions and rotated directions of all passway markers
+    /// in the given abstract room.
+    /// </summary>
+    private List<(Vector2i WorldTilePos, Direction FacingDir)> GetWorldPassways(
+        CEProceduralAbstractRoom room,
+        MapGridComponent grid,
+        int mainZLevel)
+    {
+        var result = new List<(Vector2i, Direction)>();
+
+        if (room.RoomProtoId == null || !_proto.TryIndex(room.RoomProtoId.Value, out var roomProto))
+            return result;
+
+        var passways = _dungeon.GetPassways(room.RoomProtoId.Value);
+
+        // Build the same transform as room spawning.
+        var center = new Vector2(room.Position.X + room.Size.X / 2f, room.Position.Y + room.Size.Y / 2f);
+        var unrotatedOrigin = center - (Vector2)roomProto.Size / 2f;
+        var originTfm = Matrix3Helpers.CreateTranslation(unrotatedOrigin.X, unrotatedOrigin.Y);
+        var roomTfm = Matrix3Helpers.CreateTransform((Vector2)roomProto.Size / 2f, room.Rotation);
+        var tfm = Matrix3x2.Multiply(roomTfm, originTfm);
+
+        var roomCenter = (roomProto.Offset + roomProto.Size / 2f) * grid.TileSize;
+        var tileOffset = -roomCenter + grid.TileSizeHalfVector;
+
+        foreach (var pw in passways)
+        {
+            // Only consider passways on the main z-level.
+            if (pw.ZLevel != mainZLevel)
+                continue;
+
+            var localIdx = new Vector2i(pw.TilePosition.X + roomProto.Offset.X, pw.TilePosition.Y + roomProto.Offset.Y);
+            var worldPos = Vector2.Transform(localIdx + tileOffset, tfm).Floored();
+            var rotatedDir = (pw.Direction.ToAngle() + room.Rotation).GetCardinalDir();
+
+            result.Add((worldPos, rotatedDir));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Weighted A* pathfinding with random wander.
+    /// Adds a random cost to each step so the path meanders slightly.
+    /// Avoids occupied tiles.
+    /// </summary>
+    private static List<Vector2i> FindWanderingPath(
+        Vector2i start,
+        Vector2i end,
+        HashSet<Vector2i> occupied,
+        Random random,
+        float wanderWeight)
+    {
+        // A* with weighted heuristic.
+        var openSet = new PriorityQueue<Vector2i, float>();
+        var cameFrom = new Dictionary<Vector2i, Vector2i>();
+        var gScore = new Dictionary<Vector2i, float> { [start] = 0 };
+
+        openSet.Enqueue(start, 0);
+
+        var cardinals = new Vector2i[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
+
+        while (openSet.Count > 0)
+        {
+            var current = openSet.Dequeue();
+
+            if (current == end)
+            {
+                // Reconstruct path.
+                var path = new List<Vector2i>();
+                var c = current;
+                while (cameFrom.ContainsKey(c))
+                {
+                    path.Add(c);
+                    c = cameFrom[c];
+                }
+                path.Add(start);
+                path.Reverse();
+                return path;
+            }
+
+            var currentG = gScore.GetValueOrDefault(current, float.MaxValue);
+
+            foreach (var dir in cardinals)
+            {
+                var neighbor = current + dir;
+
+                // Can't walk through occupied tiles (rooms), but the end tile is always reachable.
+                if (neighbor != end && occupied.Contains(neighbor))
+                    continue;
+
+                var tentativeG = currentG + 1f + (float)(random.NextDouble() * wanderWeight);
+                var existingG = gScore.GetValueOrDefault(neighbor, float.MaxValue);
+
+                if (tentativeG >= existingG)
+                    continue;
+
+                cameFrom[neighbor] = current;
+                gScore[neighbor] = tentativeG;
+                var h = Math.Abs(neighbor.X - end.X) + Math.Abs(neighbor.Y - end.Y);
+                openSet.Enqueue(neighbor, tentativeG + h);
+            }
+        }
+
+        // No path found — return direct line as fallback.
+        return [start, end];
     }
 
     /// <summary>
