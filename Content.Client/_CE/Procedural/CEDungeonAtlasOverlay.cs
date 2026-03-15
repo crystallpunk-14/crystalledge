@@ -111,18 +111,19 @@ public sealed class CEDungeonAtlasOverlay : Overlay
         if (viewport == null)
             return;
 
-        for (var i = 0; i < rooms.Count; i++)
+        foreach (var room in rooms)
         {
-            var room = rooms[i];
-            var colorIndex = i % RoomBorderColors.Length;
-
             // Place label at center of the room in world space, then project to screen.
             var worldCenter = new Vector2(
                 room.Offset.X + room.Size.X / 2f,
                 room.Offset.Y + room.Size.Y / 2f);
             var screenPos = viewport.WorldToScreen(worldCenter);
 
-            var label = $"{room.ID} ({room.Size.X}x{room.Size.Y} h{room.Height})";
+            var label = $"{room.ID} \n" +
+                        $"size: {room.Size.X}x{room.Size.Y} \n" +
+                        $"height: {room.Height} \n" +
+                        $"offset: {room.Offset}";
+
             handle.DrawString(_font, screenPos, label);
         }
     }
