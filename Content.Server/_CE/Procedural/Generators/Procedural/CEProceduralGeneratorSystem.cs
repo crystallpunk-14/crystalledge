@@ -127,7 +127,33 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
 
         // Create z-network so 3D rooms can be spawned across z-levels.
         var network = _zLevels.CreateZNetwork(config.Components);
-        _zLevels.TryAddMapsIntoZNetwork(network, new Dictionary<EntityUid, int> { { mapUid, 0 } });
+
+        // Determine the maximum room height to know how many z-levels we need.
+        var maxHeight = 1;
+        foreach (var room in comp.Rooms)
+        {
+            if (room.RoomProtoId == null)
+                continue;
+
+            if (_proto.TryIndex(room.RoomProtoId.Value, out var rp) && rp.Height > maxHeight)
+                maxHeight = rp.Height;
+        }
+
+        // Create a map for each required z-level and register them in the network.
+        // Rooms always start at depth 0; MainZLevel is metadata for post-generation logic.
+        var mapsByDepth = new Dictionary<EntityUid, int>
+        {
+            { mapUid, 0 }
+        };
+
+        for (var zOffset = 1; zOffset < maxHeight; zOffset++)
+        {
+            var extraMapUid = _maps.CreateMap(out _);
+            EnsureComp<MapGridComponent>(extraMapUid);
+            mapsByDepth[extraMapUid] = zOffset;
+        }
+
+        _zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth);
 
         // Ensure the map has a grid for tile/entity placement.
         var grid = EnsureComp<MapGridComponent>(mapUid);
