@@ -1,6 +1,10 @@
+using System.Numerics;
+using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Whitelist;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural;
@@ -41,6 +45,13 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     /// </summary>
     [DataField]
     public CEProceduralRoomPack BlessingRooms = new();
+
+    /// <summary>
+    /// Shared components applied to every z-level map in the dungeon's z-network
+    /// (e.g. MapAtmosphere, MapLight, CEZLevelMapRoof).
+    /// </summary>
+    [DataField]
+    public ComponentRegistry Components = new();
 }
 
 [DataDefinition]
@@ -66,8 +77,10 @@ public sealed partial class CEProceduralRoomPack
 public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSystem<CEProceduralConfig>
 {
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly CEDungeonSystem _dungeon = default!;
+    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
 
     /// <summary>
     /// Cardinal directions on the logical grid: right, left, up, down.
@@ -112,12 +125,59 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         // Compact: slide rooms toward their parent (BFS order), maintaining 1-tile gap.
         CompactRooms(comp);
 
+        // Create z-network so 3D rooms can be spawned across z-levels.
+        var network = _zLevels.CreateZNetwork(config.Components);
+        _zLevels.TryAddMapsIntoZNetwork(network, new Dictionary<EntityUid, int> { { mapUid, 0 } });
+
+        // Ensure the map has a grid for tile/entity placement.
+        var grid = EnsureComp<MapGridComponent>(mapUid);
+
+        // Spawn each room's 3D prototype onto the grid.
+        var rng = new Random(_random.Next());
+        SpawnRooms(comp, mapUid, grid, rng);
+
         Dirty(mapUid, comp);
 
         // Report results.
         args.MapUid = mapUid;
         args.MapId = mapId;
         args.Handled = true;
+    }
+
+    /// <summary>
+    /// Spawns a 3D room prototype for each abstract room that has a valid <see cref="CEProceduralAbstractRoom.RoomProtoId"/>.
+    /// The room is placed at the room's <see cref="CEProceduralAbstractRoom.Position"/> with
+    /// the pre-computed <see cref="CEProceduralAbstractRoom.Rotation"/>.
+    /// </summary>
+    private void SpawnRooms(
+        CEGeneratingProceduralDungeonComponent comp,
+        EntityUid gridUid,
+        MapGridComponent grid,
+        Random random)
+    {
+        HashSet<Vector2i>? reservedTiles = null;
+
+        foreach (var room in comp.Rooms)
+        {
+            if (room.RoomProtoId == null)
+                continue;
+
+            if (!_proto.TryIndex(room.RoomProtoId.Value, out var roomProto))
+            {
+                Log.Warning($"CEProceduralGeneratorSystem: unknown room prototype '{room.RoomProtoId}'.");
+                continue;
+            }
+
+            // Build the transform: translate to room position, then apply rotation around room centre.
+            var originTransform = Matrix3Helpers.CreateTranslation(room.Position.X, room.Position.Y);
+            var roomTransform = Matrix3Helpers.CreateTransform((Vector2)roomProto.Size / 2f, room.Rotation);
+            var finalTransform = Matrix3x2.Multiply(roomTransform, originTransform);
+
+            if (!_dungeon.TrySpawn3DRoom(gridUid, grid, finalTransform, roomProto, reservedTiles))
+            {
+                Log.Warning($"CEProceduralGeneratorSystem: failed to spawn room {room.Index} (proto '{room.RoomProtoId}').");
+            }
+        }
     }
 
     /// <summary>

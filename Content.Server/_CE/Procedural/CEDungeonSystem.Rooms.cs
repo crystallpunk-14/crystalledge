@@ -62,13 +62,33 @@ public sealed partial class CEDungeonSystem
                 continue;
             }
 
-            foreach (var tag in whitelist.Tags)
+            if (whitelist.RequireAll)
             {
-                if (!proto.Tags.Contains(tag))
-                    continue;
+                // AND mode: the room must contain ALL whitelist tags.
+                var allMatch = true;
+                foreach (var tag in whitelist.Tags)
+                {
+                    if (!proto.Tags.Contains(tag))
+                    {
+                        allMatch = false;
+                        break;
+                    }
+                }
 
-                _availableRooms.Add(proto);
-                break;
+                if (allMatch)
+                    _availableRooms.Add(proto);
+            }
+            else
+            {
+                // OR mode (default): the room must contain at least one whitelist tag.
+                foreach (var tag in whitelist.Tags)
+                {
+                    if (!proto.Tags.Contains(tag))
+                        continue;
+
+                    _availableRooms.Add(proto);
+                    break;
+                }
             }
         }
 
