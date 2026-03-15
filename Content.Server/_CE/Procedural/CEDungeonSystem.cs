@@ -1,3 +1,5 @@
+using Content.Server._CE.Procedural.Generators;
+using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.Decals;
 using Content.Shared.Maps;
@@ -20,6 +22,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly TileSystem _tile = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly MetaDataSystem _meta = default!;
 
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -36,5 +39,40 @@ public sealed partial class CEDungeonSystem : EntitySystem
         _xformQuery = GetEntityQuery<TransformComponent>();
 
         InitializeRooms();
+    }
+
+    /// <summary>
+    /// Generates a dungeon level from the given prototype ID.
+    /// Creates a new map and populates it according to the prototype's generator config.
+    /// </summary>
+    /// <returns>The generation result containing the created map info, or a failure result.</returns>
+    public CEDungeonGenerateResult GenerateLevel(ProtoId<CEDungeonLevelPrototype> protoId)
+    {
+        if (!_proto.TryIndex(protoId, out var proto))
+        {
+            Log.Error($"CEDungeonSystem: unknown dungeon level prototype '{protoId}'.");
+            return new CEDungeonGenerateResult(false);
+        }
+
+        return GenerateLevel(proto);
+    }
+
+    /// <summary>
+    /// Generates a dungeon level from the given prototype.
+    /// </summary>
+    public CEDungeonGenerateResult GenerateLevel(CEDungeonLevelPrototype proto)
+    {
+        var result = proto.Config.Generate(EntityManager);
+
+        if (!result.Success || result.MapUid is null)
+        {
+            Log.Error($"CEDungeonSystem: generation failed for dungeon level '{proto.ID}'.");
+            return result;
+        }
+
+        _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
+
+        Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
+        return result;
     }
 }

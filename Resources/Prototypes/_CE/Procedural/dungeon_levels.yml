@@ -1,0 +1,16 @@
+# Example dungeon level prototypes using the CEDungeonSystem generator configs.
+
+# A static dungeon level that loads a pre-made map file as-is.
+- type: dungeonLevel
+  id: CEDungeonTestStatic
+  name: Test Static Dungeon
+  config:
+    !type:CEStaticMapConfig
+    mapPath: /Maps/_CE/Dev/Dev0.yml
+# A multi-z-level dungeon that creates a z-network from a zMap prototype.
+- type: dungeonLevel
+  id: CEDungeonTestZNetwork
+  name: Test ZNetwork Dungeon
+  config:
+    !type:CEStaticZNetworkConfig
+    zMapProto: Atlas
