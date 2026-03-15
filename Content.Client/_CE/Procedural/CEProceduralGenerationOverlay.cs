@@ -43,10 +43,18 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);
 
+    /// <summary>
+    /// Base font size at zoom level 1. Scales proportionally with camera zoom.
+    /// </summary>
+    private const int BaseFontSize = 12;
+
+    private readonly FontResource _fontResource;
+
     public CEProceduralGenerationOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _font = new VectorFont(_cache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 12);
+        _fontResource = _cache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf");
+        _font = new VectorFont(_fontResource, BaseFontSize);
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -123,6 +131,14 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         if (viewport == null)
             return;
 
+        // Scale font size with camera zoom so labels grow/shrink proportionally.
+        var zoom = args.Viewport.Eye?.Zoom ?? Vector2.One;
+        var zoomFactor = Math.Max(zoom.X, zoom.Y);
+        var scaledSize = Math.Max(6, (int)(BaseFontSize / zoomFactor));
+        var font = scaledSize == BaseFontSize
+            ? _font
+            : new VectorFont(_fontResource, scaledSize);
+
         foreach (var room in comp.Rooms)
         {
             var worldCenter = new Vector2(
@@ -138,7 +154,7 @@ public sealed class CEProceduralGenerationOverlay : Overlay
                         $"proto: {room.RoomProtoId ?? "none"}\n" +
                         $"rot: {Math.Round(room.Rotation.Theta * 180 / Math.PI)}°";
 
-            handle.DrawString(_font, screenPos, label);
+            handle.DrawString(font, screenPos, label);
         }
     }
 }
