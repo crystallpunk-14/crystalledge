@@ -69,6 +69,13 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     /// </summary>
     [DataField]
     public float CorridorWander = 3f;
+
+    /// <summary>
+    /// Entity prototype spawned as a wall around the perimeter of all rooms and corridors.
+    /// Placed on every z-level at positions adjacent (including diagonals) to reserved tiles.
+    /// </summary>
+    [DataField]
+    public EntProtoId WallPrototype = "CEWallStoneBrick";
 }
 
 [DataDefinition]
@@ -211,12 +218,63 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         // Build corridors between connected rooms.
         BuildCorridors(comp, config, corridorGridUid, corridorGrid, rng, _reservedTiles);
 
+        // Place walls around the perimeter of all rooms and corridors on every z-level.
+        PlaceWalls(config, mapUid, mapsByDepth, _reservedTiles);
+
         Dirty(mapUid, comp);
 
         // Report results.
         args.MapUid = mapUid;
         args.MapId = mapId;
         args.Handled = true;
+    }
+
+    /// <summary>
+    /// 8-directional offsets (cardinals + diagonals) for perimeter detection.
+    /// </summary>
+    private static readonly Vector2i[] AllNeighbors =
+    [
+        new(1, 0), new(-1, 0), new(0, 1), new(0, -1),
+        new(1, 1), new(1, -1), new(-1, 1), new(-1, -1),
+    ];
+
+    /// <summary>
+    /// Places wall entities around the perimeter of all reserved (occupied) tiles.
+    /// A wall is placed at every neighbouring position (8-directional, including diagonals)
+    /// that is not itself a reserved tile. Walls are spawned on every z-level in the network.
+    /// </summary>
+    private void PlaceWalls(
+        CEProceduralConfig config,
+        EntityUid baseMapUid,
+        Dictionary<EntityUid, int> mapsByDepth,
+        HashSet<Vector2i> reservedTiles)
+    {
+        // Compute wall positions: neighbours of reserved tiles that are not occupied.
+        var wallPositions = new HashSet<Vector2i>();
+
+        foreach (var tile in reservedTiles)
+        {
+            foreach (var offset in AllNeighbors)
+            {
+                var neighbor = tile + offset;
+                if (!reservedTiles.Contains(neighbor))
+                    wallPositions.Add(neighbor);
+            }
+        }
+
+        if (wallPositions.Count == 0)
+            return;
+
+        // Spawn walls on every z-level.
+        foreach (var (levelMapUid, _) in mapsByDepth)
+        {
+            foreach (var pos in wallPositions)
+            {
+                // Tile center = (tileX + 0.5, tileY + 0.5).
+                var worldPos = new Vector2(pos.X + 0.5f, pos.Y + 0.5f);
+                Spawn(config.WallPrototype, new EntityCoordinates(levelMapUid, worldPos));
+            }
+        }
     }
 
     /// <summary>

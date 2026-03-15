@@ -22,6 +22,11 @@
   config:
     !type:CEProceduralConfig
     maxRoomSize: 16
+    components:
+    - type: MapLight
+      ambientLightColor: "#222929"
+    - type: Gravity
+      enabled: true
     generalRooms:
       whitelist:
         requireAll: true
@@ -30,7 +35,7 @@
         - CEDunGenRoomGeneral
       roomCount:
         min: 25
-        max: 30
+        max: 300
     exitRoom:
       whitelist:
         requireAll: true
