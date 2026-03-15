@@ -1,6 +1,5 @@
 using System.Numerics;
 using Content.Shared._CE.Procedural;
-using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Enums;
@@ -20,27 +19,27 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 
     private readonly Font _font;
 
-    private static readonly Color[] RoomColors =
-    [
-        Color.Red.WithAlpha(0.08f),
-        Color.Blue.WithAlpha(0.08f),
-        Color.Green.WithAlpha(0.08f),
-        Color.Yellow.WithAlpha(0.08f),
-        Color.Cyan.WithAlpha(0.08f),
-        Color.Magenta.WithAlpha(0.08f),
-        Color.Orange.WithAlpha(0.08f),
-    ];
+    /// <summary>
+    /// Fill colours keyed by room type.
+    /// </summary>
+    private static readonly Dictionary<CEProceduralRoomType, Color> TypeFillColors = new()
+    {
+        { CEProceduralRoomType.General,   Color.Gray.WithAlpha(0.08f) },
+        { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.12f) },
+        { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.12f) },
+        { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.12f) },
+    };
 
-    private static readonly Color[] RoomBorderColors =
-    [
-        Color.Red.WithAlpha(0.8f),
-        Color.Blue.WithAlpha(0.8f),
-        Color.Green.WithAlpha(0.8f),
-        Color.Yellow.WithAlpha(0.8f),
-        Color.Cyan.WithAlpha(0.8f),
-        Color.Magenta.WithAlpha(0.8f),
-        Color.Orange.WithAlpha(0.8f),
-    ];
+    /// <summary>
+    /// Border colours keyed by room type.
+    /// </summary>
+    private static readonly Dictionary<CEProceduralRoomType, Color> TypeBorderColors = new()
+    {
+        { CEProceduralRoomType.General,   Color.Gray.WithAlpha(0.8f) },
+        { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.8f) },
+        { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.8f) },
+        { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.8f) },
+    };
 
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);
 
@@ -52,17 +51,16 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        var query = _entMan.EntityQueryEnumerator<CEGeneratingProceduralDungeonComponent>();
-        while (query.MoveNext(out _, out var comp))
-        {
-            if (comp.Rooms.Count == 0)
-                continue;
+        if (!_entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(args.MapUid, out var dun))
+            return;
 
-            if (args.Space == OverlaySpace.WorldSpace)
-                DrawWorld(in args, comp);
-            else if (args.Space == OverlaySpace.ScreenSpace)
-                DrawScreen(in args, comp);
-        }
+        if (dun.Rooms.Count == 0)
+            return;
+
+        if (args.Space == OverlaySpace.WorldSpace)
+            DrawWorld(in args, dun);
+        else if (args.Space == OverlaySpace.ScreenSpace)
+            DrawScreen(in args, dun);
     }
 
     private void DrawWorld(in OverlayDrawArgs args, CEGeneratingProceduralDungeonComponent comp)
@@ -73,9 +71,8 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         for (var i = 0; i < comp.Rooms.Count; i++)
         {
             var room = comp.Rooms[i];
-            var colorIdx = i % RoomColors.Length;
-            var fillColor = RoomColors[colorIdx];
-            var borderColor = RoomBorderColors[colorIdx];
+            var fillColor = TypeFillColors.GetValueOrDefault(room.RoomType, Color.Gray.WithAlpha(0.08f));
+            var borderColor = TypeBorderColors.GetValueOrDefault(room.RoomType, Color.Gray.WithAlpha(0.8f));
 
             var box = new Box2(
                 room.Position.X,
@@ -134,7 +131,7 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 
             var screenPos = viewport.WorldToScreen(worldCenter);
 
-            var label = $"#{room.Index}\n" +
+            var label = $"#{room.Index} [{room.RoomType}]\n" +
                         $"grid: {room.GridCoord}\n" +
                         $"pos: {room.Position}\n" +
                         $"size: {room.Size.X}x{room.Size.Y}\n" +

@@ -23,6 +23,24 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
 
     [DataField]
     public CEProceduralRoomPack GeneralRooms = new();
+
+    /// <summary>
+    /// Pack used for the exit room (placed at grid origin).
+    /// </summary>
+    [DataField]
+    public CEProceduralRoomPack ExitRoom = new();
+
+    /// <summary>
+    /// Pack used for entrance rooms (dead-ends, maximally far apart).
+    /// </summary>
+    [DataField]
+    public CEProceduralRoomPack EntranceRooms = new();
+
+    /// <summary>
+    /// Pack used for blessing/treasure rooms (dead-ends, maximally far apart).
+    /// </summary>
+    [DataField]
+    public CEProceduralRoomPack BlessingRooms = new();
 }
 
 [DataDefinition]
@@ -84,6 +102,9 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         var comp = AddComp<CEGeneratingProceduralDungeonComponent>(mapUid);
 
         BuildRoomGraph(comp, config.MaxRoomSize, targetCount);
+
+        // Assign room types before selecting real prototypes.
+        AssignRoomTypes(comp, config);
 
         // Assign real room prototypes, apply rotation, resize and randomize position.
         AssignRealRooms(comp, config);
@@ -166,6 +187,7 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
     /// For each abstract room, selects a random real <see cref="CEDungeonRoom3DPrototype"/>
     /// that fits within MaxRoomSize, chooses a rotation, shrinks the abstract room to the
     /// real room's size, and randomizes its position within the original grid cell.
+    /// Uses the whitelist from the room's type-specific pack.
     /// </summary>
     private void AssignRealRooms(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config)
     {
@@ -178,15 +200,18 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         {
             var room = comp.Rooms[i];
 
+            // Pick the whitelist based on the room's assigned type.
+            var pack = GetPackForType(config, room.RoomType);
+
             // Select a random room prototype that fits within MaxRoomSize.
             var roomProto = _dungeon.GetRoomPrototype(
                 random,
-                config.GeneralRooms.Whitelist,
+                pack.Whitelist,
                 maxSize: maxSizeVec);
 
             if (roomProto == null)
             {
-                Log.Warning($"CEProceduralGeneratorSystem: no matching room prototype found for abstract room #{i}.");
+                Log.Warning($"CEProceduralGeneratorSystem: no matching room prototype found for abstract room #{i} (type={room.RoomType}).");
                 continue;
             }
 
@@ -218,6 +243,130 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             var offsetY = slack.Y > 0 ? random.Next(slack.Y + 1) : 0;
 
             room.Position = new Vector2i(cellOrigin.X + offsetX, cellOrigin.Y + offsetY);
+        }
+    }
+
+    /// <summary>
+    /// Returns the <see cref="CEProceduralRoomPack"/> matching the given room type.
+    /// </summary>
+    private static CEProceduralRoomPack GetPackForType(CEProceduralConfig config, CEProceduralRoomType type)
+    {
+        return type switch
+        {
+            CEProceduralRoomType.Exit => config.ExitRoom,
+            CEProceduralRoomType.Entrance => config.EntranceRooms,
+            CEProceduralRoomType.Blessing => config.BlessingRooms,
+            _ => config.GeneralRooms,
+        };
+    }
+
+    /// <summary>
+    /// Assigns special room types after the graph is built.
+    /// <list type="bullet">
+    ///   <item>Exit: room at grid (0,0).</item>
+    ///   <item>Entrances: dead-ends (1 connection), picked maximally far apart.</item>
+    ///   <item>Blessings: remaining dead-ends, picked maximally far apart.</item>
+    ///   <item>All other rooms remain General.</item>
+    /// </list>
+    /// </summary>
+    private void AssignRoomTypes(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config)
+    {
+        // Count connections per room.
+        var connectionCount = new Dictionary<int, int>();
+        foreach (var conn in comp.Connections)
+        {
+            connectionCount[conn.RoomA] = connectionCount.GetValueOrDefault(conn.RoomA) + 1;
+            connectionCount[conn.RoomB] = connectionCount.GetValueOrDefault(conn.RoomB) + 1;
+        }
+
+        // 1. Exit at (0, 0).
+        foreach (var room in comp.Rooms)
+        {
+            if (room.GridCoord == Vector2i.Zero)
+            {
+                room.RoomType = CEProceduralRoomType.Exit;
+                break;
+            }
+        }
+
+        // Collect dead-ends (rooms with exactly 1 connection), excluding the exit.
+        var deadEnds = new List<CEProceduralAbstractRoom>();
+        foreach (var room in comp.Rooms)
+        {
+            if (room.RoomType != CEProceduralRoomType.General)
+                continue;
+
+            if (connectionCount.GetValueOrDefault(room.Index) == 1)
+                deadEnds.Add(room);
+        }
+
+        // 2. Entrances: pick from dead-ends, maximally far apart.
+        var entranceCount = _random.Next(
+            config.EntranceRooms.RoomCount.Min,
+            config.EntranceRooms.RoomCount.Max + 1);
+        PickFarApart(deadEnds, CEProceduralRoomType.Entrance, entranceCount);
+
+        // Remove assigned rooms from dead-end pool.
+        deadEnds.RemoveAll(r => r.RoomType != CEProceduralRoomType.General);
+
+        // 3. Blessings: pick from remaining dead-ends, maximally far apart.
+        var blessingCount = _random.Next(
+            config.BlessingRooms.RoomCount.Min,
+            config.BlessingRooms.RoomCount.Max + 1);
+        PickFarApart(deadEnds, CEProceduralRoomType.Blessing, blessingCount);
+    }
+
+    /// <summary>
+    /// Greedily picks rooms from <paramref name="candidates"/> that are maximally far apart
+    /// from already-picked rooms and assigns them the given <paramref name="type"/>.
+    /// Uses grid-coordinate Manhattan distance.
+    /// </summary>
+    private static void PickFarApart(
+        List<CEProceduralAbstractRoom> candidates,
+        CEProceduralRoomType type,
+        int count)
+    {
+        if (count <= 0 || candidates.Count == 0)
+            return;
+
+        var picked = new List<CEProceduralAbstractRoom>();
+
+        for (var n = 0; n < count && candidates.Count > 0; n++)
+        {
+            CEProceduralAbstractRoom? best = null;
+            var bestMinDist = -1;
+
+            foreach (var candidate in candidates)
+            {
+                if (candidate.RoomType != CEProceduralRoomType.General)
+                    continue;
+
+                // Minimum Manhattan distance to all already picked rooms.
+                var minDist = int.MaxValue;
+                foreach (var p in picked)
+                {
+                    var dist = Math.Abs(candidate.GridCoord.X - p.GridCoord.X)
+                               + Math.Abs(candidate.GridCoord.Y - p.GridCoord.Y);
+                    if (dist < minDist)
+                        minDist = dist;
+                }
+
+                // First pick: use MaxValue so any candidate wins.
+                if (picked.Count == 0)
+                    minDist = int.MaxValue;
+
+                if (minDist > bestMinDist)
+                {
+                    bestMinDist = minDist;
+                    best = candidate;
+                }
+            }
+
+            if (best == null)
+                break;
+
+            best.RoomType = type;
+            picked.Add(best);
         }
     }
 }

@@ -73,6 +73,27 @@ public sealed partial class CEProceduralAbstractRoom
     /// </summary>
     [DataField]
     public Angle Rotation;
+
+    /// <summary>
+    /// The type/role of this room in the dungeon.
+    /// </summary>
+    [DataField]
+    public CEProceduralRoomType RoomType = CEProceduralRoomType.General;
+}
+
+/// <summary>
+/// The functional role of an abstract room in the procedural dungeon.
+/// </summary>
+public enum CEProceduralRoomType : byte
+{
+    /// <summary>Normal room.</summary>
+    General,
+    /// <summary>Dungeon exit (placed at 0,0).</summary>
+    Exit,
+    /// <summary>Dungeon entrance (dead-end, far from others).</summary>
+    Entrance,
+    /// <summary>Blessing/treasure room (dead-end, far from others).</summary>
+    Blessing,
 }
 
 /// <summary>
