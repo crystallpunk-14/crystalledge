@@ -181,7 +181,9 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         MapGridComponent grid,
         Random random)
     {
-        HashSet<Vector2i>? reservedTiles = null;
+        // Track all placed tiles to prevent overlapping writes that trigger
+        // duplicate-key errors in downstream event handlers (e.g. ExplosionSystem).
+        var reservedTiles = new HashSet<Vector2i>();
 
         foreach (var room in comp.Rooms)
         {
@@ -194,14 +196,39 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
                 continue;
             }
 
-            // Build the transform: translate to room position, then apply rotation around room centre.
-            var originTransform = Matrix3Helpers.CreateTranslation(room.Position.X, room.Position.Y);
+            // Build the transform: translate to the unrotated room origin, then rotate.
+            // room.Position is the top-left of the EFFECTIVE (rotated) bounding box.
+            // The transform expects the top-left of the UNROTATED prototype.
+            // Both share the same center:
+            //   room.Position + effectiveSize/2 == unrotatedOrigin + protoSize/2
+            var center = new Vector2(
+                room.Position.X + room.Size.X / 2f,
+                room.Position.Y + room.Size.Y / 2f);
+            var unrotatedOrigin = center - (Vector2)roomProto.Size / 2f;
+
+            var originTransform = Matrix3Helpers.CreateTranslation(unrotatedOrigin.X, unrotatedOrigin.Y);
             var roomTransform = Matrix3Helpers.CreateTransform((Vector2)roomProto.Size / 2f, room.Rotation);
             var finalTransform = Matrix3x2.Multiply(roomTransform, originTransform);
 
             if (!_dungeon.TrySpawn3DRoom(gridUid, grid, finalTransform, roomProto, reservedTiles))
             {
                 Log.Warning($"CEProceduralGeneratorSystem: failed to spawn room {room.Index} (proto '{room.RoomProtoId}').");
+                continue;
+            }
+
+            // After the room is fully spawned, mark its tile positions as reserved
+            // so future rooms don't overwrite them.
+            var roomCenter = (roomProto.Offset + roomProto.Size / 2f) * grid.TileSize;
+            var tileOffset = -roomCenter + grid.TileSizeHalfVector;
+
+            for (var x = 0; x < roomProto.Size.X; x++)
+            {
+                for (var y = 0; y < roomProto.Size.Y; y++)
+                {
+                    var indices = new Vector2i(x + roomProto.Offset.X, y + roomProto.Offset.Y);
+                    var tilePos = Vector2.Transform(indices + tileOffset, finalTransform);
+                    reservedTiles.Add(tilePos.Floored());
+                }
             }
         }
     }
@@ -274,7 +301,8 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
 
     /// <summary>
     /// For each abstract room, selects a random real <see cref="CEDungeonRoom3DPrototype"/>
-    /// that fits within MaxRoomSize, chooses a rotation, shrinks the abstract room to the
+    /// that fits within MaxRoomSize, chooses a rotation that satisfies the required exit
+    /// directions (based on neighbour connections), shrinks the abstract room to the
     /// real room's size, and randomizes its position within the original grid cell.
     /// Uses the whitelist from the room's type-specific pack.
     /// </summary>
@@ -285,6 +313,16 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         var random = new Random(_random.Next());
         var maxSizeVec = new Vector2i(maxSize, maxSize);
 
+        // Ensure the passway cache is built before we start checking exits.
+        _dungeon.EnsureRoomPasswayCache();
+
+        // Build a map of required exit directions per room index.
+        // For each room, the required exits are the directions toward its graph neighbours.
+        var requiredExits = BuildRequiredExitsMap(comp);
+
+        // Candidate rotations (0°, 90°, 180°, 270°).
+        var candidateRotations = new[] { Angle.Zero, new Angle(Math.PI / 2), new Angle(Math.PI), new Angle(3 * Math.PI / 2) };
+
         for (var i = 0; i < comp.Rooms.Count; i++)
         {
             var room = comp.Rooms[i];
@@ -292,11 +330,52 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             // Pick the whitelist based on the room's assigned type.
             var pack = GetPackForType(config, room.RoomType);
 
-            // Select a random room prototype that fits within MaxRoomSize.
-            var roomProto = _dungeon.GetRoomPrototype(
-                random,
-                pack.Whitelist,
-                maxSize: maxSizeVec);
+            // Determine required exit directions for this room.
+            var required = requiredExits.GetValueOrDefault(room.Index) ?? new HashSet<Direction>();
+
+            // Try multiple times to find a valid prototype + rotation combo.
+            const int maxAttempts = 50;
+            CEDungeonRoom3DPrototype? roomProto = null;
+            var chosenRotation = Angle.Zero;
+            var found = false;
+
+            for (var attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                var candidate = _dungeon.GetRoomPrototype(
+                    random,
+                    pack.Whitelist,
+                    maxSize: maxSizeVec);
+
+                if (candidate == null)
+                    break;
+
+                // If no exits are required (isolated room), accept any room.
+                if (required.Count == 0)
+                {
+                    roomProto = candidate;
+                    chosenRotation = _dungeon.GetRoomRotation(candidate, random);
+                    found = true;
+                    break;
+                }
+
+                // Try each of the 4 cardinal rotations to see if one satisfies all required exits.
+                // Shuffle the order so results are not biased toward 0°.
+                ShuffleArray(candidateRotations, random);
+
+                foreach (var rot in candidateRotations)
+                {
+                    if (_dungeon.HasRequiredExits(candidate.ID, rot, required))
+                    {
+                        roomProto = candidate;
+                        chosenRotation = rot;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found)
+                    break;
+            }
 
             if (roomProto == null)
             {
@@ -305,9 +384,7 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             }
 
             room.RoomProtoId = roomProto.ID;
-
-            // Choose a random rotation.
-            room.Rotation = _dungeon.GetRoomRotation(roomProto, random);
+            room.Rotation = chosenRotation;
 
             // Calculate effective size after rotation.
             // 90 / 270 degrees swap width and height.
@@ -332,6 +409,80 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             var offsetY = slack.Y > 0 ? random.Next(slack.Y + 1) : 0;
 
             room.Position = new Vector2i(cellOrigin.X + offsetX, cellOrigin.Y + offsetY);
+        }
+    }
+
+    /// <summary>
+    /// Builds a map from room index to the set of cardinal directions where the room
+    /// must have exits (toward its graph neighbours).
+    /// </summary>
+    private static Dictionary<int, HashSet<Direction>> BuildRequiredExitsMap(
+        CEGeneratingProceduralDungeonComponent comp)
+    {
+        // Index rooms by their index for GridCoord lookup.
+        var roomByIndex = new Dictionary<int, CEProceduralAbstractRoom>();
+        foreach (var room in comp.Rooms)
+            roomByIndex[room.Index] = room;
+
+        var result = new Dictionary<int, HashSet<Direction>>();
+
+        foreach (var conn in comp.Connections)
+        {
+            if (!roomByIndex.TryGetValue(conn.RoomA, out var roomA) ||
+                !roomByIndex.TryGetValue(conn.RoomB, out var roomB))
+                continue;
+
+            var dirAtoB = GridCoordToDirection(roomB.GridCoord - roomA.GridCoord);
+            var dirBtoA = GridCoordToDirection(roomA.GridCoord - roomB.GridCoord);
+
+            if (dirAtoB != Direction.Invalid)
+            {
+                if (!result.TryGetValue(conn.RoomA, out var setA))
+                {
+                    setA = new HashSet<Direction>();
+                    result[conn.RoomA] = setA;
+                }
+                setA.Add(dirAtoB);
+            }
+
+            if (dirBtoA != Direction.Invalid)
+            {
+                if (!result.TryGetValue(conn.RoomB, out var setB))
+                {
+                    setB = new HashSet<Direction>();
+                    result[conn.RoomB] = setB;
+                }
+                setB.Add(dirBtoA);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Converts a grid-coordinate delta (adjacent cell) to a cardinal direction.
+    /// </summary>
+    private static Direction GridCoordToDirection(Vector2i delta)
+    {
+        return delta switch
+        {
+            { X: > 0 } => Direction.East,
+            { X: < 0 } => Direction.West,
+            { Y: > 0 } => Direction.North,
+            { Y: < 0 } => Direction.South,
+            _ => Direction.Invalid,
+        };
+    }
+
+    /// <summary>
+    /// Fisher–Yates shuffle for a small array.
+    /// </summary>
+    private static void ShuffleArray<T>(T[] array, Random random)
+    {
+        for (var i = array.Length - 1; i > 0; i--)
+        {
+            var j = random.Next(i + 1);
+            (array[i], array[j]) = (array[j], array[i]);
         }
     }
 

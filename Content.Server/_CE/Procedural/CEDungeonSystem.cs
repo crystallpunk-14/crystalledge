@@ -2,6 +2,7 @@ using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.Decals;
+using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -39,6 +40,14 @@ public sealed partial class CEDungeonSystem : EntitySystem
         _xformQuery = GetEntityQuery<TransformComponent>();
 
         InitializeRooms();
+
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+    }
+
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        if (args.WasModified<CEDungeonRoom3DPrototype>())
+            InvalidateRoomPasswayCache();
     }
 
     /// <summary>

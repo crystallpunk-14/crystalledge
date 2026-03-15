@@ -27,6 +27,7 @@
   name: room passway marker
   categories: [ ForkFiltered ]
   components:
+  - type: CERoomPasswayMarker
   - type: PlacementReplacement
     key: CERoomPasswayMarker
   - type: Sprite
