@@ -20,3 +20,10 @@ cmd-dungen-atlas-visualize-error-unknown = Unknown zMap prototype '{ $id }'.
 cmd-dungen-atlas-visualize-enabled = Atlas overlay enabled for '{ $id }'.
 cmd-dungen-atlas-visualize-disabled = Atlas overlay disabled.
 cmd-dungen-atlas-visualize-already-disabled = Atlas overlay is not active.
+
+# Procedural generation visualize overlay command
+cmd-dungen_generation_visualize-desc = Toggles a debug overlay showing the abstract room graph for procedural dungeon generation.
+cmd-dungen_generation_visualize-help = Usage: dungen_generation_visualize
+
+cmd-dungen-generation-visualize-enabled = Procedural generation overlay enabled.
+cmd-dungen-generation-visualize-disabled = Procedural generation overlay disabled.

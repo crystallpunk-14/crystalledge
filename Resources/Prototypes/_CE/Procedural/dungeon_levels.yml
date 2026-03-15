@@ -22,7 +22,9 @@
   config:
     !type:CEProceduralConfig
     generalRooms:
-      size:
-        min: 5
-        max: 15
-      roomCount: 10
+      roomCount:
+        min: 20
+        max: 30
+    entranceCount: 3
+    blessingCount: 3
+    maxRoomSize: 16

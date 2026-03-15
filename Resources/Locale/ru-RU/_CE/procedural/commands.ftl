@@ -20,3 +20,10 @@ cmd-dungen-atlas-visualize-error-unknown = Неизвестный прототи
 cmd-dungen-atlas-visualize-enabled = Оверлей атласа включён для '{ $id }'.
 cmd-dungen-atlas-visualize-disabled = Оверлей атласа отключён.
 cmd-dungen-atlas-visualize-already-disabled = Оверлей атласа не активен.
+
+# Команда визуализации процедурной генерации
+cmd-dungen_generation_visualize-desc = Переключает отладочный оверлей, показывающий абстрактный граф комнат процедурной генерации.
+cmd-dungen_generation_visualize-help = Использование: dungen_generation_visualize
+
+cmd-dungen-generation-visualize-enabled = Оверлей процедурной генерации включён.
+cmd-dungen-generation-visualize-disabled = Оверлей процедурной генерации отключён.

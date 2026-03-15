@@ -1,0 +1,18 @@
+# Dungeon zones
+
+- type: tag
+  id: CEDunGenZoneTest
+
+# Dungeon room types
+
+- type: tag
+  id: CEDunGenRoomGeneral
+
+- type: tag
+  id: CEDunGenRoomEntrance
+
+- type: tag
+  id: CEDunGenRoomExit
+
+- type: tag
+  id: CEDunGenRoomBlessing

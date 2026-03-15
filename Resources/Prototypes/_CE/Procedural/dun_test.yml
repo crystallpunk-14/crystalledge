@@ -28,6 +28,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom1
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 7, 7
   height: 2
   zLevelMap: DunTest
@@ -36,6 +39,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom2
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 11, 7
   height: 2
   zLevelMap: DunTest
@@ -44,6 +50,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom3
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 15, 9
   height: 2
   zLevelMap: DunTest
@@ -52,6 +61,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom4
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 7, 7
   height: 2
   zLevelMap: DunTest
@@ -60,6 +72,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom5
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 7, 7
   height: 2
   zLevelMap: DunTest
@@ -68,6 +83,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom6
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 7, 10
   height: 2
   zLevelMap: DunTest
@@ -76,6 +94,9 @@
 
 - type: dungeonRoom3d
   id: TestRoom7
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 11, 10
   height: 2
   zLevelMap: DunTest
@@ -84,8 +105,46 @@
 
 - type: dungeonRoom3d
   id: TestRoom8
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
   size: 7, 10
   height: 2
   zLevelMap: DunTest
   offset: 20, 8
+  ignoreTile: CEDirt
+
+### Blessings
+
+- type: dungeonRoom3d
+  id: TestBlessingRoom1
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomBlessing
+  size: 5, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: -18, 0
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestBlessingRoom2
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomBlessing
+  size: 9, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: -12, 0
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestBlessingRoom3
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomBlessing
+  size: 5, 5
+  height: 2
+  zLevelMap: DunTest
+  offset: -10, -6
   ignoreTile: CEDirt
