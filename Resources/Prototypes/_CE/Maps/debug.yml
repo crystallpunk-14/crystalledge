@@ -62,7 +62,6 @@
   - /Maps/_CE/Empty.yml
   - /Maps/_CE/Empty.yml
   - /Maps/_CE/Empty.yml
-  - /Maps/_CE/Empty.yml
   components:
     - type: MapAtmosphere
       space: False

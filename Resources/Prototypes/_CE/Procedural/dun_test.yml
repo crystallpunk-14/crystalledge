@@ -1,0 +1,91 @@
+- type: zMap
+  id: DunTest
+  maps:
+  - /Maps/_CE/Dungeon/DunTest/DunTest0.yml
+  - /Maps/_CE/Dungeon/DunTest/DunTest1.yml
+  - /Maps/_CE/Dungeon/DunTest/DunTest2.yml
+  components:
+    - type: MapAtmosphere
+      space: False
+      mixture:
+        volume: 2500
+        immutable: True
+        temperature: 293.15
+        moles:
+          Oxygen: 21.824879
+          Nitrogen: 82.10312
+    #- type: Parallax
+    #  parallax: CESky
+    #- type: SunShadowCycle
+    #  offset: 490
+    #- type: LightCycle
+    #  offset: 490
+    #  originalColor: "#c8fdff"
+    #- type: CEZLevelMapRoof
+    #- type: SunShadow
+    #- type: MapLight
+    #  ambientLightColor: "#c8fdff"
+
+- type: dungeonRoom3d
+  id: TestRoom1
+  size: 7, 7
+  height: 2
+  zLevelMap: DunTest
+  offset: 0, 0
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom2
+  size: 11, 7
+  height: 2
+  zLevelMap: DunTest
+  offset: 8, 0
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom3
+  size: 15, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: 0, -10
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom4
+  size: 7, 7
+  height: 2
+  zLevelMap: DunTest
+  offset: 20, 0
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom5
+  size: 7, 7
+  height: 2
+  zLevelMap: DunTest
+  offset: 28, 0
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom6
+  size: 7, 10
+  height: 2
+  zLevelMap: DunTest
+  offset: 0, 8
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom7
+  size: 11, 10
+  height: 2
+  zLevelMap: DunTest
+  offset: 8, 8
+  ignoreTile: CEDirt
+
+- type: dungeonRoom3d
+  id: TestRoom8
+  size: 7, 10
+  height: 2
+  zLevelMap: DunTest
+  offset: 20, 8
+  ignoreTile: CEDirt
