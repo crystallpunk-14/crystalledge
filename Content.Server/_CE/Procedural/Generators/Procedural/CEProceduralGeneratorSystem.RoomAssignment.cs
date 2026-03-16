@@ -95,7 +95,7 @@ public sealed partial class CEProceduralGeneratorSystem
 
             if (roomProto == null)
             {
-                Log.Warning($"CEProceduralGeneratorSystem: no matching room prototype found for abstract room #{i} (type={room.RoomType}).");
+                Log.Error($"CEProceduralGeneratorSystem: no matching room prototype found for abstract room #{i} (type={room.RoomType}).");
                 continue;
             }
 
