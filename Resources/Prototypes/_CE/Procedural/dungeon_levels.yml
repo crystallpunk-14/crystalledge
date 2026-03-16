@@ -22,6 +22,9 @@
   config:
     !type:CEProceduralConfig
     maxRoomSize: 16
+    cycleCount:
+      min: 3
+      max: 10
     generalCount:
       min: 50
       max: 50

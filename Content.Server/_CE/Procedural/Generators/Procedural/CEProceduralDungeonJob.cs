@@ -76,6 +76,11 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
         _generator.AssignRoomTypes(comp, config);
         await SuspendIfOutOfTime();
 
+        // Add cyclic connections between adjacent General rooms (farthest from center first).
+        var cycleCount = _random.Next(config.CycleCount.Min, config.CycleCount.Max + 1);
+        _generator.AddCyclicConnections(comp, cycleCount, _random);
+        await SuspendIfOutOfTime();
+
         // Assign real room prototypes, apply rotation, resize and randomize position.
         await _generator.AssignRealRooms(comp, config, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();

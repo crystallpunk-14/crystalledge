@@ -4,7 +4,7 @@ meta:
   engineVersion: 272.0.0
   forkId: ""
   forkVersion: ""
-  time: 03/16/2026 18:28:35
+  time: 03/16/2026 22:05:55
   entityCount: 394
 maps:
 - 1
@@ -107,6 +107,10 @@ entities:
         2,2: 63479
         3,2: 1799
         4,0: 282578800084486
+        4,-2: 197379
+        3,-2: 16711422
+        3,-3: 1095199752192
+        4,-3: 12935430144
     - type: TileHistory
       chunkHistory: {}
     - type: ExplosionAirtightGrid

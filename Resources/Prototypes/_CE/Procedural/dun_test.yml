@@ -146,6 +146,26 @@
   zLevelMap: DunTest
   offset: 36, -4
 
+- type: dungeonRoom3d
+  id: TestRoom_DirtPathNice
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
+  size: 13, 8
+  height: 2
+  zLevelMap: DunTest
+  offset: 36, 10
+
+- type: dungeonRoom3d
+  id: TestRoom_TwoBox
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
+  size: 7, 10
+  height: 2
+  zLevelMap: DunTest
+  offset: 28, 8
+
 ### Blessings
 
 - type: dungeonRoom3d

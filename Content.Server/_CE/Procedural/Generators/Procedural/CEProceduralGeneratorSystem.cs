@@ -73,6 +73,14 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     public ComponentRegistry Components = new();
 
     /// <summary>
+    /// Number of extra cyclic connections to add between adjacent General rooms.
+    /// These connections create loops in the dungeon graph, providing alternative routes.
+    /// Pairs of rooms are sorted by distance from center (farthest first).
+    /// </summary>
+    [DataField]
+    public MinMax CycleCount = new(0, 0);
+
+    /// <summary>
     /// How much the corridor A* path is allowed to wander (0 = straight, higher = more winding).
     /// Added as a random cost multiplier to each pathfinding step.
     /// </summary>
@@ -116,6 +124,7 @@ public sealed partial class CEProceduralRoomPack
 ///   <item><c>CEProceduralGeneratorSystem.RoomAssignment.cs</c>  room type and prototype assignment.</item>
 ///   <item><c>CEProceduralGeneratorSystem.Spawning.cs</c>  room spawning and wall placement.</item>
 ///   <item><c>CEProceduralGeneratorSystem.Corridors.cs</c>  corridor pathfinding and placement.</item>
+///   <item><c>CEProceduralGeneratorSystem.Cycles.cs</c>  cyclic route injection.</item>
 ///   <item><c>CEProceduralGeneratorSystem.Compaction.cs</c>  room compaction toward parents.</item>
 /// </list>
 /// </summary>
