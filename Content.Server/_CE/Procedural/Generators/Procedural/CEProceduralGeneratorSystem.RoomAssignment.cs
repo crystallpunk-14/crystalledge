@@ -258,11 +258,11 @@ public sealed partial class CEProceduralGeneratorSystem
                 deadEnds.Add(room);
         }
 
-        // 2. Entrances: pick from dead-ends, maximally far apart.
+        // 2. Entrances: pick dead-ends farthest from center first, then far apart.
         var entranceCount = _random.Next(
             config.EntranceCount.Min,
             config.EntranceCount.Max + 1);
-        PickFarApart(deadEnds, CEProceduralRoomType.Entrance, entranceCount);
+        PickFarFromCenterThenApart(deadEnds, CEProceduralRoomType.Entrance, entranceCount);
 
         // Remove assigned rooms from dead-end pool.
         deadEnds.RemoveAll(r => r.RoomType != CEProceduralRoomType.General);
@@ -325,6 +325,67 @@ public sealed partial class CEProceduralGeneratorSystem
                 if (minDist > bestMinDist)
                 {
                     bestMinDist = minDist;
+                    best = candidate;
+                }
+            }
+
+            if (best == null)
+                break;
+
+            best.RoomType = type;
+            picked.Add(best);
+        }
+    }
+
+    /// <summary>
+    /// Greedily picks rooms that are (1) farthest from the dungeon center (grid origin)
+    /// and (2) as a tiebreaker, farthest from already-picked rooms.
+    /// Uses grid-coordinate Manhattan distance.
+    /// </summary>
+    private static void PickFarFromCenterThenApart(
+        List<CEProceduralAbstractRoom> candidates,
+        CEProceduralRoomType type,
+        int count)
+    {
+        if (count <= 0 || candidates.Count == 0)
+            return;
+
+        var picked = new List<CEProceduralAbstractRoom>();
+
+        for (var n = 0; n < count && candidates.Count > 0; n++)
+        {
+            CEProceduralAbstractRoom? best = null;
+            var bestCenterDist = -1;
+            var bestMinPeerDist = -1;
+
+            foreach (var candidate in candidates)
+            {
+                if (candidate.RoomType != CEProceduralRoomType.General)
+                    continue;
+
+                // Primary: Manhattan distance from the dungeon center (0, 0).
+                var centerDist = Math.Abs(candidate.GridCoord.X) + Math.Abs(candidate.GridCoord.Y);
+
+                // Secondary: minimum Manhattan distance to all already-picked rooms.
+                var minPeerDist = int.MaxValue;
+                foreach (var p in picked)
+                {
+                    var dist = Math.Abs(candidate.GridCoord.X - p.GridCoord.X)
+                               + Math.Abs(candidate.GridCoord.Y - p.GridCoord.Y);
+                    if (dist < minPeerDist)
+                        minPeerDist = dist;
+                }
+
+                // First pick — no peers, so peer distance is irrelevant.
+                if (picked.Count == 0)
+                    minPeerDist = int.MaxValue;
+
+                // Compare: primary wins, secondary is tiebreaker.
+                if (centerDist > bestCenterDist
+                    || (centerDist == bestCenterDist && minPeerDist > bestMinPeerDist))
+                {
+                    bestCenterDist = centerDist;
+                    bestMinPeerDist = minPeerDist;
                     best = candidate;
                 }
             }
