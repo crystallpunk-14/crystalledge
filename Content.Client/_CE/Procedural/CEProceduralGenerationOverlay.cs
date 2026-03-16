@@ -28,6 +28,7 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.12f) },
         { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.12f) },
         { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.12f) },
+        { CEProceduralRoomType.DeadEnd,   Color.Orange.WithAlpha(0.10f) },
     };
 
     /// <summary>
@@ -39,6 +40,7 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.8f) },
         { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.8f) },
         { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.8f) },
+        { CEProceduralRoomType.DeadEnd,   Color.Orange.WithAlpha(0.8f) },
     };
 
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);

@@ -136,6 +136,16 @@
   zLevelMap: DunTest
   offset: 36, -10
 
+- type: dungeonRoom3d
+  id: TestRoom_DirtCrossroad
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
+  size: 13, 13
+  height: 2
+  zLevelMap: DunTest
+  offset: 36, -4
+
 ### Blessings
 
 - type: dungeonRoom3d
@@ -167,3 +177,35 @@
   height: 2
   zLevelMap: DunTest
   offset: -10, -6
+
+# Dead ends
+
+- type: dungeonRoom3d
+  id: TestDeadEndBase1
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomDeadEnd
+  size: 9, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: 0, -22
+
+- type: dungeonRoom3d
+  id: TestDeadEndBase2
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomDeadEnd
+  size: 14, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: 10, -22
+
+- type: dungeonRoom3d
+  id: TestDeadEndBase3
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomDeadEnd
+  size: 9, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: 25, -22

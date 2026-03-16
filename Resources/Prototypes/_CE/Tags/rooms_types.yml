@@ -9,6 +9,9 @@
   id: CEDunGenRoomGeneral
 
 - type: Tag
+  id: CEDunGenRoomDeadEnd
+
+- type: Tag
   id: CEDunGenRoomEntrance
 
 - type: Tag

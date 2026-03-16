@@ -31,6 +31,9 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     [DataField]
     public CEProceduralRoomPack GeneralRooms = new();
 
+    [DataField]
+    public MinMax GeneralCount = new(30, 50);
+
     /// <summary>
     /// Pack used for the exit room (placed at grid origin).
     /// </summary>
@@ -43,11 +46,23 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     [DataField]
     public CEProceduralRoomPack EntranceRooms = new();
 
+    [DataField]
+    public MinMax EntranceCount = new(2, 2);
+
     /// <summary>
     /// Pack used for blessing/treasure rooms (dead-ends, maximally far apart).
     /// </summary>
     [DataField]
     public CEProceduralRoomPack BlessingRooms = new();
+
+    [DataField]
+    public MinMax BlessingCount = new(2, 2);
+
+    /// <summary>
+    /// Pack used for dead-end rooms (remaining dead-ends after entrances and blessings).
+    /// </summary>
+    [DataField]
+    public CEProceduralRoomPack DeadEndRooms = new();
 
     /// <summary>
     /// Shared components applied to every z-level map in the dungeon's z-network
@@ -57,18 +72,17 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     public ComponentRegistry Components = new();
 
     /// <summary>
-    /// Tile prototype used for corridors between rooms.
-    /// Only placed on empty tiles — existing room tiles are never overwritten.
-    /// </summary>
-    [DataField]
-    public ProtoId<ContentTileDefinition> CorridorTile = "CEStone";
-
-    /// <summary>
     /// How much the corridor A* path is allowed to wander (0 = straight, higher = more winding).
     /// Added as a random cost multiplier to each pathfinding step.
     /// </summary>
     [DataField]
     public float CorridorWander = 3f;
+
+    /// <summary>
+    /// Tile prototype used for corridors between rooms.
+    /// </summary>
+    [DataField]
+    public ProtoId<ContentTileDefinition> CorridorTile = "CEStone";
 
     /// <summary>
     /// Entity prototype spawned as a wall around the perimeter of all rooms and corridors.
@@ -86,12 +100,6 @@ public sealed partial class CEProceduralRoomPack
     /// </summary>
     [DataField]
     public EntityWhitelist? Whitelist;
-
-    /// <summary>
-    /// the number of rooms generated in this pack
-    /// </summary>
-    [DataField]
-    public MinMax RoomCount = new(1, 1);
 }
 
 /// <summary>
@@ -125,18 +133,14 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         new(0, -1),
     ];
 
-    /// <summary>
-    /// Maximum number of placement attempts before giving up.
-    /// Prevents infinite loops when the grid is too congested.
-    /// </summary>
-    private const int MaxPlacementAttempts = 1000;
+
 
     protected override void Generate(ref CEDungeonGenerateEvent<CEProceduralConfig> args)
     {
         var config = args.Config;
 
         // Determine how many rooms to generate.
-        var targetCount = _random.Next(config.GeneralRooms.RoomCount.Min, config.GeneralRooms.RoomCount.Max + 1);
+        var targetCount = _random.Next(config.GeneralCount.Min, config.GeneralCount.Max + 1);
         if (targetCount <= 0)
             return;
 
@@ -541,10 +545,27 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
     }
 
     /// <summary>
+    /// Checks whether a room at the given grid coordinate has at least one empty
+    /// cardinal neighbour, i.e. it can still be expanded from.
+    /// </summary>
+    private static bool HasEmptyNeighbor(Vector2i gridCoord, HashSet<Vector2i> occupied)
+    {
+        foreach (var dir in Directions)
+        {
+            if (!occupied.Contains(gridCoord + dir))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Builds the abstract room graph on a logical 2D grid.
     /// Each room occupies exactly one grid cell. The world-tile position is
     /// <c>gridCoord * (maxRoomSize + 1)</c>, where the +1 accounts for
     /// a 1-tile gap between adjacent rooms.
+    /// Uses a cached frontier (rooms with at least one free neighbour) so that
+    /// every iteration is guaranteed to make progress — no wasted attempts.
     /// </summary>
     private void BuildRoomGraph(
         CEGeneratingProceduralDungeonComponent comp,
@@ -557,6 +578,10 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         // Set of occupied logical grid cells for O(1) overlap checks.
         var occupied = new HashSet<Vector2i>();
 
+        // Frontier: list of room indices whose grid cell still has >= 1 free cardinal neighbour.
+        // We pick parents exclusively from this set, guaranteeing a valid expansion exists.
+        var frontier = new List<int>();
+
         // Place the first room at grid (0, 0).
         var firstRoom = new CEProceduralAbstractRoom
         {
@@ -567,24 +592,26 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         };
         comp.Rooms.Add(firstRoom);
         occupied.Add(Vector2i.Zero);
+        frontier.Add(0);
 
-        var attempts = 0;
-
-        while (comp.Rooms.Count < targetCount && attempts < MaxPlacementAttempts)
+        while (comp.Rooms.Count < targetCount && frontier.Count > 0)
         {
-            attempts++;
+            // Pick a random frontier room to branch from.
+            var frontierIdx = _random.Next(frontier.Count);
+            var parentRoomIdx = frontier[frontierIdx];
+            var parent = comp.Rooms[parentRoomIdx];
 
-            // Pick a random existing room to branch from.
-            var parentIdx = _random.Next(comp.Rooms.Count);
-            var parent = comp.Rooms[parentIdx];
+            // Collect free cardinal neighbours for this parent.
+            var freeDirections = new List<Vector2i>();
+            foreach (var dir in Directions)
+            {
+                if (!occupied.Contains(parent.GridCoord + dir))
+                    freeDirections.Add(dir);
+            }
 
-            // Pick a random cardinal direction.
-            var dir = _random.Pick(Directions);
-            var newGridCoord = parent.GridCoord + dir;
-
-            // Check if spot is already taken.
-            if (occupied.Contains(newGridCoord))
-                continue;
+            // Pick a random free direction.
+            var chosenDir = _random.Pick(freeDirections);
+            var newGridCoord = parent.GridCoord + chosenDir;
 
             // Place the new room.
             var newRoom = new CEProceduralAbstractRoom
@@ -600,9 +627,51 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             // Add a connection between parent and new room.
             comp.Connections.Add(new CEProceduralRoomConnection
             {
-                RoomA = parentIdx,
+                RoomA = parentRoomIdx,
                 RoomB = newRoom.Index,
             });
+
+            // Add the new room to the frontier (it has at least 1 free neighbour –
+            // the direction we came from is occupied, but the other 3 are likely free).
+            if (HasEmptyNeighbor(newGridCoord, occupied))
+                frontier.Add(newRoom.Index);
+
+            // The parent may no longer belong to the frontier if all its
+            // neighbours are now occupied.
+            if (!HasEmptyNeighbor(parent.GridCoord, occupied))
+            {
+                // Swap-remove for O(1) removal from the frontier list.
+                frontier[frontierIdx] = frontier[^1];
+                frontier.RemoveAt(frontier.Count - 1);
+            }
+
+            // The newly placed room may also have blocked a previously-frontier
+            // neighbour. Check the 4 neighbours of the new grid coord and evict
+            // any that are no longer expandable.
+            foreach (var dir in Directions)
+            {
+                var neighborCoord = newGridCoord + dir;
+                if (neighborCoord == parent.GridCoord)
+                    continue; // Already handled above.
+
+                if (!occupied.Contains(neighborCoord))
+                    continue; // Not a room.
+
+                if (HasEmptyNeighbor(neighborCoord, occupied))
+                    continue; // Still has room to expand.
+
+                // Find this neighbour in the frontier and evict it.
+                // Rooms are indexed by their Index field; find by grid coord.
+                for (var fi = frontier.Count - 1; fi >= 0; fi--)
+                {
+                    if (comp.Rooms[frontier[fi]].GridCoord == neighborCoord)
+                    {
+                        frontier[fi] = frontier[^1];
+                        frontier.RemoveAt(frontier.Count - 1);
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -803,6 +872,7 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             CEProceduralRoomType.Exit => config.ExitRoom,
             CEProceduralRoomType.Entrance => config.EntranceRooms,
             CEProceduralRoomType.Blessing => config.BlessingRooms,
+            CEProceduralRoomType.DeadEnd => config.DeadEndRooms,
             _ => config.GeneralRooms,
         };
     }
@@ -849,8 +919,8 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
 
         // 2. Entrances: pick from dead-ends, maximally far apart.
         var entranceCount = _random.Next(
-            config.EntranceRooms.RoomCount.Min,
-            config.EntranceRooms.RoomCount.Max + 1);
+            config.EntranceCount.Min,
+            config.EntranceCount.Max + 1);
         PickFarApart(deadEnds, CEProceduralRoomType.Entrance, entranceCount);
 
         // Remove assigned rooms from dead-end pool.
@@ -858,9 +928,18 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
 
         // 3. Blessings: pick from remaining dead-ends, maximally far apart.
         var blessingCount = _random.Next(
-            config.BlessingRooms.RoomCount.Min,
-            config.BlessingRooms.RoomCount.Max + 1);
+            config.BlessingCount.Min,
+            config.BlessingCount.Max + 1);
         PickFarApart(deadEnds, CEProceduralRoomType.Blessing, blessingCount);
+
+        // Remove assigned rooms from dead-end pool.
+        deadEnds.RemoveAll(r => r.RoomType != CEProceduralRoomType.General);
+
+        // 4. Dead-ends: all remaining dead-end rooms get the DeadEnd type.
+        foreach (var room in deadEnds)
+        {
+            room.RoomType = CEProceduralRoomType.DeadEnd;
+        }
     }
 
     /// <summary>

@@ -22,9 +22,12 @@
   config:
     !type:CEProceduralConfig
     maxRoomSize: 16
+    generalCount:
+      min: 30
+      max: 30
     components:
     - type: MapLight
-      ambientLightColor: "#222929"
+      ambientLightColor: "#3d4444"
     - type: Gravity
       enabled: true
     generalRooms:
@@ -33,33 +36,27 @@
         tags:
         - CEDunGenZoneTest
         - CEDunGenRoomGeneral
-      roomCount:
-        min: 25
-        max: 300
     exitRoom:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenZoneTest
         - CEDunGenRoomExit
-      roomCount:
-        min: 1
-        max: 1
     entranceRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenZoneTest
         - CEDunGenRoomEntrance
-      roomCount:
-        min: 2
-        max: 3
     blessingRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenZoneTest
         - CEDunGenRoomBlessing
-      roomCount:
-        min: 1
-        max: 3
+    deadEndRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenZoneTest
+        - CEDunGenRoomDeadEnd
