@@ -1,3 +1,5 @@
+using System.Threading;
+using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.Map;
 
 namespace Content.Server._CE.Procedural.Generators;
@@ -5,20 +7,24 @@ namespace Content.Server._CE.Procedural.Generators;
 /// <summary>
 /// Abstract base for all dungeon generator configurations.
 /// Concrete configs define data for a specific generation strategy (static map, procedural, etc.)
-/// and raise typed events so the matching <see cref="CEDungeonGeneratorSystem{TConfig}"/> can handle them.
+/// and raise typed events so the matching <see cref="CEDungeonGeneratorSystem{TConfig}"/> can
+/// create a <see cref="Job{T}"/> for cooperative execution.
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
 public abstract partial class CEDungeonGeneratorConfig
 {
     /// <summary>
-    /// Raises a <see cref="CEDungeonGenerateEvent{T}"/> to dispatch generation to the correct handler system.
-    /// Returns the result of the generation.
+    /// Raises a <see cref="CEDungeonGenerateEvent{T}"/> to dispatch job creation to the correct
+    /// handler system. Returns a <see cref="Job{T}"/> that performs the actual generation.
     /// </summary>
-    public abstract CEDungeonGenerateResult Generate(IEntityManager entMan);
+    public abstract Job<CEDungeonGenerateResult>? CreateJob(
+        IEntityManager entMan,
+        double maxTime,
+        CancellationToken cancellation);
 }
 
 /// <summary>
-/// Result returned by <see cref="CEDungeonGeneratorConfig.Generate"/>.
+/// Result returned by dungeon generation jobs.
 /// Contains only the primary map created by the generator.
 /// Any generator-specific data (z-networks, grids, etc.) should be managed internally by the generator system.
 /// </summary>
@@ -30,14 +36,17 @@ public record struct CEDungeonGenerateResult(
 public abstract partial class CEDungeonGeneratorConfigBase<T> : CEDungeonGeneratorConfig
     where T : CEDungeonGeneratorConfigBase<T>
 {
-    public override CEDungeonGenerateResult Generate(IEntityManager entMan)
+    public override Job<CEDungeonGenerateResult>? CreateJob(
+        IEntityManager entMan,
+        double maxTime,
+        CancellationToken cancellation)
     {
         if (this is not T typed)
-            return new CEDungeonGenerateResult(false);
+            return null;
 
-        var ev = new CEDungeonGenerateEvent<T>(typed);
+        var ev = new CEDungeonGenerateEvent<T>(typed, maxTime, cancellation);
         entMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
 
-        return new CEDungeonGenerateResult(ev.Handled, ev.MapUid, ev.MapId);
+        return ev.Job;
     }
 }

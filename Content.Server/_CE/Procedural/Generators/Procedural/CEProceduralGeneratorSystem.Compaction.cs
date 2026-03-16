@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Map;
 
@@ -15,7 +16,7 @@ public sealed partial class CEProceduralGeneratorSystem
     /// to every other room. This prevents connection lines from passing through
     /// unrelated rooms.
     /// </summary>
-    private static void CompactRooms(CEGeneratingProceduralDungeonComponent comp)
+    internal static async Task CompactRooms(CEGeneratingProceduralDungeonComponent comp, Func<ValueTask> suspend)
     {
         if (comp.Rooms.Count == 0)
             return;
@@ -75,8 +76,12 @@ public sealed partial class CEProceduralGeneratorSystem
             roomByIndex[room.Index] = room;
 
         // Process rooms in BFS order. Root stays in place; children slide toward parent.
+        var compactCounter = 0;
         foreach (var roomIdx in bfsOrder)
         {
+            // Yield every 20 rooms — each room runs a slide loop.
+            if (++compactCounter % 20 == 0)
+                await suspend();
             if (!roomByIndex.TryGetValue(roomIdx, out var room))
                 continue;
 

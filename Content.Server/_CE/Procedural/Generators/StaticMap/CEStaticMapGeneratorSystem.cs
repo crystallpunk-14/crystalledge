@@ -1,3 +1,5 @@
+using System.Threading;
+using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Utility;
@@ -25,24 +27,28 @@ public sealed partial class CEStaticMapGeneratorSystem : CEDungeonGeneratorSyste
 {
     [Dependency] private readonly MapLoaderSystem _loader = default!;
 
-    protected override void Generate(ref CEDungeonGenerateEvent<CEStaticMapConfig> args)
+    protected override Job<CEDungeonGenerateResult> CreateJob(
+        CEStaticMapConfig config,
+        double maxTime,
+        CancellationToken cancellation)
     {
-        var config = args.Config;
+        return new CEDelegateDungeonJob(maxTime,
+            () =>
+            {
+                if (!_loader.TryLoadMap(config.MapPath, out var map, out _))
+                {
+                    Log.Error($"CEStaticMapGeneratorSystem: failed to load map from path '{config.MapPath}'.");
+                    return new CEDungeonGenerateResult(false);
+                }
 
-        if (!_loader.TryLoadMap(config.MapPath, out var map, out _))
-        {
-            Log.Error($"CEStaticMapGeneratorSystem: failed to load map from path '{config.MapPath}'.");
-            return;
-        }
+                if (!TryComp<MapComponent>(map.Value, out var mapComp))
+                {
+                    Log.Error($"CEStaticMapGeneratorSystem: loaded entity {map.Value} has no MapComponent.");
+                    return new CEDungeonGenerateResult(false);
+                }
 
-        if (!TryComp<MapComponent>(map.Value, out var mapComp))
-        {
-            Log.Error($"CEStaticMapGeneratorSystem: loaded entity {map.Value} has no MapComponent.");
-            return;
-        }
-
-        args.MapUid = map.Value.Owner;
-        args.MapId = mapComp.MapId;
-        args.Handled = true;
+                return new CEDungeonGenerateResult(true, map.Value.Owner, mapComp.MapId);
+            },
+            cancellation);
     }
 }

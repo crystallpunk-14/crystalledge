@@ -8,6 +8,7 @@ cmd-ce-dungen-error-args = Недостаточно аргументов! Исп
 cmd-ce-dungen-error-unknown-level = Неизвестный прототип уровня подземелья '{ $level }'.
 cmd-ce-dungen-error-failed = Не удалось сгенерировать уровень подземелья '{ $level }'.
 cmd-ce-dungen-success = Уровень подземелья '{ $level }' успешно сгенерирован на карте { $mapId }.
+cmd-ce-dungen-async-started = Генерация '{ $level }' поставлена в очередь. Проверьте логи сервера для результата.
 
 # Команда визуализации атласа
 cmd-ce-dungen_atlas_visualize-desc = Переключает отладочный оверлей, показывающий прямоугольники комнат для прототипа zMap.

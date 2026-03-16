@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -24,17 +25,23 @@ public sealed partial class CEProceduralGeneratorSystem
     /// A wall is placed at every neighbouring position (8-directional, including diagonals)
     /// that is not itself a reserved tile. Walls are spawned on every z-level in the network.
     /// </summary>
-    private void PlaceWalls(
+    internal async Task PlaceWalls(
         CEProceduralConfig config,
         EntityUid baseMapUid,
         Dictionary<EntityUid, int> mapsByDepth,
-        HashSet<Vector2i> reservedTiles)
+        HashSet<Vector2i> reservedTiles,
+        Func<ValueTask> suspend)
     {
         // Compute wall positions: neighbours of reserved tiles that are not occupied.
         var wallPositions = new HashSet<Vector2i>();
 
+        var computeCounter = 0;
         foreach (var tile in reservedTiles)
         {
+            // Yield periodically during wall position computation.
+            if (++computeCounter % 500 == 0)
+                await suspend();
+
             foreach (var offset in AllNeighbors)
             {
                 var neighbor = tile + offset;
@@ -47,10 +54,15 @@ public sealed partial class CEProceduralGeneratorSystem
             return;
 
         // Spawn walls on every z-level.
+        var wallCounter = 0;
         foreach (var (levelMapUid, _) in mapsByDepth)
         {
             foreach (var pos in wallPositions)
             {
+                // Yield every 20 wall spawns — entity creation is expensive.
+                if (++wallCounter % 20 == 0)
+                    await suspend();
+
                 // Tile center = (tileX + 0.5, tileY + 0.5).
                 var worldPos = new Vector2(pos.X + 0.5f, pos.Y + 0.5f);
                 Spawn(config.WallPrototype, new EntityCoordinates(levelMapUid, worldPos));
@@ -63,16 +75,22 @@ public sealed partial class CEProceduralGeneratorSystem
     /// The room is placed at the room's <see cref="CEProceduralAbstractRoom.Position"/> with
     /// the pre-computed <see cref="CEProceduralAbstractRoom.Rotation"/>.
     /// </summary>
-    private void SpawnRooms(
+    internal async Task SpawnRooms(
         CEGeneratingProceduralDungeonComponent comp,
         EntityUid gridUid,
         MapGridComponent grid,
         Random random,
-        HashSet<Vector2i> reservedTiles)
+        HashSet<Vector2i> reservedTiles,
+        Func<ValueTask> suspend)
     {
+        var spawnCounter = 0;
 
         foreach (var room in comp.Rooms)
         {
+            // Yield every room — spawning 3D prototypes is heavy.
+            if (spawnCounter > 0)
+                await suspend();
+            spawnCounter++;
             if (room.RoomProtoId == null)
                 continue;
 

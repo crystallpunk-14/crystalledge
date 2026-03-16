@@ -1,6 +1,9 @@
+using System.Threading;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.ZLevels.Mapping.Prototypes;
+using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
@@ -31,20 +34,26 @@ public sealed partial class CEStaticZNetworkGeneratorSystem : CEDungeonGenerator
     [Dependency] private readonly MapLoaderSystem _loader = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
 
-    protected override void Generate(ref CEDungeonGenerateEvent<CEStaticZNetworkConfig> args)
+    protected override Job<CEDungeonGenerateResult> CreateJob(
+        CEStaticZNetworkConfig config,
+        double maxTime,
+        CancellationToken cancellation)
     {
-        var config = args.Config;
+        return new CEDelegateDungeonJob(maxTime, () => GenerateZNetwork(config), cancellation);
+    }
 
+    private CEDungeonGenerateResult GenerateZNetwork(CEStaticZNetworkConfig config)
+    {
         if (!_proto.TryIndex(config.ZMapProto, out var zMapProto))
         {
             Log.Error($"CEStaticZNetworkGeneratorSystem: unknown zMap prototype '{config.ZMapProto}'.");
-            return;
+            return new CEDungeonGenerateResult(false);
         }
 
         if (zMapProto.Maps.Count == 0)
         {
             Log.Error($"CEStaticZNetworkGeneratorSystem: zMap prototype '{config.ZMapProto}' has no maps.");
-            return;
+            return new CEDungeonGenerateResult(false);
         }
 
         // Create the z-network entity with shared components from the prototype.
@@ -60,7 +69,7 @@ public sealed partial class CEStaticZNetworkGeneratorSystem : CEDungeonGenerator
             if (!_loader.TryLoadMap(path, out var mapEnt, out _))
             {
                 Log.Error($"CEStaticZNetworkGeneratorSystem: failed to load map at depth {depth} from '{path}'.");
-                return;
+                return new CEDungeonGenerateResult(false);
             }
 
             mapsByDepth.Add(mapEnt.Value, depth);
@@ -76,15 +85,14 @@ public sealed partial class CEStaticZNetworkGeneratorSystem : CEDungeonGenerator
         if (!_zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth))
         {
             Log.Error($"CEStaticZNetworkGeneratorSystem: failed to link maps into z-network for '{config.ZMapProto}'.");
-            return;
+            return new CEDungeonGenerateResult(false);
         }
 
         // Report the primary map back.
-        args.MapUid = primaryMapUid;
-
+        MapId? mapId = null;
         if (primaryMapUid != null && TryComp<MapComponent>(primaryMapUid.Value, out var mapComp))
-            args.MapId = mapComp.MapId;
+            mapId = mapComp.MapId;
 
-        args.Handled = true;
+        return new CEDungeonGenerateResult(true, primaryMapUid, mapId);
     }
 }

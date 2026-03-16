@@ -1,9 +1,13 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.Decals;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
+using Robust.Shared.CPUJob.JobQueues;
+using Robust.Shared.CPUJob.JobQueues.Queues;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -32,6 +36,14 @@ public sealed partial class CEDungeonSystem : EntitySystem
 
     public static readonly ProtoId<ContentTileDefinition> FallbackTileId = "CEStone";
 
+    /// <summary>
+    /// Maximum time (seconds) the job queue is allowed to run per frame.
+    /// </summary>
+    private const double DungeonJobTime = 0.002;
+
+    private readonly JobQueue _dungeonJobQueue = new(DungeonJobTime);
+    private readonly Dictionary<Job<CEDungeonGenerateResult>, CancellationTokenSource> _dungeonJobs = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -44,6 +56,24 @@ public sealed partial class CEDungeonSystem : EntitySystem
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        _dungeonJobQueue.Process();
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+
+        foreach (var cts in _dungeonJobs.Values)
+        {
+            cts.Cancel();
+        }
+
+        _dungeonJobs.Clear();
+    }
+
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
         if (args.WasModified<CEDungeonRoom3DPrototype>())
@@ -51,11 +81,10 @@ public sealed partial class CEDungeonSystem : EntitySystem
     }
 
     /// <summary>
-    /// Generates a dungeon level from the given prototype ID.
-    /// Creates a new map and populates it according to the prototype's generator config.
+    /// Generates a dungeon level asynchronously. The work runs cooperatively
+    /// across multiple frames via the internal <see cref="JobQueue"/>.
     /// </summary>
-    /// <returns>The generation result containing the created map info, or a failure result.</returns>
-    public CEDungeonGenerateResult GenerateLevel(ProtoId<CEDungeonLevelPrototype> protoId)
+    public async Task<CEDungeonGenerateResult> GenerateLevelAsync(ProtoId<CEDungeonLevelPrototype> protoId)
     {
         if (!_proto.TryIndex(protoId, out var proto))
         {
@@ -63,25 +92,103 @@ public sealed partial class CEDungeonSystem : EntitySystem
             return new CEDungeonGenerateResult(false);
         }
 
-        return GenerateLevel(proto);
+        return await GenerateLevelAsync(proto);
     }
 
     /// <summary>
-    /// Generates a dungeon level from the given prototype.
+    /// Generates a dungeon level asynchronously from the given prototype.
     /// </summary>
-    public CEDungeonGenerateResult GenerateLevel(CEDungeonLevelPrototype proto)
+    public async Task<CEDungeonGenerateResult> GenerateLevelAsync(CEDungeonLevelPrototype proto)
     {
-        var result = proto.Config.Generate(EntityManager);
+        var cts = new CancellationTokenSource();
+        var job = proto.Config.CreateJob(EntityManager, DungeonJobTime, cts.Token);
 
-        if (!result.Success || result.MapUid is null)
+        if (job == null)
         {
-            Log.Error($"CEDungeonSystem: generation failed for dungeon level '{proto.ID}'.");
-            return result;
+            Log.Error($"CEDungeonSystem: no generator handled config for dungeon level '{proto.ID}'.");
+            return new CEDungeonGenerateResult(false);
         }
 
-        _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
+        _dungeonJobs[job] = cts;
+        _dungeonJobQueue.EnqueueJob(job);
+        await job.AsTask;
+        _dungeonJobs.Remove(job);
 
-        Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
+        if (job.Exception != null)
+        {
+            Log.Error($"CEDungeonSystem: generation failed for dungeon level '{proto.ID}': {job.Exception}");
+            throw job.Exception;
+        }
+
+        var result = job.Result;
+
+        if (result is { Success: true, MapUid: not null })
+        {
+            _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
+            Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
+        }
+        else
+        {
+            Log.Error($"CEDungeonSystem: generation failed for dungeon level '{proto.ID}'.");
+        }
+
         return result;
+    }
+
+    /// <summary>
+    /// Fire-and-forget dungeon generation. Enqueues the job and returns immediately.
+    /// Results are logged when the job completes.
+    /// </summary>
+    public void GenerateLevel(ProtoId<CEDungeonLevelPrototype> protoId)
+    {
+        if (!_proto.TryIndex(protoId, out var proto))
+        {
+            Log.Error($"CEDungeonSystem: unknown dungeon level prototype '{protoId}'.");
+            return;
+        }
+
+        GenerateLevel(proto);
+    }
+
+    /// <summary>
+    /// Fire-and-forget dungeon generation from a prototype.
+    /// </summary>
+    public void GenerateLevel(CEDungeonLevelPrototype proto)
+    {
+        var cts = new CancellationTokenSource();
+        var job = proto.Config.CreateJob(EntityManager, DungeonJobTime, cts.Token);
+
+        if (job == null)
+        {
+            Log.Error($"CEDungeonSystem: no generator handled config for dungeon level '{proto.ID}'.");
+            return;
+        }
+
+        _dungeonJobs[job] = cts;
+        _dungeonJobQueue.EnqueueJob(job);
+
+        // Log result when the job completes (fire-and-forget).
+        var protoId = proto.ID;
+        job.AsTask.ContinueWith(_ =>
+        {
+            _dungeonJobs.Remove(job);
+
+            if (job.Exception != null)
+            {
+                Log.Error($"CEDungeonSystem: generation failed for '{protoId}': {job.Exception}");
+                return;
+            }
+
+            var result = job.Result;
+            if (result is { Success: true, MapUid: not null })
+            {
+                _meta.SetEntityName(result.MapUid.Value, $"{protoId}");
+                Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
+            }
+            else
+            {
+                Log.Error($"CEDungeonSystem: generation failed for '{protoId}'.");
+            }
+        }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 }

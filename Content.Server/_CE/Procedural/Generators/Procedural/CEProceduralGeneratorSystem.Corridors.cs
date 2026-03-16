@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
@@ -16,13 +17,14 @@ public sealed partial class CEProceduralGeneratorSystem
     /// between the two rooms and lays a slightly wandering A* corridor of tiles between them.
     /// Only empty tiles are filled — existing room tiles are never overwritten.
     /// </summary>
-    private void BuildCorridors(
+    internal async Task BuildCorridors(
         CEGeneratingProceduralDungeonComponent comp,
         CEProceduralConfig config,
         EntityUid gridUid,
         MapGridComponent grid,
         Random random,
-        HashSet<Vector2i> reservedTiles)
+        HashSet<Vector2i> reservedTiles,
+        Func<ValueTask> suspend)
     {
         // Index rooms.
         var roomByIndex = new Dictionary<int, CEProceduralAbstractRoom>();
@@ -35,8 +37,19 @@ public sealed partial class CEProceduralGeneratorSystem
 
         var mainZLevel = config.MainZLevel;
 
+        // Collect all corridor positions first, then place in a single batch.
+        // A* only avoids room-reserved tiles, NOT other corridors.
+        // This ensures corridors can freely path through 1-tile gaps between rooms
+        // without being blocked by previously laid corridors.
+        var corridorPositions = new HashSet<Vector2i>();
+
+        var corridorCounter = 0;
         foreach (var conn in comp.Connections)
         {
+            // Yield every connection — exit matching + A* per connection.
+            if (corridorCounter > 0)
+                await suspend();
+            corridorCounter++;
             if (!roomByIndex.TryGetValue(conn.RoomA, out var roomA) ||
                 !roomByIndex.TryGetValue(conn.RoomB, out var roomB))
                 continue;
@@ -85,22 +98,28 @@ public sealed partial class CEProceduralGeneratorSystem
             if (bestStartTile == null || bestEndTile == null)
                 continue;
 
-            // Run weighted A* with wandering.
-            var path = FindWanderingPath(bestStartTile.Value, bestEndTile.Value, reservedTiles, random, config.CorridorWander);
+            // Run weighted A* with wandering. Only room tiles are obstacles.
+            var path = await FindWanderingPath(bestStartTile.Value, bestEndTile.Value, reservedTiles, random, config.CorridorWander, suspend);
 
-            // Place corridor tiles along the path.
-            var tiles = new List<(Vector2i, Tile)>();
+            // Accumulate corridor positions (skip tiles that overlap rooms).
             foreach (var pos in path)
             {
-                if (reservedTiles.Contains(pos))
-                    continue;
+                if (!reservedTiles.Contains(pos))
+                    corridorPositions.Add(pos);
+            }
+        }
 
+        // Place all corridor tiles in a single batch and add to reserved set.
+        if (corridorPositions.Count > 0)
+        {
+            var tiles = new List<(Vector2i, Tile)>(corridorPositions.Count);
+            foreach (var pos in corridorPositions)
+            {
                 tiles.Add((pos, corridorTile));
                 reservedTiles.Add(pos);
             }
 
-            if (tiles.Count > 0)
-                _maps.SetTiles(gridUid, grid, tiles);
+            _maps.SetTiles(gridUid, grid, tiles);
         }
     }
 
@@ -149,14 +168,15 @@ public sealed partial class CEProceduralGeneratorSystem
     /// <summary>
     /// Weighted A* pathfinding with random wander.
     /// Adds a random cost to each step so the path meanders slightly.
-    /// Avoids occupied tiles.
+    /// Avoids occupied tiles. Yields periodically to avoid blocking the server.
     /// </summary>
-    private static List<Vector2i> FindWanderingPath(
+    private static async Task<List<Vector2i>> FindWanderingPath(
         Vector2i start,
         Vector2i end,
         HashSet<Vector2i> occupied,
         Random random,
-        float wanderWeight)
+        float wanderWeight,
+        Func<ValueTask> suspend)
     {
         // A* with weighted heuristic.
         var openSet = new PriorityQueue<Vector2i, float>();
@@ -167,8 +187,13 @@ public sealed partial class CEProceduralGeneratorSystem
 
         var cardinals = new Vector2i[] { new(1, 0), new(-1, 0), new(0, 1), new(0, -1) };
 
+        var astarCounter = 0;
+
         while (openSet.Count > 0)
         {
+            // Yield every 200 A* iterations — safety valve for rare long paths.
+            if (++astarCounter % 200 == 0)
+                await suspend();
             var current = openSet.Dequeue();
 
             if (current == end)

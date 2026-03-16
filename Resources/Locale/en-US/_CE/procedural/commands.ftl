@@ -8,6 +8,7 @@ cmd-ce-dungen-error-args = Not enough arguments! Usage: dungen <dungeonLevelId>
 cmd-ce-dungen-error-unknown-level = Unknown dungeon level prototype '{ $level }'.
 cmd-ce-dungen-error-failed = Failed to generate dungeon level '{ $level }'.
 cmd-ce-dungen-success = Dungeon level '{ $level }' generated successfully on map { $mapId }.
+cmd-ce-dungen-async-started = Generation for '{ $level }' has been queued. Check server logs for completion.
 
 # Atlas visualize overlay command
 cmd-ce-dungen_atlas_visualize-desc = Toggles a debug overlay showing dungeon room rectangles for a zMap prototype.

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
@@ -33,10 +34,11 @@ public sealed partial class CEProceduralGeneratorSystem
     /// Uses a cached frontier (rooms with at least one free neighbour) so that
     /// every iteration is guaranteed to make progress — no wasted attempts.
     /// </summary>
-    private void BuildRoomGraph(
+    internal async Task BuildRoomGraph(
         CEGeneratingProceduralDungeonComponent comp,
         int maxRoomSize,
-        int targetCount)
+        int targetCount,
+        Func<ValueTask> suspend)
     {
         var step = maxRoomSize + 1; // +1 for the gap tile
         var roomSize = new Vector2i(maxRoomSize, maxRoomSize);
@@ -60,8 +62,14 @@ public sealed partial class CEProceduralGeneratorSystem
         occupied.Add(Vector2i.Zero);
         frontier.Add(0);
 
+        var yieldCounter = 0;
+
         while (comp.Rooms.Count < targetCount && frontier.Count > 0)
         {
+            // Yield every 50 rooms to avoid blocking the main thread.
+            if (++yieldCounter % 50 == 0)
+                await suspend();
+
             // Pick a random frontier room to branch from.
             var frontierIdx = _random.Next(frontier.Count);
             var parentRoomIdx = frontier[frontierIdx];

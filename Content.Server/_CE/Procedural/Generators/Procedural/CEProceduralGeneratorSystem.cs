@@ -1,9 +1,11 @@
+using System.Threading;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
+using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -104,6 +106,10 @@ public sealed partial class CEProceduralRoomPack
 /// <summary>
 /// Procedural dungeon generator. Builds an abstract room graph on a logical grid
 /// then places actual rooms on the map.
+/// <para>
+/// Generation runs asynchronously via <see cref="CEProceduralDungeonJob"/>,
+/// which yields cooperatively across frames using <see cref="Job{T}.SuspendIfOutOfTime"/>.
+/// </para>
 /// Split into partial classes by responsibility:
 /// <list type="bullet">
 ///   <item><c>CEProceduralGeneratorSystem.Graph.cs</c>  abstract room graph construction.</item>
@@ -123,16 +129,9 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
 
     /// <summary>
-    /// Cached set of reserved (occupied) tile positions.
-    /// Re-used across generation steps to avoid repeated allocations.
-    /// Cleared at the start of each <see cref="Generate"/> call.
-    /// </summary>
-    private HashSet<Vector2i> _reservedTiles = new();
-
-    /// <summary>
     /// Cardinal directions on the logical grid: right, left, up, down.
     /// </summary>
-    private static readonly Vector2i[] Directions =
+    internal static readonly Vector2i[] Directions =
     [
         new(1, 0),
         new(-1, 0),
@@ -140,101 +139,22 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
         new(0, -1),
     ];
 
-    protected override void Generate(ref CEDungeonGenerateEvent<CEProceduralConfig> args)
+    protected override Job<CEDungeonGenerateResult> CreateJob(
+        CEProceduralConfig config,
+        double maxTime,
+        CancellationToken cancellation)
     {
-        var config = args.Config;
-
-        // Determine how many rooms to generate.
-        var targetCount = _random.Next(config.GeneralCount.Min, config.GeneralCount.Max + 1);
-        if (targetCount <= 0)
-            return;
-
-        // Create a new map for this dungeon.
-        var mapUid = _maps.CreateMap(out var mapId);
-
-        // Build the abstract room graph.
-        var comp = AddComp<CEGeneratingProceduralDungeonComponent>(mapUid);
-
-        BuildRoomGraph(comp, config.MaxRoomSize, targetCount);
-
-        // Assign room types before selecting real prototypes.
-        AssignRoomTypes(comp, config);
-
-        // Assign real room prototypes, apply rotation, resize and randomize position.
-        AssignRealRooms(comp, config);
-
-        // Compact: slide rooms toward their parent (BFS order), maintaining 1-tile gap.
-        CompactRooms(comp);
-
-        // Create z-network so 3D rooms can be spawned across z-levels.
-        var network = _zLevels.CreateZNetwork(config.Components);
-
-        // Determine the maximum room height to know how many z-levels we need.
-        var maxHeight = 1;
-        foreach (var room in comp.Rooms)
-        {
-            if (room.RoomProtoId == null)
-                continue;
-
-            if (_proto.TryIndex(room.RoomProtoId.Value, out var rp) && rp.Height > maxHeight)
-                maxHeight = rp.Height;
-        }
-
-        // Create a map for each required z-level and register them in the network.
-        // Rooms always start at depth 0; MainZLevel is metadata for post-generation logic.
-        var mapsByDepth = new Dictionary<EntityUid, int>
-        {
-            { mapUid, 0 }
-        };
-
-        for (var zOffset = 1; zOffset < maxHeight; zOffset++)
-        {
-            var extraMapUid = _maps.CreateMap(out _);
-            EnsureComp<MapGridComponent>(extraMapUid);
-            mapsByDepth[extraMapUid] = zOffset;
-        }
-
-        _zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth);
-
-        // Ensure the map has a grid for tile/entity placement.
-        var grid = EnsureComp<MapGridComponent>(mapUid);
-
-        // Clear and re-use the cached reserved tile set.
-        _reservedTiles.Clear();
-
-        // Spawn each room's 3D prototype onto the grid.
-        var rng = new Random(_random.Next());
-        SpawnRooms(comp, mapUid, grid, rng, _reservedTiles);
-
-        // Resolve the grid at MainZLevel for corridor placement.
-        // The base grid (mapUid) is at depth 0; corridors go on the main playable z-level.
-        var corridorGridUid = mapUid;
-        var corridorGrid = grid;
-
-        if (config.MainZLevel != 0)
-        {
-            if (_zLevels.TryMapOffset((mapUid, EnsureComp<CEZLevelMapComponent>(mapUid)), config.MainZLevel, out var mainLevelMap))
-            {
-                corridorGridUid = mainLevelMap.Value;
-                corridorGrid = EnsureComp<MapGridComponent>(corridorGridUid);
-            }
-            else
-            {
-                Log.Warning($"CEProceduralGeneratorSystem: could not resolve MainZLevel {config.MainZLevel} for corridors.");
-            }
-        }
-
-        // Build corridors between connected rooms.
-        BuildCorridors(comp, config, corridorGridUid, corridorGrid, rng, _reservedTiles);
-
-        // Place walls around the perimeter of all rooms and corridors on every z-level.
-        PlaceWalls(config, mapUid, mapsByDepth, _reservedTiles);
-
-        Dirty(mapUid, comp);
-
-        // Report results.
-        args.MapUid = mapUid;
-        args.MapId = mapId;
-        args.Handled = true;
+        return new CEProceduralDungeonJob(
+            Log,
+            maxTime,
+            EntityManager,
+            _proto,
+            _random,
+            _maps,
+            _dungeon,
+            _zLevels,
+            this,
+            config,
+            cancellation);
     }
 }

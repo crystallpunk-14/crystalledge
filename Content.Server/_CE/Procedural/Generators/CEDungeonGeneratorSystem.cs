@@ -1,9 +1,12 @@
+using System.Threading;
+using Robust.Shared.CPUJob.JobQueues;
+
 namespace Content.Server._CE.Procedural.Generators;
 
 /// <summary>
 /// Abstract base system for handling a specific <see cref="CEDungeonGeneratorConfigBase{T}"/>.
 /// Each concrete generator system subscribes to <see cref="CEDungeonGenerateEvent{TConfig}"/>
-/// and implements the <see cref="Generate"/> method to perform the actual map creation/loading.
+/// and implements the <see cref="CreateJob"/> method to produce a cooperative job.
 /// </summary>
 /// <typeparam name="TConfig">The concrete generator config type this system handles.</typeparam>
 public abstract partial class CEDungeonGeneratorSystem<TConfig> : EntitySystem
@@ -17,13 +20,17 @@ public abstract partial class CEDungeonGeneratorSystem<TConfig> : EntitySystem
 
     private void OnGenerate(ref CEDungeonGenerateEvent<TConfig> args)
     {
-        Generate(ref args);
+        args.Job = CreateJob(args.Config, args.MaxTime, args.Cancellation);
     }
 
     /// <summary>
-    /// Perform the actual generation logic for this config type.
-    /// Implementations should set <see cref="CEDungeonGenerateEvent{T}.MapUid"/>,
-    /// <see cref="CEDungeonGenerateEvent{T}.MapId"/>, and <see cref="CEDungeonGenerateEvent{T}.Handled"/>.
+    /// Create a <see cref="Job{T}"/> that performs the actual generation logic for this config type.
+    /// The job will be enqueued onto the <see cref="CEDungeonSystem"/> job queue.
+    /// For simple generators, use <see cref="CEDelegateDungeonJob"/> to wrap synchronous work.
+    /// For heavy generators, create a dedicated Job subclass with cooperative yielding.
     /// </summary>
-    protected abstract void Generate(ref CEDungeonGenerateEvent<TConfig> args);
+    protected abstract Job<CEDungeonGenerateResult> CreateJob(
+        TConfig config,
+        double maxTime,
+        CancellationToken cancellation);
 }

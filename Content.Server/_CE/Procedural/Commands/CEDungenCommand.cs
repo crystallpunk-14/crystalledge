@@ -31,17 +31,9 @@ public sealed class CEDungenCommand : LocalizedCommands
         }
 
         var dungeonSystem = _entities.System<CEDungeonSystem>();
-        var result = dungeonSystem.GenerateLevel(proto);
+        dungeonSystem.GenerateLevel(proto);
 
-        if (!result.Success)
-        {
-            shell.WriteError(Loc.GetString("cmd-ce-dungen-error-failed", ("level", args[0])));
-            return;
-        }
-
-        shell.WriteLine(Loc.GetString("cmd-ce-dungen-success",
-            ("level", args[0]),
-            ("mapId", result.MapId?.ToString() ?? "?")));
+        shell.WriteLine(Loc.GetString("cmd-ce-dungen-async-started", ("level", args[0])));
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)

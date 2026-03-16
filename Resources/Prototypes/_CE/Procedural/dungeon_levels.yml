@@ -23,8 +23,8 @@
     !type:CEProceduralConfig
     maxRoomSize: 16
     generalCount:
-      min: 100
-      max: 100
+      min: 50
+      max: 50
     components:
     - type: MapLight
       ambientLightColor: "#3d4444"

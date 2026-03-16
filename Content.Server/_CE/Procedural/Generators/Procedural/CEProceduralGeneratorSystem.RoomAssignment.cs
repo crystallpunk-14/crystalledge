@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
@@ -17,7 +18,7 @@ public sealed partial class CEProceduralGeneratorSystem
     /// real room's size, and randomizes its position within the original grid cell.
     /// Uses the whitelist from the room's type-specific pack.
     /// </summary>
-    private void AssignRealRooms(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config)
+    internal async Task AssignRealRooms(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config, Func<ValueTask> suspend)
     {
         var maxSize = config.MaxRoomSize;
         var step = maxSize + 1;
@@ -36,6 +37,10 @@ public sealed partial class CEProceduralGeneratorSystem
 
         for (var i = 0; i < comp.Rooms.Count; i++)
         {
+            // Yield every 10 rooms — each room tries up to 50 prototypes.
+            if (i > 0 && i % 10 == 0)
+                await suspend();
+
             var room = comp.Rooms[i];
 
             // Pick the whitelist based on the room's assigned type.
@@ -222,7 +227,7 @@ public sealed partial class CEProceduralGeneratorSystem
     ///   <item>All other rooms remain General.</item>
     /// </list>
     /// </summary>
-    private void AssignRoomTypes(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config)
+    internal void AssignRoomTypes(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config)
     {
         // Count connections per room.
         var connectionCount = new Dictionary<int, int>();
