@@ -14,7 +14,7 @@
   name: Test ZNetwork Dungeon
   config:
     !type:CEStaticZNetworkConfig
-    zMapProto: Atlas
+    zMapProto: DunTest
 
 - type: dungeonLevel
   id: CEDungeonTestProcedural
