@@ -20,10 +20,12 @@ public sealed class CEPostProcessOverlay : Overlay
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     private readonly ShaderInstance _basePostProcessShader;
 
+    private readonly ProtoId<ShaderPrototype> _shaderProto = "CEPostProcess";
+
     public CEPostProcessOverlay()
     {
         IoCManager.InjectDependencies(this);
-        _basePostProcessShader = _proto.Index<ShaderPrototype>("CEPostProcess").InstanceUnique();
+        _basePostProcessShader = _proto.Index(_shaderProto).InstanceUnique();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)

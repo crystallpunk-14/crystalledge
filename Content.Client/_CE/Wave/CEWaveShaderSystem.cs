@@ -16,11 +16,13 @@ public sealed class CEWaveShaderSystem : EntitySystem
     private ShaderInstance _shader = default!;
     private bool _enabled;
 
+    private readonly ProtoId<ShaderPrototype> _shaderProto = "CEWave";
+
     public override void Initialize()
     {
         base.Initialize();
 
-        _shader = _protoMan.Index<ShaderPrototype>("CEWave").InstanceUnique();
+        _shader = _protoMan.Index(_shaderProto).InstanceUnique();
         _enabled = _cfg.GetCVar(CCVars.CEWaveShaderEnabled);
 
         SubscribeLocalEvent<CEWaveShaderComponent, ComponentStartup>(OnStartup);
