@@ -20,7 +20,7 @@ public sealed partial class Heal: CEAnimationActionEntry
         if (target is null)
             return;
 
-        var health = entManager.System<CESharedHealthSystem>();
+        var health = entManager.System<CESharedDamageableSystem>();
         health.Heal(target.Value, Amount, user);
     }
 }

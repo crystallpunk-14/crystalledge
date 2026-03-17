@@ -5,7 +5,7 @@ using Content.Shared.StatusEffectNew.Components;
 
 public sealed partial class CEDamageStatusEffectSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedHealthSystem _health = default!;
+    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
@@ -24,6 +24,6 @@ public sealed partial class CEDamageStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var effect) || effect.AppliedTo is null)
             return;
 
-        _health.TakeDamage(effect.AppliedTo.Value, ent.Comp.Damage * stack);
+        _damageable.TakeDamage(effect.AppliedTo.Value, ent.Comp.Damage * stack);
     }
 }

@@ -5,7 +5,7 @@ namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks if the entity's own health is below a threshold.
-/// Uses CEHealthComponent for health evaluation.
+/// Compares accumulated damage against the critical threshold.
 /// </summary>
 public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensorBase<CEGOAPCheckHealthLevelSensor>
 {
@@ -18,25 +18,28 @@ public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensorBase<CEGO
 
 public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSystem<CEGOAPCheckHealthLevelSensor>
 {
-    private EntityQuery<CEHealthComponent> _healthQuery;
+    private EntityQuery<CEDamageableComponent> _damageQuery;
+    private EntityQuery<CEMobStateComponent> _mobStateQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        _healthQuery = GetEntityQuery<CEHealthComponent>();
+        _damageQuery = GetEntityQuery<CEDamageableComponent>();
+        _mobStateQuery = GetEntityQuery<CEMobStateComponent>();
     }
 
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
     {
-        if (!_healthQuery.TryComp(ent, out var health))
+        if (!_damageQuery.TryComp(ent, out var damage) ||
+            !_mobStateQuery.TryComp(ent, out var mobState))
         {
             SetState(ref args, false);
             return;
         }
 
-        var healthFraction = health.MaxHealth > 0
-            ? (float) health.Health / health.MaxHealth
+        var healthFraction = mobState.CriticalThreshold > 0
+            ? 1f - (float) damage.TotalDamage / mobState.CriticalThreshold
             : 1f;
 
         SetState(ref args, healthFraction < args.Sensor.Threshold);

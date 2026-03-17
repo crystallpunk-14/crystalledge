@@ -14,12 +14,12 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEMasochismStatusEffectComponent, StatusEffectRelayedEvent<CEHealthChangedEvent>>(OnDamageTaken);
+        SubscribeLocalEvent<CEMasochismStatusEffectComponent, StatusEffectRelayedEvent<CEDamageChangedEvent>>(OnDamageTaken);
     }
 
-    private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEHealthChangedEvent> args)
+    private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEDamageChangedEvent> args)
     {
-        if (args.Args.NewHealth >= args.Args.OldHealth)
+        if (args.Args.DamageDelta <= 0)
             return;
 
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect))

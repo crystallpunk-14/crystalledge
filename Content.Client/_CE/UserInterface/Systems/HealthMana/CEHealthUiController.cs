@@ -26,7 +26,7 @@ public sealed class CEHealthUiController : UIController
 
         SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
-        SubscribeLocalEvent<CEHealthChangedEvent>(OnHealthChanged);
+        SubscribeLocalEvent<CEDamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<CEMobStateChangedEvent>(OnMobStateChanged);
     }
 
@@ -71,7 +71,7 @@ public sealed class CEHealthUiController : UIController
             _healthBar.Visible = false;
     }
 
-    private void OnHealthChanged(CEHealthChangedEvent args)
+    private void OnDamageChanged(CEDamageChangedEvent args)
     {
         if (_player.LocalEntity != args.Target)
             return;
@@ -98,13 +98,14 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
-        if (!EntityManager.TryGetComponent<CEHealthComponent>(uid, out var health))
+        if (!EntityManager.TryGetComponent<CEDamageableComponent>(uid, out var damageable) ||
+            !EntityManager.TryGetComponent<CEMobStateComponent>(uid, out var mobState))
         {
             _healthBar.Visible = false;
             return;
         }
 
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(health);
+        _healthBar.UpdateHealthDisplay(damageable, mobState);
     }
 }

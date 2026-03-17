@@ -3,7 +3,8 @@
   save: false
   abstract: true
   components:
-  - type: CEHealth
+  - type: CEDamageable
+  - type: CEMobState
   - type: Pullable
 
 - type: entity

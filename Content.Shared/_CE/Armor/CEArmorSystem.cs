@@ -39,7 +39,7 @@ public sealed partial class CEArmorSystem : EntitySystem
                 dmg -= flat;
 
             //Block healing
-            dmg = Math.Clamp(dmg, 0, dmg);
+            dmg = Math.Max(dmg, 0);
 
             newDamage.Types.Add(damageType, dmg);
         }

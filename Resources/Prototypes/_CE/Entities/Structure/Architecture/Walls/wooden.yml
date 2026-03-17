@@ -7,9 +7,9 @@
   components:
   - type: IconSmooth
     base: wood
-  - type: CEHealth
-    maxHealth: 10
-    health: 10
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
   - type: CEArmor
     flat:
       Physical: 10

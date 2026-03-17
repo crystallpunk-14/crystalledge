@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Skill.Skills.ChangeHealType;
 
 public sealed partial class CEChangeHealTypeStatusEffectSystem : EntitySystem
 {
-    [Dependency] private CESharedHealthSystem _health = default!;
+    [Dependency] private CESharedDamageableSystem _damageable = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -29,7 +29,7 @@ public sealed partial class CEChangeHealTypeStatusEffectSystem : EntitySystem
         args.Args.Cancel();
 
         var pos = Transform(args.Args.Target).Coordinates;
-        _health.TakeDamage(args.Args.Target, damage, ent);
+        _damageable.TakeDamage(args.Args.Target, damage, ent);
         Spawn(ent.Comp.Vfx, pos);
         _audio.PlayPvs(ent.Comp.Sound, pos);
     }

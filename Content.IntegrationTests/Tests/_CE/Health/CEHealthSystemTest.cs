@@ -10,7 +10,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests._CE.Health;
 
 [TestFixture]
-[TestOf(typeof(CESharedHealthSystem))]
+[TestOf(typeof(CESharedDamageableSystem))]
 public sealed class CEHealthSystemTest
 {
     private static readonly ProtoId<CEDamageTypePrototype> TestDamageType = "Physical";
@@ -20,16 +20,16 @@ public sealed class CEHealthSystemTest
 - type: entity
   id: CEHealthTestDummy
   components:
-  - type: CEHealth
-    health: 100
-    maxHealth: 100
-    deathThreshold: -20
+  - type: CEDamageable
+  - type: CEMobState
+    criticalThreshold: 100
+    deadThreshold: 120
 ";
 
     #region TakeDamage
 
     /// <summary>
-    /// Verify that applying damage through CEDamageSpecifier reduces Health correctly.
+    /// Verify that applying damage through CEDamageSpecifier increases TotalDamage correctly.
     /// </summary>
     [Test]
     public async Task TakeDamageReducesHealth()
@@ -37,25 +37,26 @@ public sealed class CEHealthSystemTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
+        var mobStateSystem = entManager.System<CEMobStateSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
+            var mobState = entManager.GetComponent<CEMobStateComponent>(ent);
 
-            Assert.That(health.Health, Is.EqualTo(100));
-            Assert.That(health.MaxHealth, Is.EqualTo(100));
-            Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Alive));
+            Assert.That(damageable.TotalDamage, Is.EqualTo(0));
+            Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Alive));
 
             var damage = new CEDamageSpecifier(TestDamageType, 30);
-            var result = healthSystem.TakeDamage(ent, damage);
+            var result = damageableSystem.TakeDamage(ent, damage);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.True);
-                Assert.That(health.Health, Is.EqualTo(70));
-                Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Alive));
+                Assert.That(damageable.TotalDamage, Is.EqualTo(30));
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Alive));
             });
 
             entManager.DeleteEntity(ent);
@@ -73,19 +74,19 @@ public sealed class CEHealthSystemTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
 
             var damage = new CEDamageSpecifier();
             damage.Types[TestDamageType] = 20;
 
-            healthSystem.TakeDamage(ent, damage);
+            damageableSystem.TakeDamage(ent, damage);
 
-            Assert.That(health.Health, Is.EqualTo(80));
+            Assert.That(damageable.TotalDamage, Is.EqualTo(20));
 
             entManager.DeleteEntity(ent);
         });
@@ -94,7 +95,7 @@ public sealed class CEHealthSystemTest
     }
 
     /// <summary>
-    /// Verify that zero or negative total damage does not change health.
+    /// Verify that zero or negative total damage does not change TotalDamage.
     /// </summary>
     [Test]
     public async Task TakeDamageZeroDamageNoEffect()
@@ -102,20 +103,20 @@ public sealed class CEHealthSystemTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
 
             var damage = new CEDamageSpecifier(TestDamageType, 0);
-            var result = healthSystem.TakeDamage(ent, damage);
+            var result = damageableSystem.TakeDamage(ent, damage);
 
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.False);
-                Assert.That(health.Health, Is.EqualTo(100));
+                Assert.That(damageable.TotalDamage, Is.EqualTo(0));
             });
 
             entManager.DeleteEntity(ent);
@@ -129,7 +130,7 @@ public sealed class CEHealthSystemTest
     #region Heal
 
     /// <summary>
-    /// Verify that Heal() restores health, capped at MaxHealth.
+    /// Verify that Heal() reduces accumulated damage, capped at 0.
     /// </summary>
     [Test]
     public async Task HealRestoresHealth()
@@ -137,25 +138,25 @@ public sealed class CEHealthSystemTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
 
             // Deal 50 damage first
-            healthSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 50));
-            Assert.That(health.Health, Is.EqualTo(50));
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 50));
+            Assert.That(damageable.TotalDamage, Is.EqualTo(50));
 
             // Heal 30
-            healthSystem.Heal(ent, 30);
-            Assert.That(health.Health, Is.EqualTo(80));
+            damageableSystem.Heal(ent, 30);
+            Assert.That(damageable.TotalDamage, Is.EqualTo(20));
 
             // Overheal by 500
-            healthSystem.Heal(ent, 500);
+            damageableSystem.Heal(ent, 500);
 
-            Assert.That(health.Health, Is.EqualTo(100));
+            Assert.That(damageable.TotalDamage, Is.EqualTo(0));
 
             entManager.DeleteEntity(ent);
         });
@@ -172,21 +173,21 @@ public sealed class CEHealthSystemTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
 
-            healthSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 10));
-            Assert.That(health.Health, Is.EqualTo(90));
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 10));
+            Assert.That(damageable.TotalDamage, Is.EqualTo(10));
 
-            healthSystem.Heal(ent, 0);
-            Assert.That(health.Health, Is.EqualTo(90));
+            damageableSystem.Heal(ent, 0);
+            Assert.That(damageable.TotalDamage, Is.EqualTo(10));
 
-            healthSystem.Heal(ent, -5);
-            Assert.That(health.Health, Is.EqualTo(90));
+            damageableSystem.Heal(ent, -5);
+            Assert.That(damageable.TotalDamage, Is.EqualTo(10));
 
             entManager.DeleteEntity(ent);
         });
@@ -199,129 +200,57 @@ public sealed class CEHealthSystemTest
     #region Critical State
 
     /// <summary>
-    /// Verify that when health reaches 0, the entity enters Critical state.
+    /// Verify that when damage reaches CriticalThreshold, the entity enters Critical state.
     /// </summary>
     [Test]
-    public async Task CriticalStateAtZeroHealth()
+    public async Task CriticalStateAtThreshold()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
+        var mobStateSystem = entManager.System<CEMobStateSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
+            var mobState = entManager.GetComponent<CEMobStateComponent>(ent);
 
-            // Damage exactly to 0
-            healthSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 100));
+            // Damage exactly to critical threshold (100)
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 100));
 
             Assert.Multiple(() =>
             {
-                Assert.That(health.Health, Is.EqualTo(0));
-                Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Critical));
-                Assert.That(healthSystem.IsCritical(ent), Is.True);
-                Assert.That(healthSystem.IsAlive(ent), Is.False);
-                Assert.That(healthSystem.IsDead(ent), Is.False);
-                Assert.That(healthSystem.IsIncapacitated(ent), Is.True);
+                Assert.That(damageable.TotalDamage, Is.EqualTo(100));
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Critical));
+                Assert.That(mobStateSystem.IsCritical(ent), Is.True);
+                Assert.That(mobStateSystem.IsAlive(ent), Is.False);
+                Assert.That(mobStateSystem.IsDead(ent), Is.False);
+                Assert.That(mobStateSystem.IsIncapacitated(ent), Is.True);
             });
 
-            // Heal past 0
-            healthSystem.Heal(ent, 10);
+            // Heal past critical
+            damageableSystem.Heal(ent, 10);
 
             Assert.Multiple(() =>
             {
-                Assert.That(health.Health, Is.EqualTo(10));
-                Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Alive));
-                Assert.That(healthSystem.IsAlive(ent), Is.True);
+                Assert.That(damageable.TotalDamage, Is.EqualTo(90));
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Alive));
+                Assert.That(mobStateSystem.IsAlive(ent), Is.True);
             });
 
-            //Kill
-            healthSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 99999));
+            // Kill (damage to dead threshold = 120)
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 99999));
 
             Assert.Multiple(() =>
             {
-                Assert.That(health.Health, Is.EqualTo(-20));
-                Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Dead));
-                Assert.That(healthSystem.IsDead(ent), Is.True);
-                Assert.That(healthSystem.IsAlive(ent), Is.False);
-                Assert.That(healthSystem.IsCritical(ent), Is.False);
-                Assert.That(healthSystem.IsIncapacitated(ent), Is.True);
-            });
-
-            entManager.DeleteEntity(ent);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    #endregion
-
-    #region SetMaxHealth Proportional
-
-    /// <summary>
-    /// Verify that SetMaxHealth scales current health proportionally.
-    /// 80/100 HP => increase to 200 max => should be 160/200.
-    /// </summary>
-    [Test]
-    public async Task SetMaxHealthScalesProportionally()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
-
-        await server.WaitAssertion(() =>
-        {
-            var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
-
-            // Reduce to 80/100
-            healthSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 20));
-            Assert.That(health.Health, Is.EqualTo(80));
-
-            // Double max health
-            healthSystem.SetMaxHealth(ent, 200);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(health.MaxHealth, Is.EqualTo(200));
-                Assert.That(health.Health, Is.EqualTo(160)); // 80 * 200/100
-            });
-
-            entManager.DeleteEntity(ent);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    /// <summary>
-    /// Verify that reducing MaxHealth scales health down proportionally.
-    /// 100/100 HP => reduce to 50 max => should be 50/50.
-    /// </summary>
-    [Test]
-    public async Task SetMaxHealthScalesDown()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
-
-        await server.WaitAssertion(() =>
-        {
-            var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
-
-            Assert.That(health.Health, Is.EqualTo(100));
-
-            // Halve max health
-            healthSystem.SetMaxHealth(ent, 50);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(health.MaxHealth, Is.EqualTo(50));
-                Assert.That(health.Health, Is.EqualTo(50)); // 100 * 50/100
+                Assert.That(damageable.TotalDamage, Is.EqualTo(100089));
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Dead));
+                Assert.That(mobStateSystem.IsDead(ent), Is.True);
+                Assert.That(mobStateSystem.IsAlive(ent), Is.False);
+                Assert.That(mobStateSystem.IsCritical(ent), Is.False);
+                Assert.That(mobStateSystem.IsIncapacitated(ent), Is.True);
             });
 
             entManager.DeleteEntity(ent);
@@ -335,7 +264,7 @@ public sealed class CEHealthSystemTest
     #region Rejuvenate
 
     /// <summary>
-    /// Verify that RejuvenateEvent fully restores health and Alive state.
+    /// Verify that RejuvenateEvent fully resets damage and restores Alive state.
     /// </summary>
     [Test]
     public async Task RejuvenateRestoresFullHealth()
@@ -343,20 +272,22 @@ public sealed class CEHealthSystemTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var entManager = server.ResolveDependency<IEntityManager>();
-        var healthSystem = entManager.System<CESharedHealthSystem>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
+        var mobStateSystem = entManager.System<CEMobStateSystem>();
 
         await server.WaitAssertion(() =>
         {
             var ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
-            var health = entManager.GetComponent<CEHealthComponent>(ent);
+            var damageable = entManager.GetComponent<CEDamageableComponent>(ent);
+            var mobState = entManager.GetComponent<CEMobStateComponent>(ent);
 
             // Kill entity
-            healthSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 999));
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 999));
 
             Assert.Multiple(() =>
             {
-                Assert.That(health.Health, Is.EqualTo(-20));
-                Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Dead));
+                Assert.That(damageable.TotalDamage, Is.EqualTo(999));
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Dead));
             });
 
             // Rejuvenate
@@ -364,9 +295,9 @@ public sealed class CEHealthSystemTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(health.Health, Is.EqualTo(100));
-                Assert.That(health.CurrentState, Is.EqualTo(CEMobState.Alive));
-                Assert.That(healthSystem.IsAlive(ent), Is.True);
+                Assert.That(damageable.TotalDamage, Is.EqualTo(0));
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Alive));
+                Assert.That(mobStateSystem.IsAlive(ent), Is.True);
             });
 
             entManager.DeleteEntity(ent);
@@ -458,7 +389,7 @@ public sealed class CEHealthSystemTest
     #region No Vanilla Components
 
     /// <summary>
-    /// Verify across ALL prototypes that have CEHealthComponent — none should have
+    /// Verify across ALL prototypes that have CEDamageableComponent — none should have
     /// vanilla DamageableComponent, MobStateComponent, or MobThresholdsComponent.
     /// </summary>
     [Test]
@@ -476,7 +407,7 @@ public sealed class CEHealthSystemTest
                 if (pair.IsTestPrototype(proto))
                     continue;
 
-                if (!proto.TryGetComponent<CEHealthComponent>(out _, entManager.ComponentFactory))
+                if (!proto.TryGetComponent<CEDamageableComponent>(out _, entManager.ComponentFactory))
                     continue;
 
                 Assert.Multiple(() =>
@@ -484,15 +415,15 @@ public sealed class CEHealthSystemTest
                     Assert.That(
                         proto.TryGetComponent<DamageableComponent>(out _, entManager.ComponentFactory),
                         Is.False,
-                        $"Prototype '{proto.ID}' has both CEHealthComponent and vanilla DamageableComponent");
+                        $"Prototype '{proto.ID}' has both CEDamageableComponent and vanilla DamageableComponent");
                     Assert.That(
                         proto.TryGetComponent<MobStateComponent>(out _, entManager.ComponentFactory),
                         Is.False,
-                        $"Prototype '{proto.ID}' has both CEHealthComponent and vanilla MobStateComponent");
+                        $"Prototype '{proto.ID}' has both CEDamageableComponent and vanilla MobStateComponent");
                     Assert.That(
                         proto.TryGetComponent<MobThresholdsComponent>(out _, entManager.ComponentFactory),
                         Is.False,
-                        $"Prototype '{proto.ID}' has both CEHealthComponent and vanilla MobThresholdsComponent");
+                        $"Prototype '{proto.ID}' has both CEDamageableComponent and vanilla MobThresholdsComponent");
                 });
             }
         });

@@ -21,7 +21,7 @@ namespace Content.Shared._CE.ZLevels.Damage;
 public sealed class CEZLevelDamageSystem : EntitySystem
 {
     [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly CESharedHealthSystem _health = default!;
+    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -90,7 +90,7 @@ public sealed class CEZLevelDamageSystem : EntitySystem
             if (otherDamage > 0)
             {
                 var otherDmgSpec = new CEDamageSpecifier(PhysicalDamageType, (int)otherDamage);
-                if (_health.TakeDamage(victim, otherDmgSpec, ent) && _net.IsClient)
+                if (_damageable.TakeDamage(victim, otherDmgSpec, ent) && _net.IsClient)
                     redDamageFlash.Add(victim);
             }
         }
@@ -99,7 +99,7 @@ public sealed class CEZLevelDamageSystem : EntitySystem
         if (damageAmount > 0)
         {
             var selfDmgSpec = new CEDamageSpecifier(PhysicalDamageType, (int)damageAmount);
-            if (_health.TakeDamage(ent.Owner, selfDmgSpec) && _net.IsClient)
+            if (_damageable.TakeDamage(ent.Owner, selfDmgSpec) && _net.IsClient)
                 redDamageFlash.Add(ent.Owner);
         }
 

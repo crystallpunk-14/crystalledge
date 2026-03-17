@@ -31,7 +31,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] protected readonly CESharedAnimationActionSystem AnimationAction = default!;
     [Dependency] private   readonly IPrototypeManager _proto = default!;
-    [Dependency] private   readonly CESharedHealthSystem _health = default!;
+    [Dependency] private   readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
 
     public override void Initialize()
@@ -219,7 +219,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         List<EntityUid> hitted = new();
         foreach (var target in targets)
         {
-            if (!_health.TakeDamage(target, weapon.Comp.Damage * power, user))
+            if (!_damageable.TakeDamage(target, weapon.Comp.Damage * power, user))
                 continue;
 
             var attackedEv = new CEAttackedEvent(user, weapon);

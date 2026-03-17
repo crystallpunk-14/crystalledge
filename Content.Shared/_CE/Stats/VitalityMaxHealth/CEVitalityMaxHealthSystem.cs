@@ -6,12 +6,12 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._CE.Stats.VitalityMaxHealth;
 
 /// <summary>
-/// Handles the connection between Vitality stat and max health.
-/// Updates <see cref="CESharedHealthSystem.SetMaxHealth"/> when vitality changes.
+/// Handles the connection between Vitality stat and mob state thresholds.
+/// Updates <see cref="CEMobStateSystem.SetThresholds"/> when vitality changes.
 /// </summary>
 public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedHealthSystem _health = default!;
+    [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     private readonly ProtoId<CECharacterStatPrototype> _vitalityStat = "Vitality";
 
@@ -27,7 +27,8 @@ public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
         if (args.StatType != _vitalityStat)
             return;
 
-        var maxHealth = (int)Math.Ceiling(args.NewValue * ent.Comp.HealthPerVitality);
-        _health.SetMaxHealth(ent.Owner, maxHealth);
+        var critThreshold = (int)Math.Ceiling(args.NewValue * ent.Comp.HealthPerVitality);
+        var deadThreshold = critThreshold + ent.Comp.DeadThresholdOffset;
+        _mobState.SetThresholds(ent.Owner, critThreshold, deadThreshold);
     }
 }
