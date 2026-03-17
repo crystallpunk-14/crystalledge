@@ -1,0 +1,20 @@
+- type: entity
+  id: CEWallWoodenBase
+  name: wooden wall
+  abstract: true
+  parent: CEBaseWall
+  suffix: Flammable, Destructable
+  components:
+  - type: IconSmooth
+    base: wood
+
+- type: entity
+  id: CEWallWoodenDark
+  name: dark wooden wall
+  suffix: Indestructable
+  parent: CEWallWoodenBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/dark.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/dark.rsi
