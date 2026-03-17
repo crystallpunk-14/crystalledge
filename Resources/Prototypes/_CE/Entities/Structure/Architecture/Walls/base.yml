@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: BaseWall
+  parent: BaseStructure
   categories: [ ForkFiltered ]
   id: CEBaseWall
   name: wall
@@ -10,6 +10,15 @@
     snap:
     - Wall
   components:
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Rotatable
+  - type: IsRoof
+  - type: Physics
+    bodyType: Static
+  - type: BlockWeather
+  - type: SunShadowCast
   - type: Transform
     anchored: true
     noRot: false
@@ -48,6 +57,10 @@
     snap:
     - Wall
   components:
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Rotatable
   - type: Transform
     anchored: true
     noRot: false
