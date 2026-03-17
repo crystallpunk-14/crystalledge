@@ -7,14 +7,40 @@
   components:
   - type: IconSmooth
     base: wood
+  - type: CEHealth
+    maxHealth: 10
+    health: 10
+  - type: CEArmor
+    flat:
+      Physical: 10
+      Fire: -5
+
+- type: entity
+  id: CEWallWooden
+  name: wooden wall
+  parent: CEWallWoodenBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/wooden.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/wooden.rsi
 
 - type: entity
   id: CEWallWoodenDark
   name: dark wooden wall
-  suffix: Indestructable
   parent: CEWallWoodenBase
   components:
   - type: Sprite
     sprite: _CE/Structures/Architecture/Walls/Wooden/dark.rsi
   - type: Icon
     sprite: _CE/Structures/Architecture/Walls/Wooden/dark.rsi
+
+- type: entity
+  id: CEWallWoodenLight
+  name: light wooden wall
+  parent: CEWallWoodenBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/light.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/light.rsi

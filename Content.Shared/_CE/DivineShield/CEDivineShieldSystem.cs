@@ -20,10 +20,10 @@ public sealed class CEDivineShieldSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEDivineShieldStatusEffectComponent, StatusEffectRelayedEvent<CEBeforeDamageEvent>>(OnBeforeDamage);
+        SubscribeLocalEvent<CEDivineShieldStatusEffectComponent, StatusEffectRelayedEvent<CEDamageCalculateEvent>>(OnBeforeDamage);
     }
 
-    private void OnBeforeDamage(Entity<CEDivineShieldStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEBeforeDamageEvent> args)
+    private void OnBeforeDamage(Entity<CEDivineShieldStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEDamageCalculateEvent> args)
     {
         args.Args.Cancelled = true;
         BreakShield(ent);

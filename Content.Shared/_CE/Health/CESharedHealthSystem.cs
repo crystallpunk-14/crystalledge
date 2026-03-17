@@ -1,4 +1,5 @@
 using Content.Shared._CE.Health.Components;
+using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
 
 namespace Content.Shared._CE.Health;
@@ -6,7 +7,7 @@ namespace Content.Shared._CE.Health;
 /// <summary>
 /// Manages CrystallEdge health: damage application, healing, max health changes.
 /// Health is a single int value. Damage is specified via <see cref="CEDamageSpecifier"/>
-/// and flows through <see cref="CEBeforeDamageEvent"/> for modification before application.
+/// and flows through <see cref="CEDamageCalculateEvent"/> for modification before application.
 /// </summary>
 public abstract partial class CESharedHealthSystem : EntitySystem
 {
@@ -61,7 +62,7 @@ public abstract partial class CESharedHealthSystem : EntitySystem
 
         var modifiedDamage = new CEDamageSpecifier(damage);
 
-        var beforeEv = new CEBeforeDamageEvent(modifiedDamage, source);
+        var beforeEv = new CEDamageCalculateEvent(modifiedDamage, source);
         RaiseLocalEvent(ent, beforeEv);
 
         if (beforeEv.Cancelled)
@@ -158,11 +159,13 @@ public sealed class CEHealthChangedEvent(EntityUid target, int oldHealth, int ne
 /// <summary>
 /// Raised before damage is applied. Systems can modify <see cref="Damage"/> or cancel the event.
 /// </summary>
-public sealed class CEBeforeDamageEvent(CEDamageSpecifier damage, EntityUid? source) : EntityEventArgs
+public sealed class CEDamageCalculateEvent(CEDamageSpecifier damage, EntityUid? source) : EntityEventArgs, IInventoryRelayEvent
 {
     public CEDamageSpecifier Damage = damage;
     public EntityUid? Source = source;
     public bool Cancelled;
+
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
 }
 
 /// <summary>
