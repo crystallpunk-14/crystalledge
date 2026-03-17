@@ -18,6 +18,6 @@ public sealed class CEDestructibleSystem : EntitySystem
     private void OnDamageChanged(Entity<CEDestructibleComponent> ent, ref CEDamageChangedEvent args)
     {
         if (args.NewDamage >= ent.Comp.DestroyThreshold)
-            QueueDel(ent);
+            PredictedQueueDel(ent);
     }
 }
