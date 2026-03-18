@@ -5,6 +5,8 @@
   description: "Interact to level up. TODO: immersive name and description"
   categories: [ ForkFiltered ]
   components:
+  - type: PlacementReplacement
+    key: walls
   - type: Sprite
     noRot: true
     drawdepth: Mobs

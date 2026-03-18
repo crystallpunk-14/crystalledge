@@ -33,6 +33,12 @@
       ambientLightColor: "#3d4444"
     - type: Gravity
       enabled: true
+      inherent: true
+    - type: Parallax
+      parallax: CEAbyss
+    blessingCount:
+      min: 4
+      max: 4
     generalRooms:
       whitelist:
         requireAll: true
@@ -44,13 +50,15 @@
         requireAll: true
         tags:
         - CEDunGenZoneTest
-        - CEDunGenRoomExit
+        #- CEDunGenRoomExit
+        - CEDunGenRoomGeneral
     entranceRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenZoneTest
-        - CEDunGenRoomEntrance
+        #- CEDunGenRoomEntrance
+        - CEDunGenRoomGeneral
     blessingRooms:
       whitelist:
         requireAll: true
