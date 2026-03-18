@@ -1,3 +1,4 @@
+using Content.Shared._CE.ElementInteraction;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
 using Robust.Shared.Map;
@@ -21,6 +22,15 @@ public sealed class CEFrostSystem : EntitySystem
     private readonly EntProtoId _defaultIceProto = "CEIce";
     private readonly EntProtoId _statusColdSlowdown = "CEStatusEffectColdSlowdown";
 
+    private EntityQuery<CEIceComponent> _iceQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _iceQuery = GetEntityQuery<CEIceComponent>();
+    }
+
     /// <summary>
     /// Applies cold slowdown stacks to an entity.
     /// </summary>
@@ -31,6 +41,13 @@ public sealed class CEFrostSystem : EntitySystem
 
         if (_net.IsClient)
             return;
+
+        // Element interaction: frost vs fire mutual neutralization.
+        var attemptEv = new CEFreezeEntityAttemptEvent(target, stack, false);
+        RaiseLocalEvent(ref attemptEv);
+        if (attemptEv.Cancelled)
+            return;
+        stack = attemptEv.Stacks;
 
         var cycleDuration = duration ?? TimeSpan.FromSeconds(5f);
 
@@ -64,12 +81,17 @@ public sealed class CEFrostSystem : EntitySystem
         if (!_mapSystem.TryGetTileRef(grid.Owner, grid.Comp, coordinates.Position, out var tileRef) || tileRef.Tile.IsEmpty)
             return;
 
+        // Element interaction: ice vs fire tile mutual neutralization.
+        var attemptEv = new CEFreezeTileAttemptEvent(coordinates, false);
+        RaiseLocalEvent(ref attemptEv);
+        if (attemptEv.Cancelled)
+            return;
+
         // Check if ice already exists on this tile.
         var existing = _mapSystem.GetAnchoredEntities((grid, grid.Comp), coordinates);
         foreach (var ent in existing)
         {
-            var meta = MetaData(ent).EntityPrototype;
-            if (meta != null && meta == _defaultIceProto)
+            if (_iceQuery.HasComp(ent))
                 return;
         }
 

@@ -38,3 +38,4 @@
   - type: FrictionContacts
   - type: TileFrictionModifier
     modifier: 0.05
+  - type: CEIce

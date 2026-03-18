@@ -1,3 +1,4 @@
+using Content.Shared._CE.ElementInteraction;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
 using Robust.Shared.GameStates;
@@ -159,6 +160,13 @@ public sealed class CEFireSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // Element interaction: fire vs frost mutual neutralization.
+        var attemptEv = new CEIgniteEntityAttemptEvent(target, stack, false);
+        RaiseLocalEvent(ref attemptEv);
+        if (attemptEv.Cancelled)
+            return;
+        stack = attemptEv.Stacks;
+
         // Read flammable overrides from the target, if present.
         var cycleDuration = TimeSpan.FromSeconds(2f);
         int? stackDeltaOverride = null;
@@ -208,6 +216,13 @@ public sealed class CEFireSystem : EntitySystem
         // Don't ignite empty tiles (space / no turf).
         if (!_mapSystem.TryGetTileRef(grid.Owner, grid.Comp, coordinates.Position, out var tileRef) || tileRef.Tile.IsEmpty)
             return;
+
+        // Element interaction: fire vs ice tile mutual neutralization.
+        var attemptEv = new CEIgniteTileAttemptEvent(coordinates, stacks, false);
+        RaiseLocalEvent(ref attemptEv);
+        if (attemptEv.Cancelled)
+            return;
+        stacks = attemptEv.Stacks;
 
         var existingFires = _mapSystem.GetAnchoredEntities((grid, grid.Comp), coordinates);
 
