@@ -1,4 +1,9 @@
 - type: roleLoadout
+  id: JobCEMage
+  groups:
+  - CEMageShirt
+
+- type: roleLoadout
   id: JobCEPriest
   groups:
   - CEPriestCloak

@@ -1,0 +1,35 @@
+- type: loadoutGroup
+  id: CEMageShirt
+  name: ce-loadout-shirt
+  minLimit: 1
+  loadouts:
+  - CEClothingMageShirtBlue
+  - CEClothingMageShirtBlueJacket
+  - CEClothingMageShirtOpenPurpleDress
+  - CEClothingMageShirtPurple
+  - CEClothingMageShirtWhitePurpleDress
+
+- type: loadout
+  id: CEClothingMageShirtBlue
+  equipment:
+    shirt: CEClothingMageShirtBlue
+
+- type: loadout
+  id: CEClothingMageShirtBlueJacket
+  equipment:
+    shirt: CEClothingMageShirtBlueJacket
+
+- type: loadout
+  id: CEClothingMageShirtOpenPurpleDress
+  equipment:
+    shirt: CEClothingMageShirtOpenPurpleDress
+
+- type: loadout
+  id: CEClothingMageShirtPurple
+  equipment:
+    shirt: CEClothingMageShirtPurple
+
+- type: loadout
+  id: CEClothingMageShirtWhitePurpleDress
+  equipment:
+    shirt: CEClothingMageShirtWhitePurpleDress
