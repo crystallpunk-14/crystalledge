@@ -25,8 +25,8 @@ public abstract partial class CESharedHealthSystem
     private void InitBlocker()
     {
         // Critical blocks most actions except movement and speech
-        SubscribeLocalEvent<CEHealthComponent, ChangeDirectionAttemptEvent>(OnChangeDirectionAttempt);
-        SubscribeLocalEvent<CEHealthComponent, UpdateCanMoveEvent>(OnUpdateCanMove);
+        SubscribeLocalEvent<CEHealthComponent, ChangeDirectionAttemptEvent>(OnBlockIfDead);
+        SubscribeLocalEvent<CEHealthComponent, UpdateCanMoveEvent>(OnBlockIfDead);
         SubscribeLocalEvent<CEHealthComponent, UseAttemptEvent>(OnBlockIfIncapacitated);
         SubscribeLocalEvent<CEHealthComponent, AttackAttemptEvent>(OnBlockIfIncapacitated);
         SubscribeLocalEvent<CEHealthComponent, ThrowAttemptEvent>(OnBlockIfIncapacitated);
@@ -35,7 +35,7 @@ public abstract partial class CESharedHealthSystem
         SubscribeLocalEvent<CEHealthComponent, StartPullAttemptEvent>(OnBlockIfIncapacitated);
         SubscribeLocalEvent<CEHealthComponent, StandAttemptEvent>(OnBlockIfIncapacitated);
         SubscribeLocalEvent<CEHealthComponent, PointAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEHealthComponent, SpeakAttemptEvent>(OnSpeakAttempt);
+        SubscribeLocalEvent<CEHealthComponent, SpeakAttemptEvent>(OnBlockIfDead);
         SubscribeLocalEvent<CEHealthComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<CEHealthComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
 
@@ -46,33 +46,6 @@ public abstract partial class CESharedHealthSystem
         SubscribeLocalEvent<CEHealthComponent, CEMobStateChangedEvent>(OnMobStateChangedSpeed);
     }
 
-    /// <summary>
-    /// Direction changes are allowed in Critical (for crawling) but blocked in Dead.
-    /// </summary>
-    private void OnChangeDirectionAttempt(EntityUid uid, CEHealthComponent comp, ChangeDirectionAttemptEvent args)
-    {
-        if (comp.CurrentState == CEMobState.Dead)
-            args.Cancel();
-    }
-
-    /// <summary>
-    /// Movement is allowed in Critical (slow crawl) but blocked in Dead.
-    /// </summary>
-    private void OnUpdateCanMove(EntityUid uid, CEHealthComponent comp, UpdateCanMoveEvent args)
-    {
-        if (comp.CurrentState == CEMobState.Dead)
-            args.Cancel();
-    }
-
-    /// <summary>
-    /// Speech is allowed in Critical (whisper only) but blocked in Dead.
-    /// TODO: Force whisper mode when in Critical state via the chat/speech pipeline.
-    /// </summary>
-    private void OnSpeakAttempt(EntityUid uid, CEHealthComponent comp, SpeakAttemptEvent args)
-    {
-        if (comp.CurrentState == CEMobState.Dead)
-            args.Cancel();
-    }
 
     /// <summary>
     /// Blocks the action if the entity is in Critical or Dead state.
@@ -80,6 +53,15 @@ public abstract partial class CESharedHealthSystem
     private void OnBlockIfIncapacitated(EntityUid uid, CEHealthComponent comp, CancellableEntityEventArgs args)
     {
         if (comp.CurrentState is CEMobState.Critical or CEMobState.Dead)
+            args.Cancel();
+    }
+
+    /// <summary>
+    /// Blocks the action if the entity is in the Dead state.
+    /// </summary>
+    private void OnBlockIfDead(EntityUid uid, CEHealthComponent comp, CancellableEntityEventArgs args)
+    {
+        if (comp.CurrentState is CEMobState.Dead)
             args.Cancel();
     }
 
