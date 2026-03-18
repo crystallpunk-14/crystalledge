@@ -4,5 +4,5 @@ ce-alert-divine-shield-desc = Protects against any damage, then breaks.
 ce-alert-fire-name = On fire!
 ce-alert-fire-desc = You take fire damage equal to the number of fire stacks on you!
 
-ce-alert-elemental-affinity-fire-name = Elemental Affinity: Fire
-ce-alert-elemental-affinity-fire-desc = You are fully immune to fire damage.
+ce-alert-cold-slowdown-name = Frostbite
+ce-alert-cold-slowdown-desc = You're moving more slowly because you're severely chilled!
