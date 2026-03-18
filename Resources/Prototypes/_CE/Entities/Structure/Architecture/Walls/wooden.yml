@@ -7,6 +7,12 @@
   - type: CEDamageable
   - type: CEDestructible
     destroyThreshold: 20
+    destroySound:
+      collection: WoodDestroy
+    loot: !type:AllSelector
+      children:
+      - id: EggySeeds
+        amount: 2
   - type: CEArmor
     flat:
       Physical: 5

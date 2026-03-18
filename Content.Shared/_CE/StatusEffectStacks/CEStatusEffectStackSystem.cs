@@ -4,8 +4,6 @@ using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Timing;
-using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.StatusEffectStacks;
 

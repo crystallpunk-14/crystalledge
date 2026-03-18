@@ -41,6 +41,18 @@ public sealed class CEFireSystem : EntitySystem
 
         SubscribeLocalEvent<CEFireComponent, MapInitEvent>(OnFireMapInit);
         SubscribeLocalEvent<CEFireComponent, StartCollideEvent>(OnCollide);
+
+        SubscribeLocalEvent<CEFlammableComponent, MapInitEvent>(OnMapInit);
+    }
+
+    private void OnMapInit(Entity<CEFlammableComponent> ent, ref MapInitEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        var dur = ent.Comp.BurnCycleDuration.TotalSeconds;
+        ent.Comp.BurnCycleDuration = TimeSpan.FromSeconds(_random.NextDouble(dur * 0.75, dur * 1.25));
+        Dirty(ent);
     }
 
     public override void Update(float frameTime)

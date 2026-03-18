@@ -1,4 +1,12 @@
 using Content.Shared._CE.Health.Components;
+using Content.Shared.EntityTable;
+using Content.Shared.Throwing;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 
 namespace Content.Shared._CE.Health;
 
@@ -8,6 +16,14 @@ namespace Content.Shared._CE.Health;
 /// </summary>
 public sealed class CEDestructibleSystem : EntitySystem
 {
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly EntityTableSystem _entityTable = default!;
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedMapSystem _maps = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -17,7 +33,40 @@ public sealed class CEDestructibleSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CEDestructibleComponent> ent, ref CEDamageChangedEvent args)
     {
-        if (args.NewDamage >= ent.Comp.DestroyThreshold)
-            PredictedQueueDel(ent);
+        if (args.NewDamage < ent.Comp.DestroyThreshold)
+            return;
+
+        var xform = Transform(ent);
+        EntityCoordinates position;
+
+        if (TryComp<MapGridComponent>(xform.GridUid, out var mapGrid))
+            position = new EntityCoordinates(xform.GridUid.Value, _maps.LocalToGrid(xform.GridUid.Value, mapGrid, xform.Coordinates));
+        else if (xform.MapUid != null)
+            position = new EntityCoordinates(xform.MapUid.Value, _transform.GetWorldPosition(xform));
+        else
+            return;
+
+        if (_net.IsClient)
+            return;
+
+        if (ent.Comp.Loot is not null)
+        {
+            var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
+            foreach (var spawn in spawns)
+            {
+                var spawnedLoot = SpawnAtPosition(spawn, position);
+                _transform.SetLocalRotation(spawnedLoot, _random.NextAngle());
+                _throwing.TryThrow(
+                    spawnedLoot,
+                    _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f),
+                    2f
+                );
+            }
+        }
+
+        if (ent.Comp.DestroySound is not null)
+            _audio.PlayPvs(ent.Comp.DestroySound, position, ent.Comp.DestroySound.Params.WithVariation(0.1f));
+
+        QueueDel(ent);
     }
 }

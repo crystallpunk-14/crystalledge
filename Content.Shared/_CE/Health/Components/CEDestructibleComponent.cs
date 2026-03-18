@@ -1,3 +1,5 @@
+using Content.Shared.EntityTable.EntitySelectors;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Health.Components;
@@ -14,4 +16,10 @@ public sealed partial class CEDestructibleComponent : Component
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
     public int DestroyThreshold;
+
+    [DataField]
+    public SoundSpecifier? DestroySound;
+
+    [DataField]
+    public EntityTableSelector? Loot;
 }
