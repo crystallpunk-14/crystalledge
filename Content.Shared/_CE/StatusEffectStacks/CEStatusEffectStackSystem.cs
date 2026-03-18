@@ -35,7 +35,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectEndingAttemptEvent args)
     {
         var delta = ent.Comp.StackDelta;
-        var newStack = ent.Comp.Stack + delta;
+        var newStack = ent.Comp.Stacks + delta;
 
         // If stacks would reach zero or below, let the effect end naturally.
         if (newStack <= 0)
@@ -58,7 +58,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (duration is null)
             return;
 
-        var ev = new CEStatusEffectStackEffectEvent(ent.Comp.Stack);
+        var ev = new CEStatusEffectStackEffectEvent(ent.Comp.Stacks);
         RaiseLocalEvent(ent, ref ev);
 
         _statusEffect.TryAddTime(statusEffect.AppliedTo.Value, proto, duration.Value);
@@ -96,7 +96,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         else
         {
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
-            SetStack(target, (statusEnt.Value, stackComp), stackComp.Stack + stack);
+            SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks + stack);
             if (duration != null)
             {
                 stackComp.BaseDuration = duration;
@@ -125,13 +125,13 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
             return false;
 
-        if (stackComp.Stack <= stack)
+        if (stackComp.Stacks <= stack)
         {
             _statusEffect.TryRemoveStatusEffect(target, statusEffect);
             return true;
         }
 
-        SetStack(target, (statusEnt.Value, stackComp), stackComp.Stack - stack);
+        SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks - stack);
         return true;
     }
 
@@ -158,13 +158,13 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (proto is null)
             return false;
 
-        if (effect.Comp.Stack <= stack)
+        if (effect.Comp.Stacks <= stack)
         {
             _statusEffect.TryRemoveStatusEffect(statusEffect.AppliedTo.Value, proto);
             return true;
         }
 
-        SetStack(statusEffect.AppliedTo.Value, (effect, effect.Comp), effect.Comp.Stack - stack);
+        SetStack(statusEffect.AppliedTo.Value, (effect, effect.Comp), effect.Comp.Stacks - stack);
         return true;
     }
 
@@ -182,17 +182,17 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
             return 0;
 
-        return stackComp.Stack;
+        return stackComp.Stacks;
     }
 
     private void SetStack(EntityUid target, Entity<CEStatusEffectStackComponent> ent, int newStack)
     {
-        if (ent.Comp.Stack == newStack)
+        if (ent.Comp.Stacks == newStack)
             return;
 
-        var oldStack = ent.Comp.Stack;
+        var oldStack = ent.Comp.Stacks;
 
-        ent.Comp.Stack = newStack;
+        ent.Comp.Stacks = newStack;
         Dirty(ent);
 
         var ev = new CEStatusEffectStackEditedEvent(target, oldStack, newStack);

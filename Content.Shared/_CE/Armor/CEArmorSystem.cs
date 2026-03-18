@@ -20,7 +20,7 @@ public sealed partial class CEArmorSystem : EntitySystem
     {
         var stack = 1;
         if (TryComp<CEStatusEffectStackComponent>(ent, out var stacks))
-            stack = stacks.Stack;
+            stack = stacks.Stacks;
 
         args.Args.Damage = GetNewDamage(args.Args.Damage, ent, stack);
     }

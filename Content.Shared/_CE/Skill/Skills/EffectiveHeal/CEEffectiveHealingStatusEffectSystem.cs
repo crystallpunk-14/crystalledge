@@ -17,7 +17,7 @@ public sealed partial class CEEffectiveHealingStatusEffectSystem : EntitySystem
     {
         var count = ent.Comp.AdditionalHeal;
         if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
-            count *= stackComp.Stack;
+            count *= stackComp.Stacks;
 
         args.Args.HealAmount += count;
     }

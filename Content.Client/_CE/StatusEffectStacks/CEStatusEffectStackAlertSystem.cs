@@ -44,7 +44,7 @@ public sealed class CEStatusEffectStackAlertSystem : EntitySystem
             if (!_stackCompQuery.TryComp(effectEnt, out var stackComp))
                 continue;
 
-            args.Amount = stackComp.Stack;
+            args.Amount = stackComp.Stacks;
             return;
         }
     }
