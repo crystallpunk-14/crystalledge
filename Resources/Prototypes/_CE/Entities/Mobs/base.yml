@@ -6,6 +6,8 @@
   - type: CEDamageable
   - type: CEMobState
   - type: Pullable
+  - type: CEFlammable
+    stackDelta: -1
 
 - type: entity
   id: CEMobMagical

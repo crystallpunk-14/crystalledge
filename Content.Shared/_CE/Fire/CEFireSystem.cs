@@ -147,6 +147,16 @@ public sealed class CEFireSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // Read flammable overrides from the target, if present.
+        var cycleDuration = TimeSpan.FromSeconds(2f);
+        int? stackDeltaOverride = null;
+
+        if (TryComp<CEFlammableComponent>(target, out var flammable))
+        {
+            cycleDuration = flammable.BurnCycleDuration;
+            stackDeltaOverride = flammable.StackDelta;
+        }
+
         // If a maxStack is provided, ensure we don't exceed it.
         if (maxStack != null)
         {
@@ -157,11 +167,16 @@ public sealed class CEFireSystem : EntitySystem
 
             var toAdd = Math.Min(stack, allowed);
 
-            _stack.TryAddStack(target, _statusFire, toAdd, TimeSpan.FromSeconds(2f));
-            return;
+            _stack.TryAddStack(target, _statusFire, toAdd, cycleDuration);
+        }
+        else
+        {
+            _stack.TryAddStack(target, _statusFire, stack, cycleDuration);
         }
 
-        _stack.TryAddStack(target, _statusFire, stack, TimeSpan.FromSeconds(2f));
+        // Apply flammable overrides to the status effect instance.
+        if (stackDeltaOverride != null)
+            _stack.SetStackDelta(target, _statusFire, stackDeltaOverride.Value);
     }
 
     /// <summary>
@@ -277,6 +292,9 @@ public enum CEFireTileVisualLevel
     High,
 }
 
+/// <summary>
+/// For tile fire entity
+/// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEFireComponent : Component
 {

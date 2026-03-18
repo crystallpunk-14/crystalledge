@@ -5,6 +5,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.StatusEffectStacks;
 
@@ -35,14 +36,16 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
     private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectEndingAttemptEvent args)
     {
-        if (ent.Comp.Stack <= 1)
+        var delta = ent.Comp.StackDelta;
+        var newStack = ent.Comp.Stack + delta;
+
+        // If stacks would reach zero or below, let the effect end naturally.
+        if (newStack <= 0)
             return;
 
-        // Always cancel the ending on both client and server to prevent visual flicker.
-        // The client predicts the same cancellation, avoiding a brief deletion-then-reappear cycle.
+        // Cancel the ending on both client and server to prevent visual flicker.
         args.Cancelled = true;
 
-        // Server handles the actual stack removal and timer extension.
         if (_net.IsClient)
             return;
 
@@ -53,7 +56,6 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect) || statusEffect.AppliedTo is null)
             return;
 
-        // Use the stored base duration instead of calculating from time difference
         var duration = ent.Comp.BaseDuration;
         if (duration is null)
             return;
@@ -62,7 +64,11 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         RaiseLocalEvent(ent, ref ev);
 
         _statusEffect.TryAddTime(statusEffect.AppliedTo.Value, proto, duration.Value);
-        TryRemoveStack(statusEffect.AppliedTo.Value, proto, 1);
+
+        if (delta < 0)
+            TryRemoveStack(statusEffect.AppliedTo.Value, proto, -delta);
+        else if (delta > 0)
+            TryAddStack(statusEffect.AppliedTo.Value, proto, delta);
     }
 
     /// <summary>
@@ -209,6 +215,21 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             appearanceState = CEStatusEffectStackPowerVisuals.High;
 
         _appearance.SetData(ent, CEStatusEffectStackVisuals.Level, appearanceState);
+    }
+
+    /// <summary>
+    /// Sets the StackDelta on a specific status effect applied to a target entity.
+    /// </summary>
+    public void SetStackDelta(EntityUid target, EntProtoId statusEffect, int delta)
+    {
+        if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
+            return;
+
+        if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
+            return;
+
+        stackComp.StackDelta = delta;
+        Dirty(statusEnt.Value, stackComp);
     }
 }
 

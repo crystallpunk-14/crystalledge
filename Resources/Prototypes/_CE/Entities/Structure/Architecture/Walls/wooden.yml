@@ -6,16 +6,17 @@
   components:
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 10
+    destroyThreshold: 20
   - type: CEArmor
     flat:
-      Physical: 10
-      Fire: -5
+      Physical: 5
+  - type: CEFlammable
+    stackDelta: 2
 
 - type: entity
   id: CEWallWooden
   name: wooden wall
-  parent: 
+  parent:
   - CEBaseWall
   - CEWallWoodenBase
   components:
@@ -29,7 +30,7 @@
 - type: entity
   id: CEWallWoodenDark
   name: dark wooden wall
-  parent: 
+  parent:
   - CEBaseWall
   - CEWallWoodenBase
   components:
@@ -43,7 +44,7 @@
 - type: entity
   id: CEWallWoodenLight
   name: light wooden wall
-  parent: 
+  parent:
   - CEBaseWall
   - CEWallWoodenBase
   components:
@@ -57,7 +58,7 @@
 - type: entity
   id: CEWallWoodenFrame
   name: wooden wall frame
-  parent: 
+  parent:
   - CEBaseWallFrame
   - CEWallWoodenBase
   components:
