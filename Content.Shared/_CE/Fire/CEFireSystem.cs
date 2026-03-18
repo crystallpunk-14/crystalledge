@@ -170,7 +170,7 @@ public sealed class CEFireSystem : EntitySystem
 
         // Element interaction: fire vs frost mutual neutralization.
         var attemptEv = new CEIgniteEntityAttemptEvent(target, stack, false);
-        RaiseLocalEvent(ref attemptEv);
+        RaiseLocalEvent(target, ref attemptEv);
         if (attemptEv.Cancelled)
             return;
         stack = attemptEv.Stacks;

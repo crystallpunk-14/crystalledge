@@ -41,14 +41,16 @@ public sealed class CEElementInteractionSystem : EntitySystem
         _fireQuery = GetEntityQuery<CEFireComponent>();
         _iceQuery = GetEntityQuery<CEIceComponent>();
 
-        // Broadcast attempt events (raised from Fire/Frost systems).
-        SubscribeLocalEvent<CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
-        SubscribeLocalEvent<CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
+        // Entity attempt events (directed on target entity).
+        SubscribeLocalEvent<TransformComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
+        SubscribeLocalEvent<TransformComponent, CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
+
+        // Tile attempt events (broadcast).
         SubscribeLocalEvent<CEIgniteTileAttemptEvent>(OnIgniteTileAttempt);
         SubscribeLocalEvent<CEFreezeTileAttemptEvent>(OnFreezeTileAttempt);
     }
 
-    private void OnIgniteEntityAttempt(ref CEIgniteEntityAttemptEvent args)
+    private void OnIgniteEntityAttempt(Entity<TransformComponent> ent, ref CEIgniteEntityAttemptEvent args)
     {
         if (args.Cancelled)
             return;
@@ -67,7 +69,7 @@ public sealed class CEElementInteractionSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    private void OnFreezeEntityAttempt(ref CEFreezeEntityAttemptEvent args)
+    private void OnFreezeEntityAttempt(Entity<TransformComponent> ent, ref CEFreezeEntityAttemptEvent args)
     {
         if (args.Cancelled)
             return;

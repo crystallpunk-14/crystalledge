@@ -1,5 +1,6 @@
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -35,6 +36,16 @@ public sealed class CEFrostSystem : EntitySystem
         _iceQuery = GetEntityQuery<CEIceComponent>();
 
         SubscribeLocalEvent<CEIceComponent, MapInitEvent>(OnIceMapInit);
+
+        SubscribeLocalEvent<CEFreezeImmunityComponent,
+            StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent>>(OnFreezeImmunity);
+    }
+
+    private void OnFreezeImmunity(
+        Entity<CEFreezeImmunityComponent> ent,
+        ref StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent> args)
+    {
+        args.Args.Cancelled = true;
     }
 
     private void OnIceMapInit(Entity<CEIceComponent> ent, ref MapInitEvent args)
@@ -66,7 +77,7 @@ public sealed class CEFrostSystem : EntitySystem
 
         // Element interaction: frost vs fire mutual neutralization.
         var attemptEv = new CEFreezeEntityAttemptEvent(target, stack, false);
-        RaiseLocalEvent(ref attemptEv);
+        RaiseLocalEvent(target, ref attemptEv);
         if (attemptEv.Cancelled)
             return;
         stack = attemptEv.Stacks;
