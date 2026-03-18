@@ -3,6 +3,8 @@ using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
 
+namespace Content.Shared._CE.DamageStatusEffect;
+
 public sealed partial class CESpeedModifierStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
