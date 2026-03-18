@@ -1,7 +1,10 @@
 - type: roleLoadout
   id: JobCEMage
   groups:
+  - CEMageHead
+  - CEMageCloak
   - CEMageShirt
+  - CEMagePants
 
 - type: roleLoadout
   id: JobCEPriest

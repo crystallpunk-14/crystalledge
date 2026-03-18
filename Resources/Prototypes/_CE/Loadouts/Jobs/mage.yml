@@ -33,3 +33,45 @@
   id: CEClothingMageShirtWhitePurpleDress
   equipment:
     shirt: CEClothingMageShirtWhitePurpleDress
+
+- type: loadoutGroup
+  id: CEMagePants
+  name: ce-loadout-pants
+  minLimit: 1
+  loadouts:
+  - CEClothingMagePantsBlue
+  - CEClothingMagePantsPurple
+
+- type: loadout
+  id: CEClothingMagePantsBlue
+  equipment:
+    pants: CEClothingMagePantsBlue
+
+- type: loadout
+  id: CEClothingMagePantsPurple
+  equipment:
+    pants: CEClothingMagePantsPurple
+
+- type: loadoutGroup
+  id: CEMageCloak
+  name: ce-loadout-cloak
+  minLimit: 1
+  loadouts:
+  - CEClothingMageCloakCape
+
+- type: loadout
+  id: CEClothingMageCloakCape
+  equipment:
+    cloak: CEClothingMageCloakCape
+
+- type: loadoutGroup
+  id: CEMageHead
+  name: ce-loadout-head
+  minLimit: 0
+  loadouts:
+  - CEClothingMageHeadTriangular
+
+- type: loadout
+  id: CEClothingMageHeadTriangular
+  equipment:
+    head: CEClothingMageHeadTriangular
