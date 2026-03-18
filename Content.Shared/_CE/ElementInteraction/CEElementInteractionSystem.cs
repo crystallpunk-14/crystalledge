@@ -14,12 +14,14 @@ namespace Content.Shared._CE.ElementInteraction;
 /// Handles fire/frost mutual neutralization through ECS attempt events.
 /// When fire is applied to a frosted entity (or ice tile), and vice versa,
 /// the opposing elements cancel each other out with a steam effect.
+/// Also handles direct spawns (e.g. admin panel) via MapInit subscriptions.
 /// </summary>
 public sealed class CEElementInteractionSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly INetManager _net = default!;
@@ -39,6 +41,7 @@ public sealed class CEElementInteractionSystem : EntitySystem
         _fireQuery = GetEntityQuery<CEFireComponent>();
         _iceQuery = GetEntityQuery<CEIceComponent>();
 
+        // Broadcast attempt events (raised from Fire/Frost systems).
         SubscribeLocalEvent<CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
         SubscribeLocalEvent<CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
         SubscribeLocalEvent<CEIgniteTileAttemptEvent>(OnIgniteTileAttempt);
@@ -138,9 +141,10 @@ public sealed class CEElementInteractionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var coords = Transform(target).Coordinates;
-        var steam = Spawn(_steamEffect, coords);
-        _audio.PlayPvs(_steamSound, steam);
+        var pos = Transform(target).Coordinates;
+
+        Spawn(_steamEffect, pos);
+        _audio.PlayPvs(_steamSound, pos);
     }
 
     private void PlaySteamEffectAt(MapCoordinates coordinates)
@@ -149,6 +153,6 @@ public sealed class CEElementInteractionSystem : EntitySystem
             return;
 
         var steam = _entManager.SpawnEntity(_steamEffect, coordinates);
-        _audio.PlayPvs(_steamSound, steam);
+        _audio.PlayPvs(_steamSound, Transform(steam).Coordinates);
     }
 }

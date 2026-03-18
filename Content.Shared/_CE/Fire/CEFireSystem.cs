@@ -1,4 +1,3 @@
-using Content.Shared._CE.ElementInteraction;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
 using Robust.Shared.GameStates;
@@ -90,8 +89,17 @@ public sealed class CEFireSystem : EntitySystem
         // Update appearance for initial stacks.
         UpdateAppearance(ent);
 
-        // Ignite entities already on the tile.
+        // Element interaction: check for opposing element on the tile.
         var coords = _transform.GetMapCoordinates(ent);
+        var attemptEv = new CEIgniteTileAttemptEvent(coords, ent.Comp.Stacks, false);
+        RaiseLocalEvent(ref attemptEv);
+        if (attemptEv.Cancelled)
+        {
+            EntityManager.DeleteEntity(ent);
+            return;
+        }
+
+        // Ignite entities already on the tile.
         var entitiesOnTile = _lookup.GetEntitiesInRange(coords, 0.5f);
         foreach (var entity in entitiesOnTile)
         {
@@ -362,3 +370,17 @@ public sealed partial class CEFireComponent : Component
     [DataField]
     public int HighThreshold = 10;
 }
+
+/// <summary>
+/// Raised as a broadcast event before fire stacks are applied to an entity.
+/// Handlers can modify Stacks or set Cancelled to prevent ignition.
+/// </summary>
+[ByRefEvent]
+public record struct CEIgniteEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
+
+/// <summary>
+/// Raised as a broadcast event before fire is placed on a tile.
+/// Handlers can modify Stacks or set Cancelled to prevent ignition.
+/// </summary>
+[ByRefEvent]
+public record struct CEIgniteTileAttemptEvent(MapCoordinates Coordinates, int Stacks, bool Cancelled);

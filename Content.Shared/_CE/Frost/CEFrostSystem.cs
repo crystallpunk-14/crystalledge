@@ -1,6 +1,7 @@
-using Content.Shared._CE.ElementInteraction;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -18,9 +19,12 @@ public sealed class CEFrostSystem : EntitySystem
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private readonly EntProtoId _defaultIceProto = "CEIce";
     private readonly EntProtoId _statusColdSlowdown = "CEStatusEffectColdSlowdown";
+    private readonly EntProtoId _freezeEffect = "CEFreezeEffect";
+    private readonly SoundSpecifier _freezeSound = new SoundPathSpecifier("/Audio/Items/Anomaly/ice_crit.ogg");
 
     private EntityQuery<CEIceComponent> _iceQuery;
 
@@ -29,6 +33,24 @@ public sealed class CEFrostSystem : EntitySystem
         base.Initialize();
 
         _iceQuery = GetEntityQuery<CEIceComponent>();
+
+        SubscribeLocalEvent<CEIceComponent, MapInitEvent>(OnIceMapInit);
+    }
+
+    private void OnIceMapInit(Entity<CEIceComponent> ent, ref MapInitEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        // Element interaction: check for opposing element on the tile.
+        var coords = _transform.GetMapCoordinates(ent);
+        var attemptEv = new CEFreezeTileAttemptEvent(coords, false);
+        RaiseLocalEvent(ref attemptEv);
+        if (attemptEv.Cancelled)
+        {
+            _entManager.DeleteEntity(ent);
+            return;
+        }
     }
 
     /// <summary>
@@ -96,6 +118,10 @@ public sealed class CEFrostSystem : EntitySystem
         }
 
         _entManager.SpawnEntity(_defaultIceProto, coordinates);
+
+        // Spawn freeze visual effect.
+        var fx = _entManager.SpawnEntity(_freezeEffect, coordinates);
+        _audio.PlayPvs(_freezeSound, fx);
     }
 
     /// <summary>
@@ -168,3 +194,17 @@ public sealed class CEFrostSystem : EntitySystem
         return Math.Max(1, (int) MathF.Ceiling(intensity * maxStacks));
     }
 }
+
+/// <summary>
+/// Raised as a broadcast event before frost/cold stacks are applied to an entity.
+/// Handlers can modify Stacks or set Cancelled to prevent freezing.
+/// </summary>
+[ByRefEvent]
+public record struct CEFreezeEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
+
+/// <summary>
+/// Raised as a broadcast event before ice is placed on a tile.
+/// Handlers can set Cancelled to prevent freezing.
+/// </summary>
+[ByRefEvent]
+public record struct CEFreezeTileAttemptEvent(MapCoordinates Coordinates, bool Cancelled);

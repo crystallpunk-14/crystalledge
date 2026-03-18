@@ -5,6 +5,10 @@
   categories: [ ForkFiltered ]
   components:
   - type: Transform
+  - type: Sprite
+    sprite: Effects/chemsmoke.rsi
+    state: chemsmoke_white
+    drawdepth: Effects
   - type: TimedDespawn
     lifetime: 1.5
   - type: PointLight
