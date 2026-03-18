@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/affinity_ice.rsi
+      sprite: _CE/Skills/frost_flow.rsi
       state: icon
   - type: TargetAction
     range: 20
