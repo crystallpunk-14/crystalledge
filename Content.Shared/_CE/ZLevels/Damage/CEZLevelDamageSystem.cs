@@ -7,12 +7,10 @@ using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Prototypes;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.CCVar;
-using Content.Shared.Effects;
 using Content.Shared.Stunnable;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -26,7 +24,6 @@ public sealed class CEZLevelDamageSystem : EntitySystem
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
 
     public float BaseFallingDamage { get; private set; }
     public float BaseFallingOtherDamage { get; private set; }
@@ -52,8 +49,6 @@ public sealed class CEZLevelDamageSystem : EntitySystem
     {
         var damageModifier = 1f;
         var stunModifier = 1f;
-
-        List<EntityUid> redDamageFlash = new();
 
         var damageToOtherEv = new CEZFallingOnTargetDamageCalculateEvent(args.ImpactPower);
         RaiseLocalEvent(ent, damageToOtherEv);
@@ -90,8 +85,7 @@ public sealed class CEZLevelDamageSystem : EntitySystem
             if (otherDamage > 0)
             {
                 var otherDmgSpec = new CEDamageSpecifier(PhysicalDamageType, (int)otherDamage);
-                if (_damageable.TakeDamage(victim, otherDmgSpec, ent) && _net.IsClient)
-                    redDamageFlash.Add(victim);
+                _damageable.TakeDamage(victim, otherDmgSpec, ent);
             }
         }
 
@@ -99,11 +93,8 @@ public sealed class CEZLevelDamageSystem : EntitySystem
         if (damageAmount > 0)
         {
             var selfDmgSpec = new CEDamageSpecifier(PhysicalDamageType, (int)damageAmount);
-            if (_damageable.TakeDamage(ent.Owner, selfDmgSpec) && _net.IsClient)
-                redDamageFlash.Add(ent.Owner);
+            _damageable.TakeDamage(ent.Owner, selfDmgSpec);
         }
-
-        _color.RaiseEffect(Color.Red, redDamageFlash, Filter.Pvs(ent, entityManager: EntityManager));
 
         var knockdownTime = MathF.Min(args.ImpactPower * args.ImpactPower * BaseFallingStunTime * stunModifier, 5f);
         if (knockdownTime > 0)

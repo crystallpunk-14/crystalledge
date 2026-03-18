@@ -37,15 +37,15 @@ public sealed class CEFrostSystem : EntitySystem
 
         SubscribeLocalEvent<CEIceComponent, MapInitEvent>(OnIceMapInit);
 
-        SubscribeLocalEvent<CEFreezeImmunityComponent,
+        SubscribeLocalEvent<CEFreezeImmunityStatusEffectComponent,
             StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent>>(OnFreezeImmunity);
     }
 
-    private void OnFreezeImmunity(
-        Entity<CEFreezeImmunityComponent> ent,
-        ref StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent> args)
+    private void OnFreezeImmunity(Entity<CEFreezeImmunityStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent> args)
     {
-        args.Args.Cancelled = true;
+        var inner = args.Args;
+        inner.Cancelled = true;
+        args.Args = inner;
     }
 
     private void OnIceMapInit(Entity<CEIceComponent> ent, ref MapInitEvent args)

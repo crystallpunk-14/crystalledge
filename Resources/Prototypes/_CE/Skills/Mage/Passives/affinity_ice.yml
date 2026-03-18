@@ -15,7 +15,7 @@
   - type: CEArmor
     flat:
       Cold: 3
-  - type: CEFreezeImmunity
+  - type: CEFreezeImmunityStatusEffect
 
 - type: alert
   id: CEAffinityIce

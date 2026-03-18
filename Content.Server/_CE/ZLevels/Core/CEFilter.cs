@@ -59,4 +59,45 @@ public static class CEFilter
 
         return filter;
     }
+    /// <summary>
+    /// A filter with every player whose PVS overlaps this point, excluding the origin entity,
+    /// plus players on adjacent z-levels who can visually see the origin's position:
+    /// </summary>
+    [PublicAPI]
+    public static Filter ZPvs(EntityUid origin, IEntityManager? entManager = null)
+    {
+        IoCManager.Resolve(ref entManager);
+
+        var filter = Filter.Pvs(origin, entityManager: entManager);
+
+        var zSystem = entManager.System<CEZLevelsSystem>();
+        var xform = entManager.GetComponent<TransformComponent>(origin);
+
+        var worldPos = xform.WorldPosition;
+
+        if (xform.MapUid is not { } currentMap)
+            return filter;
+
+        var visibleMap = new List<EntityUid>();
+
+        if (zSystem.TryMapOffset(currentMap, 1, out var mapAbove))
+            visibleMap.Add(mapAbove.Value);
+
+        for (var i = 1; i <= CESharedZLevelsSystem.MaxZLevelsBelowRendering; i++)
+        {
+            if (zSystem.TryMapOffset(currentMap, -i, out var mapBelow))
+                visibleMap.Add(mapBelow.Value);
+        }
+
+        foreach (var map in visibleMap)
+        {
+            if (entManager.TryGetComponent<MapComponent>(map, out var mapComp))
+            {
+                var mapCoord = new MapCoordinates(worldPos, mapComp.MapId);
+                filter.AddPlayersByPvs(mapCoord);
+            }
+        }
+
+        return filter;
+    }
 }

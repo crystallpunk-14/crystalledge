@@ -87,6 +87,10 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
             return false;
 
         ChangeDamage(ent, totalDamage, out var actualDelta);
+
+        if (actualDelta != 0)
+            RaiseDamageEffect(ent, source);
+
         return actualDelta != 0;
     }
 
@@ -125,6 +129,14 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
             return 0;
 
         return target.Comp.TotalDamage;
+    }
+
+    /// <summary>
+    /// Raises a red color flash on the damaged entity.
+    /// Server sends via PVS (excluding source), client shows locally during prediction.
+    /// </summary>
+    protected virtual void RaiseDamageEffect(EntityUid target, EntityUid? source)
+    {
     }
 }
 
