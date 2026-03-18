@@ -6,15 +6,9 @@
   components:
   - type: Transform
   - type: Sprite
-    sprite: Effects/chemsmoke.rsi
-    state: chemsmoke_white
+    sprite: _CE/Effects/steam_cloud.rsi
+    state: effect
+    noRot: true
     drawdepth: Effects
   - type: TimedDespawn
     lifetime: 1.5
-  - type: PointLight
-    color: "#b0c4de"
-    radius: 1.5
-    energy: 2
-    enabled: true
-  - type: LightFade
-    duration: 1.5

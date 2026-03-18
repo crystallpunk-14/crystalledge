@@ -14,7 +14,7 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 3
   - type: Action
     useDelay: 5
     icon:
@@ -29,7 +29,7 @@
 - type: animationAction
   id: AnimationFrostFlow
   movementSpeed: 0.3
-  duration: 1.8
+  duration: 1.0
   lockRotation: true
   events:
     0:
@@ -38,9 +38,9 @@
       offsetAnimation:
       - time: 0.0
         offset: 0, 0.5
-      - time: 1.7
+      - time: 0.8
         offset: 0, -1
-    1.7:
+    0.8:
     - !type:ShootProjectile
       projectileSpeed: 8
       prototype: CEProjectileFrostFlow
@@ -85,7 +85,7 @@
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/freeze_effect.rsi
     layers:
     - state: effect
       shader: unshaded

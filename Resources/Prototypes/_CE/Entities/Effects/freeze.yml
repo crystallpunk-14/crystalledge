@@ -6,12 +6,12 @@
   components:
   - type: Transform
   - type: Sprite
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/freeze_effect.rsi
     layers:
     - state: effect
     drawdepth: Effects
   - type: TimedDespawn
-    lifetime: 1.0
+    lifetime: 2.0
   - type: PointLight
     color: "#6ec6ff"
     radius: 1.2
