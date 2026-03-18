@@ -1,11 +1,10 @@
 using System.Numerics;
 using Content.Server._CE.Animation.Item;
-using Content.Server._CE.Health;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.GOAP;
-using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.Health;
 using Content.Shared.CombatMode;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
@@ -47,7 +46,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly CEHealthSystem _health = default!;
+    [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
     private EntityQuery<NPCSteeringComponent> _steeringQuery;
@@ -86,7 +85,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         }
 
         // Check if target is neutralized
-        if (!_health.IsAlive(target.Value))
+        if (!_mobState.IsAlive(target.Value))
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;

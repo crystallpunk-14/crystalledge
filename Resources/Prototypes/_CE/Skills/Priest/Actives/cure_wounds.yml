@@ -26,7 +26,7 @@
   - type: EntityTargetAction
     whitelist:
       components:
-      - CEHealth
+      - CEMobState
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationCureWounds
 

@@ -6,7 +6,7 @@
   - type: StatusEffect
     whitelist:
       components:
-      - CEHealth
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEFire
   - type: RejuvenateRemovedStatusEffect

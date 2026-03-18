@@ -1,0 +1,65 @@
+# Example dungeon level prototypes using the CEDungeonSystem generator configs.
+
+# A static dungeon level that loads a pre-made map file as-is.
+- type: dungeonLevel
+  id: CEDungeonTestStatic
+  name: Test Static Dungeon
+  config:
+    !type:CEStaticMapConfig
+    mapPath: /Maps/_CE/Dev/Dev0.yml
+
+# A multi-z-level dungeon that creates a z-network from a zMap prototype.
+- type: dungeonLevel
+  id: CEDungeonTestZNetwork
+  name: Test ZNetwork Dungeon
+  config:
+    !type:CEStaticZNetworkConfig
+    zMapProto: DunTest
+
+- type: dungeonLevel
+  id: CEDungeonTestProcedural
+  name: Test Procedural Dungeon
+  config:
+    !type:CEProceduralConfig
+    maxRoomSize: 16
+    cycleCount:
+      min: 3
+      max: 10
+    generalCount:
+      min: 50
+      max: 50
+    components:
+    - type: MapLight
+      ambientLightColor: "#3d4444"
+    - type: Gravity
+      enabled: true
+    generalRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenZoneTest
+        - CEDunGenRoomGeneral
+    exitRoom:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenZoneTest
+        - CEDunGenRoomExit
+    entranceRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenZoneTest
+        - CEDunGenRoomEntrance
+    blessingRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenZoneTest
+        - CEDunGenRoomBlessing
+    deadEndRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenZoneTest
+        - CEDunGenRoomDeadEnd

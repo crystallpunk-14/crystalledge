@@ -13,6 +13,7 @@
 BaselineWall: CEWallStoneBrick
 BaselineSpawnPoint: CESpawnPointJob
 CEUpgradeTrigger: null
+BaselineLight: CEFloorTorchAlwaysPowered
 
 # CrystallEdge zone end
 

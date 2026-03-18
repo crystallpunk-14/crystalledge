@@ -1,0 +1,69 @@
+- type: entity
+  id: CEWallWoodenBase
+  name: wooden wall
+  abstract: true
+  suffix: Flammable, Destructable
+  components:
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
+  - type: CEArmor
+    flat:
+      Physical: 10
+      Fire: -5
+
+- type: entity
+  id: CEWallWooden
+  name: wooden wall
+  parent: 
+  - CEBaseWall
+  - CEWallWoodenBase
+  components:
+  - type: IconSmooth
+    base: wood
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/wooden.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/wooden.rsi
+
+- type: entity
+  id: CEWallWoodenDark
+  name: dark wooden wall
+  parent: 
+  - CEBaseWall
+  - CEWallWoodenBase
+  components:
+  - type: IconSmooth
+    base: wood
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/dark.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/dark.rsi
+
+- type: entity
+  id: CEWallWoodenLight
+  name: light wooden wall
+  parent: 
+  - CEBaseWall
+  - CEWallWoodenBase
+  components:
+  - type: IconSmooth
+    base: wood
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/light.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/light.rsi
+
+- type: entity
+  id: CEWallWoodenFrame
+  name: wooden wall frame
+  parent: 
+  - CEBaseWallFrame
+  - CEWallWoodenBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/Wooden/frame.rsi
+    state: frame
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/Wooden/frame.rsi
+    state: frame

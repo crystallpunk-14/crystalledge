@@ -1,4 +1,5 @@
 using Content.Shared._CE.Actions;
+using Content.Shared._CE.Health;
 using Content.Shared._CE.Stats.Core;
 using Content.Shared.Armor;
 using Content.Shared.Atmos;
@@ -42,6 +43,7 @@ public partial class InventorySystem
     {
         //CrystallEdge zone
         SubscribeLocalEvent<InventoryComponent, CECalculateStatEvent>(RelayInventoryEvent);
+        SubscribeLocalEvent<InventoryComponent, CEDamageCalculateEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateManacostEvent>(RelayInventoryEvent);
         //CrystallEdge zone end
 

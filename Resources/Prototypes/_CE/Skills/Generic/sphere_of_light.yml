@@ -26,7 +26,7 @@
   - type: EntityTargetAction
     whitelist:
       components:
-      - CEHealth
+      - CEMobState
       - Item
       - Anchorable
     event: !type:CEEntityTargetActionAnimationEvent

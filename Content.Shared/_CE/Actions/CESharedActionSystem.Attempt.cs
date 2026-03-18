@@ -109,14 +109,14 @@ public abstract partial class CESharedActionSystem
 
         var target = GetEntity(args.Input.EntityTarget);
 
-        if (!TryComp<CEHealthComponent>(target, out var healthComp))
+        if (!TryComp<CEMobStateComponent>(target, out var mobStateComp))
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-target-not-mob"), args.User, args.User);
             args.Invalid = true;
             return;
         }
 
-        if (!ent.Comp.AllowedStates.Contains(healthComp.CurrentState))
+        if (!ent.Comp.AllowedStates.Contains(mobStateComp.CurrentState))
         {
             var states = "";
             foreach (var state in ent.Comp.AllowedStates)

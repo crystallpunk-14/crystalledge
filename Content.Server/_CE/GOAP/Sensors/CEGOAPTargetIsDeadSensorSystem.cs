@@ -1,5 +1,5 @@
-using Content.Server._CE.Health;
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -10,7 +10,7 @@ public sealed partial class CEGOAPTargetIsDeadSensor : CEGOAPSensorBase<CEGOAPTa
 
 public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<CEGOAPTargetIsDeadSensor>
 {
-    [Dependency] private readonly CEHealthSystem _health = default!;
+    [Dependency] private readonly CEMobStateSystem _mobState = default!;
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDeadSensor> args)
     {
         var target = GetTarget(ent.Comp, args.Sensor.TargetProviderKey);
@@ -20,6 +20,6 @@ public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<
             return;
         }
 
-        SetState(ref args, !_health.IsAlive(target.Value));
+        SetState(ref args, !_mobState.IsAlive(target.Value));
     }
 }

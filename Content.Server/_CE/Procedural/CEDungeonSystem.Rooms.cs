@@ -4,12 +4,10 @@ using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Decals;
 using Content.Shared.Maps;
-using Content.Shared.Procedural;
 using Content.Shared.Whitelist;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server._CE.Procedural;
@@ -62,13 +60,33 @@ public sealed partial class CEDungeonSystem
                 continue;
             }
 
-            foreach (var tag in whitelist.Tags)
+            if (whitelist.RequireAll)
             {
-                if (!proto.Tags.Contains(tag))
-                    continue;
+                // AND mode: the room must contain ALL whitelist tags.
+                var allMatch = true;
+                foreach (var tag in whitelist.Tags)
+                {
+                    if (!proto.Tags.Contains(tag))
+                    {
+                        allMatch = false;
+                        break;
+                    }
+                }
 
-                _availableRooms.Add(proto);
-                break;
+                if (allMatch)
+                    _availableRooms.Add(proto);
+            }
+            else
+            {
+                // OR mode (default): the room must contain at least one whitelist tag.
+                foreach (var tag in whitelist.Tags)
+                {
+                    if (!proto.Tags.Contains(tag))
+                        continue;
+
+                    _availableRooms.Add(proto);
+                    break;
+                }
             }
         }
 
@@ -83,19 +101,8 @@ public sealed partial class CEDungeonSystem
 
     public Angle GetRoomRotation(CEDungeonRoom3DPrototype room, Random random)
     {
-        var roomRotation = Angle.Zero;
-
-        if (room.Size.X == room.Size.Y)
-        {
-            // Give it a random rotation
-            roomRotation = random.Next(4) * Math.PI / 2;
-        }
-        else if (random.Next(2) == 1)
-        {
-            roomRotation += Math.PI;
-        }
-
-        return roomRotation;
+        // All rooms support 0°, 90°, 180°, 270° regardless of shape.
+        return random.Next(4) * Math.PI / 2;
     }
 
     public bool TrySpawn3DRoom(

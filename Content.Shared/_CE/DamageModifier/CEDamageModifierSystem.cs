@@ -13,12 +13,12 @@ public sealed class CEDamageModifierSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEDamageModifierStatusEffectComponent, StatusEffectRelayedEvent<CEBeforeDamageEvent>>(OnBeforeDamage);
+        SubscribeLocalEvent<CEDamageModifierStatusEffectComponent, StatusEffectRelayedEvent<CEDamageCalculateEvent>>(OnBeforeDamage);
     }
 
     private void OnBeforeDamage(
         Entity<CEDamageModifierStatusEffectComponent> ent,
-        ref StatusEffectRelayedEvent<CEBeforeDamageEvent> args)
+        ref StatusEffectRelayedEvent<CEDamageCalculateEvent> args)
     {
         if (args.Args.Cancelled)
             return;

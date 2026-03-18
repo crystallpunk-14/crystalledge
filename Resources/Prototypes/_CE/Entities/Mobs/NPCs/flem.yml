@@ -121,7 +121,7 @@
       state: alive
   - type: GenericVisualizer
     visuals:
-      enum.CEHealthState.State:
+      enum.CEMobStateVisuals.State:
         livingState:
           Alive: { state: alive }
           Critical: { state: dead }

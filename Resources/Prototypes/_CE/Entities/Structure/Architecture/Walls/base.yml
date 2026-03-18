@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: BaseWall
+  parent: BaseStructure
   categories: [ ForkFiltered ]
   id: CEBaseWall
   name: wall
@@ -10,9 +10,18 @@
     snap:
     - Wall
   components:
-  - type: CEZPhysics
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Rotatable
+  - type: IsRoof
+  - type: Physics
+    bodyType: Static
+  - type: BlockWeather
+  - type: SunShadowCast
   - type: Transform
-    noRot: true
+    anchored: true
+    noRot: false
   - type: Sprite
     drawdepth: Mobs
   - type: IconSmooth
@@ -24,6 +33,43 @@
     key: walls
   - type: CEAutoTilePlacement
   - type: Occluder
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: CEZLevelHighGround
+
+- type: entity
+  id: CEBaseWallFrame
+  categories: [ ForkFiltered ]
+  parent: BaseStructure
+  abstract: true
+  description: This wall is now in an indeterminate state between existence and non-existence.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Rotatable
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Sprite
+    drawdepth: Mobs
+  - type: PlacementReplacement
+    key: walls
+  - type: Physics
+    bodyType: Static
   - type: Fixtures
     fixtures:
       fix1:

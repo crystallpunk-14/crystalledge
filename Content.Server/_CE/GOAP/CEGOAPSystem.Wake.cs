@@ -1,5 +1,4 @@
 
-using Content.Server._CE.Health;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
@@ -9,11 +8,11 @@ namespace Content.Server._CE.GOAP;
 
 public sealed partial class CEGOAPSystem
 {
-    [Dependency] private readonly CEHealthSystem _health = default!;
+    [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     private void InitWake()
     {
-        SubscribeLocalEvent<CEHealthComponent, CECheckGOAPAwakeEvent>(OnCheckAwake);
+        SubscribeLocalEvent<CEMobStateComponent, CECheckGOAPAwakeEvent>(OnCheckAwake);
         SubscribeLocalEvent<CEGOAPComponent, CEMobStateChangedEvent>(OnMobStateChanged);
     }
 
@@ -22,12 +21,12 @@ public sealed partial class CEGOAPSystem
         UpdateAwakeStatus(ent.Owner);
     }
 
-    private void OnCheckAwake(Entity<CEHealthComponent> ent, ref CECheckGOAPAwakeEvent args)
+    private void OnCheckAwake(Entity<CEMobStateComponent> ent, ref CECheckGOAPAwakeEvent args)
     {
         if (args.Handled)
             return;
 
-        if (_health.IsAlive(ent))
+        if (_mobState.IsAlive(ent))
             args.WakeUp();
     }
 
