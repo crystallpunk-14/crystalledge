@@ -3,3 +3,10 @@
   files:
   - /Audio/_CE/Effects/crystal_ding.ogg
   - /Audio/_CE/Effects/crystal_ding2.ogg
+
+- type: soundCollection
+  id: CECoins
+  files:
+  - /Audio/_CE/Effects/coins1.ogg
+  - /Audio/_CE/Effects/coins2.ogg
+  - /Audio/_CE/Effects/coins3.ogg
