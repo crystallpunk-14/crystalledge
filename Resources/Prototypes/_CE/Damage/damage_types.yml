@@ -1,4 +1,8 @@
 - type: CEDamageType
   id: Physical
+
 - type: CEDamageType
   id: Fire
+
+- type: CEDamageType
+  id: Cold
