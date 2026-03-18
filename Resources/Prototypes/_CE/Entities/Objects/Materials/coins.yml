@@ -4,9 +4,6 @@
   abstract: true
   categories: [ ForkFiltered ]
   components:
-  - type: Tag
-    tags:
-    - CECoin
   - type: Item
     size: Tiny
   - type: Stack
