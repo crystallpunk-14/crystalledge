@@ -112,7 +112,7 @@
   id: CEMobHuman
   name: Mr. Human
   components:
-  - type: CEActivateGOAPComponentInRange
+  - type: CEGOAPActivateGOAPComponentInRange
 
 - type: entity
   parent: OrganBase
