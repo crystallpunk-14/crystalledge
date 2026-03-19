@@ -111,6 +111,8 @@
   - CEBaseSpeciesMob
   id: CEMobHuman
   name: Mr. Human
+  components:
+  - type: CEActivateGOAPComponentInRange
 
 - type: entity
   parent: OrganBase

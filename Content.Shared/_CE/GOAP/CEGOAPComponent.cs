@@ -83,6 +83,10 @@ public sealed partial class CEGOAPComponent : Component
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextSensorTime;
-
+    /// <summary>
+    /// Determines whether GOAP will be active after MapInit.
+    /// </summary>
+    [DataField(serverOnly: true)]
+    public bool SleepOnMapInit = true;
 }
 

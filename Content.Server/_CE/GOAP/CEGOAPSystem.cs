@@ -46,7 +46,10 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
-        UpdateAwakeStatus((ent, ent.Comp));
+        if (ent.Comp.SleepOnMapInit)
+            Sleep(ent!);
+        else
+            UpdateAwakeStatus(ent!);
     }
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
