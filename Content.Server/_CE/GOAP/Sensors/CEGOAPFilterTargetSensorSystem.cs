@@ -6,7 +6,7 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// <summary>
 /// Filters target components/tags by whitelist and blacklist
 /// </summary>
-public sealed partial class CEGOAPFilterTargetComponentsSensor : CEGOAPSensorBase<CEGOAPFilterTargetComponentsSensor>
+public sealed partial class CEGOAPFilterTargetSensor : CEGOAPSensorBase<CEGOAPFilterTargetSensor>
 {
     /// <summary>
     /// Whitelisted components/tags.
@@ -20,11 +20,11 @@ public sealed partial class CEGOAPFilterTargetComponentsSensor : CEGOAPSensorBas
     public EntityWhitelist? Blacklist;
 }
 
-public sealed partial class CEGOAPFilterTargetComponentsSensorSystem : CEGOAPSensorSystem<CEGOAPFilterTargetComponentsSensor>
+public sealed partial class CEGOAPFilterTargetSensorSystem : CEGOAPSensorSystem<CEGOAPFilterTargetSensor>
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
 
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilterTargetComponentsSensor> args)
+    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilterTargetSensor> args)
     {
         var target = GetTarget(ent.Comp, args.Sensor.TargetProviderKey);
         if (target == null)
