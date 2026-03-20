@@ -23,14 +23,20 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensor : CEGOAPSens
     /// <summary>
     /// Search range.
     /// </summary>
-    [DataField(required: true)]
+    [DataField]
     public float Range = 5f;
 
     /// <summary>
     /// Ignore self.
     /// </summary>
-    [DataField(required: true)]
+    [DataField]
     public bool IgnoreSelf = true;
+
+    /// <summary>
+    /// Minimum count of entities.
+    /// </summary>
+    [DataField]
+    public int MinCount = 1;
 }
 
 public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPFilteredEntityExistsInRangeSensor>
@@ -40,13 +46,18 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGO
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilteredEntityExistsInRangeSensor> args)
     {
+        int count = 0;
         var entities = _lookup.GetEntitiesInRange(Transform(ent).Coordinates, args.Sensor.Range);
+
         foreach (var entityUid in entities)
         {
             if (args.Sensor.IgnoreSelf && entityUid == ent.Owner)
                 continue;
 
             if (_whitelist.CheckBoth(entityUid, args.Sensor.Blacklist, args.Sensor.Whitelist))
+                count++;
+
+            if (count >= args.Sensor.MinCount)
             {
                 SetState(ref args, true);
                 return;
