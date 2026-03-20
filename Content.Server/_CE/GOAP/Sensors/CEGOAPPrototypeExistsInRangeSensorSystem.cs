@@ -18,6 +18,12 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     /// </summary>
     [DataField(required: true)]
     public float Range = 5f;
+
+    /// <summary>
+    /// Ignore self.
+    /// </summary>
+    [DataField(required: true)]
+    public bool IgnoreSelf = true;
 }
 
 public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPPrototypeExistsInRangeSensor>
@@ -28,6 +34,9 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSen
         var entities = _lookup.GetEntitiesInRange(Transform(ent).Coordinates, args.Sensor.Range);
         foreach (var entityUid in entities)
         {
+            if (args.Sensor.IgnoreSelf && entityUid == ent.Owner)
+                continue;
+
             if (TryComp<MetaDataComponent>(entityUid, out var meta) &&
                 meta.EntityPrototype?.ID == args.Sensor.PrototypeId.ID)
             {
