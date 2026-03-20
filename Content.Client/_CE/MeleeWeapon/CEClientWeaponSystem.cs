@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Shared._CE.Animation.Item;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Camera;
-using Content.Shared.Effects;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
@@ -23,7 +22,6 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly InputSystem _inputSystem = default!;
     [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly CEScreenshakeSystem _shake = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -162,9 +160,6 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
             // Apply screenshake to target
             _shake.Screenshake(target, otherShakeTranslation, null);
         }
-
-        // Apply color flash effect
-        _color.RaiseEffect(Color.Red, targets, Filter.Local());
     }
 
     protected override void RaiseAttackEffects(EntityUid user, List<EntityUid> targets)

@@ -12,7 +12,7 @@ namespace Content.Shared._CE.StatusEffectStacks;
 public sealed partial class CEStatusEffectStackComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public int Stack = 1;
+    public int Stacks = 1;
 
     /// <summary>
     /// Base duration of the status effect per stack.

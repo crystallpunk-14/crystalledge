@@ -1,0 +1,52 @@
+- type: entity
+  id: CEStatusEffectColdSlowdown
+  name: Cold Slowdown
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CEColdSlowdown
+  - type: RejuvenateRemovedStatusEffect
+  - type: CESpeedModifierStatusEffect
+    speed: 0.8
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/cold_slowdown_status.rsi
+    noRot: true
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 1.2
+    energy: 1
+    color: "#30caf5"
+
+- type: alert
+  id: CEColdSlowdown
+  alertViewEntity: CEColdSlowdownAlertSpriteView
+  name: ce-alert-cold-slowdown-name
+  description: ce-alert-cold-slowdown-desc
+  icons:
+  - sprite: _CE/Interface/cold.rsi
+    state: cold_slowdown
+
+- type: entity
+  id: CEColdSlowdownAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/cold.rsi
+      state: cold_slowdown
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

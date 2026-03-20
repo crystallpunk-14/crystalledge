@@ -1,0 +1,44 @@
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingMageShirtBlue
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Mage/blue.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Mage/blue.rsi
+
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingMageShirtBlueJacket
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Mage/blue_jacket.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Mage/blue_jacket.rsi
+
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingMageShirtOpenPurpleDress
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Mage/open_purple_dress.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Mage/open_purple_dress.rsi
+
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingMageShirtPurple
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Mage/purple.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Mage/purple.rsi
+
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingMageShirtWhitePurpleDress
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Shirt/Mage/white_purple_dress.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Shirt/Mage/white_purple_dress.rsi

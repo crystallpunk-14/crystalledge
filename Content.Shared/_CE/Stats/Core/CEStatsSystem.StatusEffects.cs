@@ -22,7 +22,7 @@ public sealed partial class CEStatsSystem
         var stack = 1;
 
         if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
-            stack = stackComp.Stack;
+            stack = stackComp.Stacks;
 
         args.Args.AffectValue(ent.Comp.ModifyStats.GetValueOrDefault(args.Args.StatType, 0) * stack);
 

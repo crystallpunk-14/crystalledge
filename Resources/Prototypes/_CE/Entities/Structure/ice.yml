@@ -1,0 +1,41 @@
+- type: entity
+  id: CEIce
+  name: ice
+  description: Slippery cold ice. Watch your step.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+    snap:
+      - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: PlacementReplacement
+    key: floorTile
+  - type: Sprite
+    drawdepth: FloorTiles
+    sprite: _CE/Structures/Nature/ice.rsi
+  - type: Icon
+    sprite: _CE/Structures/Nature/ice.rsi
+    state: full
+  - type: IconSmooth
+    base: tile_
+    key: ice
+    additionalKeys:
+    - CEwall
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        density: 7
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - MidImpassable
+  - type: FrictionContacts
+  - type: TileFrictionModifier
+    modifier: 0.05
+  - type: CEIce

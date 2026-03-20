@@ -1,0 +1,17 @@
+- type: entity
+  parent: CEClothingPantsBase
+  id: CEClothingMagePantsBlue
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Pants/Mage/blue.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Pants/Mage/blue.rsi
+
+- type: entity
+  parent: CEClothingPantsBase
+  id: CEClothingMagePantsPurple
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Pants/Mage/purple.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Pants/Mage/purple.rsi

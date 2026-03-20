@@ -166,6 +166,36 @@
   zLevelMap: DunTest
   offset: 28, 8
 
+- type: dungeonRoom3d
+  id: TestRoom_LargeZoneHe
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
+  size: 15, 15
+  height: 2
+  zLevelMap: DunTest
+  offset: 36, 19
+
+- type: dungeonRoom3d
+  id: TestRoom_IntroHome
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
+  size: 12, 8
+  height: 2
+  zLevelMap: DunTest
+  offset: 50, 10
+
+- type: dungeonRoom3d
+  id: TestRoom_WiggleCorridor
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomGeneral
+  size: 8, 13
+  height: 2
+  zLevelMap: DunTest
+  offset: 50, -4
+
 ### Blessings
 
 - type: dungeonRoom3d

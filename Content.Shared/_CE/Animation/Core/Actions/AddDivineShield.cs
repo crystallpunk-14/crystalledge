@@ -20,7 +20,7 @@ public sealed partial class AddDivineShield : CEAnimationActionEntry
         if (target is null)
             return;
 
-        var divine = entManager.System<CEDivineShieldSystem>();
+        var divine = entManager.System<CESharedDivineShieldSystem>();
         divine.TryAddShield(target.Value, Amount);
     }
 }
