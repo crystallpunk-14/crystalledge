@@ -22,7 +22,6 @@ public sealed class CEWeatherCommand : LocalizedCommands
     [Dependency] private readonly IEntityManager _entities = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override string Command => "znetwork-weather";
     public override string Description => "Sets weather for all maps in zNetwork";
