@@ -26,4 +26,11 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype
     /// </summary>
     [DataField]
     public string Name = string.Empty;
+
+    /// <summary>
+    /// Whether this level is stable (singleton — one instance per server, e.g. safe zones)
+    /// or unstable (multiple instances allowed, cleaned up when empty).
+    /// </summary>
+    [DataField]
+    public bool Stable;
 }
