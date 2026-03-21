@@ -1,0 +1,87 @@
+- type: entity
+  parent: BaseStructureDynamic
+  id: CEChestBase
+  categories: [ HideSpawnMenu, ForkFiltered ]
+  name: chest
+  description: Chest.
+  abstract: true
+  components:
+  - type: Transform
+    noRot: true
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Chests/wooden.rsi
+    state: icon
+  - type: Sprite
+    offset: 0,0.3
+    noRot: true
+    sprite: _CE/Structures/Furniture/Chests/wooden.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["chest"]
+  - type: InteractionOutline
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.29"
+        density: 500
+        mask:
+        - SmallMobMask #this is so they can go under plastic flaps
+        layer:
+        - MachineLayer
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        chest:
+          True: { state: open }
+          False: { state: closed }
+  - type: Storage
+    grid:
+    - 0,0,7,7
+    maxItemSize: Large
+    storageOpenSound: /Audio/Effects/closetopen.ogg
+    storageCloseSound: /Audio/Effects/closetclose.ogg
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: StaticPrice
+    price: 0
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+
+- type: entity
+  parent: CEChestBase
+  id: CEChestWooden
+  name: wooden chest
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/Chests/wooden.rsi
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Chests/wooden.rsi
+
+- type: entity
+  parent: CEChestBase
+  id: CEChestGold
+  name: golden chest
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/Chests/gold.rsi
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Chests/gold.rsi
+
+- type: entity
+  parent: CEChestBase
+  id: CEChestWoodenOld
+  name: wooden chest
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/Chests/wooden_old.rsi
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Chests/wooden_old.rsi
