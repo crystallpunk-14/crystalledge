@@ -4,7 +4,7 @@ meta:
   engineVersion: 272.0.0
   forkId: ""
   forkVersion: ""
-  time: 03/21/2026 11:34:47
+  time: 03/21/2026 12:50:39
   entityCount: 51
 maps:
 - 1
@@ -22,7 +22,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Mapping Empty [1]
+      name: Mapping Level0_Entry [1]
     - type: Transform
     - type: Map
       mapPaused: True
@@ -66,7 +66,11 @@ entities:
       fibers: []
       fingerprints: []
     - type: Roof
-      data: {}
+      data:
+        -2,1: 2314886358671294464
+        -1,1: 289360704287277056
+        -2,2: 1034834419744
+        -1,2: 64677151748
     - type: TileHistory
       chunkHistory: {}
 - proto: CEWallDirt
@@ -228,18 +232,16 @@ entities:
   - uid: 47
     components:
     - type: Transform
-      anchored: False
       rot: -1.5707963267948966 rad
-      pos: -6.5,15.5
+      pos: -6.5,14.5
       parent: 1
     - type: Fixtures
       fixtures: {}
   - uid: 49
     components:
     - type: Transform
-      anchored: False
       rot: 1.5707963267948966 rad
-      pos: -9.5,15.5
+      pos: -9.5,14.5
       parent: 1
     - type: Fixtures
       fixtures: {}

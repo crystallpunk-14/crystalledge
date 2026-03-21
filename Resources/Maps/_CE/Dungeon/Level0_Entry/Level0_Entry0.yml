@@ -4,8 +4,8 @@ meta:
   engineVersion: 272.0.0
   forkId: ""
   forkVersion: ""
-  time: 03/21/2026 11:34:47
-  entityCount: 47
+  time: 03/21/2026 12:50:39
+  entityCount: 46
 maps:
 - 1
 grids:
@@ -25,7 +25,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Mapping Empty [0]
+      name: Mapping Level0_Entry [0]
     - type: Transform
     - type: Map
       mapPaused: True
@@ -69,7 +69,11 @@ entities:
       fibers: []
       fingerprints: []
     - type: Roof
-      data: {}
+      data:
+        -2,1: 2369139694601502720
+        -1,1: 290208397570080768
+        -2,2: 1034834419744
+        -1,2: 64677151748
     - type: TileHistory
       chunkHistory: {}
 - proto: CECrystalQuartzBlue
@@ -87,6 +91,14 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -6.5,17.5
+      parent: 1
+- proto: CEDungeonLevelExitFirst
+  entities:
+  - uid: 32
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -8.5,19.5
       parent: 1
 - proto: CEWallDirt
   entities:
@@ -364,27 +376,11 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 32
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -8.5,19.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 34
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -6.5,20.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 36
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -7.5,19.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05

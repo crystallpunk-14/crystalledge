@@ -3,7 +3,10 @@ using Content.Server._CE.Procedural.Instance.Components;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Flash;
 using Content.Shared.Interaction;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 
 namespace Content.Server._CE.Procedural.Instance;
@@ -11,6 +14,18 @@ namespace Content.Server._CE.Procedural.Instance;
 public sealed partial class CEDungeonInstanceSystem
 {
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedFlashSystem _flash = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+
+    /// <summary>
+    /// Sound played on each player when they arrive at the destination.
+    /// </summary>
+    private static readonly SoundCollectionSpecifier TransitionSound = new("CEDemiplaneIntro");
+
+    /// <summary>
+    /// Duration of the white-flash blind applied to teleported players.
+    /// </summary>
+    private static readonly TimeSpan FlashDuration = TimeSpan.FromSeconds(2);
 
     private void InitializeExit()
     {
@@ -191,7 +206,9 @@ public sealed partial class CEDungeonInstanceSystem
             if (!Exists(player) || Deleted(player))
                 continue;
 
+            _flash.Flash(player, null, null, FlashDuration, 0.8f);
             _transform.SetMapCoordinates(player, targetCoords);
+            _audio.PlayEntity(TransitionSound, player, player);
         }
 
         Log.Info($"CEDungeonInstanceSystem: transitioned {group.Count} player(s) to '{inst.PrototypeId}'.");

@@ -20,7 +20,7 @@
 - type: gameMap
   id: CELevel0Entry
   mapName: CELevel0Entry
-  mapPath: /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry2.yml
+  mapPath: /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry2.yml
   minPlayers: 0
   stations:
     Level:
@@ -35,8 +35,8 @@
             CEPriest: [ -1, -1 ]
         - type: CEStationZLevels
           mapsBelow:
-          - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry0.yml
-          - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry1.yml
+          - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry0.yml
+          - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry1.yml
           zLevelsComponentOverrides:
             - type: Parallax
               parallax: CESky

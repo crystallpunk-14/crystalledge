@@ -11,14 +11,33 @@
   components:
   - type: Sprite
     drawdepth: Effects
+    noRot: true
     sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
     layers:
       - state: anom
         shader: unshaded
   - type: PointLight
-    radius: 4
-    energy: 3
-    color: "#8844ff"
+    radius: 5
+    energy: 1
+    color: "#8f42ff"
+  - type: SingularityDistortion
+    falloffPower: 1.5
+    intensity: 50
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Cubic
+        maxDuration: 2
+        startValue: 0.1
+        endValue: 1.0
+        property: Energy
+        isLooped: true
+        enabled: true
+  - type: AmbientSound
+    volume: -3
+    range: 7
+    sound:
+      path: /Audio/Ambience/Objects/gravity_gen_hum.ogg
   - type: Fixtures
     fixtures:
       fix1:
@@ -68,11 +87,22 @@
     activeDuration: 600
   - type: Sprite
     drawdepth: Effects
+    noRot: true
     sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
     layers:
       - state: pulse
         shader: unshaded
   - type: PointLight
-    radius: 3
-    energy: 2
-    color: "#44aaff"
+    radius: 5
+    energy: 1
+    color: "#8f42ff"
+  - type: AmbientSound
+    volume: -3
+    range: 7
+    sound:
+      path: /Audio/Ambience/anomaly_scary.ogg
+  - type: EmitSoundOnSpawn
+    sound:
+      collection: CEDemiplaneIntro
+      params:
+        variation: 0.3
