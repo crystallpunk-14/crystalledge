@@ -58,7 +58,7 @@
   description: A rift leading deeper into the dungeon. Interact to enter.
   categories: [ HideSpawnMenu ]
   components:
-  - type: CEDungeonLevelPassage
+  - type: CEDungeonPassage
     throughput: 4
     searchRadius: 3
     transitionDuration: 10
@@ -71,7 +71,7 @@
   parent: CEDungeonLevelExit
   suffix: To test procedural level
   components:
-  - type: CEDungeonLevelPassage
+  - type: CEDungeonPassage
     targetLevel: CEDungeonTestProcedural
 
 
@@ -81,7 +81,6 @@
   components:
   - type: Sprite
     drawdepth: BelowMobs
-    noRot: true
     sprite: _CE/Effects/portal_active_effect.rsi
     layers:
     - state: effect

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
+using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared.Flash;
 using Content.Shared.Interaction;
@@ -17,7 +18,8 @@ public sealed partial class CEDungeonInstanceSystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     // Pending generation tasks started for active passages (maps to the active passage entity).
-    private readonly Dictionary<EntityUid, Task<CEDungeonGenerateResult>> _pendingGenerations = new();
+    // We store the proto id alongside the task so the result can be processed safely on the main thread.
+    private readonly Dictionary<EntityUid, (Task<CEDungeonGenerateResult> Task, Robust.Shared.Prototypes.ProtoId<CEDungeonLevelPrototype> ProtoId)> _pendingGenerations = new();
 
     /// <summary>
     /// Sound played on each player when they arrive at the destination.
@@ -36,6 +38,49 @@ public sealed partial class CEDungeonInstanceSystem
 
     private void UpdatePassage()
     {
+        // Process completed generation tasks on the main thread to avoid thread-safety issues.
+        if (_pendingGenerations.Count > 0)
+        {
+            var pendingList = _pendingGenerations.ToList();
+            foreach (var (passageUid, tuple) in pendingList)
+            {
+                var task = tuple.Task;
+                var protoId = tuple.ProtoId;
+
+                if (!task.IsCompleted)
+                    continue;
+
+                _pendingGenerations.Remove(passageUid);
+
+                if (task.IsFaulted || !task.IsCompletedSuccessfully)
+                {
+                    Log.Error($"Generation failed for '{protoId}'.");
+                    continue;
+                }
+
+                var result = task.GetAwaiter().GetResult();
+                if (!result.Success || result.MapUid == null)
+                {
+                    Log.Error($"Generation failed for '{protoId}'.");
+                    continue;
+                }
+
+                if (!_proto.TryIndex(protoId, out var proto))
+                {
+                    Log.Error($"Generated instance has unknown prototype id '{protoId}'.");
+                    continue;
+                }
+
+                RegisterInstance(result.MapUid.Value, proto);
+
+                if (TryFindEnterPoint(proto, out var entry))
+                {
+                    var activeComp2 = EnsureComp<CEDungeonActivePassageComponent>(passageUid);
+                    activeComp2.TargetPosition = Transform(entry.Value).Coordinates;
+                }
+            }
+        }
+
         var query = EntityQueryEnumerator<CEDungeonActivePassageComponent>();
         while (query.MoveNext(out var uid, out var passage))
         {
@@ -50,20 +95,15 @@ public sealed partial class CEDungeonInstanceSystem
                 if (!TryFindEnterPoint(resolvedTarget, out var targetEntry))
                     continue;
 
+                targetEntry.Value.Comp.Active = false;
                 passage.TargetPosition = Transform(targetEntry.Value).Coordinates;
             }
 
             var candidates = GatherNearbyPlayers(uid, passage.SearchRadius, passage.Throughput);
-            if (candidates.Count == 0)
-            {
-                Log.Warning("No players found near exit for transition.");
-                return;
-            }
-
             if (passage.TargetPosition == null)
             {
                 Log.Error("Active passage has no target position.");
-                return;
+                continue;
             }
 
             foreach (var player in candidates)
@@ -75,6 +115,7 @@ public sealed partial class CEDungeonInstanceSystem
                 _flash.Flash(player, null, null, FlashDuration, 0.8f);
                 _audio.PlayEntity(TransitionSound, player, player);
             }
+            QueueDel(uid);
         }
     }
 
@@ -114,36 +155,9 @@ public sealed partial class CEDungeonInstanceSystem
         }
         else
         {
-            // Trigger dungeon generation and register the instance when the job completes.
+            // Trigger dungeon generation and store the task; result will be processed on the main thread in UpdatePassage.
             var genTask = _dungeon.GenerateLevelAsync(proto);
-            _pendingGenerations[activePassage] = genTask;
-
-            genTask.ContinueWith(t =>
-                {
-                    _pendingGenerations.Remove(activePassage);
-
-                    if (t.IsFaulted || !t.IsCompletedSuccessfully)
-                    {
-                        Log.Error($"Generation failed for '{ent.Comp.TargetLevel}'.");
-                        return;
-                    }
-
-                    var result = t.GetAwaiter().GetResult();
-                    if (!result.Success || result.MapUid == null)
-                    {
-                        Log.Error($"Generation failed for '{ent.Comp.TargetLevel}'.");
-                        return;
-                    }
-
-                    RegisterInstance(result.MapUid.Value, proto);
-
-                    if (TryFindEnterPoint(proto, out var entry))
-                    {
-                        var activeComp2 = EnsureComp<CEDungeonActivePassageComponent>(activePassage);
-                        activeComp2.TargetPosition = Transform(entry.Value).Coordinates;
-                    }
-                },
-                TaskScheduler.FromCurrentSynchronizationContext());
+            _pendingGenerations[activePassage] = (genTask, proto.ID);
         }
     }
 
