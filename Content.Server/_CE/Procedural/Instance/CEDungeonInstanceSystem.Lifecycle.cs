@@ -22,22 +22,50 @@ public sealed partial class CEDungeonInstanceSystem
         instance.PrototypeId = proto.ID;
         instance.Stable = proto.Stable;
         instance.CreatedAt = _timing.CurTime;
-        instance.PlayerCount = 0;
+        instance.EmptySince = null;
 
-        // Initialize entry point deactivation timers on all maps belonging to this instance.
-        InitializeEntryTimers(anchorUid);
+        var mapIds = GetInstanceMapIds(anchorUid);
+
+        // Assign exit targets from the prototype's Exits dictionary.
+        ConfigureExitTargets(mapIds, proto);
+
+        // Initialize entry point deactivation timers.
+        InitializeEntryTimers(mapIds);
 
         Log.Info($"CEDungeonInstanceSystem: registered instance '{proto.ID}' on entity {anchorUid} (stable={proto.Stable}).");
         return anchorUid;
     }
 
     /// <summary>
-    /// Sets <see cref="CEDungeonLevelEntryComponent.DeactivateAt"/> for all entries on the instance's maps.
+    /// Assigns <see cref="CEDungeonLevelExitComponent.TargetLevel"/> to exit entities whose
+    /// <see cref="CEDungeonLevelExitComponent.ExitSlot"/> matches a key in the prototype's Exits dictionary,
+    /// but only if the exit doesn't already have a target level set.
     /// </summary>
-    private void InitializeEntryTimers(EntityUid anchorUid)
+    private void ConfigureExitTargets(HashSet<MapId> mapIds, CEDungeonLevelPrototype proto)
+    {
+        if (proto.Exits.Count == 0)
+            return;
+
+        var query = EntityQueryEnumerator<CEDungeonLevelExitComponent, TransformComponent>();
+        while (query.MoveNext(out _, out var exit, out var xform))
+        {
+            if (!mapIds.Contains(xform.MapID))
+                continue;
+
+            if (exit.TargetLevel != null)
+                continue;
+
+            if (proto.Exits.TryGetValue(exit.ExitSlot, out var targetLevel))
+                exit.TargetLevel = targetLevel;
+        }
+    }
+
+    /// <summary>
+    /// Sets <see cref="CEDungeonLevelEntryComponent.DeactivateAt"/> for all entries on the given maps.
+    /// </summary>
+    private void InitializeEntryTimers(HashSet<MapId> mapIds)
     {
         var curTime = _timing.CurTime;
-        var mapIds = GetInstanceMapIds(anchorUid);
 
         var query = EntityQueryEnumerator<CEDungeonLevelEntryComponent, TransformComponent>();
         while (query.MoveNext(out _, out var entry, out var xform))
@@ -115,8 +143,9 @@ public sealed partial class CEDungeonInstanceSystem
 
     /// <summary>
     /// Finds an active entry point on any map belonging to the instance.
+    /// Returns the entry entity with its component for direct use.
     /// </summary>
-    private EntityUid? FindActiveEntry(EntityUid instanceUid)
+    private Entity<CEDungeonLevelEntryComponent>? FindActiveEntry(EntityUid instanceUid)
     {
         if (!_instanceQuery.TryComp(instanceUid, out _))
             return null;
@@ -139,7 +168,7 @@ public sealed partial class CEDungeonInstanceSystem
                 continue;
             }
 
-            return entUid;
+            return (entUid, entry);
         }
 
         return null;

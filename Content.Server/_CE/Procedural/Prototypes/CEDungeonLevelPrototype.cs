@@ -33,4 +33,17 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype
     /// </summary>
     [DataField]
     public bool Stable;
+
+    /// <summary>
+    /// Maps exit slot names to the target dungeon level prototypes.
+    /// After generation, exit entities with matching <c>ExitSlot</c> values get
+    /// their <c>TargetLevel</c> assigned from this dictionary.
+    /// <example>
+    /// exits:
+    ///   default: DungeonLevel2
+    ///   back: SafeZone1
+    /// </example>
+    /// </summary>
+    [DataField]
+    public Dictionary<string, ProtoId<CEDungeonLevelPrototype>> Exits = new();
 }

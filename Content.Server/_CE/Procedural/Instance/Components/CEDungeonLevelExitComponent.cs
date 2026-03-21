@@ -15,9 +15,19 @@ public sealed partial class CEDungeonLevelExitComponent : Component
 {
     /// <summary>
     /// The dungeon level prototype that this exit leads to.
+    /// Can be left empty if the owning dungeon level prototype defines exits via <c>Exits</c> dictionary;
+    /// in that case, it will be assigned at runtime based on <see cref="ExitSlot"/>.
     /// </summary>
-    [DataField(required: true)]
-    public ProtoId<CEDungeonLevelPrototype> TargetLevel;
+    [DataField]
+    public ProtoId<CEDungeonLevelPrototype>? TargetLevel;
+
+    /// <summary>
+    /// Slot name for matching this exit to the owning prototype's <c>Exits</c> dictionary.
+    /// When the dungeon is generated, exits with a matching slot get their <see cref="TargetLevel"/>
+    /// assigned from the prototype.
+    /// </summary>
+    [DataField]
+    public string ExitSlot = "default";
 
     /// <summary>
     /// Maximum number of players that can pass through this exit at once.

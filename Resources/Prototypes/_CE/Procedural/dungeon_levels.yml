@@ -5,6 +5,8 @@
   id: CEDungeonTestStatic
   name: Test Static Dungeon
   stable: true
+  exits:
+    default: CEDungeonTestZNetwork
   config:
     !type:CEStaticMapConfig
     mapPath: /Maps/_CE/Dev/Dev0.yml
@@ -14,6 +16,8 @@
   id: CEDungeonTestZNetwork
   name: Test ZNetwork Dungeon
   stable: false
+  exits:
+    default: CEDungeonTestProcedural
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: DunTest
@@ -22,6 +26,8 @@
   id: CEDungeonTestProcedural
   name: Test Procedural Dungeon
   stable: false
+  exits:
+    default: CEDungeonTestStatic
   config:
     !type:CEProceduralConfig
     maxRoomSize: 16

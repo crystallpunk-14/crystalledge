@@ -1,7 +1,7 @@
 using System.Linq;
 using Content.Server._CE.Procedural.Instance.Components;
-using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.Procedural.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Robust.Shared.Map;
@@ -28,30 +28,26 @@ public sealed partial class CEDungeonInstanceSystem
         if (args.Handled)
             return;
 
-        // Don't allow multiple activations on the same exit while one is pending.
-        if (_pendingGenerations.ContainsKey(ent.Owner))
-            return;
-
         args.Handled = true;
 
         var exit = ent.Comp;
 
-        if (!_proto.TryIndex(exit.TargetLevel, out var proto))
+        if (exit.TargetLevel == null || !_proto.TryIndex(exit.TargetLevel.Value, out var proto))
         {
-            Log.Error($"CEDungeonInstanceSystem: unknown level prototype '{exit.TargetLevel}'.");
+            Log.Error($"CEDungeonInstanceSystem: exit has no target level or unknown prototype '{exit.TargetLevel}'.");
             return;
         }
 
-        // Check if an existing instance with an active entry is available.
-        var existingInstance = FindInstanceWithActiveEntry(proto);
-
-        if (existingInstance == null)
+        // If no pending generation for this exit, check for existing instance or start generation.
+        if (!_pendingGenerations.ContainsKey(ent.Owner))
         {
-            // No existing instance — start generation immediately (runs in background).
-            _pendingGenerations[ent.Owner] = _dungeon.GenerateLevelAsync(proto);
+            var existingInstance = FindInstanceWithActiveEntry(proto);
+            if (existingInstance == null)
+            {
+                _pendingGenerations[ent.Owner] = _dungeon.GenerateLevelAsync(proto);
+            }
         }
 
-        // Start the DoAfter (minimum transition time).
         var doAfterArgs = new DoAfterArgs(
             EntityManager,
             args.User,
@@ -73,13 +69,7 @@ public sealed partial class CEDungeonInstanceSystem
     /// </summary>
     private void OnExitDoAfterComplete(Entity<CEDungeonLevelExitComponent> ent, ref CEDungeonExitDoAfterEvent args)
     {
-        if (args.Cancelled)
-        {
-            _pendingGenerations.Remove(ent.Owner);
-            return;
-        }
-
-        if (args.Handled)
+        if (args.Cancelled || args.Handled)
             return;
 
         args.Handled = true;
@@ -92,7 +82,7 @@ public sealed partial class CEDungeonInstanceSystem
     /// </summary>
     private async void HandleExitDoAfterAsync(EntityUid exitUid, CEDungeonLevelExitComponent exit)
     {
-        if (!_proto.TryIndex(exit.TargetLevel, out var proto))
+        if (exit.TargetLevel == null || !_proto.TryIndex(exit.TargetLevel.Value, out var proto))
         {
             _pendingGenerations.Remove(exitUid);
             return;
@@ -152,7 +142,7 @@ public sealed partial class CEDungeonInstanceSystem
     /// </summary>
     private List<EntityUid> GatherNearbyPlayers(EntityUid exitUid, float radius, int maxCount)
     {
-        var nearby = _lookup.GetEntitiesInRange<CEMobStateComponent>(_transform.GetMapCoordinates(exitUid), radius);
+        var nearby = _lookup.GetEntitiesInRange<CEDungeonPlayerComponent>(_transform.GetMapCoordinates(exitUid), radius);
         var candidates = nearby.Select(e => e.Owner).ToList();
 
         if (candidates.Count > maxCount)
@@ -175,12 +165,10 @@ public sealed partial class CEDungeonInstanceSystem
         var targetEntry = FindActiveEntry(instanceUid);
 
         MapCoordinates targetCoords;
-        if (targetEntry != null)
+        if (targetEntry is { } entry)
         {
-            targetCoords = _transform.GetMapCoordinates(targetEntry.Value);
-
-            if (_entryQuery.TryComp(targetEntry.Value, out var entryComp))
-                entryComp.Active = false;
+            targetCoords = _transform.GetMapCoordinates(entry.Owner);
+            entry.Comp.Active = false;
         }
         else
         {
@@ -206,7 +194,6 @@ public sealed partial class CEDungeonInstanceSystem
             _transform.SetMapCoordinates(player, targetCoords);
         }
 
-        inst.PlayerCount += group.Count;
         Log.Info($"CEDungeonInstanceSystem: transitioned {group.Count} player(s) to '{inst.PrototypeId}'.");
     }
 }

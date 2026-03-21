@@ -3,8 +3,10 @@ using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
+using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.ZLevels.Core.Components;
-using Robust.Shared.Player;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -34,8 +36,12 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// </summary>
     private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(5);
 
+    /// <summary>
+    /// How often the cleanup check runs (avoid per-frame iteration).
+    /// </summary>
+    private static readonly TimeSpan CleanupCheckInterval = TimeSpan.FromSeconds(5);
+
     private EntityQuery<CEDungeonInstanceComponent> _instanceQuery;
-    private EntityQuery<CEDungeonLevelEntryComponent> _entryQuery;
     private EntityQuery<CEZLevelsNetworkComponent> _zNetQuery;
 
     /// <summary>
@@ -43,12 +49,13 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// </summary>
     private readonly Dictionary<EntityUid, Task<CEDungeonGenerateResult>> _pendingGenerations = new();
 
+    private TimeSpan _nextCleanupCheck;
+
     public override void Initialize()
     {
         base.Initialize();
 
         _instanceQuery = GetEntityQuery<CEDungeonInstanceComponent>();
-        _entryQuery = GetEntityQuery<CEDungeonLevelEntryComponent>();
         _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
 
         InitializeExit();
@@ -57,24 +64,56 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        UpdateCleanup(_timing.CurTime);
+
+        var curTime = _timing.CurTime;
+        if (curTime < _nextCleanupCheck)
+            return;
+
+        _nextCleanupCheck = curTime + CleanupCheckInterval;
+        UpdateCleanup(curTime);
     }
 
     /// <summary>
-    /// Remove empty unstable instances past the cleanup delay.
+    /// Builds a set of MapIds that currently have living players, then checks unstable instances
+    /// for emptiness and deletes them after the cleanup delay.
     /// </summary>
     private void UpdateCleanup(TimeSpan curTime)
     {
+        // Build a set of MapIds with at least one living player (not Dead).
+        var occupiedMaps = new HashSet<MapId>();
+        var mobQuery = EntityQueryEnumerator<CEDungeonPlayerComponent, CEMobStateComponent, TransformComponent>();
+        while (mobQuery.MoveNext(out _, out _, out var mobState, out var xform))
+        {
+            if (mobState.CurrentState != CEMobState.Dead)
+                occupiedMaps.Add(xform.MapID);
+        }
+
         var query = EntityQueryEnumerator<CEDungeonInstanceComponent>();
         while (query.MoveNext(out var uid, out var inst))
         {
             if (inst.Stable)
                 continue;
 
-            if (inst.PlayerCount > 0)
-                continue;
+            var mapIds = GetInstanceMapIds(uid);
+            var hasPlayers = false;
+            foreach (var mapId in mapIds)
+            {
+                if (occupiedMaps.Contains(mapId))
+                {
+                    hasPlayers = true;
+                    break;
+                }
+            }
 
-            if (curTime - inst.CreatedAt < UnstableCleanupDelay)
+            if (hasPlayers)
+            {
+                inst.EmptySince = null;
+                continue;
+            }
+
+            inst.EmptySince ??= curTime;
+
+            if (curTime - inst.EmptySince.Value < UnstableCleanupDelay)
                 continue;
 
             Log.Info($"CEDungeonInstanceSystem: cleaning up empty unstable instance '{inst.PrototypeId}'.");

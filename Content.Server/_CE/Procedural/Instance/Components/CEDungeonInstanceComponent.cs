@@ -32,9 +32,9 @@ public sealed partial class CEDungeonInstanceComponent : Component
     public TimeSpan CreatedAt;
 
     /// <summary>
-    /// Number of players currently in this instance.
-    /// Maintained by <see cref="CEDungeonInstanceSystem"/>.
+    /// Game time when this instance first became empty (no players on any map).
+    /// Null while players are present. Used by cleanup logic to determine when to delete.
     /// </summary>
     [DataField]
-    public int PlayerCount;
+    public TimeSpan? EmptySince;
 }
