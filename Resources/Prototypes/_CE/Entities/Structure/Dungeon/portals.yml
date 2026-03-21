@@ -1,0 +1,69 @@
+# Entity prototypes for dungeon level entry/exit points.
+
+# Base abstract for dungeon portals (shared visual/physics setup).
+- type: entity
+  id: CEDungeonPortalBase
+  abstract: true
+  parent: BaseStructure
+  name: dungeon portal
+  description: A shimmering rift between dungeon levels.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
+    layers:
+      - state: anom
+        shader: unshaded
+  - type: PointLight
+    radius: 4
+    energy: 3
+    color: "#8844ff"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 100
+        mask:
+          - MachineMask
+        layer:
+          - MidImpassable
+
+# Exit portal: players interact with this to travel to the next dungeon level.
+- type: entity
+  id: CEDungeonLevelExit
+  parent: CEDungeonPortalBase
+  name: dungeon rift
+  description: A rift leading deeper into the dungeon. Interact to enter.
+  components:
+  - type: CEDungeonLevelExit
+    targetLevel: CEDungeonTestProcedural
+    throughput: 4
+    searchRadius: 3
+    transitionDuration: 10
+  - type: InteractionOutline
+  - type: UseDelay
+    delay: 2
+
+# Entry marker: placed inside generated dungeons where incoming players appear.
+- type: entity
+  id: CEDungeonLevelEntry
+  parent: CEDungeonPortalBase
+  name: dungeon entry point
+  description: An arrival point for adventurers entering this level.
+  components:
+  - type: CEDungeonLevelEntry
+    active: true
+    activeDuration: 600
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
+    layers:
+      - state: pulse
+        shader: unshaded
+  - type: PointLight
+    radius: 3
+    energy: 2
+    color: "#44aaff"

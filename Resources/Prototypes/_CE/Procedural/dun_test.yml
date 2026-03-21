@@ -259,3 +259,27 @@
   height: 2
   zLevelMap: DunTest
   offset: 25, -22
+
+# Entry points
+
+- type: dungeonRoom3d
+  id: TestEntryPoint1
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomEntrance
+  size: 9, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: -12, -22
+
+# Exits
+
+- type: dungeonRoom3d
+  id: TestExitPoint1
+  tags:
+  - CEDunGenZoneTest
+  - CEDunGenRoomExit
+  size: 13, 9
+  height: 2
+  zLevelMap: DunTest
+  offset: -26, -22

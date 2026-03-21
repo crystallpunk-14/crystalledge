@@ -4,6 +4,7 @@
 - type: dungeonLevel
   id: CEDungeonTestStatic
   name: Test Static Dungeon
+  stable: true
   config:
     !type:CEStaticMapConfig
     mapPath: /Maps/_CE/Dev/Dev0.yml
@@ -12,6 +13,7 @@
 - type: dungeonLevel
   id: CEDungeonTestZNetwork
   name: Test ZNetwork Dungeon
+  stable: false
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: DunTest
@@ -19,6 +21,7 @@
 - type: dungeonLevel
   id: CEDungeonTestProcedural
   name: Test Procedural Dungeon
+  stable: false
   config:
     !type:CEProceduralConfig
     maxRoomSize: 16
@@ -50,15 +53,13 @@
         requireAll: true
         tags:
         - CEDunGenZoneTest
-        #- CEDunGenRoomExit
-        - CEDunGenRoomGeneral
+        - CEDunGenRoomExit
     entranceRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenZoneTest
-        #- CEDunGenRoomEntrance
-        - CEDunGenRoomGeneral
+        - CEDunGenRoomEntrance
     blessingRooms:
       whitelist:
         requireAll: true
