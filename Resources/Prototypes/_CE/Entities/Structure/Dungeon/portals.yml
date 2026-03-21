@@ -59,9 +59,6 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: CEDungeonPassage
-    throughput: 4
-    searchRadius: 3
-    transitionDuration: 10
   - type: InteractionOutline
   - type: UseDelay
     delay: 2
@@ -100,21 +97,14 @@
 # Entry marker: placed inside generated dungeons where incoming players appear.
 - type: entity
   id: CEDungeonLevelEntry
-  parent: CEDungeonPortalBase
+  parent: MarkerBase
   name: dungeon entry point
   description: An arrival point for adventurers entering this level.
   components:
   - type: CEDungeonEntryPoint
     active: true
-    activeDuration: 600
   - type: Sprite
-    drawdepth: Effects
-    noRot: true
-    sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
     layers:
+      - state: green
       - state: pulse
-        shader: unshaded
-  - type: PointLight
-    radius: 5
-    energy: 1
-    color: "#8f42ff"
+        sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
