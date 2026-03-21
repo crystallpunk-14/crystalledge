@@ -1,9 +1,9 @@
 - type: zMap
   id: Level0_Entry
   maps:
-  - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry0.yml
-  - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry1.yml
-  - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry2.yml
+  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry0.yml
+  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry1.yml
+  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry2.yml
   components:
     - type: Parallax
       parallax: CESky
