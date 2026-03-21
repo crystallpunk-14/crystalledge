@@ -58,7 +58,7 @@
   description: A rift leading deeper into the dungeon. Interact to enter.
   categories: [ HideSpawnMenu ]
   components:
-  - type: CEDungeonLevelExit
+  - type: CEDungeonLevelPassage
     throughput: 4
     searchRadius: 3
     transitionDuration: 10
@@ -71,9 +71,32 @@
   parent: CEDungeonLevelExit
   suffix: To test procedural level
   components:
-  - type: CEDungeonLevelExit
+  - type: CEDungeonLevelPassage
     targetLevel: CEDungeonTestProcedural
 
+
+- type: entity
+  id: CEDungeonLevelActivePassage
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    noRot: true
+    sprite: _CE/Effects/portal_active_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#8f42ff"
+  - type: AmbientSound
+    volume: -3
+    range: 7
+    sound:
+      path: /Audio/Ambience/anomaly_scary.ogg
+  - type: TimedDespawn
+    lifetime: 60
 
 # Entry marker: placed inside generated dungeons where incoming players appear.
 - type: entity
@@ -82,7 +105,7 @@
   name: dungeon entry point
   description: An arrival point for adventurers entering this level.
   components:
-  - type: CEDungeonLevelEntry
+  - type: CEDungeonEntryPoint
     active: true
     activeDuration: 600
   - type: Sprite
@@ -96,13 +119,3 @@
     radius: 5
     energy: 1
     color: "#8f42ff"
-  - type: AmbientSound
-    volume: -3
-    range: 7
-    sound:
-      path: /Audio/Ambience/anomaly_scary.ogg
-  - type: EmitSoundOnSpawn
-    sound:
-      collection: CEDemiplaneIntro
-      params:
-        variation: 0.3

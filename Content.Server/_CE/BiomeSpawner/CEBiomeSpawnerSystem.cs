@@ -27,7 +27,7 @@ public sealed class CEBiomeSpawnerSystem : EntitySystem
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    private int _globalSeed = 0;
+    private int _globalSeed;
 
     public override void Initialize()
     {
@@ -83,7 +83,7 @@ public sealed class CEBiomeSpawnerSystem : EntitySystem
         }
 
         //Add decals
-        if (_biome.TryGetDecals(vec, biome.Layers, _globalSeed, map, out var decals))
+        if (_biome.TryGetDecals(vec, biome.Layers, _globalSeed, (gridUid, map), out var decals))
         {
             foreach (var decal in decals)
             {
@@ -93,14 +93,16 @@ public sealed class CEBiomeSpawnerSystem : EntitySystem
 
         // Remove entities
         var oldEntities = _lookup.GetEntitiesInRange(spawnerTransform.Coordinates, 0.48f, LookupFlags.Uncontained);
-        // TODO: Replace this shit with GetEntitiesInBox2
-        foreach (var entToRemove in oldEntities.Concat([ent.Owner])) // Do not remove self
+        foreach (var entToRemove in oldEntities)
         {
+            if (entToRemove == ent.Owner)
+                continue;
+
             if (!_whitelist.IsValid(ent.Comp.DeleteBlacklist, entToRemove))
                 QueueDel(entToRemove);
         }
 
-        if (_biome.TryGetEntity(vec, biome.Layers, tile.Value, _globalSeed, map, out var entityProto))
+        if (_biome.TryGetEntity(vec, biome.Layers, tile.Value, _globalSeed, (gridUid, map), out var entityProto))
             Spawn(entityProto, new EntityCoordinates(gridUid, tileCenterVec));
     }
 }

@@ -1,5 +1,4 @@
 using Content.Server._CE.Procedural.Prototypes;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Procedural.Instance.Components;
@@ -11,12 +10,12 @@ namespace Content.Server._CE.Procedural.Instance.Components;
 /// an instance of <see cref="TargetLevel"/>, and teleports the group there.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CEDungeonLevelExitComponent : Component
+public sealed partial class CEDungeonPassageComponent : Component
 {
     /// <summary>
     /// The dungeon level prototype that this exit leads to.
     /// Can be left empty if the owning dungeon level prototype defines exits via <c>Exits</c> dictionary;
-    /// in that case, it will be assigned at runtime based on <see cref="ExitSlot"/>.
+    /// in that case, it will be assigned at runtime based on <see cref="PassageSlot"/>.
     /// </summary>
     [DataField]
     public ProtoId<CEDungeonLevelPrototype>? TargetLevel;
@@ -27,20 +26,7 @@ public sealed partial class CEDungeonLevelExitComponent : Component
     /// assigned from the prototype.
     /// </summary>
     [DataField]
-    public string ExitSlot = "default";
-
-    /// <summary>
-    /// Maximum number of players that can pass through this exit at once.
-    /// If more players are nearby, a random subset is chosen.
-    /// </summary>
-    [DataField]
-    public int Throughput = 4;
-
-    /// <summary>
-    /// Radius (in tiles) to search for nearby players when forming a group.
-    /// </summary>
-    [DataField]
-    public float SearchRadius = 3f;
+    public string PassageSlot = "default";
 
     /// <summary>
     /// Time in seconds the transition takes (DoAfter duration).
@@ -48,4 +34,10 @@ public sealed partial class CEDungeonLevelExitComponent : Component
     /// </summary>
     [DataField]
     public float TransitionDuration = 10f;
+
+    [DataField]
+    public EntProtoId ActivePassageProto = "CEDungeonLevelActivePassage";
+
+    [DataField]
+    public EntityUid? ActivePassage;
 }

@@ -39,17 +39,11 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// <summary>
     /// How often the cleanup check runs (avoid per-frame iteration).
     /// </summary>
-    private static readonly TimeSpan CleanupCheckInterval = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan CleanupCheckInterval = TimeSpan.FromSeconds(20);
+    private TimeSpan _nextCleanupCheck;
 
     private EntityQuery<CEDungeonInstanceComponent> _instanceQuery;
     private EntityQuery<CEZLevelsNetworkComponent> _zNetQuery;
-
-    /// <summary>
-    /// Tracks in-flight generation tasks keyed by the exit entity that initiated them.
-    /// </summary>
-    private readonly Dictionary<EntityUid, Task<CEDungeonGenerateResult>> _pendingGenerations = new();
-
-    private TimeSpan _nextCleanupCheck;
 
     public override void Initialize()
     {
@@ -58,19 +52,20 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         _instanceQuery = GetEntityQuery<CEDungeonInstanceComponent>();
         _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
 
-        InitializeExit();
+        InitializePassage();
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var curTime = _timing.CurTime;
-        if (curTime < _nextCleanupCheck)
+        UpdatePassage();
+
+        if (_timing.CurTime < _nextCleanupCheck)
             return;
 
-        _nextCleanupCheck = curTime + CleanupCheckInterval;
-        UpdateCleanup(curTime);
+        _nextCleanupCheck = _timing.CurTime + CleanupCheckInterval;
+        UpdateCleanup(_timing.CurTime);
     }
 
     /// <summary>
@@ -79,7 +74,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// </summary>
     private void UpdateCleanup(TimeSpan curTime)
     {
-        // Build a set of MapIds with at least one living player (not Dead).
+        // Build a set of MapIds with at least one living player.
         var occupiedMaps = new HashSet<MapId>();
         var mobQuery = EntityQueryEnumerator<CEDungeonPlayerComponent, CEMobStateComponent, TransformComponent>();
         while (mobQuery.MoveNext(out _, out _, out var mobState, out var xform))
@@ -116,8 +111,8 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
             if (curTime - inst.EmptySince.Value < UnstableCleanupDelay)
                 continue;
 
-            Log.Info($"CEDungeonInstanceSystem: cleaning up empty unstable instance '{inst.PrototypeId}'.");
-            DeleteInstance(uid);
+            Log.Info($"cleaning up empty unstable instance '{inst.PrototypeId}'.");
+            _zLevels.DeleteZNetwork(uid);
         }
     }
 }

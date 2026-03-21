@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Prototypes;
-using Content.Shared._CE.ZLevels.Core.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -16,7 +16,7 @@ public sealed partial class CEDungeonInstanceSystem
     private EntityUid RegisterInstance(EntityUid mapUid, CEDungeonLevelPrototype proto)
     {
         // Determine the anchor entity: z-network entity if the map belongs to one, else the map itself.
-        var anchorUid = FindZNetworkForMap(mapUid) ?? mapUid;
+        var anchorUid = _zLevels.TryGetZNetwork(mapUid, out var zLevelNetwork) ? zLevelNetwork.Value.Owner : mapUid;
 
         var instance = EnsureComp<CEDungeonInstanceComponent>(anchorUid);
         instance.PrototypeId = proto.ID;
@@ -27,54 +27,34 @@ public sealed partial class CEDungeonInstanceSystem
         var mapIds = GetInstanceMapIds(anchorUid);
 
         // Assign exit targets from the prototype's Exits dictionary.
-        ConfigureExitTargets(mapIds, proto);
+        if (proto.Exits.Count > 0)
+        {
+            var query = EntityQueryEnumerator<CEDungeonPassageComponent, TransformComponent>();
+            while (query.MoveNext(out _, out var exit, out var xform))
+            {
+                if (!mapIds.Contains(xform.MapID))
+                    continue;
+
+                if (exit.TargetLevel != null)
+                    continue;
+
+                if (proto.Exits.TryGetValue(exit.PassageSlot, out var targetLevel))
+                    exit.TargetLevel = targetLevel;
+            }
+        }
 
         // Initialize entry point deactivation timers.
-        InitializeEntryTimers(mapIds);
+        var dungeonQuery = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
+        while (dungeonQuery.MoveNext(out _, out var entry, out var xform))
+        {
+            if (!mapIds.Contains(xform.MapID))
+                continue;
 
-        Log.Info($"CEDungeonInstanceSystem: registered instance '{proto.ID}' on entity {anchorUid} (stable={proto.Stable}).");
+            entry.DeactivateAt = _timing.CurTime + entry.ActiveDuration;
+        }
+
+        Log.Info($"registered instance '{proto.ID}' on entity {anchorUid} (stable={proto.Stable}).");
         return anchorUid;
-    }
-
-    /// <summary>
-    /// Assigns <see cref="CEDungeonLevelExitComponent.TargetLevel"/> to exit entities whose
-    /// <see cref="CEDungeonLevelExitComponent.ExitSlot"/> matches a key in the prototype's Exits dictionary,
-    /// but only if the exit doesn't already have a target level set.
-    /// </summary>
-    private void ConfigureExitTargets(HashSet<MapId> mapIds, CEDungeonLevelPrototype proto)
-    {
-        if (proto.Exits.Count == 0)
-            return;
-
-        var query = EntityQueryEnumerator<CEDungeonLevelExitComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var exit, out var xform))
-        {
-            if (!mapIds.Contains(xform.MapID))
-                continue;
-
-            if (exit.TargetLevel != null)
-                continue;
-
-            if (proto.Exits.TryGetValue(exit.ExitSlot, out var targetLevel))
-                exit.TargetLevel = targetLevel;
-        }
-    }
-
-    /// <summary>
-    /// Sets <see cref="CEDungeonLevelEntryComponent.DeactivateAt"/> for all entries on the given maps.
-    /// </summary>
-    private void InitializeEntryTimers(HashSet<MapId> mapIds)
-    {
-        var curTime = _timing.CurTime;
-
-        var query = EntityQueryEnumerator<CEDungeonLevelEntryComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var entry, out var xform))
-        {
-            if (!mapIds.Contains(xform.MapID))
-                continue;
-
-            entry.DeactivateAt = curTime + entry.ActiveDuration;
-        }
     }
 
     /// <summary>
@@ -102,63 +82,18 @@ public sealed partial class CEDungeonInstanceSystem
     }
 
     /// <summary>
-    /// Finds the z-network entity that contains the given map entity, if any.
-    /// </summary>
-    private EntityUid? FindZNetworkForMap(EntityUid mapUid)
-    {
-        var query = EntityQueryEnumerator<CEZLevelsNetworkComponent>();
-        while (query.MoveNext(out var netUid, out var zNet))
-        {
-            foreach (var (_, zMapUid) in zNet.ZLevels)
-            {
-                if (zMapUid == mapUid)
-                    return netUid;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// Finds an existing instance of the given prototype that has at least one active entry.
-    /// For stable prototypes, returns any existing instance regardless of entry state.
-    /// </summary>
-    private EntityUid? FindInstanceWithActiveEntry(CEDungeonLevelPrototype proto)
-    {
-        var query = EntityQueryEnumerator<CEDungeonInstanceComponent>();
-        while (query.MoveNext(out var uid, out var inst))
-        {
-            if (inst.PrototypeId != proto.ID)
-                continue;
-
-            if (proto.Stable)
-                return uid;
-
-            if (FindActiveEntry(uid) != null)
-                return uid;
-        }
-
-        return null;
-    }
-
-    /// <summary>
     /// Finds an active entry point on any map belonging to the instance.
     /// Returns the entry entity with its component for direct use.
     /// </summary>
-    private Entity<CEDungeonLevelEntryComponent>? FindActiveEntry(EntityUid instanceUid)
+    private bool TryFindEnterPoint(CEDungeonLevelPrototype proto, [NotNullWhen(true)] out Entity<CEDungeonEntryPointComponent>? enterPortal)
     {
-        if (!_instanceQuery.TryComp(instanceUid, out _))
-            return null;
+        enterPortal = null;
 
         var curTime = _timing.CurTime;
-        var mapIds = GetInstanceMapIds(instanceUid);
 
-        var query = EntityQueryEnumerator<CEDungeonLevelEntryComponent, TransformComponent>();
+        var query = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
         while (query.MoveNext(out var entUid, out var entry, out var xform))
         {
-            if (!mapIds.Contains(xform.MapID))
-                continue;
-
             if (!entry.Active)
                 continue;
 
@@ -168,25 +103,22 @@ public sealed partial class CEDungeonInstanceSystem
                 continue;
             }
 
-            return (entUid, entry);
+            if (xform.MapUid is null)
+                continue;
+
+            if (!_zLevels.TryGetZNetwork(xform.MapUid.Value, out var zNetwork))
+                continue;
+
+            if (!_instanceQuery.TryComp(zNetwork, out var dungeonInstance))
+                continue;
+
+            if (dungeonInstance.PrototypeId != proto)
+                continue;
+
+            enterPortal = (entUid, entry);
+            return true;
         }
 
-        return null;
-    }
-
-    /// <summary>
-    /// Deletes an instance: delegates to <see cref="CEZLevelsSystem.DeleteZNetwork"/> for z-networks,
-    /// or directly deletes a standalone map entity.
-    /// </summary>
-    private void DeleteInstance(EntityUid anchorUid)
-    {
-        if (_zNetQuery.HasComp(anchorUid))
-        {
-            _zLevels.DeleteZNetwork(anchorUid);
-        }
-        else
-        {
-            QueueDel(anchorUid);
-        }
+        return false;
     }
 }

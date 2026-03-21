@@ -1,5 +1,3 @@
-using Robust.Shared.GameObjects;
-
 namespace Content.Server._CE.Procedural.Instance.Components;
 
 /// <summary>
@@ -8,7 +6,7 @@ namespace Content.Server._CE.Procedural.Instance.Components;
 /// Once used (or after <see cref="DeactivateAt"/> expires), the entry becomes permanently inactive.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CEDungeonLevelEntryComponent : Component
+public sealed partial class CEDungeonEntryPointComponent : Component
 {
     /// <summary>
     /// Whether this entry point can still accept incoming players.
@@ -29,5 +27,5 @@ public sealed partial class CEDungeonLevelEntryComponent : Component
     /// Used by the instance system to compute <see cref="DeactivateAt"/>.
     /// </summary>
     [DataField]
-    public TimeSpan ActiveDuration = TimeSpan.FromMinutes(10);
+    public TimeSpan ActiveDuration = TimeSpan.FromMinutes(2);
 }

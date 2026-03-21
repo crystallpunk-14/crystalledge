@@ -1,5 +1,4 @@
 using Content.Server._CE.Procedural.Prototypes;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Procedural.Instance.Components;
