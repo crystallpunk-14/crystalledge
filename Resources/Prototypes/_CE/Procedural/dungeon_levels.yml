@@ -5,8 +5,6 @@
   id: CEDungeonTestStatic
   name: Test Static Dungeon
   stable: true
-  exits:
-    default: CEDungeonTestZNetwork
   config:
     !type:CEStaticMapConfig
     mapPath: /Maps/_CE/Dev/Dev0.yml
@@ -16,8 +14,6 @@
   id: CEDungeonTestZNetwork
   name: Test ZNetwork Dungeon
   stable: false
-  exits:
-    default: CEDungeonTestProcedural
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: DunTest
@@ -35,8 +31,8 @@
       min: 3
       max: 10
     generalCount:
-      min: 50
-      max: 50
+      min: 10
+      max: 15
     components:
     - type: MapLight
       ambientLightColor: "#3d4444"

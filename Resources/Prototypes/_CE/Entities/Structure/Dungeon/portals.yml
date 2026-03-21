@@ -37,6 +37,7 @@
   parent: CEDungeonPortalBase
   name: dungeon rift
   description: A rift leading deeper into the dungeon. Interact to enter.
+  categories: [ HideSpawnMenu ]
   components:
   - type: CEDungeonLevelExit
     throughput: 4
@@ -45,6 +46,15 @@
   - type: InteractionOutline
   - type: UseDelay
     delay: 2
+
+- type: entity
+  id: CEDungeonLevelExitFirst
+  parent: CEDungeonLevelExit
+  suffix: To test procedural level
+  components:
+  - type: CEDungeonLevelExit
+    targetLevel: CEDungeonTestProcedural
+
 
 # Entry marker: placed inside generated dungeons where incoming players appear.
 - type: entity
