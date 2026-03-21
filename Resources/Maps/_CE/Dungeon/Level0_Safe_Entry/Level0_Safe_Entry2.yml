@@ -80,6 +80,8 @@ entities:
         moles:
           Oxygen: 21.824879
           Nitrogen: 82.10312
+    - type: BecomesStation
+      id: Level
     - type: DecalGrid
       chunkCollection:
         version: 2

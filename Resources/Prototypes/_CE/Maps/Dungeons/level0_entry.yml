@@ -35,8 +35,8 @@
             CEPriest: [ -1, -1 ]
         - type: CEStationZLevels
           mapsBelow:
-          - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry1.yml
           - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry0.yml
+          - /Maps/_CE/Dungeon/Level0_Safe_Entry/Level0_Safe_Entry1.yml
           zLevelsComponentOverrides:
             - type: Parallax
               parallax: CESky
