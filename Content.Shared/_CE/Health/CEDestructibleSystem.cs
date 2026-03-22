@@ -7,6 +7,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Player;
 
 namespace Content.Shared._CE.Health;
 
@@ -46,27 +47,35 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        if (_net.IsClient)
-            return;
-
-        if (ent.Comp.Loot is not null)
+        // Play destroy sound immediately on client (predicted)
+        if (ent.Comp.DestroySound is not null)
         {
-            var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
-            foreach (var spawn in spawns)
+            _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
+        }
+
+        // Server-side: spawn loot. TODO: prediction someway??
+        if (_net.IsServer && ent.Comp.Loot is not null)
+        {
+            try
             {
-                var spawnedLoot = SpawnAtPosition(spawn, position);
-                _transform.SetLocalRotation(spawnedLoot, _random.NextAngle());
-                _throwing.TryThrow(
-                    spawnedLoot,
-                    _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f),
-                    2f
-                );
+                var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
+                foreach (var spawn in spawns)
+                {
+                    var spawnedLoot = SpawnAtPosition(spawn, position);
+                    _transform.SetLocalRotation(spawnedLoot, _random.NextAngle());
+                    _throwing.TryThrow(
+                        spawnedLoot,
+                        _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f),
+                        2f
+                    );
+                }
+            }
+            catch (Exception e)
+            {
+                // ignored
             }
         }
 
-        if (ent.Comp.DestroySound is not null)
-            _audio.PlayPvs(ent.Comp.DestroySound, position, ent.Comp.DestroySound.Params.WithVariation(0.1f));
-
-        QueueDel(ent);
+        PredictedQueueDel(ent.Owner);
     }
 }
