@@ -44,8 +44,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
         // Force all sensors to evaluate once so WorldState is populated immediately.
-        ResolveTargetProviders(ent);
-
         foreach (var sensor in ent.Comp.Sensors)
         {
             sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
@@ -55,6 +53,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
+        CleanupTrackers(ent);
         ClearPlan(ent);
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
@@ -81,8 +80,10 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 1. Resolve target providers, then update sensors
-        ResolveTargetProviders(ent);
+        // 0. Expire stale memorized positions
+        CleanupExpiredPositions(ent);
+
+        // 1. Update sensors
         UpdateSensors(ent);
 
         // 2. Check if we need to re-plan
@@ -92,14 +93,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
         // 3. Execute current action
         if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
-    }
-
-    private void ResolveTargetProviders(Entity<CEGOAPComponent> ent)
-    {
-        foreach (var (_, provider) in ent.Comp.TargetProviders)
-        {
-            provider.RaiseResolve(ent, EntityManager);
-        }
     }
 
     private void UpdateSensors(Entity<CEGOAPComponent> ent)

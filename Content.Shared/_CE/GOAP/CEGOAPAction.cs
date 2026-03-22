@@ -45,11 +45,12 @@ public abstract partial class CEGOAPAction
     public float Cost = 1f;
 
     /// <summary>
-    /// Key into the CEGOAPComponent.TargetProviders dictionary.
-    /// Actions that need a target read from this provider.
+    /// Key into the CEGOAPComponent.Targets dictionary.
+    /// Actions that need a target read it by this key.
+    /// Null means the action targets the entity itself.
     /// </summary>
     [DataField]
-    public string? TargetProviderKey;
+    public string? TargetKey;
 
     /// <summary>
     /// Checks whether this action can currently be executed (e.g. not on cooldown).

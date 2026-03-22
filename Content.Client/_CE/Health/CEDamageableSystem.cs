@@ -32,7 +32,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
         {
             _previousDamage[uid] = comp.TotalDamage;
             var ev = new CEDamageChangedEvent(uid, previousDamage, comp.TotalDamage);
-            RaiseLocalEvent(ev);
+            RaiseLocalEvent(uid, ev, true);
         }
     }
 
@@ -72,7 +72,7 @@ public sealed class CEClientMobStateSystem : EntitySystem
         {
             _previousStates[uid] = comp.CurrentState;
             var ev = new CEMobStateChangedEvent(uid, previousState, comp.CurrentState);
-            RaiseLocalEvent(ev);
+            RaiseLocalEvent(uid, ev, true);
         }
     }
 

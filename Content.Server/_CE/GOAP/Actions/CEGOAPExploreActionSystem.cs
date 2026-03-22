@@ -1,0 +1,133 @@
+using System.Numerics;
+using Content.Server.NPC.Components;
+using Content.Server.NPC.Systems;
+using Content.Shared._CE.GOAP;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Random;
+
+namespace Content.Server._CE.GOAP.Actions;
+
+/// <summary>
+/// Picks a random walkable tile within radius and walks to it.
+/// Used as a low-priority idle behavior so mobs circulate around their area.
+/// </summary>
+public sealed partial class CEGOAPExploreAction : CEGOAPActionBase<CEGOAPExploreAction>
+{
+    /// <summary>
+    /// Maximum distance to pick a destination (in tiles).
+    /// </summary>
+    [DataField]
+    public float ExploreRadius = 8f;
+
+    /// <summary>
+    /// Number of random directions to sample when looking for a valid destination.
+    /// </summary>
+    [DataField]
+    public int SampleDirections = 12;
+}
+
+public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOAPExploreAction>
+{
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly NPCSteeringSystem _steering = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+
+    private EntityQuery<TransformComponent> _xformQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _xformQuery = GetEntityQuery<TransformComponent>();
+    }
+
+    protected override void OnActionStartup(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionStartupEvent<CEGOAPExploreAction> args)
+    {
+        if (!_xformQuery.TryGetComponent(ent, out var xform))
+            return;
+
+        var destination = PickDestination(xform, args.Action);
+        if (destination == null)
+            return;
+
+        // Convert world position to local coordinates for steering
+        var invMatrix = _transform.GetInvWorldMatrix(xform.ParentUid);
+        var localPos = Vector2.Transform(destination.Value, invMatrix);
+        var coords = new EntityCoordinates(xform.ParentUid, localPos);
+
+        var comp = _steering.Register(ent, coords);
+        comp.Range = 1.5f;
+    }
+
+    protected override void OnActionUpdate(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionUpdateEvent<CEGOAPExploreAction> args)
+    {
+        if (!TryComp<NPCSteeringComponent>(ent, out var steering))
+        {
+            args.Status = CEGOAPActionStatus.Failed;
+            return;
+        }
+
+        switch (steering.Status)
+        {
+            case SteeringStatus.InRange:
+                args.Status = CEGOAPActionStatus.Finished;
+                return;
+            case SteeringStatus.NoPath:
+                args.Status = CEGOAPActionStatus.Failed;
+                return;
+            default:
+                args.Status = CEGOAPActionStatus.Running;
+                return;
+        }
+    }
+
+    protected override void OnActionShutdown(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionShutdownEvent<CEGOAPExploreAction> args)
+    {
+        _steering.Unregister(ent);
+    }
+
+    /// <summary>
+    /// Samples random directions and returns the world position of a valid walkable tile.
+    /// Prefers tiles at full radius; falls back to half radius.
+    /// </summary>
+    private Vector2? PickDestination(TransformComponent xform, CEGOAPExploreAction action)
+    {
+        var worldPos = _transform.GetWorldPosition(xform);
+        var mapId = xform.MapID;
+
+        float[] distances = [action.ExploreRadius, action.ExploreRadius * 0.5f];
+        var baseAngle = (float) _random.NextAngle().Theta;
+
+        foreach (var dist in distances)
+        {
+            var angleStep = MathF.PI * 2f / action.SampleDirections;
+            for (var i = 0; i < action.SampleDirections; i++)
+            {
+                var angle = baseAngle + angleStep * i;
+                var dir = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
+                var candidatePos = worldPos + dir * dist;
+
+                var mapCoords = new MapCoordinates(candidatePos, mapId);
+                if (!_mapManager.TryFindGridAt(mapCoords, out var gridUid, out var grid))
+                    continue;
+
+                var tileIndices = _mapSystem.WorldToTile(gridUid, grid, candidatePos);
+                if (!_mapSystem.TryGetTileRef(gridUid, grid, tileIndices, out var tileRef) ||
+                    tileRef.Tile.IsEmpty)
+                    continue;
+
+                return candidatePos;
+            }
+        }
+
+        return null;
+    }
+}

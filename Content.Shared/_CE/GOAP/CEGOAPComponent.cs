@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.GOAP;
@@ -29,11 +30,24 @@ public sealed partial class CEGOAPComponent : Component
     public List<CEGOAPSensor> Sensors = new();
 
     /// <summary>
-    /// Named target providers that resolve entity/coordinate targets.
-    /// Resolved each sensor tick before sensors update.
+    /// Named targets resolved by sensors.
+    /// Keys are logical target names (e.g. "enemy"), values are resolved entity UIDs.
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<string, EntityUid?> Targets = new();
+
+    /// <summary>
+    /// Last known coordinates for each target key, with an expiry time.
+    /// Updated automatically when a target is set; cleared when the memory duration expires.
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<string, MemorizedPosition> LastKnownPositions = new();
+
+    /// <summary>
+    /// How long the entity remembers a target's last known position after losing sight.
     /// </summary>
     [DataField(serverOnly: true)]
-    public Dictionary<string, CEGOAPTargetProvider> TargetProviders = new();
+    public TimeSpan TargetMemoryDuration = TimeSpan.FromSeconds(10);
 
     /// <summary>
     /// Current world state as perceived by this entity.
@@ -79,4 +93,9 @@ public sealed partial class CEGOAPComponent : Component
     public TimeSpan NextPlanTime;
 
 }
+
+/// <summary>
+/// A remembered target position with an expiry time.
+/// </summary>
+public record struct MemorizedPosition(EntityCoordinates Coordinates, TimeSpan ExpireAt);
 

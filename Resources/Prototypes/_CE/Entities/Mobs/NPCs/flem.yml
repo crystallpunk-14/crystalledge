@@ -13,45 +13,20 @@
     maxEnergy: 100
   - type: CEGOAP
     planCooldown: 0.5
-
-    targetProviders:
-      enemy: !type:CEGOAPNearestHostileTargetProvider
-        visionRadius: 10
-      self: !type:CEGOAPSelfTargetProvider
-
     goals:
-    # Buff self
+    # Most important - stay alive
     - desiredState:
-        HasDivineShield: true
-      activationConditions:
-        HasDivineShield: false
+        LowHealth: false
       priority: 4
-    # First - attack
+    # Second - kill enemies
     - desiredState:
         EnemyDead: true
-      activationConditions:
-        LowHealth: false
-        EnemyVisible: true
       priority: 3
-    # Second - run away
-    - desiredState:
-        EnemyVisible: false
-      activationConditions:
-        LowHealth: true
-        EnemyVisible: true
-      priority: 2
-    # Last - healing
-    - desiredState:
-        LowHealth: false
-      activationConditions:
-        LowHealth: true
-        EnemyVisible: false
-      priority: 1
 
     actions:
     # Move to target
     - !type:CEGOAPMoveToTargetAction
-      targetProviderKey: enemy
+      targetKey: enemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -60,7 +35,7 @@
       range: 1.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
-      targetProviderKey: enemy
+      targetKey: enemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -70,45 +45,56 @@
       angleVariation: 5
     # Run away from target
     - !type:CEGOAPFleeAction
-      targetProviderKey: enemy
+      targetKey: enemy
       effects:
         EnemyVisible: false
+        EnemyInMeleeRange: false
       cost: 1
       fleeDistance: 15
       visionRadius: 10
       occlusionBonus: 2
-    # Divine Shield - self-target action, use when no shield active
-    - !type:CEGOAPUseAction
-      targetProviderKey: self
-      effects:
-        HasDivineShield: true
-      cost: 1
-      actionPrototype: CEActionSpellDivineShield
     # Area Healing - world target under self, use when low health
     - !type:CEGOAPUseAction
-      targetProviderKey: self
+      targetKey: self
       effects:
         LowHealth: false
+      preconditions:
+        EnemyVisible: false
       cost: 2
       actionPrototype: CEActionSpellAreaHealing
+    # Wander to a random nearby tile
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
 
     sensors:
-    - !type:CEGOAPTargetExistsSensor
+    - !type:CEGOAPNearestHostileSensor
       conditionKey: EnemyVisible
-      targetProviderKey: enemy
+      outputTargetKey: enemy
+      visionRadius: 8
     - !type:CEGOAPCheckHealthLevelSensor
       conditionKey: LowHealth
       threshold: 0.5
     - !type:CEGOAPRangeToTargetSensor
       conditionKey: EnemyInMeleeRange
-      targetProviderKey: enemy
+      targetKey: enemy
       range: 1.5
     - !type:CEGOAPTargetIsDeadSensor
       conditionKey: EnemyDead
-      targetProviderKey: enemy
-    - !type:CEGOAPHasStatusEffectSensor
-      conditionKey: HasDivineShield
-      statusEffect: CEStatusEffectDivineShield
+      targetKey: enemy
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
 
   - type: NpcFactionMember
     factions:
@@ -128,8 +114,7 @@
           Dead: { state: dead }
   - type: MovementAlwaysTouching
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3
-    baseSprintSpeed: 3.5
+    baseSprintSpeed: 2.5
   - type: CEWeapon
     spriteRotation: -90
     damage:

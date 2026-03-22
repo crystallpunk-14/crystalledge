@@ -53,7 +53,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         SubscribeLocalEvent<CEMobStateComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
-        SubscribeLocalEvent<CEMobStateComponent, CEMobStateChangedEvent>(OnMobStateChangedSpeed);
+        SubscribeLocalEvent<CEMobStateComponent, CEMobStateChangedEvent>(OnMobStateChanged);
     }
 
     private void OnRejuvenate(Entity<CEMobStateComponent> ent, ref RejuvenateEvent args)
@@ -94,9 +94,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
         if (!_timing.ApplyingState)
         {
-            OnStateExited(ent, oldState);
-            OnStateEntered(ent, newState);
-
             var ev = new CEMobStateChangedEvent(ent, oldState, newState);
             RaiseLocalEvent(ent, ev, true);
         }
@@ -244,8 +241,10 @@ public sealed partial class CEMobStateSystem : EntitySystem
             args.ModifySpeed(CriticalSpeedModifier, CriticalSpeedModifier);
     }
 
-    private void OnMobStateChangedSpeed(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
+    private void OnMobStateChanged(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
     {
+        OnStateExited(uid, args.OldState);
+        OnStateEntered(uid, args.NewState);
         _movementSpeed.RefreshMovementSpeedModifiers(uid);
     }
 

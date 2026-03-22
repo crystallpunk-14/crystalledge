@@ -83,7 +83,7 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
         }
 
         // Determine the target entity for EntityTarget / WorldTarget actions
-        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
+        var target = GetTarget(ent, args.Action.TargetKey);
 
         // Set target on the action event based on auto-detected type
         if (_entityTargetQuery.HasComponent(actionEntity.Value) ||
