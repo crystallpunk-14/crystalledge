@@ -1,9 +1,18 @@
 - type: entity
-  parent: BaseMaterialDoorNavMap
+  parent: BaseStructure
   id: CEBaseDoor
   categories: [ ForkFiltered ]
   abstract: true
   components:
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: InteractionOutline
+  - type: AnimationPlayer
+  - type: Physics
+  - type: Appearance
+  - type: Occluder
+  - type: BlockWeather
   - type: Sprite
     drawdepth: Mobs
   - type: Door
