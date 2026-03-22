@@ -1,3 +1,4 @@
+using Content.Shared._CE.Damage;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Hands;
@@ -72,11 +73,13 @@ public sealed partial class CEMobStateSystem : EntitySystem
             damage = dmg.TotalDamage;
 
         UpdateState(ent, ent.Comp, damage);
+        SetDamageFraction(ent, ent.Comp, damage);
     }
 
     private void OnDamageChanged(Entity<CEMobStateComponent> ent, ref CEDamageChangedEvent args)
     {
         UpdateState(ent, ent.Comp, args.NewDamage);
+        SetDamageFraction(ent, ent.Comp, args.NewDamage);
     }
 
     private void UpdateState(Entity<CEMobStateComponent> ent, CEMobStateComponent mobState, int totalDamage)
@@ -105,6 +108,14 @@ public sealed partial class CEMobStateSystem : EntitySystem
             return CEMobState.Critical;
 
         return CEMobState.Alive;
+    }
+
+    private void SetDamageFraction(EntityUid ent, CEMobStateComponent mobState, int totalDamage)
+    {
+        var fraction = mobState.CriticalThreshold > 0
+            ? Math.Clamp((float) totalDamage / mobState.CriticalThreshold, 0f, 1f)
+            : 0f;
+        _appearance.SetData(ent, CEDamageVisuals.DamageFraction, fraction);
     }
 
     private void OnStateEntered(EntityUid target, CEMobState state)
