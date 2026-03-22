@@ -4,10 +4,8 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
-using Robust.Shared.Timing;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Player;
 
 namespace Content.Shared._CE.Health;
 
@@ -56,23 +54,16 @@ public sealed class CEDestructibleSystem : EntitySystem
         // Server-side: spawn loot. TODO: prediction someway??
         if (_net.IsServer && ent.Comp.Loot is not null)
         {
-            try
+            var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
+            foreach (var spawn in spawns)
             {
-                var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
-                foreach (var spawn in spawns)
-                {
-                    var spawnedLoot = SpawnAtPosition(spawn, position);
-                    _transform.SetLocalRotation(spawnedLoot, _random.NextAngle());
-                    _throwing.TryThrow(
-                        spawnedLoot,
-                        _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f),
-                        2f
-                    );
-                }
-            }
-            catch (Exception e)
-            {
-                // ignored
+                var spawnedLoot = SpawnAtPosition(spawn, position);
+                _transform.SetLocalRotation(spawnedLoot, _random.NextAngle());
+                _throwing.TryThrow(
+                    spawnedLoot,
+                    _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f),
+                    2f
+                );
             }
         }
 
