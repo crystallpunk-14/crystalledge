@@ -12,8 +12,20 @@
       targetKey: enemy
       preconditions:
         EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
       cost: 2
       range: 1.5
+    # Attack target from distance
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionFirewall
     # Run away from target
     - !type:CEGOAPFleeAction
       targetKey: enemy
@@ -24,28 +36,11 @@
       fleeDistance: 15
       visionRadius: 10
       occlusionBonus: 2
-    # Melee attack target
-    - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
-      preconditions:
-        EnemyInMeleeRange: true
-      effects:
-        EnemyDead: true
-      cost: 1
-      useType: Primary
-      angleVariation: 5
-    # Attack target from distance
-    - !type:CEGOAPUseAction
-      targetKey: enemy
-      preconditions:
-        EnemyInMeleeRange: false
-      effects:
-        EnemyDead: true
-      cost: 2
-      actionPrototype: CEActionFirewall
     # Area Healing - world target under self, use when low health
     - !type:CEGOAPUseAction
       targetKey: self
+      preconditions:
+        EnemyVisible: false
       effects:
         LowHealth: false
       cost: 2
@@ -82,8 +77,20 @@
       targetKey: enemy
       preconditions:
         EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
       cost: 2
       range: 1.5
+    # Attack target from distance
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionFrostFlow
     # Run away from target
     - !type:CEGOAPFleeAction
       targetKey: enemy
@@ -94,28 +101,11 @@
       fleeDistance: 15
       visionRadius: 10
       occlusionBonus: 2
-    # Melee attack target
-    - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
-      preconditions:
-        EnemyInMeleeRange: true
-      effects:
-        EnemyDead: true
-      cost: 1
-      useType: Primary
-      angleVariation: 5
-    # Attack target from distance
-    - !type:CEGOAPUseAction
-      targetKey: enemy
-      preconditions:
-        EnemyInMeleeRange: false
-      effects:
-        EnemyDead: true
-      cost: 2
-      actionPrototype: CEActionFrostFlow
     # Area Healing - world target under self, use when low health
     - !type:CEGOAPUseAction
       targetKey: self
+      preconditions:
+        EnemyVisible: false
       effects:
         LowHealth: false
       cost: 2

@@ -14,31 +14,14 @@
   - type: CEGOAP
     planCooldown: 0.5
     goals:
-    # First - attack
+    # Most important - stay alive
+    - desiredState:
+        LowHealth: false
+      priority: 4
+    # Second - kill enemies
     - desiredState:
         EnemyDead: true
-      activationConditions:
-        LowHealth: false
-        EnemyVisible: true
-      priority: 4
-    # Second - run away
-    - desiredState:
-        EnemyVisible: false
-      activationConditions:
-        LowHealth: true
-        EnemyVisible: true
       priority: 3
-    # Last - healing
-    - desiredState:
-        LowHealth: false
-      activationConditions:
-        LowHealth: true
-        EnemyVisible: false
-      priority: 2
-    # Idle - wander around
-    - desiredState:
-        EnemyVisible: true
-      priority: 1
 
     actions:
     # Move to target
@@ -75,6 +58,8 @@
       targetKey: self
       effects:
         LowHealth: false
+      preconditions:
+        EnemyVisible: false
       cost: 2
       actionPrototype: CEActionSpellAreaHealing
     # Wander to a random nearby tile
@@ -107,9 +92,6 @@
     - !type:CEGOAPTargetIsDeadSensor
       conditionKey: EnemyDead
       targetKey: enemy
-    - !type:CEGOAPHasStatusEffectSensor
-      conditionKey: HasDivineShield
-      statusEffect: CEStatusEffectDivineShield
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
