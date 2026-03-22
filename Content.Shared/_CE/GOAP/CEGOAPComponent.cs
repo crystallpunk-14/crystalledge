@@ -29,11 +29,11 @@ public sealed partial class CEGOAPComponent : Component
     public List<CEGOAPSensor> Sensors = new();
 
     /// <summary>
-    /// Named target providers that resolve entity/coordinate targets.
-    /// Resolved each sensor tick before sensors update.
+    /// Named targets resolved by sensors.
+    /// Keys are logical target names (e.g. "enemy"), values are resolved entity UIDs.
     /// </summary>
-    [DataField(serverOnly: true)]
-    public Dictionary<string, CEGOAPTargetProvider> TargetProviders = new();
+    [ViewVariables]
+    public Dictionary<string, EntityUid?> Targets = new();
 
     /// <summary>
     /// Current world state as perceived by this entity.

@@ -17,13 +17,13 @@ public sealed partial class CEGOAPTargetExistsSensorSystem : CEGOAPSensorSystem<
         Entity<CEGOAPComponent> ent,
         ref CEGOAPSensorUpdateEvent<CEGOAPTargetExistsSensor> args)
     {
-        var key = args.Sensor.TargetProviderKey;
+        var key = args.Sensor.TargetKey;
         if (key == null)
             return false;
 
-        if (!ent.Comp.TargetProviders.TryGetValue(key, out var provider))
+        if (!ent.Comp.Targets.TryGetValue(key, out var target))
             return false;
 
-        return provider.TargetEntity != null;
+        return target != null;
     }
 }

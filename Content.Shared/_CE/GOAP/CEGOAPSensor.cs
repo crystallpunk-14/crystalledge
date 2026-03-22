@@ -15,11 +15,11 @@ public abstract partial class CEGOAPSensor
     public string ConditionKey = string.Empty;
 
     /// <summary>
-    /// Optional key into CEGOAPComponent.TargetProviders.
-    /// Sensors that need to check something about a specific target reference a provider by this key.
+    /// Optional key into CEGOAPComponent.Targets.
+    /// Sensors that need to check something about a specific target read it by this key.
     /// </summary>
     [DataField]
-    public string? TargetProviderKey;
+    public string? TargetKey;
 
     /// <summary>
     /// How often this sensor is polled.

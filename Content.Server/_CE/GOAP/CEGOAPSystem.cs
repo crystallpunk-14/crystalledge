@@ -19,6 +19,25 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private int _maxUpdates = 128;
 
     /// <summary>
+    /// Reserved target key that always resolves to the entity itself.
+    /// </summary>
+    public const string SelfTargetKey = "self";
+
+    /// <summary>
+    /// Resolves a target key to an entity. "self" returns the owner, null returns null.
+    /// </summary>
+    public EntityUid? GetTarget(Entity<CEGOAPComponent> ent, string? targetKey)
+    {
+        if (targetKey == null)
+            return null;
+
+        if (targetKey == SelfTargetKey)
+            return ent.Owner;
+
+        return ent.Comp.Targets.TryGetValue(targetKey, out var target) ? target : null;
+    }
+
+    /// <summary>
     /// Reusable list for executable actions to avoid allocations during planning.
     /// </summary>
     private readonly List<CEGOAPAction> _executableActions = new();
@@ -44,8 +63,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
         // Force all sensors to evaluate once so WorldState is populated immediately.
-        ResolveTargetProviders(ent);
-
         foreach (var sensor in ent.Comp.Sensors)
         {
             sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
@@ -81,8 +98,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 1. Resolve target providers, then update sensors
-        ResolveTargetProviders(ent);
+        // 1. Update sensors
         UpdateSensors(ent);
 
         // 2. Check if we need to re-plan
@@ -92,14 +108,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
         // 3. Execute current action
         if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
-    }
-
-    private void ResolveTargetProviders(Entity<CEGOAPComponent> ent)
-    {
-        foreach (var (_, provider) in ent.Comp.TargetProviders)
-        {
-            provider.RaiseResolve(ent, EntityManager);
-        }
     }
 
     private void UpdateSensors(Entity<CEGOAPComponent> ent)
