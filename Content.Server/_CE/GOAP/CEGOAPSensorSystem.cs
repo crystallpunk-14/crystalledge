@@ -12,24 +12,20 @@ public abstract partial class CEGOAPSensorSystem<T> : EntitySystem where T : CEG
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CEGOAPComponent, CEGOAPSensorUpdateEvent<T>>(OnSensorUpdate);
+        SubscribeLocalEvent<CEGOAPComponent, CEGOAPSensorUpdateEvent<T>>(HandleSensorUpdate);
     }
 
-    /// <summary>
-    /// Called with each sensor update tick (default 0.2s).
-    /// The sensor scans information about the world and sets the key to which this sensor is bound to true or false.
-    /// The sensor MUST NOT affect the world around it or influence the entity itself in any way,
-    /// except by setting GOAP state via <see cref="SetState"/>.
-    /// </summary>
-    protected abstract void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<T> args);
-
-    /// <summary>
-    /// Updates the state of the world known to entity. The key we update is automatically taken from the sensor.
-    /// </summary>
-    protected void SetState(ref CEGOAPSensorUpdateEvent<T> args, bool newState)
+    private void HandleSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<T> args)
     {
-        args.WorldState[args.Sensor.ConditionKey] = newState;
+        args.WorldState[args.Sensor.ConditionKey] = OnSensorUpdate(ent, ref args);
     }
+
+    /// <summary>
+    /// Evaluate a world-state condition and return true/false.
+    /// Called on each poll tick and during forced updates.
+    /// Must NOT affect the world or entity — only observe.
+    /// </summary>
+    protected abstract bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<T> args);
 
     /// <summary>
     /// Returns the resolved entity target from the named target provider, or null if the key is absent or unresolved.

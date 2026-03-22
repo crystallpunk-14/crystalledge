@@ -51,8 +51,8 @@ public sealed partial class CEGOAPHasStatusEffectSensorSystem : CEGOAPSensorSyst
         }
     }
 
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPHasStatusEffectSensor> args)
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPHasStatusEffectSensor> args)
     {
-        SetState(ref args, _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect));
+        return _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect);
     }
 }

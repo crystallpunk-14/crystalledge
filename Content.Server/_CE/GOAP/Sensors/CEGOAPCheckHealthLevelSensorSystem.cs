@@ -42,8 +42,8 @@ public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSys
         }
     }
 
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
     {
-        SetState(ref args, _mobState.GetHealthFraction(ent) < args.Sensor.Threshold);
+        return _mobState.GetHealthFraction(ent) < args.Sensor.Threshold;
     }
 }

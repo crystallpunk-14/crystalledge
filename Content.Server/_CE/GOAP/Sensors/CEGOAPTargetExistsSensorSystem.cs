@@ -13,23 +13,17 @@ public sealed partial class CEGOAPTargetExistsSensor : CEGOAPSensorBase<CEGOAPTa
 
 public sealed partial class CEGOAPTargetExistsSensorSystem : CEGOAPSensorSystem<CEGOAPTargetExistsSensor>
 {
-    protected override void OnSensorUpdate(
+    protected override bool OnSensorUpdate(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPSensorUpdateEvent<CEGOAPTargetExistsSensor> args)
     {
         var key = args.Sensor.TargetProviderKey;
         if (key == null)
-        {
-            SetState(ref args, false);
-            return;
-        }
+            return false;
 
         if (!ent.Comp.TargetProviders.TryGetValue(key, out var provider))
-        {
-            SetState(ref args, false);
-            return;
-        }
+            return false;
 
-        SetState(ref args, provider.TargetEntity != null);
+        return provider.TargetEntity != null;
     }
 }
