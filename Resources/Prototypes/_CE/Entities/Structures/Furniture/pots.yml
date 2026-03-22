@@ -9,8 +9,8 @@
   components:
   - type: Transform
     noRot: true
-    offset: 0,0.3
   - type: Sprite
+    offset: 0,0.3
     noRot: true
     sprite: _CE/Structures/Furniture/clay_pot.rsi
     layers:
