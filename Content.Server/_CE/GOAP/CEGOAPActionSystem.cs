@@ -1,5 +1,4 @@
 using Content.Shared._CE.GOAP;
-using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP;
 
@@ -9,6 +8,8 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEGOAPActionBase<T>
 {
+    [Dependency] private readonly CEGOAPSystem _goap = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -50,24 +51,9 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
     }
 
     /// <summary>
-    /// Returns the resolved entity target from the named target provider, or null if the key is absent or unresolved.
+    /// Returns the entity target from the Targets dictionary.
+    /// "self" returns the owner, null returns null.
     /// </summary>
-    protected EntityUid? GetTarget(CEGOAPComponent goap, string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
-
-        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetEntity : null;
-    }
-
-    /// <summary>
-    /// Returns the resolved coordinate target from the named target provider, or null if the key is absent or unresolved.
-    /// </summary>
-    protected EntityCoordinates? GetTargetCoordinates(CEGOAPComponent goap, string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
-
-        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetCoordinates : null;
-    }
+    protected EntityUid? GetTarget(Entity<CEGOAPComponent> ent, string? targetKey)
+        => _goap.GetTarget(ent, targetKey);
 }

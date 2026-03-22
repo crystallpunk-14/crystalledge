@@ -15,10 +15,4 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<int> CEGOAPMaxUpdates =
         CVarDef.Create("ce.goap.max_updates", 128);
-
-    /// <summary>
-    /// Interval in seconds between sensor updates for GOAP agents.
-    /// </summary>
-    public static readonly CVarDef<float> CEGOAPSensorInterval =
-        CVarDef.Create("ce.goap.sensor_interval", 0.2f);
 }

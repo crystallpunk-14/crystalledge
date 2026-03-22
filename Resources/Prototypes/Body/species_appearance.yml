@@ -33,6 +33,8 @@
     - map: ["enum.HumanoidVisualLayers.Overlay"]
 
     # More equipment
+    - map: [ "pants" ] #CrystallEdge
+    - map: [ "shirt" ] #CrystallEdge
     - map: [ "gloves" ]
     - map: [ "shoes" ]
     - map: [ "ears" ]
@@ -40,6 +42,7 @@
     - map: [ "belt" ]
     - map: [ "id" ]
     - map: [ "outerClothing" ]
+    - map: [ "cloak" ] #CrystallEdge
     - map: [ "back" ]
     - map: [ "neck" ]
     - map: [ "suitstorage" ]

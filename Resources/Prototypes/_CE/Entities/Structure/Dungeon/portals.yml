@@ -1,0 +1,110 @@
+# Entity prototypes for dungeon level entry/exit points.
+
+# Base abstract for dungeon portals (shared visual/physics setup).
+- type: entity
+  id: CEDungeonPortalBase
+  abstract: true
+  parent: BaseStructure
+  name: dungeon portal
+  description: A shimmering rift between dungeon levels.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: _CE/Structures/Dungeon/demiplan_rift.rsi
+    layers:
+      - state: anom
+        shader: unshaded
+  - type: PointLight
+    radius: 5
+    energy: 1
+    color: "#8f42ff"
+  - type: SingularityDistortion
+    falloffPower: 1.5
+    intensity: 50
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Cubic
+        maxDuration: 2
+        startValue: 0.1
+        endValue: 1.0
+        property: Energy
+        isLooped: true
+        enabled: true
+  - type: AmbientSound
+    volume: -3
+    range: 7
+    sound:
+      path: /Audio/Ambience/Objects/gravity_gen_hum.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 100
+        mask:
+          - MachineMask
+        layer:
+          - MidImpassable
+
+# Exit portal: players interact with this to travel to the next dungeon level.
+- type: entity
+  id: CEDungeonLevelExit
+  parent: CEDungeonPortalBase
+  name: dungeon rift
+  description: A rift leading deeper into the dungeon. Interact to enter.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CEDungeonPassage
+  - type: InteractionOutline
+  - type: UseDelay
+    delay: 2
+
+- type: entity
+  id: CEDungeonLevelExitFirst
+  parent: CEDungeonLevelExit
+  suffix: To test procedural level
+  components:
+  - type: CEDungeonPassage
+    targetLevel: CEDungeonTestProcedural
+
+
+- type: entity
+  id: CEDungeonLevelActivePassage
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/portal_active_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#8f42ff"
+  - type: AmbientSound
+    volume: -3
+    range: 7
+    sound:
+      path: /Audio/Ambience/anomaly_scary.ogg
+  - type: TimedDespawn
+    lifetime: 60
+
+# Entry marker: placed inside generated dungeons where incoming players appear.
+- type: entity
+  id: CEDungeonLevelEntry
+  parent: MarkerBase
+  name: dungeon entry point
+  description: An arrival point for adventurers entering this level.
+  components:
+  - type: CEDungeonEntryPoint
+    active: true
+  - type: Sprite
+    layers:
+      - state: green
+      - state: pulse
+        sprite: _CE/Structures/Dungeon/demiplan_rift.rsi

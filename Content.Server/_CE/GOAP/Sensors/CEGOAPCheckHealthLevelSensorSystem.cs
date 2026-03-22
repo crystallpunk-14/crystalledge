@@ -1,5 +1,5 @@
 using Content.Shared._CE.GOAP;
-using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -18,30 +18,32 @@ public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensorBase<CEGO
 
 public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSystem<CEGOAPCheckHealthLevelSensor>
 {
-    private EntityQuery<CEDamageableComponent> _damageQuery;
-    private EntityQuery<CEMobStateComponent> _mobStateQuery;
+    [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _damageQuery = GetEntityQuery<CEDamageableComponent>();
-        _mobStateQuery = GetEntityQuery<CEMobStateComponent>();
+        SubscribeLocalEvent<CEGOAPComponent, CEDamageChangedEvent>(OnDamageChanged);
     }
 
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
+    /// <summary>
+    /// Event-driven update: fires when damage changes on an entity with GOAP.
+    /// </summary>
+    private void OnDamageChanged(Entity<CEGOAPComponent> ent, ref CEDamageChangedEvent args)
     {
-        if (!_damageQuery.TryComp(ent, out var damage) ||
-            !_mobStateQuery.TryComp(ent, out var mobState))
+        var fraction = _mobState.GetHealthFraction(ent);
+
+        foreach (var sensor in ent.Comp.Sensors)
         {
-            SetState(ref args, false);
-            return;
+            if (sensor is not CEGOAPCheckHealthLevelSensor healthSensor)
+                continue;
+
+            ent.Comp.WorldState[healthSensor.ConditionKey] = fraction < healthSensor.Threshold;
         }
+    }
 
-        var healthFraction = mobState.CriticalThreshold > 0
-            ? 1f - (float) damage.TotalDamage / mobState.CriticalThreshold
-            : 1f;
-
-        SetState(ref args, healthFraction < args.Sensor.Threshold);
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
+    {
+        return _mobState.GetHealthFraction(ent) < args.Sensor.Threshold;
     }
 }

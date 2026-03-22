@@ -75,6 +75,27 @@ public sealed partial class CEZLevelsSystem
 
         return success;
     }
+
+    /// <summary>
+    /// Deletes a z-network: queues deletion of all maps in the network, then the network entity itself.
+    /// </summary>
+    [PublicAPI]
+    public void DeleteZNetwork(EntityUid networkUid)
+    {
+        if (!TryComp<CEZLevelsNetworkComponent>(networkUid, out var zNet))
+        {
+            Log.Error($"CEZLevelsSystem: entity {networkUid} does not have CEZLevelsNetworkComponent.");
+            return;
+        }
+
+        foreach (var (_, mapUid) in zNet.ZLevels)
+        {
+            if (mapUid != null)
+                QueueDel(mapUid.Value);
+        }
+
+        QueueDel(networkUid);
+    }
 }
 
 /// <summary>

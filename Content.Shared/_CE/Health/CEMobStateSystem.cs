@@ -53,7 +53,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         SubscribeLocalEvent<CEMobStateComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
-        SubscribeLocalEvent<CEMobStateComponent, CEMobStateChangedEvent>(OnMobStateChangedSpeed);
+        SubscribeLocalEvent<CEMobStateComponent, CEMobStateChangedEvent>(OnMobStateChanged);
     }
 
     private void OnRejuvenate(Entity<CEMobStateComponent> ent, ref RejuvenateEvent args)
@@ -94,9 +94,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
         if (!_timing.ApplyingState)
         {
-            OnStateExited(ent, oldState);
-            OnStateEntered(ent, newState);
-
             var ev = new CEMobStateChangedEvent(ent, oldState, newState);
             RaiseLocalEvent(ent, ev, true);
         }
@@ -196,6 +193,20 @@ public sealed partial class CEMobStateSystem : EntitySystem
         return component.CurrentState is CEMobState.Critical or CEMobState.Dead;
     }
 
+    /// <summary>
+    /// Returns the health fraction (0..1) of the entity, where 1 is full health and 0 is at critical threshold.
+    /// Returns 1 if no damageable/mob state components are found.
+    /// </summary>
+    public float GetHealthFraction(EntityUid uid, CEDamageableComponent? damage = null, CEMobStateComponent? mobState = null)
+    {
+        if (!Resolve(uid, ref damage, false) || !Resolve(uid, ref mobState, false))
+            return 1f;
+
+        return mobState.CriticalThreshold > 0
+            ? 1f - (float) damage.TotalDamage / mobState.CriticalThreshold
+            : 1f;
+    }
+
     #endregion
 
     #region Action Blocking
@@ -230,8 +241,10 @@ public sealed partial class CEMobStateSystem : EntitySystem
             args.ModifySpeed(CriticalSpeedModifier, CriticalSpeedModifier);
     }
 
-    private void OnMobStateChangedSpeed(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
+    private void OnMobStateChanged(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
     {
+        OnStateExited(uid, args.OldState);
+        OnStateEntered(uid, args.NewState);
         _movementSpeed.RefreshMovementSpeedModifiers(uid);
     }
 

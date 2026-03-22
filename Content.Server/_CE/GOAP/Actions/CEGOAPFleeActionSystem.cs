@@ -61,7 +61,7 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPFleeAction> args)
     {
-        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
+        var target = GetTarget(ent, args.Action.TargetKey);
         if (target == null)
             return;
 
@@ -72,7 +72,7 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPFleeAction> args)
     {
-        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
+        var target = GetTarget(ent, args.Action.TargetKey);
         if (target == null)
         {
             args.Status = CEGOAPActionStatus.Finished;
