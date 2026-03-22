@@ -36,10 +36,9 @@ public abstract partial class CEGOAPSensorSystem<T> : EntitySystem where T : CEG
         => _goap.GetTarget(ent, targetKey);
 
     /// <summary>
-    /// Writes a target entity into the component’s Targets dictionary.
+    /// Writes a target entity into the component’s Targets dictionary
+    /// and automatically tracks its last-known position.
     /// </summary>
-    protected void SetTarget(CEGOAPComponent comp, string key, EntityUid? target)
-    {
-        comp.Targets[key] = target;
-    }
+    protected void SetTarget(Entity<CEGOAPComponent> ent, string key, EntityUid? target)
+        => _goap.SetTarget(ent, key, target);
 }

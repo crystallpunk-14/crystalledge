@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.GOAP;
@@ -34,6 +35,13 @@ public sealed partial class CEGOAPComponent : Component
     /// </summary>
     [ViewVariables]
     public Dictionary<string, EntityUid?> Targets = new();
+
+    /// <summary>
+    /// Last known coordinates for each target key.
+    /// Updated automatically when a target is set; preserved when the target is cleared.
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<string, EntityCoordinates> LastKnownPositions = new();
 
     /// <summary>
     /// Current world state as perceived by this entity.

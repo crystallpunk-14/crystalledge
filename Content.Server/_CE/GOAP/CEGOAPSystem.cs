@@ -38,6 +38,40 @@ public sealed partial class CEGOAPSystem : EntitySystem
     }
 
     /// <summary>
+    /// Writes a target entity into the Targets dictionary and auto-tracks its position.
+    /// When target is non-null, LastKnownPositions[key] is updated.
+    /// When target becomes null, the last-known position is preserved.
+    /// Raises <see cref="CETargetChangedEvent"/> when the resolved target changes.
+    /// </summary>
+    public void SetTarget(Entity<CEGOAPComponent> ent, string key, EntityUid? target)
+    {
+        var old = ent.Comp.Targets.TryGetValue(key, out var prev) ? prev : null;
+        ent.Comp.Targets[key] = target;
+
+        if (target != null && TryComp<TransformComponent>(target.Value, out var xform))
+            ent.Comp.LastKnownPositions[key] = xform.Coordinates;
+
+        if (target != old)
+        {
+            var ev = new CETargetChangedEvent(key, target);
+            RaiseLocalEvent(ent, ref ev);
+        }
+    }
+
+    /// <summary>
+    /// Removes a last-known position for the given key and notifies sensors.
+    /// </summary>
+    public void ClearLastKnownPosition(Entity<CEGOAPComponent> ent, string key)
+    {
+        if (!ent.Comp.LastKnownPositions.Remove(key))
+            return;
+
+        var current = ent.Comp.Targets.TryGetValue(key, out var t) ? t : null;
+        var ev = new CETargetChangedEvent(key, current);
+        RaiseLocalEvent(ent, ref ev);
+    }
+
+    /// <summary>
     /// Reusable list for executable actions to avoid allocations during planning.
     /// </summary>
     private readonly List<CEGOAPAction> _executableActions = new();
@@ -269,3 +303,10 @@ public sealed partial class CEGOAPSystem : EntitySystem
         ent.Comp.ActiveGoalIndex = -1;
     }
 }
+
+
+/// <summary>
+/// Raised on the GOAP entity when a target in the Targets dictionary changes.
+/// </summary>
+[ByRefEvent]
+public record struct CETargetChangedEvent(string TargetKey, EntityUid? NewTarget);

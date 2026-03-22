@@ -15,32 +15,30 @@
     planCooldown: 0.5
 
     goals:
-    # Buff self
-    - desiredState:
-        HasDivineShield: true
-      activationConditions:
-        HasDivineShield: false
-      priority: 4
     # First - attack
     - desiredState:
         EnemyDead: true
       activationConditions:
         LowHealth: false
         EnemyVisible: true
-      priority: 3
+      priority: 4
     # Second - run away
     - desiredState:
         EnemyVisible: false
       activationConditions:
         LowHealth: true
         EnemyVisible: true
-      priority: 2
+      priority: 3
     # Last - healing
     - desiredState:
         LowHealth: false
       activationConditions:
         LowHealth: true
         EnemyVisible: false
+      priority: 2
+    # Idle - wander around
+    - desiredState:
+        EnemyVisible: true
       priority: 1
 
     actions:
@@ -72,13 +70,6 @@
       fleeDistance: 15
       visionRadius: 10
       occlusionBonus: 2
-    # Divine Shield - self-target action, use when no shield active
-    - !type:CEGOAPUseAction
-      targetKey: self
-      effects:
-        HasDivineShield: true
-      cost: 1
-      actionPrototype: CEActionSpellDivineShield
     # Area Healing - world target under self, use when low health
     - !type:CEGOAPUseAction
       targetKey: self
@@ -86,12 +77,26 @@
         LowHealth: false
       cost: 2
       actionPrototype: CEActionSpellAreaHealing
+    # Wander to a random nearby tile
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
 
     sensors:
     - !type:CEGOAPNearestHostileSensor
       conditionKey: EnemyVisible
       outputTargetKey: enemy
-      visionRadius: 10
+      visionRadius: 5
     - !type:CEGOAPCheckHealthLevelSensor
       conditionKey: LowHealth
       threshold: 0.5
@@ -105,6 +110,9 @@
     - !type:CEGOAPHasStatusEffectSensor
       conditionKey: HasDivineShield
       statusEffect: CEStatusEffectDivineShield
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
 
   - type: NpcFactionMember
     factions:

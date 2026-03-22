@@ -50,7 +50,7 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
     {
         if (!_xformQuery.TryGetComponent(ent, out var xform))
         {
-            SetTarget(ent.Comp, args.Sensor.OutputTargetKey, null);
+            SetTarget(ent, args.Sensor.OutputTargetKey, null);
             return false;
         }
 
@@ -87,7 +87,7 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
             closestTarget = targetUid;
         }
 
-        SetTarget(ent.Comp, args.Sensor.OutputTargetKey, closestTarget);
+        SetTarget(ent, args.Sensor.OutputTargetKey, closestTarget);
         return closestTarget != null;
     }
 }
