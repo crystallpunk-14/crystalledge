@@ -7,6 +7,8 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// </summary>
 public sealed partial class CEGOAPRangeToTargetSensor : CEGOAPSensorBase<CEGOAPRangeToTargetSensor>
 {
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.2);
+
     /// <summary>
     /// Range threshold in tiles.
     /// </summary>

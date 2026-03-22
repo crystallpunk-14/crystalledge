@@ -6,7 +6,10 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// <summary>
 /// Checks if the current target is neutralized (critical or dead).
 /// </summary>
-public sealed partial class CEGOAPTargetIsDeadSensor : CEGOAPSensorBase<CEGOAPTargetIsDeadSensor>;
+public sealed partial class CEGOAPTargetIsDeadSensor : CEGOAPSensorBase<CEGOAPTargetIsDeadSensor>
+{
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.2);
+}
 
 public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<CEGOAPTargetIsDeadSensor>
 {

@@ -78,11 +78,5 @@ public sealed partial class CEGOAPComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextPlanTime;
 
-    /// <summary>
-    /// The next game time at which sensors are updated.
-    /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan NextSensorTime;
-
 }
 
