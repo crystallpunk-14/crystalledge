@@ -1,0 +1,139 @@
+- type: entity
+  parent: CEFlem
+  id: CEFlem2
+  suffix: Fire
+  components:
+  - type: Sprite
+    color: Red
+  - type: CEGOAP
+    actions:
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      cost: 2
+      range: 1.5
+    # Run away from target
+    - !type:CEGOAPFleeAction
+      targetKey: enemy
+      effects:
+        EnemyVisible: false
+        EnemyInMeleeRange: false
+      cost: 1
+      fleeDistance: 15
+      visionRadius: 10
+      occlusionBonus: 2
+    # Melee attack target
+    - !type:CEGOAPMeleeAttackAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    # Attack target from distance
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 2
+      actionPrototype: CEActionFirewall
+    # Area Healing - world target under self, use when low health
+    - !type:CEGOAPUseAction
+      targetKey: self
+      effects:
+        LowHealth: false
+      cost: 2
+      actionPrototype: CEActionSpellAreaHealing
+    # Wander to a random nearby tile
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+  - type: CEArmor
+    flat:
+      Fire: 5
+
+- type: entity
+  parent: CEFlem
+  id: CEFlem3
+  suffix: Frost
+  components:
+  - type: Sprite
+    color: Blue
+  - type: CEGOAP
+    actions:
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      cost: 2
+      range: 1.5
+    # Run away from target
+    - !type:CEGOAPFleeAction
+      targetKey: enemy
+      effects:
+        EnemyVisible: false
+        EnemyInMeleeRange: false
+      cost: 1
+      fleeDistance: 15
+      visionRadius: 10
+      occlusionBonus: 2
+    # Melee attack target
+    - !type:CEGOAPMeleeAttackAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    # Attack target from distance
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 2
+      actionPrototype: CEActionFrostFlow
+    # Area Healing - world target under self, use when low health
+    - !type:CEGOAPUseAction
+      targetKey: self
+      effects:
+        LowHealth: false
+      cost: 2
+      actionPrototype: CEActionSpellAreaHealing
+    # Wander to a random nearby tile
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+  - type: CEArmor
+    flat:
+      Frost: 5

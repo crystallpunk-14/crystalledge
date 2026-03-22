@@ -13,7 +13,6 @@
     maxEnergy: 100
   - type: CEGOAP
     planCooldown: 0.5
-
     goals:
     # First - attack
     - desiredState:
@@ -66,6 +65,7 @@
       targetKey: enemy
       effects:
         EnemyVisible: false
+        EnemyInMeleeRange: false
       cost: 1
       fleeDistance: 15
       visionRadius: 10
@@ -96,7 +96,7 @@
     - !type:CEGOAPNearestHostileSensor
       conditionKey: EnemyVisible
       outputTargetKey: enemy
-      visionRadius: 5
+      visionRadius: 8
     - !type:CEGOAPCheckHealthLevelSensor
       conditionKey: LowHealth
       threshold: 0.5
@@ -132,7 +132,7 @@
           Dead: { state: dead }
   - type: MovementAlwaysTouching
   - type: MovementSpeedModifier
-    baseSprintSpeed: 1.5
+    baseSprintSpeed: 2.5
   - type: CEWeapon
     spriteRotation: -90
     damage:
