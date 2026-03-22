@@ -1,3 +1,5 @@
+using Content.Shared._CE.Health;
+
 namespace Content.Shared._CE.GOAP;
 
 /// <summary>
@@ -18,6 +20,19 @@ public abstract partial class CEGOAPSensor
     /// </summary>
     [DataField]
     public string? TargetProviderKey;
+
+    /// <summary>
+    /// How often this sensor is polled.
+    /// If null or zero, the sensor is purely event-driven and will not be polled.
+    /// Defined per concrete sensor class in C#; not serialized.
+    /// </summary>
+    public virtual TimeSpan? UpdateInterval => null;
+
+    /// <summary>
+    /// Next game time at which this sensor should be polled. Runtime state, not serialized.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextUpdateTime;
 
     /// <summary>
     /// Raises the sensor update event to evaluate world state conditions.

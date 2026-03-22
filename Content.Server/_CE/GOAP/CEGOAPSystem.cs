@@ -1,5 +1,4 @@
 using Content.Shared._CE.GOAP;
-using Content.Shared._CE.Health.Components;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
 using Robust.Shared.Configuration;
@@ -18,7 +17,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private bool _enabled = true;
     private int _maxUpdates = 128;
-    private float _sensorInterval = 0.2f;
 
     /// <summary>
     /// Reusable list for executable actions to avoid allocations during planning.
@@ -36,7 +34,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
         Subs.CVar(_cfg, CCVars.CEGOAPEnabled, v => _enabled = v, true);
         Subs.CVar(_cfg, CCVars.CEGOAPMaxUpdates, v => _maxUpdates = v, true);
-        Subs.CVar(_cfg, CCVars.CEGOAPSensorInterval, v => _sensorInterval = v, true);
 
         InitWake();
 
@@ -46,6 +43,13 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
+        // Force all sensors to evaluate once so WorldState is populated immediately.
+        ResolveTargetProviders(ent);
+
+        foreach (var sensor in ent.Comp.Sensors)
+        {
+            sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
+        }
         UpdateAwakeStatus((ent, ent.Comp));
     }
 
@@ -78,11 +82,8 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
         // 1. Resolve target providers, then update sensors
-        if (_timing.CurTime >= ent.Comp.NextSensorTime)
-        {
-            ResolveTargetProviders(ent);
-            UpdateSensors(ent);
-        }
+        ResolveTargetProviders(ent);
+        UpdateSensors(ent);
 
         // 2. Check if we need to re-plan
         if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
@@ -103,9 +104,21 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateSensors(Entity<CEGOAPComponent> ent)
     {
-        ent.Comp.NextSensorTime = _timing.CurTime + TimeSpan.FromSeconds(_sensorInterval);
+        var curTime = _timing.CurTime;
+
         foreach (var sensor in ent.Comp.Sensors)
         {
+            var interval = sensor.UpdateInterval;
+
+            // Event-only sensors are not polled.
+            if (interval is null || interval.Value <= TimeSpan.Zero)
+                continue;
+
+            // Per-sensor timing.
+            if (curTime < sensor.NextUpdateTime)
+                continue;
+
+            sensor.NextUpdateTime = curTime + interval.Value;
             sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
         }
     }

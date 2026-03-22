@@ -4,6 +4,7 @@
 - type: dungeonLevel
   id: CEDungeonTestStatic
   name: Test Static Dungeon
+  stable: true
   config:
     !type:CEStaticMapConfig
     mapPath: /Maps/_CE/Dev/Dev0.yml
@@ -12,6 +13,7 @@
 - type: dungeonLevel
   id: CEDungeonTestZNetwork
   name: Test ZNetwork Dungeon
+  stable: false
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: DunTest
@@ -19,15 +21,21 @@
 - type: dungeonLevel
   id: CEDungeonTestProcedural
   name: Test Procedural Dungeon
+  stable: false
+  exits:
+    default: CEDungeonTestStatic
   config:
     !type:CEProceduralConfig
     maxRoomSize: 16
+    blessingCount:
+      min: 1
+      max: 1
     cycleCount:
-      min: 3
-      max: 10
+      min: 1
+      max: 2
     generalCount:
-      min: 50
-      max: 50
+      min: 15
+      max: 20
     components:
     - type: MapLight
       ambientLightColor: "#3d4444"
@@ -36,9 +44,6 @@
       inherent: true
     - type: Parallax
       parallax: CEAbyss
-    blessingCount:
-      min: 4
-      max: 4
     generalRooms:
       whitelist:
         requireAll: true
@@ -50,15 +55,13 @@
         requireAll: true
         tags:
         - CEDunGenZoneTest
-        #- CEDunGenRoomExit
-        - CEDunGenRoomGeneral
+        - CEDunGenRoomExit
     entranceRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenZoneTest
-        #- CEDunGenRoomEntrance
-        - CEDunGenRoomGeneral
+        - CEDunGenRoomEntrance
     blessingRooms:
       whitelist:
         requireAll: true

@@ -11,6 +11,6 @@
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs
-  - type: CEWallmount
+  #- type: CEWallmount
   - type: Physics
     canCollide: false

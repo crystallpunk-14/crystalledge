@@ -12,6 +12,7 @@
   id: CEBaseSpeciesMob
   save: false
   components:
+  - type: CEDungeonPlayer
   - type: StatusIcon
     bounds: -0.5,-0.5,0.5,0.5
   - type: RotationVisuals

@@ -1,0 +1,51 @@
+- type: zMap
+  id: Level0_Entry
+  maps:
+  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry0.yml
+  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry1.yml
+  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry2.yml
+  components:
+    - type: Parallax
+      parallax: CESky
+    - type: SunShadowCycle
+      offset: 490
+    - type: LightCycle
+      offset: 490
+      originalColor: "#c8fdff"
+    - type: CEZLevelMapRoof
+    - type: SunShadow
+    - type: MapLight
+      ambientLightColor: "#c8fdff"
+
+- type: gameMap
+  id: CELevel0Entry
+  mapName: CELevel0Entry
+  mapPath: /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry2.yml
+  minPlayers: 0
+  stations:
+    Level:
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: "Level0"
+        - type: StationJobs
+          availableJobs:
+            CEWarrior: [ -1, -1 ]
+            CEMage: [ -1, -1 ]
+            CEPriest: [ -1, -1 ]
+        - type: CEStationZLevels
+          mapsBelow:
+          - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry0.yml
+          - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry1.yml
+          zLevelsComponentOverrides:
+            - type: Parallax
+              parallax: CESky
+            - type: SunShadowCycle
+              offset: 490
+            - type: LightCycle
+              offset: 490
+              originalColor: "#75e3ff"
+            - type: CEZLevelMapRoof
+            - type: SunShadow
+            - type: MapLight
+              ambientLightColor: "#75e3ff"

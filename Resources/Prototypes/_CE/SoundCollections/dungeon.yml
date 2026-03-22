@@ -1,0 +1,7 @@
+- type: soundCollection
+  id: CEDemiplaneIntro
+  files:
+    - /Audio/_CE/Ambience/Demiplane/intro1.ogg
+    - /Audio/_CE/Ambience/Demiplane/intro2.ogg
+    - /Audio/_CE/Ambience/Demiplane/intro3.ogg
+    - /Audio/_CE/Ambience/Demiplane/intro4.ogg

@@ -7,6 +7,8 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// </summary>
 public sealed partial class CEGOAPRangeToTargetSensor : CEGOAPSensorBase<CEGOAPRangeToTargetSensor>
 {
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.2);
+
     /// <summary>
     /// Range threshold in tiles.
     /// </summary>
@@ -24,28 +26,19 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : CEGOAPSensorSystem
         _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
     {
         var target = GetTarget(ent.Comp, args.Sensor.TargetProviderKey);
         if (target == null)
-        {
-            SetState(ref args, false);
-            return;
-        }
+            return false;
 
         if (!_xformQuery.TryGetComponent(ent, out var xform) ||
             !_xformQuery.TryGetComponent(target.Value, out var targetXform))
-        {
-            SetState(ref args, false);
-            return;
-        }
+            return false;
 
         if (!xform.Coordinates.TryDistance(EntityManager, targetXform.Coordinates, out var distance))
-        {
-            SetState(ref args, false);
-            return;
-        }
+            return false;
 
-        SetState(ref args, distance <= args.Sensor.Range);
+        return distance <= args.Sensor.Range;
     }
 }

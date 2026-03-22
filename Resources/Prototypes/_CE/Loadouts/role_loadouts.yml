@@ -5,6 +5,7 @@
   - CEMageCloak
   - CEMageShirt
   - CEMagePants
+  - CEGeneralBag
 
 - type: roleLoadout
   id: JobCEPriest
@@ -12,3 +13,4 @@
   - CEPriestCloak
   - CEPriestShirt
   - CEPriestPants
+  - CEGeneralBag
