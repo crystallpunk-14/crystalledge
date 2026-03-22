@@ -80,6 +80,9 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
+        // 0. Expire stale memorized positions
+        CleanupExpiredPositions(ent);
+
         // 1. Update sensors
         UpdateSensors(ent);
 
