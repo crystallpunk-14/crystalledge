@@ -26,7 +26,7 @@ public sealed partial class CEGOAPFilterTargetSensorSystem : CEGOAPSensorSystem<
 
     protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilterTargetSensor> args)
     {
-        var target = GetTarget(ent.Comp, args.Sensor.TargetProviderKey);
+        var target = GetTarget(ent, args.Sensor.TargetKey);
         if (target == null)
         {
             return false;

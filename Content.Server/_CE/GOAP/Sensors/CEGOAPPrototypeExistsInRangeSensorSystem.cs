@@ -45,7 +45,8 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSen
             if (args.Sensor.IgnoreSelf && entityUid == ent.Owner)
                 continue;
 
-            if (EntityManager.TryGetComponent(entityUid, out MetaDataComponent? meta) && meta.EntityPrototype?.ID == args.Sensor.PrototypeId.ID)
+            var meta = MetaData(entityUid).EntityPrototype;
+            if (meta != null && meta.ID == args.Sensor.PrototypeId.ID)
                 count++;
 
             if (count >= args.Sensor.MinCount)
