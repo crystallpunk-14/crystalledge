@@ -19,59 +19,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private int _maxUpdates = 128;
 
     /// <summary>
-    /// Reserved target key that always resolves to the entity itself.
-    /// </summary>
-    public const string SelfTargetKey = "self";
-
-    /// <summary>
-    /// Resolves a target key to an entity. "self" returns the owner, null returns null.
-    /// </summary>
-    public EntityUid? GetTarget(Entity<CEGOAPComponent> ent, string? targetKey)
-    {
-        if (targetKey == null)
-            return null;
-
-        if (targetKey == SelfTargetKey)
-            return ent.Owner;
-
-        return ent.Comp.Targets.TryGetValue(targetKey, out var target) ? target : null;
-    }
-
-    /// <summary>
-    /// Writes a target entity into the Targets dictionary and auto-tracks its position.
-    /// When target is non-null, LastKnownPositions[key] is updated.
-    /// When target becomes null, the last-known position is preserved.
-    /// Raises <see cref="CETargetChangedEvent"/> when the resolved target changes.
-    /// </summary>
-    public void SetTarget(Entity<CEGOAPComponent> ent, string key, EntityUid? target)
-    {
-        var old = ent.Comp.Targets.TryGetValue(key, out var prev) ? prev : null;
-        ent.Comp.Targets[key] = target;
-
-        if (target != null && TryComp<TransformComponent>(target.Value, out var xform))
-            ent.Comp.LastKnownPositions[key] = xform.Coordinates;
-
-        if (target != old)
-        {
-            var ev = new CETargetChangedEvent(key, target);
-            RaiseLocalEvent(ent, ref ev);
-        }
-    }
-
-    /// <summary>
-    /// Removes a last-known position for the given key and notifies sensors.
-    /// </summary>
-    public void ClearLastKnownPosition(Entity<CEGOAPComponent> ent, string key)
-    {
-        if (!ent.Comp.LastKnownPositions.Remove(key))
-            return;
-
-        var current = ent.Comp.Targets.TryGetValue(key, out var t) ? t : null;
-        var ev = new CETargetChangedEvent(key, current);
-        RaiseLocalEvent(ent, ref ev);
-    }
-
-    /// <summary>
     /// Reusable list for executable actions to avoid allocations during planning.
     /// </summary>
     private readonly List<CEGOAPAction> _executableActions = new();
@@ -106,6 +53,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
+        CleanupTrackers(ent);
         ClearPlan(ent);
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
@@ -303,10 +251,3 @@ public sealed partial class CEGOAPSystem : EntitySystem
         ent.Comp.ActiveGoalIndex = -1;
     }
 }
-
-
-/// <summary>
-/// Raised on the GOAP entity when a target in the Targets dictionary changes.
-/// </summary>
-[ByRefEvent]
-public record struct CETargetChangedEvent(string TargetKey, EntityUid? NewTarget);

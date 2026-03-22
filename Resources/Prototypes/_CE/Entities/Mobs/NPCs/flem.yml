@@ -132,8 +132,7 @@
           Dead: { state: dead }
   - type: MovementAlwaysTouching
   - type: MovementSpeedModifier
-    baseWalkSpeed: 3
-    baseSprintSpeed: 3.5
+    baseSprintSpeed: 1.5
   - type: CEWeapon
     spriteRotation: -90
     damage:
