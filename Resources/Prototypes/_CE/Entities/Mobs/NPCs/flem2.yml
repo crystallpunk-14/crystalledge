@@ -136,4 +136,4 @@
       cost: 0.5
   - type: CEArmor
     flat:
-      Frost: 5
+      Cold: 5
