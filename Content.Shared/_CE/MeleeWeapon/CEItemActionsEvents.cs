@@ -31,6 +31,22 @@ public sealed class CEWeaponUseEvent(
 }
 
 /// <summary>
+/// Sent from client to server at the arc attack keyframe.
+/// Contains the client's calculated hit list for server validation.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CEWeaponArcHitEvent(
+    NetEntity weapon,
+    List<NetEntity> targets,
+    float power)
+    : EntityEventArgs
+{
+    public readonly NetEntity Weapon = weapon;
+    public readonly List<NetEntity> Targets = targets;
+    public readonly float Power = power;
+}
+
+/// <summary>
 /// Event raised on entity in GetWeapon function to allow systems to manually
 /// specify what the weapon should be.
 /// </summary>

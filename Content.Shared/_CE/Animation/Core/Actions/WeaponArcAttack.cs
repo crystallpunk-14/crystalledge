@@ -60,7 +60,7 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
             .ToList();
 
         targets.Remove(user);
-        melee.TryAttack(user, (used.Value, weapon), targets, Power);
+        melee.HandleArcAttackHit(user, (used.Value, weapon), targets, Power);
     }
 }
 

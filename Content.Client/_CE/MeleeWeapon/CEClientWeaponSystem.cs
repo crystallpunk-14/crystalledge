@@ -129,6 +129,10 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
     private void OnAttackEffectEvent(CEMeleeAttackEffectEvent args)
     {
         var user = GetEntity(args.User);
+
+        if (!Exists(user))
+            return;
+
         var targets = GetEntityList(args.Targets);
 
         var otherShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.35f, DecayRate = 2f, Frequency = 0.008f };
@@ -175,5 +179,18 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
 
         // This handles the prediction case for the attacking player
         OnAttackEffectEvent(new CEMeleeAttackEffectEvent(GetNetEntity(user), GetNetEntityList(targets)));
+    }
+
+    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)
+    {
+        if (!Timing.IsFirstTimePredicted)
+            return;
+
+        // Send the client-calculated hit list as a predicted event.
+        // The shared handler will call TryAttack both during prediction and on server.
+        RaisePredictiveEvent(new CEWeaponArcHitEvent(
+            GetNetEntity(weapon.Owner),
+            GetNetEntityList(targets),
+            power));
     }
 }
