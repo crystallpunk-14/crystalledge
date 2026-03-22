@@ -1,11 +1,11 @@
 - type: animationAction
   id: SpearAttackLight
   movementSpeed: 0.3
-  duration: 0.35
+  duration: 0.5
   events:
     0:
     - !type:Dash
-      distance: 0.3
+      distance: 0.1
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash.ogg
@@ -20,14 +20,6 @@
       - time: 0.25
         offset: 0, -0.3
         easing: QuadOut
-
-      rotationAnimation:
-      - time: 0.0
-        rotation: 0
-      - time: 0.08
-        rotation: 0
-      - time: 0.25
-        rotation: 0
 
       colorAnimation:
       - time: 0.0
@@ -51,36 +43,114 @@
 - type: animationAction
   id: SpearAttackHeavy
   movementSpeed: 0.2
-  duration: 0.55
+  duration: 0.85
   events:
     0:
-    #- !type:Dash
-    #  distance: 0.4
-    #- !type:PlaySound
-    #  sound:
-    #    path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
     - !type:EntityAnimation
       offsetAnimation:
       - time: 0.0
         offset: -0.5, -0.3
+        easing: QuadIn
       - time: 0.4
         offset: -0.3, 0.3
       - time: 0.45
         offset: -0.5, -0.3
       - time: 0.55
-        offset: 0, -2
+        offset: 0, -1.5
+        easing: QuadIn
+      - time: 0.75
+        offset: 0, -1.2
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 0
+        easing: QuadIn
+      - time: 0.4
+        rotation: -15
+      - time: 0.45
+        rotation: 0
+      - time: 0.55
+        rotation: 5
+        easing: QuadIn
 
       colorAnimation:
-      - time: 0.25
+      - time: 0.65
         color: "#ffffff"
         easing: QuadOut
-      #- time: 0.4
-      #  color: "#ffffff00"
+      - time: 0.8
+        color: "#ffffff00"
 
       scaleAnimation:
       - time: 0.0
         scale: 1, -1
-    #0.15:
-    #- !type:WeaponArcAttack
-    #  range: 1.0
-    #  arcWidth: 20
+    0.15:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword3.ogg
+    0.45:
+    - !type:Dash
+      distance: 1
+    0.55:
+    - !type:WeaponArcAttack
+      range: 1.0
+      arcWidth: 25
+      power: 2
+
+
+- type: animationAction
+  id: SpearAttackHeavy2
+  movementSpeed: 0.2
+  duration: 0.85
+  events:
+    0:
+    - !type:EntityAnimation
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.5, -0.3
+        easing: QuadIn
+      - time: 0.4
+        offset: 0.3, 0.3
+      - time: 0.45
+        offset: 0.5, -0.3
+      - time: 0.55
+        offset: 0, -1.5
+        easing: QuadIn
+      - time: 0.75
+        offset: 0, -1.2
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 0
+        easing: QuadIn
+      - time: 0.4
+        rotation: 15
+      - time: 0.45
+        rotation: 0
+      - time: 0.55
+        rotation: -5
+        easing: QuadIn
+
+      colorAnimation:
+      - time: 0.65
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.8
+        color: "#ffffff00"
+
+      scaleAnimation:
+      - time: 0.0
+        scale: 1, -1
+    0.15:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword3.ogg
+    0.45:
+    - !type:Dash
+      distance: 1
+    0.55:
+    - !type:WeaponArcAttack
+      range: 1.0
+      arcWidth: 25
+      power: 2

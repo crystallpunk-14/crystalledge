@@ -17,12 +17,13 @@
       - anim: SpearAttackLight
       Secondary:
       - anim: SpearAttackHeavy
-  - type: CEWieldedWeapon
-    animations:
-      Primary:
-      - anim: SpearAttackLight
-      Secondary:
-      - anim: SpearAttackHeavy
+      - anim: SpearAttackHeavy2
+  #- type: CEWieldedWeapon #TODO: Custom wielded animations
+  #  animations:
+  #    Primary:
+  #    - anim: SpearAttackLight
+  #    Secondary:
+  #    - anim: SpearAttackHeavy
   - type: Wieldable
   - type: Clothing
     slots: [ neck ]
