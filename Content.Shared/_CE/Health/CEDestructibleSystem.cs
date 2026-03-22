@@ -4,7 +4,6 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
-using Robust.Shared.Timing;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -46,10 +45,14 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        if (_net.IsClient)
-            return;
+        // Play destroy sound immediately on client (predicted)
+        if (ent.Comp.DestroySound is not null)
+        {
+            _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
+        }
 
-        if (ent.Comp.Loot is not null)
+        // Server-side: spawn loot. TODO: prediction someway??
+        if (_net.IsServer && ent.Comp.Loot is not null)
         {
             var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
             foreach (var spawn in spawns)
@@ -64,9 +67,6 @@ public sealed class CEDestructibleSystem : EntitySystem
             }
         }
 
-        if (ent.Comp.DestroySound is not null)
-            _audio.PlayPvs(ent.Comp.DestroySound, position, ent.Comp.DestroySound.Params.WithVariation(0.1f));
-
-        QueueDel(ent);
+        PredictedQueueDel(ent.Owner);
     }
 }

@@ -1,0 +1,44 @@
+- type: entity
+  parent: BaseStructureDynamic
+  id: CEPot
+  categories: [ ForkFiltered ]
+  name: pot
+  description: TODO
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    offset: 0,0.3
+    noRot: true
+    sprite: _CE/Structures/Furniture/clay_pot.rsi
+    layers:
+    - state: pot1
+      map: [ "random" ]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          pot1: ""
+          pot2: ""
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 1
+    destroySound:
+      collection: CEPotBreak
+    loot: !type:AllSelector
+      children:
+      - id: CECoinCopper1
+        amount: 2
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 500
+        mask:
+        - SmallMobMask
+        layer:
+        - MachineLayer

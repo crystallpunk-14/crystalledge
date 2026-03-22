@@ -1,0 +1,26 @@
+- type: entity
+  id: CEIronDoorWindowed
+  parent:
+  - CEBaseDoor
+  name: iron windowed door
+  description: a solid iron door with a small window. You can look through it, of course, but it's hard to put your hand through.
+  suffix: Opened
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Doors/iron_windowed_door.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+  - type: Occluder
+    enabled: false
+  - type: Door
+    occludes: false
+
+- type: entity
+  id: CEIronDoorWindowedMirrored
+  parent: CEIronDoorWindowed
+  suffix: Opened, Mirrored
+  components:
+  - type: Door
+    openSpriteState: open_mirrored
+    closedSpriteState: closed_mirrored

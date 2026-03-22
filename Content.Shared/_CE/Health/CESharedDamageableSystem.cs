@@ -27,7 +27,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     /// Directly changes damage by a delta. Clamped to minimum 0.
     /// Positive delta = more damage, negative delta = healing.
     /// </summary>
-    public void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta)
+    public void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta, EntityUid? source = null)
     {
         actualDelta = 0;
 
@@ -43,7 +43,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 
         if (oldDamage != newDamage)
         {
-            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage);
+            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage, source);
             RaiseLocalEvent(ent, ev, true);
         }
     }
@@ -86,7 +86,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (totalDamage <= 0)
             return false;
 
-        ChangeDamage(ent, totalDamage, out var actualDelta);
+        ChangeDamage(ent, totalDamage, out var actualDelta, source);
 
         if (actualDelta != 0)
             RaiseDamageEffect(ent, source);
@@ -143,12 +143,13 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 /// <summary>
 /// Raised when damage changes on an entity.
 /// </summary>
-public sealed class CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage)
+public sealed class CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage, EntityUid? source = null)
     : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly int OldDamage = oldDamage;
     public readonly int NewDamage = newDamage;
+    public readonly EntityUid? Source = source;
     public int DamageDelta => NewDamage - OldDamage;
 }
 
