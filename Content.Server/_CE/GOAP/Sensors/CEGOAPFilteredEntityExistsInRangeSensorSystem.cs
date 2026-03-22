@@ -44,7 +44,7 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGO
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
 
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilteredEntityExistsInRangeSensor> args)
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilteredEntityExistsInRangeSensor> args)
     {
         int count = 0;
         var entities = _lookup.GetEntitiesInRange(Transform(ent).Coordinates, args.Sensor.Range);
@@ -58,11 +58,8 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGO
                 count++;
 
             if (count >= args.Sensor.MinCount)
-            {
-                SetState(ref args, true);
-                return;
-            }
+                return true;
         }
-        SetState(ref args, false);
+        return false;
     }
 }

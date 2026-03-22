@@ -35,7 +35,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
 public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPPrototypeExistsInRangeSensor>
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    protected override void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPPrototypeExistsInRangeSensor> args)
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPPrototypeExistsInRangeSensor> args)
     {
         int count = 0;
 
@@ -45,15 +45,12 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSen
             if (args.Sensor.IgnoreSelf && entityUid == ent.Owner)
                 continue;
 
-            if (TryComp<MetaDataComponent>(entityUid, out var meta) && meta.EntityPrototype?.ID == args.Sensor.PrototypeId.ID)
+            if (EntityManager.TryGetComponent(entityUid, out MetaDataComponent? meta) && meta.EntityPrototype?.ID == args.Sensor.PrototypeId.ID)
                 count++;
 
             if (count >= args.Sensor.MinCount)
-            {
-                SetState(ref args, true);
-                return;
-            }
+                return true;
         }
-        SetState(ref args, false);
+        return false;
     }
 }
