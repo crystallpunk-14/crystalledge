@@ -29,7 +29,7 @@
           bounds: "-0.4,-0.4,0.4,0.29"
         density: 500
         mask:
-        - SmallMobMask #this is so they can go under plastic flaps
+        - SmallMobMask
         layer:
         - MachineLayer
   - type: GenericVisualizer

@@ -43,6 +43,18 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
+        foreach (var sensor in ent.Comp.Sensors)
+        {
+            if (sensor.TargetKey is not null)
+                ent.Comp.WorldState[sensor.TargetKey] = false;
+        }
+
+        foreach (var action in ent.Comp.Actions)
+        {
+            if (action.TargetKey is not null)
+                ent.Comp.WorldState[action.TargetKey] = false;
+        }
+
         // Force all sensors to evaluate once so WorldState is populated immediately.
         foreach (var sensor in ent.Comp.Sensors)
         {

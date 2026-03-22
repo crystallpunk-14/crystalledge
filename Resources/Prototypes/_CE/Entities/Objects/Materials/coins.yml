@@ -33,6 +33,9 @@
   - type: EmitSoundOnPickup
     sound:
       collection: CECoins
+  - type: CEEmitSoundOnStackMerge
+    sound:
+      collection: CECoins
 
 # Copper
 
