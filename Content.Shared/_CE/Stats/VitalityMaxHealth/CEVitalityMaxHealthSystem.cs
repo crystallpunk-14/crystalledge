@@ -28,7 +28,6 @@ public sealed partial class CEVitalityMaxHealthSystem : EntitySystem
             return;
 
         var critThreshold = (int)Math.Ceiling(args.NewValue * ent.Comp.HealthPerVitality);
-        var deadThreshold = critThreshold + ent.Comp.DeadThresholdOffset;
-        _mobState.SetThresholds(ent.Owner, critThreshold, deadThreshold);
+        _mobState.SetThresholds(ent.Owner, critThreshold);
     }
 }

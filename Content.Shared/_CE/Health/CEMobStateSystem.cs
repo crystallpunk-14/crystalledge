@@ -17,7 +17,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared._CE.Health;
 
 /// <summary>
-/// Manages CE mob states (Alive, Critical, Dead) based on <see cref="CEDamageableComponent"/> damage
+/// Manages CE mob states (Alive, Critical) based on <see cref="CEDamageableComponent"/> damage
 /// and thresholds in <see cref="CEMobStateComponent"/>.
 /// </summary>
 public sealed partial class CEMobStateSystem : EntitySystem
@@ -39,17 +39,17 @@ public sealed partial class CEMobStateSystem : EntitySystem
         SubscribeLocalEvent<CEMobStateComponent, RejuvenateEvent>(OnRejuvenate);
 
         // Action blocking
-        SubscribeLocalEvent<CEMobStateComponent, ChangeDirectionAttemptEvent>(OnBlockIfDead);
-        SubscribeLocalEvent<CEMobStateComponent, UpdateCanMoveEvent>(OnBlockIfDead);
-        SubscribeLocalEvent<CEMobStateComponent, UseAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, AttackAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, ThrowAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, DropAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, PickupAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, StartPullAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, StandAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, PointAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, SpeakAttemptEvent>(OnBlockIfDead);
+        SubscribeLocalEvent<CEMobStateComponent, ChangeDirectionAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, UpdateCanMoveEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, UseAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, AttackAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, ThrowAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, DropAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, PickupAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, StartPullAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, StandAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, PointAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, SpeakAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
@@ -101,9 +101,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private CEMobState CalculateState(CEMobStateComponent mobState, int totalDamage)
     {
-        if (totalDamage >= mobState.DeadThreshold)
-            return CEMobState.Dead;
-
         if (totalDamage >= mobState.CriticalThreshold)
             return CEMobState.Critical;
 
@@ -124,11 +121,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
                 var dropEv = new DropHandItemsEvent();
                 RaiseLocalEvent(target, ref dropEv);
                 break;
-            case CEMobState.Dead:
-                _standing.Down(target);
-                var dropDeadEv = new DropHandItemsEvent();
-                RaiseLocalEvent(target, ref dropDeadEv);
-                break;
         }
     }
 
@@ -137,19 +129,17 @@ public sealed partial class CEMobStateSystem : EntitySystem
         switch (state)
         {
             case CEMobState.Critical:
-            case CEMobState.Dead:
                 _standing.Stand(target);
                 break;
         }
     }
 
-    public void SetThresholds(Entity<CEMobStateComponent?> ent, int criticalThreshold, int deadThreshold)
+    public void SetThresholds(Entity<CEMobStateComponent?> ent, int criticalThreshold)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
 
         ent.Comp.CriticalThreshold = criticalThreshold;
-        ent.Comp.DeadThreshold = deadThreshold;
         Dirty(ent);
 
         var damage = 0;
@@ -177,20 +167,12 @@ public sealed partial class CEMobStateSystem : EntitySystem
         return component.CurrentState == CEMobState.Critical;
     }
 
-    public bool IsDead(EntityUid uid, CEMobStateComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return false;
-
-        return component.CurrentState == CEMobState.Dead;
-    }
-
     public bool IsIncapacitated(EntityUid uid, CEMobStateComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;
 
-        return component.CurrentState is CEMobState.Critical or CEMobState.Dead;
+        return component.CurrentState == CEMobState.Critical;
     }
 
     /// <summary>
@@ -211,28 +193,22 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     #region Action Blocking
 
-    private void OnBlockIfDead(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
+    private void OnBlockIfCritical(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
     {
-        if (comp.CurrentState is CEMobState.Dead)
-            args.Cancel();
-    }
-
-    private void OnBlockIfIncapacitated(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
-    {
-        if (comp.CurrentState is CEMobState.Critical or CEMobState.Dead)
+        if (comp.CurrentState == CEMobState.Critical)
             args.Cancel();
     }
 
     private void OnEquipAttempt(EntityUid uid, CEMobStateComponent comp, IsEquippingAttemptEvent args)
     {
         if (args.Equipee == uid)
-            OnBlockIfIncapacitated(uid, comp, args);
+            OnBlockIfCritical(uid, comp, args);
     }
 
     private void OnUnequipAttempt(EntityUid uid, CEMobStateComponent comp, IsUnequippingAttemptEvent args)
     {
         if (args.Unequipee == uid)
-            OnBlockIfIncapacitated(uid, comp, args);
+            OnBlockIfCritical(uid, comp, args);
     }
 
     private void OnRefreshMoveSpeed(EntityUid uid, CEMobStateComponent comp, RefreshMovementSpeedModifiersEvent args)
