@@ -1,0 +1,33 @@
+- type: entity
+  id: CEWoodenDoor
+  parent:
+  - CEBaseDoor
+  name: wooden door
+  description: Not the most solid construction, but it's better than nothing.
+  suffix: Opened
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Doors/wooden_door.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+  - type: CEArmor
+    flat:
+      Physical: 5
+  - type: CEFlammable
+    stackDelta: 2
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 20
+    destroySound:
+      collection: WoodDestroy
+
+- type: entity
+  id: CEWoodenDoorMirrored
+  parent: CEWoodenDoor
+  suffix: Opened, Mirrored
+  components:
+  - type: Door
+    openSpriteState: open_mirrored
+    closedSpriteState: closed_mirrored
+
