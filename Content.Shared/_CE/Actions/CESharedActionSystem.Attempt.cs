@@ -126,8 +126,6 @@ public abstract partial class CESharedActionSystem
 
                 if (state == CEMobState.Alive)
                     states += Loc.GetString("ce-magic-spell-target-mob-state-live");
-                else if (state == CEMobState.Dead)
-                    states += Loc.GetString("ce-magic-spell-target-mob-state-dead");
                 else if (state == CEMobState.Critical)
                     states += Loc.GetString("ce-magic-spell-target-mob-state-critical");
             }

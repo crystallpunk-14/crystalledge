@@ -12,7 +12,6 @@
   - type: CEMagicEnergyContainer
     maxEnergy: 100
   - type: CEGOAP
-    planCooldown: 0.5
     goals:
     # Most important - stay alive
     - desiredState:
@@ -89,9 +88,6 @@
       conditionKey: EnemyInMeleeRange
       targetKey: enemy
       range: 1.5
-    - !type:CEGOAPTargetIsDeadSensor
-      conditionKey: EnemyDead
-      targetKey: enemy
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy

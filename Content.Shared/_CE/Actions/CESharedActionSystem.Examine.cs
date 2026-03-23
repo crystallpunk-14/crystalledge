@@ -52,9 +52,6 @@ public abstract partial class CESharedActionSystem
                 case CEMobState.Alive:
                     states += Loc.GetString("ce-magic-spell-target-mob-state-live");
                     break;
-                case CEMobState.Dead:
-                    states += Loc.GetString("ce-magic-spell-target-mob-state-dead");
-                    break;
                 case CEMobState.Critical:
                     states += Loc.GetString("ce-magic-spell-target-mob-state-critical");
                     break;

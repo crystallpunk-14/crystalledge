@@ -22,6 +22,5 @@ ce-magic-spell-ssd = Do not touch disconnected players!
 ce-magic-spell-target-not-mob = The target must be a living thing!
 
 ce-magic-spell-target-mob-state = Can only be used on {$state} targets!
-ce-magic-spell-target-mob-state-dead = dead
 ce-magic-spell-target-mob-state-live = living
 ce-magic-spell-target-mob-state-critical = dying

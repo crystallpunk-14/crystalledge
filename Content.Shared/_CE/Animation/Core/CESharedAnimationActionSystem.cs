@@ -32,7 +32,10 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         while (query.MoveNext(out var uid, out var controller, out var xform))
         {
             if (!_proto.Resolve(controller.ActiveAnimation, out var animation))
+            {
+                StopAnimation((uid, controller));
                 continue;
+            }
 
             var speedMultiplier = 1f / controller.AnimationSpeed;
 
@@ -202,7 +205,10 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     public void CancelAnimation(Entity<CEActiveAnimationActionComponent> entity)
     {
         if (!_proto.Resolve(entity.Comp.ActiveAnimation, out var animation))
+        {
+            StopAnimation(entity);
             return;
+        }
 
         //Canceling
         var cancelEv = new CEAnimationActionEndedEvent(animation, true);

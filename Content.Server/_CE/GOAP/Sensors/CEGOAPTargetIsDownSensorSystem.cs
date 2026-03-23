@@ -4,14 +4,14 @@ using Content.Shared._CE.Health;
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Checks if the current target is neutralized (critical or dead).
+/// Checks if the current target is incapacitated (critical).
 /// Event-driven: reacts to CEMobStateChangedEvent via CEGOAPTargetComponent.
 /// </summary>
-public sealed partial class CEGOAPTargetIsDeadSensor : CEGOAPSensorBase<CEGOAPTargetIsDeadSensor>
+public sealed partial class CEGOAPTargetIsDownSensor : CEGOAPSensorBase<CEGOAPTargetIsDownSensor>
 {
 }
 
-public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<CEGOAPTargetIsDeadSensor>
+public sealed partial class CEGOAPTargetIsDownSensorSystem : CEGOAPSensorSystem<CEGOAPTargetIsDownSensor>
 {
     [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
@@ -30,18 +30,18 @@ public sealed partial class CEGOAPTargetIsDeadSensorSystem : CEGOAPSensorSystem<
 
             foreach (var sensor in goap.Sensors)
             {
-                if (sensor is not CEGOAPTargetIsDeadSensor deadSensor)
+                if (sensor is not CEGOAPTargetIsDownSensor downSensor)
                     continue;
 
-                if (deadSensor.TargetKey == null || !keys.Contains(deadSensor.TargetKey))
+                if (downSensor.TargetKey == null || !keys.Contains(downSensor.TargetKey))
                     continue;
 
-                goap.WorldState[deadSensor.ConditionKey] = !_mobState.IsAlive(ent.Owner);
+                goap.WorldState[downSensor.ConditionKey] = !_mobState.IsAlive(ent.Owner);
             }
         }
     }
 
-    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDeadSensor> args)
+    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDownSensor> args)
     {
         var target = GetTarget(ent, args.Sensor.TargetKey);
         if (target == null)

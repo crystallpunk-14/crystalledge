@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._CE.Animation.Core;
+using Content.Shared._CE.Animation.Core.Actions;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health;
 using Content.Shared.ActionBlocker;
@@ -40,8 +41,32 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
         SubscribeAllEvent<CEWeaponUseEvent>(OnClientAttackRequest);
         SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
+        SubscribeAllEvent<CEWeaponArcHitEvent>(OnArcHitEvent);
 
         SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponEvent>(OnGetWeapon);
+    }
+
+    private void OnArcHitEvent(CEWeaponArcHitEvent ev, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not { } user)
+            return;
+
+        if (!TryGetWeapon(user, out var weapon) ||
+            weapon.Value.Owner != GetEntity(ev.Weapon))
+            return;
+
+        var targets = GetEntityList(ev.Targets);
+        targets = ValidateArcTargets(user, weapon.Value, targets);
+
+        TryAttack(user, weapon.Value, targets, ev.Power);
+    }
+
+    /// <summary>
+    /// Validates arc attack targets. Server overrides to check range and obstructions.
+    /// </summary>
+    protected virtual List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    {
+        return targets;
     }
 
     private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponEvent args)
@@ -212,6 +237,16 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         //RaiseLocalEvent(user, ev);
 //
         //return !ev.Cancelled;
+    }
+
+    /// <summary>
+    /// Called from <see cref="WeaponArcAttack"/> when arc trace detects targets.
+    /// Client overrides to send hit list to server. Server overrides to skip (waits for client event)
+    /// unless the attacker is an NPC.
+    /// </summary>
+    public virtual void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)
+    {
+        TryAttack(user, weapon, targets, power);
     }
 
     public bool TryAttack(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)

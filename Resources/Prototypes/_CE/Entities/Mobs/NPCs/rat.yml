@@ -1,0 +1,167 @@
+- type: entity
+  parent:
+  - BaseMob
+  - MobFlammable
+  - CEMobDamageable
+  - CEMobCombat
+  id: CERat
+  name: rat
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEDestructible
+    destroyThreshold: 3
+    destroySound:
+      collection: gib
+    loot: !type:AllSelector
+      children:
+      - id: CECoinCopper1
+        amount: 1
+  - type: CEGOAP
+    goals:
+    # Single stupid goal - kill enemies
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+
+    actions:
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 1.5
+    # Attack target
+    - !type:CEGOAPMeleeAttackAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    # Explore
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+
+    sensors:
+    - !type:CEGOAPNearestHostileSensor
+      conditionKey: EnemyVisible
+      outputTargetKey: enemy
+      visionRadius: 8
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
+      targetKey: enemy
+      range: 1.5
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
+
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/rat.rsi
+    layers:
+    - state: rat
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 2.5
+  - type: CEWeapon
+    spriteRotation: -90
+    damage:
+      types:
+        Physical: 1
+    animations:
+      Primary:
+      - anim: RatBite
+
+- type: entity
+  id: CERatBiteEffectTelegraphy
+  components:
+  - type: Sprite
+    sprite: Effects/arcs.rsi
+    state: disarm
+    drawdepth: Effects
+
+- type: entity
+  id: CERatBiteEffect
+  components:
+  - type: Sprite
+    sprite: Effects/arcs.rsi
+    state: bite
+    drawdepth: Effects
+
+- type: animationAction
+  id: RatBite
+  movementSpeed: 0.8
+  duration: 0.8
+  events:
+    0:
+    - !type:EntityAnimation
+      dummyEntity: CERatBiteEffectTelegraphy
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.3
+        easing: QuadIn
+      - time: 0.2
+        offset: 0, -0.2
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    0.2:
+    - !type:EntityAnimation
+      dummyEntity: CERatBiteEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.2
+        easing: QuadIn
+      - time: 0.3
+        offset: 0, -0.7
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/bite.ogg
+        params:
+          variation: 0.1
+    0.25:
+    - !type:WeaponArcAttack
+      range: 0.5
+      arcWidth: 40
+    - !type:Dash
+      distance: 0.1

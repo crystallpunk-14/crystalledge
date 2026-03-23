@@ -79,8 +79,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         var mobQuery = EntityQueryEnumerator<CEDungeonPlayerComponent, CEMobStateComponent, TransformComponent>();
         while (mobQuery.MoveNext(out _, out _, out var mobState, out var xform))
         {
-            if (mobState.CurrentState != CEMobState.Dead)
-                occupiedMaps.Add(xform.MapID);
+            occupiedMaps.Add(xform.MapID);
         }
 
         var query = EntityQueryEnumerator<CEDungeonInstanceComponent>();

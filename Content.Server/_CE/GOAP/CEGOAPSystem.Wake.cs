@@ -30,7 +30,7 @@ public sealed partial class CEGOAPSystem
             args.WakeUp();
     }
 
-    public void UpdateAwakeStatus(Entity<CEGOAPComponent?> ent)
+    private void UpdateAwakeStatus(Entity<CEGOAPComponent?> ent)
     {
         var ev = new CECheckGOAPAwakeEvent();
         RaiseLocalEvent(ent, ev);

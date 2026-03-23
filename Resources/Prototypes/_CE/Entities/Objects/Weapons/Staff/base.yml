@@ -1,0 +1,27 @@
+- type: entity
+  abstract: true
+  id: CEBaseWeaponStaff
+  categories: [ ForkFiltered ]
+  parent: [ BaseItem ]
+  components:
+  - type: Item
+    size: Ginormous
+  - type: CEWeapon
+    spriteRotation: -90
+    rangeMultiplier: 0.6
+    damage:
+      types:
+        Physical: 1
+    animations:
+      Primary:
+      - anim: StaffAttackLight
+      - anim: StaffAttackLight2
+      Secondary:
+      - anim: StaffAttackHeavy
+  #- type: CEWieldedWeapon #TODO: Custom wielded animations
+  - type: Wieldable
+  - type: Clothing
+    slots: [ neck ]
+    equipWhileMoving: true
+    equipDelay: 1
+    unequipDelay: 1

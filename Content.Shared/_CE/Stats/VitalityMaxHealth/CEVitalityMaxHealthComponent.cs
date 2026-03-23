@@ -14,11 +14,4 @@ public sealed partial class CEVitalityMaxHealthComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float HealthPerVitality = 4f;
-
-    /// <summary>
-    /// How many extra damage points beyond critical threshold before death.
-    /// DeadThreshold = CriticalThreshold + DeadThresholdOffset.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public int DeadThresholdOffset = 10;
 }

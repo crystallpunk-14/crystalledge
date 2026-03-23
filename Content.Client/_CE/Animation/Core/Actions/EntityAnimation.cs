@@ -156,6 +156,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
+        var prevTime = 0f;
         foreach (var keyframe in OffsetAnimation)
         {
             // Calculate relative offset from the base position
@@ -164,7 +165,9 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
             // Rotate the relative offset by the animation angle
             var rotatedOffset = angle.RotateVec(relativeOffset);
 
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, keyframe.Time * _animationSpeedMultiplier, GetEasingFunction(keyframe.Easing)));
+            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            prevTime = keyframe.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -192,11 +195,14 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
+        var prevTime = 0f;
         foreach (var keyframe in RotationAnimation)
         {
             // Add keyframe rotation to base rotation
             var totalRotation = angle + Angle.FromDegrees(keyframe.Rotation);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, keyframe.Time * _animationSpeedMultiplier, GetEasingFunction(keyframe.Easing)));
+            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            prevTime = keyframe.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -224,9 +230,12 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
+        var prevTime = 0f;
         foreach (var keyframe in ColorAnimation)
         {
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, keyframe.Time * _animationSpeedMultiplier, GetEasingFunction(keyframe.Easing)));
+            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            prevTime = keyframe.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;
@@ -254,9 +263,12 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
 
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
+        var prevTime = 0f;
         foreach (var keyframe in ScaleAnimation)
         {
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Scale, keyframe.Time * _animationSpeedMultiplier, GetEasingFunction(keyframe.Easing)));
+            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            prevTime = keyframe.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Scale, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
 
         return animation;

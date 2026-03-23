@@ -13,6 +13,9 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
     [DataField]
     public float ArcWidth = 90f;
 
+    [DataField]
+    public Angle Angle = Angle.Zero;
+
     /// <summary>
     /// The overall damage modifier for this attack.
     /// </summary>
@@ -42,7 +45,7 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
 
         // Get entity coordinates
         var entityCoords = transform.GetMapCoordinates(user);
-        var direction = new Angle(angle.ToWorldVec());
+        var direction = new Angle(angle.ToWorldVec()) + Angle;
 
         var range = Range * weapon.RangeMultiplier;
 
@@ -60,7 +63,7 @@ public sealed partial class WeaponArcAttack : CEAnimationActionEntry
             .ToList();
 
         targets.Remove(user);
-        melee.TryAttack(user, (used.Value, weapon), targets, Power);
+        melee.HandleArcAttackHit(user, (used.Value, weapon), targets, Power);
     }
 }
 

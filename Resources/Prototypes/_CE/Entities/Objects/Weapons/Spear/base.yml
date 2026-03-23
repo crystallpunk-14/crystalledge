@@ -1,0 +1,32 @@
+- type: entity
+  abstract: true
+  id: CEBaseWeaponSpear
+  categories: [ ForkFiltered ]
+  parent: [ BaseItem ]
+  components:
+  - type: Item
+    size: Ginormous
+  - type: CEWeapon
+    spriteRotation: -90
+    rangeMultiplier: 1.4
+    damage:
+      types:
+        Physical: 2
+    animations:
+      Primary:
+      - anim: SpearAttackLight
+      Secondary:
+      - anim: SpearAttackHeavy
+      - anim: SpearAttackHeavy2
+  #- type: CEWieldedWeapon #TODO: Custom wielded animations
+  #  animations:
+  #    Primary:
+  #    - anim: SpearAttackLight
+  #    Secondary:
+  #    - anim: SpearAttackHeavy
+  - type: Wieldable
+  - type: Clothing
+    slots: [ neck ]
+    equipWhileMoving: true
+    equipDelay: 1
+    unequipDelay: 1
