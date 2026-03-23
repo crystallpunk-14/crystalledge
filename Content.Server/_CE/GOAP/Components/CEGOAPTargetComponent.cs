@@ -1,4 +1,4 @@
-namespace Content.Server._CE.GOAP;
+namespace Content.Server._CE.GOAP.Components;
 
 /// <summary>
 /// Added to entities that are currently selected as a GOAP target.

@@ -1,0 +1,21 @@
+- type: entity
+  id: CEAlarmEffect
+  name: dust effect
+  suffix: VFX
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Interface/alarm.rsi
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: Physics
+    canCollide: false
+  - type: Tag
+    tags:
+      - HideContextMenu
+  - type: TimedDespawn
+    lifetime: 0.6

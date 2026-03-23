@@ -1,3 +1,4 @@
+using Content.Server._CE.GOAP.Components;
 using Content.Shared._CE.GOAP;
 using Robust.Shared.Map;
 
@@ -67,6 +68,8 @@ public sealed partial class CEGOAPSystem
             var ev = new CETargetChangedEvent(key, target);
             RaiseLocalEvent(ent, ref ev);
         }
+
+        Replan(ent);
     }
 
     /// <summary>

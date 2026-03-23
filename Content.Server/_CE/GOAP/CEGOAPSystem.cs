@@ -43,16 +43,29 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            if (sensor.TargetKey is not null)
-                ent.Comp.WorldState[sensor.TargetKey] = false;
-        }
-
         foreach (var action in ent.Comp.Actions)
         {
-            if (action.TargetKey is not null)
-                ent.Comp.WorldState[action.TargetKey] = false;
+            foreach (var prec in action.Preconditions)
+            {
+                ent.Comp.WorldState[prec.Key] = false;
+            }
+
+            foreach (var effect in action.Effects)
+            {
+                ent.Comp.WorldState[effect.Key] = false;
+            }
+        }
+
+        foreach (var goal in ent.Comp.Goals)
+        {
+            foreach (var state in goal.DesiredState)
+            {
+                ent.Comp.WorldState[state.Key] = false;
+            }
+            foreach (var prec in goal.Preconditions)
+            {
+                ent.Comp.WorldState[prec.Key] = false;
+            }
         }
 
         // Force all sensors to evaluate once so WorldState is populated immediately.
@@ -100,7 +113,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
         // 2. Check if we need to re-plan
         if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
-            UpdatePlan(ent);
+            Replan(ent);
 
         // 3. Execute current action
         if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
@@ -128,7 +141,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
         }
     }
 
-    private void UpdatePlan(Entity<CEGOAPComponent> ent)
+    private void Replan(Entity<CEGOAPComponent> ent)
     {
         ent.Comp.NextPlanTime = _timing.CurTime + ent.Comp.PlanCooldown;
 
@@ -180,7 +193,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
             // Skip goals whose activation conditions are not currently met
             var active = true;
-            foreach (var (key, value) in goal.ActivationConditions)
+            foreach (var (key, value) in goal.Preconditions)
             {
                 if (!goap.WorldState.TryGetValue(key, out var current) || current != value)
                 {
