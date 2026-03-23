@@ -8,7 +8,7 @@
     size: Ginormous
   - type: CEWeapon
     spriteRotation: -90
-    rangeMultiplier: 0.8
+    rangeMultiplier: 0.6
     damage:
       types:
         Physical: 1
