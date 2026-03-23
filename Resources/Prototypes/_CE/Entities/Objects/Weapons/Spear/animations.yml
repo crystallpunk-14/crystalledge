@@ -24,7 +24,6 @@
       colorAnimation:
       - time: 0.0
         color: "#ffffff"
-        easing: Linear
       - time: 0.15
         color: "#ffffff"
         easing: QuadOut
