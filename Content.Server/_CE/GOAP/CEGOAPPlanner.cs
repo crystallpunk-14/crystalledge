@@ -25,12 +25,13 @@ public static class CEGOAPPlanner
 
     /// <summary>
     /// Plans a sequence of actions to achieve the goal from the current state.
-    /// Returns null if no plan is found.
+    /// Returns true if a plan was found and populates the output plan list.
     /// </summary>
-    public static List<CEGOAPAction>? Plan(
+    public static bool Plan(
         Dictionary<string, bool> currentState,
         Dictionary<string, bool> goalState,
         List<CEGOAPAction> availableActions,
+        List<CEGOAPAction> outPlan,
         int maxIterations = 100)
     {
         var startNode = new PlanNode(
@@ -52,7 +53,10 @@ public static class CEGOAPPlanner
             var current = openList.Dequeue();
 
             if (GoalSatisfied(current.State, goalState))
-                return ReconstructPlan(current);
+            {
+                ReconstructPlan(current, outPlan);
+                return true;
+            }
 
             var stateHash = GetStateHash(current.State);
             if (!closedStates.Add(stateHash))
@@ -76,7 +80,7 @@ public static class CEGOAPPlanner
             }
         }
 
-        return null;
+        return false;
     }
 
     private static bool GoalSatisfied(
@@ -147,18 +151,17 @@ public static class CEGOAPPlanner
         return hash.ToHashCode();
     }
 
-    private static List<CEGOAPAction> ReconstructPlan(PlanNode goalNode)
+    private static void ReconstructPlan(PlanNode goalNode, List<CEGOAPAction> outPlan)
     {
-        var plan = new List<CEGOAPAction>();
+        outPlan.Clear();
         var current = goalNode;
 
         while (current?.Action != null)
         {
-            plan.Add(current.Action);
+            outPlan.Add(current.Action);
             current = current.Parent;
         }
 
-        plan.Reverse();
-        return plan;
+        outPlan.Reverse();
     }
 }

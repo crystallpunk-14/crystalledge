@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._CE.GOAP;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
@@ -27,6 +28,11 @@ public sealed partial class CEGOAPSystem : EntitySystem
     /// Reusable list for candidate goal indices, sorted by descending priority, to avoid per-frame allocations.
     /// </summary>
     private readonly List<int> _candidateGoals = new();
+
+    /// <summary>
+    /// Note: CurrentPlan lists in entity components are reused and cleared/repopulated 
+    /// rather than creating new lists each time to minimize GC allocations.
+    /// </summary>
 
     public override void Initialize()
     {
@@ -105,18 +111,15 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 0. Expire stale memorized positions
-        CleanupExpiredPositions(ent);
-
         // 1. Update sensors
         UpdateSensors(ent);
 
         // 2. Check if we need to re-plan
-        if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
+        if (ent.Comp.CurrentPlan.Count == 0 || _timing.CurTime >= ent.Comp.NextPlanTime)
             Replan(ent);
 
         // 3. Execute current action
-        if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
+        if (ent.Comp.CurrentPlan.Count != 0 && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
     }
 
@@ -158,18 +161,22 @@ public sealed partial class CEGOAPSystem : EntitySystem
         foreach (var goalIndex in _candidateGoals)
         {
             // If this is already the active goal and plan is still valid, keep it
-            if (goalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan != null)
+            if (goalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan.Count > 0)
                 return;
 
             var goal = ent.Comp.Goals[goalIndex];
-            var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions);
+            
+            // Clear current plan first to prepare for new plan
+            ent.Comp.CurrentPlan.Clear();
+            
+            if (!CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions, ent.Comp.CurrentPlan))
+                continue;
 
-            if (plan == null || plan.Count == 0)
+            if (ent.Comp.CurrentPlan.Count == 0)
                 continue;
 
             ShutdownCurrentAction(ent);
             ent.Comp.ActiveGoalIndex = goalIndex;
-            ent.Comp.CurrentPlan = plan;
             ent.Comp.CurrentActionIndex = 0;
             ent.Comp.CurrentActionStarted = false;
             return;
@@ -262,18 +269,22 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void ShutdownCurrentAction(Entity<CEGOAPComponent> ent)
     {
-        if (ent.Comp.CurrentPlan != null &&
-            ent.Comp.CurrentActionStarted &&
-            ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
-        {
-            ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
-        }
+        if (ent.Comp.CurrentPlan is null)
+            return;
+
+        if (!ent.Comp.CurrentActionStarted)
+            return;
+
+        if (ent.Comp.CurrentActionIndex >= ent.Comp.CurrentPlan.Count)
+            return;
+
+        ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
     }
 
     private void ClearPlan(Entity<CEGOAPComponent> ent)
     {
         ShutdownCurrentAction(ent);
-        ent.Comp.CurrentPlan = null;
+        ent.Comp.CurrentPlan.Clear();
         ent.Comp.CurrentActionIndex = 0;
         ent.Comp.CurrentActionStarted = false;
         ent.Comp.ActiveGoalIndex = -1;

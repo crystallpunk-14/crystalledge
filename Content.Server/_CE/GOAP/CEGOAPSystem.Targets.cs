@@ -5,7 +5,7 @@ using Robust.Shared.Map;
 namespace Content.Server._CE.GOAP;
 
 /// <summary>
-/// Partial class for target resolution, tracking, and last-known-position management.
+/// Partial class for target resolution, tracking.
 /// </summary>
 public sealed partial class CEGOAPSystem
 {
@@ -13,11 +13,6 @@ public sealed partial class CEGOAPSystem
     /// Reserved target key that always resolves to the entity itself.
     /// </summary>
     public const string SelfTargetKey = "self";
-
-    /// <summary>
-    /// Reusable list for expired position keys to avoid allocations during cleanup.
-    /// </summary>
-    private readonly List<string> _expiredKeys = new();
 
     /// <summary>
     /// Resolves a target key to an entity. "self" returns the owner, null returns null.
@@ -34,14 +29,6 @@ public sealed partial class CEGOAPSystem
     }
 
     /// <summary>
-    /// Returns the last-known position for the given key, or null if none is memorized.
-    /// </summary>
-    public EntityCoordinates? GetLastKnownPosition(Entity<CEGOAPComponent> ent, string key)
-    {
-        return ent.Comp.LastKnownPositions.TryGetValue(key, out var mem) ? mem.Coordinates : null;
-    }
-
-    /// <summary>
     /// Writes a target entity into the Targets dictionary and auto-tracks its position.
     /// When target is non-null, LastKnownPositions[key] is updated with a fresh expiry.
     /// When target becomes null, the existing memorized position is preserved until it expires.
@@ -52,58 +39,30 @@ public sealed partial class CEGOAPSystem
         var old = ent.Comp.Targets.TryGetValue(key, out var prev) ? prev : null;
         ent.Comp.Targets[key] = target;
 
-        if (target != null)
-        {
-            var expireAt = _timing.CurTime + ent.Comp.TargetMemoryDuration;
-            ent.Comp.LastKnownPositions[key] = new MemorizedPosition(Transform(target.Value).Coordinates, expireAt);
-        }
-
-        if (target != old)
-        {
-            if (old != null)
-                RemoveTracker(old.Value, ent.Owner, key);
-            if (target != null)
-                AddTracker(target.Value, ent.Owner, key);
-
-            var ev = new CETargetChangedEvent(key, target);
-            RaiseLocalEvent(ent, ref ev);
-        }
-
-        Replan(ent);
-    }
-
-    /// <summary>
-    /// Removes a last-known position for the given key and notifies sensors.
-    /// </summary>
-    public void ClearLastKnownPosition(Entity<CEGOAPComponent> ent, string key)
-    {
-        if (!ent.Comp.LastKnownPositions.Remove(key))
+        if (target == old)
             return;
 
-        var current = ent.Comp.Targets.TryGetValue(key, out var t) ? t : null;
-        var ev = new CETargetChangedEvent(key, current);
+        if (old != null)
+            RemoveTracker(old.Value, ent.Owner, key);
+
+        //We lost target
+        if (target is null)
+        {
+            //If new target is null, but old is not, we remembrer last known position
+            if (old != null)
+                SetLastKnownPosition(ent, key, Transform(old.Value).Coordinates);
+        }
+        // We set new target
+        else
+        {
+            ClearLastKnownPosition(ent, key); //We dont need remember last known position - WE SEE TARGET RIGHT NOW
+            AddTracker(target.Value, ent.Owner, key);
+        }
+
+        var ev = new CETargetChangedEvent(key, target);
         RaiseLocalEvent(ent, ref ev);
-    }
 
-    /// <summary>
-    /// Removes expired memorized positions and notifies sensors.
-    /// Called once per agent per tick from <see cref="UpdateAgent"/>.
-    /// </summary>
-    private void CleanupExpiredPositions(Entity<CEGOAPComponent> ent)
-    {
-        var now = _timing.CurTime;
-
-        _expiredKeys.Clear();
-        foreach (var (key, mem) in ent.Comp.LastKnownPositions)
-        {
-            if (now >= mem.ExpireAt)
-                _expiredKeys.Add(key);
-        }
-
-        foreach (var key in _expiredKeys)
-        {
-            ClearLastKnownPosition(ent, key);
-        }
+        Replan(ent);
     }
 
     private void AddTracker(EntityUid target, EntityUid goapOwner, string key)

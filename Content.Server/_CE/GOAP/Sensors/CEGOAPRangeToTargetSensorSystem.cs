@@ -26,9 +26,9 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : CEGOAPSensorSystem
         _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
-    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
+    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPRangeToTargetSensor> args)
     {
-        var target = GetTarget(ent, args.Sensor.TargetKey);
+        var target = Goap.GetTarget(ent, args.Sensor.TargetKey);
         if (target == null)
             return false;
 

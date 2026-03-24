@@ -44,13 +44,13 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
         _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
-    protected override bool OnSensorUpdate(
+    protected override bool? OnSensorUpdate(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPSensorUpdateEvent<CEGOAPNearestHostileSensor> args)
     {
         if (!_xformQuery.TryGetComponent(ent, out var xform))
         {
-            SetTarget(ent, args.Sensor.OutputTargetKey, null);
+            Goap.SetTarget(ent, args.Sensor.OutputTargetKey, null);
             return false;
         }
 
@@ -87,7 +87,7 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
             closestTarget = targetUid;
         }
 
-        SetTarget(ent, args.Sensor.OutputTargetKey, closestTarget);
+        Goap.SetTarget(ent, args.Sensor.OutputTargetKey, closestTarget);
         return closestTarget != null;
     }
 }

@@ -40,7 +40,7 @@ public sealed partial class CEGOAPHasLastKnownPositionSensorSystem
         }
     }
 
-    protected override bool OnSensorUpdate(
+    protected override bool? OnSensorUpdate(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPSensorUpdateEvent<CEGOAPHasLastKnownPositionSensor> args)
     {

@@ -64,15 +64,9 @@ public sealed partial class CEGOAPAlarmSensorSystem : CEGOAPSensorSystem<CEGOAPA
             {
                 if (sensor is not CEGOAPAlarmSensor alarmSensor)
                     continue;
-                SetTarget((uid, goap), alarmSensor.OutputTargetKey, ev.Source);
+                Goap.SetTarget((uid, goap), alarmSensor.OutputTargetKey, ev.Source);
             }
         }
-    }
-
-    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPAlarmSensor> args)
-    {
-        //Do nothing
-        return args.Sensor.TargetKey is not null && ent.Comp.WorldState[args.Sensor.TargetKey];
     }
 }
 

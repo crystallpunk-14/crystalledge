@@ -43,7 +43,7 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPMoveToTargetAction> args)
     {
-        var target = GetTarget(ent, args.Action.TargetKey);
+        var target = Goap.GetTarget(ent, args.Action.TargetKey);
         if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
             return;
 
@@ -55,7 +55,7 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMoveToTargetAction> args)
     {
-        var target = GetTarget(ent, args.Action.TargetKey);
+        var target = Goap.GetTarget(ent, args.Action.TargetKey);
         if (target == null)
         {
             args.Status = CEGOAPActionStatus.Failed;
