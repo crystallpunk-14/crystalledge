@@ -37,7 +37,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
 public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPPrototypeExistsInRangeSensor>
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPPrototypeExistsInRangeSensor> args)
+    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPPrototypeExistsInRangeSensor> args)
     {
         int count = 0;
 

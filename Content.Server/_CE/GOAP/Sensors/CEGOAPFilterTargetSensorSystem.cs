@@ -24,9 +24,9 @@ public sealed partial class CEGOAPFilterTargetSensorSystem : CEGOAPSensorSystem<
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
 
-    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilterTargetSensor> args)
+    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilterTargetSensor> args)
     {
-        var target = GetTarget(ent, args.Sensor.TargetKey);
+        var target = Goap.GetTarget(ent, args.Sensor.TargetKey);
         if (target == null)
         {
             return false;
