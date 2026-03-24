@@ -92,14 +92,14 @@ public sealed partial class CEGOAPMoveToLastKnownPositionActionSystem
         {
             case SteeringStatus.InRange:
                 // Arrived at current waypoint — pick a new random point around the memorized position.
-                if (!TryPickSearchPoint(ent, args.Action, out var nextCoords))
+                // If no valid tile is found, stay and wait: sensors keep scanning,
+                // and the timeout will eventually expire.
+                if (TryPickSearchPoint(ent, args.Action, out var nextCoords))
                 {
-                    args.Status = CEGOAPActionStatus.Failed;
-                    return;
+                    var comp = _steering.Register(ent, nextCoords);
+                    comp.Range = args.Action.Range;
                 }
 
-                var comp = _steering.Register(ent, nextCoords);
-                comp.Range = args.Action.Range;
                 args.Status = CEGOAPActionStatus.Running;
                 return;
             case SteeringStatus.NoPath:

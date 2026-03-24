@@ -165,20 +165,21 @@ public sealed partial class CEGOAPSystem : EntitySystem
                 return;
 
             var goal = ent.Comp.Goals[goalIndex];
-            
-            // Clear current plan first to prepare for new plan
+
+            // Shutdown old action BEFORE clearing: plan list reuse means the old
+            // action reference is lost once the list is cleared.
+            ShutdownCurrentAction(ent);
+            ent.Comp.CurrentActionStarted = false;
             ent.Comp.CurrentPlan.Clear();
-            
+
             if (!CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions, ent.Comp.CurrentPlan))
                 continue;
 
             if (ent.Comp.CurrentPlan.Count == 0)
                 continue;
 
-            ShutdownCurrentAction(ent);
             ent.Comp.ActiveGoalIndex = goalIndex;
             ent.Comp.CurrentActionIndex = 0;
-            ent.Comp.CurrentActionStarted = false;
             return;
         }
 

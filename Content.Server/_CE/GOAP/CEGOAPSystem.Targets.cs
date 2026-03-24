@@ -62,7 +62,11 @@ public sealed partial class CEGOAPSystem
         var ev = new CETargetChangedEvent(key, target);
         RaiseLocalEvent(ent, ref ev);
 
-        Replan(ent);
+        // Defer replanning to the next UpdateAgent tick so all sensors
+        // finish updating WorldState before the planner reads it.
+        // Reset ActiveGoalIndex so Replan doesn't keep a stale plan.
+        ent.Comp.ActiveGoalIndex = -1;
+        ent.Comp.NextPlanTime = TimeSpan.Zero;
     }
 
     private void AddTracker(EntityUid target, EntityUid goapOwner, string key)
