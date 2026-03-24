@@ -1,11 +1,9 @@
 using Content.Shared._CE.StatusEffectStacks;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-
-public sealed partial class ApplyStatusEffect : CEEntityEffect
+public sealed partial class ApplyStatusEffect : CEEntityEffectBase<ApplyStatusEffect>
 {
     [DataField(required: true)]
     public EntProtoId StatusEffect;
@@ -15,21 +13,17 @@ public sealed partial class ApplyStatusEffect : CEEntityEffect
 
     [DataField]
     public int Stack = 1;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSystem<ApplyStatusEffect>
+{
+    [Dependency] private readonly CEStatusEffectStackSystem _effectStack = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<ApplyStatusEffect> args)
     {
-        if (target is null)
+        if (args.Args.Target is null)
             return;
 
-        var effectSys = entManager.System<CEStatusEffectStackSystem>();
-        effectSys.TryAddStack(target.Value, StatusEffect, Stack, Duration);
+        _effectStack.TryAddStack(args.Args.Target.Value, args.Effect.StatusEffect, args.Effect.Stack, args.Effect.Duration);
     }
 }

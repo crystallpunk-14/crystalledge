@@ -1,25 +1,21 @@
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class PlaySound : CEEntityEffect
+public sealed partial class PlaySound : CEEntityEffectBase<PlaySound>
 {
     [DataField(required: true)]
     public SoundSpecifier Sound = default!;
+}
 
-    public override void Effect(EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEPlaySoundEffectSystem : CEEntityEffectSystem<PlaySound>
+{
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<PlaySound> args)
     {
-        var audio = entManager.System<SharedAudioSystem>();
-
-        audio.PlayPredicted(Sound, user, user, Sound.Params.WithVariation(0.15f));
+        _audio.PlayPredicted(args.Effect.Sound, args.Args.User, args.Args.User,
+            args.Effect.Sound.Params.WithVariation(0.15f));
     }
 }

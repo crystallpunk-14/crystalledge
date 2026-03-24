@@ -1,9 +1,8 @@
 using Content.Shared._CE.Fire;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class IgniteArea : CEEntityEffect
+public sealed partial class IgniteArea : CEEntityEffectBase<IgniteArea>
 {
     [DataField]
     public float Radius = 3;
@@ -11,29 +10,17 @@ public sealed partial class IgniteArea : CEEntityEffect
     public float FallOffFactor = 0.5f;
     [DataField]
     public int MaxStacks = 10;
+}
 
-    public override void Effect(EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEIgniteAreaEffectSystem : CEEntityEffectSystem<IgniteArea>
+{
+    [Dependency] private readonly CEFireSystem _fire = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<IgniteArea> args)
     {
-        EntityCoordinates? targetPoint = null;
-
-        if (target is not null &&
-            entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
-            targetPoint = transformComponent.Coordinates;
-        else if (position is not null)
-            targetPoint = position;
-
-        if (targetPoint is null)
+        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
             return;
 
-        var fire = entManager.System<CEFireSystem>();
-
-        fire.IgniteArea(targetPoint.Value, Radius, FallOffFactor, MaxStacks);
+        _fire.IgniteArea(targetPoint, args.Effect.Radius, args.Effect.FallOffFactor, args.Effect.MaxStacks);
     }
 }

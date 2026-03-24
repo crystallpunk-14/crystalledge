@@ -1,9 +1,8 @@
 using Content.Shared.Whitelist;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class AreaEffect : CEEntityEffect
+public sealed partial class AreaEffect : CEEntityEffectBase<AreaEffect>
 {
     [DataField(required: true)]
     public List<CEEntityEffect> Effects { get; set; } = new();
@@ -25,50 +24,38 @@ public sealed partial class AreaEffect : CEEntityEffect
 
     [DataField]
     public bool AffectCaster;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<AreaEffect>
+{
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<AreaEffect> args)
     {
-        EntityCoordinates? targetPoint = null;
-
-        if (target is not null &&
-            entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
-            targetPoint = transformComponent.Coordinates;
-        else if (position is not null)
-            targetPoint = position;
-
-        if (targetPoint is null)
+        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
             return;
 
-        var lookup = entManager.System<EntityLookupSystem>();
-        var whitelist = entManager.System<EntityWhitelistSystem>();
-
-        var entitiesAround = lookup.GetEntitiesInRange(targetPoint.Value, Range, LookupFlags.Uncontained);
+        var entitiesAround = _lookup.GetEntitiesInRange(targetPoint, args.Effect.Range, LookupFlags.Uncontained);
 
         var count = 0;
         foreach (var entity in entitiesAround)
         {
-            if (entity == user && !AffectCaster)
+            if (entity == args.Args.User && !args.Effect.AffectCaster)
                 continue;
 
-            if (!whitelist.CheckBoth(entity, Whitelist, Blacklist))
+            if (!_whitelist.CheckBoth(entity, args.Effect.Whitelist, args.Effect.Blacklist))
                 continue;
 
-            foreach (var effect in Effects)
+            var nestedArgs = args.Args with { Target = entity, Position = null };
+            foreach (var effect in args.Effect.Effects)
             {
-                effect.Effect(entManager, user, used, angle, speed, frame, entity, null);
+                effect.Effect(nestedArgs);
             }
 
             count++;
 
-            if (MaxTargets > 0 && count >= MaxTargets)
+            if (args.Effect.MaxTargets > 0 && count >= args.Effect.MaxTargets)
                 break;
         }
     }

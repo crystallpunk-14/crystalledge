@@ -8,7 +8,7 @@ using Robust.Shared.Random;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class ShootProjectile : CEEntityEffect
+public sealed partial class ShootProjectile : CEEntityEffectBase<ShootProjectile>
 {
     [DataField(required: true)]
     public EntProtoId Prototype;
@@ -24,72 +24,59 @@ public sealed partial class ShootProjectile : CEEntityEffect
 
     [DataField]
     public bool SaveVelocity;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem<ShootProjectile>
+{
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedGunSystem _gun = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<ShootProjectile> args)
     {
-        EntityCoordinates? targetPoint = null;
-
-        if (target is not null &&
-            entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
-            targetPoint = transformComponent.Coordinates;
-        else if (position is not null)
-            targetPoint = position;
-
-        if (targetPoint is null)
+        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
             return;
 
-        var transform = entManager.System<SharedTransformSystem>();
-        var physics = entManager.System<SharedPhysicsSystem>();
-        var gunSystem = entManager.System<SharedGunSystem>();
-        var mapManager = IoCManager.Resolve<IMapManager>();
-        var netManager = IoCManager.Resolve<INetManager>();
-        var random = IoCManager.Resolve<IRobustRandom>();
-
-        if (!netManager.IsServer)
+        if (!_net.IsServer)
             return;
 
-        if (!entManager.TryGetComponent<TransformComponent>(user, out var xform))
+        if (!TryComp<TransformComponent>(args.Args.User, out var xform))
             return;
 
         var fromCoords = xform.Coordinates;
-        var userVelocity = physics.GetMapLinearVelocity(user);
+        var userVelocity = _physics.GetMapLinearVelocity(args.Args.User);
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
-        var fromMap = transform.ToMapCoordinates(fromCoords);
+        var fromMap = _transform.ToMapCoordinates(fromCoords);
 
-        var spawnCoords = mapManager.TryFindGridAt(fromMap, out var gridUid, out _)
-            ? transform.WithEntityId(fromCoords, gridUid)
-            : new(mapManager.GetMapEntityId(fromMap.MapId), fromMap.Position);
+        var spawnCoords = _mapManager.TryFindGridAt(fromMap, out var gridUid, out _)
+            ? _transform.WithEntityId(fromCoords, gridUid)
+            : new(_mapManager.GetMapEntityId(fromMap.MapId), fromMap.Position);
 
-        for (var i = 0; i < ProjectileCount; i++)
+        for (var i = 0; i < args.Effect.ProjectileCount; i++)
         {
             //Apply spread to target point
-            var offsetedTargetPoint = targetPoint.Value.Offset(new Vector2(
-                (float)(random.NextDouble() * 2 - 1) * Spread,
-                (float)(random.NextDouble() * 2 - 1) * Spread));
+            var offsetedTargetPoint = targetPoint.Offset(new Vector2(
+                (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread,
+                (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread));
 
             if (fromCoords == offsetedTargetPoint)
                 continue;
 
-            var ent = entManager.SpawnAtPosition(Prototype, spawnCoords);
+            var ent = EntityManager.SpawnAtPosition(args.Effect.Prototype, spawnCoords);
 
-            var direction = offsetedTargetPoint.ToMapPos(entManager, transform) -
-                            spawnCoords.ToMapPos(entManager, transform);
+            var direction = offsetedTargetPoint.ToMapPos(EntityManager, _transform) -
+                            spawnCoords.ToMapPos(EntityManager, _transform);
 
-            gunSystem.ShootProjectile(ent,
+            _gun.ShootProjectile(ent,
                 direction,
-                SaveVelocity ? userVelocity : new Vector2(),
-                user,
-                user,
-                ProjectileSpeed);
+                args.Effect.SaveVelocity ? userVelocity : new Vector2(),
+                args.Args.User,
+                args.Args.User,
+                args.Effect.ProjectileSpeed);
         }
     }
 }

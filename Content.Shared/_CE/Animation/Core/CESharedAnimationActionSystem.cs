@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
+using Content.Shared._CE.EntityEffect;
 using Content.Shared.Movement.Systems;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
@@ -87,10 +88,22 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     // Only trigger if event time is within this frame
                     if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
                     {
+                        var effectArgs = new CEEntityEffectArgs(
+                            EntityManager,
+                            uid,
+                            controller.Used,
+                            _transform.GetWorldRotation(uid),
+                            controller.AnimationSpeed,
+                            controller.TargetEntity,
+                            controller.TargetCoordinates);
+
                         foreach (var action in actions)
                         {
-                            action.Effect(EntityManager, uid, controller.Used, _transform.GetWorldRotation(uid), controller.AnimationSpeed, keyFrame, controller.TargetEntity, controller.TargetCoordinates);
+                            action.Effect(effectArgs);
                         }
+
+                        OnKeyFrameProcessed(uid, controller.Used, effectArgs.Angle, keyFrame, actions);
+
                         controller.LastEvent = realKeyFrame;
                         Dirty(uid, controller);
                     }
@@ -258,6 +271,19 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     {
         RemComp<CEActiveAnimationActionComponent>(entity);
         _movement.RefreshMovementSpeedModifiers(entity);
+    }
+
+    /// <summary>
+    /// Called after all effects at a keyframe have been processed.
+    /// Server override sends visual sync events to non-predicting clients.
+    /// </summary>
+    protected virtual void OnKeyFrameProcessed(
+        EntityUid uid,
+        EntityUid? used,
+        Angle angle,
+        TimeSpan keyFrame,
+        List<CEEntityEffect> actions)
+    {
     }
 }
 

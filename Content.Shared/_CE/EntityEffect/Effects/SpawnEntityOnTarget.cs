@@ -1,40 +1,29 @@
-using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class SpawnEntityOnTarget : CEEntityEffect
+public sealed partial class SpawnEntityOnTarget : CEEntityEffectBase<SpawnEntityOnTarget>
 {
     [DataField]
     public List<EntProtoId> Spawns = new();
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CESpawnEntityOnTargetEffectSystem : CEEntityEffectSystem<SpawnEntityOnTarget>
+{
+    [Dependency] private readonly INetManager _net = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<SpawnEntityOnTarget> args)
     {
-        EntityCoordinates? targetPoint = null;
-        if (position is not null)
-            targetPoint = position.Value;
-        if (target is not null && entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
-            targetPoint = transformComponent.Coordinates;
-
-        if (targetPoint is null)
+        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
             return;
 
-        var netMan = IoCManager.Resolve<INetManager>();
-        if (netMan.IsClient)
+        if (_net.IsClient)
             return;
 
-        foreach (var spawn in Spawns)
+        foreach (var spawn in args.Effect.Spawns)
         {
-            entManager.SpawnAtPosition(spawn, targetPoint.Value);
+            EntityManager.SpawnAtPosition(spawn, targetPoint);
         }
     }
 }

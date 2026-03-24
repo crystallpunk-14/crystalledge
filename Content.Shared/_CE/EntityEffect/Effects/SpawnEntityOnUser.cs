@@ -1,34 +1,29 @@
-using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class SpawnEntityOnUser : CEEntityEffect
+public sealed partial class SpawnEntityOnUser : CEEntityEffectBase<SpawnEntityOnUser>
 {
     [DataField]
     public List<EntProtoId> Spawns = new();
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CESpawnEntityOnUserEffectSystem : CEEntityEffectSystem<SpawnEntityOnUser>
+{
+    [Dependency] private readonly INetManager _net = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<SpawnEntityOnUser> args)
     {
-        if (!entManager.TryGetComponent<TransformComponent>(user, out var transformComponent))
+        if (!TryComp<TransformComponent>(args.Args.User, out var transformComponent))
             return;
 
-        var netMan = IoCManager.Resolve<INetManager>();
-        if (netMan.IsClient)
+        if (_net.IsClient)
             return;
 
-        foreach (var spawn in Spawns)
+        foreach (var spawn in args.Effect.Spawns)
         {
-            entManager.SpawnAtPosition(spawn, transformComponent.Coordinates);
+            EntityManager.SpawnAtPosition(spawn, transformComponent.Coordinates);
         }
     }
 }

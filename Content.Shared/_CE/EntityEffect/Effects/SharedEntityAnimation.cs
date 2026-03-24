@@ -5,11 +5,11 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._CE.EntityEffect.Effects;
 
 /// <summary>
-/// A CEAnimationActionEntry that spawns a client-side visual entity resembling the used item
-/// (or with an overridden sprite), plays a customizable animation on it, and despawns it.
-/// Server-side this is a no-op; client-side the partial method provides the visual implementation.
+/// Data-only effect that spawns a client-side visual entity with customizable animations.
+/// Logic is handled by client-side <c>CEEntityAnimationEffectSystem</c>.
+/// Server-side, the animation system sends a network event for non-predicting clients.
 /// </summary>
-public abstract partial class SharedEntityAnimation : CEEntityEffect
+public sealed partial class EntityAnimation : CEEntityEffectBase<EntityAnimation>
 {
     /// <summary>
     /// Clientside VFX entity that visuals we spawn and animate. If null, the sprite is copied from the used item entity.

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Animations;
 using Content.Shared._CE.Animation.Item.Components;
+using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
@@ -13,134 +14,128 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CE.EntityEffect.Effects;
 
-public sealed partial class EntityAnimation : SharedEntityAnimation
+public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem<EntityAnimation>
 {
     private const string OffsetAnimationKey = "ce-item-visual-offset";
     private const string RotationAnimationKey = "ce-item-visual-rotation";
     private const string ColorAnimationKey = "ce-item-visual-color";
     private const string ScaleAnimationKey = "ce-item-visual-scale";
 
-    private float _animationSpeedMultiplier = 1f;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+    protected override void Effect(ref CEEntityEffectEvent<EntityAnimation> args)
     {
-        var timing = IoCManager.Resolve<IGameTiming>();
-        if (!timing.IsFirstTimePredicted)
+        if (!_timing.IsFirstTimePredicted)
             return;
 
-        var transform = entManager.System<TransformSystem>();
-        var spriteSystem = entManager.System<SpriteSystem>();
-        var animationPlayer = entManager.System<AnimationPlayerSystem>();
+        var effect = args.Effect;
+        var user = args.Args.User;
+        var used = args.Args.Used;
+        var angle = args.Args.Angle;
+        var speedMultiplier = 1f / args.Args.Speed;
 
-        _animationSpeedMultiplier = 1f / speed;
-
-        if (!entManager.TryGetComponent<TransformComponent>(user, out var userXform)
+        if (!TryComp<TransformComponent>(user, out var userXform)
             || userXform.MapID == MapId.Nullspace)
             return;
 
         // Spawn a client-side clone entity at the user's position
-        var effectEntity = entManager.SpawnEntity("clientsideclone", userXform.Coordinates);
+        var effectEntity = EntityManager.SpawnEntity("clientsideclone", userXform.Coordinates);
 
-        if (!entManager.TryGetComponent<SpriteComponent>(effectEntity, out var effectSprite))
+        if (!TryComp<SpriteComponent>(effectEntity, out var effectSprite))
             return;
 
         // Set up the sprite: either override or copy from the used item
-        if (DummyEntity != null)
+        if (effect.DummyEntity != null)
         {
-            var dummy = entManager.Spawn(DummyEntity);
-            if (entManager.TryGetComponent<SpriteComponent>(dummy, out var dummySprite))
-                spriteSystem.CopySprite((dummy, dummySprite), (effectEntity, effectSprite));
-            entManager.DeleteEntity(dummy);
+            var dummy = EntityManager.Spawn(effect.DummyEntity);
+            if (TryComp<SpriteComponent>(dummy, out var dummySprite))
+                _sprite.CopySprite((dummy, dummySprite), (effectEntity, effectSprite));
+            EntityManager.DeleteEntity(dummy);
 
-            var proto = IoCManager.Resolve<IPrototypeManager>().Index(DummyEntity.Value);
-            entManager.AddComponents(effectEntity, proto, false);
+            var proto = _protoManager.Index(effect.DummyEntity.Value);
+            EntityManager.AddComponents(effectEntity, proto, false);
         }
         else
         {
-            if (used is not null && entManager.TryGetComponent<SpriteComponent>(used.Value, out var itemSprite))
-                spriteSystem.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
+            if (used is not null && TryComp<SpriteComponent>(used.Value, out var itemSprite))
+                _sprite.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
         }
 
-        spriteSystem.SetVisible((effectEntity, effectSprite), true);
+        _sprite.SetVisible((effectEntity, effectSprite), true);
 
         // Set initial rotation
         var initialRotation = angle;
-        if (entManager.TryGetComponent<CEWeaponComponent>(used, out var itemAnim))
+        if (TryComp<CEWeaponComponent>(used, out var itemAnim))
             initialRotation += Angle.FromDegrees(itemAnim.SpriteRotation);
 
-        spriteSystem.SetRotation((effectEntity, effectSprite), initialRotation);
+        _sprite.SetRotation((effectEntity, effectSprite), initialRotation);
 
         // Get initial offset from first keyframe or use zero
         var initialOffset = Vector2.Zero;
-        if (OffsetAnimation.Count > 0)
+        if (effect.OffsetAnimation.Count > 0)
         {
-            var firstKeyframe = OffsetAnimation[0];
+            var firstKeyframe = effect.OffsetAnimation[0];
             if (firstKeyframe.Time == 0)
                 initialOffset = firstKeyframe.Offset;
         }
 
         // Set up to follow the user if enabled
-        if (FollowUser)
+        if (effect.FollowUser)
         {
-            var track = entManager.EnsureComponent<TrackUserComponent>(effectEntity);
+            var track = EnsureComp<TrackUserComponent>(effectEntity);
             track.User = user;
         }
         else
         {
             // Position at the offset from the user if not following
-            var worldPos = transform.GetWorldPosition(userXform) + angle.RotateVec(initialOffset);
-            transform.SetWorldPosition(effectEntity, worldPos);
+            var worldPos = _transform.GetWorldPosition(userXform) + angle.RotateVec(initialOffset);
+            _transform.SetWorldPosition(effectEntity, worldPos);
         }
 
         // Set up timed despawn
-        var despawn = entManager.EnsureComponent<TimedDespawnComponent>(effectEntity);
-        despawn.Lifetime = CalculateDuration() + 0.1f;
+        var despawn = EnsureComp<TimedDespawnComponent>(effectEntity);
+        despawn.Lifetime = CalculateDuration(effect, speedMultiplier) + 0.1f;
 
         // Build and play offset animation if keyframes exist
-        if (OffsetAnimation.Count > 0)
+        if (effect.OffsetAnimation.Count > 0)
         {
-            var offsetAnim = BuildOffsetAnimation(angle);
-            animationPlayer.Play(effectEntity, offsetAnim, OffsetAnimationKey);
+            var offsetAnim = BuildOffsetAnimation(effect, angle, speedMultiplier);
+            _animationPlayer.Play(effectEntity, offsetAnim, OffsetAnimationKey);
         }
 
         // Build and play rotation animation if keyframes exist
-        if (RotationAnimation.Count > 0)
+        if (effect.RotationAnimation.Count > 0)
         {
-            var rotationAnim = BuildRotationAnimation(initialRotation);
-            animationPlayer.Play(effectEntity, rotationAnim, RotationAnimationKey);
+            var rotationAnim = BuildRotationAnimation(effect, initialRotation, speedMultiplier);
+            _animationPlayer.Play(effectEntity, rotationAnim, RotationAnimationKey);
         }
 
         // Build and play color animation if keyframes exist
-        if (ColorAnimation.Count > 0)
+        if (effect.ColorAnimation.Count > 0)
         {
-            var colorAnim = BuildColorAnimation();
-            animationPlayer.Play(effectEntity, colorAnim, ColorAnimationKey);
+            var colorAnim = BuildColorAnimation(effect, speedMultiplier);
+            _animationPlayer.Play(effectEntity, colorAnim, ColorAnimationKey);
         }
 
         // Build and play scale animation if keyframes exist
-        if (ScaleAnimation.Count > 0)
+        if (effect.ScaleAnimation.Count > 0)
         {
-            var scaleAnim = BuildScaleAnimation();
-            animationPlayer.Play(effectEntity, scaleAnim, ScaleAnimationKey);
+            var scaleAnim = BuildScaleAnimation(effect, speedMultiplier);
+            _animationPlayer.Play(effectEntity, scaleAnim, ScaleAnimationKey);
         }
     }
 
-    /// <summary>
-    /// Builds an animation for sprite offset from keyframes.
-    /// </summary>
-    private Robust.Client.Animations.Animation BuildOffsetAnimation(Angle angle)
+    private static Robust.Client.Animations.Animation BuildOffsetAnimation(
+        EntityAnimation effect, Angle angle, float speedMultiplier)
     {
+        var duration = CalculateDuration(effect, speedMultiplier);
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(CalculateDuration()),
+            Length = TimeSpan.FromSeconds(duration),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -156,15 +151,10 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
         var prevTime = 0f;
-        foreach (var keyframe in OffsetAnimation)
+        foreach (var keyframe in effect.OffsetAnimation)
         {
-            // Calculate relative offset from the base position
-            var relativeOffset = keyframe.Offset;
-
-            // Rotate the relative offset by the animation angle
-            var rotatedOffset = angle.RotateVec(relativeOffset);
-
-            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            var rotatedOffset = angle.RotateVec(keyframe.Offset);
+            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
             prevTime = keyframe.Time;
             track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
@@ -172,14 +162,13 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         return animation;
     }
 
-    /// <summary>
-    /// Builds an animation for sprite rotation from keyframes.
-    /// </summary>
-    private Robust.Client.Animations.Animation BuildRotationAnimation(Angle angle)
+    private static Robust.Client.Animations.Animation BuildRotationAnimation(
+        EntityAnimation effect, Angle angle, float speedMultiplier)
     {
+        var duration = CalculateDuration(effect, speedMultiplier);
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(CalculateDuration()),
+            Length = TimeSpan.FromSeconds(duration),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -195,11 +184,10 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
         var prevTime = 0f;
-        foreach (var keyframe in RotationAnimation)
+        foreach (var keyframe in effect.RotationAnimation)
         {
-            // Add keyframe rotation to base rotation
             var totalRotation = angle + Angle.FromDegrees(keyframe.Rotation);
-            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
             prevTime = keyframe.Time;
             track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
@@ -207,14 +195,13 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         return animation;
     }
 
-    /// <summary>
-    /// Builds an animation for sprite color/alpha from keyframes.
-    /// </summary>
-    private Robust.Client.Animations.Animation BuildColorAnimation()
+    private static Robust.Client.Animations.Animation BuildColorAnimation(
+        EntityAnimation effect, float speedMultiplier)
     {
+        var duration = CalculateDuration(effect, speedMultiplier);
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(CalculateDuration()),
+            Length = TimeSpan.FromSeconds(duration),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -230,9 +217,9 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
         var prevTime = 0f;
-        foreach (var keyframe in ColorAnimation)
+        foreach (var keyframe in effect.ColorAnimation)
         {
-            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
             prevTime = keyframe.Time;
             track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
@@ -240,14 +227,13 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         return animation;
     }
 
-    /// <summary>
-    /// Builds an animation for sprite scale from keyframes.
-    /// </summary>
-    private Robust.Client.Animations.Animation BuildScaleAnimation()
+    private static Robust.Client.Animations.Animation BuildScaleAnimation(
+        EntityAnimation effect, float speedMultiplier)
     {
+        var duration = CalculateDuration(effect, speedMultiplier);
         var animation = new Robust.Client.Animations.Animation
         {
-            Length = TimeSpan.FromSeconds(CalculateDuration()),
+            Length = TimeSpan.FromSeconds(duration),
             AnimationTracks =
             {
                 new AnimationTrackComponentProperty
@@ -263,9 +249,9 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
 
         var prevTime = 0f;
-        foreach (var keyframe in ScaleAnimation)
+        foreach (var keyframe in effect.ScaleAnimation)
         {
-            var deltaTime = (keyframe.Time - prevTime) * _animationSpeedMultiplier;
+            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
             prevTime = keyframe.Time;
             track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Scale, deltaTime, GetEasingFunction(keyframe.Easing)));
         }
@@ -273,49 +259,29 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
         return animation;
     }
 
-    /// <summary>
-    /// Calculates the adaptive duration by finding the maximum time from all keyframe animations.
-    /// If no keyframes are present, returns a default duration of 0.5 seconds.
-    /// </summary>
-    private float CalculateDuration()
+    private static float CalculateDuration(EntityAnimation effect, float speedMultiplier)
     {
         var maxTime = 0f;
 
-        // Check offset animation keyframes
-        if (OffsetAnimation.Count > 0)
-        {
-            var maxOffsetTime = OffsetAnimation.Max(k => k.Time);
-            maxTime = Math.Max(maxTime, maxOffsetTime);
-        }
+        if (effect.OffsetAnimation.Count > 0)
+            maxTime = Math.Max(maxTime, effect.OffsetAnimation.Max(k => k.Time));
 
-        // Check rotation animation keyframes
-        if (RotationAnimation.Count > 0)
-        {
-            var maxRotationTime = RotationAnimation.Max(k => k.Time);
-            maxTime = Math.Max(maxTime, maxRotationTime);
-        }
+        if (effect.RotationAnimation.Count > 0)
+            maxTime = Math.Max(maxTime, effect.RotationAnimation.Max(k => k.Time));
 
-        // Check color animation keyframes
-        if (ColorAnimation.Count > 0)
-        {
-            var maxColorTime = ColorAnimation.Max(k => k.Time);
-            maxTime = Math.Max(maxTime, maxColorTime);
-        }
+        if (effect.ColorAnimation.Count > 0)
+            maxTime = Math.Max(maxTime, effect.ColorAnimation.Max(k => k.Time));
 
-        maxTime *= _animationSpeedMultiplier;
+        maxTime *= speedMultiplier;
 
-        // If no keyframes found, use default duration
         return maxTime > 0f ? maxTime + 0.5f : 0.5f;
     }
 
-    /// <summary>
-    /// Converts CEAnimationEasing enum to actual easing function.
-    /// </summary>
     private static Func<float, float> GetEasingFunction(CEAnimationEasing easing)
     {
         return easing switch
         {
-            CEAnimationEasing.Linear => (p) => p, // Identity function for linear interpolation
+            CEAnimationEasing.Linear => (p) => p,
             CEAnimationEasing.QuadIn => Easings.InQuad,
             CEAnimationEasing.QuadOut => Easings.OutQuad,
             CEAnimationEasing.QuadInOut => Easings.InOutQuad,
@@ -325,7 +291,7 @@ public sealed partial class EntityAnimation : SharedEntityAnimation
             CEAnimationEasing.QuartIn => Easings.InQuart,
             CEAnimationEasing.QuartOut => Easings.OutQuart,
             CEAnimationEasing.QuartInOut => Easings.InOutQuart,
-            _ => (p) => p // Default to linear
+            _ => (p) => p
         };
     }
 }

@@ -1,41 +1,34 @@
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class ThrowToUser : CEEntityEffect
+public sealed partial class ThrowToUser : CEEntityEffectBase<ThrowToUser>
 {
     [DataField]
     public float ThrowPower = 10f;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEThrowToUserEffectSystem : CEEntityEffectSystem<ThrowToUser>
+{
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedProjectileSystem _projectile = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<ThrowToUser> args)
     {
-        if (target is null)
+        if (args.Args.Target is null)
             return;
 
-        var targetEntity = target.Value;
+        var targetEntity = args.Args.Target.Value;
 
-        var throwing = entManager.System<ThrowingSystem>();
-
-        if (!entManager.TryGetComponent<TransformComponent>(user, out var xform))
+        if (!TryComp<TransformComponent>(args.Args.User, out var xform))
             return;
 
-        if (entManager.TryGetComponent<EmbeddableProjectileComponent>(targetEntity, out var embeddable))
+        if (TryComp<EmbeddableProjectileComponent>(targetEntity, out var embeddable))
         {
-            var projectile = entManager.System<SharedProjectileSystem>();
-
-            projectile.EmbedDetach(targetEntity, embeddable);
+            _projectile.EmbedDetach(targetEntity, embeddable);
         }
 
-        throwing.TryThrow(targetEntity, xform.Coordinates, ThrowPower);
+        _throwing.TryThrow(targetEntity, xform.Coordinates, args.Effect.ThrowPower);
     }
 }

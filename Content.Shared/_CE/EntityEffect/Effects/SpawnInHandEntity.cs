@@ -1,45 +1,39 @@
 using Content.Shared.Hands.EntitySystems;
-using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class SpawnInHandEntity : CEEntityEffect
+public sealed partial class SpawnInHandEntity : CEEntityEffectBase<SpawnInHandEntity>
 {
     [DataField]
     public List<EntProtoId> Spawns = new();
 
     [DataField]
     public bool DeleteIfCantPickup;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CESpawnInHandEntityEffectSystem : CEEntityEffectSystem<SpawnInHandEntity>
+{
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<SpawnInHandEntity> args)
     {
-        if (target is null)
+        if (args.Args.Target is null)
             return;
 
-        if (!entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
+        if (!TryComp<TransformComponent>(args.Args.Target.Value, out var transformComponent))
             return;
 
-        var netMan = IoCManager.Resolve<INetManager>();
-        if (netMan.IsClient)
+        if (_net.IsClient)
             return;
 
-        var handSystem = entManager.System<SharedHandsSystem>();
-
-        foreach (var spawn in Spawns)
+        foreach (var spawn in args.Effect.Spawns)
         {
-            var item = entManager.SpawnAtPosition(spawn, transformComponent.Coordinates);
-            if (!handSystem.TryPickupAnyHand(target.Value, item) && DeleteIfCantPickup)
-                entManager.QueueDeleteEntity(item);
+            var item = EntityManager.SpawnAtPosition(spawn, transformComponent.Coordinates);
+            if (!_hands.TryPickupAnyHand(args.Args.Target.Value, item) && args.Effect.DeleteIfCantPickup)
+                EntityManager.QueueDeleteEntity(item);
         }
     }
 }

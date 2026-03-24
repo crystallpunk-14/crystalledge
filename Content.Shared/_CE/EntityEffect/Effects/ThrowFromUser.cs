@@ -1,50 +1,43 @@
 using System.Numerics;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class ThrowFromUser : CEEntityEffect
+public sealed partial class ThrowFromUser : CEEntityEffectBase<ThrowFromUser>
 {
     [DataField]
     public float ThrowPower = 10f;
 
     [DataField]
     public float Distance = 2.5f;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEThrowFromUserEffectSystem : CEEntityEffectSystem<ThrowFromUser>
+{
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedProjectileSystem _projectile = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<ThrowFromUser> args)
     {
-        if (target is null)
+        if (args.Args.Target is null)
             return;
 
-        var targetEntity = target.Value;
+        var targetEntity = args.Args.Target.Value;
 
-        var throwing = entManager.System<ThrowingSystem>();
-        var xform = entManager.System<SharedTransformSystem>();
-
-        var worldPos = xform.GetWorldPosition(user);
-        var dir = xform.GetWorldPosition(target.Value) - worldPos;
+        var worldPos = _transform.GetWorldPosition(args.Args.User);
+        var dir = _transform.GetWorldPosition(targetEntity) - worldPos;
         if (dir == Vector2.Zero)
             return;
 
-        var foo = Vector2.Normalize(dir);
+        var normalized = Vector2.Normalize(dir);
 
-        if (entManager.TryGetComponent<EmbeddableProjectileComponent>(targetEntity, out var embeddable))
+        if (TryComp<EmbeddableProjectileComponent>(targetEntity, out var embeddable))
         {
-            var projectile = entManager.System<SharedProjectileSystem>();
-
-            projectile.EmbedDetach(targetEntity, embeddable);
+            _projectile.EmbedDetach(targetEntity, embeddable);
         }
 
-        throwing.TryThrow(targetEntity, foo * Distance, ThrowPower, user, doSpin: true);
+        _throwing.TryThrow(targetEntity, normalized * args.Effect.Distance, args.Effect.ThrowPower, args.Args.User, doSpin: true);
     }
 }

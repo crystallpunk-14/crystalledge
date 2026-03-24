@@ -1,12 +1,11 @@
 using System.Linq;
-using Content.Shared._CE.Animation.Item;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class WeaponArcAttack : CEEntityEffect
+public sealed partial class WeaponArcAttack : CEEntityEffectBase<WeaponArcAttack>
 {
     [DataField]
     public float Range = 1.5f;
@@ -22,50 +21,6 @@ public sealed partial class WeaponArcAttack : CEEntityEffect
     /// </summary>
     [DataField]
     public float Power = 1f;
-
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
-    {
-        if (used is null)
-            return;
-
-        // Try to use the 'used' weapon if it has a CEMeleeWeaponComponent
-        if (!entManager.TryGetComponent<CEWeaponComponent>(used.Value, out var weapon))
-            return;
-
-        var lookup = entManager.System<EntityLookupSystem>();
-        var transform = entManager.System<SharedTransformSystem>();
-        var melee = entManager.System<CESharedWeaponSystem>();
-
-        // Get entity coordinates
-        var entityCoords = transform.GetMapCoordinates(user);
-        var direction = new Angle(angle.ToWorldVec()) + Angle;
-
-        var range = Range * weapon.RangeMultiplier;
-
-        // Raise debug event for arc attack visualization
-        var debugEvent = new CEDebugArcAttackEvent(entityCoords, direction, range, ArcWidth);
-        entManager.EventBus.RaiseEvent(EventSource.Local, debugEvent);
-
-        // Find all entities in the arc
-        var targets = lookup.GetEntitiesInArc(
-            entityCoords,
-            range,
-            direction,
-            ArcWidth,
-            LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries)
-            .ToList();
-
-        targets.Remove(user);
-        melee.HandleArcAttackHit(user, (used.Value, weapon), targets, Power);
-    }
 }
 
 /// <summary>
@@ -78,4 +33,41 @@ public sealed class CEDebugArcAttackEvent(MapCoordinates position, Angle directi
     public Angle Direction = direction;
     public float Range = range;
     public float ArcWidth = arcWidth;
+}
+
+public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem<WeaponArcAttack>
+{
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly CESharedWeaponSystem _melee = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<WeaponArcAttack> args)
+    {
+        if (args.Args.Used is null)
+            return;
+
+        if (!TryComp<CEWeaponComponent>(args.Args.Used.Value, out var weapon))
+            return;
+
+        var entityCoords = _transform.GetMapCoordinates(args.Args.User);
+        var direction = new Angle(args.Args.Angle.ToWorldVec()) + args.Effect.Angle;
+
+        var range = args.Effect.Range * weapon.RangeMultiplier;
+
+        // Raise debug event for arc attack visualization
+        var debugEvent = new CEDebugArcAttackEvent(entityCoords, direction, range, args.Effect.ArcWidth);
+        EntityManager.EventBus.RaiseEvent(EventSource.Local, debugEvent);
+
+        // Find all entities in the arc
+        var targets = _lookup.GetEntitiesInArc(
+            entityCoords,
+            range,
+            direction,
+            args.Effect.ArcWidth,
+            LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries)
+            .ToList();
+
+        targets.Remove(args.Args.User);
+        _melee.HandleArcAttackHit(args.Args.User, (args.Args.Used.Value, weapon), targets, args.Effect.Power);
+    }
 }

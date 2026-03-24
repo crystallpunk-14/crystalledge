@@ -1,4 +1,5 @@
 
+using Content.Shared._CE.EntityEffect;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Animation.Effects;
@@ -32,10 +33,11 @@ public sealed partial class CEEntityEffectSpawnerSystem : EntitySystem
             spawner.NextEffectTime = _timing.CurTime + spawner.Frequency;
 
             var pos = Transform(uid).Coordinates;
+            var args = new CEEntityEffectArgs(EntityManager, uid, null, Angle.Zero, 1f, uid, pos);
 
             foreach (var effect in spawner.Effects)
             {
-                effect.Effect(EntityManager, uid, null, Angle.Zero, 1f, TimeSpan.Zero, uid, pos);
+                effect.Effect(args);
             }
         }
     }

@@ -1,33 +1,27 @@
 using Content.Shared.Throwing;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class Dash : CEEntityEffect
+public sealed partial class Dash : CEEntityEffectBase<Dash>
 {
     [DataField]
     public float Speed = 10f;
 
     [DataField]
     public float Distance = 1f;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEDashEffectSystem : CEEntityEffectSystem<Dash>
+{
+    [Dependency] private readonly ThrowingSystem _throwing = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<Dash> args)
     {
-        var throwing = entManager.System<ThrowingSystem>();
-
-        throwing.TryThrow(
-            user,
-            angle.ToWorldVec() * Distance,
-            Speed,
-            user,
+        _throwing.TryThrow(
+            args.Args.User,
+            args.Args.Angle.ToWorldVec() * args.Effect.Distance,
+            args.Effect.Speed,
+            args.Args.User,
             animated: false,
             doSpin: false);
     }

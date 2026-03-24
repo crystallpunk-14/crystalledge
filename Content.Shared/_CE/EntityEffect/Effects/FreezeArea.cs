@@ -1,9 +1,8 @@
 using Content.Shared._CE.Frost;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class FreezeArea : CEEntityEffect
+public sealed partial class FreezeArea : CEEntityEffectBase<FreezeArea>
 {
     [DataField]
     public float Radius = 3;
@@ -13,29 +12,17 @@ public sealed partial class FreezeArea : CEEntityEffect
 
     [DataField]
     public int MaxStacks = 3;
+}
 
-    public override void Effect(EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEFreezeAreaEffectSystem : CEEntityEffectSystem<FreezeArea>
+{
+    [Dependency] private readonly CEFrostSystem _frost = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<FreezeArea> args)
     {
-        EntityCoordinates? targetPoint = null;
-
-        if (target is not null &&
-            entManager.TryGetComponent<TransformComponent>(target.Value, out var transformComponent))
-            targetPoint = transformComponent.Coordinates;
-        else if (position is not null)
-            targetPoint = position;
-
-        if (targetPoint is null)
+        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
             return;
 
-        var frost = entManager.System<CEFrostSystem>();
-
-        frost.FreezeArea(targetPoint.Value, Radius, FallOffFactor, MaxStacks);
+        _frost.FreezeArea(targetPoint, args.Effect.Radius, args.Effect.FallOffFactor, args.Effect.MaxStacks);
     }
 }

@@ -1,28 +1,22 @@
 using Content.Shared.Damage.Systems;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class StaminaDamage : CEEntityEffect
+public sealed partial class StaminaDamage : CEEntityEffectBase<StaminaDamage>
 {
     [DataField]
     public float Damage = 10f;
+}
 
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
+public sealed partial class CEStaminaDamageEffectSystem : CEEntityEffectSystem<StaminaDamage>
+{
+    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
+
+    protected override void Effect(ref CEEntityEffectEvent<StaminaDamage> args)
     {
-        if (target is null)
+        if (args.Args.Target is null)
             return;
 
-        var stamina = entManager.System<SharedStaminaSystem>();
-
-        stamina.TakeStaminaDamage(target.Value, Damage, null, user, used);
+        _stamina.TakeStaminaDamage(args.Args.Target.Value, args.Effect.Damage, null, args.Args.User, args.Args.Used);
     }
 }

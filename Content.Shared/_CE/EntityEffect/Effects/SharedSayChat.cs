@@ -1,9 +1,8 @@
 using Content.Shared.Chat;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public abstract partial class SharedSayChat : CEEntityEffect
+public sealed partial class SayChat : CEEntityEffectBase<SayChat>
 {
     /// <summary>
     /// A message spoken by a character. Will automatically attempt to use it as LocId, but you can also insert regular text.
@@ -13,17 +12,4 @@ public abstract partial class SharedSayChat : CEEntityEffect
 
     [DataField]
     public InGameICChatType ChatType = InGameICChatType.Speak;
-
-    public override void Effect(
-        EntityManager entManager,
-        EntityUid user,
-        EntityUid? used,
-        Angle angle,
-        float speed,
-        TimeSpan frame,
-        EntityUid? target,
-        EntityCoordinates? position)
-    {
-        //Only server side logic
-    }
 }
