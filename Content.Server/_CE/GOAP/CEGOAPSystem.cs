@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._CE.GOAP;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
@@ -28,6 +29,11 @@ public sealed partial class CEGOAPSystem : EntitySystem
     /// </summary>
     private readonly List<int> _candidateGoals = new();
 
+    /// <summary>
+    /// Note: CurrentPlan lists in entity components are reused and cleared/repopulated 
+    /// rather than creating new lists each time to minimize GC allocations.
+    /// </summary>
+
     public override void Initialize()
     {
         base.Initialize();
@@ -43,16 +49,29 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            if (sensor.TargetKey is not null)
-                ent.Comp.WorldState[sensor.TargetKey] = false;
-        }
-
         foreach (var action in ent.Comp.Actions)
         {
-            if (action.TargetKey is not null)
-                ent.Comp.WorldState[action.TargetKey] = false;
+            foreach (var prec in action.Preconditions)
+            {
+                ent.Comp.WorldState[prec.Key] = false;
+            }
+
+            foreach (var effect in action.Effects)
+            {
+                ent.Comp.WorldState[effect.Key] = false;
+            }
+        }
+
+        foreach (var goal in ent.Comp.Goals)
+        {
+            foreach (var state in goal.DesiredState)
+            {
+                ent.Comp.WorldState[state.Key] = false;
+            }
+            foreach (var prec in goal.Preconditions)
+            {
+                ent.Comp.WorldState[prec.Key] = false;
+            }
         }
 
         // Force all sensors to evaluate once so WorldState is populated immediately.
@@ -92,18 +111,15 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 0. Expire stale memorized positions
-        CleanupExpiredPositions(ent);
-
         // 1. Update sensors
         UpdateSensors(ent);
 
         // 2. Check if we need to re-plan
-        if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
-            UpdatePlan(ent);
+        if (ent.Comp.CurrentPlan.Count == 0 || _timing.CurTime >= ent.Comp.NextPlanTime)
+            Replan(ent);
 
         // 3. Execute current action
-        if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
+        if (ent.Comp.CurrentPlan.Count != 0 && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
     }
 
@@ -128,7 +144,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
         }
     }
 
-    private void UpdatePlan(Entity<CEGOAPComponent> ent)
+    private void Replan(Entity<CEGOAPComponent> ent)
     {
         ent.Comp.NextPlanTime = _timing.CurTime + ent.Comp.PlanCooldown;
 
@@ -145,20 +161,25 @@ public sealed partial class CEGOAPSystem : EntitySystem
         foreach (var goalIndex in _candidateGoals)
         {
             // If this is already the active goal and plan is still valid, keep it
-            if (goalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan != null)
+            if (goalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan.Count > 0)
                 return;
 
             var goal = ent.Comp.Goals[goalIndex];
-            var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions);
 
-            if (plan == null || plan.Count == 0)
+            // Shutdown old action BEFORE clearing: plan list reuse means the old
+            // action reference is lost once the list is cleared.
+            ShutdownCurrentAction(ent);
+            ent.Comp.CurrentActionStarted = false;
+            ent.Comp.CurrentPlan.Clear();
+
+            if (!CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions, ent.Comp.CurrentPlan))
                 continue;
 
-            ShutdownCurrentAction(ent);
+            if (ent.Comp.CurrentPlan.Count == 0)
+                continue;
+
             ent.Comp.ActiveGoalIndex = goalIndex;
-            ent.Comp.CurrentPlan = plan;
             ent.Comp.CurrentActionIndex = 0;
-            ent.Comp.CurrentActionStarted = false;
             return;
         }
 
@@ -180,7 +201,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
             // Skip goals whose activation conditions are not currently met
             var active = true;
-            foreach (var (key, value) in goal.ActivationConditions)
+            foreach (var (key, value) in goal.Preconditions)
             {
                 if (!goap.WorldState.TryGetValue(key, out var current) || current != value)
                 {
@@ -249,18 +270,22 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void ShutdownCurrentAction(Entity<CEGOAPComponent> ent)
     {
-        if (ent.Comp.CurrentPlan != null &&
-            ent.Comp.CurrentActionStarted &&
-            ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
-        {
-            ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
-        }
+        if (ent.Comp.CurrentPlan is null)
+            return;
+
+        if (!ent.Comp.CurrentActionStarted)
+            return;
+
+        if (ent.Comp.CurrentActionIndex >= ent.Comp.CurrentPlan.Count)
+            return;
+
+        ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
     }
 
     private void ClearPlan(Entity<CEGOAPComponent> ent)
     {
         ShutdownCurrentAction(ent);
-        ent.Comp.CurrentPlan = null;
+        ent.Comp.CurrentPlan.Clear();
         ent.Comp.CurrentActionIndex = 0;
         ent.Comp.CurrentActionStarted = false;
         ent.Comp.ActiveGoalIndex = -1;

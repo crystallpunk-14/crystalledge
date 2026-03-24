@@ -1,3 +1,4 @@
+using Content.Server._CE.GOAP.Components;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
 
@@ -41,9 +42,9 @@ public sealed partial class CEGOAPTargetIsDownSensorSystem : CEGOAPSensorSystem<
         }
     }
 
-    protected override bool OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDownSensor> args)
+    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDownSensor> args)
     {
-        var target = GetTarget(ent, args.Sensor.TargetKey);
+        var target = Goap.GetTarget(ent, args.Sensor.TargetKey);
         if (target == null)
             return false;
 

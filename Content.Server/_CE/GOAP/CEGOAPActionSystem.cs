@@ -8,7 +8,7 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEGOAPActionBase<T>
 {
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
+    [Dependency] protected readonly CEGOAPSystem Goap = default!;
 
     public override void Initialize()
     {
@@ -49,11 +49,4 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
     protected virtual void OnActionShutdown(Entity<CEGOAPComponent> ent, ref CEGOAPActionShutdownEvent<T> args)
     {
     }
-
-    /// <summary>
-    /// Returns the entity target from the Targets dictionary.
-    /// "self" returns the owner, null returns null.
-    /// </summary>
-    protected EntityUid? GetTarget(Entity<CEGOAPComponent> ent, string? targetKey)
-        => _goap.GetTarget(ent, targetKey);
 }

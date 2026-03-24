@@ -5,6 +5,8 @@ using Content.Shared._CE.GOAP;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP.Actions;
 
@@ -31,13 +33,19 @@ public sealed partial class CEGOAPMoveToLastKnownPositionAction
     /// Radius around the last-known position to wander in.
     /// </summary>
     [DataField]
-    public float SearchRadius = 4f;
+    public float SearchRadius = 6f;
 
     /// <summary>
     /// Number of random directions to sample when picking a wander point.
     /// </summary>
     [DataField]
     public int SampleDirections = 8;
+
+    [DataField]
+    public TimeSpan SearchTime = TimeSpan.FromSeconds(10f);
+
+    [DataField(customTypeSerializer:typeof(TimeOffsetSerializer))]
+    public TimeSpan EndSearchTime = TimeSpan.Zero;
 }
 
 public sealed partial class CEGOAPMoveToLastKnownPositionActionSystem
@@ -48,24 +56,32 @@ public sealed partial class CEGOAPMoveToLastKnownPositionActionSystem
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPMoveToLastKnownPositionAction> args)
     {
-        var coords = _goap.GetLastKnownPosition(ent, args.Action.PositionTargetKey);
+        var coords = Goap.GetLastKnownPosition(ent, args.Action.PositionTargetKey);
         if (coords == null)
             return;
 
         var comp = _steering.Register(ent, coords.Value);
         comp.Range = args.Action.Range;
+        args.Action.EndSearchTime = _timing.CurTime + args.Action.SearchTime;
     }
 
     protected override void OnActionUpdate(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMoveToLastKnownPositionAction> args)
     {
+        if (_timing.CurTime > args.Action.EndSearchTime)
+        {
+            Goap.ClearLastKnownPosition(ent, args.Action.PositionTargetKey);
+            args.Status = CEGOAPActionStatus.Failed;
+            return;
+        }
+
         if (!TryComp<NPCSteeringComponent>(ent, out var steering))
         {
             args.Status = CEGOAPActionStatus.Failed;
@@ -76,18 +92,18 @@ public sealed partial class CEGOAPMoveToLastKnownPositionActionSystem
         {
             case SteeringStatus.InRange:
                 // Arrived at current waypoint — pick a new random point around the memorized position.
-                if (!TryPickSearchPoint(ent, args.Action, out var nextCoords))
+                // If no valid tile is found, stay and wait: sensors keep scanning,
+                // and the timeout will eventually expire.
+                if (TryPickSearchPoint(ent, args.Action, out var nextCoords))
                 {
-                    args.Status = CEGOAPActionStatus.Failed;
-                    return;
+                    var comp = _steering.Register(ent, nextCoords);
+                    comp.Range = args.Action.Range;
                 }
 
-                _steering.Unregister(ent);
-                var comp = _steering.Register(ent, nextCoords);
-                comp.Range = args.Action.Range;
                 args.Status = CEGOAPActionStatus.Running;
                 return;
             case SteeringStatus.NoPath:
+                Goap.ClearLastKnownPosition(ent, args.Action.PositionTargetKey); //We cant reach target position, forget it and fail
                 args.Status = CEGOAPActionStatus.Failed;
                 return;
             default:
@@ -100,6 +116,7 @@ public sealed partial class CEGOAPMoveToLastKnownPositionActionSystem
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionShutdownEvent<CEGOAPMoveToLastKnownPositionAction> args)
     {
+        args.Action.EndSearchTime = TimeSpan.Zero;
         _steering.Unregister(ent);
     }
 
@@ -110,7 +127,7 @@ public sealed partial class CEGOAPMoveToLastKnownPositionActionSystem
     {
         coords = default;
 
-        var center = _goap.GetLastKnownPosition(ent, action.PositionTargetKey);
+        var center = Goap.GetLastKnownPosition(ent, action.PositionTargetKey);
         if (center == null)
             return false;
 

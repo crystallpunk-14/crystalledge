@@ -37,17 +37,10 @@ public sealed partial class CEGOAPComponent : Component
     public Dictionary<string, EntityUid?> Targets = new();
 
     /// <summary>
-    /// Last known coordinates for each target key, with an expiry time.
-    /// Updated automatically when a target is set; cleared when the memory duration expires.
+    /// Last known coordinates for each target key
     /// </summary>
     [ViewVariables]
-    public Dictionary<string, MemorizedPosition> LastKnownPositions = new();
-
-    /// <summary>
-    /// How long the entity remembers a target's last known position after losing sight.
-    /// </summary>
-    [DataField(serverOnly: true)]
-    public TimeSpan TargetMemoryDuration = TimeSpan.FromSeconds(10);
+    public Dictionary<string, EntityCoordinates> LastKnownPositions = new();
 
     /// <summary>
     /// Current world state as perceived by this entity.
@@ -60,7 +53,7 @@ public sealed partial class CEGOAPComponent : Component
     /// Current plan being executed. Null if no plan.
     /// </summary>
     [ViewVariables]
-    public List<CEGOAPAction>? CurrentPlan;
+    public List<CEGOAPAction> CurrentPlan = new();
 
     /// <summary>
     /// Index of the currently executing action in the plan.
@@ -97,5 +90,5 @@ public sealed partial class CEGOAPComponent : Component
 /// <summary>
 /// A remembered target position with an expiry time.
 /// </summary>
-public record struct MemorizedPosition(EntityCoordinates Coordinates, TimeSpan ExpireAt);
+public record struct MemorizedPosition();
 
