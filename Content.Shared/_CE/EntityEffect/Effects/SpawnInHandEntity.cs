@@ -23,8 +23,7 @@ public sealed partial class CESpawnInHandEntityEffectSystem : CEEntityEffectSyst
         if (args.Args.Target is null)
             return;
 
-        if (!TryComp<TransformComponent>(args.Args.Target.Value, out var transformComponent))
-            return;
+        var transformComponent = Transform(args.Args.Target.Value);
 
         if (_net.IsClient)
             return;

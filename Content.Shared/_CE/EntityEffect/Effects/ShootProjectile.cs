@@ -43,8 +43,7 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
         if (!_net.IsServer)
             return;
 
-        if (!TryComp<TransformComponent>(args.Args.User, out var xform))
-            return;
+        var xform = Transform(args.Args.User);
 
         var fromCoords = xform.Coordinates;
         var userVelocity = _physics.GetMapLinearVelocity(args.Args.User);

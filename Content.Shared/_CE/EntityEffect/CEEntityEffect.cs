@@ -78,9 +78,9 @@ public abstract partial class CEEntityEffectSystem<TEffect> : EntitySystem where
     /// </summary>
     protected bool TryResolveTargetCoordinates(CEEntityEffectArgs args, out EntityCoordinates targetPoint)
     {
-        if (args.Target is not null && TryComp<TransformComponent>(args.Target.Value, out var xform))
+        if (args.Target is not null)
         {
-            targetPoint = xform.Coordinates;
+            targetPoint = Transform(args.Target.Value).Coordinates;
             return true;
         }
 

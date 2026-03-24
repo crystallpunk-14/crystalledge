@@ -15,8 +15,7 @@ public sealed partial class CESpawnEntityOnUserEffectSystem : CEEntityEffectSyst
 
     protected override void Effect(ref CEEntityEffectEvent<SpawnEntityOnUser> args)
     {
-        if (!TryComp<TransformComponent>(args.Args.User, out var transformComponent))
-            return;
+        var transformComponent = Transform(args.Args.User);
 
         if (_net.IsClient)
             return;

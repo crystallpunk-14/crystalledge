@@ -21,8 +21,7 @@ public sealed partial class CEThrowToUserEffectSystem : CEEntityEffectSystem<Thr
 
         var targetEntity = args.Args.Target.Value;
 
-        if (!TryComp<TransformComponent>(args.Args.User, out var xform))
-            return;
+        var xform = Transform(args.Args.User);
 
         if (TryComp<EmbeddableProjectileComponent>(targetEntity, out var embeddable))
         {
