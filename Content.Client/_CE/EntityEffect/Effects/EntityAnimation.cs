@@ -38,8 +38,9 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         var angle = args.Args.Angle;
         var speedMultiplier = 1f / args.Args.Speed;
 
-        if (!TryComp<TransformComponent>(user, out var userXform)
-            || userXform.MapID == MapId.Nullspace)
+        var userXform = Transform(user);
+
+        if (userXform.MapID == MapId.Nullspace)
             return;
 
         // Spawn a client-side clone entity at the user's position
