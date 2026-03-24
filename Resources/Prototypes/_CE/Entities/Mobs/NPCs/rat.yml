@@ -19,13 +19,17 @@
         amount: 1
   - type: CEGOAP
     goals:
-    # Single stupid goal - kill enemies
+    # The main goal is to find other rats
+    - desiredState:
+        NotAlone: true
+      priority: 2
+    # If there are other rats nearby, kill the enemies
     - desiredState:
         EnemyDead: true
       priority: 1
 
+    # Move to enemy
     actions:
-    # Move to target
     - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
       preconditions:
@@ -34,7 +38,7 @@
         EnemyInMeleeRange: true
       cost: 1
       range: 1.5
-    # Attack target
+    # Attack enemy
     - !type:CEGOAPMeleeAttackAction
       targetKey: enemy
       preconditions:
@@ -44,13 +48,24 @@
       cost: 1
       useType: Primary
       angleVariation: 5
-    # Explore
+    # Try to find other rats
     - !type:CEGOAPExploreAction
       effects:
-        EnemyVisible: true
+        NotAlone: true
       cost: 1
       exploreRadius: 8
-    # Move to enemy's last known position
+    # Run away from the enemy if there are no other rats nearby
+    - !type:CEGOAPFleeAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        NotAlone: true
+      cost: 0.5
+      fleeDistance: 15
+      visionRadius: 10
+      occlusionBonus: 2
+      # Move to enemy's last known position
     - !type:CEGOAPMoveToLastKnownPositionAction
       positionTargetKey: enemy
       effects:
@@ -58,19 +73,17 @@
       preconditions:
         HasEnemyLastPos: true
       cost: 0.5
-
     sensors:
     - !type:CEGOAPNearestHostileSensor
       conditionKey: EnemyVisible
       outputTargetKey: enemy
       visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
+    - !type:CEGOAPPrototypeExistsInRangeSensor
+      conditionKey: NotAlone
+      prototypeId: CERat
 
   - type: NpcFactionMember
     factions:

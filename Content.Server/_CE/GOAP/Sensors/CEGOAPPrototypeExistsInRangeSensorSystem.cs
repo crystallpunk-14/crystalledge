@@ -11,7 +11,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     /// The prototype ID to find in range.
     /// </summary>
     [DataField(required: true)]
-    public EntityPrototype PrototypeId;
+    public EntProtoId PrototypeId;
 
     /// <summary>
     /// Search range.
@@ -30,6 +30,8 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     /// </summary>
     [DataField]
     public int MinCount = 1;
+
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.1);
 }
 
 public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPPrototypeExistsInRangeSensor>
@@ -46,7 +48,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSen
                 continue;
 
             var meta = MetaData(entityUid).EntityPrototype;
-            if (meta != null && meta.ID == args.Sensor.PrototypeId.ID)
+            if (meta != null && meta.ID == args.Sensor.PrototypeId)
                 count++;
 
             if (count >= args.Sensor.MinCount)
