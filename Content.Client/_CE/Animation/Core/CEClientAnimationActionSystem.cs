@@ -1,6 +1,6 @@
 using Content.Shared._CE.Animation.Core;
-using Content.Shared._CE.Animation.Core.Actions;
 using Content.Shared._CE.Animation.Core.Components;
+using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Animation.Core;
@@ -38,7 +38,7 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
         {
             if (action is SharedEntityAnimation visualEffect)
             {
-                visualEffect.Play(EntityManager, entity, used, ev.Angle, comp.AnimationSpeed, ev.Frame, comp.TargetEntity, comp.TargetCoordinates);
+                visualEffect.Effect(EntityManager, entity, used, ev.Angle, comp.AnimationSpeed, ev.Frame, comp.TargetEntity, comp.TargetCoordinates);
             }
         }
     }

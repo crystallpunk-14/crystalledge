@@ -89,7 +89,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     {
                         foreach (var action in actions)
                         {
-                            action.Play(EntityManager, uid, controller.Used, _transform.GetWorldRotation(uid), controller.AnimationSpeed, keyFrame, controller.TargetEntity, controller.TargetCoordinates);
+                            action.Effect(EntityManager, uid, controller.Used, _transform.GetWorldRotation(uid), controller.AnimationSpeed, keyFrame, controller.TargetEntity, controller.TargetCoordinates);
                         }
                         controller.LastEvent = realKeyFrame;
                         Dirty(uid, controller);
@@ -111,7 +111,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimationToAngle(EntityUid entity,
-        ProtoId<CEAnimationActionPrototype> animationProto,
+        ProtoId<CEEntityEffectAnimationPrototype> animationProto,
         Angle? angle = null,
         EntityUid? used = null,
         float speed = 1f,
@@ -144,7 +144,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimationToEntity(EntityUid entity,
-        ProtoId<CEAnimationActionPrototype> animationProto,
+        ProtoId<CEEntityEffectAnimationPrototype> animationProto,
         EntityUid target,
         EntityUid? used = null,
         float speed = 1f,
@@ -177,7 +177,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimationToCoordinates(EntityUid entity,
-        ProtoId<CEAnimationActionPrototype> animationProto,
+        ProtoId<CEEntityEffectAnimationPrototype> animationProto,
         EntityCoordinates target,
         EntityUid? used = null,
         float speed = 1f,
@@ -221,7 +221,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// </summary>
     private void StartAnimation(
         EntityUid entity,
-        CEAnimationActionPrototype animation,
+        CEEntityEffectAnimationPrototype animation,
         EntityUid? used = null,
         Angle? rotateTo = null,
         EntityUid? targetEntity = null,
@@ -262,22 +262,22 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 }
 
 /// <summary>
-///
+/// TODO
 /// </summary>
 /// <param name="animation"></param>
 /// <param name="cancelled"></param>
-public sealed class CEAnimationActionEndedEvent(ProtoId<CEAnimationActionPrototype> animation, bool cancelled)
+public sealed class CEAnimationActionEndedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation, bool cancelled)
     : EntityEventArgs
 {
-    public ProtoId<CEAnimationActionPrototype> Animation = animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation = animation;
     public bool Cancelled = cancelled;
 }
 
 /// <summary>
-///
+/// TODO
 /// </summary>
 /// <param name="animation"></param>
-public sealed class CEAnimationActionStartedEvent(ProtoId<CEAnimationActionPrototype> animation) : EntityEventArgs
+public sealed class CEAnimationActionStartedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation) : EntityEventArgs
 {
-    public ProtoId<CEAnimationActionPrototype> Animation = animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation = animation;
 }

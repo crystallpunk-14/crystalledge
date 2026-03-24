@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._CE.Animation.Core;
-using Content.Shared._CE.Animation.Core.Actions;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health;
 using Content.Shared.ActionBlocker;
@@ -17,7 +16,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.Animation.Item;
+namespace Content.Shared._CE.MeleeWeapon;
 
 public abstract partial class CESharedWeaponSystem : EntitySystem
 {

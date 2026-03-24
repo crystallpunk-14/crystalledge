@@ -1,5 +1,6 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -82,7 +83,7 @@ public sealed partial class CEWeaponComponent : Component
 public sealed partial class CEAnimationEntry
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Anim;
+    public ProtoId<CEEntityEffectAnimationPrototype> Anim;
 
     /// <summary>
     /// animation playback speed modifier

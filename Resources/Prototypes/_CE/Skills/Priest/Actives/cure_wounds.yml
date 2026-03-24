@@ -30,7 +30,7 @@
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationCureWounds
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationCureWounds
   movementSpeed: 0.5
   duration: 2

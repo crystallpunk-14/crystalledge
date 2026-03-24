@@ -1,4 +1,4 @@
-- type: animationAction
+- type: entityEffectAnimation
   id: SkimitarAttackLight1
   movementSpeed: 0.8
   duration: 0.4
@@ -52,7 +52,7 @@
       range: 0.6
       arcWidth: 60
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SkimitarAttackLight2
   movementSpeed: 0.8
   duration: 0.4
@@ -106,7 +106,7 @@
       range: 0.7
       arcWidth: 40
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SkimitarAttackHeavy1
   movementSpeed: 0.4
   duration: 1

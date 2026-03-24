@@ -21,7 +21,7 @@
     event: !type:CEInstantActionAnimationEvent
       animation: AnimationUnbreakable
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationUnbreakable
   movementSpeed: 0.3
   duration: 0.6

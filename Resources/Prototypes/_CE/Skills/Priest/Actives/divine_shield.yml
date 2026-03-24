@@ -30,7 +30,7 @@
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationDivineShield
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationDivineShield
   movementSpeed: 0.5
   duration: 1.5

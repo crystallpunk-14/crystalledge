@@ -27,7 +27,7 @@
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationAreaHealing
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationAreaHealing
   movementSpeed: 0.5
   duration: 1.5

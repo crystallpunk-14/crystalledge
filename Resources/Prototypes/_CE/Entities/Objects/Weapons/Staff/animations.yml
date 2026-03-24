@@ -1,4 +1,4 @@
-- type: animationAction
+- type: entityEffectAnimation
   id: StaffAttackLight
   movementSpeed: 0.6
   duration: 0.35
@@ -42,7 +42,7 @@
       arcWidth: 100
       angle: -40
 
-- type: animationAction
+- type: entityEffectAnimation
   id: StaffAttackLight2
   movementSpeed: 0.6
   duration: 0.35
@@ -87,7 +87,7 @@
       angle: 40
 
 
-- type: animationAction
+- type: entityEffectAnimation
   id: StaffAttackHeavy
   movementSpeed: 0.4
   duration: 0.55

@@ -21,7 +21,7 @@
     event: !type:CEInstantActionAnimationEvent
       animation: AnimationIntellectBuff
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationIntellectBuff
   movementSpeed: 0.3
   duration: 0.6

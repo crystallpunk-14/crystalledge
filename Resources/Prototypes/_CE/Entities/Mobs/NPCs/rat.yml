@@ -112,7 +112,7 @@
     state: bite
     drawdepth: Effects
 
-- type: animationAction
+- type: entityEffectAnimation
   id: RatBite
   movementSpeed: 0.8
   duration: 0.8
