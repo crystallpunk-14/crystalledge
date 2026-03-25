@@ -1,0 +1,143 @@
+using Content.Shared._CE.EntityEffect;
+using Content.Shared.DoAfter;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Popups;
+using Content.Shared.Whitelist;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Serialization;
+
+namespace Content.Shared._CE.Consumable;
+
+public sealed class CEConsumableSystem : EntitySystem
+{
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<CEConsumableComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<CEConsumableComponent, UseInHandEvent>(OnUseInHand);
+        SubscribeLocalEvent<CEConsumableComponent, AfterInteractEvent>(OnAfterInteract);
+        SubscribeLocalEvent<CEConsumableComponent, CEUseConsumableDoAfterEvent>(OnDoAfter);
+    }
+
+    private void OnMapInit(Entity<CEConsumableComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.Charges is { } charges && ent.Comp.MaxCharges == null)
+            ent.Comp.MaxCharges = charges;
+    }
+
+    private void OnUseInHand(Entity<CEConsumableComponent> ent, ref UseInHandEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!_whitelist.CheckBoth(args.User, ent.Comp.Blacklist, ent.Comp.Whitelist))
+            return;
+
+        if (TryStartDoAfter(ent, args.User, args.User, ent.Comp.UseDelay))
+            args.Handled = true;
+    }
+
+    private void OnAfterInteract(Entity<CEConsumableComponent> ent, ref AfterInteractEvent args)
+    {
+        if (args.Handled || args.Target is not { } target || !args.CanReach)
+            return;
+
+        if (!_whitelist.CheckBoth(target, ent.Comp.Blacklist, ent.Comp.Whitelist))
+            return;
+
+        var delay = ent.Comp.UseDelay;
+        if (target != args.User)
+            delay *= ent.Comp.OtherUseDelayMultiplier;
+
+        if (TryStartDoAfter(ent, args.User, target, delay))
+            args.Handled = true;
+    }
+
+    private bool TryStartDoAfter(Entity<CEConsumableComponent> ent, EntityUid user, EntityUid target, TimeSpan delay)
+    {
+        var doAfterArgs = new DoAfterArgs(
+            EntityManager,
+            user,
+            delay,
+            new CEUseConsumableDoAfterEvent(),
+            ent.Owner,
+            target: target,
+            used: ent.Owner)
+        {
+            BreakOnMove = false,
+            BreakOnDamage = true,
+            NeedHand = true,
+        };
+
+        return _doAfter.TryStartDoAfter(doAfterArgs);
+    }
+
+    private void OnDoAfter(Entity<CEConsumableComponent> ent, ref CEUseConsumableDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled || args.Target is not { } target)
+            return;
+
+        if (!_whitelist.CheckBoth(target, ent.Comp.Blacklist, ent.Comp.Whitelist))
+            return;
+
+        args.Handled = true;
+
+        _audio.PlayPredicted(ent.Comp.UseSound, ent.Owner, args.User);
+
+        // Apply all effects to the target.
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            target,
+            ent.Owner,
+            Angle.Zero,
+            0f,
+            target,
+            Transform(target).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            effect.Effect(effectArgs);
+        }
+
+        // Handle charges.
+        if (ent.Comp.Charges is { } charges)
+        {
+            charges--;
+            ent.Comp.Charges = charges;
+            Dirty(ent);
+
+            if (charges > 0)
+                return;
+        }
+
+        // Item is depleted (or single-use without charges) — spawn replacement and delete.
+        SpawnReplacement(ent, args.User);
+        PredictedQueueDel(ent.Owner);
+    }
+
+    private void SpawnReplacement(Entity<CEConsumableComponent> ent, EntityUid? user)
+    {
+        if (ent.Comp.ReplacementEntity is not { } replacement)
+            return;
+
+        var position = _transform.GetMapCoordinates(ent);
+        var pickup = user != null && _hands.IsHolding(user.Value, ent, out _);
+        var spawned = EntityManager.PredictedSpawn(replacement, position);
+
+        if (pickup && user != null)
+            _hands.TryPickupAnyHand(user.Value, spawned);
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed partial class CEUseConsumableDoAfterEvent : SimpleDoAfterEvent;

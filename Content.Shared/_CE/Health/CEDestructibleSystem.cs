@@ -45,11 +45,8 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        // Play destroy sound immediately on client (predicted)
         if (ent.Comp.DestroySound is not null)
-        {
             _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
-        }
 
         // Server-side: spawn loot. TODO: prediction someway??
         if (_net.IsServer && ent.Comp.Loot is not null)
@@ -67,6 +64,15 @@ public sealed class CEDestructibleSystem : EntitySystem
             }
         }
 
+        var destructedEv = new CEDestructedEvent(position, args.Source);
+        RaiseLocalEvent(ent.Owner, ref destructedEv);
+
         PredictedQueueDel(ent.Owner);
     }
 }
+
+/// <summary>
+/// Raised on an entity just before it is destroyed by <see cref="CEDestructibleSystem"/>.
+/// </summary>
+[ByRefEvent]
+public record struct CEDestructedEvent(EntityCoordinates Position, EntityUid? Source);
