@@ -101,6 +101,9 @@
     - !type:WeaponArcAttack
       range: 1.3
       arcWidth: 45
+      effects:
+      - !type:ThrowFromUser
+        distance: 1
     - !type:EntityAnimation
       offsetAnimation:
       - time: 0.0

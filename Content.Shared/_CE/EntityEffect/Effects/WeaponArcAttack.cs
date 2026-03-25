@@ -21,6 +21,9 @@ public sealed partial class WeaponArcAttack : CEEntityEffectBase<WeaponArcAttack
     /// </summary>
     [DataField]
     public float Power = 1f;
+
+    [DataField]
+    public List<CEEntityEffect> Effects = new();
 }
 
 /// <summary>
@@ -69,5 +72,16 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
         targets.Remove(args.Args.User);
         _melee.HandleArcAttackHit(args.Args.User, (args.Args.Used.Value, weapon), targets, args.Effect.Power);
+
+
+        foreach (var target in targets)
+        {
+            var effectArgs = args.Args with { EntityManager = EntityManager, Target = target, Position = null };
+
+            foreach (var effect in args.Effect.Effects)
+            {
+                effect.Effect(effectArgs);
+            }
+        }
     }
 }
