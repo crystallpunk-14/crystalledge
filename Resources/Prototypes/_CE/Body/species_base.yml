@@ -91,3 +91,4 @@
   - type: CEBlinker
   - type: CEBlessingReceiver
   - type: CESkillStorage
+  - type: CEStamina

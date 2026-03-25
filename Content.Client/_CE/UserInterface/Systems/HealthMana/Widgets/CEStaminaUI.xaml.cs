@@ -32,8 +32,12 @@ public sealed partial class CEStaminaUI : UIWidget
 
         if (_emptyTex != null)
         {
-            MinWidth = _emptyTex.Width * TextureScale;
-            MinHeight = _emptyTex.Height * TextureScale;
+            var w = _emptyTex.Width * TextureScale;
+            var h = _emptyTex.Height * TextureScale;
+            MinWidth = w;
+            MinHeight = h;
+            SetWidth = w;
+            SetHeight = h;
         }
 
         var font = new VectorFont(

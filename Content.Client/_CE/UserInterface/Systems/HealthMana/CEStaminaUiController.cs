@@ -66,6 +66,9 @@ public sealed class CEStaminaUiController : UIController, IOnStateEntered<Gamepl
         if (UIManager.ActiveScreen is DefaultGameScreen game)
             return game.StaminaBar;
 
+        if (UIManager.ActiveScreen is SeparatedChatGameScreen separated)
+            return separated.StaminaBar;
+
         return null;
     }
 
