@@ -34,6 +34,11 @@ public sealed partial class DefaultGameScreen : InGameScreen
 
         SetAnchorAndMarginPreset(ManaBar, LayoutPreset.CenterBottom);
         SetMarginLeft(ManaBar, manaOffset);
+
+        // Stamina bar centered between health and mana, slightly above
+        SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom);
+        SetMarginLeft(StaminaBar, -StaminaBar.MinWidth / 2f);
+        SetMarginBottom(StaminaBar, 110f);
         // CrystallEdge end
 
         Chat.OnResized += ChatOnResized;
