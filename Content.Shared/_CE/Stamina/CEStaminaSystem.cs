@@ -1,5 +1,6 @@
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.Timing;
 
@@ -8,6 +9,7 @@ namespace Content.Shared._CE.Stamina;
 public sealed class CEStaminaSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
 
     public override void Initialize()
@@ -87,12 +89,18 @@ public sealed class CEStaminaSystem : EntitySystem
             return true; //Dont block using item for entities without stamina component
 
         if (ent.Comp.Exhausted)
+        {
+            _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), ent, ent, PopupType.SmallCaution);
             return false;
+        }
 
         var current = GetStamina(ent);
 
         if (current <= 0)
+        {
+            _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), ent, ent, PopupType.SmallCaution);
             return false;
+        }
 
         // Snapshot current computed stamina minus damage.
         var newStamina = Math.Max(current - amount, 0f);

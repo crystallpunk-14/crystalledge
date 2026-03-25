@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -7,7 +8,7 @@ namespace Content.Shared._CE.Stamina;
 /// Tracks entity stamina. When stamina reaches 0, the entity enters an exhausted state
 /// with a movement speed penalty until stamina fully recovers.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 [Access(typeof(CEStaminaSystem))]
 public sealed partial class CEStaminaComponent : Component
 {
@@ -58,4 +59,67 @@ public sealed partial class CEStaminaComponent : Component
     /// </summary>
     [DataField]
     public float ExhaustedSpeedModifier = 0.6f;
+    // ── Fatigue animation parameters ──
+
+    /// <summary>
+    /// Stamina ratio (current/max) below which the fatigue animation starts.
+    /// 1.0 = always playing when not full, 0.5 = starts at half stamina.
+    /// </summary>
+    [DataField]
+    public float AnimationThreshold = 0.5f;
+
+    /// <summary>
+    /// Minimum breathing animation frequency (cycles per second) at the start of fatigue.
+    /// </summary>
+    [DataField]
+    public float FrequencyMin = 0.25f;
+
+    /// <summary>
+    /// Additional frequency added as fatigue increases (0 → max fatigue).
+    /// </summary>
+    [DataField]
+    public float FrequencyMod = 1.75f;
+
+    /// <summary>
+    /// Minimum jitter amplitude at the start of fatigue.
+    /// </summary>
+    [DataField]
+    public float JitterAmplitudeMin;
+
+    /// <summary>
+    /// Additional jitter amplitude as fatigue increases.
+    /// </summary>
+    [DataField]
+    public float JitterAmplitudeMod = 0.04f;
+
+    /// <summary>
+    /// Minimum jitter offset bounds (X, Y).
+    /// </summary>
+    [DataField]
+    public Vector2 JitterMin = new(0.5f, 0.125f);
+
+    /// <summary>
+    /// Maximum jitter offset bounds (X, Y).
+    /// </summary>
+    [DataField]
+    public Vector2 JitterMax = new(1.0f, 0.25f);
+
+    /// <summary>
+    /// Minimum breathing amplitude at the start of fatigue.
+    /// </summary>
+    [DataField]
+    public float BreathingAmplitudeMin = 0.04f;
+
+    /// <summary>
+    /// Additional breathing amplitude as fatigue increases.
+    /// </summary>
+    [DataField]
+    public float BreathingAmplitudeMod = 0.04f;
+
+    /// <summary>
+    /// Number of jitter keyframes per breathing cycle.
+    /// </summary>
+    [DataField]
+    public int Jitters = 4;
+
 }
