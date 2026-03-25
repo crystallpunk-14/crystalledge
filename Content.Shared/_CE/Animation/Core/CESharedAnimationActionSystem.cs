@@ -211,6 +211,12 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         return true;
     }
 
+    [PublicAPI]
+    public bool IsPlayingAnimation(EntityUid entity)
+    {
+        return HasComp<CEActiveAnimationActionComponent>(entity);
+    }
+
     /// <summary>
     /// Prematurely cancels animation execution
     /// </summary>

@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Stamina;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
@@ -33,6 +34,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] private   readonly IPrototypeManager _proto = default!;
     [Dependency] private   readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
+    [Dependency] private   readonly CEStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {
@@ -137,6 +139,15 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
         if (!Blocker.CanAttack(user))
             return false;
+
+        if (AnimationAction.IsPlayingAnimation(user))
+            return false;
+
+        if (used.Comp.StaminaCost.TryGetValue(useType, out var cost) && cost > 0f)
+        {
+            if (!_stamina.TryTakeDamage(user, cost))
+                return false;
+        }
 
         //Get animations
         List<CEAnimationEntry> animations = new();

@@ -77,6 +77,17 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField]
     public float RangeMultiplier = 1f;
+
+    /// <summary>
+    /// Stamina cost per attack, keyed by use type.
+    /// If a use type is not present, the attack costs no stamina.
+    /// </summary>
+    [DataField]
+    public Dictionary<CEUseType, float> StaminaCost = new()
+    {
+        { CEUseType.Primary, 2f },
+        { CEUseType.Secondary, 2f },
+    };
 }
 
 [DataDefinition, Serializable]

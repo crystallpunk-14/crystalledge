@@ -84,7 +84,7 @@ public sealed class CEStaminaSystem : EntitySystem
     public bool TryTakeDamage(Entity<CEStaminaComponent?> ent, float amount)
     {
         if (!Resolve(ent, ref ent.Comp, false))
-            return false;
+            return true; //Dont block using item for entities without stamina component
 
         if (ent.Comp.Exhausted)
             return false;

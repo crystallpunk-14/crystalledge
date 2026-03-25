@@ -15,7 +15,7 @@ public sealed partial class CEStaminaComponent : Component
     /// Maximum stamina value.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float MaxStamina = 100f;
+    public float MaxStamina = 10f;
 
     /// <summary>
     /// Snapshot of stamina at the time of last state change.
@@ -23,13 +23,13 @@ public sealed partial class CEStaminaComponent : Component
     /// Use <see cref="CEStaminaSystem.GetStamina"/> to get the real value.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float Stamina = 100f;
+    public float Stamina = 10f;
 
     /// <summary>
     /// Stamina regeneration per second after the cooldown expires.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float RegenRate = 15f;
+    public float RegenRate = 2f;
 
     /// <summary>
     /// How long after the last stamina use before regeneration begins.
@@ -57,5 +57,5 @@ public sealed partial class CEStaminaComponent : Component
     /// Movement speed multiplier applied while exhausted (0.7 = 30% slower).
     /// </summary>
     [DataField]
-    public float ExhaustedSpeedModifier = 0.7f;
+    public float ExhaustedSpeedModifier = 0.6f;
 }
