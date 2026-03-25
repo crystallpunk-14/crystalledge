@@ -113,9 +113,9 @@
   components:
   - type: Sprite
     layers:
+    - state: icon
     - state: fill
       color: "#b63d1f"
-    - state: icon
   - type: CEConsumable
     effects:
     - !type:Heal
@@ -144,9 +144,9 @@
   components:
   - type: Sprite
     layers:
+    - state: icon
     - state: fill
       color: "#b63d1f"
-    - state: icon
   - type: CEConsumable
     effects:
     - !type:Heal
@@ -177,9 +177,9 @@
   components:
   - type: Sprite
     layers:
+    - state: icon
     - state: fill
       color: "#1f36b6"
-    - state: icon
   - type: CEConsumable
     effects:
     - !type:RestoreMana
@@ -208,9 +208,9 @@
   components:
   - type: Sprite
     layers:
+    - state: icon
     - state: fill
       color: "#1f36b6"
-    - state: icon
   - type: CEConsumable
     effects:
     - !type:RestoreMana
