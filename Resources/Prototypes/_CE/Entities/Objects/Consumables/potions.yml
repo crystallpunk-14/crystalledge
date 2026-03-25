@@ -1,47 +1,16 @@
 # Base consumable potion
 - type: entity
-  id: CEConsumablePotionBase
+  id: CEPotionBase
   parent: BaseItem
   abstract: true
   categories: [ ForkFiltered ]
+  name: empty vial
+  description: A potion was poured here once. Or will be. Who knows?
   components:
   - type: Item
-    size: Small
+    size: Tiny
   - type: Sprite
-    sprite: Objects/Specific/Chemistry/vial.rsi
-    state: vial
-  - type: CEConsumable
-    useDelay: 1.5
-
-# Multi-charge healing potion — 3 charges, heals 5 HP each use, leaves empty vial
-- type: entity
-  id: CEConsumablePotionHealingMulti
-  parent: CEConsumablePotionBase
-  name: healing potion
-  description: A vial of red liquid with multiple doses. Drink to restore health.
-  components:
-  - type: CEConsumable
-    useDelay: 2
-    replacementEntity: CEConsumablePotionEmpty
-    effects:
-    - !type:Heal
-      amount: 5
-    - !type:SpawnEntityOnTarget
-      spawns:
-      - CEEffectHealingGeneric
-    useSound:
-      path: /Audio/Items/drink.ogg
-  - type: CEDestructionEffect
-    range: 1
-    whitelist:
-      components:
-      - CEMobState
-    effects:
-    - !type:Heal
-      amount: 3
-    - !type:SpawnEntityOnTarget
-      spawns:
-      - CEEffectHealingGeneric
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
   - type: CEDamageable
   - type: CEDamageOnLand
     damage:
@@ -49,21 +18,119 @@
         Physical: 1
   - type: CEDestructible
     destroyThreshold: 1
-    vfx:
-    - CEEffectAreaHealingEffect
     destroySound:
       collection: GlassBreak
+    lootTable: !type:AllSelector
+      children:
+      - id: CEGlassShard
+        amount: 1
 
-# Empty potion vial (trash left after a multi-charge potion)
 - type: entity
-  id: CEConsumablePotionEmpty
+  id: CEConsumablePotionBase
+  parent: CEPotionBase
+  abstract: true
+  components:
+  - type: CEConsumable
+    whitelist:
+      components:
+      - CEMobState
+    replacementEntity: CEPotionEmpty
+    useDelay: 1.5
+    useSound:
+      path: /Audio/Items/drink.ogg
+  - type: CEDestructionEffect
+    range: 1
+    whitelist:
+      components:
+      - CEMobState
+
+- type: entity
+  id: CEGlassShard
   parent: BaseItem
-  name: empty vial
-  description: An empty glass vial.
+  name: glass shard
+  description: Sharp pieces of glass. Don't step on it!
   categories: [ ForkFiltered ]
   components:
   - type: Item
-    size: Small
+    size: Tiny
   - type: Sprite
-    sprite: Objects/Specific/Chemistry/vial.rsi
-    state: icon_empty
+    sprite: _CE/Objects/Consumable/Potions/shards.rsi
+    layers:
+    - state: shard1
+      map: [ "random" ]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          shard1: ""
+          shard2: ""
+
+
+
+- type: entity
+  id: CEConsumablePotionHealing
+  parent: CEConsumablePotionBase
+  name: healing potion
+  description: A simple healing potion. Drink it, or throw it at whoever you want to see get well.
+  components:
+  - type: Sprite
+    layers:
+    - state: fill
+      color: "#b63d1f"
+    - state: icon
+  - type: CEConsumable
+    effects:
+    - !type:Heal
+      amount: 10
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:Heal
+      amount: 5
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructible
+    vfx:
+    - CEEffectAreaHealingEffect
+
+- type: entity
+  id: CEConsumablePotionMana
+  parent: CEConsumablePotionBase
+  name: mana potion
+  description: TODO
+  components:
+  - type: Sprite
+    layers:
+    - state: fill
+      color: "#1f36b6"
+    - state: icon
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 10
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:RestoreMana
+      amount: 5
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructible
+    vfx:
+    - CEEffectAreaHealingEffect
+
+# Empty potion vial (trash left after a multi-charge potion)
+- type: entity
+  id: CEPotionEmpty
+  parent: CEPotionBase
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+    layers:
+    - state: icon
