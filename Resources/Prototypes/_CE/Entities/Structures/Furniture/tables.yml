@@ -1,0 +1,74 @@
+- type: entity
+  parent:
+  - BaseStructure
+  id: CETableBase
+  categories: [ ForkFiltered ]
+  abstract: true
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 55
+        mask: # tables should collide with other tables
+        - TableMask
+        layer:
+        - TableLayer
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepHull
+  - type: Climbable
+  - type: PlaceableSurface
+  - type: PlacementReplacement
+    key: walls
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Physical: 1
+
+- type: entity
+  parent:
+  - CETableBase
+  id: CEWoodenTableBase
+  abstract: true
+  components:
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWood
+  - type: CEFlammable
+    stackDelta: 1
+
+- type: entity
+  parent: CEWoodenTableBase
+  id: CETableWoodenFrame
+  name: wooden table frame
+  description: Base for any wooden table
+  components:
+  - type: Sprite
+    snapCardinals: true
+    sprite: _CE/Structures/Furniture/Tables/wood.rsi
+    state: frame
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Tables/wood.rsi
+    state: frame
+
+- type: entity
+  parent: CEWoodenTableBase
+  id: CETableWooden
+  name: wooden table
+  description: A simple table made of boards.
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/Tables/wood.rsi
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Tables/wood.rsi
+    state: full
+  - type: IconSmooth
+    key: state
+    base: state
