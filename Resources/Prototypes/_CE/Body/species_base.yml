@@ -6,7 +6,6 @@
   - CEMobCombat
   - CEMobDamageable
   - CEMobMagical
-  - CEMobStatBased
   - StripableInventoryBase
   - BaseSpeciesAppearance
   id: CEBaseSpeciesMob
@@ -90,3 +89,5 @@
     tags:
     - FootstepSound
   - type: CEBlinker
+  - type: CEBlessingReceiver
+  - type: CESkillStorage
