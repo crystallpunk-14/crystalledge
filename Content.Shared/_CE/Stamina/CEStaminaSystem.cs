@@ -90,7 +90,7 @@ public sealed class CEStaminaSystem : EntitySystem
 
         if (ent.Comp.Exhausted)
         {
-            _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), ent, ent, PopupType.SmallCaution);
+            TryPopupNotEnough(ent, ent.Comp);
             return false;
         }
 
@@ -98,7 +98,7 @@ public sealed class CEStaminaSystem : EntitySystem
 
         if (current <= 0)
         {
-            _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), ent, ent, PopupType.SmallCaution);
+            TryPopupNotEnough(ent, ent.Comp);
             return false;
         }
 
@@ -141,5 +141,18 @@ public sealed class CEStaminaSystem : EntitySystem
 
         var elapsed = (float) (curTime - comp.RegenStartTime).TotalSeconds;
         return Math.Min(comp.Stamina + elapsed * comp.RegenRate, comp.MaxStamina);
+    }
+
+    private static readonly TimeSpan PopupCooldown = TimeSpan.FromSeconds(2);
+
+    private void TryPopupNotEnough(EntityUid uid, CEStaminaComponent comp)
+    {
+        var curTime = _timing.CurTime;
+
+        if (curTime < comp.NextPopupTime)
+            return;
+
+        comp.NextPopupTime = curTime + PopupCooldown;
+        _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), uid, uid, PopupType.SmallCaution);
     }
 }

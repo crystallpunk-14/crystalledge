@@ -55,6 +55,13 @@ public sealed partial class CEStaminaComponent : Component
     public bool Exhausted;
 
     /// <summary>
+    /// Next time a "not enough stamina" popup is allowed. Prevents spam.
+    /// Not networked — tracked locally on the predicting side.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan NextPopupTime;
+
+    /// <summary>
     /// Movement speed multiplier applied while exhausted (0.7 = 30% slower).
     /// </summary>
     [DataField]
