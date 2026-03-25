@@ -9,8 +9,6 @@
   components:
   - type: Item
     size: Tiny
-  - type: Sprite
-    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
   - type: CEDamageable
   - type: CEDamageOnLand
     damage:
@@ -34,7 +32,6 @@
     whitelist:
       components:
       - CEMobState
-    replacementEntity: CEPotionEmpty
     useDelay: 1.5
     useSound:
       path: /Audio/Items/drink.ogg
@@ -44,6 +41,45 @@
       components:
       - CEMobState
 
+- type: entity
+  id: CEPotionSmall
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/small_bottle.rsi
+  - type: CEConsumable
+    replacementEntity: CEPotionEmptySmall
+
+- type: entity
+  id: CEPotionMedium
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+  - type: CEConsumable
+    replacementEntity: CEPotionEmptyMedium
+
+
+# Empty potion vial (trash left after a multi-charge potion)
+- type: entity
+  id: CEPotionEmptyMedium
+  parent: CEPotionBase
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+    layers:
+    - state: icon
+
+- type: entity
+  id: CEPotionEmptySmall
+  parent: CEPotionBase
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/small_bottle.rsi
+    layers:
+    - state: icon
+
+#Shards
 - type: entity
   id: CEGlassShard
   parent: BaseItem
@@ -66,10 +102,43 @@
           shard2: ""
 
 
+# Healing potion
+- type: entity
+  id: CEConsumablePotionHealingSmall
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionSmall
+  name: small healing potion
+  description: A simple healing potion. Drink it, or throw it at whoever you want to see get well.
+  components:
+  - type: Sprite
+    layers:
+    - state: fill
+      color: "#b63d1f"
+    - state: icon
+  - type: CEConsumable
+    effects:
+    - !type:Heal
+      amount: 5
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:Heal
+      amount: 2
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructible
+    vfx:
+    - CEEffectAreaHealingEffect
 
 - type: entity
-  id: CEConsumablePotionHealing
-  parent: CEConsumablePotionBase
+  id: CEConsumablePotionHealingMedium
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
   name: healing potion
   description: A simple healing potion. Drink it, or throw it at whoever you want to see get well.
   components:
@@ -96,9 +165,44 @@
     vfx:
     - CEEffectAreaHealingEffect
 
+
+# Mana potion
 - type: entity
-  id: CEConsumablePotionMana
-  parent: CEConsumablePotionBase
+  id: CEConsumablePotionManaSmall
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionSmall
+  name: small mana potion
+  description: TODO
+  components:
+  - type: Sprite
+    layers:
+    - state: fill
+      color: "#1f36b6"
+    - state: icon
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 5
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:RestoreMana
+      amount: 2
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructible
+    vfx:
+    - CEEffectAreaHealingEffect
+
+- type: entity
+  id: CEConsumablePotionManaMedium
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
   name: mana potion
   description: TODO
   components:
@@ -124,13 +228,3 @@
   - type: CEDestructible
     vfx:
     - CEEffectAreaHealingEffect
-
-# Empty potion vial (trash left after a multi-charge potion)
-- type: entity
-  id: CEPotionEmpty
-  parent: CEPotionBase
-  components:
-  - type: Sprite
-    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
-    layers:
-    - state: icon
