@@ -1,7 +1,6 @@
 using Content.Shared.EntityTable.EntitySelectors;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Health.Components;
 
@@ -24,7 +23,4 @@ public sealed partial class CEDestructibleComponent : Component
 
     [DataField]
     public EntityTableSelector? LootTable;
-
-    [DataField]
-    public List<EntProtoId> Vfx = new();
 }

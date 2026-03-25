@@ -9,7 +9,7 @@ public sealed partial class IgniteArea : CEEntityEffectBase<IgniteArea>
     [DataField]
     public float FallOffFactor = 0.5f;
     [DataField]
-    public int MaxStacks = 10;
+    public int MaxStacks = 3;
 }
 
 public sealed partial class CEIgniteAreaEffectSystem : CEEntityEffectSystem<IgniteArea>

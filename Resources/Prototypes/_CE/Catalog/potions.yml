@@ -22,6 +22,10 @@
       tableId: CEHealingPotion
     - !type:NestedSelector
       tableId: CEManaPotion
+    - id: CEConsumablePotionFrost
+      weight: 0.5
+    - id: CEConsumablePotionAlchemicalFire
+      weight: 0.5
 
 - type: entity
   id: CESpawnerRandomPotion

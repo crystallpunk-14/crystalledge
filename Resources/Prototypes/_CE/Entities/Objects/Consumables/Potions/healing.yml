@@ -1,0 +1,103 @@
+- type: entity
+  id: CEConsumablePotionHealingSmall
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionSmall
+  name: small healing potion
+  description: A simple healing potion. Drink it, or throw it at whoever you want to see get well.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#b63d1f"
+  - type: CEConsumable
+    effects:
+    - !type:Heal
+      amount: 5
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:Heal
+        amount: 2
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntityOnUser
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible
+
+- type: entity
+  id: CEConsumablePotionHealingMedium
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
+  name: healing potion
+  description: A simple healing potion. Drink it, or throw it at whoever you want to see get well.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#b63d1f"
+  - type: CEConsumable
+    effects:
+    - !type:Heal
+      amount: 10
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:Heal
+        amount: 5
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntityOnUser
+      spawns:
+      - CEEffectPotionHealing
+  - type: CEDestructible
+
+- type: entity
+  id: CEEffectPotionHealing
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/area_healing_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#8dd0e8"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

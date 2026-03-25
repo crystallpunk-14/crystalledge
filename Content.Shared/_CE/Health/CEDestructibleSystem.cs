@@ -72,11 +72,6 @@ public sealed class CEDestructibleSystem : EntitySystem
             }
         }
 
-        foreach (var vfx in ent.Comp.Vfx)
-        {
-            SpawnAtPosition(vfx, position);
-        }
-
         var destructedEv = new CEDestructedEvent(position, args.Source);
         RaiseLocalEvent(ent.Owner, ref destructedEv);
 

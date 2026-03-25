@@ -1,13 +1,9 @@
 using Content.Shared._CE.Health;
-using Content.Shared.Whitelist;
 
 namespace Content.Shared._CE.EntityEffect.Systems;
 
 public sealed class CEDestructionEffectSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-
     public override void Initialize()
     {
         base.Initialize();
@@ -16,35 +12,18 @@ public sealed class CEDestructionEffectSystem : EntitySystem
 
     private void OnDestructed(Entity<CEDestructionEffectComponent> ent, ref CEDestructedEvent args)
     {
-        var entitiesAround = _lookup.GetEntitiesInRange(args.Position, ent.Comp.Range, LookupFlags.Uncontained);
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            ent.Owner,
+            null,
+            Angle.Zero,
+            0f,
+            null,
+            args.Position);
 
-        var count = 0;
-        foreach (var entity in entitiesAround)
+        foreach (var effect in ent.Comp.Effects)
         {
-            if (entity == ent.Owner)
-                continue;
-
-            if (!_whitelist.CheckBoth(entity, ent.Comp.Blacklist, ent.Comp.Whitelist))
-                continue;
-
-            var effectArgs = new CEEntityEffectArgs(
-                EntityManager,
-                ent.Owner,
-                null,
-                Angle.Zero,
-                0f,
-                entity,
-                Transform(entity).Coordinates);
-
-            foreach (var effect in ent.Comp.Effects)
-            {
-                effect.Effect(effectArgs);
-            }
-
-            count++;
-
-            if (ent.Comp.MaxTargets > 0 && count >= ent.Comp.MaxTargets)
-                break;
+            effect.Effect(effectArgs);
         }
     }
 }

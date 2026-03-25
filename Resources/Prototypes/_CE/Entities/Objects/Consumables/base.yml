@@ -1,0 +1,98 @@
+# Base consumable potion
+- type: entity
+  id: CEPotionBase
+  parent: BaseItem
+  abstract: true
+  categories: [ ForkFiltered ]
+  name: empty vial
+  description: A potion was poured here once. Or will be. Who knows?
+  components:
+  - type: Item
+    size: Tiny
+  - type: CEDamageable
+  - type: CEDamageOnLand
+    damage:
+      types:
+        Physical: 1
+  - type: CEDestructible
+    destroyThreshold: 1
+    destroySound:
+      collection: GlassBreak
+    lootTable: !type:AllSelector
+      children:
+      - id: CEGlassShard
+        amount: 1
+
+- type: entity
+  id: CEConsumablePotionBase
+  parent: CEPotionBase
+  abstract: true
+  components:
+  - type: CEConsumable
+    whitelist:
+      components:
+      - CEMobState
+    useDelay: 1.5
+    useSound:
+      path: /Audio/Items/drink.ogg
+  - type: CEDestructionEffect
+
+- type: entity
+  id: CEPotionSmall
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/small_bottle.rsi
+  - type: CEConsumable
+    replacementEntity: CEPotionEmptySmall
+
+- type: entity
+  id: CEPotionMedium
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+  - type: CEConsumable
+    replacementEntity: CEPotionEmptyMedium
+
+
+# Empty potion vial (trash left after a multi-charge potion)
+- type: entity
+  id: CEPotionEmptyMedium
+  parent: CEPotionBase
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+    layers:
+    - state: icon
+
+- type: entity
+  id: CEPotionEmptySmall
+  parent: CEPotionBase
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/small_bottle.rsi
+    layers:
+    - state: icon
+
+#Shards
+- type: entity
+  id: CEGlassShard
+  parent: BaseItem
+  name: glass shard
+  description: Sharp pieces of glass. Don't step on it!
+  categories: [ ForkFiltered ]
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/shards.rsi
+    layers:
+    - state: shard1
+      map: [ "random" ]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          shard1: ""
+          shard2: ""

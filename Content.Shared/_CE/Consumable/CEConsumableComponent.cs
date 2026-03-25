@@ -42,18 +42,6 @@ public sealed partial class CEConsumableComponent : Component
     public EntProtoId? ReplacementEntity;
 
     /// <summary>
-    /// Number of uses remaining. If null, the item is single-use (consumed after first use).
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public int? Charges;
-
-    /// <summary>
-    /// Maximum number of charges. Stored for reference/UI. Automatically set from <see cref="Charges"/> on map init.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public int? MaxCharges;
-
-    /// <summary>
     /// If set, only entities matching this whitelist can be targeted by this consumable.
     /// </summary>
     [DataField]

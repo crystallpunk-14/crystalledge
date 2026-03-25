@@ -3,6 +3,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Serialization;
@@ -21,16 +22,10 @@ public sealed class CEConsumableSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEConsumableComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEConsumableComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<CEConsumableComponent, AfterInteractEvent>(OnAfterInteract);
+        SubscribeLocalEvent<CEConsumableComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAltVerbs);
         SubscribeLocalEvent<CEConsumableComponent, CEUseConsumableDoAfterEvent>(OnDoAfter);
-    }
-
-    private void OnMapInit(Entity<CEConsumableComponent> ent, ref MapInitEvent args)
-    {
-        if (ent.Comp.Charges is { } charges && ent.Comp.MaxCharges == null)
-            ent.Comp.MaxCharges = charges;
     }
 
     private void OnUseInHand(Entity<CEConsumableComponent> ent, ref UseInHandEvent args)
@@ -61,7 +56,26 @@ public sealed class CEConsumableSystem : EntitySystem
             args.Handled = true;
     }
 
-    private bool TryStartDoAfter(Entity<CEConsumableComponent> ent, EntityUid user, EntityUid target, TimeSpan delay)
+    private void OnGetAltVerbs(Entity<CEConsumableComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanInteract || !args.CanAccess)
+            return;
+
+        if (!_whitelist.CheckBoth(args.User, ent.Comp.Blacklist, ent.Comp.Whitelist))
+            return;
+
+        var user = args.User;
+        var held = _hands.IsHolding(user, ent, out _);
+
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Act = () => TryStartDoAfter(ent, user, user, ent.Comp.UseDelay, needHand: held),
+            Text = Loc.GetString("ce-consumable-verb-consume"),
+            Priority = 2,
+        });
+    }
+
+    private bool TryStartDoAfter(Entity<CEConsumableComponent> ent, EntityUid user, EntityUid target, TimeSpan delay, bool needHand = true)
     {
         var doAfterArgs = new DoAfterArgs(
             EntityManager,
@@ -72,9 +86,9 @@ public sealed class CEConsumableSystem : EntitySystem
             target: target,
             used: ent.Owner)
         {
-            BreakOnMove = false,
+            BreakOnMove = !needHand,
             BreakOnDamage = true,
-            NeedHand = true,
+            NeedHand = needHand,
         };
 
         return _doAfter.TryStartDoAfter(doAfterArgs);
@@ -90,7 +104,7 @@ public sealed class CEConsumableSystem : EntitySystem
 
         args.Handled = true;
 
-        _audio.PlayPredicted(ent.Comp.UseSound, ent.Owner, args.User);
+        _audio.PlayPredicted(ent.Comp.UseSound, Transform(ent).Coordinates, args.User);
 
         // Apply all effects to the target.
         var effectArgs = new CEEntityEffectArgs(
@@ -105,17 +119,6 @@ public sealed class CEConsumableSystem : EntitySystem
         foreach (var effect in ent.Comp.Effects)
         {
             effect.Effect(effectArgs);
-        }
-
-        // Handle charges.
-        if (ent.Comp.Charges is { } charges)
-        {
-            charges--;
-            ent.Comp.Charges = charges;
-            Dirty(ent);
-
-            if (charges > 0)
-                return;
         }
 
         // Item is depleted (or single-use without charges) — spawn replacement and delete.

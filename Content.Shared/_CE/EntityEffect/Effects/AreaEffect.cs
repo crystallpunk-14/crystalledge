@@ -44,7 +44,7 @@ public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<Area
             if (entity == args.Args.User && !args.Effect.AffectCaster)
                 continue;
 
-            if (!_whitelist.CheckBoth(entity, args.Effect.Whitelist, args.Effect.Blacklist))
+            if (!_whitelist.CheckBoth(entity, args.Effect.Blacklist, args.Effect.Whitelist))
                 continue;
 
             var nestedArgs = args.Args with { Target = entity, Position = null };

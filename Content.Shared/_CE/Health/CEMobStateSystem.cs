@@ -40,8 +40,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
         SubscribeLocalEvent<CEMobStateComponent, RejuvenateEvent>(OnRejuvenate);
 
         // Action blocking
-        SubscribeLocalEvent<CEMobStateComponent, ChangeDirectionAttemptEvent>(OnBlockIfCritical);
-        SubscribeLocalEvent<CEMobStateComponent, UpdateCanMoveEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, UseAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, AttackAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, ThrowAttemptEvent>(OnBlockIfCritical);
@@ -49,8 +47,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
         SubscribeLocalEvent<CEMobStateComponent, PickupAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, StartPullAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, StandAttemptEvent>(OnBlockIfCritical);
-        SubscribeLocalEvent<CEMobStateComponent, PointAttemptEvent>(OnBlockIfCritical);
-        SubscribeLocalEvent<CEMobStateComponent, SpeakAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
