@@ -43,7 +43,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             var animationEndTime = controller.StartAnimationTime + (animation.Duration * speedMultiplier);
 
             //Finishing animation
-            if (_timing.CurTime > animationEndTime)
+            if (_timing.CurTime >= animationEndTime)
             {
                 var finishedEv = new CEAnimationActionEndedEvent(animation, false);
                 RaiseLocalEvent(uid, finishedEv);
