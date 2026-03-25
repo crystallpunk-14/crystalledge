@@ -12,6 +12,9 @@
     damage:
       types:
         Physical: 2
+    staminaCost:
+      Primary: 2
+      Secondary: 3
     animations:
       Primary:
       - anim: SpearAttackLight

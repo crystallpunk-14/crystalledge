@@ -12,6 +12,9 @@
     damage:
       types:
         Physical: 2
+    staminaCost:
+      Primary: 1
+      Secondary: 2
     animations:
       Primary:
       - anim: SkimitarAttackLight1
