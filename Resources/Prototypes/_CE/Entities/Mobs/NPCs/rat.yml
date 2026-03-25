@@ -18,7 +18,7 @@
     destroyThreshold: 3
     destroySound:
       collection: gib
-    loot: !type:AllSelector
+    lootTable: !type:AllSelector
       children:
       - id: CECoinCopper1
         amount: 1

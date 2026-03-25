@@ -35,6 +35,9 @@ public sealed class CEDestructibleSystem : EntitySystem
         if (args.NewDamage < ent.Comp.DestroyThreshold)
             return;
 
+        if (TerminatingOrDeleted(ent.Owner))
+            return;
+
         var xform = Transform(ent);
         EntityCoordinates position;
 
@@ -45,13 +48,16 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
+        // PlayPvs sends to everyone in range (including the source).
+        // PlayPredicted would exclude the thrower, who may not be running
+        // client prediction for this entity.
         if (ent.Comp.DestroySound is not null)
-            _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
+            _audio.PlayPvs(ent.Comp.DestroySound, Transform(ent).Coordinates);
 
         // Server-side: spawn loot. TODO: prediction someway??
-        if (_net.IsServer && ent.Comp.Loot is not null)
+        if (_net.IsServer && ent.Comp.LootTable is not null)
         {
-            var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
+            var spawns = _entityTable.GetSpawns(ent.Comp.LootTable);
             foreach (var spawn in spawns)
             {
                 var spawnedLoot = SpawnAtPosition(spawn, position);
@@ -62,6 +68,11 @@ public sealed class CEDestructibleSystem : EntitySystem
                     2f
                 );
             }
+        }
+
+        foreach (var vfx in ent.Comp.Vfx)
+        {
+            SpawnAtPosition(vfx, position);
         }
 
         var destructedEv = new CEDestructedEvent(position, args.Source);

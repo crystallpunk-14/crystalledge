@@ -1,6 +1,5 @@
 using Content.Shared._CE.Health;
 using Content.Shared.Whitelist;
-using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.EntityEffect.Systems;
 

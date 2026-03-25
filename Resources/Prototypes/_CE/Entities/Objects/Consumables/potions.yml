@@ -42,9 +42,6 @@
     - !type:SpawnEntityOnTarget
       spawns:
       - CEEffectHealingGeneric
-    - !type:SpawnEntityOnUser
-      spawns:
-      - CEEffectAreaHealingEffect
   - type: CEDamageable
   - type: CEDamageOnLand
     damage:
@@ -52,6 +49,8 @@
         Physical: 1
   - type: CEDestructible
     destroyThreshold: 1
+    vfx:
+    - CEEffectAreaHealingEffect
     destroySound:
       collection: GlassBreak
 
