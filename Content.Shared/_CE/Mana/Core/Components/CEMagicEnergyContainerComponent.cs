@@ -13,8 +13,8 @@ public sealed partial class CEMagicEnergyContainerComponent : Component
     /// Current available energy.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int Energy = 10;
+    public int Energy = 20;
 
     [DataField, AutoNetworkedField]
-    public int MaxEnergy = 10;
+    public int MaxEnergy = 20;
 }

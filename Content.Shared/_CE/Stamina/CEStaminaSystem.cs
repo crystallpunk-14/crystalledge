@@ -143,8 +143,6 @@ public sealed class CEStaminaSystem : EntitySystem
         return Math.Min(comp.Stamina + elapsed * comp.RegenRate, comp.MaxStamina);
     }
 
-    private static readonly TimeSpan PopupCooldown = TimeSpan.FromSeconds(2);
-
     private void TryPopupNotEnough(EntityUid uid, CEStaminaComponent comp)
     {
         var curTime = _timing.CurTime;
@@ -152,7 +150,7 @@ public sealed class CEStaminaSystem : EntitySystem
         if (curTime < comp.NextPopupTime)
             return;
 
-        comp.NextPopupTime = curTime + PopupCooldown;
+        comp.NextPopupTime = curTime + TimeSpan.FromSeconds(2);
         _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), uid, uid, PopupType.SmallCaution);
     }
 }
