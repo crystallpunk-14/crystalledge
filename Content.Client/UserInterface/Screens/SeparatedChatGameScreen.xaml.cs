@@ -40,7 +40,7 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetMarginLeft(ManaBar, manaOffset);
 
         // Stamina bar at center bottom
-        SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 75);
+        SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 80);
         SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);
         SetMarginRight(StaminaBar, StaminaBar.MinSize.X / 2f);
         // CrystallEdge end
