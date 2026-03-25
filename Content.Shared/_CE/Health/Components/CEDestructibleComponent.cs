@@ -10,6 +10,7 @@ namespace Content.Shared._CE.Health.Components;
 /// Works independently from <see cref="CEMobStateComponent"/>.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[Access(typeof(CEDestructibleSystem))]
 public sealed partial class CEDestructibleComponent : Component
 {
     /// <summary>

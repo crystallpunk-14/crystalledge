@@ -6,6 +6,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
 
@@ -22,6 +23,7 @@ public sealed class CEDestructibleSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -35,7 +37,10 @@ public sealed class CEDestructibleSystem : EntitySystem
         if (args.NewDamage < ent.Comp.DestroyThreshold)
             return;
 
-        if (TerminatingOrDeleted(ent.Owner))
+        if (TerminatingOrDeleted(ent.Owner) || EntityManager.IsQueuedForDeletion(ent.Owner))
+            return;
+
+        if (!_timing.IsFirstTimePredicted)
             return;
 
         var xform = Transform(ent);
@@ -48,9 +53,6 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        // PlayPvs sends to everyone in range (including the source).
-        // PlayPredicted would exclude the thrower, who may not be running
-        // client prediction for this entity.
         if (ent.Comp.DestroySound is not null)
             _audio.PlayPvs(ent.Comp.DestroySound, Transform(ent).Coordinates);
 
