@@ -20,5 +20,5 @@
 - type: alert
   id: CEAffinityIce
   icons:
-  - sprite: _CE/Skills/affinity_ice.rsi
+  - sprite: _CE/Skills/Mage/affinity_ice.rsi
     state: icon

@@ -1,0 +1,83 @@
+- type: skill
+  parent: BaseMageSkill
+  id: ManaGift
+  effect: !type:AddAction
+    action: CEActionManaGift
+
+- type: entity
+  id: CEActionManaGift
+  parent: CEActionSpellBase
+  name: Mana Gift
+  description: Restore 5 mana to the selected target
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: CEActionManaCost
+    canModifyManacost: false
+    manaCost: 5
+  - type: Action
+    useDelay: 2
+    icon:
+      sprite: _CE/Skills/Mage/mana_gift.rsi
+      state: icon
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      requireAll: true
+      components:
+      - CEMobState
+      - CEMagicEnergyContainer
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationManaGift
+
+- type: entityEffectAnimation
+  id: AnimationManaGift
+  movementSpeed: 0.5
+  duration: 0.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+    - !type:SayChat
+      sentence: "Dare magis"
+    0.45:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+    - !type:RestoreMana
+      amount: 5
+
+- type: entity
+  id: CEEffectManaRestore
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: mana restore effect
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/mana_restore_generic.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#5428e7"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

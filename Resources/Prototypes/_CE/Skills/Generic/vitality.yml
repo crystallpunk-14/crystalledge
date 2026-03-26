@@ -11,7 +11,7 @@
 - type: entity
   id: CEStatusEffectVitality
   name: Vitality
-  description: Your maximum health is increased by [color=#2bef1d]10[/color].
+  description: Your maximum health is increased by [color=#f54730]10[/color].
   components:
   - type: StatusEffect
   - type: CEVitalityStatusEffect
