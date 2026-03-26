@@ -38,11 +38,6 @@
     pants: CEClothingPriestPantsDark
 
 - type: loadout
-  id: CEClothingPriestPantsDark2
-  equipment:
-    pants: CEClothingPriestPantsDark2
-
-- type: loadout
   id: CEClothingPriestPantsWhite
   equipment:
     pants: CEClothingPriestPantsWhite

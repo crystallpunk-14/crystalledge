@@ -22,17 +22,3 @@
   categories: [ ForkFiltered ]
   components:
   - type: CombatMode
-  - type: CEWeapon
-    spriteRotation: -90
-    damage:
-      types:
-        Physical: 1
-    animations:
-      Primary:
-      - anim: SwordAttackLight1
-      - anim: SwordAttackLight2
-      Secondary:
-      - anim: SwordAttackHeavy1
-        speed: 1
-      - anim: SwordAttackHeavy2
-        speed: 1
