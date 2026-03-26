@@ -1,0 +1,39 @@
+- type: skill
+  parent: BaseMageSkill
+  id: FairyStealMagicEnergy
+  effect: !type:AddAction
+    action: CEActionSpellFairyStealMagicEnergy
+
+- type: entity
+  id: CEActionSpellFairyStealMagicEnergy
+  parent: CEActionSpellBase
+  name: Steal Magic Energy
+  description: You absorb a small amount of mana from the target.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: Action
+    useDelay: 2
+    icon:
+      sprite: _CE/Interface/steal_mana.rsi
+      state: steal_mana
+  - type: TargetAction
+    range: 5
+  - type: CEActionManaCost
+    manaCost: 1
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CEMagicEnergyContainer
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationFairyStealMagicEnergy
+
+- type: entityEffectAnimation
+  id: AnimationFairyStealMagicEnergy
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:StealMagicEnergy
+      energyCount: 5

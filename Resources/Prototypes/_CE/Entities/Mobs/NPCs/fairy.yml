@@ -1,0 +1,112 @@
+- type: entity
+  parent:
+  - BaseMob
+  - MobFlammable
+  - CEMobDamageable
+  id: CEFairy
+  name: fairy
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:  
+  - type: CEGOAP
+    goals:
+    - desiredState:
+        LowHealth: false
+      priority: 3
+    - desiredState:
+        StealingEnergy: true
+      priority: 2
+    - desiredState:
+        Exploring: true
+      priority: 1
+
+    # Steal Magic Energy
+    actions:
+    - !type:CEGOAPUseAction
+      targetKey: target
+      preconditions:
+        OnTarget: true
+      effects:
+        StealingEnergy: true
+      actionPrototype: CEActionSpellFairyStealMagicEnergy
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: target
+      preconditions:
+        TargetExists: true
+      effects:
+        OnTarget: true
+      cost: 1
+      range: 5
+    # Explore
+    - !type:CEGOAPExploreAction
+      effects:
+        Exploring: true
+      cost: 1
+      exploreRadius: 8
+    # Move to target last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: target
+      effects:
+        TargetExists: true
+      preconditions:
+        HasTargetLastPos: true
+      cost: 0.5
+    - !type:CEGOAPUseAction
+      targetKey: self
+      effects:
+        LowHealth: false
+      cost: 1
+      actionPrototype: CEActionSpellAreaHealing
+    sensors:
+    - !type:CEGOAPFilteredEntityExistsInRangeSensor
+      conditionKey: TargetExists
+      outputTargetKey: target
+      whitelist:
+        components:
+          - CEMagicEnergyContainer
+      blacklist:
+        components:
+          - CEEmptyMagicEnergyContainer
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasTargetLastPos
+      positionTargetKey: target
+    - !type:CEGOAPCheckHealthLevelSensor
+      conditionKey: LowHealth
+      threshold: 0.2
+
+  - type: CEMagicEnergyContainer
+    maxEnergy: 200
+  - type: MovementSpeedModifier
+    baseWalkSpeed : 2
+    baseSprintSpeed : 6
+  - type: Sprite
+    drawdepth: Mobs
+    color: "#42AAFF"
+    sprite: _CE/Mobs/fairy.rsi
+    layers:
+    - map: [ "livingState" ]
+      state: alive
+  - type: GenericVisualizer
+    visuals:
+      enum.CEMobStateVisuals.State:
+        livingState:
+          Alive: { state: alive }
+          Critical: { state: dead }
+          Dead: { state: dead }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 7.5
+        mask:
+        - FlyingMobMask
+        layer:
+        - FlyingMobLayer
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile  
+  - type: MovementIgnoreGravity
+  - type: Appearance

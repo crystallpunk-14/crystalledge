@@ -15,6 +15,22 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
         SubscribeLocalEvent<CEMagicEnergyExaminableComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CEMagicEnergyAmbientSoundComponent, CESlotCrystalPowerChangedEvent>(OnSlotPowerChanged);
+        SubscribeLocalEvent<CEMagicEnergyContainerComponent, CEMagicEnergyLevelChangeEvent>(OnMagicEnergyChanged);
+    }
+
+    private void OnMagicEnergyChanged(Entity<CEMagicEnergyContainerComponent> ent, ref CEMagicEnergyLevelChangeEvent args)
+    {
+        if (!TryComp<CEMagicEnergyContainerComponent>(ent, out var magicContainer))
+            return;
+
+        if (magicContainer.Energy > 0)
+        {
+            RemCompDeferred<CEEmptyMagicEnergyContainerComponent>(ent);
+            return;
+        }
+
+        EnsureComp<CEEmptyMagicEnergyContainerComponent>(ent);
+
     }
 
     private void OnRejuvenate(Entity<CEMagicEnergyContainerComponent> ent, ref RejuvenateEvent args)
@@ -88,7 +104,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         var transferEnergy = Math.Min(freeSpace, energy);
 
         ChangeEnergy(sender, -transferEnergy, out var change, out var overload);
-        ChangeEnergy(receiver , -(change + overload), out deltaEnergy, out overloadEnergy);
+        ChangeEnergy(receiver, -(change + overload), out deltaEnergy, out overloadEnergy);
     }
 
     public bool HasEnergy(EntityUid uid, int energy, CEMagicEnergyContainerComponent? component = null)

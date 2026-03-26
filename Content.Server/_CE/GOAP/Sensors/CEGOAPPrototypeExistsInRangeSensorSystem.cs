@@ -30,6 +30,12 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     /// </summary>
     [DataField]
     public int MinCount = 1;
+    
+    /// <summary>
+    /// Make the found entity the target.
+    /// </summary>
+    [DataField]
+    public string OutputTargetKey = string.Empty;
 
     public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.1);
 }
@@ -52,7 +58,11 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSen
                 count++;
 
             if (count >= args.Sensor.MinCount)
+            {
+                if (args.Sensor.OutputTargetKey != string.Empty)
+                    Goap.SetTarget(ent, args.Sensor.OutputTargetKey, entityUid);
                 return true;
+            }
         }
         return false;
     }
