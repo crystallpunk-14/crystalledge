@@ -1,6 +1,7 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.Actions.Events;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP.Actions;
@@ -47,6 +48,15 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
             return;
 
         if (!TryComp<ActionComponent>(actionEntity.Value, out var actionComp))
+        {
+            args.CanExecute = false;
+            return;
+        }
+
+        //TODO: this should be really inside vanilla Action system, something like CanPerform method
+        var attemptEv = new ActionAttemptEvent(ent);
+        RaiseLocalEvent(actionEntity.Value, ref attemptEv);
+        if (attemptEv.Cancelled)
         {
             args.CanExecute = false;
             return;

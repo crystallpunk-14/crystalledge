@@ -45,7 +45,7 @@ public sealed partial class CEGOAPSystem
 
         if (!_mobState.IsAlive(ent))
             return;
-        
+
         args.WakeUp();
     }
 

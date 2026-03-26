@@ -10,7 +10,8 @@
   categories: [ ForkFiltered ]
   components:
   - type: CEMagicEnergyContainer
-    maxEnergy: 100
+    energy: 100
+    baseMaxEnergy: 100
   - type: CEGOAP
     goals:
     # Most important - stay alive
