@@ -53,6 +53,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
 public sealed class CEClientMobStateSystem : EntitySystem
 {
     private readonly Dictionary<EntityUid, CEMobState> _previousStates = new();
+    private readonly Dictionary<EntityUid, int> _previousThresholds = new();
 
     public override void Initialize()
     {
@@ -74,10 +75,27 @@ public sealed class CEClientMobStateSystem : EntitySystem
             var ev = new CEMobStateChangedEvent(uid, previousState, comp.CurrentState);
             RaiseLocalEvent(uid, ev, true);
         }
+
+        if (!_previousThresholds.TryGetValue(uid, out var previousThreshold))
+        {
+            _previousThresholds[uid] = comp.CriticalThreshold;
+        }
+        else if (previousThreshold != comp.CriticalThreshold)
+        {
+            _previousThresholds[uid] = comp.CriticalThreshold;
+            var ev = new CEMaxHealthChangedEvent(uid);
+            RaiseLocalEvent(uid, ev, true);
+        }
     }
 
     private void OnMobStateShutdown(EntityUid uid, CEMobStateComponent comp, ComponentShutdown args)
     {
         _previousStates.Remove(uid);
+        _previousThresholds.Remove(uid);
     }
+}
+
+public sealed class CEMaxHealthChangedEvent(EntityUid target) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
 }

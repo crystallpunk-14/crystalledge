@@ -1,3 +1,4 @@
+using Content.Client._CE.Health;
 using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
@@ -28,6 +29,7 @@ public sealed class CEHealthUiController : UIController
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<CEDamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<CEMobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CEMaxHealthChangedEvent>(OnMaxHealthChanged);
     }
 
     private void OnScreenLoad()
@@ -83,6 +85,14 @@ public sealed class CEHealthUiController : UIController
     }
 
     private void OnMobStateChanged(CEMobStateChangedEvent args)
+    {
+        if (_player.LocalEntity != args.Target)
+            return;
+
+        UpdateHealth(args.Target);
+    }
+
+    private void OnMaxHealthChanged(CEMaxHealthChangedEvent args)
     {
         if (_player.LocalEntity != args.Target)
             return;

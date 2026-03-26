@@ -1,6 +1,7 @@
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Audio;
 using Content.Shared.Examine;
+using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
 
 namespace Content.Shared._CE.Mana.Core;
@@ -149,6 +150,24 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
         RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, ent.Comp.Energy, ent.Comp.MaxEnergy), true);
     }
+
+    /// <summary>
+    /// Recalculates effective max mana by raising <see cref="CECalculateMaxManaEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEMagicEnergyContainerComponent.MaxEnergy"/> and scales current energy proportionally.
+    /// </summary>
+    public void RefreshMaxMana(EntityUid uid, CEMagicEnergyContainerComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp, false))
+            return;
+
+        var ev = new CECalculateMaxManaEvent(comp.BaseMaxEnergy);
+        RaiseLocalEvent(uid, ev);
+
+        var newMax = Math.Max(1, ev.MaxMana);
+
+        SetMaximumEnergy((uid, comp), newMax);
+    }
 }
 
 /// <summary>
@@ -161,4 +180,21 @@ public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue
     public readonly int OldValue = oldValue;
     public readonly int NewValue = newValue;
     public readonly int MaxValue = maxValue;
+}
+
+/// <summary>
+/// Raised on an entity to calculate its effective maximum mana.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final max mana = (BaseMaxMana + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateMaxManaEvent(int baseMaxMana) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public int BaseMaxMana = baseMaxMana;
+    public int FlatModifier;
+    public float Multiplier = 1f;
+
+    public int MaxMana => (int)((BaseMaxMana + FlatModifier) * Multiplier);
 }

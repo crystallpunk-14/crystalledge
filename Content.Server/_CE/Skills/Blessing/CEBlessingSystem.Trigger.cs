@@ -225,7 +225,7 @@ public sealed partial class CEBlessingSystem
             if (proto.Abstract)
                 continue;
 
-            if (_skill.HaveSkill(receiver, proto))
+            if (proto.Unique && _skill.HaveSkill(receiver, proto))
                 continue;
 
             if (alreadyPicked.Contains(proto.ID))

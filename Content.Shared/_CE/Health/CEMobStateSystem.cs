@@ -28,6 +28,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
 
     private const float CriticalSpeedModifier = 0.2f;
 
@@ -64,6 +65,8 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private void OnStartup(Entity<CEMobStateComponent> ent, ref ComponentStartup args)
     {
+        RefreshMaxHealth(ent, ent.Comp);
+
         var damage = 0;
         if (TryComp<CEDamageableComponent>(ent, out var dmg))
             damage = dmg.TotalDamage;
@@ -154,6 +157,43 @@ public sealed partial class CEMobStateSystem : EntitySystem
             damage = dmg.TotalDamage;
 
         UpdateState((ent, ent.Comp), ent.Comp, damage);
+    }
+
+    /// <summary>
+    /// Recalculates effective max health by raising <see cref="CECalculateMaxHealthEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEMobStateComponent.CriticalThreshold"/> and scales current damage proportionally.
+    /// </summary>
+    public void RefreshMaxHealth(EntityUid uid, CEMobStateComponent? mobState = null)
+    {
+        if (!Resolve(uid, ref mobState, false))
+            return;
+
+        var ev = new CECalculateMaxHealthEvent(mobState.BaseMaxHealth);
+        RaiseLocalEvent(uid, ev);
+
+        var newMax = Math.Max(1, ev.MaxHealth);
+        var oldMax = mobState.CriticalThreshold;
+
+        if (newMax == oldMax)
+            return;
+
+        mobState.CriticalThreshold = newMax;
+        Dirty(uid, mobState);
+
+        var hasDamage = TryComp<CEDamageableComponent>(uid, out var dmg);
+
+        // Scale damage proportionally to maintain the same health fraction.
+        if (hasDamage && oldMax > 0 && dmg!.TotalDamage > 0)
+        {
+            var scaledDamage = (int) MathF.Round(dmg.TotalDamage * ((float) newMax / oldMax));
+            _damageable.SetDamage((uid, dmg), scaledDamage);
+        }
+
+        // Recalculate state + visuals with new threshold.
+        var currentDamage = hasDamage ? dmg!.TotalDamage : 0;
+        UpdateState((uid, mobState), mobState, currentDamage);
+        SetDamageFraction(uid, mobState, currentDamage);
     }
 
     #region State Queries
