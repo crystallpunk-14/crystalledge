@@ -12,11 +12,14 @@ public sealed partial class CESayChatEffectSystem : CEEntityEffectSystem<SayChat
 
     protected override void Effect(ref CEEntityEffectEvent<SayChat> args)
     {
-        if (!HasComp<SpeechComponent>(args.Args.User) || HasComp<MutedComponent>(args.Args.User))
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
+            return;
+
+        if (!HasComp<SpeechComponent>(entity) || HasComp<MutedComponent>(entity))
             return;
         if (string.IsNullOrWhiteSpace(args.Effect.Sentence))
             return;
 
-        _chat.TrySendInGameICMessage(args.Args.User, Loc.GetString(args.Effect.Sentence), args.Effect.ChatType, true);
+        _chat.TrySendInGameICMessage(entity, Loc.GetString(args.Effect.Sentence), args.Effect.ChatType, true);
     }
 }

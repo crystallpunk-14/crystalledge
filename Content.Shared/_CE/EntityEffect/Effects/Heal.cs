@@ -14,9 +14,9 @@ public sealed partial class CEHealEffectSystem : CEEntityEffectSystem<Heal>
 
     protected override void Effect(ref CEEntityEffectEvent<Heal> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _health.Heal(args.Args.Target.Value, args.Effect.Amount, args.Args.User);
+        _health.Heal(entity, args.Effect.Amount, args.Args.User);
     }
 }

@@ -14,9 +14,9 @@ public sealed partial class CEStaminaDamageEffectSystem : CEEntityEffectSystem<S
 
     protected override void Effect(ref CEEntityEffectEvent<StaminaDamage> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _stamina.TakeStaminaDamage(args.Args.Target.Value, args.Effect.Damage, null, args.Args.User, args.Args.Used);
+        _stamina.TakeStaminaDamage(entity, args.Effect.Damage, null, args.Args.User, args.Args.Used);
     }
 }

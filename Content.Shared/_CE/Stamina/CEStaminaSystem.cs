@@ -118,6 +118,29 @@ public sealed class CEStaminaSystem : EntitySystem
     }
 
     /// <summary>
+    /// Restores stamina by the given amount, clamped to max.
+    /// If the entity was exhausted and stamina reaches max, clears exhaustion.
+    /// </summary>
+    public void RestoreStamina(Entity<CEStaminaComponent?> ent, float amount)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        var current = GetStamina(ent);
+        var newStamina = Math.Min(current + amount, ent.Comp.MaxStamina);
+        ent.Comp.Stamina = newStamina;
+        ent.Comp.RegenStartTime = _timing.CurTime;
+
+        if (ent.Comp.Exhausted && newStamina >= ent.Comp.MaxStamina)
+        {
+            ent.Comp.Exhausted = false;
+            _movement.RefreshMovementSpeedModifiers(ent);
+        }
+
+        Dirty(ent);
+    }
+
+    /// <summary>
     /// Returns the current stamina value for the entity, computed from the snapshot + elapsed regen.
     /// </summary>
     public float GetStamina(Entity<CEStaminaComponent?> ent)

@@ -29,18 +29,13 @@
   minLimit: 1
   loadouts:
   - CEClothingPriestPantsDark
-  - CEClothingPriestPantsDark2
   - CEClothingPriestPantsWhite
+  - CEClothingGeneralPantsDark
 
 - type: loadout
   id: CEClothingPriestPantsDark
   equipment:
     pants: CEClothingPriestPantsDark
-
-- type: loadout
-  id: CEClothingPriestPantsDark2
-  equipment:
-    pants: CEClothingPriestPantsDark2
 
 - type: loadout
   id: CEClothingPriestPantsWhite

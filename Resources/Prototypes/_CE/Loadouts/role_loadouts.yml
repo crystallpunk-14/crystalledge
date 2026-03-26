@@ -5,6 +5,7 @@
   - CEMageCloak
   - CEMageShirt
   - CEMagePants
+  - CEGeneralShoes
   - CEGeneralBag
 
 - type: roleLoadout
@@ -13,4 +14,15 @@
   - CEPriestCloak
   - CEPriestShirt
   - CEPriestPants
+  - CEGeneralShoes
+  - CEGeneralBag
+
+- type: roleLoadout
+  id: JobCEKnight
+  groups:
+  - CEKnightCloak
+  - CEKnightShirt
+  - CEKnightPants
+  - CEKnightGloves
+  - CEGeneralShoes
   - CEGeneralBag

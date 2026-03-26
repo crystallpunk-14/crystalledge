@@ -17,9 +17,9 @@ public sealed partial class CEFreezeEntityEffectSystem : CEEntityEffectSystem<Fr
 
     protected override void Effect(ref CEEntityEffectEvent<FreezeEntity> args)
     {
-        if (args.Args.Target is not { } target)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _frost.FreezeEntity(target, args.Effect.Stacks, args.Effect.MaxStacks > 0 ? args.Effect.MaxStacks : null);
+        _frost.FreezeEntity(entity, args.Effect.Stacks, args.Effect.MaxStacks > 0 ? args.Effect.MaxStacks : null);
     }
 }

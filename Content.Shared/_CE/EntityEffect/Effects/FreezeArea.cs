@@ -20,7 +20,7 @@ public sealed partial class CEFreezeAreaEffectSystem : CEEntityEffectSystem<Free
 
     protected override void Effect(ref CEEntityEffectEvent<FreezeArea> args)
     {
-        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
+        if (!TryResolveEffectCoordinates(args.Args, args.Effect.EffectTarget, out var targetPoint))
             return;
 
         _frost.FreezeArea(targetPoint, args.Effect.Radius, args.Effect.FallOffFactor, args.Effect.MaxStacks);

@@ -1,0 +1,52 @@
+- type: loadoutGroup
+  id: CEKnightShirt
+  name: ce-loadout-shirt
+  minLimit: 1
+  loadouts:
+  - CEClothingKnightShirtFighter
+
+- type: loadout
+  id: CEClothingKnightShirtFighter
+  equipment:
+    shirt: CEClothingKnightShirtFighter
+
+
+- type: loadoutGroup
+  id: CEKnightPants
+  name: ce-loadout-pants
+  minLimit: 1
+  loadouts:
+  - CEClothingGeneralPantsDark
+
+
+- type: loadoutGroup
+  id: CEKnightCloak
+  name: ce-loadout-cloak
+  minLimit: 1
+  loadouts:
+  - CEClothingKnightCloakCapeRed
+  - CEClothingKnightCloakFurRed
+
+- type: loadout
+  id: CEClothingKnightCloakCapeRed
+  equipment:
+    cloak: CEClothingKnightCloakCapeRed
+
+- type: loadout
+  id: CEClothingKnightCloakFurRed
+  equipment:
+    cloak: CEClothingKnightCloakFurRed
+
+
+- type: loadoutGroup
+  id: CEKnightGloves
+  name: ce-loadout-gloves
+  minLimit: 1
+  loadouts:
+  - CEClothingKnightGlovesFighter
+
+- type: loadout
+  id: CEClothingKnightGlovesFighter
+  equipment:
+    gloves: CEClothingKnightGlovesFighter
+

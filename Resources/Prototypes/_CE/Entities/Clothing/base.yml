@@ -41,6 +41,7 @@
   - type: Clothing
     equipDelay: 1
     unequipDelay: 1
+    equipWhileMoving: true
     slots:
     - cloak
   - type: Sprite
@@ -57,6 +58,7 @@
   - type: Clothing
     equipDelay: 1
     unequipDelay: 1
+    equipWhileMoving: true
     slots:
     - head
   - type: Sprite
@@ -64,8 +66,40 @@
 
 - type: entity
   abstract: true
-  parent:
-  - Clothing
+  parent: Clothing
+  id: CEClothingShoesBase
+  categories: [ ForkFiltered ]
+  name: shoes
+  description: TODO
+  components:
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 1
+    slots:
+    - feet
+  - type: Sprite
+    state: icon
+
+- type: entity
+  abstract: true
+  parent: Clothing
+  id: CEClothingGlovesBase
+  categories: [ ForkFiltered ]
+  name: gloves
+  description: TODO
+  components:
+  - type: Clothing
+    equipDelay: 0.5
+    unequipDelay: 0.5
+    equipWhileMoving: true
+    slots:
+    - gloves
+  - type: Sprite
+    state: icon
+
+- type: entity
+  abstract: true
+  parent: Clothing
   id: CEClothingBackContainerBase
   categories: [ ForkFiltered ]
   components:

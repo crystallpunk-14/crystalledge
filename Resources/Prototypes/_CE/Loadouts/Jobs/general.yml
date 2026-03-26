@@ -18,3 +18,33 @@
   id: CEClothingBackSatchel
   equipment:
     back: CEClothingBackSatchel
+
+
+# Pants
+
+- type: loadout
+  id: CEClothingGeneralPantsDark
+  equipment:
+    pants: CEClothingGeneralPantsDark
+
+
+# Shoes
+
+- type: loadoutGroup
+  id: CEGeneralShoes
+  name: ce-loadout-shoes
+  minLimit: 1
+  loadouts:
+  - CEClothingGeneralShoesAristocraticBlack
+  - CEClothingGeneralShoesLongLeatherBoots
+
+- type: loadout
+  id: CEClothingGeneralShoesAristocraticBlack
+  equipment:
+    shoes: CEClothingGeneralShoesAristocraticBlack
+
+- type: loadout
+  id: CEClothingGeneralShoesLongLeatherBoots
+  equipment:
+    shoes: CEClothingGeneralShoesLongLeatherBoots
+

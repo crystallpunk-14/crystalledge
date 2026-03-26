@@ -19,7 +19,7 @@
     effects:
     - !type:IgniteEntity
       stacks: 6
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
   - type: CEDestructionEffect
@@ -27,7 +27,8 @@
     - !type:IgniteArea
       radius: 2
       maxStacks: 6
-    - !type:SpawnEntityOnUser
+    - !type:SpawnEntity
+      effectTarget: User
       spawns:
       - CEEffectPotionAlchemicalFire
   - type: CEDestructible

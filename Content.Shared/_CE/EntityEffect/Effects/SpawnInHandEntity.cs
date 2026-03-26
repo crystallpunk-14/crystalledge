@@ -20,10 +20,10 @@ public sealed partial class CESpawnInHandEntityEffectSystem : CEEntityEffectSyst
 
     protected override void Effect(ref CEEntityEffectEvent<SpawnInHandEntity> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        var transformComponent = Transform(args.Args.Target.Value);
+        var transformComponent = Transform(entity);
 
         if (_net.IsClient)
             return;
@@ -31,7 +31,7 @@ public sealed partial class CESpawnInHandEntityEffectSystem : CEEntityEffectSyst
         foreach (var spawn in args.Effect.Spawns)
         {
             var item = EntityManager.SpawnAtPosition(spawn, transformComponent.Coordinates);
-            if (!_hands.TryPickupAnyHand(args.Args.Target.Value, item) && args.Effect.DeleteIfCantPickup)
+            if (!_hands.TryPickupAnyHand(entity, item) && args.Effect.DeleteIfCantPickup)
                 EntityManager.QueueDeleteEntity(item);
         }
     }
