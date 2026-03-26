@@ -1,0 +1,17 @@
+- type: entity
+  parent: CEClothingCloakBase
+  id: CEClothingKnightCloakCapeRed
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Cloak/Knight/cape_red.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Cloak/Knight/cape_red.rsi
+
+- type: entity
+  parent: CEClothingCloakBase
+  id: CEClothingKnightCloakFurRed
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Cloak/Knight/furcape_red.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Cloak/Knight/furcape_red.rsi

@@ -34,6 +34,7 @@
   equipment:
     shirt: CEClothingMageShirtWhitePurpleDress
 
+
 - type: loadoutGroup
   id: CEMagePants
   name: ce-loadout-pants
@@ -41,6 +42,7 @@
   loadouts:
   - CEClothingMagePantsBlue
   - CEClothingMagePantsPurple
+  - CEClothingGeneralPantsDark
 
 - type: loadout
   id: CEClothingMagePantsBlue
@@ -51,6 +53,7 @@
   id: CEClothingMagePantsPurple
   equipment:
     pants: CEClothingMagePantsPurple
+
 
 - type: loadoutGroup
   id: CEMageCloak

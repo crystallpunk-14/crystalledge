@@ -30,7 +30,7 @@
           mapNameTemplate: "Level0"
         - type: StationJobs
           availableJobs:
-            CEWarrior: [ -1, -1 ]
+            CEKnight: [ -1, -1 ]
             CEMage: [ -1, -1 ]
             CEPriest: [ -1, -1 ]
         - type: CEStationZLevels

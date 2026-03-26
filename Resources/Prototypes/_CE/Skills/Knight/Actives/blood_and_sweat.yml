@@ -1,5 +1,5 @@
 - type: skill
-  parent: BaseWarriorSkill
+  parent: BaseKnightSkill
   id: BloodAndSweat
   icon:
     sprite: _CE/Skills/unbreakable.rsi #TODO custom icon
