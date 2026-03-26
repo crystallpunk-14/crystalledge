@@ -14,9 +14,9 @@ public sealed partial class CEAddDivineShieldEffectSystem : CEEntityEffectSystem
 
     protected override void Effect(ref CEEntityEffectEvent<AddDivineShield> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _divine.TryAddShield(args.Args.Target.Value, args.Effect.Amount);
+        _divine.TryAddShield(entity, args.Effect.Amount);
     }
 }

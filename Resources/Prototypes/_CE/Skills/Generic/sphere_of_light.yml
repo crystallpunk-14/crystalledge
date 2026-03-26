@@ -38,7 +38,7 @@
   duration: 1.0
   events:
     0:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEImpactEffectSphereOfLight
     - !type:SayChat

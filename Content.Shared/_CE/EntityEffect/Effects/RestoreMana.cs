@@ -14,9 +14,9 @@ public sealed partial class CERestoreManaEffectSystem : CEEntityEffectSystem<Res
 
     protected override void Effect(ref CEEntityEffectEvent<RestoreMana> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _mana.ChangeEnergy(args.Args.Target.Value, args.Effect.Amount, out _, out _);
+        _mana.ChangeEnergy(entity, args.Effect.Amount, out _, out _);
     }
 }

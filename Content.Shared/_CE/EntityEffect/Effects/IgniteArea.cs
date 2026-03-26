@@ -18,7 +18,7 @@ public sealed partial class CEIgniteAreaEffectSystem : CEEntityEffectSystem<Igni
 
     protected override void Effect(ref CEEntityEffectEvent<IgniteArea> args)
     {
-        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
+        if (!TryResolveEffectCoordinates(args.Args, args.Effect.EffectTarget, out var targetPoint))
             return;
 
         _fire.IgniteArea(targetPoint, args.Effect.Radius, args.Effect.FallOffFactor, args.Effect.MaxStacks);

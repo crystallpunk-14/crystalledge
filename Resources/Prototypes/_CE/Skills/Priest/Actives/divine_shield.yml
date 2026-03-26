@@ -36,13 +36,13 @@
   duration: 1.5
   events:
     0:
-    #- !type:SpawnEntityOnTarget
+    #- !type:SpawnEntity
     #  spawns:
     #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat
       sentence: "Et in necessitate"
     0.2:
-    #- !type:SpawnEntityOnTarget
+    #- !type:SpawnEntity
     #  spawns:
     #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat

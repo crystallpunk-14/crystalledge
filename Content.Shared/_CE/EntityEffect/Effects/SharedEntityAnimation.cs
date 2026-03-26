@@ -11,6 +11,11 @@ namespace Content.Shared._CE.EntityEffect.Effects;
 /// </summary>
 public sealed partial class EntityAnimation : CEEntityEffectBase<EntityAnimation>
 {
+    public EntityAnimation()
+    {
+        EffectTarget = CEEffectTarget.User;
+    }
+
     /// <summary>
     /// Clientside VFX entity that visuals we spawn and animate. If null, the sprite is copied from the used item entity.
     /// </summary>

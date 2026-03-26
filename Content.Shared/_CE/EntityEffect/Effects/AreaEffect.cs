@@ -33,7 +33,7 @@ public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<Area
 
     protected override void Effect(ref CEEntityEffectEvent<AreaEffect> args)
     {
-        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
+        if (!TryResolveEffectCoordinates(args.Args, args.Effect.EffectTarget, out var targetPoint))
             return;
 
         var entitiesAround = _lookup.GetEntitiesInRange(targetPoint, args.Effect.Range, LookupFlags.Uncontained);

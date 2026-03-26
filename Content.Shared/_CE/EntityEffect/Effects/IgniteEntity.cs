@@ -17,9 +17,9 @@ public sealed partial class CEIgniteEntityEffectSystem : CEEntityEffectSystem<Ig
 
     protected override void Effect(ref CEEntityEffectEvent<IgniteEntity> args)
     {
-        if (args.Args.Target is not { } target)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _fire.IgniteEntity(target, args.Args.User, args.Effect.Stacks, args.Effect.MaxStacks > 0 ? args.Effect.MaxStacks : null);
+        _fire.IgniteEntity(entity, args.Args.User, args.Effect.Stacks, args.Effect.MaxStacks > 0 ? args.Effect.MaxStacks : null);
     }
 }

@@ -33,13 +33,13 @@
   duration: 1.5
   events:
     0:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectAreaHealingTelegraphy
     - !type:SayChat
       sentence: "Et curabuntur"
     1.2:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectAreaHealingEffect
     - !type:SayChat
@@ -48,7 +48,7 @@
       range: 1.2
       affectCaster: true
       effects:
-      - !type:SpawnEntityOnTarget
+      - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric
       - !type:Heal

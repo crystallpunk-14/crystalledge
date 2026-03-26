@@ -15,7 +15,7 @@
     effects:
     - !type:Heal
       amount: 5
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
   - type: CEDestructionEffect
@@ -28,10 +28,11 @@
       effects:
       - !type:Heal
         amount: 2
-      - !type:SpawnEntityOnTarget
+      - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric
-    - !type:SpawnEntityOnUser
+    - !type:SpawnEntity
+      effectTarget: User
       spawns:
       - CEEffectAreaHealingEffect
   - type: CEDestructible
@@ -53,7 +54,7 @@
     effects:
     - !type:Heal
       amount: 10
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
   - type: CEDestructionEffect
@@ -66,10 +67,11 @@
       effects:
       - !type:Heal
         amount: 5
-      - !type:SpawnEntityOnTarget
+      - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric
-    - !type:SpawnEntityOnUser
+    - !type:SpawnEntity
+      effectTarget: User
       spawns:
       - CEEffectPotionHealing
   - type: CEDestructible

@@ -32,19 +32,21 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
+            return;
+
         var effect = args.Effect;
-        var user = args.Args.User;
         var used = args.Args.Used;
         var angle = args.Args.Angle;
         var speedMultiplier = 1f / args.Args.Speed;
 
-        var userXform = Transform(user);
+        var entityXform = Transform(entity);
 
-        if (userXform.MapID == MapId.Nullspace)
+        if (entityXform.MapID == MapId.Nullspace)
             return;
 
-        // Spawn a client-side clone entity at the user's position
-        var effectEntity = EntityManager.SpawnEntity("clientsideclone", userXform.Coordinates);
+        // Spawn a client-side clone entity at the entity's position
+        var effectEntity = EntityManager.SpawnEntity("clientsideclone", entityXform.Coordinates);
 
         if (!TryComp<SpriteComponent>(effectEntity, out var effectSprite))
             return;
@@ -84,16 +86,16 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
                 initialOffset = firstKeyframe.Offset;
         }
 
-        // Set up to follow the user if enabled
+        // Set up to follow the entity if enabled
         if (effect.FollowUser)
         {
             var track = EnsureComp<TrackUserComponent>(effectEntity);
-            track.User = user;
+            track.User = entity;
         }
         else
         {
-            // Position at the offset from the user if not following
-            var worldPos = _transform.GetWorldPosition(userXform) + angle.RotateVec(initialOffset);
+            // Position at the offset from the entity if not following
+            var worldPos = _transform.GetWorldPosition(entityXform) + angle.RotateVec(initialOffset);
             _transform.SetWorldPosition(effectEntity, worldPos);
         }
 

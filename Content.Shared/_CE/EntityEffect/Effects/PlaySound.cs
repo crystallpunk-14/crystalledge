@@ -5,6 +5,11 @@ namespace Content.Shared._CE.EntityEffect.Effects;
 
 public sealed partial class PlaySound : CEEntityEffectBase<PlaySound>
 {
+    public PlaySound()
+    {
+        EffectTarget = CEEffectTarget.User;
+    }
+
     [DataField(required: true)]
     public SoundSpecifier Sound = default!;
 }
@@ -15,7 +20,10 @@ public sealed partial class CEPlaySoundEffectSystem : CEEntityEffectSystem<PlayS
 
     protected override void Effect(ref CEEntityEffectEvent<PlaySound> args)
     {
-        _audio.PlayPredicted(args.Effect.Sound, args.Args.User, args.Args.User,
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
+            return;
+
+        _audio.PlayPredicted(args.Effect.Sound, entity, args.Args.User,
             args.Effect.Sound.Params.WithVariation(0.15f));
     }
 }

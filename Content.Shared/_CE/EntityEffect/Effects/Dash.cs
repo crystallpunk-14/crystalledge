@@ -4,6 +4,11 @@ namespace Content.Shared._CE.EntityEffect.Effects;
 
 public sealed partial class Dash : CEEntityEffectBase<Dash>
 {
+    public Dash()
+    {
+        EffectTarget = CEEffectTarget.User;
+    }
+
     [DataField]
     public float Speed = 10f;
 
@@ -17,11 +22,14 @@ public sealed partial class CEDashEffectSystem : CEEntityEffectSystem<Dash>
 
     protected override void Effect(ref CEEntityEffectEvent<Dash> args)
     {
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
+            return;
+
         _throwing.TryThrow(
-            args.Args.User,
+            entity,
             args.Args.Angle.ToWorldVec() * args.Effect.Distance,
             args.Effect.Speed,
-            args.Args.User,
+            entity,
             animated: false,
             doSpin: false);
     }

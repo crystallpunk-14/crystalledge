@@ -17,10 +17,10 @@ public sealed partial class CEStunEffectSystem : CEEntityEffectSystem<Stun>
 
     protected override void Effect(ref CEEntityEffectEvent<Stun> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _stun.TryKnockdown(args.Args.Target.Value, args.Effect.Duration, drop: args.Effect.DropItems);
-        _stun.TryAddStunDuration(args.Args.Target.Value, args.Effect.Duration);
+        _stun.TryKnockdown(entity, args.Effect.Duration, drop: args.Effect.DropItems);
+        _stun.TryAddStunDuration(entity, args.Effect.Duration);
     }
 }

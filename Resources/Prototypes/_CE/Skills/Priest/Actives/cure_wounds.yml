@@ -36,21 +36,21 @@
   duration: 2
   events:
     0:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
     - !type:SayChat
       sentence: "Et curabuntur"
     0.5:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
     1.0:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
     1.5:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
     - !type:Heal

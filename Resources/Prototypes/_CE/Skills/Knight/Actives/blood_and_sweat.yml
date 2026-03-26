@@ -28,14 +28,16 @@
   lockRotation: false
   events:
     0:
-    - !type:SpawnEntityOnUser
+    - !type:SpawnEntity
+      effectTarget: User
       spawns:
       - CEEffectBloodAndSweat
     0.2:
-    - !type:SpawnEntityOnUser
+    - !type:SpawnEntity
+      effectTarget: User
       spawns:
       - CEEffectBloodAndSweat
-    - !type:SelfDamage
+    - !type:Damage
       damage:
         types:
           Physical: 1

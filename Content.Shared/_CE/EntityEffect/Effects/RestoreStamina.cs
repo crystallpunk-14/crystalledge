@@ -17,9 +17,9 @@ public sealed partial class CERestoreStaminaEffectSystem : CEEntityEffectSystem<
 
     protected override void Effect(ref CEEntityEffectEvent<RestoreStamina> args)
     {
-        if (args.Args.Target is not { } target)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _stamina.RestoreStamina(target, args.Effect.Amount);
+        _stamina.RestoreStamina(entity, args.Effect.Amount);
     }
 }

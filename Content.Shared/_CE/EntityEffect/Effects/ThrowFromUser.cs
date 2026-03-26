@@ -21,10 +21,8 @@ public sealed partial class CEThrowFromUserEffectSystem : CEEntityEffectSystem<T
 
     protected override void Effect(ref CEEntityEffectEvent<ThrowFromUser> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } targetEntity)
             return;
-
-        var targetEntity = args.Args.Target.Value;
 
         var worldPos = _transform.GetWorldPosition(args.Args.User);
         var dir = _transform.GetWorldPosition(targetEntity) - worldPos;

@@ -21,9 +21,9 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
 
     protected override void Effect(ref CEEntityEffectEvent<ApplyStatusEffect> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _effectStack.TryAddStack(args.Args.Target.Value, args.Effect.StatusEffect, args.Effect.Stack, args.Effect.Duration);
+        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, args.Effect.Stack, args.Effect.Duration);
     }
 }

@@ -16,10 +16,8 @@ public sealed partial class CEThrowToUserEffectSystem : CEEntityEffectSystem<Thr
 
     protected override void Effect(ref CEEntityEffectEvent<ThrowToUser> args)
     {
-        if (args.Args.Target is null)
+        if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } targetEntity)
             return;
-
-        var targetEntity = args.Args.Target.Value;
 
         var xform = Transform(args.Args.User);
 
