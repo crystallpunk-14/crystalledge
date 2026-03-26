@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
+using Content.Shared._CE.EntityEffect;
 using Content.Shared.Movement.Systems;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
@@ -87,10 +88,22 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     // Only trigger if event time is within this frame
                     if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
                     {
+                        var effectArgs = new CEEntityEffectArgs(
+                            EntityManager,
+                            uid,
+                            controller.Used,
+                            _transform.GetWorldRotation(uid),
+                            controller.AnimationSpeed,
+                            controller.TargetEntity,
+                            controller.TargetCoordinates);
+
                         foreach (var action in actions)
                         {
-                            action.Play(EntityManager, uid, controller.Used, _transform.GetWorldRotation(uid), controller.AnimationSpeed, keyFrame, controller.TargetEntity, controller.TargetCoordinates);
+                            action.Effect(effectArgs);
                         }
+
+                        OnKeyFrameProcessed(uid, controller.Used, effectArgs.Angle, keyFrame, actions);
+
                         controller.LastEvent = realKeyFrame;
                         Dirty(uid, controller);
                     }
@@ -111,7 +124,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimationToAngle(EntityUid entity,
-        ProtoId<CEAnimationActionPrototype> animationProto,
+        ProtoId<CEEntityEffectAnimationPrototype> animationProto,
         Angle? angle = null,
         EntityUid? used = null,
         float speed = 1f,
@@ -144,7 +157,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimationToEntity(EntityUid entity,
-        ProtoId<CEAnimationActionPrototype> animationProto,
+        ProtoId<CEEntityEffectAnimationPrototype> animationProto,
         EntityUid target,
         EntityUid? used = null,
         float speed = 1f,
@@ -177,7 +190,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// <returns></returns>
     [PublicAPI]
     public bool TryPlayAnimationToCoordinates(EntityUid entity,
-        ProtoId<CEAnimationActionPrototype> animationProto,
+        ProtoId<CEEntityEffectAnimationPrototype> animationProto,
         EntityCoordinates target,
         EntityUid? used = null,
         float speed = 1f,
@@ -196,6 +209,12 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
         StartAnimation(entity, indexedAnimation, used, targetCoordinates: target, speed: speed);
         return true;
+    }
+
+    [PublicAPI]
+    public bool IsPlayingAnimation(EntityUid entity)
+    {
+        return HasComp<CEActiveAnimationActionComponent>(entity);
     }
 
     /// <summary>
@@ -221,7 +240,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     /// </summary>
     private void StartAnimation(
         EntityUid entity,
-        CEAnimationActionPrototype animation,
+        CEEntityEffectAnimationPrototype animation,
         EntityUid? used = null,
         Angle? rotateTo = null,
         EntityUid? targetEntity = null,
@@ -259,25 +278,38 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         RemComp<CEActiveAnimationActionComponent>(entity);
         _movement.RefreshMovementSpeedModifiers(entity);
     }
+
+    /// <summary>
+    /// Called after all effects at a keyframe have been processed.
+    /// Server override sends visual sync events to non-predicting clients.
+    /// </summary>
+    protected virtual void OnKeyFrameProcessed(
+        EntityUid uid,
+        EntityUid? used,
+        Angle angle,
+        TimeSpan keyFrame,
+        List<CEEntityEffect> actions)
+    {
+    }
 }
 
 /// <summary>
-///
+/// TODO
 /// </summary>
 /// <param name="animation"></param>
 /// <param name="cancelled"></param>
-public sealed class CEAnimationActionEndedEvent(ProtoId<CEAnimationActionPrototype> animation, bool cancelled)
+public sealed class CEAnimationActionEndedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation, bool cancelled)
     : EntityEventArgs
 {
-    public ProtoId<CEAnimationActionPrototype> Animation = animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation = animation;
     public bool Cancelled = cancelled;
 }
 
 /// <summary>
-///
+/// TODO
 /// </summary>
 /// <param name="animation"></param>
-public sealed class CEAnimationActionStartedEvent(ProtoId<CEAnimationActionPrototype> animation) : EntityEventArgs
+public sealed class CEAnimationActionStartedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation) : EntityEventArgs
 {
-    public ProtoId<CEAnimationActionPrototype> Animation = animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation = animation;
 }

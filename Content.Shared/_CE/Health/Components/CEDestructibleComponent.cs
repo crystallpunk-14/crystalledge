@@ -9,6 +9,7 @@ namespace Content.Shared._CE.Health.Components;
 /// Works independently from <see cref="CEMobStateComponent"/>.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[Access(typeof(CEDestructibleSystem))]
 public sealed partial class CEDestructibleComponent : Component
 {
     /// <summary>
@@ -21,5 +22,5 @@ public sealed partial class CEDestructibleComponent : Component
     public SoundSpecifier? DestroySound;
 
     [DataField]
-    public EntityTableSelector? Loot;
+    public EntityTableSelector? LootTable;
 }

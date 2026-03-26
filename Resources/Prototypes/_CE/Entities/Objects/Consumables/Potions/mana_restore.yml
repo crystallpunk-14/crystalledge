@@ -1,0 +1,104 @@
+- type: entity
+  id: CEConsumablePotionManaSmall
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionSmall
+  name: small mana potion
+  description: TODO
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#1f36b6"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 5
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:RestoreMana
+        amount: 2
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntityOnUser
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible
+
+- type: entity
+  id: CEConsumablePotionManaMedium
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
+  name: mana potion
+  description: TODO
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#1f36b6"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 10
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:RestoreMana
+        amount: 5
+      - !type:SpawnEntityOnTarget
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntityOnUser
+      spawns:
+      - CEEffectPotionManaRestore
+  - type: CEDestructible
+
+- type: entity
+  id: CEEffectPotionManaRestore
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/area_healing_effect.rsi #TODO custom sprite
+    layers:
+    - state: effect
+      color: "#61a7e1"
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

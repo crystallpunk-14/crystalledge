@@ -1,4 +1,4 @@
-- type: animationAction
+- type: entityEffectAnimation
   id: SpearAttackLight
   movementSpeed: 0.3
   duration: 0.5
@@ -39,7 +39,7 @@
       arcWidth: 15
 
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SpearAttackHeavy
   movementSpeed: 0.2
   duration: 0.85
@@ -97,7 +97,7 @@
       power: 2
 
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SpearAttackHeavy2
   movementSpeed: 0.2
   duration: 0.85

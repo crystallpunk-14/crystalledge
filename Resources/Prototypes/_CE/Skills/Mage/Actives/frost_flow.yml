@@ -26,7 +26,7 @@
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationFrostFlow
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationFrostFlow
   movementSpeed: 0.3
   duration: 1.0
@@ -142,7 +142,7 @@
     damage:
       types:
         Cold: 0
-  - type: CEAnimationActionsSpawner
+  - type: CEEntityEffectSpawner
     frequency: 0.2
     firstDelay: 0.3
     effects:

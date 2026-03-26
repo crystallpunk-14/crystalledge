@@ -1,4 +1,4 @@
-- type: animationAction
+- type: entityEffectAnimation
   id: SwordAttackLight1
   movementSpeed: 0.3
   duration: 0.4
@@ -47,7 +47,7 @@
       range: 0.7
       arcWidth: 40
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SwordAttackLight2
   movementSpeed: 0.3
   duration: 0.4
@@ -97,7 +97,7 @@
       arcWidth: 40
 
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SwordAttackHeavy1
   movementSpeed: 0.3
   duration: 0.5
@@ -145,7 +145,7 @@
       range: 0.6
       arcWidth: 180
 
-- type: animationAction
+- type: entityEffectAnimation
   id: SwordAttackHeavy2
   movementSpeed: 0.3
   duration: 0.5

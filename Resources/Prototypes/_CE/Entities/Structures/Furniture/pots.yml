@@ -27,7 +27,7 @@
     destroyThreshold: 1
     destroySound:
       collection: CEPotBreak
-    loot: !type:AllSelector
+    lootTable: !type:AllSelector
       children:
       - id: CECoinCopper1
         amount: 2

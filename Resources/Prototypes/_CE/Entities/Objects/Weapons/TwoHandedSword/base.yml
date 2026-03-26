@@ -13,6 +13,9 @@
     damage:
       types:
         Physical: 4
+    staminaCost:
+      Primary: 2.5
+      Secondary: 2.5
     animations:
       Primary:
       - anim: SwordAttackLight1

@@ -1,0 +1,34 @@
+
+- type: entity
+  id: CEConsumablePotionFrost
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
+  name: frost potion
+  description: TODO
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#00ccff"
+    - sprite: _CE/Effects/cold_slowdown_status.rsi
+      state: effect
+      shader: unshaded
+  - type: CEConsumable
+    effects:
+    - !type:FreezeEntity
+      stacks: 6
+    - !type:SpawnEntityOnTarget
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:FreezeArea
+      radius: 2
+      maxStacks: 6
+  - type: CEDestructible
+  - type: PointLight
+    color: "#00d9ff"
+    radius: 1.3
+    energy: 10

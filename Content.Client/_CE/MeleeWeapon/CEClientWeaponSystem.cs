@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared._CE.Animation.Item;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Camera;
+using Content.Shared._CE.MeleeWeapon;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Input;

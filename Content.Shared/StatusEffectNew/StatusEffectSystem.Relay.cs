@@ -1,7 +1,6 @@
 using Content.Shared._CE.Fire;
 using Content.Shared._CE.Frost;
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Stats.Core;
 using Content.Shared.Body.Events;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
@@ -21,7 +20,6 @@ public sealed partial class StatusEffectsSystem
     private void InitializeRelay()
     {
         //CrystallEdge zone
-        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateStatEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEGetHealAmountEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptHealEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEDamageChangedEvent>(RelayStatusEffectEvent);

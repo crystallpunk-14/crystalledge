@@ -18,20 +18,6 @@
     maxEnergy: 10
 
 - type: entity
-  id: CEMobStatBased
-  abstract: true
-  categories: [ ForkFiltered ]
-  components:
-  - type: CEStats
-    baseStats:
-      Vitality: 5
-      Intelligence: 5
-  - type: CEVitalityMaxHealth
-  - type: CEIntelligenceMaxMana
-  - type: CEBlessingReceiver
-  - type: CESkillStorage
-
-- type: entity
   id: CEMobCombat
   abstract: true
   categories: [ ForkFiltered ]

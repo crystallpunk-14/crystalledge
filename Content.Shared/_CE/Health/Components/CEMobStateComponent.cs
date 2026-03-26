@@ -18,7 +18,7 @@ public sealed partial class CEMobStateComponent : Component
     /// Damage at or above which the entity enters Critical state.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int CriticalThreshold = 10;
+    public int CriticalThreshold = 20;
 }
 
 [Serializable, NetSerializable]

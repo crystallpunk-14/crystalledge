@@ -121,7 +121,7 @@
       - anim: FlemAttack1
       - anim: FlemAttack2
 
-- type: animationAction
+- type: entityEffectAnimation
   id: FlemAttack1
   movementSpeed: 0.5
   duration: 0.8
@@ -131,9 +131,7 @@
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
     - !type:EntityAnimation
-      spriteOverride:
-        sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
-        state: icon
+      dummyEntity: CEWeaponSkimitarIron
       offsetAnimation:
       - time: 0.0
         offset: -0.1, -0.2
@@ -180,7 +178,7 @@
     - !type:Dash
       distance: 0.1
 
-- type: animationAction
+- type: entityEffectAnimation
   id: FlemAttack2
   movementSpeed: 0.5
   duration: 0.8
@@ -190,9 +188,7 @@
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
     - !type:EntityAnimation
-      spriteOverride:
-        sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
-        state: icon
+      dummyEntity: CEWeaponSkimitarIron
       offsetAnimation:
       - time: 0.0
         offset: 0.1, -0.2

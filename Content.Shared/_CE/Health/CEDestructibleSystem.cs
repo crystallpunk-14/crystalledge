@@ -6,6 +6,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
 
@@ -22,6 +23,7 @@ public sealed class CEDestructibleSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -35,6 +37,12 @@ public sealed class CEDestructibleSystem : EntitySystem
         if (args.NewDamage < ent.Comp.DestroyThreshold)
             return;
 
+        if (TerminatingOrDeleted(ent.Owner) || EntityManager.IsQueuedForDeletion(ent.Owner))
+            return;
+
+        if (!_timing.IsFirstTimePredicted)
+            return;
+
         var xform = Transform(ent);
         EntityCoordinates position;
 
@@ -45,16 +53,13 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        // Play destroy sound immediately on client (predicted)
         if (ent.Comp.DestroySound is not null)
-        {
-            _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
-        }
+            _audio.PlayPvs(ent.Comp.DestroySound, Transform(ent).Coordinates);
 
         // Server-side: spawn loot. TODO: prediction someway??
-        if (_net.IsServer && ent.Comp.Loot is not null)
+        if (_net.IsServer && ent.Comp.LootTable is not null)
         {
-            var spawns = _entityTable.GetSpawns(ent.Comp.Loot);
+            var spawns = _entityTable.GetSpawns(ent.Comp.LootTable);
             foreach (var spawn in spawns)
             {
                 var spawnedLoot = SpawnAtPosition(spawn, position);
@@ -67,6 +72,15 @@ public sealed class CEDestructibleSystem : EntitySystem
             }
         }
 
+        var destructedEv = new CEDestructedEvent(position, args.Source);
+        RaiseLocalEvent(ent.Owner, ref destructedEv);
+
         PredictedQueueDel(ent.Owner);
     }
 }
+
+/// <summary>
+/// Raised on an entity just before it is destroyed by <see cref="CEDestructibleSystem"/>.
+/// </summary>
+[ByRefEvent]
+public record struct CEDestructedEvent(EntityCoordinates Position, EntityUid? Source);

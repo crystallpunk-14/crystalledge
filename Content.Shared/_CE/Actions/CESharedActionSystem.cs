@@ -83,7 +83,7 @@ public abstract partial class CESharedActionSystem : EntitySystem
 public sealed partial class CEInstantActionAnimationEvent : InstantActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;
@@ -95,7 +95,7 @@ public sealed partial class CEInstantActionAnimationEvent : InstantActionEvent
 public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;
@@ -107,7 +107,7 @@ public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActio
 public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;
@@ -120,7 +120,7 @@ public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
 public sealed partial class CEEntityTargetActionAnimationEvent : EntityTargetActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;

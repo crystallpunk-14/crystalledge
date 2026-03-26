@@ -33,4 +33,5 @@
     <alerts:AlertsUI Name="Alerts" Access="Protected" />
     <healthMana:CEHealthUI Name="HealthBar" Access="Public" />
     <healthMana:CEManaUI Name="ManaBar" Access="Public" />
+    <healthMana:CEStaminaUI Name="StaminaBar" Access="Public" />
 </screens:DefaultGameScreen>

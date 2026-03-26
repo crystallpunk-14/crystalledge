@@ -1,5 +1,6 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -76,13 +77,24 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField]
     public float RangeMultiplier = 1f;
+
+    /// <summary>
+    /// Stamina cost per attack, keyed by use type.
+    /// If a use type is not present, the attack costs no stamina.
+    /// </summary>
+    [DataField]
+    public Dictionary<CEUseType, float> StaminaCost = new()
+    {
+        { CEUseType.Primary, 2f },
+        { CEUseType.Secondary, 2f },
+    };
 }
 
 [DataDefinition, Serializable]
 public sealed partial class CEAnimationEntry
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Anim;
+    public ProtoId<CEEntityEffectAnimationPrototype> Anim;
 
     /// <summary>
     /// animation playback speed modifier

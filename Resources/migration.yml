@@ -15,6 +15,11 @@ BaselineSpawnPoint: CESpawnPointJob
 CEUpgradeTrigger: null
 BaselineLight: CEFloorTorchAlwaysPowered
 
+CEClothingCloakCapeBarbarian: null
+CEClothingCloakCapeFur: null
+CEClothingCloakCapeFur2: null
+
+
 # CrystallEdge zone end
 
 

@@ -1,0 +1,44 @@
+- type: entityTable
+  id: CEHealingPotion
+  table: !type:GroupSelector
+    children:
+    - id: CEConsumablePotionHealingMedium
+      weight: 0.5
+    - id: CEConsumablePotionHealingSmall
+
+- type: entityTable
+  id: CEManaPotion
+  table: !type:GroupSelector
+    children:
+    - id: CEConsumablePotionManaMedium
+      weight: 0.5
+    - id: CEConsumablePotionManaSmall
+
+- type: entityTable
+  id: CERandomPotion
+  table: !type:GroupSelector
+    children:
+    - !type:NestedSelector
+      tableId: CEHealingPotion
+    - !type:NestedSelector
+      tableId: CEManaPotion
+    - id: CEConsumablePotionFrost
+      weight: 0.5
+    - id: CEConsumablePotionAlchemicalFire
+      weight: 0.5
+
+- type: entity
+  id: CESpawnerRandomPotion
+  name: random potion spawner
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+      state: icon
+  - type: EntityTableSpawner
+    table: !type:NestedSelector
+      tableId: CERandomPotion
+      prob: 0.6

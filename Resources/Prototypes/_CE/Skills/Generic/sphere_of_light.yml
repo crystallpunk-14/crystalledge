@@ -32,7 +32,7 @@
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationSphereOfLight
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationSphereOfLight
   movementSpeed: 0.5
   duration: 1.0
