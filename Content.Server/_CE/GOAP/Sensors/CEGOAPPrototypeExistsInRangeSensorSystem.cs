@@ -30,7 +30,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     /// </summary>
     [DataField]
     public int MinCount = 1;
-    
+
     /// <summary>
     /// Make the found entity the target.
     /// </summary>
