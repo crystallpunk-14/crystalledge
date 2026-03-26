@@ -1,6 +1,8 @@
 using System.Numerics;
+using Content.Server._CE.GOAPAlarm;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.GOAP;
+using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -27,13 +29,11 @@ public sealed partial class CEGOAPAlarmSensorSystem : CEGOAPSensorSystem<CEGOAPA
 
     private void OnAlarm(CEGOAPAlarmEvent ev)
     {
-        var alarmXform = Transform(ev.Source);
-
-        var alarmMap = alarmXform.MapUid;
+        var alarmMap = Transform(ev.Target).MapUid;
         if (alarmMap is null)
             return;
 
-        var alarmPos = _transform.GetWorldPosition(alarmXform);
+        var alarmPos = _transform.ToWorldPosition(ev.Source);
         _zLevel.TryGetZNetwork(alarmMap.Value, out var alarmZNetwork);
 
         var query = EntityQueryEnumerator<CEGOAPComponent, TransformComponent, CEActiveGOAPComponent>();
@@ -64,14 +64,8 @@ public sealed partial class CEGOAPAlarmSensorSystem : CEGOAPSensorSystem<CEGOAPA
             {
                 if (sensor is not CEGOAPAlarmSensor alarmSensor)
                     continue;
-                Goap.SetTarget((uid, goap), alarmSensor.OutputTargetKey, ev.Source);
+                Goap.SetTarget((uid, goap), alarmSensor.OutputTargetKey, ev.Target);
             }
         }
     }
-}
-
-public sealed class CEGOAPAlarmEvent(EntityUid source, float radius) : EntityEventArgs
-{
-    public EntityUid Source = source;
-    public float Radius = radius;
 }

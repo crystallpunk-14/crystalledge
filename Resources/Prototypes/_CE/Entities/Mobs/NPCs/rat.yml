@@ -76,6 +76,8 @@
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
 
   - type: NpcFactionMember
     factions:

@@ -11,7 +11,7 @@ public abstract partial class CEGOAPSensor
     /// <summary>
     /// The world state key this sensor writes its result to.
     /// </summary>
-    [DataField(required: true)]
+    [DataField]
     public string ConditionKey = string.Empty;
 
     /// <summary>

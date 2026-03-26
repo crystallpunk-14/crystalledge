@@ -24,4 +24,7 @@ public sealed partial class CEGOAPAlarmComponent : Component
 
     [DataField(customTypeSerializer:typeof(TimeOffsetSerializer))]
     public TimeSpan LastAlarm = TimeSpan.Zero;
+
+    [DataField]
+    public float Radius = 3f;
 }
