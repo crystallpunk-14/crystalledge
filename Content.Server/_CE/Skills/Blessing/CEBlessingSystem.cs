@@ -33,7 +33,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         if (args.OurFixtureId != ent.Comp.TriggerFixtureId)
             return;
 
-        if (!ent.Comp.Initialized)
+        if (!ent.Comp.StatueInitialized)
         {
             var entities = new HashSet<EntityUid>();
             _lookup.GetEntitiesInRange(ent.Owner, ent.Comp.LinkRadius, entities);
@@ -44,7 +44,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
                     ent.Comp.LinkedTables.Add(uid);
             }
 
-            ent.Comp.Initialized = true;
+            ent.Comp.StatueInitialized = true;
         }
 
         var player = args.OtherEntity;

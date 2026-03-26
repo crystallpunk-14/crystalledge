@@ -57,7 +57,7 @@ public sealed partial class CEBlessingStatueComponent : Component
     public Dictionary<EntityUid, List<ProtoId<CESkillPrototype>>> OfferedSkills = new();
 
     [DataField]
-    public bool Initialized = false;
+    public bool StatueInitialized = false;
 
     [DataField]
     public string TriggerFixtureId = "trigger";
