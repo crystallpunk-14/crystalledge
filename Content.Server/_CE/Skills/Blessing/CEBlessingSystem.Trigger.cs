@@ -194,14 +194,14 @@ public sealed partial class CEBlessingSystem
         Entity<CEBlessingReceiverComponent> receiver,
         List<ProtoId<CESkillPrototype>> alreadyPicked)
     {
-        var candidates = GetSkillCandidates(receiver, alreadyPicked, filterProposed: true);
+        var candidates = GetSkillCandidates(receiver, alreadyPicked);
 
         if (candidates.Count == 0)
         {
             // Pool exhausted — clear proposed list and retry
             receiver.Comp.ProposedSkills.Clear();
             Dirty(receiver);
-            candidates = GetSkillCandidates(receiver, alreadyPicked, filterProposed: false);
+            candidates = GetSkillCandidates(receiver, alreadyPicked);
         }
 
         if (candidates.Count == 0)
@@ -215,8 +215,7 @@ public sealed partial class CEBlessingSystem
 
     private List<ProtoId<CESkillPrototype>> GetSkillCandidates(
         Entity<CEBlessingReceiverComponent> receiver,
-        List<ProtoId<CESkillPrototype>> alreadyPicked,
-        bool filterProposed)
+        List<ProtoId<CESkillPrototype>> alreadyPicked)
     {
         var candidates = new List<ProtoId<CESkillPrototype>>();
 
@@ -228,10 +227,10 @@ public sealed partial class CEBlessingSystem
             if (proto.Unique && _skill.HaveSkill(receiver, proto))
                 continue;
 
-            if (alreadyPicked.Contains(proto.ID))
+            if (proto.Unique && alreadyPicked.Contains(proto.ID))
                 continue;
 
-            if (filterProposed && receiver.Comp.ProposedSkills.Contains(proto.ID))
+            if (receiver.Comp.ProposedSkills.Contains(proto.ID))
                 continue;
 
             if (!CheckRestrictions(proto, receiver))

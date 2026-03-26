@@ -48,6 +48,7 @@ public partial class InventorySystem
         SubscribeLocalEvent<InventoryComponent, CECalculateMaxHealthEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateMaxManaEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateMaxStaminaEvent>(RelayInventoryEvent);
+        SubscribeLocalEvent<InventoryComponent, CECalculateStaminaRegenEvent>(RelayInventoryEvent);
         //CrystallEdge zone end
 
         SubscribeLocalEvent<InventoryComponent, DamageModifyEvent>(RelayInventoryEvent);

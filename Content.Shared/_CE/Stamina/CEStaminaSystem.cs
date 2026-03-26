@@ -204,6 +204,28 @@ public sealed class CEStaminaSystem : EntitySystem
         comp.MaxStamina = newMax;
         Dirty(uid, comp);
     }
+
+    /// <summary>
+    /// Recalculates effective stamina regen rate by raising <see cref="CECalculateStaminaRegenEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEStaminaComponent.RegenRate"/>.
+    /// </summary>
+    public void RefreshStaminaRegen(EntityUid uid, CEStaminaComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp, false))
+            return;
+
+        var ev = new CECalculateStaminaRegenEvent(comp.BaseRegenRate);
+        RaiseLocalEvent(uid, ev);
+
+        var newRate = MathF.Max(0f, ev.RegenRate);
+
+        if (MathHelper.CloseTo(newRate, comp.RegenRate))
+            return;
+
+        comp.RegenRate = newRate;
+        Dirty(uid, comp);
+    }
 }
 
 /// <summary>
@@ -221,4 +243,21 @@ public sealed class CECalculateMaxStaminaEvent(float baseMaxStamina) : EntityEve
     public float Multiplier = 1f;
 
     public float MaxStamina => (BaseMaxStamina + FlatModifier) * Multiplier;
+}
+
+/// <summary>
+/// Raised on an entity to calculate its effective stamina regen rate.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final regen rate = (BaseRegenRate + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateStaminaRegenEvent(float baseRegenRate) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public float BaseRegenRate = baseRegenRate;
+    public float FlatModifier;
+    public float Multiplier = 1f;
+
+    public float RegenRate => (BaseRegenRate + FlatModifier) * Multiplier;
 }
