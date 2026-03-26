@@ -17,6 +17,12 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEGOAPAlarmComponent, CETargetChangedEvent>(OnChangeTarget);
+        SubscribeLocalEvent<CEAlarmOnSpawnComponent, MapInitEvent>(OnAlarmOnSpawn);
+    }
+
+    private void OnAlarmOnSpawn(Entity<CEAlarmOnSpawnComponent> ent, ref MapInitEvent args)
+    {
+        Alarm(Transform(ent).Coordinates, ent.Owner, ent.Comp.Radius);
     }
 
     private void OnChangeTarget(Entity<CEGOAPAlarmComponent> ent, ref CETargetChangedEvent args)
