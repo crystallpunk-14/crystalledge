@@ -1,0 +1,87 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  id: ZombieMob
+  name: Zombie
+  description: "stinky corpse"
+  components:
+    - type: Sprite
+      drawdepth: Mobs
+      sprite: _CE/Mobs/flem.rsi
+      layers:
+      - map: [ "livingState" ]
+        state: alive
+    - type: NpcFactionMember
+      factions:
+      - SimpleHostile
+    - type: CEGOAP
+      goals:
+      - desiredState:
+          Brains: true
+        priority: 10
+      - desiredState:
+          FindBrains: true
+          TargetVisible: true
+        priority: 1
+
+      actions:
+      # Move to target
+      - !type:CEGOAPMoveToTargetAction
+        targetKey: enemy
+        preconditions:
+          TargetHasBrain: true
+          TargetVisible: true
+        effects:
+          EnemyInMeleeRange: true
+        cost: 1
+        range: 1.5
+      # Attack target
+      - !type:CEGOAPMeleeAttackAction
+        targetKey: enemy
+        preconditions:
+          TargetHasBrain: true
+          EnemyInMeleeRange: true
+        effects:
+          Brains: true
+        cost: 2
+        useType: Primary
+        angleVariation: 5
+      # Explore
+      - !type:CEGOAPExploreAction
+        preconditions:
+          TargetHasBrain: false
+        effects:
+          FindBrains: true
+        cost: 1
+        exploreRadius: 4
+      # Move to enemy's last known position
+      - !type:CEGOAPMoveToLastKnownPositionAction
+        positionTargetKey: enemy
+        effects:
+          FindBrains: true
+          TargetVisible: true
+        preconditions:
+          TargetHasBrain: true
+          HasEnemyLastPos: true
+        cost: 0.5
+      sensors:
+      - !type:CEGOAPFilterTargetSensor
+        targetKey: enemy
+        conditionKey: TargetHasBrain
+        whitelist: {components: [Actor]}
+      - !type:CEGOAPNearestHostileSensor
+        conditionKey: TargetVisible
+        outputTargetKey: enemy
+        visionRadius: 8
+      - !type:CEGOAPRangeToTargetSensor
+        conditionKey: EnemyInMeleeRange
+        targetKey: enemy
+        range: 1.5
+      - !type:CEGOAPHasLastKnownPositionSensor
+        conditionKey: HasEnemyLastPos
+        positionTargetKey: enemy
+
+
+
