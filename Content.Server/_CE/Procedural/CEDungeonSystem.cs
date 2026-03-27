@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server._CE.Procedural.Generators;
+using Content.Server._CE.Procedural.PostProcess;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.Decals;
@@ -28,6 +29,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
     [Dependency] private readonly TileSystem _tile = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly MetaDataSystem _meta = default!;
+    [Dependency] private readonly CEDungeonPostProcessSystem _postProcess = default!;
 
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -126,6 +128,20 @@ public sealed partial class CEDungeonSystem : EntitySystem
         {
             _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
             Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
+
+            // Run post-processing layers.
+            if (proto.PostProcess.Count > 0)
+            {
+                var ppJob = new CEDungeonPostProcessJob(
+                    DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, cts.Token);
+                _dungeonJobQueue.EnqueueJob(ppJob);
+                await ppJob.AsTask;
+
+                if (ppJob.Exception != null)
+                    Log.Error($"CEDungeonSystem: post-processing failed for '{proto.ID}': {ppJob.Exception}");
+                else
+                    Log.Info($"CEDungeonSystem: post-processing complete for '{proto.ID}'.");
+            }
         }
         else
         {
@@ -184,6 +200,14 @@ public sealed partial class CEDungeonSystem : EntitySystem
             {
                 _meta.SetEntityName(result.MapUid.Value, $"{protoId}");
                 Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
+
+                // Enqueue post-processing layers.
+                if (proto.PostProcess.Count > 0)
+                {
+                    var ppJob = new CEDungeonPostProcessJob(
+                        DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, cts.Token);
+                    _dungeonJobQueue.EnqueueJob(ppJob);
+                }
             }
             else
             {

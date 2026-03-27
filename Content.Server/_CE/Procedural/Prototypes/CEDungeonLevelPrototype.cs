@@ -1,4 +1,5 @@
 using Content.Server._CE.Procedural.Generators;
+using Content.Server._CE.Procedural.PostProcess;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Procedural.Prototypes;
@@ -46,4 +47,7 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype
     /// </summary>
     [DataField]
     public Dictionary<string, ProtoId<CEDungeonLevelPrototype>> Exits = new();
+
+    [DataField]
+    public List<CEDungeonPostProcessLayer> PostProcess = new();
 }
