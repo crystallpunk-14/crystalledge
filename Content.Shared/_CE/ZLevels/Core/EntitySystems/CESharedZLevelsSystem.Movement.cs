@@ -18,8 +18,6 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    public const int MaxZLevelsBelowRendering = 3;
-
     private const float ZGravityForce = 9.8f;
     private const float ZVelocityLimit = 20.0f;
 
@@ -102,6 +100,9 @@ public abstract partial class CESharedZLevelsSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        return; //Currently we have no need for active z-physics, so we can skip this costly loop.
+                //We will return to it when we ready.
 
         var query = EntityQueryEnumerator<CEZPhysicsComponent, CEActiveZPhysicsComponent, TransformComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out _, out var xform, out var physics))

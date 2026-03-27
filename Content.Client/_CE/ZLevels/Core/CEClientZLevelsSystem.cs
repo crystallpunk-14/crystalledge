@@ -60,6 +60,9 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
     {
         base.Update(frameTime);
 
+        return; //Currently we have no need for active z-physics, so we can skip this costly loop.
+                //We will return to it when we ready.
+
         var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out var sprite, out var xform))
         {
@@ -69,19 +72,6 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
 
             _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault + new Vector2(0, localPosition * ZLevelOffset));
             _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
-        }
-
-        // Update StartOffset for entities with running fatigue animations
-        // This allows animations to follow dynamic offset changes (e.g., from Z-levels system)
-        var query2 = EntityQueryEnumerator<StaminaComponent, SpriteComponent, CEZPhysicsComponent>();
-        while (query2.MoveNext(out var uid, out var stamina, out var sprite, out var zPhys))
-        {
-            // Only update if animation is running
-            if (!_animation.HasRunningAnimation(uid, StaminaSystem.StaminaAnimationKey))
-                continue;
-
-            // Update the base offset to track changes made by other systems
-            stamina.StartOffset = zPhys.SpriteOffsetDefault;
         }
     }
 
