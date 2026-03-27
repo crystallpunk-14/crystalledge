@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
-using Content.Shared.Whitelist;
-using Robust.Shared.Map;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural;
 
@@ -15,7 +13,7 @@ public sealed partial class CEProceduralGeneratorSystem
     /// For each abstract room, selects a random real <see cref="CEDungeonRoom3DPrototype"/>
     /// that fits within MaxRoomSize, chooses a rotation that satisfies the required exit
     /// directions (based on neighbour connections), shrinks the abstract room to the
-    /// real room's size, and randomizes its position within the original grid cell.
+    /// real room's size, and centres it within the original grid cell.
     /// Uses the whitelist from the room's type-specific pack.
     /// </summary>
     internal async Task AssignRealRooms(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config, Func<ValueTask> suspend)
@@ -114,15 +112,15 @@ public sealed partial class CEProceduralGeneratorSystem
             // Shrink abstract room to match the real room's effective size.
             room.Size = effectiveSize;
 
-            // Randomize position within the original grid cell.
+            // Center the room within the original grid cell.
             // The cell origin is gridCoord * step and has maxSize × maxSize space.
             var cellOrigin = new Vector2i(room.GridCoord.X * step, room.GridCoord.Y * step);
             var slack = new Vector2i(
                 Math.Max(0, maxSize - effectiveSize.X),
                 Math.Max(0, maxSize - effectiveSize.Y));
 
-            var offsetX = slack.X > 0 ? random.Next(slack.X + 1) : 0;
-            var offsetY = slack.Y > 0 ? random.Next(slack.Y + 1) : 0;
+            var offsetX = slack.X / 2;
+            var offsetY = slack.Y / 2;
 
             room.Position = new Vector2i(cellOrigin.X + offsetX, cellOrigin.Y + offsetY);
         }

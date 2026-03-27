@@ -12,6 +12,7 @@
   - type: PlacementReplacement
     key: walls
   - type: Sprite
+    drawdepth: Mobs
     layers:
     - state: red
   - type: Transform

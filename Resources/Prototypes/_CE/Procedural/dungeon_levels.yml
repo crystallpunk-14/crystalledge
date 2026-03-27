@@ -25,6 +25,8 @@
     default: MossyTemple1 # Recursion for now
   config:
     !type:CEProceduralConfig
+    corridorTile: CEStonebricks
+    corridorWander: 0
     maxRoomSize: 16
     blessingCount:
       min: 0
@@ -33,8 +35,8 @@
       min: 1
       max: 2
     generalCount:
-      min: 15
-      max: 20
+      min: 30
+      max: 50
     components:
     - type: MapLight
       ambientLightColor: "#3d4444"
