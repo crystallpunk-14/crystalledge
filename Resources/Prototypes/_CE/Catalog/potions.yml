@@ -51,4 +51,4 @@
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomPotion
-      prob: 0.6
+      prob: 1

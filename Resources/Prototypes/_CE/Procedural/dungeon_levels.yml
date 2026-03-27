@@ -29,14 +29,14 @@
     corridorWander: 0
     maxRoomSize: 16
     blessingCount:
-      min: 0
-      max: 0
+      min: 2
+      max: 3
     cycleCount:
       min: 1
       max: 2
     generalCount:
-      min: 30
-      max: 50
+      min: 10
+      max: 15
     components:
     - type: MapLight
       ambientLightColor: "#3d4444"
@@ -60,27 +60,35 @@
         requireAll: true
         tags:
         - CEDunGenMossyTemple
-        #- CEDunGenRoomEntrance
+        - CEDunGenRoomEntrance
     blessingRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenMossyTemple
-        #- CEDunGenRoomBlessing
+        - CEDunGenRoomBlessing
     deadEndRooms:
       whitelist:
         requireAll: true
         tags:
         - CEDunGenMossyTemple
-        #- CEDunGenRoomDeadEnd
+        - CEDunGenRoomDeadEnd
   postProcess:
   - !type:CETileVariantizePostProcess
+  - !type:CEEntitySwapPostProcess
+    source: CEWallStoneBrick
+    target: CEWallStone
+    chance: 0.05
+  - !type:CEEntitySwapPostProcess
+    source: CEWallStoneBrick
+    target: CEWallDirt
+    chance: 0.05
   - !type:CEBiomeApplyPostProcess
     seed: 42
     layers:
     - !type:BiomeTileLayer
       tile: CEDirt
-      threshold: 0
+      threshold: 0.15
       noise:
         seed: 0
         noiseType: OpenSimplex2
@@ -93,7 +101,7 @@
         domainWarpAmp: 120
     - !type:BiomeTileLayer
       tile: CEGrass
-      threshold: 0.45
+      threshold: 0.5
       noise:
         seed: 0
         noiseType: OpenSimplex2
@@ -104,27 +112,8 @@
         gain: 0.7
         domainWarpType: OpenSimplex2
         domainWarpAmp: 120
-    - !type:BiomeDecalLayer #Rock decal
-      threshold: 0.6
-      divisions: 1
-      noise:
-        seed: 18
-        noiseType: OpenSimplex2
-        fractalType: Ridged
-        frequency: 0.11
-        octaves: 3
-        lacunarity: 1.7
-        gain: 0.8
-        domainWarpType: OpenSimplex2
-        domainWarpAmp: 120
-      decals:
-        - CEFloraRock01
-        - CEFloraRock02
-        - CEFloraRock03
-        - CEFloraRock04
-        - CEFloraRock05
     - !type:BiomeDecalLayer #Grass decal
-      threshold: 0
+      threshold: 0.3
       divisions: 1
       noise:
         seed: 12
@@ -151,8 +140,27 @@
         - CEFloraGrass12
         - CEFloraGrass13
         - CEFloraGrass14
+    - !type:BiomeDecalLayer #Rock decal
+      threshold: 0.7
+      divisions: 1
+      noise:
+        seed: 18
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.11
+        octaves: 3
+        lacunarity: 1.7
+        gain: 0.8
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+        - CEFloraRock01
+        - CEFloraRock02
+        - CEFloraRock03
+        - CEFloraRock04
+        - CEFloraRock05
     - !type:BiomeDecalLayer #Bush decal
-      threshold: 0.35
+      threshold: 0.5
       divisions: 1
       noise:
         seed: 12

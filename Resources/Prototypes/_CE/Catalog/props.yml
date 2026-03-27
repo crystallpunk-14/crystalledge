@@ -1,0 +1,23 @@
+- type: entityTable
+  id: CEDungeonProp
+  table: !type:GroupSelector
+    children:
+    - id: CEPot
+
+- type: entity
+  id: CESpawnerRandomDungeonProp
+  name: random dungeon prop spawner
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    snapCardinals: true
+    drawdepth: Mobs
+    layers:
+    - state: red
+    - sprite: _CE/Structures/Furniture/clay_pot.rsi
+      state: pot1
+  - type: EntityTableSpawner
+    table: !type:NestedSelector
+      tableId: CEDungeonProp
+      prob: 0.1

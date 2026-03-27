@@ -98,6 +98,7 @@
 - type: entity
   id: CEDungeonLevelEntry
   parent: MarkerBase
+  categories: [ ForkFiltered ]
   name: dungeon entry point
   description: An arrival point for adventurers entering this level.
   components:

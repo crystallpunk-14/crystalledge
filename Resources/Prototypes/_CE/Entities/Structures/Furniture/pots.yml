@@ -11,6 +11,7 @@
     noRot: true
   - type: Sprite
     offset: 0,0.3
+    drawdepth: Mobs
     noRot: true
     sprite: _CE/Structures/Furniture/clay_pot.rsi
     layers:
