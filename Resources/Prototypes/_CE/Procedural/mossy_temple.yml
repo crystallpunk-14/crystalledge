@@ -1,0 +1,99 @@
+- type: zMap
+  id: MossyTemple
+  maps:
+  - /Maps/_CE/Dungeon/MossyTemple/MossyTemple0.yml
+  - /Maps/_CE/Dungeon/MossyTemple/MossyTemple1.yml
+  - /Maps/_CE/Dungeon/MossyTemple/MossyTemple2.yml
+  components:
+    - type: MapLight
+      ambientLightColor: "#38d18a"
+
+- type: dungeonRoom3d
+  id: MossyTemple_PillarsWideCrossroad
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 8
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 0, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_PillarsSmallCrossroad
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 8
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 16, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_PillarsCorridor
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 6
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 25, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssCorridorL
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 8
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 0, -1
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssCorridorT
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 12
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 0, 8
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssCorridorO
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 13
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 16, -1
+
+- type: dungeonRoom3d
+  id: MossyTemple_SmolTCrossroad
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 8
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 30, -3
+
+- type: dungeonRoom3d
+  id: MossyTemple_OneSideAbyss
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 14
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 30, 6
+
+- type: dungeonRoom3d
+  id: MossyTemple_LoongO
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 7
+  height: 3
+  zLevelMap: MossyTemple
+  offset: 16, 13

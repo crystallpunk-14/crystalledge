@@ -1,0 +1,1103 @@
+meta:
+  format: 7
+  category: Map
+  engineVersion: 272.0.0
+  forkId: ""
+  forkVersion: ""
+  time: 03/27/2026 15:44:14
+  entityCount: 148
+maps:
+- 1
+grids:
+- 1
+orphans: []
+nullspace: []
+tilemap:
+  0: Space
+  1: CEStone
+entities:
+- proto: ""
+  entities:
+  - uid: 1
+    components:
+    - type: MetaData
+      name: Mapping DunTest [0]
+    - type: Transform
+    - type: Map
+      mapPaused: True
+    - type: GridTree
+    - type: Broadphase
+    - type: OccluderTree
+    - type: MapGrid
+      chunks:
+        1,1:
+          ind: 1,1
+          tiles: AAAAAAAAAAEAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAIAAEAAAAACAABAAAAAA0AAQAAAAAMAAEAAAAABQABAAAAAAoAAQAAAAAFAAEAAAAABgABAAAAAAQAAQAAAAAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        0,1:
+          ind: 0,1
+          tiles: AQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAgAAQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAMAAQAAAAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        2,1:
+          ind: 2,1
+          tiles: AAAAAAAAAAAAAAAAAAABAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        2,0:
+          ind: 2,0
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        1,0:
+          ind: 1,0
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABgABAAAAAAwAAQAAAAAJAAEAAAAAAQABAAAAAAcAAQAAAAAEAAEAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACwABAAAAAAIAAQAAAAAMAAAAAAAAAAABAAAAAAoAAAAAAAAAAAEAAAAACwABAAAAAAAAAQAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAIAAQAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAABwABAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAQAAQAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAIAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACQABAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAADAABAAAAAAYAAQAAAAAMAAAAAAAAAAABAAAAAAIAAAAAAAAAAAEAAAAABAABAAAAAAYAAQAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAANAAEAAAAADQABAAAAAAQAAQAAAAANAAEAAAAABQABAAAAAAoAAQAAAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAKAAEAAAAAAgABAAAAAAkAAQAAAAADAAEAAAAAAgABAAAAAAsAAQAAAAAFAAEAAAAACwABAAAAAAAAAQAAAAAEAAEAAAAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+        0,0:
+          ind: 0,0
+          tiles: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAADQABAAAAAAgAAQAAAAAGAAEAAAAABwABAAAAAAcAAQAAAAAIAAEAAAAACQABAAAAAAoAAQAAAAADAAEAAAAACwABAAAAAAIAAQAAAAAMAAEAAAAACgAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACAABAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAUAAQAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAADAABAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAACwAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAADQABAAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAALAAEAAAAACAABAAAAAAQAAQAAAAABAAEAAAAABwABAAAAAAoAAQAAAAACAAEAAAAACQABAAAAAAIAAQAAAAAIAAEAAAAABAABAAAAAAEAAQAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAANAAEAAAAABgABAAAAAAQAAQAAAAALAAEAAAAACAABAAAAAAkAAQAAAAAIAAEAAAAADQABAAAAAAQAAQAAAAAEAAEAAAAACgABAAAAAAYAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          version: 7
+    - type: SpreaderGrid
+      updateAccumulator: 0.93349075
+    - type: GridPathfinding
+    - type: Gravity
+      gravityShakeSound: !type:SoundPathSpecifier
+        path: /Audio/Effects/alert.ogg
+      inherent: True
+      enabled: True
+    - type: MapAtmosphere
+      space: False
+      mixture:
+        volume: 2500
+        immutable: True
+        temperature: 293.15
+        moles:
+          Oxygen: 21.824879
+          Nitrogen: 82.10312
+    - type: DecalGrid
+      chunkCollection:
+        version: 2
+        nodes: []
+    - type: Forensics
+      residues: []
+      dnas: []
+      fibers: []
+      fingerprints: []
+    - type: Roof
+      data:
+        0,0: 35887507618889599
+        0,1: 8970184743391821695
+        1,0: 1099511591024
+        1,1: 18410715276959023103
+        2,0: 67818116498321648
+        2,1: 16701547338134976503
+        3,0: 56233383884621575
+        3,1: 216459776140445447
+        0,2: 31869
+        1,2: 65535
+        2,2: 63479
+        3,2: 1799
+        4,0: 282578800084486
+        4,-2: 197379
+        3,-2: 16711422
+        3,-3: 1095199752192
+        4,-3: 12935430144
+        4,2: 4665940320188366848
+        4,3: 13889171895510646848
+        5,2: 36309172484046848
+        5,3: 18410715544022826558
+        6,2: 72340168526266368
+        6,3: 72340172838076673
+    - type: TileHistory
+      chunkHistory: {}
+    - type: ExplosionAirtightGrid
+    - type: RadiationGridResistance
+- proto: CEWallStoneBrick
+  entities:
+  - uid: 2
+    components:
+    - type: Transform
+      pos: 4.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 3
+    components:
+    - type: Transform
+      pos: 18.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 4
+    components:
+    - type: Transform
+      pos: 27.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 5
+    components:
+    - type: Transform
+      pos: 27.5,14.5
+      parent: 1
+  - uid: 6
+    components:
+    - type: Transform
+      pos: 2.5,12.5
+      parent: 1
+  - uid: 7
+    components:
+    - type: Transform
+      pos: 17.5,15.5
+      parent: 1
+  - uid: 8
+    components:
+    - type: Transform
+      pos: 27.5,16.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 9
+    components:
+    - type: Transform
+      pos: 12.5,10.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 10
+    components:
+    - type: Transform
+      pos: 26.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 11
+    components:
+    - type: Transform
+      pos: 12.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 12
+    components:
+    - type: Transform
+      pos: 17.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 13
+    components:
+    - type: Transform
+      pos: 12.5,11.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 14
+    components:
+    - type: Transform
+      pos: 25.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 15
+    components:
+    - type: Transform
+      pos: 26.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 16
+    components:
+    - type: Transform
+      pos: 19.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 17
+    components:
+    - type: Transform
+      pos: 10.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 18
+    components:
+    - type: Transform
+      pos: 0.5,15.5
+      parent: 1
+  - uid: 19
+    components:
+    - type: Transform
+      pos: 12.5,8.5
+      parent: 1
+  - uid: 20
+    components:
+    - type: Transform
+      pos: 3.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 21
+    components:
+    - type: Transform
+      pos: 21.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 22
+    components:
+    - type: Transform
+      pos: 22.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 23
+    components:
+    - type: Transform
+      pos: 27.5,17.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 24
+    components:
+    - type: Transform
+      pos: 3.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 25
+    components:
+    - type: Transform
+      pos: 12.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 26
+    components:
+    - type: Transform
+      pos: 12.5,17.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 27
+    components:
+    - type: Transform
+      pos: 2.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 28
+    components:
+    - type: Transform
+      pos: 9.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 29
+    components:
+    - type: Transform
+      pos: 17.5,17.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 30
+    components:
+    - type: Transform
+      pos: 17.5,16.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 31
+    components:
+    - type: Transform
+      pos: 11.5,16.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 32
+    components:
+    - type: Transform
+      pos: 5.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 33
+    components:
+    - type: Transform
+      pos: 11.5,19.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 34
+    components:
+    - type: Transform
+      pos: 11.5,12.5
+      parent: 1
+  - uid: 35
+    components:
+    - type: Transform
+      pos: 12.5,16.5
+      parent: 1
+  - uid: 36
+    components:
+    - type: Transform
+      pos: 11.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 37
+    components:
+    - type: Transform
+      pos: 20.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 38
+    components:
+    - type: Transform
+      pos: 12.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 39
+    components:
+    - type: Transform
+      pos: 18.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 40
+    components:
+    - type: Transform
+      pos: 19.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 41
+    components:
+    - type: Transform
+      pos: 6.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 42
+    components:
+    - type: Transform
+      pos: 20.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 43
+    components:
+    - type: Transform
+      pos: 27.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 44
+    components:
+    - type: Transform
+      pos: 8.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 45
+    components:
+    - type: Transform
+      pos: 25.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 46
+    components:
+    - type: Transform
+      pos: 0.5,16.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 47
+    components:
+    - type: Transform
+      pos: 12.5,19.5
+      parent: 1
+  - uid: 48
+    components:
+    - type: Transform
+      pos: 1.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 49
+    components:
+    - type: Transform
+      pos: 9.5,15.5
+      parent: 1
+  - uid: 50
+    components:
+    - type: Transform
+      pos: 5.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 51
+    components:
+    - type: Transform
+      pos: 22.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 52
+    components:
+    - type: Transform
+      pos: 10.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 53
+    components:
+    - type: Transform
+      pos: 12.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 54
+    components:
+    - type: Transform
+      pos: 23.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 55
+    components:
+    - type: Transform
+      pos: 1.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 56
+    components:
+    - type: Transform
+      pos: 6.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 57
+    components:
+    - type: Transform
+      pos: 24.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 58
+    components:
+    - type: Transform
+      pos: 8.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 59
+    components:
+    - type: Transform
+      pos: 7.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 60
+    components:
+    - type: Transform
+      pos: 23.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 61
+    components:
+    - type: Transform
+      pos: 0.5,12.5
+      parent: 1
+  - uid: 62
+    components:
+    - type: Transform
+      pos: 21.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 63
+    components:
+    - type: Transform
+      pos: 17.5,18.5
+      parent: 1
+  - uid: 64
+    components:
+    - type: Transform
+      pos: 24.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 65
+    components:
+    - type: Transform
+      pos: 4.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 66
+    components:
+    - type: Transform
+      pos: 34.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 67
+    components:
+    - type: Transform
+      pos: 34.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 68
+    components:
+    - type: Transform
+      pos: 34.5,13.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 69
+    components:
+    - type: Transform
+      pos: 34.5,14.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 70
+    components:
+    - type: Transform
+      pos: 34.5,17.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 71
+    components:
+    - type: Transform
+      pos: 34.5,10.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 72
+    components:
+    - type: Transform
+      pos: 34.5,7.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 73
+    components:
+    - type: Transform
+      pos: 34.5,11.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 74
+    components:
+    - type: Transform
+      pos: 34.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 75
+    components:
+    - type: Transform
+      pos: 34.5,12.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 76
+    components:
+    - type: Transform
+      pos: 34.5,18.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 77
+    components:
+    - type: Transform
+      pos: 34.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 78
+    components:
+    - type: Transform
+      pos: 34.5,16.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 79
+    components:
+    - type: Transform
+      pos: 34.5,19.5
+      parent: 1
+  - uid: 80
+    components:
+    - type: Transform
+      pos: 7.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 81
+    components:
+    - type: Transform
+      pos: 3.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 82
+    components:
+    - type: Transform
+      pos: 25.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 83
+    components:
+    - type: Transform
+      pos: 12.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 84
+    components:
+    - type: Transform
+      pos: 24.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 85
+    components:
+    - type: Transform
+      pos: 19.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 86
+    components:
+    - type: Transform
+      pos: 11.5,6.5
+      parent: 1
+  - uid: 87
+    components:
+    - type: Transform
+      pos: 18.5,8.5
+      parent: 1
+  - uid: 88
+    components:
+    - type: Transform
+      pos: 4.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 89
+    components:
+    - type: Transform
+      pos: 19.5,1.5
+      parent: 1
+  - uid: 90
+    components:
+    - type: Transform
+      pos: 8.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 91
+    components:
+    - type: Transform
+      pos: 25.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 92
+    components:
+    - type: Transform
+      pos: 24.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 93
+    components:
+    - type: Transform
+      pos: 26.5,7.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 94
+    components:
+    - type: Transform
+      pos: 11.5,2.5
+      parent: 1
+  - uid: 95
+    components:
+    - type: Transform
+      pos: 20.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 96
+    components:
+    - type: Transform
+      pos: 20.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 97
+    components:
+    - type: Transform
+      pos: 18.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 98
+    components:
+    - type: Transform
+      pos: 20.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 99
+    components:
+    - type: Transform
+      pos: 25.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 100
+    components:
+    - type: Transform
+      pos: 12.5,4.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 101
+    components:
+    - type: Transform
+      pos: 10.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 102
+    components:
+    - type: Transform
+      pos: 25.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 103
+    components:
+    - type: Transform
+      pos: 11.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 104
+    components:
+    - type: Transform
+      pos: 21.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 105
+    components:
+    - type: Transform
+      pos: 26.5,8.5
+      parent: 1
+  - uid: 106
+    components:
+    - type: Transform
+      pos: 24.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 107
+    components:
+    - type: Transform
+      pos: 26.5,2.5
+      parent: 1
+  - uid: 108
+    components:
+    - type: Transform
+      pos: 24.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 109
+    components:
+    - type: Transform
+      pos: 12.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 110
+    components:
+    - type: Transform
+      pos: 26.5,3.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 111
+    components:
+    - type: Transform
+      pos: 19.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 112
+    components:
+    - type: Transform
+      pos: 18.5,4.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 113
+    components:
+    - type: Transform
+      pos: 19.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 114
+    components:
+    - type: Transform
+      pos: 0.5,11.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 115
+    components:
+    - type: Transform
+      pos: 6.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 116
+    components:
+    - type: Transform
+      pos: 12.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 117
+    components:
+    - type: Transform
+      pos: 26.5,4.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 118
+    components:
+    - type: Transform
+      pos: 23.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 119
+    components:
+    - type: Transform
+      pos: 19.5,7.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 120
+    components:
+    - type: Transform
+      pos: 11.5,11.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 121
+    components:
+    - type: Transform
+      pos: 19.5,3.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 122
+    components:
+    - type: Transform
+      pos: 19.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 123
+    components:
+    - type: Transform
+      pos: 18.5,7.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 124
+    components:
+    - type: Transform
+      pos: 22.5,1.5
+      parent: 1
+  - uid: 125
+    components:
+    - type: Transform
+      pos: 18.5,3.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 126
+    components:
+    - type: Transform
+      pos: 11.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 127
+    components:
+    - type: Transform
+      pos: 9.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 128
+    components:
+    - type: Transform
+      pos: 22.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 129
+    components:
+    - type: Transform
+      pos: 0.5,2.5
+      parent: 1
+  - uid: 130
+    components:
+    - type: Transform
+      pos: 22.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 131
+    components:
+    - type: Transform
+      pos: 25.5,3.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 132
+    components:
+    - type: Transform
+      pos: 0.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 133
+    components:
+    - type: Transform
+      pos: 22.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 134
+    components:
+    - type: Transform
+      pos: 26.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 135
+    components:
+    - type: Transform
+      pos: 1.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 136
+    components:
+    - type: Transform
+      pos: 23.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 137
+    components:
+    - type: Transform
+      pos: 25.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 138
+    components:
+    - type: Transform
+      pos: 5.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 139
+    components:
+    - type: Transform
+      pos: 12.5,3.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 140
+    components:
+    - type: Transform
+      pos: 21.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 141
+    components:
+    - type: Transform
+      pos: 20.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 142
+    components:
+    - type: Transform
+      pos: 18.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 143
+    components:
+    - type: Transform
+      pos: 26.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 144
+    components:
+    - type: Transform
+      pos: 25.5,7.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 145
+    components:
+    - type: Transform
+      pos: 2.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 146
+    components:
+    - type: Transform
+      pos: 18.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 147
+    components:
+    - type: Transform
+      pos: 12.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 148
+    components:
+    - type: Transform
+      pos: 7.5,15.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+...

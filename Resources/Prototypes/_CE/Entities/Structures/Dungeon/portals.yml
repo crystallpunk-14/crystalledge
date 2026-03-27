@@ -69,7 +69,7 @@
   suffix: To test procedural level
   components:
   - type: CEDungeonPassage
-    targetLevel: CEDungeonTestProcedural
+    targetLevel: MossyTemple1
 
 
 - type: entity
