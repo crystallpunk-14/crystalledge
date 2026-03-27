@@ -1,0 +1,48 @@
+﻿- type: entity
+  id: CEChasm
+  categories: [ ForkFiltered ]
+  parent: MarkerBase
+  name: chasm
+  description: You can't even see the bottom.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: PlacementReplacement
+    key: walls
+  - type: Sprite
+    layers:
+    - state: red
+  - type: Transform
+    anchored: true
+  - type: Chasm
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.4
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+        density: 1000
+      fix2:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - WallLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: Climbable
+
