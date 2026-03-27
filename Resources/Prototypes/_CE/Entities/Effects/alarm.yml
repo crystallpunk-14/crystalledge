@@ -1,7 +1,5 @@
 - type: entity
   id: CEAlarmEffect
-  name: dust effect
-  suffix: VFX
   categories: [ HideSpawnMenu ]
   save: false
   components:
@@ -19,3 +17,25 @@
       - HideContextMenu
   - type: TimedDespawn
     lifetime: 0.6
+
+- type: entity
+  id: CEAlarmInRange5
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  save: false
+  name: Alarm mobs
+  suffix: 5 range
+  components:
+  - type: TimedDespawn
+    lifetime: 1
+  - type: CEAlarmOnSpawn
+    radius: 5
+
+- type: entity
+  id: CEAlarmInRange10
+  parent: CEAlarmInRange5
+  save: false
+  suffix: 10 range
+  components:
+  - type: CEAlarmOnSpawn
+    radius: 10

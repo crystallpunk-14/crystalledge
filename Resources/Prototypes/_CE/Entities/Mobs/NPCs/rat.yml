@@ -89,7 +89,8 @@
     - !type:CEGOAPPrototypeExistsInRangeSensor
       conditionKey: NotAlone
       prototypeId: CERat
-
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
   - type: NpcFactionMember
     factions:
     - SimpleHostile

@@ -19,5 +19,5 @@
 - type: alert
   id: CEAffinityFire
   icons:
-  - sprite: _CE/Skills/affinity_fire.rsi
+  - sprite: _CE/Skills/Mage/affinity_fire.rsi
     state: icon

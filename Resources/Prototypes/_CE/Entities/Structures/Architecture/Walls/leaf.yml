@@ -1,0 +1,64 @@
+- type: entity
+  id: CEWallLeaf
+  parent:
+  - CEBaseWall
+  name: leaf wall
+  description: Dense, marginal bushes. You can climb through them, but watch out for thorny branches!
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Walls/leaf.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Walls/leaf.rsi
+  - type: CEAutoTilePlacement
+    tile: CEDirt
+  - type: IconSmooth
+    key: CEwallLeaf
+    base: wall
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: CEGrassGathering
+        params:
+          variation: 0.05
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 1000
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+      fix2: #For melee or laser
+        hard: true
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        mask:
+        - FullTileMask
+        layer:
+        - Opaque
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.4
+    sprintSpeedModifier: 0.4
+  - type: EmitSoundOnTrigger
+    sound:
+      params:
+        volume: -8
+      collection: CEGrassGathering
+  - type: TriggerOnCollide
+    fixtureID: fix1
+  - type: CEZLevelHighGround
+    heightCurve:
+    - 0
+    - 0
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 20
+    destroySound:
+      collection: CEGrassGathering
+  - type: CEFlammable
+    stackDelta: 3

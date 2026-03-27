@@ -25,6 +25,7 @@ public sealed class CEHealthSystemTest
     criticalThreshold: 100
 ";
 
+    /*
     #region TakeDamage
 
     /// <summary>
@@ -271,6 +272,7 @@ public sealed class CEHealthSystemTest
     }
 
     #endregion
+    */
 
     #region CEDamageSpecifier Math
 

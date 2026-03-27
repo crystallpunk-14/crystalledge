@@ -12,33 +12,17 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
-    private readonly Dictionary<EntityUid, int> _previousDamage = new();
-
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEDamageableComponent, AfterAutoHandleStateEvent>(OnDamageableAfterState);
-        SubscribeLocalEvent<CEDamageableComponent, ComponentShutdown>(OnDamageableShutdown);
     }
 
     private void OnDamageableAfterState(EntityUid uid, CEDamageableComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        if (!_previousDamage.TryGetValue(uid, out var previousDamage))
-        {
-            _previousDamage[uid] = comp.TotalDamage;
-        }
-        else if (previousDamage != comp.TotalDamage)
-        {
-            _previousDamage[uid] = comp.TotalDamage;
-            var ev = new CEDamageChangedEvent(uid, previousDamage, comp.TotalDamage);
-            RaiseLocalEvent(uid, ev, true);
-        }
-    }
-
-    private void OnDamageableShutdown(EntityUid uid, CEDamageableComponent comp, ComponentShutdown args)
-    {
-        _previousDamage.Remove(uid);
+        var ev = new CEDamageChangedEvent(uid, comp.TotalDamage, comp.TotalDamage);
+        RaiseLocalEvent(uid, ev, true);
     }
 
     protected override void RaiseDamageEffect(EntityUid target, EntityUid? source)
@@ -52,32 +36,24 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
 
 public sealed class CEClientMobStateSystem : EntitySystem
 {
-    private readonly Dictionary<EntityUid, CEMobState> _previousStates = new();
-
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEMobStateComponent, AfterAutoHandleStateEvent>(OnMobStateAfterState);
-        SubscribeLocalEvent<CEMobStateComponent, ComponentShutdown>(OnMobStateShutdown);
     }
 
     private void OnMobStateAfterState(EntityUid uid, CEMobStateComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        if (!_previousStates.TryGetValue(uid, out var previousState))
-        {
-            _previousStates[uid] = comp.CurrentState;
-        }
-        else if (previousState != comp.CurrentState)
-        {
-            _previousStates[uid] = comp.CurrentState;
-            var ev = new CEMobStateChangedEvent(uid, previousState, comp.CurrentState);
-            RaiseLocalEvent(uid, ev, true);
-        }
-    }
+        var stateEv = new CEMobStateChangedEvent(uid, comp.CurrentState, comp.CurrentState);
+        RaiseLocalEvent(uid, stateEv, true);
 
-    private void OnMobStateShutdown(EntityUid uid, CEMobStateComponent comp, ComponentShutdown args)
-    {
-        _previousStates.Remove(uid);
+        var maxHealthEv = new CEMaxHealthChangedEvent(uid);
+        RaiseLocalEvent(uid, maxHealthEv, true);
     }
+}
+
+public sealed class CEMaxHealthChangedEvent(EntityUid target) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
 }

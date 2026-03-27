@@ -1,0 +1,71 @@
+- type: entity
+  parent: BaseStructure
+  id: CEBaseFence
+  abstract: true
+  categories: [ ForkFiltered ]
+  name: fence
+  description: A low fence restricting movement in a purely nominal way.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    offset: 0, 0.4
+    drawdepth: Mobs
+    state: fence
+  - type: Icon
+    state: fence
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/Weapons/boxingpunch1.ogg"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,0.25,0.5,0.5"
+        density: 1000
+        layer:
+        - LowImpassable
+        - MidImpassable
+  - type: Climbable
+    delay: 1.5
+
+- type: entity
+  parent:
+  - CEBaseFence
+  id: CEFenceWooden
+  suffix: Wooden
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Fences/wooden.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Fences/wooden.rsi
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 15
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Physical: 2
+  - type: CEFlammable
+    stackDelta: 1
+
+- type: entity
+  parent:
+  - CEBaseFence
+  id: CEFenceIron
+  suffix: Iron
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Fences/iron.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Fences/iron.rsi

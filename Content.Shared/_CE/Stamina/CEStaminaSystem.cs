@@ -1,3 +1,4 @@
+using Content.Shared.Inventory;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
@@ -176,4 +177,87 @@ public sealed class CEStaminaSystem : EntitySystem
         comp.NextPopupTime = curTime + TimeSpan.FromSeconds(2);
         _popup.PopupClient(Loc.GetString("ce-stamina-not-enough"), uid, uid, PopupType.SmallCaution);
     }
+
+    /// <summary>
+    /// Recalculates effective max stamina by raising <see cref="CECalculateMaxStaminaEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEStaminaComponent.MaxStamina"/> and scales current stamina proportionally.
+    /// </summary>
+    public void RefreshMaxStamina(EntityUid uid, CEStaminaComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp, false))
+            return;
+
+        var ev = new CECalculateMaxStaminaEvent(comp.BaseMaxStamina);
+        RaiseLocalEvent(uid, ev);
+
+        var newMax = MathF.Max(1f, ev.MaxStamina);
+        var oldMax = comp.MaxStamina;
+
+        if (MathHelper.CloseTo(newMax, oldMax))
+            return;
+
+        // Scale current stamina proportionally to maintain the same fraction.
+        if (oldMax > 0f && comp.Stamina > 0f)
+            comp.Stamina = MathF.Min(comp.Stamina * newMax / oldMax, newMax);
+
+        comp.MaxStamina = newMax;
+        Dirty(uid, comp);
+    }
+
+    /// <summary>
+    /// Recalculates effective stamina regen rate by raising <see cref="CECalculateStaminaRegenEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEStaminaComponent.RegenRate"/>.
+    /// </summary>
+    public void RefreshStaminaRegen(EntityUid uid, CEStaminaComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp, false))
+            return;
+
+        var ev = new CECalculateStaminaRegenEvent(comp.BaseRegenRate);
+        RaiseLocalEvent(uid, ev);
+
+        var newRate = MathF.Max(0f, ev.RegenRate);
+
+        if (MathHelper.CloseTo(newRate, comp.RegenRate))
+            return;
+
+        comp.RegenRate = newRate;
+        Dirty(uid, comp);
+    }
+}
+
+/// <summary>
+/// Raised on an entity to calculate its effective maximum stamina.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final max stamina = (BaseMaxStamina + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateMaxStaminaEvent(float baseMaxStamina) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public float BaseMaxStamina = baseMaxStamina;
+    public float FlatModifier;
+    public float Multiplier = 1f;
+
+    public float MaxStamina => (BaseMaxStamina + FlatModifier) * Multiplier;
+}
+
+/// <summary>
+/// Raised on an entity to calculate its effective stamina regen rate.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final regen rate = (BaseRegenRate + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateStaminaRegenEvent(float baseRegenRate) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public float BaseRegenRate = baseRegenRate;
+    public float FlatModifier;
+    public float Multiplier = 1f;
+
+    public float RegenRate => (BaseRegenRate + FlatModifier) * Multiplier;
 }

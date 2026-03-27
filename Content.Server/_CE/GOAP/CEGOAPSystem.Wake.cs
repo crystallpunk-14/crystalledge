@@ -3,6 +3,7 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.NPC;
+using Robust.Shared.Player;
 
 namespace Content.Server._CE.GOAP;
 
@@ -12,8 +13,21 @@ public sealed partial class CEGOAPSystem
 
     private void InitWake()
     {
-        SubscribeLocalEvent<CEMobStateComponent, CECheckGOAPAwakeEvent>(OnCheckAwake);
+        SubscribeLocalEvent<CEGOAPComponent, CECheckGOAPAwakeEvent>(OnCheckAwake);
+
         SubscribeLocalEvent<CEGOAPComponent, CEMobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CEGOAPComponent, PlayerAttachedEvent>(OnPlayerAttached);
+        SubscribeLocalEvent<CEGOAPComponent, PlayerDetachedEvent>(OnPlayerDetached);
+    }
+
+    private void OnPlayerDetached(Entity<CEGOAPComponent> ent, ref PlayerDetachedEvent args)
+    {
+        UpdateAwakeStatus(ent.Owner);
+    }
+
+    private void OnPlayerAttached(Entity<CEGOAPComponent> ent, ref PlayerAttachedEvent args)
+    {
+        UpdateAwakeStatus(ent.Owner);
     }
 
     private void OnMobStateChanged(Entity<CEGOAPComponent> ent, ref CEMobStateChangedEvent args)
@@ -21,13 +35,18 @@ public sealed partial class CEGOAPSystem
         UpdateAwakeStatus(ent.Owner);
     }
 
-    private void OnCheckAwake(Entity<CEMobStateComponent> ent, ref CECheckGOAPAwakeEvent args)
+    private void OnCheckAwake(Entity<CEGOAPComponent> ent, ref CECheckGOAPAwakeEvent args)
     {
         if (args.Handled)
             return;
 
-        if (_mobState.IsAlive(ent))
-            args.WakeUp();
+        if (HasComp<ActorComponent>(ent))
+            return;
+
+        if (!_mobState.IsAlive(ent))
+            return;
+
+        args.WakeUp();
     }
 
     private void UpdateAwakeStatus(Entity<CEGOAPComponent?> ent)

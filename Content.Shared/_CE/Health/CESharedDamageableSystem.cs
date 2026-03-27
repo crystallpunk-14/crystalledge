@@ -182,3 +182,20 @@ public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : Cance
     public readonly EntityUid Target = target;
     public readonly int HealAmount = healAmount;
 }
+
+/// <summary>
+/// Raised on an entity to calculate its effective maximum health.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final max health = (BaseMaxHealth + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public int BaseMaxHealth = baseMaxHealth;
+    public int FlatModifier;
+    public float Multiplier = 1f;
+
+    public int MaxHealth => (int)((BaseMaxHealth + FlatModifier) * Multiplier);
+}

@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/frost_flow.rsi
+      sprite: _CE/Skills/Mage/frost_flow.rsi
       state: icon
   - type: TargetAction
     range: 20

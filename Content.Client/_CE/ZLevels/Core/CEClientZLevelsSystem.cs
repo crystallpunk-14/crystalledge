@@ -20,9 +20,8 @@ namespace Content.Client._CE.ZLevels.Core;
 public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    //[Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
 
     public static float ZLevelOffset = 0.7f;
 
@@ -56,6 +55,10 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         ent.Comp.SpriteOffsetDefault = sprite.Offset;
     }
 
+    //Currently we have no need for active z-physics, so we can skip this costly loop.
+    //We will return to it when we ready.
+
+    /*
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -70,21 +73,8 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
             _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault + new Vector2(0, localPosition * ZLevelOffset));
             _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
         }
-
-        // Update StartOffset for entities with running fatigue animations
-        // This allows animations to follow dynamic offset changes (e.g., from Z-levels system)
-        var query2 = EntityQueryEnumerator<StaminaComponent, SpriteComponent, CEZPhysicsComponent>();
-        while (query2.MoveNext(out var uid, out var stamina, out var sprite, out var zPhys))
-        {
-            // Only update if animation is running
-            if (!_animation.HasRunningAnimation(uid, StaminaSystem.StaminaAnimationKey))
-                continue;
-
-            // Update the base offset to track changes made by other systems
-            stamina.StartOffset = zPhys.SpriteOffsetDefault;
-        }
     }
-
+    */
 
     public float GetVisualsLocalPosition(Entity<CEZPhysicsComponent?> ent, TransformComponent? xform = null)
     {

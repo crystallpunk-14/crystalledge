@@ -62,6 +62,13 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     /// </summary>
     [DataField]
     public Color Color = Color.White;
+
+    /// <summary>
+    /// Whether this skill can only be learned once. When false, the skill can be offered
+    /// and taken multiple times (each application adds a stack).
+    /// </summary>
+    [DataField]
+    public bool Unique = true;
 }
 
 [ImplicitDataDefinitionForInheritors]

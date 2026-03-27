@@ -15,7 +15,16 @@ public sealed partial class CEMobStateComponent : Component
     public CEMobState CurrentState = CEMobState.Alive;
 
     /// <summary>
-    /// Damage at or above which the entity enters Critical state.
+    /// Base maximum health before modifiers.
+    /// Used as the starting value for <see cref="CECalculateMaxHealthEvent"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int BaseMaxHealth = 20;
+
+    /// <summary>
+    /// Effective maximum health after modifiers (flat + multipliers).
+    /// Damage at or above this value causes the entity to enter Critical state.
+    /// Set by <see cref="CEMobStateSystem.RefreshMaxHealth"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
     public int CriticalThreshold = 20;

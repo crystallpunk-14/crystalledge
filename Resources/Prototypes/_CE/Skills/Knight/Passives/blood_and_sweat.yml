@@ -1,0 +1,45 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: BloodAndSweat
+  icon:
+    sprite: _CE/Skills/Knight/blood_and_tears.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectBloodAndSweat
+
+- type: entity
+  id: CEStatusEffectBloodAndSweat
+  name: Through Blood and Sweat
+  description: You restore [color=#2bef1d]5 stamina[/color] each time you take damage.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEBloodAndSweat
+  - type: CEBloodAndSweatStatusEffect
+    staminaRestore: 5
+
+- type: alert
+  id: CEBloodAndSweat
+  alertViewEntity: CEBloodAndSweatAlertSpriteView
+  icons:
+  - sprite: _CE/Skills/Knight/blood_and_tears.rsi
+    state: icon
+
+- type: entity
+  id: CEBloodAndSweatAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/Knight/blood_and_tears.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

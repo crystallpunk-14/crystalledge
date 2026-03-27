@@ -1,0 +1,58 @@
+- type: entity
+  parent: CEBaseFence
+  id: CEBaseFenceGate
+  abstract: true
+  categories: [ ForkFiltered ]
+  name: fence gate
+  description: You have two paths. You can open the door like a normal person, or you can climb over the door like a funny person.
+  components:
+  - type: Sprite
+    layers:
+    - state: door_closed
+      map: ["enum.DoorVisualLayers.Base"]
+  - type: Icon
+    state: door_closed
+  - type: InteractionOutline
+  - type: Appearance
+  - type: Door
+    openSpriteState: door_opened
+    closedSpriteState: door_closed
+    canPry: false
+    occludes: false
+    changeAirtight: false
+    bumpOpen: false
+    clickOpen: true
+    canCrush: false
+    closeTimeOne: 0
+    closeTimeTwo: 0
+    openTimeOne: 0
+    openTimeTwo: 0
+    closedDrawDepth: Mobs
+    openDrawDepth: Mobs
+    openingAnimationTime: 0
+    closingAnimationTime: 0
+    openSound:
+      path: /Audio/Effects/door_open.ogg
+    closeSound:
+      path: /Audio/Effects/door_close.ogg
+
+- type: entity
+  parent:
+  - CEBaseFenceGate
+  id: CEFenceGateWooden
+  suffix: Wooden
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Fences/wooden.rsi
+  - type: Icon
+    sprite: _CE/Structures/Architecture/Fences/wooden.rsi
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 15
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Physical: 2
+  - type: CEFlammable
+    stackDelta: 1

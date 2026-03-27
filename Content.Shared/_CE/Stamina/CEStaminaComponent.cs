@@ -13,7 +13,15 @@ namespace Content.Shared._CE.Stamina;
 public sealed partial class CEStaminaComponent : Component
 {
     /// <summary>
-    /// Maximum stamina value.
+    /// Base maximum stamina before modifiers.
+    /// Used as the starting value for <see cref="CECalculateMaxStaminaEvent"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BaseMaxStamina = 10f;
+
+    /// <summary>
+    /// Effective maximum stamina after modifiers (flat + multipliers).
+    /// Set by <see cref="CEStaminaSystem.RefreshMaxStamina"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MaxStamina = 10f;
@@ -27,7 +35,15 @@ public sealed partial class CEStaminaComponent : Component
     public float Stamina = 10f;
 
     /// <summary>
-    /// Stamina regeneration per second after the cooldown expires.
+    /// Base stamina regeneration per second before modifiers.
+    /// Used as the starting value for <see cref="CECalculateStaminaRegenEvent"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BaseRegenRate = 2f;
+
+    /// <summary>
+    /// Effective stamina regeneration per second after modifiers.
+    /// Set by <see cref="CEStaminaSystem.RefreshStaminaRegen"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float RegenRate = 2f;

@@ -1,12 +1,11 @@
 - type: zMap
-  id: Level0_Entry
+  id: CELevel0Entry
   maps:
-  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry0.yml
-  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry1.yml
-  - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry2.yml
+  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry-1.yml
+  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
+  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
+  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry2.yml
   components:
-    - type: Parallax
-      parallax: CESky
     - type: SunShadowCycle
       offset: 490
     - type: LightCycle
@@ -20,7 +19,7 @@
 - type: gameMap
   id: CELevel0Entry
   mapName: CELevel0Entry
-  mapPath: /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry2.yml
+  mapPath: /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry-1.yml
   minPlayers: 0
   stations:
     Level:
@@ -34,9 +33,10 @@
             CEMage: [ -1, -1 ]
             CEPriest: [ -1, -1 ]
         - type: CEStationZLevels
-          mapsBelow:
-          - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry0.yml
-          - /Maps/_CE/Dungeon/Level0_Entry/Level0_Entry1.yml
+          mapsAbove:
+          - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
+          - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
+          - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry2.yml
           zLevelsComponentOverrides:
             - type: Parallax
               parallax: CESky

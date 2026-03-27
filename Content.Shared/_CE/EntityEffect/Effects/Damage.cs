@@ -1,20 +1,20 @@
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
 /// <summary>
-/// Deals typed damage to the resolved target entity, going through armor and modifiers.
-/// Defaults to <see cref="CEEffectTarget.User"/> for backward compatibility.
+/// Deals typed damage to the resolved target entity.
+/// When <see cref="IgnoreArmor"/> is false (default), damage goes through armor and modifiers.
+/// When true, damage bypasses all modifiers and is applied directly.
 /// </summary>
 public sealed partial class Damage : CEEntityEffectBase<Damage>
 {
-    public Damage()
-    {
-        EffectTarget = CEEffectTarget.User;
-    }
-
     [DataField("damage", required: true)]
     public CEDamageSpecifier DamageSpec = new();
+
+    [DataField]
+    public bool IgnoreArmor;
 }
 
 public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
@@ -26,6 +26,9 @@ public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _health.TakeDamage(entity, args.Effect.DamageSpec);
+        if (args.Effect.IgnoreArmor)
+            _health.ChangeDamage(entity, args.Effect.DamageSpec.Total, out _);
+        else
+            _health.TakeDamage(entity, args.Effect.DamageSpec);
     }
 }
