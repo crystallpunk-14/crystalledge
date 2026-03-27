@@ -20,9 +20,8 @@ namespace Content.Client._CE.ZLevels.Core;
 public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    //[Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
 
     public static float ZLevelOffset = 0.7f;
 
