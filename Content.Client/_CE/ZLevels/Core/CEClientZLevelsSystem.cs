@@ -56,12 +56,13 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         ent.Comp.SpriteOffsetDefault = sprite.Offset;
     }
 
+    //Currently we have no need for active z-physics, so we can skip this costly loop.
+    //We will return to it when we ready.
+
+    /*
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        return; //Currently we have no need for active z-physics, so we can skip this costly loop.
-                //We will return to it when we ready.
 
         var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out var sprite, out var xform))
@@ -74,7 +75,7 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
             _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
         }
     }
-
+    */
 
     public float GetVisualsLocalPosition(Entity<CEZPhysicsComponent?> ent, TransformComponent? xform = null)
     {

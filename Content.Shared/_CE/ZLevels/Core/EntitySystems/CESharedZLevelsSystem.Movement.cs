@@ -97,12 +97,13 @@ public abstract partial class CESharedZLevelsSystem
         args.VelocityDelta -= ZGravityForce * ent.Comp.GravityMultiplier;
     }
 
+    //Currently we have no need for active z-physics, so we can skip this costly loop.
+    //We will return to it when we ready.
+
+    /*
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
-        return; //Currently we have no need for active z-physics, so we can skip this costly loop.
-                //We will return to it when we ready.
 
         var query = EntityQueryEnumerator<CEZPhysicsComponent, CEActiveZPhysicsComponent, TransformComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out _, out var xform, out var physics))
@@ -197,6 +198,7 @@ public abstract partial class CESharedZLevelsSystem
                 DirtyField(uid, zPhys, nameof(CEZPhysicsComponent.LocalPosition));
         }
     }
+    */
 
     /// <summary>
     /// Returns the last cached distance to the floor.
