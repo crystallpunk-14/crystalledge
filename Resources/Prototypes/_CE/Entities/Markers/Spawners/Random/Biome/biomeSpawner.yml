@@ -23,6 +23,8 @@
       - MindContainer
   - type: PlacementReplacement
     key: CEBiomeSpawner
+  - type: CEAutoTilePlacement
+    tile: CEDirt
 
 - type: entity
   id: CEBiomeSpawnerGrassland
