@@ -9,15 +9,6 @@
     !type:CEStaticMapConfig
     mapPath: /Maps/_CE/Dev/Dev0.yml
 
-# A multi-z-level dungeon that creates a z-network from a zMap prototype.
-- type: dungeonLevel
-  id: CEDungeonTestZNetwork
-  name: Test ZNetwork Dungeon
-  stable: false
-  config:
-    !type:CEStaticZNetworkConfig
-    zMapProto: DunTest
-
 - type: dungeonLevel
   id: MossyTemple1
   stable: false

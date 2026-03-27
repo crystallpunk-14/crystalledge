@@ -40,4 +40,10 @@ public sealed partial class CEDungeonRoom3DPrototype : IPrototype
     /// </summary>
     [DataField]
     public ProtoId<ContentTileDefinition>? IgnoreTile;
+
+    /// <summary>
+    /// Selection weight for this room. Higher values make the room appear more frequently.
+    /// </summary>
+    [DataField]
+    public float Weight = 1f;
 }
