@@ -417,15 +417,15 @@ namespace Content.IntegrationTests.Tests
                 if (entManager.HasComponent<StationJobsComponent>(station))
                 {
                     // Test that the map has valid latejoin spawn points or container spawn points
-                    if (!NoSpawnMaps.Contains(mapProto))
-                    {
-                        var lateSpawns = 0;
-
-                        lateSpawns += GetCountLateSpawn<SpawnPointComponent>(gridUids, entManager);
-                        lateSpawns += GetCountLateSpawn<ContainerSpawnPointComponent>(gridUids, entManager);
-
-                        Assert.That(lateSpawns, Is.GreaterThan(0), $"Found no latejoin spawn points on {mapProto}");
-                    }
+                    //if (!NoSpawnMaps.Contains(mapProto)) //CrystallEdge we dont need latejoin
+                    //{
+                    //    var lateSpawns = 0;
+//
+                    //    lateSpawns += GetCountLateSpawn<SpawnPointComponent>(gridUids, entManager);
+                    //    lateSpawns += GetCountLateSpawn<ContainerSpawnPointComponent>(gridUids, entManager);
+//
+                    //    Assert.That(lateSpawns, Is.GreaterThan(0), $"Found no latejoin spawn points on {mapProto}");
+                    //}
 
                     // Test all availableJobs have spawnPoints
                     // This is done inside gamemap test because loading the map takes ages and we already have it.

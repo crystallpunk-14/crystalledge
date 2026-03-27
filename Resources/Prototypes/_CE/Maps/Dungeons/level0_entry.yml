@@ -6,8 +6,6 @@
   - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
   - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry2.yml
   components:
-    - type: Parallax
-      parallax: CESky
     - type: SunShadowCycle
       offset: 490
     - type: LightCycle
