@@ -24,3 +24,10 @@
   - /Audio/_CE/Effects/pot_break2.ogg
   - /Audio/_CE/Effects/pot_break3.ogg
   - /Audio/_CE/Effects/pot_break4.ogg
+
+- type: soundCollection
+  id: CEGrassGathering
+  files:
+    - /Audio/_CE/Effects/grass_gather.ogg
+    - /Audio/_CE/Effects/grass_gather2.ogg
+    - /Audio/_CE/Effects/grass_gather3.ogg
