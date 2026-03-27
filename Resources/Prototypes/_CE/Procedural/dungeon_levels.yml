@@ -9,25 +9,17 @@
     !type:CEStaticMapConfig
     mapPath: /Maps/_CE/Dev/Dev0.yml
 
+# Base abstract prototype for all Mossy Temple dungeon levels.
+# Children override generalCount, blessingCount, cycleCount, maxRoomSize, and exits.
 - type: dungeonLevel
-  id: MossyTemple1
+  id: BaseMossyTemple
+  abstract: true
   stable: false
-  exits:
-    default: MossyTemple1 # Recursion for now
   config:
     !type:CEProceduralConfig
     corridorTile: CEStonebricks
     corridorWander: 0
     maxRoomSize: 16
-    blessingCount:
-      min: 2
-      max: 3
-    cycleCount:
-      min: 1
-      max: 2
-    generalCount:
-      min: 10
-      max: 15
     components:
     - type: MapLight
       ambientLightColor: "#3d4444"
@@ -45,7 +37,7 @@
         requireAll: true
         tags:
         - CEDunGenMossyTemple
-        #- CEDunGenRoomExit
+        - CEDunGenRoomExit
     entranceRooms:
       whitelist:
         requireAll: true
@@ -173,3 +165,60 @@
         - CEGrassBushes7
         - CEGrassBushes8
         - CEGrassBushes9
+
+# Floor 1: Small introductory level.
+- type: dungeonLevel
+  id: MossyTemple1
+  parent: BaseMossyTemple
+  name: Mossy Temple — Floor 1
+  exits:
+    default: MossyTemple2
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 5
+      max: 7
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 1
+      max: 2
+
+# Floor 2: Medium-sized level with more rooms.
+- type: dungeonLevel
+  id: MossyTemple2
+  parent: BaseMossyTemple
+  name: Mossy Temple — Floor 2
+  exits:
+    default: MossyTemple3
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 7
+      max: 10
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 2
+      max: 3
+
+# Floor 3: Large final level with many rooms and cycles.
+- type: dungeonLevel
+  id: MossyTemple3
+  parent: BaseMossyTemple
+  name: Mossy Temple — Floor 3
+  exits:
+    default: MossyTemple1 # Loops back for now
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 10
+      max: 15
+    blessingCount:
+      min: 1
+      max: 2
+    cycleCount:
+      min: 2
+      max: 4

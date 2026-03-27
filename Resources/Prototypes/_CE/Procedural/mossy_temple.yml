@@ -127,6 +127,36 @@
   zLevelMap: MossyTemple
   offset: 39, 13
 
+- type: dungeonRoom3d
+  id: MossyTemple_GrassMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_GrassBox
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 4
+
+- type: dungeonRoom3d
+  id: MossyTemple_GrassAngle
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 13
+
 # Dead ends
 
 - type: dungeonRoom3d
@@ -159,6 +189,16 @@
   zLevelMap: MossyTemple
   offset: 19, -21
 
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_SecretLeafWallStash
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 8, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 28, -21
+
 # Entrance
 
 - type: dungeonRoom3d
@@ -180,6 +220,18 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -24, -10
+
+# Exits
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_First
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 11, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -14, 0
 
 # Blessing
 
