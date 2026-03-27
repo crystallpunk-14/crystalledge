@@ -28,8 +28,8 @@
     !type:CEProceduralConfig
     maxRoomSize: 16
     blessingCount:
-      min: 1
-      max: 1
+      min: 2
+      max: 2
     cycleCount:
       min: 1
       max: 2
@@ -42,8 +42,6 @@
     - type: Gravity
       enabled: true
       inherent: true
-    - type: Parallax
-      parallax: CEAbyss
     generalRooms:
       whitelist:
         requireAll: true
