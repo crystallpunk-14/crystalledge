@@ -197,6 +197,46 @@
   zLevelMap: MossyTemple
   offset: 40, 21
 
+- type: dungeonRoom3d
+  id: MossyTemple_CaveBigHole
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 12
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 21
+
+- type: dungeonRoom3d
+  id: MossyTemple_CorridorC
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 62, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_DunCaveDun
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, 28
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssWalking
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 12
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, 30
+
 # Dead ends
 
 - type: dungeonRoom3d
@@ -280,6 +320,16 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -37, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_AbyssBridge2
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomEntrance
+  size: 12, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -27, 0
 
 # Exits
 
