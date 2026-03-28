@@ -47,13 +47,11 @@ public sealed class CEWeaponUseEvent(
 [Serializable, NetSerializable]
 public sealed class CEWeaponArcHitEvent(
     NetEntity weapon,
-    List<NetEntity> targets,
-    float power)
+    List<NetEntity> targets)
     : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
     public readonly List<NetEntity> Targets = targets;
-    public readonly float Power = power;
 }
 
 /// <summary>

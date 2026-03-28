@@ -43,9 +43,8 @@
       - time: 0.0
         scale: 1, -1
     0.1:
-    - !type:WeaponArcAttack
-      range: 0.7
-      arcWidth: 40
+    - !type:WeaponEffectSlot
+      slot: OnHit
 
 - type: entityEffectAnimation
   id: SwordAttackLight2
@@ -92,9 +91,8 @@
       - time: 0.0
         scale: 1, 1
     0.1:
-    - !type:WeaponArcAttack
-      range: 0.7
-      arcWidth: 40
+    - !type:WeaponEffectSlot
+      slot: OnHit
 
 
 - type: entityEffectAnimation
@@ -141,9 +139,8 @@
       - time: 0.0
         scale: 1, -1
     0.2:
-    - !type:WeaponArcAttack
-      range: 0.6
-      arcWidth: 180
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit
 
 - type: entityEffectAnimation
   id: SwordAttackHeavy2
@@ -189,6 +186,5 @@
       - time: 0.0
         scale: 1, 1
     0.2:
-    - !type:WeaponArcAttack
-      range: 0.6
-      arcWidth: 180
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit

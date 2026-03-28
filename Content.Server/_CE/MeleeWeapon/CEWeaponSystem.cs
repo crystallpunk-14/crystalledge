@@ -23,12 +23,12 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
     /// Damage comes from the predicted <see cref="CEWeaponArcHitEvent"/> handled in the shared system.
     /// For NPCs (no attached session), apply damage directly since there is no client.
     /// </summary>
-    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)
+    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
     {
         if (HasComp<ActorComponent>(user))
             return;
 
-        TryAttack(user, weapon, targets, power);
+        TryAttack(user, weapon, targets);
     }
 
     protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
@@ -36,7 +36,7 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
         if (targets.Count > MaxTargets)
             targets = targets.GetRange(0, MaxTargets);
 
-        var range = 1.5f * weapon.Comp.RangeMultiplier + 0.5f;
+        var range = 2f;
         var validated = new List<EntityUid>();
 
         foreach (var target in targets)

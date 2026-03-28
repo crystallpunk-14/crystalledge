@@ -9,18 +9,34 @@
     size: Ginormous
   - type: CEWeapon
     spriteRotation: -90
-    damage:
-      types:
-        Physical: 2
-    staminaCost:
-      Primary: 1
-      Secondary: 2
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 60
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 360
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
     animations:
       Primary:
       - anim: SkimitarAttackLight1
+        staminaCost: 1
       - anim: SkimitarAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: SkimitarAttackHeavy1
+        staminaCost: 2
   - type: Clothing
     slots:
     - neck

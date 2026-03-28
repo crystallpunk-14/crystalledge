@@ -9,21 +9,38 @@
     size: Ginormous
   - type: CEWeapon
     spriteRotation: -90
-    damage:
-      types:
-        Physical: 2
-    staminaCost:
-      Primary: 1
-      Secondary: 1
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.7
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 180
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
     animations:
       Primary:
       - anim: SwordAttackLight1
+        staminaCost: 1
       - anim: SwordAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: SwordAttackHeavy1
         speed: 1.2
+        staminaCost: 1
       - anim: SwordAttackHeavy2
         speed: 1.2
+        staminaCost: 1
   - type: Clothing
     slots:
     - neck

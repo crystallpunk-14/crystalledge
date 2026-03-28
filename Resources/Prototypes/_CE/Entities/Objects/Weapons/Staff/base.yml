@@ -8,19 +8,36 @@
     size: Ginormous
   - type: CEWeapon
     spriteRotation: -90
-    rangeMultiplier: 0.6
-    damage:
-      types:
-        Physical: 1
-    staminaCost:
-      Primary: 1
-      Secondary: 2
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 100
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+      - !type:ThrowFromUser
+        distance: 1
     animations:
       Primary:
       - anim: StaffAttackLight
+        staminaCost: 1
       - anim: StaffAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: StaffAttackHeavy
+        staminaCost: 2
   #- type: CEWieldedWeapon #TODO: Custom wielded animations
   - type: Wieldable
   - type: Clothing

@@ -8,19 +8,34 @@
     size: Ginormous
   - type: CEWeapon
     spriteRotation: -90
-    rangeMultiplier: 1.4
-    damage:
-      types:
-        Physical: 2
-    staminaCost:
-      Primary: 2
-      Secondary: 3
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 1.26
+        arcWidth: 15
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 1.4
+        arcWidth: 25
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 4
     animations:
       Primary:
       - anim: SpearAttackLight
+        staminaCost: 2
       Secondary:
       - anim: SpearAttackHeavy
+        staminaCost: 3
       - anim: SpearAttackHeavy2
+        staminaCost: 3
   #- type: CEWieldedWeapon #TODO: Custom wielded animations
   #  animations:
   #    Primary:

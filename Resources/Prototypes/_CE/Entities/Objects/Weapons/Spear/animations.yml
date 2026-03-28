@@ -34,9 +34,8 @@
       - time: 0.0
         scale: 1, -1
     0.08:
-    - !type:WeaponArcAttack
-      range: 0.9
-      arcWidth: 15
+    - !type:WeaponEffectSlot
+      slot: OnHit
 
 
 - type: entityEffectAnimation
@@ -91,10 +90,8 @@
     - !type:Dash
       distance: 1
     0.55:
-    - !type:WeaponArcAttack
-      range: 1.0
-      arcWidth: 25
-      power: 2
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit
 
 
 - type: entityEffectAnimation
@@ -149,7 +146,5 @@
     - !type:Dash
       distance: 1
     0.55:
-    - !type:WeaponArcAttack
-      range: 1.0
-      arcWidth: 25
-      power: 2
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit

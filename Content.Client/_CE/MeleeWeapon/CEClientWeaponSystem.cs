@@ -182,7 +182,7 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
         OnAttackEffectEvent(new CEMeleeAttackEffectEvent(GetNetEntity(user), GetNetEntityList(targets)));
     }
 
-    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)
+    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
     {
         if (!Timing.IsFirstTimePredicted)
             return;
@@ -191,7 +191,6 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
         // The shared handler will call TryAttack both during prediction and on server.
         RaisePredictiveEvent(new CEWeaponArcHitEvent(
             GetNetEntity(weapon.Owner),
-            GetNetEntityList(targets),
-            power));
+            GetNetEntityList(targets)));
     }
 }
