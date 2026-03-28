@@ -1,0 +1,51 @@
+- type: entity
+  id: CESpiderWeb
+  name: spider web
+  description: It's stringy and sticky.
+  categories: [ "ForkFiltered" ]
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: PlacementReplacement
+    key: web
+  - type: Sprite
+    sprite: _CE/Structures/spider_web.rsi
+    drawdepth: WallMountedItems
+  - type: Appearance
+  - type: Clickable
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: IconSmooth
+    key: web
+    additionalKeys:
+    - CEwall
+    base: web_
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        density: 7
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+    ignoreWhitelist:
+      components:
+      - IgnoreSpiderWeb
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
+    destroySound:
+      path:
+        "/Audio/Weapons/slash.ogg"
+  - type: CEFlammable
+    stackDelta: 2
