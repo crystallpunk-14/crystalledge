@@ -26,7 +26,7 @@ public sealed partial class CEDungeonActivePassageComponent : Component
     /// Radius (in tiles) to search for nearby players when forming a group.
     /// </summary>
     [DataField]
-    public float SearchRadius = 1f;
+    public float SearchRadius = 1.5f;
 
     /// <summary>
     /// Maximum number of players that can pass through this exit at once.

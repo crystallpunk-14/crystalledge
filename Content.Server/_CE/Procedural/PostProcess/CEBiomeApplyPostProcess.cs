@@ -61,6 +61,9 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
                 if (++counter % 500 == 0)
                     await suspend();
 
+                if (map.AnchoredEntityCount(uid, grid, tileRef.GridIndices) > 0)
+                    continue;
+
                 if (biome.TryGetEntity(tileRef.GridIndices, Layers, tileRef.Tile, seed, gridEnt, out var entity))
                     entMan.SpawnEntity(entity, map.GridTileToLocal(uid, grid, tileRef.GridIndices));
             }

@@ -165,6 +165,20 @@
         - CEGrassBushes7
         - CEGrassBushes8
         - CEGrassBushes9
+    - !type:BiomeEntityLayer # Tall grass!
+      threshold: 0.6
+      noise:
+        seed: 23
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+        - CERandomBushOffsetSpawner
 
 # Floor 1: Small introductory level.
 - type: dungeonLevel
@@ -176,8 +190,8 @@
   config:
     !type:CEProceduralConfig
     generalCount:
-      min: 5
-      max: 7
+      min: 7
+      max: 10
     blessingCount:
       min: 1
       max: 1
@@ -195,8 +209,8 @@
   config:
     !type:CEProceduralConfig
     generalCount:
-      min: 7
-      max: 10
+      min: 10
+      max: 15
     blessingCount:
       min: 1
       max: 1
