@@ -100,7 +100,7 @@ public sealed class CEFireSystem : EntitySystem
         }
 
         // Ignite entities already on the tile.
-        var entitiesOnTile = _lookup.GetEntitiesInRange(coords, 0.5f);
+        var entitiesOnTile = _lookup.GetEntitiesInRange(coords, 0.5f, LookupFlags.Uncontained);
         foreach (var entity in entitiesOnTile)
         {
             IgniteEntity(entity, ent, ent.Comp.Stacks, ent.Comp.Stacks);
