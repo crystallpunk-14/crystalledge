@@ -1,0 +1,51 @@
+# Magic Staff weapon entities
+
+- type: entity
+  parent: CEBaseWeaponMagicStaff
+  id: CEWeaponMagicStaffFire
+  name: fire staff
+  description: A staff imbued with fire magic. Launches fiery projectiles at enemies.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/MagicStaff/simple_fire_stick.rsi
+    layers:
+    - state: icon
+    - state: orb
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicFire
+        projectileSpeed: 10
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+
+- type: entity
+  id: CEProjectileMagicFire
+  name: fire bolt
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/fire_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff9603"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      damage:
+        types:
+          Fire: 1

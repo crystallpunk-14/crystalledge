@@ -1,0 +1,27 @@
+- type: entity
+  abstract: true
+  id: CEBaseWeaponMagicStaff
+  categories: [ ForkFiltered ]
+  parent:
+  - BaseItem
+  components:
+  - type: Item
+    size: Ginormous
+  - type: CEWeapon
+    spriteRotation: -90
+    animations:
+      Primary:
+      - anim: MagicStaffAttackLight1
+        staminaCost: 1
+      - anim: MagicStaffAttackLight2
+        staminaCost: 1
+      Secondary:
+      - anim: MagicStaffAttackHeavy
+        staminaCost: 1
+  - type: Clothing
+    slots:
+    - neck
+    equipWhileMoving: true
+    equipDelay: 1
+    unequipDelay: 1
+  - type: Wieldable
