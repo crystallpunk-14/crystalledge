@@ -22,7 +22,7 @@
     maxRoomSize: 16
     components:
     - type: MapLight
-      ambientLightColor: "#3d4444"
+      ambientLightColor: "#293542"
     - type: Gravity
       enabled: true
       inherent: true
@@ -179,6 +179,20 @@
         domainWarpAmp: 120
       entities:
         - CERandomBushOffsetSpawner
+    - !type:BiomeEntityLayer # God rays!
+      threshold: 0.3
+      noise:
+        seed: 877
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.03
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+        - CEGodRaysMoon
 
 # Floor 1: Small introductory level.
 - type: dungeonLevel

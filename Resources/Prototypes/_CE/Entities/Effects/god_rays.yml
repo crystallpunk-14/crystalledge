@@ -1,0 +1,33 @@
+- type: entity
+  id: CEGodRays
+  categories: [ ForkFiltered ]
+  name: god rays
+  suffix: Sun
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/god_rays.rsi
+    drawdepth: Mobs
+    noRot: true
+    offset: -0.25, 1.5
+    layers:
+      - state: ray
+        shader: unshaded
+        color: "#ffdbac"
+  - type: TileEmission
+    color: "#ffdbac"
+  - type: Tag
+    tags:
+      - HideContextMenu
+
+- type: entity
+  parent: CEGodRays
+  id: CEGodRaysMoon
+  suffix: Moon
+  components:
+  - type: Sprite
+    layers:
+      - state: ray
+        shader: unshaded
+        color: "#6ec7c7"
+  - type: TileEmission
+    color: "#6ec7c7"
