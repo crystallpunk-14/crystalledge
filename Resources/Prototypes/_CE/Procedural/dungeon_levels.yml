@@ -213,12 +213,6 @@
     - proto: CEFlem
       cost: 3
       weight: 1
-    - proto: CEFlem2
-      cost: 5
-      weight: 0.5
-    - proto: CEFlem3
-      cost: 5
-      weight: 0.5
 
 # Floor 2: Medium-sized level with more rooms.
 - type: dungeonLevel
@@ -322,16 +316,18 @@
   - !type:CEBudgetSpawnPostProcess
     budget: 40
     wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
     entries:
     - proto: CERat
       cost: 1
-      weight: 3
+      weight: 1
     - proto: CEFlem
       cost: 3
       weight: 1
     - proto: CEFlem2
       cost: 5
-      weight: 0.5
+      weight: 1
     - proto: CEFlem3
       cost: 5
-      weight: 0.5
+      weight: 1

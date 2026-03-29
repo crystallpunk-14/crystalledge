@@ -237,6 +237,16 @@
   zLevelMap: MossyTemple
   offset: 16, 30
 
+- type: dungeonRoom3d
+  id: MossyTemple_SimmetricalBox
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 62, 4
+
 # Dead ends
 
 - type: dungeonRoom3d
@@ -288,6 +298,16 @@
   height: 2
   zLevelMap: MossyTemple
   offset: 37, -23
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_Armory
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 14, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 46, -19
 
 # Entrance
 
@@ -342,6 +362,16 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -14, 0
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_DoubleRooms
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 11, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -14, 12
 
 # Blessing
 
