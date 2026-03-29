@@ -1,5 +1,7 @@
+using System.Numerics;
 using System.Threading.Tasks;
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
@@ -47,6 +49,13 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
     [DataField]
     public bool WakeOnSpawn;
 
+    /// <summary>
+    /// Room types to exclude from spawning. Tiles inside rooms of these types
+    /// will not be considered as candidates.
+    /// </summary>
+    [DataField]
+    public List<CEProceduralRoomType> ExcludedRoomTypes = new();
+
     public override async Task Execute(IEntityManager entMan, EntityUid mapUid, Func<ValueTask> suspend)
     {
         var postProcess = entMan.System<CEDungeonPostProcessSystem>();
@@ -68,6 +77,9 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         // Collect all valid spawn positions across all z-levels.
         var candidates = new List<(EntityUid MapUid, Vector2i GridIndices, EntityCoordinates Coords)>();
         var counter = 0;
+
+        // Build excluded zones from room data on the map.
+        var excludedZones = BuildExcludedZones(entMan, mapUid);
 
         foreach (var uid in maps)
         {
@@ -95,6 +107,10 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
                     if (!match)
                         continue;
                 }
+
+                // Room type exclusion filter.
+                if (IsInExcludedZone(tileRef.GridIndices, excludedZones))
+                    continue;
 
                 // Anchored entity whitelist filter.
                 if (AnchoredWhitelist is not null)
@@ -221,6 +237,40 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         {
             sleepingSystem.WakeMob(ent);
         }
+    }
+
+    /// <summary>
+    /// Reads room data from the dungeon component on the map and builds
+    /// a list of bounding boxes for rooms whose type is in <see cref="ExcludedRoomTypes"/>.
+    /// </summary>
+    private List<(Vector2i Pos, Vector2i Size)> BuildExcludedZones(IEntityManager entMan, EntityUid mapUid)
+    {
+        var zones = new List<(Vector2i Pos, Vector2i Size)>();
+
+        if (ExcludedRoomTypes.Count == 0)
+            return zones;
+
+        if (!entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(mapUid, out var dungeon))
+            return zones;
+
+        foreach (var room in dungeon.Rooms)
+        {
+            if (ExcludedRoomTypes.Contains(room.RoomType))
+                zones.Add((room.Position, room.Size));
+        }
+
+        return zones;
+    }
+
+    private static bool IsInExcludedZone(Vector2i tileIndices, List<(Vector2i Pos, Vector2i Size)> zones)
+    {
+        foreach (var (pos, size) in zones)
+        {
+            if (tileIndices.X >= pos.X && tileIndices.X < pos.X + size.X &&
+                tileIndices.Y >= pos.Y && tileIndices.Y < pos.Y + size.Y)
+                return true;
+        }
+        return false;
     }
 }
 

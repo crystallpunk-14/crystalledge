@@ -204,6 +204,8 @@
   - !type:CEBudgetSpawnPostProcess
     budget: 10
     wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
     entries:
     - proto: CERat
       cost: 1
@@ -241,6 +243,8 @@
   - !type:CEBudgetSpawnPostProcess
     budget: 15
     wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
     entries:
     - proto: CERat
       cost: 1
@@ -278,6 +282,8 @@
   - !type:CEBudgetSpawnPostProcess
     budget: 20
     wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
     entries:
     - proto: CERat
       cost: 1
