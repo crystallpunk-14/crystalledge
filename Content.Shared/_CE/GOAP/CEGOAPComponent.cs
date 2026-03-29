@@ -12,21 +12,31 @@ namespace Content.Shared._CE.GOAP;
 public sealed partial class CEGOAPComponent : Component
 {
     /// <summary>
+    /// When true, the entity spawns in a sleeping state (with <see cref="CEGOAPSleepingComponent"/>)
+    /// and must be explicitly woken by a trigger (damage, proximity, etc.).
+    /// </summary>
+    [DataField]
+    public bool StartSleeping = true;
+
+    /// <summary>
     /// List of goals this entity can pursue.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CEGOAPGoal> Goals = new();
 
     /// <summary>
     /// Available actions this entity can perform.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
     /// Sensors that update the world state each frame.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CEGOAPSensor> Sensors = new();
 
     /// <summary>
@@ -84,7 +94,6 @@ public sealed partial class CEGOAPComponent : Component
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextPlanTime;
-
 }
 
 /// <summary>

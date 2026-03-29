@@ -1,16 +1,3 @@
-# Example dungeon level prototypes using the CEDungeonSystem generator configs.
-
-# A static dungeon level that loads a pre-made map file as-is.
-- type: dungeonLevel
-  id: CEDungeonTestStatic
-  name: Test Static Dungeon
-  stable: true
-  config:
-    !type:CEStaticMapConfig
-    mapPath: /Maps/_CE/Dev/Dev0.yml
-
-# Base abstract prototype for all Mossy Temple dungeon levels.
-# Children override generalCount, blessingCount, cycleCount, maxRoomSize, and exits.
 - type: dungeonLevel
   id: BaseMossyTemple
   abstract: true
@@ -212,6 +199,17 @@
     cycleCount:
       min: 1
       max: 2
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 10
+    entries:
+    - proto: CERat
+      cost: 1
+      weight: 3
+    - proto: CEFlem
+      cost: 5
+      weight: 1
 
 # Floor 2: Medium-sized level with more rooms.
 - type: dungeonLevel
@@ -231,6 +229,17 @@
     cycleCount:
       min: 2
       max: 3
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 15
+    entries:
+    - proto: CERat
+      cost: 1
+      weight: 3
+    - proto: CEFlem
+      cost: 5
+      weight: 1
 
 # Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
@@ -250,3 +259,14 @@
     cycleCount:
       min: 2
       max: 4
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 20
+    entries:
+    - proto: CERat
+      cost: 1
+      weight: 3
+    - proto: CEFlem
+      cost: 5
+      weight: 1

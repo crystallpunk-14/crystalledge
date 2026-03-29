@@ -46,10 +46,15 @@ public sealed partial class CEGOAPSystem
         if (!_mobState.IsAlive(ent))
             return;
 
+        // Sleeping entities are blocked from waking via normal checks.
+        // They must be woken explicitly by CEGOAPSleepingSystem.
+        if (HasComp<CEGOAPSleepingComponent>(ent))
+            return;
+
         args.WakeUp();
     }
 
-    private void UpdateAwakeStatus(Entity<CEGOAPComponent?> ent)
+    public void UpdateAwakeStatus(Entity<CEGOAPComponent?> ent)
     {
         var ev = new CECheckGOAPAwakeEvent();
         RaiseLocalEvent(ent, ev);

@@ -53,5 +53,6 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     public Dictionary<string, ProtoId<CEDungeonLevelPrototype>> Exits = new();
 
     [DataField]
+    [AlwaysPushInheritance]
     public List<CEDungeonPostProcessLayer> PostProcess = new();
 }

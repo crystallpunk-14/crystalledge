@@ -79,6 +79,11 @@ public sealed partial class CEGOAPSystem : EntitySystem
         {
             sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
         }
+
+        // If StartSleeping is set, add the sleeping marker so the entity stays dormant.
+        if (ent.Comp.StartSleeping)
+            EnsureComp<CEGOAPSleepingComponent>(ent);
+
         UpdateAwakeStatus((ent, ent.Comp));
     }
 
