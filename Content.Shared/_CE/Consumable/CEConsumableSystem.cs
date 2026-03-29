@@ -132,11 +132,21 @@ public sealed class CEConsumableSystem : EntitySystem
             return;
 
         var position = _transform.GetMapCoordinates(ent);
-        var pickup = user != null && _hands.IsHolding(user.Value, ent, out _);
+
+        // Capture which hand holds the consumable before touching anything.
+        string? handId = null;
+        var inHand = user != null && _hands.IsHolding(user.Value, ent, out handId);
+
         var spawned = EntityManager.PredictedSpawn(replacement, position);
 
-        if (pickup && user != null)
-            _hands.TryPickupAnyHand(user.Value, spawned);
+        if (!inHand || user == null)
+            return;
+
+        // Free the holding hand without triggering drop interactions (item is about to be deleted).
+        _hands.TryDrop(user.Value, ent.Owner, checkActionBlocker: false, doDropInteraction: false);
+
+        // Put the replacement into the exact same hand slot.
+        _hands.TryPickup(user.Value, spawned, handId!);
     }
 }
 
