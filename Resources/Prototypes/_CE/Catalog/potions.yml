@@ -45,7 +45,7 @@
   components:
   - type: Sprite
     layers:
-    - state: red
+    - state: green
     - sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
       state: icon
   - type: EntityTableSpawner

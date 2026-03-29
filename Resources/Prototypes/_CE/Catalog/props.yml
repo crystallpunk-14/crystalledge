@@ -14,7 +14,7 @@
     snapCardinals: true
     drawdepth: Mobs
     layers:
-    - state: red
+    - state: green
     - sprite: _CE/Structures/Furniture/clay_pot.rsi
       state: pot1
   - type: EntityTableSpawner
