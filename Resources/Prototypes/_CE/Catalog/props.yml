@@ -3,6 +3,9 @@
   table: !type:GroupSelector
     children:
     - id: CEPot
+      weight: 1
+    - id: CEChestWoodenFilled
+      weight: 0.1
 
 - type: entity
   id: CESpawnerRandomDungeonProp

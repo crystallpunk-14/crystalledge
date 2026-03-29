@@ -5,7 +5,7 @@
   parent: [ BaseItem ]
   components:
   - type: Item
-    size: Ginormous
+    size: Large
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
