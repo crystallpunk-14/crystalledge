@@ -37,7 +37,6 @@ public sealed partial class CEDungeonInstanceSystem
 
     private void UpdatePassage()
     {
-        // Process completed generation tasks on the main thread to avoid thread-safety issues.
         if (_pendingGenerations.Count > 0)
         {
             var pendingList = _pendingGenerations.ToList();
@@ -74,6 +73,7 @@ public sealed partial class CEDungeonInstanceSystem
 
                 if (TryFindEnterPoint(proto, out var entry))
                 {
+                    entry.Value.Comp.Active = false;
                     var activeComp2 = EnsureComp<CEDungeonActivePassageComponent>(passageUid);
                     activeComp2.TargetPosition = Transform(entry.Value).Coordinates;
                 }
