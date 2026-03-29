@@ -6,6 +6,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.Consumable;
@@ -14,6 +15,7 @@ public sealed class CEConsumableSystem : EntitySystem
 {
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
@@ -133,20 +135,25 @@ public sealed class CEConsumableSystem : EntitySystem
 
         var position = _transform.GetMapCoordinates(ent);
 
-        // Capture which hand holds the consumable before touching anything.
+        // Case 1: item is in a hand — put replacement in the same hand slot.
         string? handId = null;
-        var inHand = user != null && _hands.IsHolding(user.Value, ent, out handId);
-
-        var spawned = EntityManager.PredictedSpawn(replacement, position);
-
-        if (!inHand || user == null)
+        if (user != null && _hands.IsHolding(user.Value, ent, out handId))
+        {
+            var spawned = EntityManager.PredictedSpawn(replacement, position);
+            // Free the holding hand without triggering drop interactions (item is about to be deleted).
+            _hands.TryDrop(user.Value, ent.Owner, checkActionBlocker: false, doDropInteraction: false);
+            _hands.TryPickup(user.Value, spawned, handId);
             return;
+        }
 
-        // Free the holding hand without triggering drop interactions (item is about to be deleted).
-        _hands.TryDrop(user.Value, ent.Owner, checkActionBlocker: false, doDropInteraction: false);
-
-        // Put the replacement into the exact same hand slot.
-        _hands.TryPickup(user.Value, spawned, handId!);
+        // Case 2: item is in a container (pocket, bag, chest) — put replacement in the same container.
+        if (_containers.TryGetContainingContainer(ent.Owner, out var container))
+        {
+            var spawned = EntityManager.PredictedSpawn(replacement, position);
+            _containers.Remove(ent.Owner, container);
+            _containers.Insert(spawned, container);
+            return;
+        }
     }
 }
 
