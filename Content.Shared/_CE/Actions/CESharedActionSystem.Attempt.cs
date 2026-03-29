@@ -14,6 +14,7 @@ public abstract partial class CESharedActionSystem
 {
     private void InitializeAttempts()
     {
+        SubscribeLocalEvent<CEMobStateComponent, ActionAttemptEvent>(OnMobStateAttempt);
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
@@ -21,6 +22,12 @@ public abstract partial class CESharedActionSystem
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ActionValidateEvent>(OnTargetMobStatusRequiredValidate);
+    }
+
+    private void OnMobStateAttempt(Entity<CEMobStateComponent> ent, ref ActionAttemptEvent args)
+    {
+        if (ent.Comp.CurrentState != CEMobState.Alive)
+            args.Cancelled = true;
     }
 
     /// <summary>
