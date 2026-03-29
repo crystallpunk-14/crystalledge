@@ -203,13 +203,20 @@
   # Mobs
   - !type:CEBudgetSpawnPostProcess
     budget: 10
+    wakeOnSpawn: true
     entries:
     - proto: CERat
       cost: 1
       weight: 3
     - proto: CEFlem
-      cost: 5
+      cost: 3
       weight: 1
+    - proto: CEFlem2
+      cost: 5
+      weight: 0.5
+    - proto: CEFlem3
+      cost: 5
+      weight: 0.5
 
 # Floor 2: Medium-sized level with more rooms.
 - type: dungeonLevel
@@ -233,19 +240,64 @@
   # Mobs
   - !type:CEBudgetSpawnPostProcess
     budget: 15
+    wakeOnSpawn: true
     entries:
     - proto: CERat
       cost: 1
       weight: 3
     - proto: CEFlem
-      cost: 5
+      cost: 3
       weight: 1
+    - proto: CEFlem2
+      cost: 5
+      weight: 0.5
+    - proto: CEFlem3
+      cost: 5
+      weight: 0.5
 
 # Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
   id: MossyTemple3
   parent: BaseMossyTemple
   name: Mossy Temple — Floor 3
+  exits:
+    default: MossyTemple4
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 10
+      max: 15
+    blessingCount:
+      min: 1
+      max: 2
+    cycleCount:
+      min: 2
+      max: 4
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 20
+    wakeOnSpawn: true
+    entries:
+    - proto: CERat
+      cost: 1
+      weight: 3
+    - proto: CEFlem
+      cost: 3
+      weight: 1
+    - proto: CEFlem2
+      cost: 5
+      weight: 0.5
+    - proto: CEFlem3
+      cost: 5
+      weight: 0.5
+
+
+# Floor 3: Large final level with many rooms and cycles.
+- type: dungeonLevel
+  id: MossyTemple4
+  parent: BaseMossyTemple
+  name: Mossy Temple — Floor 4
   exits:
     default: MossyTemple1 # Loops back for now
   config:
@@ -262,11 +314,18 @@
   postProcess:
   # Mobs
   - !type:CEBudgetSpawnPostProcess
-    budget: 20
+    budget: 40
+    wakeOnSpawn: true
     entries:
     - proto: CERat
       cost: 1
       weight: 3
     - proto: CEFlem
-      cost: 5
+      cost: 3
       weight: 1
+    - proto: CEFlem2
+      cost: 5
+      weight: 0.5
+    - proto: CEFlem3
+      cost: 5
+      weight: 0.5
