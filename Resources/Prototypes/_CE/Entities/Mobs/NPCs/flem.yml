@@ -9,6 +9,7 @@
   description: TODO
   categories: [ ForkFiltered ]
   components:
+  - type: CEGOAPAlarm
   - type: CEMagicEnergyContainer
     energy: 100
     baseMaxEnergy: 100
@@ -114,9 +115,16 @@
     baseSprintSpeed: 2.5
   - type: CEWeapon
     spriteRotation: -90
-    damage:
-      types:
-        Physical: 2
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.7
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
     animations:
       Primary:
       - anim: FlemAttack1
@@ -173,9 +181,8 @@
       - time: 0.0
         scale: 1, -1
     0.25:
-    - !type:WeaponArcAttack
-      range: 0.7
-      arcWidth: 40
+    - !type:WeaponEffectSlot
+      slot: OnHit
     - !type:Dash
       distance: 0.1
 
@@ -230,8 +237,7 @@
       - time: 0.0
         scale: 1, 1
     0.25:
-    - !type:WeaponArcAttack
-      range: 0.7
-      arcWidth: 40
+    - !type:WeaponEffectSlot
+      slot: OnHit
     - !type:Dash
       distance: 0.1

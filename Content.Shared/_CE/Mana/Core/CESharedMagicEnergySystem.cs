@@ -12,10 +12,16 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CEMagicEnergyContainerComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEMagicEnergyContainerComponent, RejuvenateEvent>(OnRejuvenate);
 
         SubscribeLocalEvent<CEMagicEnergyExaminableComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CEMagicEnergyAmbientSoundComponent, CESlotCrystalPowerChangedEvent>(OnSlotPowerChanged);
+    }
+
+    private void OnMapInit(Entity<CEMagicEnergyContainerComponent> ent, ref MapInitEvent args)
+    {
+        RefreshMaxMana(ent, ent.Comp);
     }
 
     private void OnRejuvenate(Entity<CEMagicEnergyContainerComponent> ent, ref RejuvenateEvent args)
