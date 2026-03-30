@@ -119,23 +119,22 @@
         - CEGrassBushes7
         - CEGrassBushes8
         - CEGrassBushes9
-    # TODO: Uncomment when CEHighBushRandom entity is ported
-    #- !type:BiomeEntityLayer # Tall grass!
-    #  threshold: 0.3
-    #  noise:
-    #    seed: 23
-    #    noiseType: OpenSimplex2
-    #    fractalType: Ridged
-    #    frequency: 0.05
-    #    octaves: 3
-    #    lacunarity: 1.8
-    #    gain: 0.7
-    #    domainWarpType: OpenSimplex2
-    #    domainWarpAmp: 120
-    #  allowedTiles:
-    #    - CEGrassTall
-    #  entities:
-    #    - CEHighBushRandom
+    - !type:BiomeEntityLayer # Tall grass!
+      threshold: 0.3
+      noise:
+        seed: 23
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      allowedTiles:
+        - CEGrassTall
+      entities:
+        - CERandomBushOffsetSpawner
     - !type:BiomeEntityLayer # Rare Trees
       threshold: 0.8
       noise:

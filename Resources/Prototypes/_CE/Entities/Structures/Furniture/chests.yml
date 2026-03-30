@@ -79,7 +79,7 @@
 - type: entity
   parent: CEChestBase
   id: CEChestWoodenOld
-  name: wooden chest
+  name: old wooden chest
   components:
   - type: Sprite
     sprite: _CE/Structures/Furniture/Chests/wooden_old.rsi

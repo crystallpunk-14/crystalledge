@@ -93,9 +93,20 @@ public sealed partial class CEDungeonSystem
         if (_availableRooms.Count == 0)
             return null;
 
-        var room = _availableRooms[random.Next(_availableRooms.Count)];
+        // Weighted random selection.
+        var totalWeight = 0f;
+        foreach (var r in _availableRooms)
+            totalWeight += r.Weight;
 
-        return room;
+        var roll = (float)(random.NextDouble() * totalWeight);
+        foreach (var r in _availableRooms)
+        {
+            roll -= r.Weight;
+            if (roll <= 0f)
+                return r;
+        }
+
+        return _availableRooms[^1];
     }
 
 

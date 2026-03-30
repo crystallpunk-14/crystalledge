@@ -1,0 +1,42 @@
+- type: entityTable
+  id: CECommonWeapon
+  table: !type:GroupSelector
+    children:
+    - id: CEWeaponMagicStaffFire
+    - id: CEWeaponMagicStaffIce
+    - id: CEWeaponSkimitarIron
+    - id: CEWeaponSpearIron
+    - id: CEWeaponSwordIron
+
+- type: entityTable
+  id: CEUncommonWeapon
+  table: !type:GroupSelector
+    children:
+    - id: CEWeaponTwoHandedSwordIron #TODO
+
+- type: entityTable
+  id: CERandomWeapon
+  table: !type:GroupSelector
+    children:
+    - !type:NestedSelector
+      tableId: CECommonWeapon
+      weight: 1
+    - !type:NestedSelector
+      tableId: CEUncommonWeapon
+      weight: 0.5
+
+- type: entity
+  id: CESpawnerRandomWeapon
+  name: random weapon spawner
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
+      state: icon
+  - type: EntityTableSpawner
+    table: !type:NestedSelector
+      tableId: CERandomWeapon
+      prob: 0.3

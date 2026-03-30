@@ -95,19 +95,31 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
     }
 
     /// <summary>
-    /// Samples random directions and returns the world position of a valid walkable tile.
-    /// Prefers tiles at full radius; falls back to half radius.
+    /// Samples random directions at progressively shorter distances
+    /// and returns the world position of a valid walkable tile.
+    /// Fallback to shorter distances ensures mobs can navigate tight corridors.
     /// </summary>
     private Vector2? PickDestination(TransformComponent xform, CEGOAPExploreAction action)
     {
         var worldPos = _transform.GetWorldPosition(xform);
         var mapId = xform.MapID;
 
-        float[] distances = [action.ExploreRadius, action.ExploreRadius * 0.5f];
+        // Try progressively shorter distances to handle corridors.
+        float[] distances =
+        [
+            action.ExploreRadius,
+            action.ExploreRadius * 0.65f,
+            action.ExploreRadius * 0.4f,
+            action.ExploreRadius * 0.2f,
+            2f
+        ];
         var baseAngle = (float) _random.NextAngle().Theta;
 
         foreach (var dist in distances)
         {
+            if (dist < 1f)
+                continue;
+
             var angleStep = MathF.PI * 2f / action.SampleDirections;
             for (var i = 0; i < action.SampleDirections; i++)
             {
@@ -122,6 +134,10 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
                 var tileIndices = _mapSystem.WorldToTile(gridUid, grid, candidatePos);
                 if (!_mapSystem.TryGetTileRef(gridUid, grid, tileIndices, out var tileRef) ||
                     tileRef.Tile.IsEmpty)
+                    continue;
+
+                // Skip tiles with anchored entities (walls, furniture).
+                if (_mapSystem.AnchoredEntityCount(gridUid, grid, tileIndices) > 0)
                     continue;
 
                 return candidatePos;

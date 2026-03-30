@@ -56,7 +56,8 @@
   parent: CEDungeonPortalBase
   name: dungeon rift
   description: A rift leading deeper into the dungeon. Interact to enter.
-  categories: [ HideSpawnMenu ]
+  categories: [ ForkFiltered ]
+  suffix: For dungeon mapping
   components:
   - type: CEDungeonPassage
   - type: InteractionOutline
@@ -69,7 +70,7 @@
   suffix: To test procedural level
   components:
   - type: CEDungeonPassage
-    targetLevel: CEDungeonTestProcedural
+    targetLevel: MossyTemple1
 
 
 - type: entity
@@ -98,6 +99,7 @@
 - type: entity
   id: CEDungeonLevelEntry
   parent: MarkerBase
+  categories: [ ForkFiltered ]
   name: dungeon entry point
   description: An arrival point for adventurers entering this level.
   components:

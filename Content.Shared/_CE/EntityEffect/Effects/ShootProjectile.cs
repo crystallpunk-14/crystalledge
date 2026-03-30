@@ -37,9 +37,6 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
 
     protected override void Effect(ref CEEntityEffectEvent<ShootProjectile> args)
     {
-        if (!TryResolveTargetCoordinates(args.Args, out var targetPoint))
-            return;
-
         if (!_net.IsServer)
             return;
 
@@ -55,20 +52,30 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
             ? _transform.WithEntityId(fromCoords, gridUid)
             : new(_mapManager.GetMapEntityId(fromMap.MapId), fromMap.Position);
 
+        // Resolve direction: prefer target coordinates, fall back to angle.
+        var baseDirection = Vector2.Zero;
+        if (TryResolveTargetCoordinates(args.Args, out var targetPoint))
+        {
+            baseDirection = targetPoint.ToMapPos(EntityManager, _transform) -
+                            spawnCoords.ToMapPos(EntityManager, _transform);
+        }
+
+        // Fall back to angle when no target or target is the user (zero direction).
+        if (baseDirection == default)
+        {
+            baseDirection = args.Args.Angle.ToWorldVec();
+        }
+
         for (var i = 0; i < args.Effect.ProjectileCount; i++)
         {
-            //Apply spread to target point
-            var offsetedTargetPoint = targetPoint.Offset(new Vector2(
+            var direction = baseDirection + new Vector2(
                 (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread,
-                (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread));
+                (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread);
 
-            if (fromCoords == offsetedTargetPoint)
+            if (direction == Vector2.Zero)
                 continue;
 
             var ent = EntityManager.SpawnAtPosition(args.Effect.Prototype, spawnCoords);
-
-            var direction = offsetedTargetPoint.ToMapPos(EntityManager, _transform) -
-                            spawnCoords.ToMapPos(EntityManager, _transform);
 
             _gun.ShootProjectile(ent,
                 direction,

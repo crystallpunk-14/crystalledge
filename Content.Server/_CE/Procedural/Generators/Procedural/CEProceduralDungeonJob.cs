@@ -1,11 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Server._CE.Procedural.Generators.Procedural;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Robust.Shared.CPUJob.JobQueues;
-using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -23,7 +21,6 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
     private readonly IPrototypeManager _proto;
     private readonly IRobustRandom _random;
     private readonly SharedMapSystem _maps;
-    private readonly CEDungeonSystem _dungeon;
     private readonly CEZLevelsSystem _zLevels;
     private readonly CEProceduralGeneratorSystem _generator;
     private readonly CEProceduralConfig _config;
@@ -36,7 +33,6 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
         IPrototypeManager proto,
         IRobustRandom random,
         SharedMapSystem maps,
-        CEDungeonSystem dungeon,
         CEZLevelsSystem zLevels,
         CEProceduralGeneratorSystem generator,
         CEProceduralConfig config,
@@ -48,7 +44,6 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
         _proto = proto;
         _random = random;
         _maps = maps;
-        _dungeon = dungeon;
         _zLevels = zLevels;
         _generator = generator;
         _config = config;
@@ -85,8 +80,8 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
         await _generator.AssignRealRooms(comp, config, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
-        // Compact: slide rooms toward their parent (BFS order), maintaining 1-tile gap.
-        await CEProceduralGeneratorSystem.CompactRooms(comp, SuspendIfOutOfTime);
+        // Compact: slide rooms toward their parent (BFS order), maintaining adaptive gap.
+        await _generator.CompactRooms(comp, config.MainZLevel, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
         // Create z-network so 3D rooms can be spawned across z-levels.
@@ -124,8 +119,7 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
 
         // Spawn each room's 3D prototype onto the grid.
         var reservedTiles = new HashSet<Vector2i>();
-        var rng = new Random(_random.Next());
-        await _generator.SpawnRooms(comp, mapUid, grid, rng, reservedTiles, SuspendIfOutOfTime);
+        await _generator.SpawnRooms(comp, mapUid, grid, reservedTiles, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
         // Resolve the grid at MainZLevel for corridor placement.
@@ -149,7 +143,9 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
             }
         }
 
-        // Build corridors between connected rooms.
+        var rng = new Random(_random.Next());
+
+        // Build corridors and spawn doors between connected rooms.
         await _generator.BuildCorridors(comp, config, corridorGridUid, corridorGrid, rng, reservedTiles, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 

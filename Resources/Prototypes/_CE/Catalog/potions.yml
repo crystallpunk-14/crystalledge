@@ -45,10 +45,10 @@
   components:
   - type: Sprite
     layers:
-    - state: red
+    - state: green
     - sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
       state: icon
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomPotion
-      prob: 0.6
+      prob: 0.3

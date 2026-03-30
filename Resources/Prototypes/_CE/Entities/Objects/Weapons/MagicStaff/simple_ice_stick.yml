@@ -1,0 +1,49 @@
+- type: entity
+  parent: CEBaseWeaponMagicStaff
+  id: CEWeaponMagicStaffIce
+  name: ice staff
+  description: A staff imbued with ice magic. Launches freezing projectiles at enemies.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/MagicStaff/simple_ice_stick.rsi
+    layers:
+    - state: icon
+    - state: orb
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicIce
+        projectileSpeed: 10
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.8
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+
+- type: entity
+  id: CEProjectileMagicIce
+  name: ice bolt
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/cold_slowdown_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      damage:
+        types:
+          Cold: 1

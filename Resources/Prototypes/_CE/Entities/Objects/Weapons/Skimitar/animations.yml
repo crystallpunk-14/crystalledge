@@ -48,9 +48,8 @@
       - time: 0.0
         scale: 1, -1
     0.15:
-    - !type:WeaponArcAttack
-      range: 0.6
-      arcWidth: 60
+    - !type:WeaponEffectSlot
+      slot: OnHit
 
 - type: entityEffectAnimation
   id: SkimitarAttackLight2
@@ -102,9 +101,8 @@
       - time: 0.0
         scale: 1, 1
     0.25:
-    - !type:WeaponArcAttack
-      range: 0.7
-      arcWidth: 40
+    - !type:WeaponEffectSlot
+      slot: OnHit
 
 - type: entityEffectAnimation
   id: SkimitarAttackHeavy1
@@ -165,7 +163,5 @@
     - !type:Dash
       distance: 1
     0.05:
-    - !type:WeaponArcAttack
-      range: 0.6
-      arcWidth: 360
-      power: 0.5
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit

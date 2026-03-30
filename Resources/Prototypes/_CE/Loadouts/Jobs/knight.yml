@@ -50,3 +50,27 @@
   equipment:
     gloves: CEClothingKnightGlovesFighter
 
+
+- type: loadoutGroup
+  id: CEKnightWeapon
+  name: ce-loadout-weapon
+  minLimit: 1
+  loadouts:
+  - CEWeaponSwordIron
+  - CEWeaponSpearIron
+  - CEWeaponSkimitarIron
+
+- type: loadout
+  id: CEWeaponSwordIron
+  equipment:
+    neck: CEWeaponSwordIron
+
+- type: loadout
+  id: CEWeaponSpearIron
+  equipment:
+    neck: CEWeaponSpearIron
+
+- type: loadout
+  id: CEWeaponSkimitarIron
+  equipment:
+    neck: CEWeaponSkimitarIron

@@ -34,6 +34,13 @@ public sealed partial class CEGOAPSystem : EntitySystem
     /// rather than creating new lists each time to minimize GC allocations.
     /// </summary>
 
+    /// <summary>
+    /// Snapshot buffer for active GOAP entities. Populated at the start of each Update()
+    /// to avoid collection-modified exceptions when WakeMob adds CEActiveGOAPComponent
+    /// to new entities during action execution.
+    /// </summary>
+    private readonly List<(EntityUid Uid, CEGOAPComponent Goap)> _activeSnapshot = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -79,6 +86,11 @@ public sealed partial class CEGOAPSystem : EntitySystem
         {
             sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
         }
+
+        // If StartSleeping is set, add the sleeping marker so the entity stays dormant.
+        if (ent.Comp.StartSleeping)
+            EnsureComp<CEGOAPSleepingComponent>(ent);
+
         UpdateAwakeStatus((ent, ent.Comp));
     }
 
@@ -97,12 +109,24 @@ public sealed partial class CEGOAPSystem : EntitySystem
         if (!_enabled)
             return;
 
-        var count = 0;
+        // Snapshot active entities before iterating to prevent
+        // InvalidOperationException if WakeMob adds CEActiveGOAPComponent
+        // to a new entity during action execution.
+        _activeSnapshot.Clear();
         var query = EntityQueryEnumerator<CEActiveGOAPComponent, CEGOAPComponent>();
         while (query.MoveNext(out var uid, out _, out var goap))
         {
+            _activeSnapshot.Add((uid, goap));
+        }
+
+        var count = 0;
+        foreach (var (uid, goap) in _activeSnapshot)
+        {
             if (count >= _maxUpdates)
                 break;
+
+            if (!HasComp<CEActiveGOAPComponent>(uid))
+                continue;
 
             UpdateAgent((uid, goap), frameTime);
             count++;

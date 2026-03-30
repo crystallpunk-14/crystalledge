@@ -78,3 +78,23 @@
   id: CEClothingMageHeadTriangular
   equipment:
     head: CEClothingMageHeadTriangular
+
+
+
+- type: loadoutGroup
+  id: CEMageWeapon
+  name: ce-loadout-weapon
+  minLimit: 1
+  loadouts:
+  - CEWeaponMagicStaffFire
+  - CEWeaponMagicStaffIce
+
+- type: loadout
+  id: CEWeaponMagicStaffFire
+  equipment:
+    neck: CEWeaponMagicStaffFire
+
+- type: loadout
+  id: CEWeaponMagicStaffIce
+  equipment:
+    neck: CEWeaponMagicStaffIce

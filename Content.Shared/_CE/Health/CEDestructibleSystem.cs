@@ -54,7 +54,7 @@ public sealed class CEDestructibleSystem : EntitySystem
             return;
 
         if (ent.Comp.DestroySound is not null)
-            _audio.PlayPvs(ent.Comp.DestroySound, Transform(ent).Coordinates);
+            _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
 
         // Server-side: spawn loot. TODO: prediction someway??
         if (_net.IsServer && ent.Comp.LootTable is not null)

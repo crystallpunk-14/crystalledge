@@ -115,4 +115,11 @@ public sealed partial class CEProceduralRoomConnection
     /// </summary>
     [DataField]
     public int RoomB;
+
+    /// <summary>
+    /// Whether this connection is "close" — the rooms have aligned passway markers
+    /// separated by exactly 1 tile (placed with gap = 1 during compaction).
+    /// </summary>
+    [DataField]
+    public bool IsClose;
 }

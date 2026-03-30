@@ -79,7 +79,6 @@ public sealed partial class CEProceduralGeneratorSystem
         CEGeneratingProceduralDungeonComponent comp,
         EntityUid gridUid,
         MapGridComponent grid,
-        Random random,
         HashSet<Vector2i> reservedTiles,
         Func<ValueTask> suspend)
     {

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._CE.Animation.Item.Components;
+using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Map;
 
@@ -15,12 +16,6 @@ public sealed partial class WeaponArcAttack : CEEntityEffectBase<WeaponArcAttack
 
     [DataField]
     public Angle Angle = Angle.Zero;
-
-    /// <summary>
-    /// The overall damage modifier for this attack.
-    /// </summary>
-    [DataField]
-    public float Power = 1f;
 
     [DataField]
     public List<CEEntityEffect> Effects = new();
@@ -55,7 +50,7 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         var entityCoords = _transform.GetMapCoordinates(args.Args.User);
         var direction = new Angle(args.Args.Angle.ToWorldVec()) + args.Effect.Angle;
 
-        var range = args.Effect.Range * weapon.RangeMultiplier;
+        var range = args.Effect.Range;
 
         // Raise debug event for arc attack visualization
         var debugEvent = new CEDebugArcAttackEvent(entityCoords, direction, range, args.Effect.ArcWidth);
@@ -71,8 +66,14 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
             .ToList();
 
         targets.Remove(args.Args.User);
-        _melee.HandleArcAttackHit(args.Args.User, (args.Args.Used.Value, weapon), targets, args.Effect.Power);
 
+        if (args.Args.Used is { } usedEntity)
+            targets.Remove(usedEntity);
+
+        // Filter to only damageable entities — skip walls, floor items, etc.
+        targets.RemoveAll(t => !HasComp<CEDamageableComponent>(t));
+
+        _melee.HandleArcAttackHit(args.Args.User, (args.Args.Used.Value, weapon), targets);
 
         foreach (var target in targets)
         {

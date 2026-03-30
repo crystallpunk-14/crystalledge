@@ -10,6 +10,9 @@
   name: Cure wounds
   description: You restore [color=#1defa9]5 health[/color] to the creature you touch.
   components:
+  - type: Sprite
+    sprite: _CE/Skills/cure_wounds.rsi
+    state: icon
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
