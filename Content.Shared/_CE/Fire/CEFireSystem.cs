@@ -1,5 +1,7 @@
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -26,10 +28,13 @@ public sealed class CEFireSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private readonly EntProtoId _defaultFireProto = "CEFireTileLow";
 
     private readonly EntProtoId _statusFire = "CEStatusEffectFire";
+    private readonly EntProtoId _fireImpactEffect = "CEFireImpactEffect";
+    private readonly SoundSpecifier _fireSound = new SoundPathSpecifier("/Audio/_CE/Effects/fire_whoosh.ogg");
 
     private EntityQuery<CEFireComponent> _fireQuery;
 
@@ -251,6 +256,10 @@ public sealed class CEFireSystem : EntitySystem
             // Set stacks directly (MapInit already set it to initial value, so we override).
             SetStacks((newFire, newComp), stacks);
         }
+
+        // Spawn freeze visual effect.
+        var fx = _entManager.SpawnEntity(_fireImpactEffect, coordinates);
+        _audio.PlayPvs(_fireSound, fx);
     }
 
     public void IgniteArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 10)

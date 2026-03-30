@@ -1,66 +1,72 @@
 - type: skill
   parent: BaseMageSkill
-  id: Fireblast
+  id: Firebolt
   effect: !type:AddAction
-    action: CEActionFireblast
+    action: CEActionFirebolt
 
 - type: entity
-  id: CEActionFireblast
+  id: CEActionFirebolt
   parent: CEActionSpellBase
-  name: Fireblast
+  name: Firebolt
   description: You hurl a fireball that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].
   components:
   - type: Sprite
-    sprite: _CE/Skills/Mage/fireblast.rsi
+    sprite: _CE/Skills/Mage/firebolt.rsi
     state: icon
   - type: CEVisualizeWideLineAction
-    width: 2.5
+    width: 1.0
     projectileMode: true
   - type: CEActionManaCost
     manaCost: 3
   - type: Action
     useDelay: 3
     icon:
-      sprite: _CE/Skills/Mage/fireblast.rsi
+      sprite: _CE/Skills/Mage/firebolt.rsi
       state: icon
   - type: TargetAction
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
-      animation: AnimationFireblast
+      animation: AnimationFirebolt
 
 - type: entityEffectAnimation
-  id: AnimationFireblast
+  id: AnimationFirebolt
   movementSpeed: 0.3
   duration: 1.0
   lockRotation: true
   events:
     0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:EntityAnimation
-      dummyEntity: CEEffectFireblastCharge
+      dummyEntity: CEEffectFireboltCharge
       offsetAnimation:
       - time: 0.0
         offset: 0, 0.5
       - time: 0.8
         offset: 0, -1
     0.8:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:ShootProjectile
       projectileSpeed: 8
-      prototype: CEProjectileFireblast
+      prototype: CEProjectileFirebolt
       projectileCount: 1
       spread: 0
 
 - type: entity
-  id: CEEffectFireblastCharge
+  id: CEEffectFireboltCharge
   parent: CEBaseMagicImpact
   categories: [ ForkFiltered ]
   suffix: VFX
-  name: fireblast charge
+  name: firebolt charge
   save: false
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/fireball_charge.rsi
+    sprite: _CE/Effects/firebolt_charge.rsi
     layers:
     - state: effect
       shader: unshaded
@@ -81,13 +87,13 @@
         enabled: true
 
 - type: entity
-  id: CEProjectileFireblast
-  name: fireblast projectile
+  id: CEProjectileFirebolt
+  name: firebolt projectile
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/fireball.rsi
+    sprite: _CE/Effects/firebolt.rsi
     layers:
     - state: effect
       shader: unshaded
@@ -103,4 +109,8 @@
           Heat: 3
     - !type:IgniteArea
       radius: 2
-      maxStacks: 3
+      maxStacks: 2
+    - !type:SpawnEntity
+      effectTarget: Target
+      spawns:
+      - CEEffectPotionAlchemicalFire
