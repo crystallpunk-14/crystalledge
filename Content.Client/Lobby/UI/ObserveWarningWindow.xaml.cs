@@ -21,14 +21,19 @@ public sealed partial class ObserveWarningWindow : DefaultWindow
         IoCManager.InjectDependencies(this);
         var player = _playerManager.LocalSession;
 
+        // CrystallEdge: upstream player-observe confirmation is suppressed; the popup only keeps the admin observer action.
+        ObserveButton.Visible = false;
+
         if (player != null && _adminManager.IsAdmin(player))
         {
-            ObserveButton.Text = Loc.GetString("observe-as-player");
             ObserveAsAdminButton.Visible = true;
             ObserveAsAdminButton.OnPressed += _ => { this.Close(); };
         }
+        else
+        {
+            ObserveAsAdminButton.Visible = false;
+        }
 
-        ObserveButton.OnPressed += _ => { this.Close(); };
         NevermindButton.OnPressed += _ => { this.Close(); };
     }
 }

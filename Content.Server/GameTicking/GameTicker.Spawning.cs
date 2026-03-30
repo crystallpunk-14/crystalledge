@@ -376,6 +376,30 @@ namespace Content.Server.GameTicking
                 SpawnPlayer(player, EntityUid.Invalid);
         }
 
+        // CrystallEdge: upstream observer flows remain available only for admins; regular players are sent back to the lobby instead.
+        public bool CanBecomeObserver(ICommonSession player, bool adminOverride = false)
+        {
+            return adminOverride || _adminManager.IsAdmin(player);
+        }
+
+        public bool CanBecomeObserver(NetUserId? userId, bool adminOverride = false)
+        {
+            if (adminOverride)
+                return true;
+
+            if (userId == null || !_playerManager.TryGetSessionById(userId.Value, out var player))
+                return false;
+
+            return CanBecomeObserver(player);
+        }
+
+        public void ReturnPlayerToLobby(ICommonSession player)
+        {
+            _mind.WipeMind(player);
+            PlayerJoinLobby(player);
+            _chatManager.DispatchServerMessage(player, Loc.GetString("observer-disabled-returned-to-lobby"));
+        }
+
         /// <summary>
         /// Makes a player join into the game and spawn on a station.
         /// </summary>
@@ -397,24 +421,38 @@ namespace Content.Server.GameTicking
         /// <summary>
         /// Causes the given player to join the current game as observer ghost. See also <see cref="SpawnObserver"/>
         /// </summary>
-        public void JoinAsObserver(ICommonSession player)
+        public void JoinAsObserver(ICommonSession player, bool adminOverride = false)
         {
             // Can't spawn players with a dummy ticker!
             if (DummyTicker)
                 return;
 
+            // CrystallEdge: late-join observer fallback must not create a playable observer for regular players.
+            if (!CanBecomeObserver(player, adminOverride))
+            {
+                ReturnPlayerToLobby(player);
+                return;
+            }
+
             PlayerJoinGame(player);
-            SpawnObserver(player);
+            SpawnObserver(player, adminOverride);
         }
 
         /// <summary>
         /// Spawns an observer ghost and attaches the given player to it. If the player does not yet have a mind, the
         /// player is given a new mind with the observer role. Otherwise, the current mind is transferred to the ghost.
         /// </summary>
-        public void SpawnObserver(ICommonSession player)
+        public void SpawnObserver(ICommonSession player, bool adminOverride = false)
         {
             if (DummyTicker)
                 return;
+
+            // CrystallEdge: direct observer spawns from upstream admin/game flows still collapse to lobby for non-admin sessions.
+            if (!CanBecomeObserver(player, adminOverride))
+            {
+                ReturnPlayerToLobby(player);
+                return;
+            }
 
             var makeObserver = false;
             Entity<MindComponent?>? mind = player.GetMind();
@@ -427,7 +465,13 @@ namespace Content.Server.GameTicking
                 makeObserver = true;
             }
 
-            var ghost = _ghost.SpawnGhost(mind.Value);
+            var ghost = _ghost.SpawnGhost(mind.Value, adminOverride: adminOverride);
+            if (ghost == null)
+            {
+                ReturnPlayerToLobby(player);
+                return;
+            }
+
             if (makeObserver)
                 _roles.MindAddRole(mind.Value, "MindRoleObserver");
 

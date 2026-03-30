@@ -1,3 +1,4 @@
+using Content.Server.Administration;
 using Content.Server.Popups;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
@@ -7,7 +8,7 @@ using Content.Server.GameTicking;
 
 namespace Content.Server.Ghost
 {
-    [AnyCommand]
+    [AdminCommand(AdminFlags.Admin)] //CrystallEdge - not for all
     public sealed class GhostCommand : IConsoleCommand
     {
         [Dependency] private readonly IEntityManager _entities = default!;

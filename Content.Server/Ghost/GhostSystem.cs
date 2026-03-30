@@ -435,10 +435,10 @@ namespace Content.Server.Ghost
         }
 
         public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityUid targetEntity,
-            bool canReturn = false)
+            bool canReturn = false, bool adminOverride = false)
         {
             _transformSystem.TryGetMapOrGridCoordinates(targetEntity, out var spawnPosition);
-            return SpawnGhost(mind, spawnPosition, canReturn);
+            return SpawnGhost(mind, spawnPosition, canReturn, adminOverride);
         }
 
         private bool IsValidSpawnPosition(EntityCoordinates? spawnPosition)
@@ -459,10 +459,15 @@ namespace Content.Server.Ghost
         }
 
         public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityCoordinates? spawnPosition = null,
-            bool canReturn = false)
+            bool canReturn = false, bool adminOverride = false)
         {
             if (!Resolve(mind, ref mind.Comp))
                 return null;
+
+            // CrystallEdge: regular players may not receive upstream observer ghosts outside explicit admin-only paths.
+            if (!_gameTicker.CanBecomeObserver(mind.Comp.UserId, adminOverride))
+                return null;
+            //CrystallEdge end
 
             // Test if the map or grid is being deleted
             if (!IsValidSpawnPosition(spawnPosition))
@@ -519,6 +524,11 @@ namespace Content.Server.Ghost
         {
             if (!Resolve(mindId, ref mind))
                 return false;
+
+            // CrystallEdge: the normal ghost pipeline is disabled; only explicit admin overrides such as forceghost may use it.
+            if (!forced)
+                return false;
+            // CrystallEdge end
 
             var playerEntity = mind.CurrentEntity;
 
