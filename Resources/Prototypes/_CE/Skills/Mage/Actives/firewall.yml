@@ -14,9 +14,9 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 6
   - type: Action
-    useDelay: 5
+    useDelay: 8
     icon:
       sprite: _CE/Skills/Mage/firewall.rsi
       state: icon

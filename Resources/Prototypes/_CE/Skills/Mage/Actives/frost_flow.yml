@@ -14,9 +14,9 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 4
   - type: Action
-    useDelay: 5
+    useDelay: 8
     icon:
       sprite: _CE/Skills/Mage/frost_flow.rsi
       state: icon
@@ -138,10 +138,6 @@
         - HighImpassable
         - LowImpassable
         hard: false
-  - type: Projectile
-    damage:
-      types:
-        Cold: 0
   - type: CEEntityEffectSpawner
     frequency: 0.2
     firstDelay: 0.3
@@ -150,3 +146,11 @@
       radius: 1.5
       maxStacks: 6
       fallOffFactor: 1
+    - !type:AreaEffect
+      affectCaster: true
+      range: 1.5
+      effects:
+      - !type:Damage
+        damage:
+          types:
+            Cold: 1
