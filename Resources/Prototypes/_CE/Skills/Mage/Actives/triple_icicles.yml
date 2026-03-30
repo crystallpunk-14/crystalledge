@@ -45,7 +45,8 @@
     #    offset: 0, -1
     #0.8:
     - !type:ShootProjectile
-      projectileSpeed: 10
+      projectileSpeed: 8
+      projectileMaxSpeed: 12
       prototype: CEProjectileTripleIcicle
       projectileCount: 3
       spread: 0.2
@@ -67,10 +68,14 @@
     energy: 4.0
   - type: CEProjectile
     hitEffects:
-    - !type:Damage
-      damage:
-        types:
-          Cold: 2
     - !type:FreezeArea
       radius: 1.5
       maxStacks: 6
+    - !type:AreaEffect
+      affectCaster: true
+      range: 1.5
+      effects:
+      - !type:Damage
+        damage:
+          types:
+            Cold: 2

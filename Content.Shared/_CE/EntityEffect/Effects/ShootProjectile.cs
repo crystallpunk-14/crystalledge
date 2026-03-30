@@ -18,6 +18,9 @@ public sealed partial class ShootProjectile : CEEntityEffectBase<ShootProjectile
     public float ProjectileSpeed = 20f;
 
     [DataField]
+    public float? ProjectileMaxSpeed = null;
+
+    [DataField]
     public float Spread;
 
     [DataField]
@@ -84,12 +87,20 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
 
             var ent = EntityManager.SpawnAtPosition(args.Effect.Prototype, spawnCoords);
 
+            var speed = args.Effect.ProjectileSpeed;
+            if (args.Effect.ProjectileMaxSpeed is { } max)
+            {
+                var min = MathF.Min(speed, max);
+                var maxv = MathF.Max(speed, max);
+                speed = _random.NextFloat(min, maxv);
+            }
+
             _gun.ShootProjectile(ent,
                 direction,
                 args.Effect.SaveVelocity ? userVelocity : new Vector2(),
                 args.Args.User,
                 args.Args.User,
-                args.Effect.ProjectileSpeed);
+                speed);
         }
     }
 }
