@@ -106,7 +106,7 @@
     - !type:Damage
       damage:
         types:
-          Heat: 3
+          Fire: 3
     - !type:IgniteArea
       radius: 2
       maxStacks: 2

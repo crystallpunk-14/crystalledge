@@ -1,25 +1,22 @@
 - type: skill
   parent: BaseMageSkill
-  id: ManaGift
+  id: ManaSteal
   effect: !type:AddAction
-    action: CEActionManaGift
+    action: CEActionManaSteal
 
 - type: entity
-  id: CEActionManaGift
+  id: CEActionManaSteal
   parent: CEActionSpellBase
-  name: Mana Gift
-  description: Restore [color=#3082f5]5 mana[/color] to the selected target
+  name: Mana Steal
+  description: Steal [color=#3082f5]2 mana[/color] from the selected target and transfer it to yourself.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
-  - type: CEActionManaCost
-    canModifyManacost: false
-    manaCost: 5
   - type: Action
-    useDelay: 2
+    useDelay: 8
     icon:
-      sprite: _CE/Skills/Mage/mana_gift.rsi
+      sprite: _CE/Skills/Mage/mana_steal.rsi
       state: icon
   - type: TargetAction
     range: 1.5
@@ -32,43 +29,42 @@
       - CEMobState
       - CEMagicEnergyContainer
     event: !type:CEEntityTargetActionAnimationEvent
-      animation: AnimationManaGift
+      animation: AnimationManaSteal
 
 - type: entityEffectAnimation
-  id: AnimationManaGift
-  movementSpeed: 0.5
+  id: AnimationManaSteal
+  movementSpeed: 0.6
   duration: 0.5
   events:
     0:
     - !type:SpawnEntity
+      effectTarget: Target
       spawns:
-      - CEEffectManaRestore
-    - !type:SayChat
-      sentence: "Dare magis"
+      - CEEffectManaDrain
     0.45:
     - !type:SpawnEntity
+      effectTarget: User
       spawns:
       - CEEffectManaRestore
-    - !type:RestoreMana
-      amount: 5
-      applyModifiers: false
+    - !type:StealMana
+      amount: 2
 
 - type: entity
-  id: CEEffectManaRestore
+  id: CEEffectManaDrain
   parent: CEBaseMagicImpact
   categories: [ ForkFiltered ]
-  name: mana restore effect
+  name: mana drain effect
   suffix: VFX
   save: false
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/mana_restore_generic.rsi
+    sprite: _CE/Effects/mana_drain.rsi
     layers:
     - state: effect
       shader: unshaded
   - type: PointLight
-    color: "#5428e7"
+    color: "#6b19af"
     radius: 1.5
   - type: TimedDespawn
     lifetime: 2
