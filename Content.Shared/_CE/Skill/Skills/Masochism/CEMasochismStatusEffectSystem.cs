@@ -33,6 +33,6 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
         if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
             count *= stackComp.Stacks;
 
-        _magic.ChangeEnergy(statusEffect.AppliedTo.Value, count, out _, out _);
+        _magic.Restore(statusEffect.AppliedTo.Value, count, statusEffect.AppliedTo.Value);
     }
 }

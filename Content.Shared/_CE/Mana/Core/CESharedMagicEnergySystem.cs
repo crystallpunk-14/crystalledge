@@ -45,7 +45,43 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         _ambient.SetAmbience(ent, args.Powered);
     }
 
-    public void ChangeEnergy(Entity<CEMagicEnergyContainerComponent?> ent,
+    public void Restore(Entity<CEMagicEnergyContainerComponent?> ent, int amount, EntityUid? source = null, bool raiseModifiersEvent = true)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        var finalAmount = amount;
+        if (raiseModifiersEvent)
+        {
+            if (source is not null)
+            {
+                var ev = new CEGetManaRestoreAmountEvent(ent, amount);
+                RaiseLocalEvent(source.Value, ev);
+
+                finalAmount = ev.RestoreAmount;
+            }
+
+            var ev2 = new CEGetManaRestoringAmountEvent(source, finalAmount);
+            RaiseLocalEvent(ent, ev2);
+
+            finalAmount = ev2.RestoreAmount;
+        }
+
+        if (finalAmount <= 0)
+            return;
+
+        ChangeEnergy(ent, finalAmount, out _, out _);
+    }
+
+    public void Take(Entity<CEMagicEnergyContainerComponent?> ent, int amount)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ChangeEnergy(ent, -amount, out _, out _);
+    }
+
+    private void ChangeEnergy(Entity<CEMagicEnergyContainerComponent?> ent,
         int energy,
         out int deltaEnergy,
         out int overloadEnergy)
@@ -65,17 +101,6 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
         if (oldEnergy != newEnergy)
             RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, newEnergy, ent.Comp.MaxEnergy), true);
-    }
-
-    /// <summary>
-    /// Set energy to 0
-    /// </summary>
-    public void ClearEnergy(Entity<CEMagicEnergyContainerComponent?> ent)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return;
-
-        ChangeEnergy(ent, -ent.Comp.Energy, out _, out _);
     }
 
     public void TransferEnergy(Entity<CEMagicEnergyContainerComponent?> sender,
@@ -203,4 +228,22 @@ public sealed class CECalculateMaxManaEvent(int baseMaxMana) : EntityEventArgs, 
     public float Multiplier = 1f;
 
     public int MaxMana => (int)((BaseMaxMana + FlatModifier) * Multiplier);
+}
+
+/// <summary>
+/// Called on mana restoring source entity to calculate the amount to heal.
+/// </summary>
+public sealed class CEGetManaRestoreAmountEvent(EntityUid target, int restoreAmount) : EntityEventArgs
+{
+    public EntityUid Target = target;
+    public int RestoreAmount = restoreAmount;
+}
+
+/// <summary>
+/// Called on entity that restoring mana to calculate the amount of mana restore
+/// </summary>
+public sealed class CEGetManaRestoringAmountEvent(EntityUid? source, int restoreAmount) : EntityEventArgs
+{
+    public EntityUid? Source = source;
+    public int RestoreAmount = restoreAmount;
 }

@@ -6,6 +6,9 @@ public sealed partial class RestoreMana : CEEntityEffectBase<RestoreMana>
 {
     [DataField]
     public int Amount = 1;
+
+    [DataField]
+    public bool ApplyModifiers = true;
 }
 
 public sealed partial class CERestoreManaEffectSystem : CEEntityEffectSystem<RestoreMana>
@@ -17,6 +20,6 @@ public sealed partial class CERestoreManaEffectSystem : CEEntityEffectSystem<Res
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _mana.ChangeEnergy(entity, args.Effect.Amount, out _, out _);
+        _mana.Restore(entity, args.Effect.Amount, args.Args.User, args.Effect.ApplyModifiers);
     }
 }
