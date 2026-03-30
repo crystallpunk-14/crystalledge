@@ -24,7 +24,7 @@ public sealed class CEHealthSystemTest
   - type: CEMobState
     criticalThreshold: 100
   - type: CEDestructible
-      destroyThreshold: 25
+    destroyThreshold: 25
 ";
 
     /*
