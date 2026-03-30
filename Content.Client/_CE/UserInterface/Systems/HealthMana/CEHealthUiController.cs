@@ -118,7 +118,9 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
+        EntityManager.TryGetComponent<CEDestructibleComponent>(uid, out var destructible);
+
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(damageable, mobState);
+        _healthBar.UpdateHealthDisplay(damageable, mobState, destructible);
     }
 }

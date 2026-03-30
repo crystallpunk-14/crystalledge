@@ -35,11 +35,17 @@ public sealed partial class CEHealthUI : UIWidget
         HealthLabel.FontOverride = vollkornFont;
     }
 
-    public void UpdateHealthDisplay(CEDamageableComponent damageable, CEMobStateComponent mobState)
+    public void UpdateHealthDisplay(CEDamageableComponent damageable, CEMobStateComponent mobState, CEDestructibleComponent? destructible = null)
     {
         var currentState = mobState.CurrentState;
         var critThreshold = mobState.CriticalThreshold;
         var currentHp = Math.Max(0, critThreshold - damageable.TotalDamage);
+        var damageUntilDeath = destructible != null
+            ? Math.Max(0, destructible.DestroyThreshold)
+            : 0;
+        var remainingDamageUntilDeath = destructible != null
+            ? Math.Max(0, critThreshold + damageUntilDeath - damageable.TotalDamage)
+            : 0;
 
         float ratio;
 
@@ -64,7 +70,11 @@ public sealed partial class CEHealthUI : UIWidget
             }
         }
 
-        HealthLabel.Text = $"{currentHp}/{critThreshold}";
+        HealthLabel.Text = currentState switch
+        {
+            CEMobState.Critical when destructible != null => $"{remainingDamageUntilDeath}/{damageUntilDeath}",
+            _ => $"{currentHp}/{critThreshold}"
+        };
 
         if (currentState != _lastMobState)
         {

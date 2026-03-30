@@ -16,8 +16,6 @@
         variation: 0.1
   - type: CEDestructible
     destroyThreshold: 3
-    destroySound:
-      collection: gib
     lootTable: !type:AllSelector
       children:
       - id: CECoinCopper1

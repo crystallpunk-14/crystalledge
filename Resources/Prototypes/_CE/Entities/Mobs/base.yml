@@ -4,7 +4,10 @@
   abstract: true
   components:
   - type: CEDamageable
-  - type: CEMobState
+  - type: CEDestructible
+    destroyThreshold: 20
+    destroySound:
+      collection: gib
   - type: Pullable
   - type: CEFlammable
     stackDelta: -1

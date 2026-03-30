@@ -23,6 +23,8 @@ public sealed class CEHealthSystemTest
   - type: CEDamageable
   - type: CEMobState
     criticalThreshold: 100
+  - type: CEDestructible
+      destroyThreshold: 25
 ";
 
     /*
@@ -273,6 +275,44 @@ public sealed class CEHealthSystemTest
 
     #endregion
     */
+
+    [Test]
+    public async Task CriticalDamageLimitDeletesEntity()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var damageableSystem = entManager.System<CESharedDamageableSystem>();
+        EntityUid ent = default;
+
+        await server.WaitAssertion(() =>
+        {
+            ent = entManager.SpawnEntity("CEHealthTestDummy", MapCoordinates.Nullspace);
+            var mobState = entManager.GetComponent<CEMobStateComponent>(ent);
+
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 100));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entManager.EntityExists(ent), Is.True);
+                Assert.That(mobState.CurrentState, Is.EqualTo(CEMobState.Critical));
+            });
+
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 24));
+            Assert.That(entManager.EntityExists(ent), Is.True);
+
+            damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 1));
+        });
+
+        await server.WaitIdleAsync();
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entManager.EntityExists(ent), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     #region CEDamageSpecifier Math
 

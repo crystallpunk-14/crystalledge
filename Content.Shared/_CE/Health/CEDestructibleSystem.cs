@@ -1,7 +1,12 @@
 using Content.Shared._CE.Health.Components;
 using Content.Shared.EntityTable;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Storage;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Map;
@@ -12,11 +17,15 @@ namespace Content.Shared._CE.Health;
 
 /// <summary>
 /// Destroys entities via QueueDel when accumulated damage reaches <see cref="CEDestructibleComponent.DestroyThreshold"/>.
-/// Works independently from <see cref="CEMobStateSystem"/>.
+/// For entities with <see cref="CEMobStateComponent"/>, the threshold is counted
+/// from the moment they enter Critical.
 /// </summary>
 public sealed class CEDestructibleSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
@@ -34,7 +43,9 @@ public sealed class CEDestructibleSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CEDestructibleComponent> ent, ref CEDamageChangedEvent args)
     {
-        if (args.NewDamage < ent.Comp.DestroyThreshold)
+        var destroyThreshold = GetDestroyThreshold(ent, args.NewDamage);
+
+        if (args.NewDamage < destroyThreshold)
             return;
 
         if (TerminatingOrDeleted(ent.Owner) || EntityManager.IsQueuedForDeletion(ent.Owner))
@@ -56,19 +67,19 @@ public sealed class CEDestructibleSystem : EntitySystem
         if (ent.Comp.DestroySound is not null)
             _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
 
-        // Server-side: spawn loot. TODO: prediction someway??
-        if (_net.IsServer && ent.Comp.LootTable is not null)
+        if (_net.IsServer)
         {
-            var spawns = _entityTable.GetSpawns(ent.Comp.LootTable);
-            foreach (var spawn in spawns)
+            DropCarriedItems(ent.Owner, position);
+
+            // Server-side: spawn loot. TODO: prediction someway??
+            if (ent.Comp.LootTable is not null)
             {
-                var spawnedLoot = SpawnAtPosition(spawn, position);
-                _transform.SetLocalRotation(spawnedLoot, _random.NextAngle());
-                _throwing.TryThrow(
-                    spawnedLoot,
-                    _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f),
-                    2f
-                );
+                var spawns = _entityTable.GetSpawns(ent.Comp.LootTable);
+                foreach (var spawn in spawns)
+                {
+                    var spawnedLoot = SpawnAtPosition(spawn, position);
+                    ScatterDroppedItem(spawnedLoot, position);
+                }
             }
         }
 
@@ -76,6 +87,103 @@ public sealed class CEDestructibleSystem : EntitySystem
         RaiseLocalEvent(ent.Owner, ref destructedEv);
 
         PredictedQueueDel(ent.Owner);
+    }
+
+    private int GetDestroyThreshold(Entity<CEDestructibleComponent> ent, int totalDamage)
+    {
+        if (!TryComp<CEMobStateComponent>(ent, out var mobState))
+            return ent.Comp.DestroyThreshold;
+
+        if (totalDamage < mobState.CriticalThreshold)
+            return int.MaxValue;
+
+        return mobState.CriticalThreshold + ent.Comp.DestroyThreshold;
+    }
+
+    private void DropCarriedItems(EntityUid uid, EntityCoordinates position)
+    {
+        DropInventoryItems(uid, position);
+        DropHandItems(uid, position);
+    }
+
+    private void DropInventoryItems(EntityUid uid, EntityCoordinates position)
+    {
+        if (!TryComp(uid, out InventoryComponent? inventory))
+            return;
+
+        var equippedItems = new List<(EntityUid Item, string Slot)>();
+        var enumerator = _inventory.GetSlotEnumerator((uid, inventory));
+
+        while (enumerator.NextItem(out var item, out var slot))
+        {
+            equippedItems.Add((item, slot.Name));
+        }
+
+        foreach (var (item, slot) in equippedItems)
+        {
+            if (TerminatingOrDeleted(item) || EntityManager.IsQueuedForDeletion(item))
+                continue;
+
+            if (_inventory.TryUnequip(uid, uid, slot, out var removedItem, true, true, inventory: inventory))
+            {
+                ScatterDroppedItem(removedItem.Value, position);
+                continue;
+            }
+
+            if (!_container.IsEntityInContainer(item))
+                ScatterDroppedItem(item, position);
+        }
+    }
+
+    private void DropHandItems(EntityUid uid, EntityCoordinates position)
+    {
+        if (!TryComp(uid, out HandsComponent? hands))
+            return;
+
+        var heldItems = new List<EntityUid>();
+        foreach (var held in _hands.EnumerateHeld((uid, hands)))
+        {
+            heldItems.Add(held);
+        }
+
+        foreach (var held in heldItems)
+        {
+            if (TerminatingOrDeleted(held) || EntityManager.IsQueuedForDeletion(held))
+                continue;
+
+            _hands.TryDrop((uid, hands), held, checkActionBlocker: false, doDropInteraction: false);
+
+            if (!_container.IsEntityInContainer(held))
+                ScatterDroppedItem(held, position);
+        }
+    }
+
+    private void ScatterDroppedItem(EntityUid item, EntityCoordinates position)
+    {
+        if (TerminatingOrDeleted(item) || EntityManager.IsQueuedForDeletion(item))
+            return;
+
+        EmptyNestedStorage(item, position);
+
+        _transform.SetLocalRotation(item, _random.NextAngle());
+        _throwing.TryThrow(item, _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f), 2f);
+    }
+
+    private void EmptyNestedStorage(EntityUid item, EntityCoordinates position)
+    {
+        if (!TryComp(item, out StorageComponent? storage) || storage.StoredItems.Count == 0)
+            return;
+
+        var storedItems = new List<EntityUid>(storage.StoredItems.Keys);
+        _container.EmptyContainer(storage.Container, destination: position);
+
+        foreach (var stored in storedItems)
+        {
+            if (_container.IsEntityInContainer(stored))
+                continue;
+
+            ScatterDroppedItem(stored, position);
+        }
     }
 }
 
