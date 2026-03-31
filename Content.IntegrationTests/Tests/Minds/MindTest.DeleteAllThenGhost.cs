@@ -9,7 +9,6 @@ namespace Content.IntegrationTests.Tests.Minds;
 public sealed partial class MindTests
 {
     [Test]
-    [Ignore("CrystallEdge - not needed")]
     public async Task DeleteAllThenGhost()
     {
         var settings = new PoolSettings
