@@ -1,0 +1,107 @@
+- type: entity
+  parent: BaseItem
+  id: PonyEd
+  categories: [ "ForkFiltered" ]
+  name: pony Ed
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: ed
+
+- type: entity
+  parent: BaseItem
+  id: PonyAngel
+  categories: [ "ForkFiltered" ]
+  name: pony Angel
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: angel
+
+- type: entity
+  parent: BaseItem
+  id: PonyDina
+  categories: [ "ForkFiltered" ]
+  name: pony Dina
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: dina
+
+- type: entity
+  parent: BaseItem
+  id: PonyEglow
+  categories: [ "ForkFiltered" ]
+  name: pony Eglow
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: eglow
+
+- type: entity
+  parent: BaseItem
+  id: PonyEz
+  categories: [ "ForkFiltered" ]
+  name: pony Ez
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: ez
+
+- type: entity
+  parent: BaseItem
+  id: PonyLucson
+  categories: [ "ForkFiltered" ]
+  name: pony Lucson
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: lucson
+
+- type: entity
+  parent: BaseItem
+  id: PonyStepa
+  categories: [ "ForkFiltered" ]
+  name: pony Stepa
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: stepa
+
+- type: entity
+  parent: BaseItem
+  id: PonyStraymer
+  categories: [ "ForkFiltered" ]
+  name: pony Straymer
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: straymer
+
+- type: entity
+  parent: BaseItem
+  id: PonyVojner
+  categories: [ "ForkFiltered" ]
+  name: pony Vojner
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: /Textures/_CE/pony.rsi
+    layers:
+    - state: vojner
