@@ -1,0 +1,130 @@
+- type: skill
+  parent: BaseMageSkill
+  id: TripleIcicles
+  effect: !type:AddAction
+    action: CEActionTripleIcicles
+
+- type: entity
+  id: CEActionTripleIcicles
+  parent: CEActionSpellBase
+  name: Triple Icicles
+  description: You unleash three icicles that deal [color=#30caf5]cold[/color] damage and [color=#30caf5]freeze[/color] the area on hit.
+  components:
+  - type: Sprite
+    sprite: _CE/Skills/Mage/triple_icicle.rsi
+    state: icon
+  - type: CEVisualizeConeAction
+    width: 25
+    range: 5
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Mage/triple_icicle.rsi
+      state: icon
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationTripleIcicles
+
+- type: entityEffectAnimation
+  id: AnimationTripleIcicles
+  movementSpeed: 0.3
+  duration: 1.0
+  lockRotation: true
+  events:
+    0:
+    - !type:EntityAnimation
+      dummyEntity: CEProjectileTripleIcicle
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.5, 0
+      - time: 0.2
+        offset: -0.4, -0.2
+      - time: 0.4
+        offset: -0.3, -0.5
+        easing: QuadIn
+      - time: 0.6
+        offset: 0.2, -0.6
+        easing: QuadOut
+      rotationAnimation:
+      - time: 0.0
+        rotation: -45
+      - time: 0.6
+        rotation: 15
+    0.1:
+    - !type:EntityAnimation
+      dummyEntity: CEProjectileTripleIcicle
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.5, 0
+      - time: 0.2
+        offset: -0.4, -0.2
+      - time: 0.4
+        offset: -0.3, -0.5
+        easing: QuadIn
+      - time: 0.5
+        offset: 0, -0.7
+        easing: QuadOut
+      rotationAnimation:
+      - time: 0.0
+        rotation: -45
+      - time: 0.5
+        rotation: 0
+    0.2:
+    - !type:EntityAnimation
+      dummyEntity: CEProjectileTripleIcicle
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.5, 0
+      - time: 0.2
+        offset: -0.4, -0.2
+      - time: 0.3
+        offset: -0.3, -0.5
+        easing: QuadIn
+      - time: 0.4
+        offset: -0.2, -0.5
+        easing: QuadOut
+      rotationAnimation:
+      - time: 0.0
+        rotation: -45
+      - time: 0.4
+        rotation: -15
+    0.9:
+    - !type:ShootProjectile
+      projectileSpeed: 10
+      projectileMaxSpeed: 12
+      prototype: CEProjectileTripleIcicle
+      projectileCount: 3
+      spread: 0.2
+
+- type: entity
+  id: CEProjectileTripleIcicle
+  name: triple icicle
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Skills/Mage/triple_icicle.rsi
+    layers:
+    - state: projectile
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 1.8
+    energy: 4.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:FreezeArea
+      radius: 1.5
+      maxStacks: 6
+    - !type:AreaEffect
+      affectCaster: true
+      range: 1.5
+      effects:
+      - !type:Damage
+        damage:
+          types:
+            Cold: 2

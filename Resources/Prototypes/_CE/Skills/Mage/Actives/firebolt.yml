@@ -1,0 +1,116 @@
+- type: skill
+  parent: BaseMageSkill
+  id: Firebolt
+  effect: !type:AddAction
+    action: CEActionFirebolt
+
+- type: entity
+  id: CEActionFirebolt
+  parent: CEActionSpellBase
+  name: Firebolt
+  description: You hurl a fireball that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].
+  components:
+  - type: Sprite
+    sprite: _CE/Skills/Mage/firebolt.rsi
+    state: icon
+  - type: CEVisualizeWideLineAction
+    width: 1.0
+    projectileMode: true
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 3
+    icon:
+      sprite: _CE/Skills/Mage/firebolt.rsi
+      state: icon
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationFirebolt
+
+- type: entityEffectAnimation
+  id: AnimationFirebolt
+  movementSpeed: 0.3
+  duration: 1.0
+  lockRotation: true
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:EntityAnimation
+      dummyEntity: CEEffectFireboltCharge
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0.5
+      - time: 0.8
+        offset: 0, -1
+    0.8:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:ShootProjectile
+      projectileSpeed: 8
+      prototype: CEProjectileFirebolt
+      projectileCount: 1
+      spread: 0
+
+- type: entity
+  id: CEEffectFireboltCharge
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: firebolt charge
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/firebolt_charge.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff8a05"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEProjectileFirebolt
+  name: firebolt projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/firebolt.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff9603"
+    radius: 2.0
+    energy: 5.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      damage:
+        types:
+          Fire: 3
+    - !type:IgniteArea
+      radius: 2
+      maxStacks: 2
+    - !type:SpawnEntity
+      effectTarget: Target
+      spawns:
+      - CEEffectPotionAlchemicalFire

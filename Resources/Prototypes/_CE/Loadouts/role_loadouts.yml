@@ -1,7 +1,7 @@
 - type: roleLoadout
   id: JobCEMage
   groups:
-  # Mage skills TODO
+  - CEMageSkill
   - CEMageWeapon
   - CEMageHead
   - CEMageCloak

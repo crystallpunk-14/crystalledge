@@ -17,7 +17,7 @@ using Robust.Shared.Utility;
 namespace Content.Client._CE.Actions;
 
 /// <summary>
-/// Draws spell targeting visuals: cast-radius circle, wide-line trajectory, and AoE zone.
+/// Draws spell targeting visuals: cast-radius circle, wide-line trajectory, cone, and AoE zone.
 /// All visuals are drawn below entities but above the grid.
 /// </summary>
 public sealed class CEActionTargetingOverlay : Overlay
@@ -100,7 +100,13 @@ public sealed class CEActionTargetingOverlay : Overlay
             DrawWideLine(handle, playerUid, actionUid, playerPos, mousePos, range, hasEntityTarget, lineVis);
         }
 
-        // 3) AoE zone.
+        // 3) Cone.
+        if (_entManager.TryGetComponent<CEVisualizeConeActionComponent>(actionUid, out var coneVis))
+        {
+            DrawCone(handle, playerUid, actionUid, playerPos, mousePos, range, hasEntityTarget, coneVis);
+        }
+
+        // 4) AoE zone.
         if (_entManager.TryGetComponent<CEVisualizeAoEZoneActionComponent>(actionUid, out var aoeVis))
         {
             DrawAoEZone(handle,
@@ -299,7 +305,12 @@ public sealed class CEActionTargetingOverlay : Overlay
             lineLength,
             perp * halfWidth,
             rotation,
-            vis);
+            vis.BorderStartSprite,
+            vis.BorderStartState,
+            vis.BorderMidSprite,
+            vis.BorderMidState,
+            vis.BorderEndSprite,
+            vis.BorderEndState);
 
         // Draw border sprites — right side (mirrored, start, stretched mid, end).
         DrawBorderStrip(handle,
@@ -308,7 +319,12 @@ public sealed class CEActionTargetingOverlay : Overlay
             lineLength,
             perp * (-halfWidth),
             rotation,
-            vis);
+            vis.BorderStartSprite,
+            vis.BorderStartState,
+            vis.BorderMidSprite,
+            vis.BorderMidState,
+            vis.BorderEndSprite,
+            vis.BorderEndState);
     }
 
     private void DrawBorderStrip(
@@ -318,7 +334,12 @@ public sealed class CEActionTargetingOverlay : Overlay
         float length,
         Vector2 offset,
         Angle rotation,
-        CEVisualizeWideLineActionComponent vis)
+        ResPath borderStartSprite,
+        string borderStartState,
+        ResPath borderMidSprite,
+        string borderMidState,
+        ResPath borderEndSprite,
+        string borderEndState)
     {
         var capSize = 0.5f; // Size of start/end caps in world units.
         var halfCap = capSize / 2f;
@@ -337,7 +358,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         var endCapRotation = rotation + Angle.FromDegrees(180);
 
         // Start cap — centred at start+offset.
-        var startTex = GetTexture(vis.BorderStartSprite.ToString(), vis.BorderStartState);
+        var startTex = GetTexture(borderStartSprite.ToString(), borderStartState);
         if (startTex != null)
         {
             var startPos = start + offset;
@@ -346,7 +367,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         }
 
         // Stretched middle — starts at halfCap from 'start', ends at halfCap before 'end'.
-        var midTex = GetTexture(vis.BorderMidSprite.ToString(), vis.BorderMidState);
+        var midTex = GetTexture(borderMidSprite.ToString(), borderMidState);
         if (midTex != null && midLength > 0f)
         {
             var midCenter = start + offset + dirNorm * (halfCap + midLength / 2f);
@@ -356,13 +377,163 @@ public sealed class CEActionTargetingOverlay : Overlay
         }
 
         // End cap — centred at end+offset.
-        var endTex = GetTexture(vis.BorderEndSprite.ToString(), vis.BorderEndState);
+        var endTex = GetTexture(borderEndSprite.ToString(), borderEndState);
         if (endTex != null)
         {
             var endPos = end + offset;
             var box = new Box2(-halfCap, -halfCap, halfCap, halfCap).Translated(endPos);
             handle.DrawTextureRect(endTex, new Box2Rotated(box, endCapRotation, endPos), color);
         }
+    }
+
+    #endregion
+
+    #region Cone drawing
+
+    private void DrawCone(
+        DrawingHandleWorld handle,
+        EntityUid playerUid,
+        EntityUid actionUid,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float actionRange,
+        bool hasEntityTarget,
+        CEVisualizeConeActionComponent vis)
+    {
+        Vector2 targetPos;
+        if (hasEntityTarget)
+        {
+            targetPos = FindSnapTarget(playerUid, actionUid, mousePos) ?? mousePos;
+        }
+        else
+        {
+            targetPos = mousePos;
+        }
+
+        var direction = targetPos - playerPos;
+        var distance = direction.Length();
+        if (distance < 0.01f || vis.Width <= 0.01f)
+            return;
+
+        var coneRange = vis.Range > 0f ? vis.Range : actionRange > 0f ? actionRange : distance;
+        if (coneRange < 0.01f)
+            return;
+
+        var facing = new Angle(MathF.Atan2(direction.Y, direction.X));
+        var halfWidth = vis.Width / 2f;
+        var leftAngle = facing - Angle.FromDegrees(halfWidth);
+        var rightAngle = facing + Angle.FromDegrees(halfWidth);
+
+        var leftEnd = playerPos + leftAngle.RotateVec(new Vector2(coneRange, 0f));
+        var rightEnd = playerPos + rightAngle.RotateVec(new Vector2(coneRange, 0f));
+
+        DrawFilledCone(handle, playerPos, facing, coneRange, vis.Width, Color.White.WithAlpha(vis.FillAlpha));
+
+        DrawBorderStrip(handle,
+            playerPos,
+            leftEnd,
+            coneRange,
+            Vector2.Zero,
+            leftAngle,
+            vis.BorderStartSprite,
+            vis.BorderStartState,
+            vis.BorderMidSprite,
+            vis.BorderMidState,
+            vis.BorderEndSprite,
+            vis.BorderEndState);
+
+        DrawBorderStrip(handle,
+            playerPos,
+            rightEnd,
+            coneRange,
+            Vector2.Zero,
+            rightAngle,
+            vis.BorderStartSprite,
+            vis.BorderStartState,
+            vis.BorderMidSprite,
+            vis.BorderMidState,
+            vis.BorderEndSprite,
+            vis.BorderEndState);
+
+        DrawConeArc(handle, playerPos, facing, coneRange, vis);
+    }
+
+    private static void DrawFilledCone(
+        DrawingHandleWorld handle,
+        Vector2 center,
+        Angle facing,
+        float range,
+        float width,
+        Color color)
+    {
+        var arcLength = MathF.Tau * range * (width / 360f);
+        var segments = Math.Clamp((int) MathF.Ceiling(arcLength / 0.4f), 12, 64);
+        var halfWidth = width / 2f;
+        var startAngle = facing - Angle.FromDegrees(halfWidth);
+        var prevPoint = center + startAngle.RotateVec(new Vector2(range, 0f));
+
+        for (var i = 1; i <= segments; i++)
+        {
+            var t = (float) i / segments;
+            var angle = startAngle + Angle.FromDegrees(width * t);
+            var point = center + angle.RotateVec(new Vector2(range, 0f));
+
+            handle.DrawPrimitives(DrawPrimitiveTopology.TriangleList,
+                new[]
+                {
+                    center,
+                    prevPoint,
+                    point,
+                }, color);
+
+            prevPoint = point;
+        }
+    }
+
+    private void DrawConeArc(
+        DrawingHandleWorld handle,
+        Vector2 center,
+        Angle facing,
+        float range,
+        CEVisualizeConeActionComponent vis)
+    {
+        var halfWidth = vis.Width / 2f;
+        var startAngle = facing - Angle.FromDegrees(halfWidth);
+        var arcLength = MathF.Tau * range * (vis.Width / 360f);
+        var segments = Math.Clamp((int) MathF.Ceiling(arcLength / 0.4f), 12, 64);
+
+        var texture = GetTexture(vis.ArcSprite.ToString(), vis.ArcState);
+        if (texture == null)
+        {
+            var prevPoint = center + startAngle.RotateVec(new Vector2(range, 0f));
+
+            for (var i = 1; i <= segments; i++)
+            {
+                var t = (float) i / segments;
+                var angle = startAngle + Angle.FromDegrees(vis.Width * t);
+                var point = center + angle.RotateVec(new Vector2(range, 0f));
+                handle.DrawLine(prevPoint, point, Color.White.WithAlpha(0.6f));
+                prevPoint = point;
+            }
+
+            return;
+        }
+
+        var spacing = vis.ArcSpriteSpacing > 0f ? vis.ArcSpriteSpacing : vis.ArcSpriteSize;
+        var count = Math.Max(1, (int) MathF.Ceiling(arcLength / MathF.Max(0.1f, spacing)));
+        var halfSize = vis.ArcSpriteSize / 2f;
+
+        for (var i = 0; i < count; i++)
+        {
+            var t = (i + 0.5f) / count;
+            var angle = startAngle + Angle.FromDegrees(vis.Width * t);
+            var pos = center + angle.RotateVec(new Vector2(range, 0f));
+
+            var inwardAngle = new Angle(MathF.Atan2(center.Y - pos.Y, center.X - pos.X));
+            var box = new Box2(-halfSize, -halfSize, halfSize, halfSize).Translated(pos);
+            handle.DrawTextureRect(texture, new Box2Rotated(box, inwardAngle, pos), Color.White);
+        }
+
     }
 
     #endregion

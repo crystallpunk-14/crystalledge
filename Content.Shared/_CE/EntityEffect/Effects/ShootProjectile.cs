@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
@@ -15,6 +16,9 @@ public sealed partial class ShootProjectile : CEEntityEffectBase<ShootProjectile
 
     [DataField]
     public float ProjectileSpeed = 20f;
+
+    [DataField]
+    public float? ProjectileMaxSpeed = null;
 
     [DataField]
     public float Spread;
@@ -66,23 +70,37 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
             baseDirection = args.Args.Angle.ToWorldVec();
         }
 
-        for (var i = 0; i < args.Effect.ProjectileCount; i++)
+        var projCount = Math.Max(1, args.Effect.ProjectileCount);
+        var baseAngle = MathF.Atan2(baseDirection.Y, baseDirection.X);
+
+        for (var i = 0; i < projCount; i++)
         {
-            var direction = baseDirection + new Vector2(
-                (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread,
-                (float)(_random.NextDouble() * 2 - 1) * args.Effect.Spread);
+            // Interpret Spread as the angle (in radians) between adjacent projectiles.
+            var center = (projCount - 1) / 2.0f;
+            var angleOffset = (i - center) * args.Effect.Spread;
+            var angle = baseAngle + angleOffset;
+
+            var direction = new Vector2(MathF.Cos(angle), MathF.Sin(angle));
 
             if (direction == Vector2.Zero)
                 continue;
 
             var ent = EntityManager.SpawnAtPosition(args.Effect.Prototype, spawnCoords);
 
+            var speed = args.Effect.ProjectileSpeed;
+            if (args.Effect.ProjectileMaxSpeed is { } max)
+            {
+                var min = MathF.Min(speed, max);
+                var maxv = MathF.Max(speed, max);
+                speed = _random.NextFloat(min, maxv);
+            }
+
             _gun.ShootProjectile(ent,
                 direction,
                 args.Effect.SaveVelocity ? userVelocity : new Vector2(),
                 args.Args.User,
                 args.Args.User,
-                args.Effect.ProjectileSpeed);
+                speed);
         }
     }
 }

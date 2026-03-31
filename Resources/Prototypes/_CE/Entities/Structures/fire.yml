@@ -78,3 +78,26 @@
   components:
   - type: CEFire
     stacks: 10
+
+- type: entity
+  id: CEFireImpactEffect
+  name: fire impact
+  description: A burst of fire upon impact.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/fire_tile_impact.rsi
+    snapCardinals: true
+    layers:
+    - state: effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 2.0
+  - type: PointLight
+    color: "#f1ff27"
+    radius: 2.5
+    energy: 2.5
+    enabled: true
+  - type: LightFade
+    duration: 1.0
