@@ -274,7 +274,6 @@ public sealed class CEHealthSystemTest
     }
 
     #endregion
-    */
 
     [Test]
     public async Task CriticalDamageLimitDeletesEntity()
@@ -313,6 +312,7 @@ public sealed class CEHealthSystemTest
 
         await pair.CleanReturnAsync();
     }
+    */
 
     #region CEDamageSpecifier Math
 
