@@ -11,6 +11,7 @@
   - type: Pullable
   - type: CEFlammable
     stackDelta: -1
+  - type: FloorOcclusion
 
 - type: entity
   id: CEMobMagical
