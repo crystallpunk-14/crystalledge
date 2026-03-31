@@ -39,7 +39,6 @@ public sealed class GhostRoleTests
     /// </summary>
     [TestCase(true)]
     [TestCase(false)]
-    [Ignore("CrystallEdge - not needed")]
     public async Task TakeRoleAndReturn(bool adminGhost)
     {
         var ghostCommand = adminGhost ? "aghost" : "ghost";
