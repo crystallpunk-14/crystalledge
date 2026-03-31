@@ -1,5 +1,4 @@
 using Content.Client.Audio;
-using Content.Client.Administration.Managers;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
 using Content.Client.Lobby.UI;
@@ -24,7 +23,6 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IClientConsoleHost _consoleHost = default!;
-        [Dependency] private readonly IClientAdminManager _adminManager = default!;
         [Dependency] private readonly IEntityManager _entityManager = default!;
         [Dependency] private readonly IResourceCache _resourceCache = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
@@ -77,7 +75,6 @@ namespace Content.Client.Lobby
             _gameTicker.InfoBlobUpdated += UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated += LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
-            _adminManager.AdminStatusUpdated += UpdateLobbyUi;
         }
 
         protected override void Shutdown()
@@ -87,7 +84,6 @@ namespace Content.Client.Lobby
             _gameTicker.InfoBlobUpdated -= UpdateLobbyUi;
             _gameTicker.LobbyStatusUpdated -= LobbyStatusUpdated;
             _gameTicker.LobbyLateJoinStatusUpdated -= LobbyLateJoinStatusUpdated;
-            _adminManager.AdminStatusUpdated -= UpdateLobbyUi;
             _contentAudioSystem.LobbySoundtrackChanged -= UpdateLobbySoundtrackInfo;
 
             _voteManager.ClearPopupContainer();
@@ -182,16 +178,12 @@ namespace Content.Client.Lobby
 
         private void UpdateLobbyUi()
         {
-            // CrystallEdge: hide the upstream observe button for regular players and expose it only as an admin-only entry point.
-            var canAdminObserve = _gameTicker.IsGameStarted && _adminManager.IsAdmin();
-
             if (_gameTicker.IsGameStarted)
             {
                 Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
-                Lobby!.ObserveButton.Disabled = !canAdminObserve;
-                Lobby!.ObserveButton.Visible = canAdminObserve;
+                Lobby!.ObserveButton.Disabled = false;
             }
             else
             {
@@ -201,7 +193,6 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
                 Lobby!.ObserveButton.Disabled = true;
-                Lobby!.ObserveButton.Visible = false;
             }
 
             if (_gameTicker.ServerInfoBlob != null)

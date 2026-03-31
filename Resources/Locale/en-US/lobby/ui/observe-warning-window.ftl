@@ -5,7 +5,3 @@ observe-warning-2 = You cannot play in the round if you do so.
 observe-warning-window-title = Warning
 observe-as-admin = Admin Observe
 observe-as-player = Player Observe
-observe-admin-only = Observer mode is only available to admins.
-observe-admin-round-started = Wait until the round starts.
-observer-disabled-returned-to-lobby = Observer mode is disabled for regular players. You have been returned to the lobby.
-observer-disabled-use-admin-observe = Use admin observe instead.

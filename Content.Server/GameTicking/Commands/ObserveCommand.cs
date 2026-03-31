@@ -1,4 +1,3 @@
-using Content.Server.Administration;
 using Content.Server.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
@@ -6,7 +5,7 @@ using Robust.Shared.Console;
 
 namespace Content.Server.GameTicking.Commands
 {
-    [AdminCommand(AdminFlags.Admin)] //CrystallEdge - not for all
+    [AnyCommand]
     sealed class ObserveCommand : IConsoleCommand
     {
         [Dependency] private readonly IEntityManager _e = default!;

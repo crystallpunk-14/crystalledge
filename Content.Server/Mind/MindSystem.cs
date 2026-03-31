@@ -75,9 +75,6 @@ public sealed class MindSystem : SharedMindSystem
         if (ghost != null)
             // Log these to make sure they're not causing the GameTicker round restart bugs...
             Log.Debug($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, spawned \"{ToPrettyString(ghost)}\".");
-        // CrystallEdge: when upstream would spawn an observer after body deletion, regular players are rerouted to the lobby instead.
-        else if (mind.UserId is { } userId && _players.TryGetSessionById(userId, out var session))
-            _gameTicker.ReturnPlayerToLobby(session);
         else
             // This should be an error, if it didn't cause tests to start erroring when they delete a player.
             Log.Warning($"Entity \"{ToPrettyString(uid)}\" for {mind.CharacterName} was deleted, and no applicable spawn location is available.");
@@ -209,22 +206,14 @@ public sealed class MindSystem : SharedMindSystem
             // If people want to create a ghost, that should be done explicitly via some TransferToGhost() method, not
             // not implicitly via optional arguments.
 
-            // CrystallEdge: hidden createGhost callers should not bypass the observer restriction for regular players.
-            if (!_gameTicker.CanBecomeObserver(mind.UserId))
-            {
-                createGhost = false;
-            }
-            else
-            {
-                var position = Deleted(mind.OwnedEntity)
-                    ? _transform.ToMapCoordinates(_gameTicker.GetObserverSpawnPoint())
-                    : _transform.GetMapCoordinates(mind.OwnedEntity.Value);
+            var position = Deleted(mind.OwnedEntity)
+                ? _transform.ToMapCoordinates(_gameTicker.GetObserverSpawnPoint())
+                : _transform.GetMapCoordinates(mind.OwnedEntity.Value);
 
-                entity = Spawn(GameTicker.ObserverPrototypeName, position);
-                component = EnsureComp<MindContainerComponent>(entity.Value);
-                var ghostComponent = Comp<GhostComponent>(entity.Value);
-                _ghosts.SetCanReturnToBody((entity.Value, ghostComponent), false);
-            }
+            entity = Spawn(GameTicker.ObserverPrototypeName, position);
+            component = EnsureComp<MindContainerComponent>(entity.Value);
+            var ghostComponent = Comp<GhostComponent>(entity.Value);
+            _ghosts.SetCanReturnToBody((entity.Value, ghostComponent), false);
         }
 
         var oldEntity = mind.OwnedEntity;
@@ -265,13 +254,6 @@ public sealed class MindSystem : SharedMindSystem
         if (mind.UserId != null && _players.TryGetSessionById(mind.UserId.Value, out var userSession)
                                 && !alreadyAttached && mind.VisitingEntity == null)
         {
-            // CrystallEdge: if upstream detached a player without a legal observer target, recover them into the lobby.
-            if (entity == null && createGhost == false && !_gameTicker.CanBecomeObserver(userSession))
-            {
-                _gameTicker.ReturnPlayerToLobby(userSession);
-                return;
-            }
-
             _players.SetAttachedEntity(userSession, entity, true);
             DebugTools.Assert(userSession.AttachedEntity == entity, "Failed to attach entity.");
             Log.Info($"Session {userSession.Name} transferred to entity {entity}.");
