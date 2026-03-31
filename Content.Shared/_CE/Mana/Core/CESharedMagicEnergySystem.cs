@@ -17,22 +17,6 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
         SubscribeLocalEvent<CEMagicEnergyExaminableComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CEMagicEnergyAmbientSoundComponent, CESlotCrystalPowerChangedEvent>(OnSlotPowerChanged);
-        SubscribeLocalEvent<CEMagicEnergyContainerComponent, CEMagicEnergyLevelChangeEvent>(OnMagicEnergyChanged);
-    }
-
-    private void OnMagicEnergyChanged(Entity<CEMagicEnergyContainerComponent> ent, ref CEMagicEnergyLevelChangeEvent args)
-    {
-        if (!TryComp<CEMagicEnergyContainerComponent>(ent, out var magicContainer))
-            return;
-
-        if (magicContainer.Energy > 0)
-        {
-            RemCompDeferred<CEEmptyMagicEnergyContainerComponent>(ent);
-            return;
-        }
-
-        EnsureComp<CEEmptyMagicEnergyContainerComponent>(ent);
-
     }
 
     private void OnMapInit(Entity<CEMagicEnergyContainerComponent> ent, ref MapInitEvent args)

@@ -20,12 +20,6 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     public float Range = 5f;
 
     /// <summary>
-    /// Ignore self.
-    /// </summary>
-    [DataField]
-    public bool IgnoreSelf = true;
-
-    /// <summary>
     /// Minimum count of prototypes.
     /// </summary>
     [DataField]
@@ -37,7 +31,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensor : CEGOAPSensorBas
     [DataField]
     public string OutputTargetKey = string.Empty;
 
-    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.1);
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.2);
 }
 
 public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPPrototypeExistsInRangeSensor>
@@ -50,7 +44,7 @@ public sealed partial class CEGOAPPrototypeExistsInRangeSensorSystem : CEGOAPSen
         var entities = _lookup.GetEntitiesInRange(Transform(ent).Coordinates, args.Sensor.Range);
         foreach (var entityUid in entities)
         {
-            if (args.Sensor.IgnoreSelf && entityUid == ent.Owner)
+            if (entityUid == ent.Owner)
                 continue;
 
             var meta = MetaData(entityUid).EntityPrototype;

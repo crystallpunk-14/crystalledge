@@ -13,13 +13,14 @@ public sealed partial class CEGOAPFilterTargetSensor : CEGOAPSensorBase<CEGOAPFi
     /// </summary>
     [DataField]
     public EntityWhitelist? Whitelist;
+
     /// <summary>
     /// Blacklisted components/tags
     /// </summary>
     [DataField]
     public EntityWhitelist? Blacklist;
 
-    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.1);
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.2);
 }
 
 public sealed partial class CEGOAPFilterTargetSensorSystem : CEGOAPSensorSystem<CEGOAPFilterTargetSensor>

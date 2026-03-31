@@ -4,16 +4,16 @@ using Content.Shared.Whitelist;
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Filter entities components/tags in range.
+/// Checks for the presence of a specific target in the EntityWhitelist within a certain radius and assigns it to the specified target slot
 /// </summary>
 public sealed partial class CEGOAPFilteredEntityExistsInRangeSensor : CEGOAPSensorBase<CEGOAPFilteredEntityExistsInRangeSensor>
 {
-
     /// <summary>
     /// Whitelisted components/tags.
     /// </summary>
     [DataField]
     public EntityWhitelist? Whitelist;
+
     /// <summary>
     /// Blacklisted components/tags
     /// </summary>
@@ -27,12 +27,6 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensor : CEGOAPSens
     public float Range = 5f;
 
     /// <summary>
-    /// Ignore self.
-    /// </summary>
-    [DataField]
-    public bool IgnoreSelf = true;
-
-    /// <summary>
     /// Minimum count of entities.
     /// </summary>
     [DataField]
@@ -43,7 +37,8 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensor : CEGOAPSens
     /// </summary>
     [DataField]
     public string OutputTargetKey = string.Empty;
-    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.1);
+
+    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.2);
 }
 
 public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGOAPSensorSystem<CEGOAPFilteredEntityExistsInRangeSensor>
@@ -51,6 +46,7 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGO
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
 
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+
     protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPFilteredEntityExistsInRangeSensor> args)
     {
         int count = 0;
@@ -58,7 +54,7 @@ public sealed partial class CEGOAPFilteredEntityExistsInRangeSensorSystem : CEGO
 
         foreach (var entityUid in entities)
         {
-            if (args.Sensor.IgnoreSelf && entityUid == ent.Owner)
+            if (entityUid == ent.Owner)
                 continue;
 
             if (_whitelist.CheckBoth(entityUid, args.Sensor.Blacklist, args.Sensor.Whitelist))
