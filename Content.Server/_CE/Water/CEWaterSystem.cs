@@ -7,9 +7,8 @@ using Robust.Shared.Physics.Events;
 
 namespace Content.Server._CE.Water;
 
-public sealed class CEWaterSystem : EntitySystem
+public sealed class CEWaterSystem : CESharedWaterSystem
 {
-    [Dependency] private readonly CEFireSystem _fire = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
 
@@ -64,7 +63,7 @@ public sealed class CEWaterSystem : EntitySystem
                 continue;
 
             args.Cancelled = true;
-            _fire.SpawnSteamEffect(args.Coordinates);
+            Fire.SpawnSteamEffect(args.Coordinates);
             return;
         }
     }
@@ -74,7 +73,7 @@ public sealed class CEWaterSystem : EntitySystem
     /// </summary>
     private void OnCollide(Entity<CEWaterComponent> ent, ref StartCollideEvent args)
     {
-        _fire.ExtinguishEntity(args.OtherEntity);
+        Fire.ExtinguishEntity(new Entity<CEFlammableComponent?>(args.OtherEntity, null));
     }
 
     #endregion

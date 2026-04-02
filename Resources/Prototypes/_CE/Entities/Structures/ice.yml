@@ -15,15 +15,19 @@
     key: floorTile
   - type: Sprite
     drawdepth: FloorTiles
+    snapCardinals: true
     sprite: _CE/Structures/Nature/ice.rsi
-  - type: Icon
-    sprite: _CE/Structures/Nature/ice.rsi
-    state: full
-  - type: IconSmooth
-    base: tile_
-    key: ice
-    additionalKeys:
-    - CEwall
+    layers:
+    - state: ice1
+      map: [ "random" ]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          ice1: ""
+          ice2: ""
+          ice3: ""
+          ice4: ""
   - type: Physics
   - type: Fixtures
     fixtures:
@@ -38,4 +42,18 @@
   - type: FrictionContacts
   - type: TileFrictionModifier
     modifier: 0.05
-  - type: CEIce
+  - type: CEMeltTransform
+    meltsInto: CEWater
+
+- type: entity
+  parent: CEIce
+  id: CEIceFrozenStream
+  suffix: Frozen Stream
+  description: A frozen stream, the current trapped under ice.
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Nature/ice.rsi
+    layers:
+    - state: ice1
+  - type: CEMeltTransform
+    meltsInto: CEWaterMoving

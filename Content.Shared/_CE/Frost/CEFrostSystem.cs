@@ -1,3 +1,4 @@
+using Content.Shared._CE.Fire;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
 using Content.Shared.StatusEffectNew;
@@ -13,6 +14,7 @@ namespace Content.Shared._CE.Frost;
 public sealed class CEFrostSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
+    [Dependency] private readonly CEFireSystem _fire = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
@@ -22,23 +24,25 @@ public sealed class CEFrostSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
-    private readonly EntProtoId _defaultIceProto = "CEIce";
-    private readonly EntProtoId _statusColdSlowdown = "CEStatusEffectColdSlowdown";
     private readonly EntProtoId _freezeEffect = "CEFreezeEffect";
     private readonly SoundSpecifier _freezeSound = new SoundPathSpecifier("/Audio/Items/Anomaly/ice_crit.ogg");
 
-    private EntityQuery<CEIceComponent> _iceQuery;
+    private EntityQuery<CEFireComponent> _fireQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        _iceQuery = GetEntityQuery<CEIceComponent>();
+        _fireQuery = GetEntityQuery<CEFireComponent>();
 
-        SubscribeLocalEvent<CEIceComponent, MapInitEvent>(OnIceMapInit);
+        SubscribeLocalEvent<CEFreezeTransformComponent, CEFreezedEvent>(OnFreezingFreezed);
+        SubscribeLocalEvent<CEFreezableComponent, CEFreezedEvent>(OnFreezableFreezed);
+        SubscribeLocalEvent<CEFreezableComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
 
-        SubscribeLocalEvent<CEFreezeImmunityStatusEffectComponent,
-            StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent>>(OnFreezeImmunity);
+        SubscribeLocalEvent<CEFreezeImmunityStatusEffectComponent, StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent>>(OnFreezeImmunity);
+
+        // Tile attempt: frost extinguishes fire tiles.
+        SubscribeLocalEvent<CEFreezeTileAttemptEvent>(OnFreezeTileAttempt);
     }
 
     private void OnFreezeImmunity(Entity<CEFreezeImmunityStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent> args)
@@ -48,24 +52,98 @@ public sealed class CEFrostSystem : EntitySystem
         args.Args = inner;
     }
 
-    private void OnIceMapInit(Entity<CEIceComponent> ent, ref MapInitEvent args)
+    /// <summary>
+    /// Frost neutralizes fire: when something tries to ignite a frosted entity,
+    /// cold stacks cancel out an equal number of incoming fire stacks.
+    /// </summary>
+    private void OnIgniteEntityAttempt(Entity<CEFreezableComponent> ent, ref CEIgniteEntityAttemptEvent args)
     {
-        if (_net.IsClient)
+        if (args.Cancelled)
             return;
 
-        // Element interaction: check for opposing element on the tile.
-        var coords = _transform.GetMapCoordinates(ent);
-        var attemptEv = new CEFreezeTileAttemptEvent(coords, false);
-        RaiseLocalEvent(ref attemptEv);
-        if (attemptEv.Cancelled)
+        var frostStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
+        if (frostStacks <= 0)
+            return;
+
+        var neutralized = Math.Min(frostStacks, args.Stacks);
+        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
+        args.Stacks -= neutralized;
+
+        _fire.SpawnSteamEffect(ent);
+
+        if (args.Stacks <= 0)
+            args.Cancelled = true;
+    }
+
+    /// <summary>
+    /// When frost is placed on a tile with fire entities, the fire is deleted
+    /// and the frost tile placement is cancelled.
+    /// </summary>
+    private void OnFreezeTileAttempt(ref CEFreezeTileAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (!_mapManager.TryFindGridAt(args.Coordinates, out var gridUid, out var grid))
+            return;
+
+        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), args.Coordinates);
+
+        foreach (var ent in anchored)
         {
-            _entManager.DeleteEntity(ent);
+            if (!_fireQuery.HasComp(ent))
+                continue;
+
+            if (!_net.IsClient)
+                EntityManager.DeleteEntity(ent);
+
+            args.Cancelled = true;
+            _fire.SpawnSteamEffect(args.Coordinates);
             return;
         }
     }
 
+    private void OnFreezableFreezed(Entity<CEFreezableComponent> ent, ref CEFreezedEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        var stacks = args.Stacks;
+        var cycleDuration = args.Duration ?? ent.Comp.DefaultDuration;
+
+        if (args.MaxStacks != null)
+        {
+            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
+            var allowed = Math.Max(0, args.MaxStacks.Value - current);
+            if (allowed <= 0)
+                return;
+
+            stacks = Math.Min(stacks, allowed);
+        }
+
+        _stack.TryAddStack(ent, ent.Comp.StatusEffect, stacks, cycleDuration);
+    }
+
+    private void OnFreezingFreezed(Entity<CEFreezeTransformComponent> ent, ref CEFreezedEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        var xform = Transform(ent);
+        var rotation = xform.LocalRotation;
+        var coordinates = _transform.GetMapCoordinates(ent, xform);
+
+        _entManager.DeleteEntity(ent);
+
+        var frozen = _entManager.SpawnEntity(ent.Comp.FreezesInto, coordinates);
+        _transform.SetLocalRotation(frozen, rotation);
+
+        args.Handled = true;
+    }
+
     /// <summary>
-    /// Applies cold slowdown stacks to an entity.
+    /// Raises a <see cref="CEFreezedEvent"/> on the target entity.
+    /// Entities with freezing-related components handle the event to apply their effects.
     /// </summary>
     public void FreezeEntity(EntityUid target, int stack = 1, int? maxStack = null, TimeSpan? duration = null)
     {
@@ -82,28 +160,14 @@ public sealed class CEFrostSystem : EntitySystem
             return;
         stack = attemptEv.Stacks;
 
-        var cycleDuration = duration ?? TimeSpan.FromSeconds(5f);
-
-        if (maxStack != null)
-        {
-            var current = _stack.GetStack(target, _statusColdSlowdown);
-            var allowed = Math.Max(0, maxStack.Value - current);
-            if (allowed <= 0)
-                return;
-
-            var toAdd = Math.Min(stack, allowed);
-            _stack.TryAddStack(target, _statusColdSlowdown, toAdd, cycleDuration);
-        }
-        else
-        {
-            _stack.TryAddStack(target, _statusColdSlowdown, stack, cycleDuration);
-        }
+        var freezedEv = new CEFreezedEvent(stack, maxStack, duration);
+        RaiseLocalEvent(target, ref freezedEv);
     }
 
     /// <summary>
-    /// Spawns ice on the given tile if there is no ice already.
+    /// Freezes all entities on the given tile by calling <see cref="FreezeEntity"/> on each.
     /// </summary>
-    public void FreezeTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates)
+    public void FreezeTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1, int? maxStacks = null, TimeSpan? duration = null)
     {
         if (_net.IsClient)
             return;
@@ -114,21 +178,16 @@ public sealed class CEFrostSystem : EntitySystem
         if (!_mapSystem.TryGetTileRef(grid.Owner, grid.Comp, coordinates.Position, out var tileRef) || tileRef.Tile.IsEmpty)
             return;
 
-        // Element interaction: ice vs fire tile mutual neutralization.
         var attemptEv = new CEFreezeTileAttemptEvent(coordinates, false);
         RaiseLocalEvent(ref attemptEv);
         if (attemptEv.Cancelled)
             return;
 
-        // Check if ice already exists on this tile.
-        var existing = _mapSystem.GetAnchoredEntities((grid, grid.Comp), coordinates);
-        foreach (var ent in existing)
+        var entities = _lookup.GetEntitiesInRange(coordinates, 0.5f, LookupFlags.Uncontained);
+        foreach (var ent in entities)
         {
-            if (_iceQuery.HasComp(ent))
-                return;
+            FreezeEntity(ent, stacks, maxStacks, duration);
         }
-
-        _entManager.SpawnEntity(_defaultIceProto, coordinates);
 
         // Spawn freeze visual effect.
         var fx = _entManager.SpawnEntity(_freezeEffect, coordinates);
@@ -179,22 +238,10 @@ public sealed class CEFrostSystem : EntitySystem
                 if (!_examine.InRangeUnOccluded(center, tileCoords, radius, null))
                     continue;
 
-                FreezeTile((gridUid, grid), tileCoords);
+                var normalizedDist = distance / radius;
+                var stacks = CalculateStacks(normalizedDist, falloffFactor, maxStacks);
+                FreezeTile((gridUid, grid), tileCoords, stacks, maxStacks);
             }
-        }
-
-        // Apply cold slowdown to entities in the area.
-        var entities = _lookup.GetEntitiesInRange(center, radius);
-        foreach (var entity in entities)
-        {
-            var entPos = _transform.GetMapCoordinates(entity);
-            var dist = (entPos.Position - centerWorld).Length();
-            if (dist > radius)
-                continue;
-
-            var normalizedDist = dist / radius;
-            var stacks = CalculateStacks(normalizedDist, falloffFactor, maxStacks);
-            FreezeEntity(entity, stacks, maxStacks);
         }
     }
 
@@ -219,3 +266,10 @@ public record struct CEFreezeEntityAttemptEvent(EntityUid Target, int Stacks, bo
 /// </summary>
 [ByRefEvent]
 public record struct CEFreezeTileAttemptEvent(MapCoordinates Coordinates, bool Cancelled);
+
+/// <summary>
+/// Raised as a directed event on an entity when it receives a frost/freeze effect.
+/// Carries the freeze intensity for handlers to apply their specific effects.
+/// </summary>
+[ByRefEvent]
+public record struct CEFreezedEvent(int Stacks = 0, int? MaxStacks = null, TimeSpan? Duration = null, bool Handled = false);
