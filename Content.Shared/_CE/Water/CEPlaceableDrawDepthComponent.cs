@@ -16,7 +16,7 @@ public sealed partial class CEPlaceableDrawDepthComponent : Component
     /// Defaults to FloorObjects (below Puddles).
     /// </summary>
     [DataField]
-    public int LoweredDrawDepth = (int) Content.Shared.DrawDepth.DrawDepth.FloorObjects;
+    public int LoweredDrawDepth = (int) DrawDepth.DrawDepth.FloorObjects;
 
     /// <summary>
     /// The original DrawDepth before this component modified it.
@@ -28,5 +28,5 @@ public sealed partial class CEPlaceableDrawDepthComponent : Component
     /// Whether the original draw depth has been captured.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool Initialized;
+    public bool DepthInitialized;
 }

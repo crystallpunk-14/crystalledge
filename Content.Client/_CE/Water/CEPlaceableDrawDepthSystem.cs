@@ -28,10 +28,10 @@ public sealed class CEPlaceableDrawDepthSystem : EntitySystem
         if (!TryComp<SpriteComponent>(uid, out var sprite))
             return;
 
-        if (!comp.Initialized)
+        if (!comp.DepthInitialized)
         {
             comp.OriginalDrawDepth = sprite.DrawDepth;
-            comp.Initialized = true;
+            comp.DepthInitialized = true;
         }
 
         _sprite.SetDrawDepth((uid, sprite), comp.LoweredDrawDepth);
@@ -39,7 +39,7 @@ public sealed class CEPlaceableDrawDepthSystem : EntitySystem
 
     private void OnShutdown(EntityUid uid, CEPlaceableDrawDepthComponent comp, ComponentShutdown args)
     {
-        if (!comp.Initialized)
+        if (!comp.DepthInitialized)
             return;
 
         if (!TryComp<SpriteComponent>(uid, out var sprite))
@@ -53,7 +53,7 @@ public sealed class CEPlaceableDrawDepthSystem : EntitySystem
         if (!TryComp<CEPlaceableDrawDepthComponent>(args.OtherEntity, out var comp))
             return;
 
-        if (!comp.Initialized)
+        if (!comp.DepthInitialized)
             return;
 
         if (!TryComp<SpriteComponent>(args.OtherEntity, out var itemSprite))
@@ -70,7 +70,7 @@ public sealed class CEPlaceableDrawDepthSystem : EntitySystem
         if (!TryComp<CEPlaceableDrawDepthComponent>(args.OtherEntity, out var comp))
             return;
 
-        if (!comp.Initialized)
+        if (!comp.DepthInitialized)
             return;
 
         if (!TryComp<SpriteComponent>(args.OtherEntity, out var itemSprite))
