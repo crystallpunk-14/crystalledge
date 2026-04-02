@@ -51,9 +51,5 @@
   suffix: Frozen Stream
   description: A frozen stream, the current trapped under ice.
   components:
-  - type: Sprite
-    sprite: _CE/Structures/Nature/ice.rsi
-    layers:
-    - state: ice1
   - type: CEMeltTransform
     meltsInto: CEWaterMoving
