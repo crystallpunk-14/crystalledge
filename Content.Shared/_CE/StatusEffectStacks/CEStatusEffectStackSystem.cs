@@ -171,7 +171,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// </summary>
     /// <param name="target">Target entity with StatusEffectContainer</param>
     /// <param name="statusEffect">Type of status effect.</param>
-    public int GetStack(EntityUid target, EntProtoId statusEffect)
+    public int GetFlammableStack(EntityUid target, EntProtoId statusEffect)
     {
         if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
             return 0;

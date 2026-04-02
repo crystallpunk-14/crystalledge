@@ -27,13 +27,9 @@ public sealed class CEFrostSystem : EntitySystem
     private readonly EntProtoId _freezeEffect = "CEFreezeEffect";
     private readonly SoundSpecifier _freezeSound = new SoundPathSpecifier("/Audio/Items/Anomaly/ice_crit.ogg");
 
-    private EntityQuery<CEFireComponent> _fireQuery;
-
     public override void Initialize()
     {
         base.Initialize();
-
-        _fireQuery = GetEntityQuery<CEFireComponent>();
 
         SubscribeLocalEvent<CEFreezeTransformComponent, CEFreezedEvent>(OnFreezingFreezed);
         SubscribeLocalEvent<CEFreezableComponent, CEFreezedEvent>(OnFreezableFreezed);
@@ -41,8 +37,8 @@ public sealed class CEFrostSystem : EntitySystem
 
         SubscribeLocalEvent<CEFreezeImmunityStatusEffectComponent, StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent>>(OnFreezeImmunity);
 
-        // Tile attempt: frost extinguishes fire tiles.
-        SubscribeLocalEvent<CEFreezeTileAttemptEvent>(OnFreezeTileAttempt);
+        // Tile attempt: fire entities block frost tile placement (fire is extinguished).
+        SubscribeLocalEvent<CEFireComponent, CEFreezeTileAttemptEvent>(OnFireFreezeTileAttempt);
     }
 
     private void OnFreezeImmunity(Entity<CEFreezeImmunityStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEFreezeEntityAttemptEvent> args)
@@ -61,7 +57,7 @@ public sealed class CEFrostSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var frostStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
+        var frostStacks = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
         if (frostStacks <= 0)
             return;
 
@@ -76,31 +72,19 @@ public sealed class CEFrostSystem : EntitySystem
     }
 
     /// <summary>
-    /// When frost is placed on a tile with fire entities, the fire is deleted
-    /// and the frost tile placement is cancelled.
+    /// When frost tile is about to be placed on a tile with a fire entity,
+    /// the fire is extinguished and frost placement is cancelled.
     /// </summary>
-    private void OnFreezeTileAttempt(ref CEFreezeTileAttemptEvent args)
+    private void OnFireFreezeTileAttempt(Entity<CEFireComponent> ent, ref CEFreezeTileAttemptEvent args)
     {
         if (args.Cancelled)
             return;
 
-        if (!_mapManager.TryFindGridAt(args.Coordinates, out var gridUid, out var grid))
-            return;
+        if (!_net.IsClient)
+            EntityManager.DeleteEntity(ent);
 
-        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), args.Coordinates);
-
-        foreach (var ent in anchored)
-        {
-            if (!_fireQuery.HasComp(ent))
-                continue;
-
-            if (!_net.IsClient)
-                EntityManager.DeleteEntity(ent);
-
-            args.Cancelled = true;
-            _fire.SpawnSteamEffect(args.Coordinates);
-            return;
-        }
+        args.Cancelled = true;
+        _fire.SpawnSteamEffect(args.Coordinates);
     }
 
     private void OnFreezableFreezed(Entity<CEFreezableComponent> ent, ref CEFreezedEvent args)
@@ -113,7 +97,7 @@ public sealed class CEFrostSystem : EntitySystem
 
         if (args.MaxStacks != null)
         {
-            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
+            var current = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
             var allowed = Math.Max(0, args.MaxStacks.Value - current);
             if (allowed <= 0)
                 return;
@@ -137,8 +121,6 @@ public sealed class CEFrostSystem : EntitySystem
 
         var frozen = _entManager.SpawnEntity(ent.Comp.FreezesInto, coordinates);
         _transform.SetLocalRotation(frozen, rotation);
-
-        args.Handled = true;
     }
 
     /// <summary>
@@ -179,9 +161,13 @@ public sealed class CEFrostSystem : EntitySystem
             return;
 
         var attemptEv = new CEFreezeTileAttemptEvent(coordinates, false);
-        RaiseLocalEvent(ref attemptEv);
-        if (attemptEv.Cancelled)
-            return;
+        var anchored = _mapSystem.GetAnchoredEntities((grid, grid.Comp), coordinates);
+        foreach (var ent in anchored)
+        {
+            RaiseLocalEvent(ent, ref attemptEv);
+            if (attemptEv.Cancelled)
+                return;
+        }
 
         var entities = _lookup.GetEntitiesInRange(coordinates, 0.5f, LookupFlags.Uncontained);
         foreach (var ent in entities)
@@ -261,8 +247,9 @@ public sealed class CEFrostSystem : EntitySystem
 public record struct CEFreezeEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
 
 /// <summary>
-/// Raised as a broadcast event before ice is placed on a tile.
-/// Handlers can set Cancelled to prevent freezing.
+/// Raised as a directed event on each anchored entity on a tile before frost is placed.
+/// Handlers can set <see cref="Cancelled"/> to block frost tile placement.
+/// Handled by <c>CEFireComponent</c> (fire extinguishing).
 /// </summary>
 [ByRefEvent]
 public record struct CEFreezeTileAttemptEvent(MapCoordinates Coordinates, bool Cancelled);
@@ -272,4 +259,4 @@ public record struct CEFreezeTileAttemptEvent(MapCoordinates Coordinates, bool C
 /// Carries the freeze intensity for handlers to apply their specific effects.
 /// </summary>
 [ByRefEvent]
-public record struct CEFreezedEvent(int Stacks = 0, int? MaxStacks = null, TimeSpan? Duration = null, bool Handled = false);
+public record struct CEFreezedEvent(int Stacks = 0, int? MaxStacks = null, TimeSpan? Duration = null);

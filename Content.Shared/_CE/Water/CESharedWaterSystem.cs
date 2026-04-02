@@ -19,6 +19,7 @@ public abstract class CESharedWaterSystem : EntitySystem
         _waterQuery = GetEntityQuery<CEWaterComponent>();
 
         SubscribeLocalEvent<TransformComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
+        SubscribeLocalEvent<CEWaterComponent, CEIgniteTileAttemptEvent>(OnIgniteTileAttempt);
     }
 
     private void OnIgniteEntityAttempt(Entity<TransformComponent> ent, ref CEIgniteEntityAttemptEvent args)
@@ -31,6 +32,18 @@ public abstract class CESharedWaterSystem : EntitySystem
 
         args.Cancelled = true;
         Fire.SpawnSteamEffect(args.Target);
+    }
+
+    /// <summary>
+    /// Water blocks fire tile placement. Water is NOT consumed.
+    /// </summary>
+    private void OnIgniteTileAttempt(Entity<CEWaterComponent> ent, ref CEIgniteTileAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        args.Cancelled = true;
+        Fire.SpawnSteamEffect(args.Coordinates);
     }
 
     /// <summary>
