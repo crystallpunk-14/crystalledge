@@ -247,6 +247,26 @@
   zLevelMap: MossyTemple
   offset: 62, 4
 
+- type: dungeonRoom3d
+  id: MossyTemple_FloodedCave
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 62, 13
+
+- type: dungeonRoom3d
+  id: MossyTemple_Sewers
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 73, -10
+
 # Dead ends
 
 - type: dungeonRoom3d

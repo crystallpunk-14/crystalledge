@@ -17,6 +17,8 @@
   - type: SyncSprite
   - type: CEIconSmooth
     key: floorTile
+    additionalKeys:
+    - CEwall
   - type: Physics
     bodyType: Static
   - type: Fixtures

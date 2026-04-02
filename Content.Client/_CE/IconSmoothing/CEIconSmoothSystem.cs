@@ -1,3 +1,4 @@
+using Content.Client.IconSmoothing;
 using Content.Shared.Maps;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -197,10 +198,11 @@ public sealed class CEIconSmoothSystem : EntitySystem
 
         _generation += 1;
         var spriteQuery = GetEntityQuery<SpriteComponent>();
+        var vanillaQuery = GetEntityQuery<IconSmoothComponent>();
 
         while (_dirtyEntities.TryDequeue(out var uid))
         {
-            CalculateNewSprite(uid, spriteQuery, smoothQuery, xformQuery);
+            CalculateNewSprite(uid, spriteQuery, smoothQuery, xformQuery, vanillaQuery);
         }
     }
 
@@ -209,6 +211,7 @@ public sealed class CEIconSmoothSystem : EntitySystem
         EntityQuery<SpriteComponent> spriteQuery,
         EntityQuery<CEIconSmoothComponent> smoothQuery,
         EntityQuery<TransformComponent> xformQuery,
+        EntityQuery<IconSmoothComponent> vanillaQuery,
         CEIconSmoothComponent? smooth = null)
     {
         if (!smoothQuery.Resolve(uid, ref smooth, false)
@@ -243,7 +246,7 @@ public sealed class CEIconSmoothSystem : EntitySystem
             }
         }
 
-        CalculateNewSpriteCorners(gridEntity, smooth, (uid, sprite), xform, smoothQuery);
+        CalculateNewSpriteCorners(gridEntity, smooth, (uid, sprite), xform, smoothQuery, vanillaQuery);
     }
 
     private void CalculateNewSpriteCorners(
@@ -251,7 +254,8 @@ public sealed class CEIconSmoothSystem : EntitySystem
         CEIconSmoothComponent smooth,
         Entity<SpriteComponent> spriteEnt,
         TransformComponent xform,
-        EntityQuery<CEIconSmoothComponent> smoothQuery)
+        EntityQuery<CEIconSmoothComponent> smoothQuery,
+        EntityQuery<IconSmoothComponent> vanillaQuery)
     {
         var nullable = spriteEnt.AsNullable();
 
@@ -274,21 +278,21 @@ public sealed class CEIconSmoothSystem : EntitySystem
 
         // Calculate corner fills — identical to the original Corners mode.
         var n = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.North)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.North)), smoothQuery, vanillaQuery);
         var ne = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.NorthEast)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.NorthEast)), smoothQuery, vanillaQuery);
         var e = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.East)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.East)), smoothQuery, vanillaQuery);
         var se = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.SouthEast)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.SouthEast)), smoothQuery, vanillaQuery);
         var s = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.South)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.South)), smoothQuery, vanillaQuery);
         var sw = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.SouthWest)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.SouthWest)), smoothQuery, vanillaQuery);
         var w = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.West)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.West)), smoothQuery, vanillaQuery);
         var nw = MatchingEntity(smooth,
-            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.NorthWest)), smoothQuery);
+            _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(Direction.NorthWest)), smoothQuery, vanillaQuery);
 
         var cornerNE = CornerFill.None;
         var cornerSE = CornerFill.None;
@@ -533,15 +537,27 @@ public sealed class CEIconSmoothSystem : EntitySystem
     private bool MatchingEntity(
         CEIconSmoothComponent smooth,
         AnchoredEntitiesEnumerator candidates,
-        EntityQuery<CEIconSmoothComponent> smoothQuery)
+        EntityQuery<CEIconSmoothComponent> smoothQuery,
+        EntityQuery<IconSmoothComponent> vanillaQuery)
     {
         while (candidates.MoveNext(out var entity))
         {
+            // Check CE smooth entities.
             if (smoothQuery.TryGetComponent(entity, out var other)
                 && other.SmoothKey != null
                 && (other.SmoothKey == smooth.SmoothKey
                     || smooth.AdditionalKeys.Contains(other.SmoothKey))
                 && other.Enabled)
+            {
+                return true;
+            }
+
+            // Check vanilla IconSmooth entities (cross-matching via AdditionalKeys).
+            if (vanillaQuery.TryGetComponent(entity, out var vanilla)
+                && vanilla.SmoothKey != null
+                && (vanilla.SmoothKey == smooth.SmoothKey
+                    || smooth.AdditionalKeys.Contains(vanilla.SmoothKey))
+                && vanilla.Enabled)
             {
                 return true;
             }
