@@ -34,7 +34,9 @@ public sealed class CEFireSystem : EntitySystem
 
     private readonly EntProtoId _statusFire = "CEStatusEffectFire";
     private readonly EntProtoId _fireImpactEffect = "CEFireImpactEffect";
+    private readonly EntProtoId _steamEffect = "CESteamEffect";
     private readonly SoundSpecifier _fireSound = new SoundPathSpecifier("/Audio/_CE/Effects/fire_whoosh.ogg");
+    private readonly SoundSpecifier _steamSound = new SoundPathSpecifier("/Audio/Effects/sizzle.ogg");
 
     private EntityQuery<CEFireComponent> _fireQuery;
 
@@ -314,6 +316,49 @@ public sealed class CEFireSystem : EntitySystem
         var intensity = 1f - adjustedDistance;
         return Math.Max(1, (int)MathF.Ceiling(intensity * maxStacks));
     }
+
+    /// <summary>
+    /// Removes all CE fire stacks from an entity and spawns a steam effect.
+    /// </summary>
+    /// <returns>True if the entity had fire and was extinguished.</returns>
+    public bool ExtinguishEntity(EntityUid target)
+    {
+        if (_net.IsClient)
+            return false;
+
+        var stacks = _stack.GetStack(target, _statusFire);
+        if (stacks <= 0)
+            return false;
+
+        _stack.TryRemoveStack(target, _statusFire, stacks);
+        SpawnSteamEffect(target);
+        return true;
+    }
+
+    /// <summary>
+    /// Spawns a steam effect at an entity's position.
+    /// </summary>
+    public void SpawnSteamEffect(EntityUid target)
+    {
+        if (_net.IsClient)
+            return;
+
+        var pos = Transform(target).Coordinates;
+        Spawn(_steamEffect, pos);
+        _audio.PlayPvs(_steamSound, pos);
+    }
+
+    /// <summary>
+    /// Spawns a steam effect at map coordinates.
+    /// </summary>
+    public void SpawnSteamEffect(MapCoordinates coordinates)
+    {
+        if (_net.IsClient)
+            return;
+
+        var steam = _entManager.SpawnEntity(_steamEffect, coordinates);
+        _audio.PlayPvs(_steamSound, Transform(steam).Coordinates);
+    }
 }
 
 /// <summary>
@@ -381,15 +426,17 @@ public sealed partial class CEFireComponent : Component
 }
 
 /// <summary>
-/// Raised as a broadcast event before fire stacks are applied to an entity.
-/// Handlers can modify Stacks or set Cancelled to prevent ignition.
+/// Raised as a directed event on the target entity before fire stacks are applied.
+/// Handlers can modify <see cref="Stacks"/> or set <see cref="Cancelled"/> to prevent ignition.
+/// Handled by <c>CEElementInteractionSystem</c> for frost neutralization and water blocking.
 /// </summary>
 [ByRefEvent]
 public record struct CEIgniteEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
 
 /// <summary>
 /// Raised as a broadcast event before fire is placed on a tile.
-/// Handlers can modify Stacks or set Cancelled to prevent ignition.
+/// Handlers can modify <see cref="Stacks"/> or set <see cref="Cancelled"/> to prevent ignition.
+/// Handled by <c>CEElementInteractionSystem</c> (ice melting) and <c>CEWaterSystem</c> (water blocking).
 /// </summary>
 [ByRefEvent]
 public record struct CEIgniteTileAttemptEvent(MapCoordinates Coordinates, int Stacks, bool Cancelled);

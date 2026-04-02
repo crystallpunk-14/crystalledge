@@ -1,8 +1,7 @@
 using Content.Shared._CE.Fire;
 using Content.Shared._CE.Frost;
 using Content.Shared._CE.StatusEffectStacks;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
+using Content.Shared._CE.Water;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -11,27 +10,26 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._CE.ElementInteraction;
 
 /// <summary>
-/// Handles fire/frost mutual neutralization through ECS attempt events.
-/// When fire is applied to a frosted entity (or ice tile), and vice versa,
-/// the opposing elements cancel each other out with a steam effect.
-/// Also handles direct spawns (e.g. admin panel) via MapInit subscriptions.
+/// Handles element interactions through ECS attempt events:
+/// fire/frost mutual neutralization, and water blocking fire.
+/// When fire is applied to a frosted entity (or ice tile), opposing elements cancel out with steam.
+/// Water blocks entity ignition entirely (but is not consumed, unlike ice).
 /// </summary>
 public sealed class CEElementInteractionSystem : EntitySystem
 {
+    [Dependency] private readonly CEFireSystem _fire = default!;
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly INetManager _net = default!;
 
     private readonly EntProtoId _statusFire = "CEStatusEffectFire";
     private readonly EntProtoId _statusColdSlowdown = "CEStatusEffectColdSlowdown";
-    private readonly EntProtoId _steamEffect = "CESteamEffect";
-    private readonly SoundSpecifier _steamSound = new SoundPathSpecifier("/Audio/Effects/sizzle.ogg");
 
     private EntityQuery<CEFireComponent> _fireQuery;
     private EntityQuery<CEIceComponent> _iceQuery;
+    private EntityQuery<CEWaterComponent> _waterQuery;
 
     public override void Initialize()
     {
@@ -39,6 +37,7 @@ public sealed class CEElementInteractionSystem : EntitySystem
 
         _fireQuery = GetEntityQuery<CEFireComponent>();
         _iceQuery = GetEntityQuery<CEIceComponent>();
+        _waterQuery = GetEntityQuery<CEWaterComponent>();
 
         // Entity attempt events (directed on target entity).
         SubscribeLocalEvent<TransformComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
@@ -54,6 +53,15 @@ public sealed class CEElementInteractionSystem : EntitySystem
         if (args.Cancelled)
             return;
 
+        // Water blocks ignition entirely — entity standing on a water tile cannot be set on fire.
+        if (IsOnWater(ent))
+        {
+            args.Cancelled = true;
+            _fire.SpawnSteamEffect(args.Target);
+            return;
+        }
+
+        // Frost neutralizes fire stacks.
         var frostStacks = _stack.GetStack(args.Target, _statusColdSlowdown);
         if (frostStacks <= 0)
             return;
@@ -62,7 +70,7 @@ public sealed class CEElementInteractionSystem : EntitySystem
         _stack.TryRemoveStack(args.Target, _statusColdSlowdown, neutralized);
         args.Stacks -= neutralized;
 
-        PlaySteamEffect(args.Target);
+        _fire.SpawnSteamEffect(args.Target);
 
         if (args.Stacks <= 0)
             args.Cancelled = true;
@@ -81,7 +89,7 @@ public sealed class CEElementInteractionSystem : EntitySystem
         _stack.TryRemoveStack(args.Target, _statusFire, neutralized);
         args.Stacks -= neutralized;
 
-        PlaySteamEffect(args.Target);
+        _fire.SpawnSteamEffect(args.Target);
 
         if (args.Stacks <= 0)
             args.Cancelled = true;
@@ -107,7 +115,7 @@ public sealed class CEElementInteractionSystem : EntitySystem
                 EntityManager.DeleteEntity(ent);
 
             args.Cancelled = true;
-            PlaySteamEffectAt(args.Coordinates);
+            _fire.SpawnSteamEffect(args.Coordinates);
             return;
         }
     }
@@ -132,28 +140,29 @@ public sealed class CEElementInteractionSystem : EntitySystem
                 EntityManager.DeleteEntity(ent);
 
             args.Cancelled = true;
-            PlaySteamEffectAt(args.Coordinates);
+            _fire.SpawnSteamEffect(args.Coordinates);
             return;
         }
     }
 
-    private void PlaySteamEffect(EntityUid target)
+    /// <summary>
+    /// Checks if an entity is standing on a tile that contains a water entity.
+    /// </summary>
+    private bool IsOnWater(Entity<TransformComponent> ent)
     {
-        if (_net.IsClient)
-            return;
+        var xform = ent.Comp;
+        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
 
-        var pos = Transform(target).Coordinates;
+        var coords = _transform.GetMapCoordinates(ent);
+        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), coords);
 
-        Spawn(_steamEffect, pos);
-        _audio.PlayPvs(_steamSound, pos);
-    }
+        foreach (var anchEnt in anchored)
+        {
+            if (_waterQuery.HasComp(anchEnt))
+                return true;
+        }
 
-    private void PlaySteamEffectAt(MapCoordinates coordinates)
-    {
-        if (_net.IsClient)
-            return;
-
-        var steam = _entManager.SpawnEntity(_steamEffect, coordinates);
-        _audio.PlayPvs(_steamSound, Transform(steam).Coordinates);
+        return false;
     }
 }

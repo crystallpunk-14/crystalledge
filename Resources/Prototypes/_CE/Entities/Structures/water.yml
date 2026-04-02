@@ -41,14 +41,7 @@
         volume: 8
   - type: CEWaterDistortion
     intensity: 0.5
-  #- type: Conveyor
-  #- type: Appearance
-  #- type: GenericVisualizer
-  #  visuals:
-  #    enum.ConveyorVisuals.State:
-  #      enum.ConveyorState.Off:
-  #        Off: { state: static }
-  #        Forward: { state: moving }
+  - type: CEWater
 
 - type: entity
   parent: CEWater
@@ -60,3 +53,6 @@
     snapCardinals: false
   - type: CEWaterDistortion
     intensity: 1
+  - type: CEWater
+    flowing: true
+  - type: Conveyor
