@@ -5,7 +5,7 @@
   - type: StatusEffect
     whitelist:
       components:
-      - CEDamageable
+      - CEFreezable
   - type: StatusEffectAlert
     alert: CEColdSlowdown
   - type: RejuvenateRemovedStatusEffect

@@ -11,6 +11,7 @@
   - type: Pullable
   - type: CEFlammable
     stackDelta: -1
+  - type: CEFreezable
   - type: FloorOcclusion
 
 - type: entity
