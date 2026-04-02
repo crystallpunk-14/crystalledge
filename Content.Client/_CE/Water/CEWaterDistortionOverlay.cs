@@ -26,15 +26,15 @@ public sealed class CEWaterDistortionOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
     private static readonly ProtoId<ShaderPrototype> WaterDistortionShader = "CEWaterDistortion";
 
-    // Overlay settings (normal motion)
-    private const float ShaderStrength = 0.06f;
-    private const float ShaderScale = 1.5f;
-    private const float ShaderSpeed = 0.2f;
+    // Reduced motion multipliers
+    private const float ReducedMotionStrengthMul = 0.15f;
+    private const float ReducedMotionScaleMul = 0.33f;
+    private const float ReducedMotionSpeedMul = 0.25f;
 
-    // Overlay settings (reduced motion)
-    private const float ShaderStrengthReducedMotion = 0.01f;
-    private const float ShaderScaleReducedMotion = 0.5f;
-    private const float ShaderSpeedReducedMotion = 0.05f;
+    private bool _reducedMotion;
+    private float _currentStrength = 0.06f;
+    private float _currentScale = 1.5f;
+    private float _currentSpeed = 0.2f;
 
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
@@ -68,9 +68,7 @@ public sealed class CEWaterDistortionOverlay : Overlay
 
     private void SetReducedMotion(bool reducedMotion)
     {
-        _shader.SetParameter("strength_scale", reducedMotion ? ShaderStrengthReducedMotion : ShaderStrength);
-        _shader.SetParameter("spatial_scale", reducedMotion ? ShaderScaleReducedMotion : ShaderScale);
-        _shader.SetParameter("speed_scale", reducedMotion ? ShaderSpeedReducedMotion : ShaderSpeed);
+        _reducedMotion = reducedMotion;
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -111,12 +109,21 @@ public sealed class CEWaterDistortionOverlay : Overlay
                     var localBounds = gridInvMatrix.TransformBox(worldBounds);
 
                     _entities.Clear();
-                    _lookup.GetLocalEntitiesIntersecting(grid.Owner, localBounds, _entities, flags: LookupFlags.Static);
+                    _lookup.GetLocalEntitiesIntersecting(grid.Owner, localBounds, _entities);
 
                     if (_entities.Count == 0)
                         continue;
 
                     anyDistortion = true;
+
+                    // Capture shader params from first visible entity
+                    foreach (var first in _entities)
+                    {
+                        _currentStrength = first.Comp.Strength;
+                        _currentScale = first.Comp.Scale;
+                        _currentSpeed = first.Comp.Speed;
+                        break;
+                    }
 
                     var gridMatrix = _xformSys.GetWorldMatrix(grid.Owner);
                     var worldToViewportLocal = viewport.GetWorldToLocalMatrix();
@@ -152,6 +159,13 @@ public sealed class CEWaterDistortionOverlay : Overlay
         if (ScreenTexture is null || res.WaterTarget is null)
             return;
 
+        var strength = _reducedMotion ? _currentStrength * ReducedMotionStrengthMul : _currentStrength;
+        var scale = _reducedMotion ? _currentScale * ReducedMotionScaleMul : _currentScale;
+        var speed = _reducedMotion ? _currentSpeed * ReducedMotionSpeedMul : _currentSpeed;
+
+        _shader.SetParameter("strength_scale", strength);
+        _shader.SetParameter("spatial_scale", scale);
+        _shader.SetParameter("speed_scale", speed);
         _shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
         _shader.SetParameter("NOISE_TEXTURE", _noiseTexture);
 
