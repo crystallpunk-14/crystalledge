@@ -14,8 +14,9 @@
     sprite: _CE/Structures/Nature/water.rsi
     state: static
     drawdepth: Puddles
-    snapCardinals: true
   - type: SyncSprite
+  - type: CEIconSmooth
+    key: floorTile
   - type: Physics
     bodyType: Static
   - type: Fixtures

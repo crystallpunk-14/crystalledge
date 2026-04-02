@@ -13,9 +13,10 @@
   - type: Clickable
   - type: PlacementReplacement
     key: floorTile
+  - type: CEIconSmooth
+    key: floorTile
   - type: Sprite
     drawdepth: FloorTiles
-    snapCardinals: true
     sprite: _CE/Structures/Nature/ice.rsi
     layers:
     - state: ice1
