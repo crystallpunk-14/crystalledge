@@ -8,7 +8,6 @@
   components:
   - type: PlacementReplacement
     key: water
-  - type: Clickable
   - type: Transform
     anchored: true
   - type: Sprite
@@ -41,6 +40,7 @@
       params:
         volume: 8
   - type: CEWaterDistortion
+    intensity: 0.5
   #- type: Conveyor
   #- type: Appearance
   #- type: GenericVisualizer
@@ -58,3 +58,5 @@
   - type: Sprite
     state: moving
     snapCardinals: false
+  - type: CEWaterDistortion
+    intensity: 1

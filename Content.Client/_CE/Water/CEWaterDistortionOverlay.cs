@@ -10,7 +10,6 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 using System.Numerics;
 using Content.Client.Resources;
-using Texture = Robust.Client.Graphics.Texture;
 
 namespace Content.Client._CE.Water;
 
@@ -31,10 +30,12 @@ public sealed class CEWaterDistortionOverlay : Overlay
     private const float ReducedMotionScaleMul = 0.33f;
     private const float ReducedMotionSpeedMul = 0.25f;
 
+    // Global shader constants
+    private const float ShaderStrength = 0.4f;
+    private const float ShaderScale = 0.5f;
+    private const float ShaderSpeed = 0.1f;
+
     private bool _reducedMotion;
-    private float _currentStrength = 0.06f;
-    private float _currentScale = 1.5f;
-    private float _currentSpeed = 0.2f;
 
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
@@ -116,15 +117,6 @@ public sealed class CEWaterDistortionOverlay : Overlay
 
                     anyDistortion = true;
 
-                    // Capture shader params from first visible entity
-                    foreach (var first in _entities)
-                    {
-                        _currentStrength = first.Comp.Strength;
-                        _currentScale = first.Comp.Scale;
-                        _currentSpeed = first.Comp.Speed;
-                        break;
-                    }
-
                     var gridMatrix = _xformSys.GetWorldMatrix(grid.Owner);
                     var worldToViewportLocal = viewport.GetWorldToLocalMatrix();
                     var gridToViewportLocal = Matrix3x2.Multiply(gridMatrix, worldToViewportLocal);
@@ -134,9 +126,11 @@ public sealed class CEWaterDistortionOverlay : Overlay
                     foreach (var ent in _entities)
                     {
                         var xform = _xformQuery.Comp(ent);
+                        // Encode per-entity intensity in the red channel
+                        var intensity = ent.Comp.Intensity;
                         worldHandle.DrawRect(
                             Box2.CenteredAround(xform.LocalPosition, new Vector2(1f, 1f)),
-                            Color.White);
+                            new Color(intensity, 0f, 0f));
                     }
                 }
             },
@@ -159,9 +153,9 @@ public sealed class CEWaterDistortionOverlay : Overlay
         if (ScreenTexture is null || res.WaterTarget is null)
             return;
 
-        var strength = _reducedMotion ? _currentStrength * ReducedMotionStrengthMul : _currentStrength;
-        var scale = _reducedMotion ? _currentScale * ReducedMotionScaleMul : _currentScale;
-        var speed = _reducedMotion ? _currentSpeed * ReducedMotionSpeedMul : _currentSpeed;
+        var strength = _reducedMotion ? ShaderStrength * ReducedMotionStrengthMul : ShaderStrength;
+        var scale = _reducedMotion ? ShaderScale * ReducedMotionScaleMul : ShaderScale;
+        var speed = _reducedMotion ? ShaderSpeed * ReducedMotionSpeedMul : ShaderSpeed;
 
         _shader.SetParameter("strength_scale", strength);
         _shader.SetParameter("spatial_scale", scale);

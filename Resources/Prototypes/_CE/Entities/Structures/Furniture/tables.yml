@@ -16,6 +16,15 @@
         - TableMask
         layer:
         - TableLayer
+      itemcollide:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - HighImpassable
+        hard: false
+  - type: ItemPlacer
+    maxEntities: 0
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepHull

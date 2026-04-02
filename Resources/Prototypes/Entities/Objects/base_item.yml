@@ -46,6 +46,7 @@
   - type: DamageExaminable
   #CrystallEdge
   - type: CEZPhysics
+  - type: CEPlaceableDrawDepth
 
 - type: entity
   name: "storage item"
