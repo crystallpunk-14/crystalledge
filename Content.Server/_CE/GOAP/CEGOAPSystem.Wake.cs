@@ -43,8 +43,11 @@ public sealed partial class CEGOAPSystem
         if (HasComp<ActorComponent>(ent))
             return;
 
-        if (!_mobState.IsAlive(ent))
-            return;
+        if (TryComp<CEMobStateComponent>(ent, out var mobState))
+        {
+            if (!_mobState.IsAlive(ent, mobState))
+                return;
+        }
 
         // Sleeping entities are blocked from waking via normal checks.
         // They must be woken explicitly by CEGOAPSleepingSystem.
