@@ -36,7 +36,7 @@ public sealed class ConveyorController : SharedConveyorController
 
     private void OnInit(EntityUid uid, ConveyorComponent component, ComponentInit args)
     {
-        _signalSystem.EnsureSinkPorts(uid, component.ReversePort, component.ForwardPort, component.OffPort);
+        //_signalSystem.EnsureSinkPorts(uid, component.ReversePort, component.ForwardPort, component.OffPort); //CrystallEdge removal
 
         if (PhysicsQuery.TryComp(uid, out var physics))
         {
