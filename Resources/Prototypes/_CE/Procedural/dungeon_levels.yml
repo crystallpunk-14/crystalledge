@@ -1,48 +1,6 @@
 - type: dungeonLevel
-  id: BaseMossyTemple
+  id: BaseMossyTemplePostProcess
   abstract: true
-  stable: false
-  config:
-    !type:CEProceduralConfig
-    corridorTile: CEStonebricks
-    corridorWander: 0
-    maxRoomSize: 16
-    components:
-    - type: MapLight
-      ambientLightColor: "#293542"
-    - type: Gravity
-      enabled: true
-      inherent: true
-    generalRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomGeneral
-    exitRoom:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomExit
-    entranceRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomEntrance
-    blessingRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomBlessing
-    deadEndRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomDeadEnd
   postProcess:
   - !type:CETileVariantizePostProcess
   - !type:CEEntitySwapPostProcess
@@ -181,10 +139,61 @@
       entities:
         - CEGodRaysMoon
 
+
+
+
+- type: dungeonLevel
+  id: BaseMossyTempleProcedural
+  abstract: true
+  stable: false
+  config:
+    !type:CEProceduralConfig
+    corridorTile: CEStonebricks
+    corridorWander: 0
+    maxRoomSize: 16
+    components:
+    - type: MapLight
+      ambientLightColor: "#31455a"
+    - type: Gravity
+      enabled: true
+      inherent: true
+    generalRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomGeneral
+    exitRoom:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomExit
+    entranceRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomEntrance
+    blessingRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomBlessing
+    deadEndRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomDeadEnd
+
 # Floor 1: Small introductory level.
 - type: dungeonLevel
   id: MossyTemple1
-  parent: BaseMossyTemple
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 1
   exits:
     default: MossyTemple2
@@ -220,7 +229,9 @@
 # Floor 2: Medium-sized level with more rooms.
 - type: dungeonLevel
   id: MossyTemple2
-  parent: BaseMossyTemple
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 2
   exits:
     default: MossyTemple3
@@ -262,7 +273,9 @@
 # Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
   id: MossyTemple3
-  parent: BaseMossyTemple
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 3
   exits:
     default: MossyTemple4
@@ -302,10 +315,12 @@
 # Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
   id: MossyTemple4
-  parent: BaseMossyTemple
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 4
   exits:
-    default: MossyTemple1 # Loops back for now
+    default: MossyTempleSafe
   config:
     !type:CEProceduralConfig
     generalCount:
@@ -337,3 +352,27 @@
     - proto: CEFlem3
       cost: 5
       weight: 1
+
+
+- type: dungeonLevel
+  id: MossyTempleSafe
+  parent:
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Safe Zone
+  exits:
+    default: MossyTemple1 # Loops back for now
+  config:
+    !type:CEStaticZNetworkConfig
+    zMapProto: MossyTempleSafe
+
+- type: zMap
+  id: MossyTempleSafe
+  maps:
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe0.yml
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true

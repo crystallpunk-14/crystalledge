@@ -88,6 +88,9 @@ public sealed partial class CEStaticZNetworkGeneratorSystem : CEDungeonGenerator
             return new CEDungeonGenerateResult(false);
         }
 
+        // Initialize all maps in the network.
+        _zLevels.InitializeZNetwork(network);
+
         // Report the primary map back.
         MapId? mapId = null;
         if (primaryMapUid != null && TryComp<MapComponent>(primaryMapUid.Value, out var mapComp))

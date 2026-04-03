@@ -30,8 +30,8 @@
             CEMage: [ -1, -1 ]
             CEPriest: [ -1, -1 ]
         - type: CEStationZLevels
-          mapsAbove:
-          - /Maps/_CE/Dev/Dev1.yml
+          #mapsAbove:
+          #- /Maps/_CE/Dev/Dev1.yml
           zLevelsComponentOverrides:
             - type: MapAtmosphere
               space: False
