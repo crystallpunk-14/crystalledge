@@ -1,6 +1,8 @@
 using Content.Shared._CE.Health.Components;
+using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
 
@@ -11,11 +13,35 @@ namespace Content.Shared._CE.Health;
 /// </summary>
 public abstract partial class CESharedDamageableSystem : EntitySystem
 {
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEDamageableComponent, RejuvenateEvent>(OnRejuvenate);
+        SubscribeLocalEvent<DoAfterComponent, CEDamageChangedEvent>(OnDoAfterBreakAttempt);
+    }
+
+    private void OnDoAfterBreakAttempt(Entity<DoAfterComponent> ent, ref CEDamageChangedEvent args)
+    {
+        if (_timing.ApplyingState)
+            return;
+
+        if (!args.InterruptsDoAfters || !args.DamageIncreased)
+            return;
+
+        var delta = args.DamageDelta;
+
+        foreach (var (id, doAfter) in ent.Comp.DoAfters)
+        {
+            if (doAfter.Cancelled || doAfter.Completed)
+                continue;
+
+            if (doAfter.Args.BreakOnDamage && delta >= doAfter.Args.DamageThreshold)
+                _doAfter.Cancel(ent, id, ent.Comp);
+        }
     }
 
     private void OnRejuvenate(Entity<CEDamageableComponent> ent, ref RejuvenateEvent args)
@@ -27,7 +53,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     /// Directly changes damage by a delta. Clamped to minimum 0.
     /// Positive delta = more damage, negative delta = healing.
     /// </summary>
-    public void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta, EntityUid? source = null)
+    private void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta, EntityUid? source = null, bool interruptDoAfters = true)
     {
         actualDelta = 0;
 
@@ -43,7 +69,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 
         if (oldDamage != newDamage)
         {
-            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage, source);
+            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage, source, interruptDoAfters);
             RaiseLocalEvent(ent, ev, true);
         }
     }
@@ -62,31 +88,39 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (delta == 0)
             return;
 
-        ChangeDamage(ent, delta, out _);
+        ChangeDamage(ent, delta, out _, interruptDoAfters: false);
     }
 
     /// <summary>
     /// Applies damage specified by <see cref="CEDamageSpecifier"/>.
     /// The total damage (sum of all types) is added to the entity's accumulated damage.
     /// </summary>
-    public bool TakeDamage(Entity<CEDamageableComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null)
+    public bool TakeDamage(Entity<CEDamageableComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null, bool ignoreArmor = false, bool interruptDoAfters = true)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        var modifiedDamage = new CEDamageSpecifier(damage);
+        int totalDamage;
 
-        var beforeEv = new CEDamageCalculateEvent(modifiedDamage, source);
-        RaiseLocalEvent(ent, beforeEv);
+        if (ignoreArmor)
+            totalDamage = damage.Total;
+        else
+        {
+            var modifiedDamage = new CEDamageSpecifier(damage);
 
-        if (beforeEv.Cancelled)
-            return false;
+            var beforeEv = new CEDamageCalculateEvent(modifiedDamage, source);
+            RaiseLocalEvent(ent, beforeEv);
 
-        var totalDamage = beforeEv.Damage.Total;
+            if (beforeEv.Cancelled)
+                return false;
+
+            totalDamage = beforeEv.Damage.Total;
+        }
+
         if (totalDamage <= 0)
             return false;
 
-        ChangeDamage(ent, totalDamage, out var actualDelta, source);
+        ChangeDamage(ent, totalDamage, out var actualDelta, source, interruptDoAfters);
 
         if (actualDelta != 0)
             RaiseDamageEffect(ent, source);
@@ -120,7 +154,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (finalAmount <= 0)
             return;
 
-        ChangeDamage(target, -finalAmount, out _);
+        ChangeDamage(target, -finalAmount, out _, interruptDoAfters: false);
     }
 
     public int GetDamage(Entity<CEDamageableComponent?> target)
@@ -143,14 +177,35 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 /// <summary>
 /// Raised when damage changes on an entity.
 /// </summary>
-public sealed class CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage, EntityUid? source = null)
-    : EntityEventArgs
+public sealed class CEDamageChangedEvent : EntityEventArgs
 {
-    public readonly EntityUid Target = target;
-    public readonly int OldDamage = oldDamage;
-    public readonly int NewDamage = newDamage;
-    public readonly EntityUid? Source = source;
+    public readonly EntityUid Target;
+    public readonly int OldDamage;
+    public readonly int NewDamage;
+    public readonly EntityUid? Source;
+
+    /// <summary>
+    /// Was any of the damage change dealing damage, or was it all healing?
+    /// </summary>
+    public readonly bool DamageIncreased;
+
+    /// <summary>
+    /// Does this event interrupt DoAfters?
+    /// Accounts for <see cref="DamageIncreased"/>: only true when damage actually went up.
+    /// </summary>
+    public readonly bool InterruptsDoAfters;
+
     public int DamageDelta => NewDamage - OldDamage;
+
+    public CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage, EntityUid? source = null, bool interruptsDoAfters = true)
+    {
+        Target = target;
+        OldDamage = oldDamage;
+        NewDamage = newDamage;
+        Source = source;
+        DamageIncreased = newDamage > oldDamage;
+        InterruptsDoAfters = interruptsDoAfters && DamageIncreased;
+    }
 }
 
 /// <summary>

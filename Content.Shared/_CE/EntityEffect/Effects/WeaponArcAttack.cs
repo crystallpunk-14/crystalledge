@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.MeleeWeapon;
+using Content.Shared.Interaction;
 using Robust.Shared.Map;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
@@ -37,6 +38,7 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly CESharedWeaponSystem _melee = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<WeaponArcAttack> args)
@@ -72,6 +74,9 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
         // Filter to only damageable entities — skip walls, floor items, etc.
         targets.RemoveAll(t => !HasComp<CEDamageableComponent>(t));
+
+        // Filter out entities behind walls (line-of-sight check).
+        targets.RemoveAll(t => !_interaction.InRangeUnobstructed(entityCoords, t, range + 0.1f));
 
         _melee.HandleArcAttackHit(args.Args.User, (args.Args.Used.Value, weapon), targets);
 

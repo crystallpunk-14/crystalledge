@@ -75,6 +75,7 @@
   - type: Tag
     tags:
     - FootstepSound
+  - type: WarpPoint
   - type: CEBlinker
   - type: CEBlessingReceiver
   - type: CESkillStorage

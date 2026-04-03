@@ -15,6 +15,9 @@ public sealed partial class Damage : CEEntityEffectBase<Damage>
 
     [DataField]
     public bool IgnoreArmor;
+
+    [DataField]
+    public bool InterruptDoAfters = true;
 }
 
 public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
@@ -26,9 +29,6 @@ public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        if (args.Effect.IgnoreArmor)
-            _health.ChangeDamage(entity, args.Effect.DamageSpec.Total, out _);
-        else
-            _health.TakeDamage(entity, args.Effect.DamageSpec);
+        _health.TakeDamage(entity, args.Effect.DamageSpec, args.Args.User, args.Effect.IgnoreArmor, args.Effect.InterruptDoAfters);
     }
 }

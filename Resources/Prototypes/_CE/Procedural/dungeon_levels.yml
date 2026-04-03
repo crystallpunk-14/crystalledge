@@ -196,7 +196,7 @@
   - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 1
   exits:
-    default: MossyTemple2
+    default: MossyTempleSafe
   config:
     !type:CEProceduralConfig
     generalCount:
@@ -356,6 +356,7 @@
 
 - type: dungeonLevel
   id: MossyTempleSafe
+  stable: true
   parent:
   - BaseMossyTemplePostProcess
   name: Mossy Temple — Safe Zone

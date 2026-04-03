@@ -94,7 +94,7 @@ public sealed partial class CEDungeonInstanceSystem
         var query = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
         while (query.MoveNext(out var entUid, out var entry, out var xform))
         {
-            if (!entry.Active)
+            if (!proto.Stable && !entry.Active)
                 continue;
 
             if (curTime >= entry.DeactivateAt)

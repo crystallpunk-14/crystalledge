@@ -26,7 +26,6 @@
     whitelist:
       requireAll: true
       components:
-      - CEMobState
       - CEMagicEnergyContainer
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationManaSteal
