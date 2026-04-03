@@ -47,6 +47,13 @@
   - type: CEWater
   - type: CEFreezeTransform
     freezesInto: CEIce
+  - type: RandomSpawner
+    prototypes:
+    - CEWaterReeds
+    - CEWaterLilies
+    chance: 0.4
+    offset: 0.1
+    deleteSpawnerAfterSpawn: false
 
 - type: entity
   parent: CEWater
@@ -63,3 +70,4 @@
   - type: CEFreezeTransform
     freezesInto: CEIceFrozenStream
   - type: Conveyor
+    speed: 0.25

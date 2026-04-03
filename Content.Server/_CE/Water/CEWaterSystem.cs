@@ -26,7 +26,6 @@ public sealed class CEWaterSystem : CESharedWaterSystem
         var conveyor = EnsureComp<ConveyorComponent>(uid);
         conveyor.State = ConveyorState.Forward;
         conveyor.Powered = true;
-        conveyor.Speed = component.Speed;
         Dirty(uid, conveyor);
     }
 

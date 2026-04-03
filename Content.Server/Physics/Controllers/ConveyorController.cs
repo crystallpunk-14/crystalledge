@@ -16,7 +16,7 @@ namespace Content.Server.Physics.Controllers;
 public sealed class ConveyorController : SharedConveyorController
 {
     [Dependency] private readonly FixtureSystem _fixtures = default!;
-    [Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
+    //[Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
     [Dependency] private readonly MaterialReclaimerSystem _materialReclaimer = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly TurfSystem _turf = default!;

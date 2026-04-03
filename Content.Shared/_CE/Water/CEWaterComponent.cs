@@ -13,10 +13,4 @@ public sealed partial class CEWaterComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool Flowing;
-
-    /// <summary>
-    /// Speed of the water current (conveyor speed in tiles/sec).
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float Speed = 0.25f;
 }
