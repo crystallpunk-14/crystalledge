@@ -155,6 +155,6 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
 
         _entManager.Dirty(mapUid, comp);
 
-        return new CEDungeonGenerateResult(true, mapUid, mapId);
+        return new CEDungeonGenerateResult(true, mapUid, mapId, network.Owner);
     }
 }

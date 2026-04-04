@@ -6,6 +6,7 @@ using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.Decals;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Maps;
 using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.CPUJob.JobQueues.Queues;
@@ -126,6 +127,14 @@ public sealed partial class CEDungeonSystem : EntitySystem
 
         if (result is { Success: true, MapUid: not null })
         {
+            // Initialize z-network maps now that we are outside the job context,
+            // so InitializeMap does not conflict with PVS parallel jobs.
+            if (result.ZNetworkUid != null
+                && TryComp<CEZLevelsNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
+            {
+                _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
+            }
+
             _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
             Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
 
@@ -198,6 +207,13 @@ public sealed partial class CEDungeonSystem : EntitySystem
             var result = job.Result;
             if (result is { Success: true, MapUid: not null })
             {
+                // Initialize z-network maps now that we are outside the job context.
+                if (result.ZNetworkUid != null
+                    && TryComp<CEZLevelsNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
+                {
+                    _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
+                }
+
                 _meta.SetEntityName(result.MapUid.Value, $"{protoId}");
                 Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
 
