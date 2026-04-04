@@ -14,7 +14,7 @@
   id: CEActionSpellFocus
   parent: CEActionSpellBase
   name: Focus
-  description: Your next attack is a guaranteed [color=#ff8a05]critical strike[/color], dealing double damage.
+  description: Your next attack is a guaranteed [color=#ff0505]critical strike[/color], dealing double damage.
   components:
   - type: CEActionManaCost
     manaCost: 2
@@ -31,7 +31,7 @@
 - type: entityEffectAnimation
   id: AnimationFocus
   movementSpeed: 0.5
-  duration: 0.9
+  duration: 1
   events:
     0:
     - !type:PlaySound
@@ -56,11 +56,23 @@
       - time: 0.8
         rotation: -90
         easing: QuadOut
+      colorAnimation:
+        - time: 0.9
+          color: "#ffffff"
+        - time: 1
+          color: "#ffffff01"
     - !type:ApplyStatusEffectStack
       effectTarget: User
       statusEffect: CEStatusEffectFocus
       duration: 10
       stack: 1
+    0.6:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEEffectFocusTelegraphy
+      offsetAnimation:
+      - time: 0
+        offset: -0.6, 0.1
+
 
 - type: entity
   id: CEStatusEffectFocus
@@ -73,6 +85,38 @@
   - type: CEStatusEffectStack
     stackDelta: -1
   - type: CEFocusStatusEffect
+
+
+
+- type: entity
+  id: CEEffectFocusTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: focus telegraphy
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/critical_charge.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff0505"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
 
 - type: alert
   id: CEFocus
