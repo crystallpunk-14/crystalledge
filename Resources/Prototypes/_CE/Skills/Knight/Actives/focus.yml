@@ -20,7 +20,7 @@
     manaCost: 2
   - type: CEActionWeaponRequired
   - type: Action
-    useDelay: 10
+    useDelay: 1
     icon:
       sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
       state: icon
@@ -30,12 +30,32 @@
 
 - type: entityEffectAnimation
   id: AnimationFocus
-  duration: 0.4
+  movementSpeed: 0.5
+  duration: 0.9
   events:
     0:
     - !type:PlaySound
       sound:
         path: /Audio/Magic/rumble.ogg
+    - !type:ActiveHandEntityAnimation
+      offsetAnimation:
+      - time: 0
+        offset: -0, -0.3
+        easing: QuadIn
+      - time: 0.4
+        offset: -0.5, -0.2
+      - time: 0.8
+        offset: -0.5, 0.1
+        easing: QuadOut
+      rotationAnimation:
+      - time: 0
+        rotation: 90
+        easing: QuadIn
+      - time: 0.4
+        rotation: -30
+      - time: 0.8
+        rotation: -90
+        easing: QuadOut
     - !type:ApplyStatusEffectStack
       effectTarget: User
       statusEffect: CEStatusEffectFocus
@@ -51,7 +71,7 @@
   - type: StatusEffectAlert
     alert: CEFocus
   - type: CEStatusEffectStack
-    stackDelta: 0
+    stackDelta: -1
   - type: CEFocusStatusEffect
 
 - type: alert

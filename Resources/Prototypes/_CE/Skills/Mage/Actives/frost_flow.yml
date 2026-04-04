@@ -33,7 +33,7 @@
   lockRotation: true
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEEffectFrostFlowCharge
       offsetAnimation:
       - time: 0.0

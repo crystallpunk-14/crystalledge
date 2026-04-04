@@ -18,6 +18,7 @@ ce-magic-spell-stamina-not-enough = У вас недостаточно сил д
 ce-magic-staminacost = Затраты выносливости
 ce-magic-spell-pacified = Это может причинить кому-то вред!
 ce-magic-spell-ssd = Не трогайте отключившихся игроков!
+ce-magic-weapon-required = Необходимо держать в руках оружие
 
 ce-magic-spell-target-not-mob = Цель должна быть живым существом!
 

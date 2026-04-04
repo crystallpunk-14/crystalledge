@@ -125,7 +125,7 @@
   duration: 0.8
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CERatBiteEffectTelegraphy
       offsetAnimation:
       - time: 0.0
@@ -146,7 +146,7 @@
         color: "#ffffff00"  # Fade out
         easing: QuadOut
     0.2:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CERatBiteEffect
       offsetAnimation:
       - time: 0.0

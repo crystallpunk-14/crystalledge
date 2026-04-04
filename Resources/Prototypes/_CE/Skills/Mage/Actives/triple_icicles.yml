@@ -36,7 +36,7 @@
   lockRotation: true
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEProjectileTripleIcicle
       offsetAnimation:
       - time: 0.0
@@ -55,7 +55,7 @@
       - time: 0.6
         rotation: 15
     0.1:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEProjectileTripleIcicle
       offsetAnimation:
       - time: 0.0
@@ -74,7 +74,7 @@
       - time: 0.5
         rotation: 0
     0.2:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEProjectileTripleIcicle
       offsetAnimation:
       - time: 0.0

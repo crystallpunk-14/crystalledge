@@ -7,7 +7,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
         offset: -0.1, -0.2
@@ -60,7 +60,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
         offset: 0.1, -0.2
@@ -113,7 +113,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword4.ogg
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
         offset: 0, -0.7

@@ -1,4 +1,5 @@
 using Content.Shared._CE.Actions.Components;
+using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Actions.Components;
@@ -20,6 +21,7 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
         SubscribeLocalEvent<CEActionDangerousComponent, ActionAttemptEvent>(OnDangerousActionAttempt);
+        SubscribeLocalEvent<CEActionWeaponRequiredComponent, ActionAttemptEvent>(OnWeaponRequiredActionAttempt);
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ActionValidateEvent>(OnTargetMobStatusRequiredValidate);
@@ -116,6 +118,19 @@ public abstract partial class CESharedActionSystem
             Popup.PopupClient(Loc.GetString("ce-magic-spell-pacified"), args.User, args.User);
             args.Cancelled = true;
         }
+    }
+
+    private void OnWeaponRequiredActionAttempt(Entity<CEActionWeaponRequiredComponent> ent, ref ActionAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (_hand.TryGetActiveItem(args.User, out var held) &&
+            HasComp<CEWeaponComponent>(held))
+            return;
+
+        Popup.PopupClient(Loc.GetString("ce-magic-weapon-required"), args.User, args.User);
+        args.Cancelled = true;
     }
 
     private void OnTargetMobStatusRequiredValidate(Entity<CEActionTargetMobStatusRequiredComponent> ent,

@@ -39,7 +39,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/firebolt.ogg
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEEffectFireboltCharge
       offsetAnimation:
       - time: 0.0

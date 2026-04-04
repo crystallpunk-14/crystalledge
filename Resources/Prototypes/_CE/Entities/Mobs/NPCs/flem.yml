@@ -139,7 +139,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEWeaponSkimitarIron
       offsetAnimation:
       - time: 0.0
@@ -195,7 +195,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEWeaponSkimitarIron
       offsetAnimation:
       - time: 0.0

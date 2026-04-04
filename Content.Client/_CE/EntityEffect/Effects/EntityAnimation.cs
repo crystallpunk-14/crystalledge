@@ -4,6 +4,7 @@ using Content.Client.Animations;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared.Hands.EntitySystems;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
 using Robust.Shared.Animations;
@@ -26,6 +27,7 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<EntityAnimation> args)
     {
@@ -36,7 +38,6 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
             return;
 
         var effect = args.Effect;
-        var used = args.Args.Used;
         var angle = args.Args.Angle;
         var speedMultiplier = 1f / args.Args.Speed;
 
@@ -51,7 +52,11 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         if (!TryComp<SpriteComponent>(effectEntity, out var effectSprite))
             return;
 
-        // Set up the sprite: either override or copy from the used item
+        // Resolve sprite source (in priority order):
+        // 1. DummyEntity — explicit VFX entity prototype, always wins
+        // 2. ActiveHandEntityAnimation — resolve from user's active hand
+        // 3. UsedEntityAnimation — use the action's container item (args.Used)
+        EntityUid? spriteSource = null;
         if (effect.DummyEntity != null)
         {
             var dummy = EntityManager.Spawn(effect.DummyEntity);
@@ -62,17 +67,25 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
             var proto = _protoManager.Index(effect.DummyEntity.Value);
             EntityManager.AddComponents(effectEntity, proto, false);
         }
-        else
+        else if (effect is ActiveHandEntityAnimation
+                 && _hands.TryGetActiveItem(entity, out var activeItem)
+                 && TryComp<SpriteComponent>(activeItem.Value, out var handSprite))
         {
-            if (used is not null && TryComp<SpriteComponent>(used.Value, out var itemSprite))
-                _sprite.CopySprite((used.Value, itemSprite), (effectEntity, effectSprite));
+            spriteSource = activeItem.Value;
+            _sprite.CopySprite((activeItem.Value, handSprite), (effectEntity, effectSprite));
+        }
+        else if (args.Args.Used is { } used
+                 && TryComp<SpriteComponent>(used, out var itemSprite))
+        {
+            spriteSource = used;
+            _sprite.CopySprite((used, itemSprite), (effectEntity, effectSprite));
         }
 
         _sprite.SetVisible((effectEntity, effectSprite), true);
 
         // Set initial rotation
         var initialRotation = angle;
-        if (TryComp<CEWeaponComponent>(used, out var itemAnim))
+        if (TryComp<CEWeaponComponent>(spriteSource, out var itemAnim))
             initialRotation += Angle.FromDegrees(itemAnim.SpriteRotation);
 
         _sprite.SetRotation((effectEntity, effectSprite), initialRotation);

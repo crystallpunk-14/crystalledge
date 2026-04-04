@@ -7,13 +7,15 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._CE.EntityEffect.Effects;
 
 /// <summary>
-/// Data-only effect that spawns a client-side visual entity with customizable animations.
+/// Abstract base for entity animation effects that spawn a client-side visual entity with customizable animations.
 /// Logic is handled by client-side <c>CEEntityAnimationEffectSystem</c>.
 /// Server-side, the animation system sends a network event for non-predicting clients.
+/// Use <see cref="UsedEntityAnimation"/> to copy sprite from the action's container item,
+/// or <see cref="ActiveHandEntityAnimation"/> to resolve sprite from the user's active hand.
 /// </summary>
-public sealed partial class EntityAnimation : CEEntityEffectBase<EntityAnimation>
+public abstract partial class EntityAnimation : CEEntityEffectBase<EntityAnimation>
 {
-    public EntityAnimation()
+    protected EntityAnimation()
     {
         EffectTarget = CEEffectTarget.User;
     }
@@ -58,6 +60,19 @@ public sealed partial class EntityAnimation : CEEntityEffectBase<EntityAnimation
     [DataField]
     public List<CEScaleKeyFrame> ScaleAnimation = new();
 }
+
+/// <summary>
+/// Copies sprite from the action's container item (<see cref="CEEntityEffectArgs.Used"/>).
+/// If <see cref="EntityAnimation.DummyEntity"/> is set, it overrides the item sprite.
+/// </summary>
+public sealed partial class UsedEntityAnimation : EntityAnimation;
+
+/// <summary>
+/// Resolves the sprite from the user's active hand item instead of <see cref="CEEntityEffectArgs.Used"/>.
+/// If <see cref="EntityAnimation.DummyEntity"/> is set, it overrides the active hand sprite.
+/// </summary>
+public sealed partial class ActiveHandEntityAnimation : EntityAnimation;
+
 
 /// <summary>
 /// Network event sent to non-predicting clients to display visual effects

@@ -33,7 +33,7 @@
   lockRotation: true
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEEffectFireballCharge
       offsetAnimation:
       - time: 0.0
