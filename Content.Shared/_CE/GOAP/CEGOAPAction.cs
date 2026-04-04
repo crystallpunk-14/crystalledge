@@ -47,7 +47,8 @@ public abstract partial class CEGOAPAction
     /// <summary>
     /// Key into the CEGOAPComponent.Targets dictionary.
     /// Actions that need a target read it by this key.
-    /// Null means the action targets the entity itself.
+    /// Null means the action has no target (GetTarget returns null).
+    /// Use "self" to target the entity itself.
     /// </summary>
     [DataField]
     public string? TargetKey;
