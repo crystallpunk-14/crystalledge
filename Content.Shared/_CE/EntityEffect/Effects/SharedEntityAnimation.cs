@@ -1,4 +1,6 @@
 using System.Numerics;
+using Content.Shared._CE.Animation.Core.Prototypes;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -62,12 +64,24 @@ public sealed partial class EntityAnimation : CEEntityEffectBase<EntityAnimation
 /// that were already processed on the predicting client.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEEntityAnimationEvent(NetEntity entity, NetEntity? used, Angle angle, TimeSpan frame) : EntityEventArgs
+public sealed class CEEntityAnimationEvent(
+    NetEntity entity,
+    NetEntity? used,
+    Angle angle,
+    TimeSpan frame,
+    ProtoId<CEEntityEffectAnimationPrototype> animationId,
+    float speed,
+    NetEntity? targetEntity,
+    NetCoordinates? targetCoordinates) : EntityEventArgs
 {
     public NetEntity Entity = entity;
     public NetEntity? Used = used;
     public Angle Angle = angle;
     public TimeSpan Frame = frame;
+    public ProtoId<CEEntityEffectAnimationPrototype> AnimationId = animationId;
+    public float Speed = speed;
+    public NetEntity? TargetEntity = targetEntity;
+    public NetCoordinates? TargetCoordinates = targetCoordinates;
 }
 
 

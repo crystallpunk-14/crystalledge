@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared.Movement.Systems;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
@@ -99,6 +100,11 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
                         foreach (var action in actions)
                         {
+                            // Skip EntityAnimation effects for entities we don't predict.
+                            // Non-predicting clients receive these via CEEntityAnimationEvent instead.
+                            if (action is EntityAnimation && !IsLocallyPredicted(uid))
+                                continue;
+
                             action.Effect(effectArgs);
                         }
 
@@ -290,6 +296,16 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         TimeSpan keyFrame,
         List<CEEntityEffect> actions)
     {
+    }
+
+    /// <summary>
+    /// Returns true if the entity is locally predicted (i.e., the local player on the client).
+    /// On the server, all entities are considered locally predicted.
+    /// Client override checks against <c>IPlayerManager.LocalEntity</c>.
+    /// </summary>
+    protected virtual bool IsLocallyPredicted(EntityUid uid)
+    {
+        return true;
     }
 }
 
