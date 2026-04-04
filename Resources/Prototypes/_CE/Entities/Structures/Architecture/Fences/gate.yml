@@ -48,11 +48,11 @@
     sprite: _CE/Structures/Architecture/Fences/wooden.rsi
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 15
+    destroyThreshold: 10
     destroySound:
       collection: WoodDestroy
   - type: CEArmor
     flat:
-      Physical: 2
+      Physical: 1
   - type: CEFlammable
     stackDelta: 1

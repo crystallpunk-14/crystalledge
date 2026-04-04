@@ -109,9 +109,11 @@ public sealed class CEConsumableSystem : EntitySystem
         _audio.PlayPredicted(ent.Comp.UseSound, Transform(ent).Coordinates, args.User);
 
         // Apply all effects to the target.
+        // Source is the consumable item itself, not the player,
+        // so heal modifiers on the player (like Apostasy) won't intercept.
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
-            target,
+            ent.Owner,
             ent.Owner,
             Angle.Zero,
             0f,

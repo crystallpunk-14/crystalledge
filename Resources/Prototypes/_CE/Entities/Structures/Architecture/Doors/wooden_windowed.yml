@@ -18,12 +18,12 @@
     occludes: false
   - type: CEArmor
     flat:
-      Physical: 5
+      Physical: 1
   - type: CEFlammable
     stackDelta: 2
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 20
+    destroyThreshold: 15
     destroySound:
       collection: WoodDestroy
 

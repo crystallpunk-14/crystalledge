@@ -41,7 +41,7 @@ public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<Area
         var count = 0;
         foreach (var entity in entitiesAround)
         {
-            if (entity == args.Args.User && !args.Effect.AffectCaster)
+            if (entity == args.Args.Source && !args.Effect.AffectCaster)
                 continue;
 
             if (!_whitelist.CheckBoth(entity, args.Effect.Blacklist, args.Effect.Whitelist))

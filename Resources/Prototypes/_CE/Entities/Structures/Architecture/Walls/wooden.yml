@@ -11,7 +11,7 @@
       collection: WoodDestroy
   - type: CEArmor
     flat:
-      Physical: 5
+      Physical: 1
   - type: CEFlammable
     stackDelta: 2
 

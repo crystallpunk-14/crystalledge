@@ -22,6 +22,15 @@
       collection: CECrystalDings
       params:
         variation: 0.03
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 5
+    destroySound:
+      collection: GlassSmash
+  - type: CEArmor
+    flat:
+      Fire: 5
+      Cold: 5
   #- type: MeleeSound
   #  soundGroups:
   #    Brute:

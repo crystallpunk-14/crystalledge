@@ -87,11 +87,6 @@
     radius: 2
     energy: 3
     color: "#8f42ff"
-  - type: AmbientSound
-    volume: -3
-    range: 7
-    sound:
-      path: /Audio/Ambience/anomaly_scary.ogg
   - type: TimedDespawn
     lifetime: 60
 

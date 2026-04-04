@@ -24,7 +24,7 @@ public sealed partial class CEThrowFromUserEffectSystem : CEEntityEffectSystem<T
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } targetEntity)
             return;
 
-        var worldPos = _transform.GetWorldPosition(args.Args.User);
+        var worldPos = _transform.GetWorldPosition(args.Args.Source);
         var dir = _transform.GetWorldPosition(targetEntity) - worldPos;
         if (dir == Vector2.Zero)
             return;
@@ -36,6 +36,6 @@ public sealed partial class CEThrowFromUserEffectSystem : CEEntityEffectSystem<T
             _projectile.EmbedDetach(targetEntity, embeddable);
         }
 
-        _throwing.TryThrow(targetEntity, normalized * args.Effect.Distance, args.Effect.ThrowPower, args.Args.User, doSpin: true);
+        _throwing.TryThrow(targetEntity, normalized * args.Effect.Distance, args.Effect.ThrowPower, args.Args.Source, doSpin: true);
     }
 }

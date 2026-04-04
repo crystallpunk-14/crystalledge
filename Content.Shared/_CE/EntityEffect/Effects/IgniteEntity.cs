@@ -20,6 +20,6 @@ public sealed partial class CEIgniteEntityEffectSystem : CEEntityEffectSystem<Ig
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _fire.IgniteEntity(entity, args.Args.User, args.Effect.Stacks, args.Effect.MaxStacks > 0 ? args.Effect.MaxStacks : null);
+        _fire.IgniteEntity(entity, args.Args.Source, args.Effect.Stacks, args.Effect.MaxStacks > 0 ? args.Effect.MaxStacks : null);
     }
 }

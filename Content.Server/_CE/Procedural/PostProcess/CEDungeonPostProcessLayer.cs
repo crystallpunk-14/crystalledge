@@ -15,9 +15,11 @@ public abstract partial class CEDungeonPostProcessLayer
     /// </summary>
     /// <param name="entMan">Entity manager for resolving systems and components.</param>
     /// <param name="mapUid">The primary map entity of the dungeon.</param>
+    /// <param name="mainZLevel">The z-level depth to treat as the main level.</param>
     /// <param name="suspend">Cooperative yield function to call periodically to avoid frame hitches.</param>
     public abstract Task Execute(
         IEntityManager entMan,
         EntityUid mapUid,
+        int mainZLevel,
         Func<ValueTask> suspend);
 }

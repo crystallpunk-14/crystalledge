@@ -7,7 +7,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Actions;
 
@@ -17,7 +16,6 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hand = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
 
     private EntityQuery<ActionComponent> _actionQuery;

@@ -11,11 +11,12 @@ public sealed class CEDungeonPostProcessSystem : EntitySystem
     internal async Task RunAll(
         List<CEDungeonPostProcessLayer> layers,
         EntityUid mapUid,
+        int mainZLevel,
         Func<ValueTask> suspend)
     {
         foreach (var layer in layers)
         {
-            await layer.Execute(EntityManager, mapUid, suspend);
+            await layer.Execute(EntityManager, mapUid, mainZLevel, suspend);
         }
     }
 
@@ -42,5 +43,21 @@ public sealed class CEDungeonPostProcessSystem : EntitySystem
         }
 
         return maps;
+    }
+
+    /// <summary>
+    /// Returns the map entity at the given z-level depth within the z-network
+    /// that <paramref name="mapUid"/> belongs to.
+    /// Falls back to <paramref name="mapUid"/> if no z-network exists or the depth is not found.
+    /// </summary>
+    internal EntityUid GetMapAtZLevel(EntityUid mapUid, int depth)
+    {
+        if (!_zLevels.TryGetZNetwork(mapUid, out var zNet))
+            return mapUid;
+
+        var zLevels = zNet.Value.Comp.ZLevels;
+        return zLevels.TryGetValue(depth, out var target) && target != null
+            ? target.Value
+            : mapUid;
     }
 }

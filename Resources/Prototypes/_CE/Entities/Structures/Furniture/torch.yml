@@ -33,6 +33,15 @@
     range: 5
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Physical: 1
+      Fire: 2
 
 - type: entity
   id: CEWallmountTorchAlwaysPowered
@@ -56,3 +65,11 @@
     range: 5
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Fire: 1

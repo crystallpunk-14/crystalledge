@@ -14,6 +14,8 @@ public abstract partial class CESharedActionSystem
 {
     private void InitializeAttempts()
     {
+
+        SubscribeLocalEvent<ActionComponent, ActionAttemptEvent>(OnMobStateAttempt);
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
@@ -21,6 +23,21 @@ public abstract partial class CESharedActionSystem
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ActionValidateEvent>(OnTargetMobStatusRequiredValidate);
+    }
+
+
+    private void OnMobStateAttempt(Entity<ActionComponent> ent, ref ActionAttemptEvent args)
+    {
+        if (!TryComp<CEMobStateComponent>(args.User, out var mobState))
+            return;
+
+        if (mobState.CurrentState == CEMobState.Alive)
+            return;
+
+        if (HasComp<CEActionCastableFromCriticalComponent>(ent))
+            return;
+
+        args.Cancelled = true;
     }
 
     /// <summary>
@@ -57,7 +74,7 @@ public abstract partial class CESharedActionSystem
             return;
         }
 
-        if (playerMana.Energy < requiredMana && _timing.IsFirstTimePredicted)
+        if (playerMana.Energy < requiredMana)
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-not-enough-mana"), args.User, args.User);
             args.Cancelled = true;
