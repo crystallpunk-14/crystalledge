@@ -71,7 +71,7 @@
     alert: CEGlowing
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/General/sphere_of_light.rsi
+    sprite: _CE/Effects/sphere_of_light.rsi
     offset: 0, 1
     noRot: true
     layers:
