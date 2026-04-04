@@ -19,7 +19,7 @@
   - type: Action
     useDelay: 1
     icon:
-      sprite: _CE/Skills/sphere_of_light.rsi
+      sprite: _CE/Skills/General/sphere_of_light.rsi
       state: icon
   - type: TargetAction
     range: 5
@@ -71,7 +71,7 @@
     alert: CEGlowing
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/sphere_of_light.rsi
+    sprite: _CE/Effects/General/sphere_of_light.rsi
     offset: 0, 1
     noRot: true
     layers:
@@ -85,5 +85,5 @@
 - type: alert
   id: CEGlowing
   icons:
-  - sprite: _CE/Skills/sphere_of_light.rsi
+  - sprite: _CE/Skills/General/sphere_of_light.rsi
     state: icon

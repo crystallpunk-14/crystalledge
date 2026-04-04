@@ -1,0 +1,43 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: SelfTreatment
+  effect: !type:AddAction
+    action: CEActionSpellSelfTreatment
+  restrictions:
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEPriest #This skill is useless for priest
+
+- type: entity
+  id: CEActionSpellSelfTreatment
+  parent: CEActionSpellBase
+  name: Self Treatment
+  description: You restore [color=#1defa9]2 health[/color] to yourself.
+  components:
+  - type: CEActionManaCost
+    manaCost: 4
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/General/self_treatment.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationSelfTreatment
+
+- type: entityEffectAnimation
+  id: AnimationSelfTreatment
+  movementSpeed: 0.5
+  duration: 0.6
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    0.5:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    - !type:Heal
+      amount: 2

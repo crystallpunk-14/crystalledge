@@ -49,6 +49,7 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     /// Skill restriction. Restrictions on this skill entering the pool of possible skills when the player levels up.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CESkillRestriction> Restrictions = new();
 
     /// <summary>
@@ -91,5 +92,8 @@ public abstract partial class CESkillEffect
 [MeansImplicitUse]
 public abstract partial class CESkillRestriction
 {
+    [DataField]
+    public bool Inverted;
+
     public abstract bool Check(IEntityManager entManager, EntityUid target);
 }
