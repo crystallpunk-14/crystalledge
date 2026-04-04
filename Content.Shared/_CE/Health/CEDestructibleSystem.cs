@@ -34,11 +34,28 @@ public sealed class CEDestructibleSystem : EntitySystem
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
+    /// <summary>
+    /// Deferred destruction queue — processed in <see cref="Update"/> to avoid
+    /// modifying entity archetype tables while other systems are enumerating queries
+    /// (e.g. ThrownItemSystem).
+    /// </summary>
+    private readonly Queue<(EntityUid Uid, EntityUid? Source)> _pendingDestruction = new();
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEDestructibleComponent, CEDamageChangedEvent>(OnDamageChanged);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        while (_pendingDestruction.TryDequeue(out var pending))
+        {
+            ProcessDestruction(pending.Uid, pending.Source);
+        }
     }
 
     private void OnDamageChanged(Entity<CEDestructibleComponent> ent, ref CEDamageChangedEvent args)
@@ -54,7 +71,18 @@ public sealed class CEDestructibleSystem : EntitySystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
-        var xform = Transform(ent);
+        _pendingDestruction.Enqueue((ent.Owner, args.Source));
+    }
+
+    private void ProcessDestruction(EntityUid uid, EntityUid? source)
+    {
+        if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
+            return;
+
+        if (!TryComp<CEDestructibleComponent>(uid, out var comp))
+            return;
+
+        var xform = Transform(uid);
         EntityCoordinates position;
 
         if (TryComp<MapGridComponent>(xform.GridUid, out var mapGrid))
@@ -64,17 +92,17 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        if (ent.Comp.DestroySound is not null)
-            _audio.PlayPredicted(ent.Comp.DestroySound, Transform(ent).Coordinates, args.Source);
+        if (comp.DestroySound is not null)
+            _audio.PlayPredicted(comp.DestroySound, xform.Coordinates, source);
 
         if (_net.IsServer)
         {
-            DropCarriedItems(ent.Owner, position);
+            DropCarriedItems(uid, position);
 
             // Server-side: spawn loot. TODO: prediction someway??
-            if (ent.Comp.LootTable is not null)
+            if (comp.LootTable is not null)
             {
-                var spawns = _entityTable.GetSpawns(ent.Comp.LootTable);
+                var spawns = _entityTable.GetSpawns(comp.LootTable);
                 foreach (var spawn in spawns)
                 {
                     var spawnedLoot = SpawnAtPosition(spawn, position);
@@ -83,10 +111,10 @@ public sealed class CEDestructibleSystem : EntitySystem
             }
         }
 
-        var destructedEv = new CEDestructedEvent(position, args.Source);
-        RaiseLocalEvent(ent.Owner, ref destructedEv);
+        var destructedEv = new CEDestructedEvent(position, source);
+        RaiseLocalEvent(uid, ref destructedEv);
 
-        PredictedQueueDel(ent.Owner);
+        PredictedQueueDel(uid);
     }
 
     private int GetDestroyThreshold(Entity<CEDestructibleComponent> ent, int totalDamage)
