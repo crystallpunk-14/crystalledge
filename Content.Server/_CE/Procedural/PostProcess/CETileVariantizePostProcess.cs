@@ -11,7 +11,7 @@ namespace Content.Server._CE.Procedural.PostProcess;
 /// </summary>
 public sealed partial class CETileVariantizePostProcess : CEDungeonPostProcessLayer
 {
-    public override async Task Execute(IEntityManager entMan, EntityUid mapUid, Func<ValueTask> suspend)
+    public override async Task Execute(IEntityManager entMan, EntityUid mapUid, int mainZLevel, Func<ValueTask> suspend)
     {
         var postProcess = entMan.System<CEDungeonPostProcessSystem>();
         var map = entMan.System<SharedMapSystem>();

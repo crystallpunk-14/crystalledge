@@ -22,7 +22,7 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
     [DataField]
     public int? Seed;
 
-    public override async Task Execute(IEntityManager entMan, EntityUid mapUid, Func<ValueTask> suspend)
+    public override async Task Execute(IEntityManager entMan, EntityUid mapUid, int mainZLevel, Func<ValueTask> suspend)
     {
         var postProcess = entMan.System<CEDungeonPostProcessSystem>();
         var biome = entMan.System<BiomeSystem>();

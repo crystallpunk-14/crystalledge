@@ -55,4 +55,11 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     [DataField]
     [AlwaysPushInheritance]
     public List<CEDungeonPostProcessLayer> PostProcess = new();
+
+    /// <summary>
+    /// The z-level depth that post-processing layers should treat as the "main" level.
+    /// Layers like budget spawn use this to restrict entity placement to a single z-level.
+    /// </summary>
+    [DataField]
+    public int MainZLevel = 1;
 }

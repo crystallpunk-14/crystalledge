@@ -30,7 +30,7 @@ public sealed partial class CEEntityReplacePostProcess : CEDungeonPostProcessLay
     [DataField]
     public float Chance = 0.1f;
 
-    public override async Task Execute(IEntityManager entMan, EntityUid mapUid, Func<ValueTask> suspend)
+    public override async Task Execute(IEntityManager entMan, EntityUid mapUid, int mainZLevel, Func<ValueTask> suspend)
     {
         var postProcess = entMan.System<CEDungeonPostProcessSystem>();
         var map = entMan.System<SharedMapSystem>();

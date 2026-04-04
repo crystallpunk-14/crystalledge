@@ -142,7 +142,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
             if (proto.PostProcess.Count > 0)
             {
                 var ppJob = new CEDungeonPostProcessJob(
-                    DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, cts.Token);
+                    DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
                 _dungeonJobQueue.EnqueueJob(ppJob);
                 await ppJob.AsTask;
 
@@ -221,7 +221,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
                 if (proto.PostProcess.Count > 0)
                 {
                     var ppJob = new CEDungeonPostProcessJob(
-                        DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, cts.Token);
+                        DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
                     _dungeonJobQueue.EnqueueJob(ppJob);
                 }
             }
