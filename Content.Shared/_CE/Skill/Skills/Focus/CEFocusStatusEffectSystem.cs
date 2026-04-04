@@ -1,3 +1,4 @@
+using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -23,6 +24,12 @@ public sealed partial class CEFocusStatusEffectSystem : EntitySystem
             return;
 
         if (statusEffect.AppliedTo is null)
+            return;
+
+        if (args.Args.Weapon is null)
+            return;
+
+        if (!TryComp<CEWeaponComponent>(args.Args.Weapon, out var weapon)) //block criting for spells
             return;
 
         var ev = args.Args;
