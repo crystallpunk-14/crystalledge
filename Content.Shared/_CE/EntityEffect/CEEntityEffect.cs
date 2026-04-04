@@ -54,7 +54,7 @@ public abstract partial class CEEntityEffectBase<T> : CEEntityEffect where T : C
 /// </summary>
 public record struct CEEntityEffectArgs(
     IEntityManager EntityManager,
-    EntityUid User,
+    EntityUid Source,
     EntityUid? Used,
     Angle Angle,
     float Speed,
@@ -89,14 +89,14 @@ public abstract partial class CEEntityEffectSystem<TEffect> : EntitySystem where
 
     /// <summary>
     /// Resolves the entity that the effect should operate on, based on <see cref="CEEntityEffect.EffectTarget"/>.
-    /// Returns <see cref="CEEntityEffectArgs.User"/> for <see cref="CEEffectTarget.User"/>,
+    /// Returns <see cref="CEEntityEffectArgs.Source"/> for <see cref="CEEffectTarget.User"/>,
     /// or <see cref="CEEntityEffectArgs.Target"/> for <see cref="CEEffectTarget.Target"/>.
     /// </summary>
     protected EntityUid? ResolveEffectEntity(CEEntityEffectArgs args, CEEffectTarget effectTarget)
     {
         return effectTarget switch
         {
-            CEEffectTarget.User => args.User,
+            CEEffectTarget.User => args.Source,
             _ => args.Target,
         };
     }
@@ -110,7 +110,7 @@ public abstract partial class CEEntityEffectSystem<TEffect> : EntitySystem where
     {
         if (effectTarget == CEEffectTarget.User)
         {
-            coords = Transform(args.User).Coordinates;
+            coords = Transform(args.Source).Coordinates;
             return true;
         }
 

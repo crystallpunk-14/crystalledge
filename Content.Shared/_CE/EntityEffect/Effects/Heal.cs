@@ -17,6 +17,6 @@ public sealed partial class CEHealEffectSystem : CEEntityEffectSystem<Heal>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _health.Heal(entity, args.Effect.Amount, args.Args.User);
+        _health.Heal(entity, args.Effect.Amount, args.Args.Source);
     }
 }

@@ -47,7 +47,7 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         if (!TryComp<CEWeaponComponent>(args.Args.Used.Value, out var weapon))
             return;
 
-        var entityCoords = _transform.GetMapCoordinates(args.Args.User);
+        var entityCoords = _transform.GetMapCoordinates(args.Args.Source);
         var direction = new Angle(args.Args.Angle.ToWorldVec()) + args.Effect.Angle;
 
         var range = args.Effect.Range;
@@ -65,7 +65,7 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
             LookupFlags.Dynamic | LookupFlags.Static | LookupFlags.Sundries)
             .ToList();
 
-        targets.Remove(args.Args.User);
+        targets.Remove(args.Args.Source);
 
         if (args.Args.Used is { } usedEntity)
             targets.Remove(usedEntity);
@@ -73,7 +73,7 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         // Filter to only damageable entities — skip walls, floor items, etc.
         targets.RemoveAll(t => !HasComp<CEDamageableComponent>(t));
 
-        _melee.HandleArcAttackHit(args.Args.User, (args.Args.Used.Value, weapon), targets);
+        _melee.HandleArcAttackHit(args.Args.Source, (args.Args.Used.Value, weapon), targets);
 
         foreach (var target in targets)
         {

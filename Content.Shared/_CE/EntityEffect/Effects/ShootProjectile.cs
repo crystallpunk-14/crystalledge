@@ -44,10 +44,10 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
         if (!_net.IsServer)
             return;
 
-        var xform = Transform(args.Args.User);
+        var xform = Transform(args.Args.Source);
 
         var fromCoords = xform.Coordinates;
-        var userVelocity = _physics.GetMapLinearVelocity(args.Args.User);
+        var userVelocity = _physics.GetMapLinearVelocity(args.Args.Source);
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
         var fromMap = _transform.ToMapCoordinates(fromCoords);
@@ -98,8 +98,8 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
             _gun.ShootProjectile(ent,
                 direction,
                 args.Effect.SaveVelocity ? userVelocity : new Vector2(),
-                args.Args.User,
-                args.Args.User,
+                args.Args.Source,
+                args.Args.Source,
                 speed);
         }
     }

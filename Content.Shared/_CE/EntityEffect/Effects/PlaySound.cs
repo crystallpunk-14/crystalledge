@@ -23,7 +23,7 @@ public sealed partial class CEPlaySoundEffectSystem : CEEntityEffectSystem<PlayS
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _audio.PlayPredicted(args.Effect.Sound, entity, args.Args.User,
+        _audio.PlayPredicted(args.Effect.Sound, entity, args.Args.Source,
             args.Effect.Sound.Params.WithVariation(0.15f));
     }
 }
