@@ -10,13 +10,9 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly CEScreenshakeSystem _shake = default!;
 
-    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source)
+    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)
     {
-        var filter = source != null
-            ? CEFilter.ZPvsExcept(source.Value, EntityManager)
-            : CEFilter.ZPvs(target, EntityManager);
-
-        _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
+        _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, CEFilter.ZPvs(target, EntityManager));
 
         var shakeTranslation = new CEScreenshakeParameters() { Trauma = 0.4f, DecayRate = 3f, Frequency = 0.008f };
         _shake.Screenshake(target, shakeTranslation, null);

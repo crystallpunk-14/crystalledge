@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server._CE.Animation.Item;
+using Content.Server._CE.MeleeWeapon;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.Animation.Item.Components;

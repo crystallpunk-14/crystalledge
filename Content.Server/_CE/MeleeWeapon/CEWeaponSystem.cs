@@ -1,10 +1,9 @@
 using Content.Server._CE.ZLevels.Core;
-using Content.Shared._CE.Animation.Item;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Player;
 
-namespace Content.Server._CE.Animation.Item;
+namespace Content.Server._CE.MeleeWeapon;
 
 public sealed class CEWeaponSystem : CESharedWeaponSystem
 {

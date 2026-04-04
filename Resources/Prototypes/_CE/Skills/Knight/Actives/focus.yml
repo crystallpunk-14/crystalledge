@@ -1,11 +1,11 @@
 # Knight active skill: Focus
-# Guarantees the next attack is a critical strike (double damage).
+# Grants 5 seconds of guaranteed critical strikes (double damage).
 
 - type: skill
   parent: BaseKnightSkill
   id: Focus
   icon:
-    sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+    sprite: _CE/Skills/Knight/focus.rsi
     state: icon
   effect: !type:AddAction
     action: CEActionSpellFocus
@@ -14,15 +14,15 @@
   id: CEActionSpellFocus
   parent: CEActionSpellBase
   name: Focus
-  description: Your next attack is a guaranteed [color=#ff0505]critical strike[/color], dealing double damage.
+  description: Grants [color=#ff0505]3 seconds[/color] of guaranteed [color=#ff0505]critical strikes[/color], dealing double damage.
   components:
   - type: CEActionManaCost
-    manaCost: 2
+    manaCost: 6
   - type: CEActionWeaponRequired
   - type: Action
-    useDelay: 1
+    useDelay: 15
     icon:
-      sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+      sprite: _CE/Skills/Knight/focus.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
@@ -61,30 +61,37 @@
           color: "#ffffff"
         - time: 1
           color: "#ffffff01"
-    - !type:ApplyStatusEffectStack
-      effectTarget: User
-      statusEffect: CEStatusEffectFocus
-      duration: 10
-      stack: 1
     0.6:
     - !type:UsedEntityAnimation
       dummyEntity: CEEffectFocusTelegraphy
       offsetAnimation:
       - time: 0
         offset: -0.6, 0.1
+    - !type:ApplyStatusEffect
+      effectTarget: User
+      statusEffect: CEStatusEffectFocus
+      duration: 3
 
 
 - type: entity
   id: CEStatusEffectFocus
   name: Focus
-  description: Your next attack will be a guaranteed [color=#ff8a05]critical strike[/color].
+  description: All attacks deal guaranteed [color=#ff8a05]critical[/color] damage.
   components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Effects/focus_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEFocus
-  - type: CEStatusEffectStack
-    stackDelta: -1
   - type: CEFocusStatusEffect
+  - type: PointLight
+    color: "#ff0505"
+    radius: 1.9
 
 
 
@@ -106,12 +113,12 @@
     color: "#ff0505"
     radius: 1.5
   - type: TimedDespawn
-    lifetime: 3
+    lifetime: 1.5
   - type: LightBehaviour
     behaviours:
       - !type:PulseBehaviour
         interpolate: Linear
-        maxDuration: 3
+        maxDuration: 1.5
         startValue: 0
         endValue: 5.0
         property: Energy
@@ -120,26 +127,6 @@
 
 - type: alert
   id: CEFocus
-  alertViewEntity: CEFocusAlertSpriteView
   icons:
-  - sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+  - sprite: _CE/Skills/Knight/focus.rsi
     state: icon
-
-- type: entity
-  id: CEFocusAlertSpriteView
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: GenericCounterAlert
-    centerGlyph: false
-    hideLeadingZeroes: true
-  - type: Sprite
-    sprite: /Textures/Interface/Alerts/essence_counter.rsi
-    layers:
-    - sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
-      state: icon
-    - map: [ "1" ]
-      offset: 0.65, 0
-    - map: [ "10" ]
-      offset: 0.45, 0
-    - map: [ "100" ]
-      offset: 0.25, 0

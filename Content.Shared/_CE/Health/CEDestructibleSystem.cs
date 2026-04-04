@@ -92,8 +92,8 @@ public sealed class CEDestructibleSystem : EntitySystem
         else
             return;
 
-        if (comp.DestroySound is not null)
-            _audio.PlayPredicted(comp.DestroySound, xform.Coordinates, source);
+        if (comp.DestroySound is not null && _net.IsServer)
+            _audio.PlayPvs(comp.DestroySound, xform.Coordinates);
 
         if (_net.IsServer)
         {
