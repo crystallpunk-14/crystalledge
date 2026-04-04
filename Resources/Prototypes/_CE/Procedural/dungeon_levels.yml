@@ -196,7 +196,7 @@
   - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 1
   exits:
-    default: MossyTempleSafe
+    default: MossyTemple2
   config:
     !type:CEProceduralConfig
     generalCount:
@@ -360,8 +360,8 @@
   parent:
   - BaseMossyTemplePostProcess
   name: Mossy Temple — Safe Zone
-  exits:
-    default: MossyTemple1 # Loops back for now
+  #exits:
+  #  default: MossyTemple1 # Loops back for now
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: MossyTempleSafe

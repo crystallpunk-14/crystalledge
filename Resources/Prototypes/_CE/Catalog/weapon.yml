@@ -12,7 +12,7 @@
   id: CEUncommonWeapon
   table: !type:GroupSelector
     children:
-    - id: CEWeaponTwoHandedSwordIron #TODO
+    - id: CEWeaponDaggerSacrificial
 
 - type: entityTable
   id: CERandomWeapon

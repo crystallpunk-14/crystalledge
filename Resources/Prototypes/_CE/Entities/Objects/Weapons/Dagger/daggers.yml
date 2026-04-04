@@ -1,0 +1,87 @@
+- type: entity
+  parent: CEBaseWeaponDagger
+  id: CEWeaponDaggerSacrificial
+  name: sacrificial dagger
+  description: An enchanted dagger that restores mana to whoever it cuts.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Dagger/sacrifice_dagger.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.4
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          ignoreArmor: true
+          damage:
+            types:
+              Physical: 1
+        - !type:RestoreMana
+          amount: 2
+        - !type:SpawnEntity
+          spawns:
+          - CEEffectManaRestore
+      OnHeavyHit: # Apply this effect of self
+      - !type:Damage
+        effectTarget: User
+        ignoreArmor: true
+        damage:
+          types:
+            Physical: 1
+      - !type:RestoreMana
+        effectTarget: User
+        amount: 2
+      - !type:SpawnEntity
+        effectTarget: User
+        spawns:
+        - CEEffectManaRestore
+    animations:
+      Primary:
+      - anim: DaggerAttackLight1
+        speed: 2
+        staminaCost: 1
+      - anim: DaggerAttackLight2
+        speed: 2
+        staminaCost: 1
+      Secondary:
+      - anim: SelfCut
+        staminaCost: 1
+
+- type: entityEffectAnimation
+  id: SelfCut
+  movementSpeed: 0.6
+  duration: 0.4
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword2.ogg
+    - !type:UsedEntityAnimation
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.5
+        easing: QuadOut
+      - time: 0.2
+        offset: 0, -0.7
+        easing: QuadIn
+      - time: 0.5
+        offset: 0, -0
+      - time: 0.6
+        offset: 0, -0.3
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: -180
+
+      colorAnimation:
+      - time: 0.5
+        color: "#ffffff"
+      - time: 0.6
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    0.39:
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit
