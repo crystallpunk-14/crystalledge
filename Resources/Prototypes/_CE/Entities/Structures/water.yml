@@ -43,7 +43,7 @@
       params:
         volume: 8
   - type: CEWaterDistortion
-    intensity: 0.5
+    intensity: 0.4
   - type: CEWater
   - type: CEFreezeTransform
     freezesInto: CEIce
@@ -64,7 +64,7 @@
     state: moving
     snapCardinals: false
   - type: CEWaterDistortion
-    intensity: 1
+    intensity: 0.6
   - type: CEWater
     flowing: true
   - type: CEFreezeTransform
