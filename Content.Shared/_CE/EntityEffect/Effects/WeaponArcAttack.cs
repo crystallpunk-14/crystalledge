@@ -76,7 +76,8 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         targets.RemoveAll(t => !HasComp<CEDamageableComponent>(t));
 
         // Filter out entities behind walls (line-of-sight check).
-        targets.RemoveAll(t => !_interaction.InRangeUnobstructed(entityCoords, t, range + 0.1f));
+        // GetEntitiesInArc uses range * 2 for the broadphase lookup, so match that here.
+        targets.RemoveAll(t => !_interaction.InRangeUnobstructed(entityCoords, t, range * 2 + 0.1f));
 
         _melee.HandleArcAttackHit(args.Args.Source, (args.Args.Used.Value, weapon), targets);
 

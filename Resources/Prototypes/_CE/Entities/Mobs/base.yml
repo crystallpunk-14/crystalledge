@@ -28,3 +28,6 @@
   components:
   - type: CombatMode
   - type: StatusIcon #TODO not here!
+  - type: ContentEye
+    maxZoom: 0.6, 0.6
+    targetZoom: 0.6, 0.6
