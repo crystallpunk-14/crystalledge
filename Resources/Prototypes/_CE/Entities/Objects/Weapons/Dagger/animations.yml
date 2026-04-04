@@ -4,8 +4,6 @@
   duration: 0.4
   events:
     0:
-    - !type:Dash
-      distance: 0.2
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash.ogg
@@ -52,8 +50,6 @@
   duration: 0.4
   events:
     0:
-    - !type:Dash
-      distance: 0.2
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash.ogg
