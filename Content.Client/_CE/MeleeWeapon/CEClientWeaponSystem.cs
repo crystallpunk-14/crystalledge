@@ -136,8 +136,8 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
 
         var targets = GetEntityList(args.Targets);
 
-        var otherShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.35f, DecayRate = 2f, Frequency = 0.008f };
-        var userShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.35f, DecayRate = 1.25f, Frequency = 0.008f };
+        var otherShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.4f, DecayRate = 3f, Frequency = 0.008f };
+        var userShakeTranslation = new CEScreenshakeParameters() { Trauma = 0.5f, DecayRate = 3f, Frequency = 0.008f };
 
         // Apply screenshake to attacker if they're a local player
         if (_player.LocalSession?.AttachedEntity == user && targets.Any())

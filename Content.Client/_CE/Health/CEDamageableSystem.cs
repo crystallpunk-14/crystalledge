@@ -1,3 +1,4 @@
+using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Effects;
@@ -10,6 +11,7 @@ namespace Content.Client._CE.Health;
 public sealed class CEDamageableSystem : CESharedDamageableSystem
 {
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private readonly CEScreenshakeSystem _shake = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -31,6 +33,9 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
             return;
 
         _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Local());
+
+        var shakeTranslation = new CEScreenshakeParameters() { Trauma = 0.4f, DecayRate = 3f, Frequency = 0.008f };
+        _shake.Screenshake(target, shakeTranslation, null);
     }
 }
 
