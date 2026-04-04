@@ -1,0 +1,81 @@
+# Knight active skill: Focus
+# Guarantees the next attack is a critical strike (double damage).
+
+- type: skill
+  parent: BaseKnightSkill
+  id: Focus
+  icon:
+    sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellFocus
+
+- type: entity
+  id: CEActionSpellFocus
+  parent: CEActionSpellBase
+  name: Focus
+  description: Your next attack is a guaranteed [color=#ff8a05]critical strike[/color], dealing double damage.
+  components:
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: CEActionWeaponRequired
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationFocus
+
+- type: entityEffectAnimation
+  id: AnimationFocus
+  duration: 0.4
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectFocus
+      duration: 10
+      stack: 1
+
+- type: entity
+  id: CEStatusEffectFocus
+  name: Focus
+  description: Your next attack will be a guaranteed [color=#ff8a05]critical strike[/color].
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEFocus
+  - type: CEStatusEffectStack
+    stackDelta: 0
+  - type: CEFocusStatusEffect
+
+- type: alert
+  id: CEFocus
+  alertViewEntity: CEFocusAlertSpriteView
+  icons:
+  - sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+    state: icon
+
+- type: entity
+  id: CEFocusAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Skills/Knight/blood_and_tears.rsi # TODO: Replace with dedicated focus icon
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

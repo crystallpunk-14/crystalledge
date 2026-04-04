@@ -29,6 +29,6 @@ public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _health.TakeDamage(entity, args.Effect.DamageSpec, args.Args.Source, args.Effect.IgnoreArmor, args.Effect.InterruptDoAfters);
+        _health.TakeDamage(entity, args.Effect.DamageSpec, args.Args.Source, args.Args.Used, args.Effect.IgnoreArmor, args.Effect.InterruptDoAfters);
     }
 }

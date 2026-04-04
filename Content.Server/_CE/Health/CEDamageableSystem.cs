@@ -2,7 +2,6 @@ using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared.Effects;
-using Robust.Shared.Player;
 
 namespace Content.Server._CE.Health;
 
