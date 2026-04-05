@@ -14,7 +14,7 @@
   id: JobCEPriest
   groups:
   - CEPriestSkill
-  # Priest weapon TODO
+  - CEPriestWeapon
   - CEPriestCloak
   - CEPriestShirt
   - CEPriestPants
