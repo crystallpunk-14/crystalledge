@@ -14,7 +14,8 @@ public sealed class CEWaterSystem : CESharedWaterSystem
         // Conveyor activation for flowing water.
         SubscribeLocalEvent<CEWaterComponent, MapInitEvent>(OnMapInit);
 
-        // Fire interaction: extinguish entities entering water.
+        // Fire interaction: extinguish burning entities entering water.
+        // Water interaction: apply wet stacks to entities entering water.
         SubscribeLocalEvent<CEWaterComponent, StartCollideEvent>(OnCollide);
     }
 
@@ -30,10 +31,11 @@ public sealed class CEWaterSystem : CESharedWaterSystem
     }
 
     /// <summary>
-    /// Extinguish burning entities that touch water.
+    /// Extinguish burning entities that touch water and apply wet stacks.
     /// </summary>
     private void OnCollide(Entity<CEWaterComponent> ent, ref StartCollideEvent args)
     {
         Fire.ExtinguishEntity(new Entity<CEFlammableComponent?>(args.OtherEntity, null));
+        WetEntity(args.OtherEntity, maxStack: 10);
     }
 }

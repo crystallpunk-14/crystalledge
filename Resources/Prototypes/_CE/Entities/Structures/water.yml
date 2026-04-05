@@ -71,3 +71,19 @@
     freezesInto: CEIceFrozenStream
   - type: Conveyor
     speed: 0.25
+
+- type: entity
+  id: CEWaterTileImpactEffect
+  name: water splash
+  description: A splash of water upon impact.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/water_tile_impact.rsi
+    snapCardinals: true
+    layers:
+    - state: effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 2.0

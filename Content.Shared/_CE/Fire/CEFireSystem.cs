@@ -1,5 +1,6 @@
 using Content.Shared._CE.Frost;
 using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.Water;
 using Content.Shared.Examine;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -51,6 +52,7 @@ public sealed partial class CEFireSystem : EntitySystem
         SubscribeLocalEvent<CEMeltTransformComponent, CEIgnitedEvent>(OnMeltingIgnited);
         SubscribeLocalEvent<CEFlammableComponent, CEIgnitedEvent>(OnFlammableIgnited);
         SubscribeLocalEvent<CEFlammableComponent, CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
+        SubscribeLocalEvent<CEFlammableComponent, CEWetEntityAttemptEvent>(OnFireWetAttempt);
 
         SubscribeLocalEvent<CEFlammableComponent, MapInitEvent>(OnMapInit);
 
@@ -96,6 +98,29 @@ public sealed partial class CEFireSystem : EntitySystem
     /// fire stacks cancel out an equal number of incoming frost stacks.
     /// </summary>
     private void OnFreezeEntityAttempt(Entity<CEFlammableComponent> ent, ref CEFreezeEntityAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var fireStacks = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+        if (fireStacks <= 0)
+            return;
+
+        var neutralized = Math.Min(fireStacks, args.Stacks);
+        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
+        args.Stacks -= neutralized;
+
+        SpawnSteamEffect(ent);
+
+        if (args.Stacks <= 0)
+            args.Cancelled = true;
+    }
+
+    /// <summary>
+    /// Fire neutralizes wet: when something tries to wet a burning entity,
+    /// fire stacks cancel out an equal number of incoming wet stacks.
+    /// </summary>
+    private void OnFireWetAttempt(Entity<CEFlammableComponent> ent, ref CEWetEntityAttemptEvent args)
     {
         if (args.Cancelled)
             return;

@@ -12,6 +12,7 @@
   - type: CEFlammable
     stackDelta: -1
   - type: CEFreezable
+  - type: CEWettable
   - type: FloorOcclusion
 
 - type: entity
