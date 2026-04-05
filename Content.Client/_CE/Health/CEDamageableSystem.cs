@@ -86,7 +86,7 @@ public sealed class CEHealthStatusControl : Control
         };
         _progress.SetHeight = 8f;
         _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#c23030"));
-        _progress.BackgroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#0f2d42"));
+        _progress.BackgroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#010c13"));
         _progress.Margin = new Thickness(0, 4);
         _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
 
