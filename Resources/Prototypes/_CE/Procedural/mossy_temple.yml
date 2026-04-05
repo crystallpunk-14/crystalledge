@@ -349,6 +349,36 @@
   zLevelMap: MossyTemple
   offset: 46, -19
 
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_WaterBridge
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 11, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -33
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_LeafMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 10, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 12, -33
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_WoodenRoom
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 8, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 23, -29
+
 # Entrance
 
 - type: dungeonRoom3d
@@ -434,3 +464,23 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -10, -20
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_Cliff
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -10, -32
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_SmallBoring
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -18, -28
