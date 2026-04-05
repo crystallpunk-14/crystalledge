@@ -1,21 +1,26 @@
 - type: entity
   parent: CEBaseWeaponStaff
-  id: CEWeaponMagicStaffFire
-  name: fire staff
-  description: A staff imbued with fire magic. Launches fiery projectiles at enemies.
+  id: CEWeaponMagicStaffHealing
+  name: healing staff
+  description: A staff imbued with healing magic. Restores health to anything it hit.
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/MagicStaff/simple_fire_stick.rsi
+    sprite: _CE/Objects/Weapons/Staff/healing_staff.rsi
     layers:
     - state: icon
     - state: orb
       shader: unshaded
+  - type: CEDestructible
+    destroyThreshold: 25
   - type: CEWeapon
     effectSlots:
       OnHit:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicFire
-        projectileSpeed: 10
+        prototype: CEProjectileMagicHealing
+        projectileCount: 3
+        projectileSpeed: 3
+        projectileMaxSpeed: 7
+        spread: 0.4
       - !type:Damage
         effectTarget: Used
         damage:
@@ -29,7 +34,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 1
+              Physical: 2
         - !type:Damage
           effectTarget: Used
           damage:
@@ -37,23 +42,25 @@
               Physical: 1
 
 - type: entity
-  id: CEProjectileMagicFire
-  name: fire bolt
+  id: CEProjectileMagicHealing
+  name: healing energy bolt
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/fire_status.rsi
+    sprite: _CE/Effects/cold_slowdown_status.rsi
     layers:
     - state: effect
       shader: unshaded
+      color: "#30f5b7"
   - type: PointLight
-    color: "#ff9603"
+    color: "#30f5b7"
     radius: 1.5
     energy: 3.0
   - type: CEProjectile
     hitEffects:
-    - !type:Damage
-      damage:
-        types:
-          Fire: 1
+    - !type:Heal
+      amount: 1
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric

@@ -5,7 +5,7 @@
   description: A staff imbued with ice magic. Launches freezing projectiles at enemies.
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/MagicStaff/simple_ice_stick.rsi
+    sprite: _CE/Objects/Weapons/Staff/ice_staff.rsi
     layers:
     - state: icon
     - state: orb
@@ -21,20 +21,6 @@
         damage:
           types:
             Physical: 1
-      OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.8
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          damage:
-            types:
-              Physical: 1
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
 
 - type: entity
   id: CEProjectileMagicIce

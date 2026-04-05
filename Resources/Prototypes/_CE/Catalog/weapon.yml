@@ -13,6 +13,7 @@
   table: !type:GroupSelector
     children:
     - id: CEWeaponDaggerSacrificial
+    - id: CEWeaponMagicStaffHealing
 
 - type: entityTable
   id: CERandomWeapon
