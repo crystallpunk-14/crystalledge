@@ -222,7 +222,7 @@
     - proto: CERat
       cost: 1
       weight: 3
-    - proto: CEFlem
+    - proto: CESlimeWater
       cost: 3
       weight: 1
 
@@ -260,13 +260,13 @@
     - proto: CERat
       cost: 1
       weight: 3
+    - proto: CESlimeWater
+      cost: 2
+      weight: 1
     - proto: CEFlem
       cost: 3
       weight: 1
     - proto: CEFlem2
-      cost: 5
-      weight: 0.5
-    - proto: CEFlem3
       cost: 5
       weight: 0.5
 
@@ -301,15 +301,18 @@
     - proto: CERat
       cost: 1
       weight: 3
+    - proto: CESlimeWater
+      cost: 2
+      weight: 1
     - proto: CEFlem
       cost: 3
       weight: 1
     - proto: CEFlem2
       cost: 5
       weight: 0.5
-    - proto: CEFlem3
-      cost: 5
-      weight: 0.5
+    - proto: CESlimeFire
+      cost: 3
+      weight: 1
 
 
 # Floor 3: Large final level with many rooms and cycles.
@@ -343,6 +346,9 @@
     - proto: CERat
       cost: 1
       weight: 1
+    - proto: CESlimeWater
+      cost: 2
+      weight: 1
     - proto: CEFlem
       cost: 3
       weight: 1
@@ -351,6 +357,9 @@
       weight: 1
     - proto: CEFlem3
       cost: 5
+      weight: 1
+    - proto: CESlimeFire
+      cost: 3
       weight: 1
 
 

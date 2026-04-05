@@ -2,3 +2,8 @@
   license: "CC0-1.0"
   copyright: "toefur on Freesound"
   source: "https://freesound.org/people/toefur/sounds/288941/"
+
+- files: ["slime_alert.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Created by qubodup on Freesound.org'
+  source: "https://freesound.org/people/qubodup/sounds/751342/"
