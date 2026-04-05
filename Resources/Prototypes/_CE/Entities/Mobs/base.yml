@@ -31,3 +31,21 @@
   - type: ContentEye
     maxZoom: 0.6, 0.6
     targetZoom: 0.6, 0.6
+  - type: CEWeapon
+    spriteRotation: 0
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.4
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+    animations:
+      Primary:
+      - anim: Punch1
+        staminaCost: 1
+      - anim: Punch2
+        staminaCost: 1
