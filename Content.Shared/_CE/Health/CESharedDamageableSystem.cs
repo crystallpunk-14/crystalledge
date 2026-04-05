@@ -191,6 +191,58 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     }
 
     /// <summary>
+    /// Returns health info for any damageable entity.
+    /// Uses <see cref="CEMobStateComponent.CriticalThreshold"/> when available,
+    /// falls back to <see cref="CEDestructibleComponent.DestroyThreshold"/> for entities without mob state.
+    /// </summary>
+    public CEHealthInfo GetHealthInfo(EntityUid uid)
+    {
+        if (!TryComp<CEDamageableComponent>(uid, out var damage))
+            return new CEHealthInfo { CurrentHp = 0, MaxHp = 0, Ratio = 1f };
+
+        if (TryComp<CEMobStateComponent>(uid, out var mobState))
+        {
+            var maxHp = mobState.CriticalThreshold;
+            var currentHp = Math.Max(0, maxHp - damage.TotalDamage);
+
+            int? destroyThreshold = null;
+            int? remainingUntilDeath = null;
+            if (TryComp<CEDestructibleComponent>(uid, out var destr))
+            {
+                destroyThreshold = destr.DestroyThreshold;
+                remainingUntilDeath = Math.Max(0, maxHp + destr.DestroyThreshold - damage.TotalDamage);
+            }
+
+            return new CEHealthInfo
+            {
+                CurrentHp = currentHp,
+                MaxHp = maxHp,
+                Ratio = maxHp > 0 ? Math.Clamp((float) currentHp / maxHp, 0f, 1f) : 0f,
+                MobState = mobState.CurrentState,
+                HasMobState = true,
+                DestroyThreshold = destroyThreshold,
+                RemainingUntilDeath = remainingUntilDeath,
+            };
+        }
+
+        if (TryComp<CEDestructibleComponent>(uid, out var destructible) && destructible.DestroyThreshold > 0)
+        {
+            var maxHp = destructible.DestroyThreshold;
+            var currentHp = Math.Max(0, maxHp - damage.TotalDamage);
+
+            return new CEHealthInfo
+            {
+                CurrentHp = currentHp,
+                MaxHp = maxHp,
+                Ratio = Math.Clamp((float) currentHp / maxHp, 0f, 1f),
+                HasMobState = false,
+            };
+        }
+
+        return new CEHealthInfo { CurrentHp = 0, MaxHp = 0, Ratio = 1f };
+    }
+
+    /// <summary>
     /// Raises visual and audio effects for damage on an entity.
     /// Server sends via PVS, client shows locally during prediction.
     /// </summary>
@@ -299,3 +351,17 @@ public sealed class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventAr
 /// </summary>
 [ByRefEvent]
 public record struct CEIsCriticalDamageEvent(EntityUid Target, EntityUid? Weapon, bool IsCritical = false);
+
+/// <summary>
+/// Snapshot of an entity's health state. Works for entities with or without <see cref="CEMobStateComponent"/>.
+/// </summary>
+public struct CEHealthInfo
+{
+    public int CurrentHp;
+    public int MaxHp;
+    public float Ratio;
+    public bool HasMobState;
+    public CEMobState MobState;
+    public int? DestroyThreshold;
+    public int? RemainingUntilDeath;
+}

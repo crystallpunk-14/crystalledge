@@ -1,5 +1,5 @@
 - type: entity
-  parent: CEBaseWeaponMagicStaff
+  parent: CEBaseWeaponStaff
   id: CEWeaponMagicStaffIce
   name: ice staff
   description: A staff imbued with ice magic. Launches freezing projectiles at enemies.

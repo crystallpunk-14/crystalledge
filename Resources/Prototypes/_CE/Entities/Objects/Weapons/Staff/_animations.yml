@@ -1,12 +1,14 @@
+# Staff Animations
+
 - type: entityEffectAnimation
-  id: StaffAttackLight
-  movementSpeed: 0.6
-  duration: 0.35
+  id: StaffAttackLight1
+  movementSpeed: 0.3
+  duration: 0.4
   events:
     0:
     - !type:PlaySound
       sound:
-        path: /Audio/_CE/Effects/Weapon/slash_wooden2.ogg
+        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
@@ -36,19 +38,18 @@
         easing: QuadOut
       - time: 0.35
         color: "#ffffff00"
-    0.08:
     - !type:WeaponEffectSlot
       slot: OnHit
 
 - type: entityEffectAnimation
   id: StaffAttackLight2
-  movementSpeed: 0.6
-  duration: 0.35
+  movementSpeed: 0.3
+  duration: 0.4
   events:
     0:
     - !type:PlaySound
       sound:
-        path: /Audio/_CE/Effects/Weapon/slash_wooden1.ogg
+        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
@@ -78,10 +79,8 @@
         easing: QuadOut
       - time: 0.35
         color: "#ffffff00"
-    0.08:
     - !type:WeaponEffectSlot
       slot: OnHit
-
 
 - type: entityEffectAnimation
   id: StaffAttackHeavy

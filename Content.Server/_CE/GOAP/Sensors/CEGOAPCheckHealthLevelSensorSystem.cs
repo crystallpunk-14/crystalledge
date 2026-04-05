@@ -1,6 +1,5 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Health.Components;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -19,7 +18,7 @@ public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensorBase<CEGO
 
 public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSystem<CEGOAPCheckHealthLevelSensor>
 {
-    [Dependency] private readonly CEMobStateSystem _mobState = default!;
+    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
@@ -32,7 +31,7 @@ public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSys
     /// </summary>
     private void OnDamageChanged(Entity<CEGOAPComponent> ent, ref CEDamageChangedEvent args)
     {
-        var fraction = GetHealthFraction(ent);
+        var fraction = _damageable.GetHealthInfo(ent).Ratio;
 
         foreach (var sensor in ent.Comp.Sensors)
         {
@@ -45,26 +44,6 @@ public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSys
 
     protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
     {
-        return GetHealthFraction(ent) < args.Sensor.Threshold;
-    }
-
-    /// <summary>
-    /// Returns health fraction (0..1). Uses <see cref="CEMobStateComponent"/> thresholds when available,
-    /// falls back to <see cref="CEDestructibleComponent.DestroyThreshold"/> for entities without mob state.
-    /// </summary>
-    private float GetHealthFraction(EntityUid uid)
-    {
-        if (!TryComp<CEDamageableComponent>(uid, out var damage))
-            return 1f;
-
-        // Prefer CEMobStateComponent thresholds (has critical + destroy).
-        if (TryComp<CEMobStateComponent>(uid, out var mobState))
-            return _mobState.GetHealthFraction(uid, damage, mobState);
-
-        // Fallback: use CEDestructible destroy threshold as max health.
-        if (TryComp<CEDestructibleComponent>(uid, out var destructible) && destructible.DestroyThreshold > 0)
-            return 1f - (float) damage.TotalDamage / destructible.DestroyThreshold;
-
-        return 1f;
+        return _damageable.GetHealthInfo(ent).Ratio < args.Sensor.Threshold;
     }
 }

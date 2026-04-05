@@ -1,7 +1,5 @@
-# Magic Staff weapon entities
-
 - type: entity
-  parent: CEBaseWeaponMagicStaff
+  parent: CEBaseWeaponStaff
   id: CEWeaponMagicStaffFire
   name: fire staff
   description: A staff imbued with fire magic. Launches fiery projectiles at enemies.

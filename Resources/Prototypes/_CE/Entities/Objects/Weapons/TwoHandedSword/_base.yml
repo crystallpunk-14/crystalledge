@@ -1,14 +1,10 @@
 - type: entity
   abstract: true
   id: CEBaseWeaponTwoHandedSword
-  categories: [ ForkFiltered ]
   parent:
-  - BaseItem
+  - CEBaseWeapon
   components:
-  - type: Item
-    size: Large
   - type: CEWeapon
-    spriteRotation: -90
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
@@ -62,7 +58,4 @@
   - type: Clothing
     slots:
     - neck
-    equipWhileMoving: true
-    equipDelay: 1
-    unequipDelay: 1
   - type: Wieldable

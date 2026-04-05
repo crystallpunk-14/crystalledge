@@ -222,20 +222,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
         return component.CurrentState == CEMobState.Critical;
     }
 
-    /// <summary>
-    /// Returns the health fraction (0..1) of the entity, where 1 is full health and 0 is at critical threshold.
-    /// Returns 1 if no damageable/mob state components are found.
-    /// </summary>
-    public float GetHealthFraction(EntityUid uid, CEDamageableComponent? damage = null, CEMobStateComponent? mobState = null)
-    {
-        if (!Resolve(uid, ref damage, false) || !Resolve(uid, ref mobState, false))
-            return 1f;
-
-        return mobState.CriticalThreshold > 0
-            ? 1f - (float) damage.TotalDamage / mobState.CriticalThreshold
-            : 1f;
-    }
-
     #endregion
 
     #region Action Blocking

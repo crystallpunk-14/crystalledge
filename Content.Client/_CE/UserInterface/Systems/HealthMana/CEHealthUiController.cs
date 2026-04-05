@@ -111,16 +111,22 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
-        if (!EntityManager.TryGetComponent<CEDamageableComponent>(uid, out var damageable) ||
-            !EntityManager.TryGetComponent<CEMobStateComponent>(uid, out var mobState))
+        if (!EntityManager.TryGetComponent<CEDamageableComponent>(uid, out _))
         {
             _healthBar.Visible = false;
             return;
         }
 
-        EntityManager.TryGetComponent<CEDestructibleComponent>(uid, out var destructible);
+        var damageable = EntityManager.System<CESharedDamageableSystem>();
+        var info = damageable.GetHealthInfo(uid);
+
+        if (info.MaxHp <= 0)
+        {
+            _healthBar.Visible = false;
+            return;
+        }
 
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(damageable, mobState, destructible);
+        _healthBar.UpdateHealthDisplay(info);
     }
 }

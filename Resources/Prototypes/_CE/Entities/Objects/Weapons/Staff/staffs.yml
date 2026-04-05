@@ -1,9 +1,0 @@
-- type: entity
-  parent: CEBaseWeaponStaff
-  id: CEWeaponStaffWooden
-  name: wooden staff
-  description: TODO
-  components:
-  - type: Sprite
-    sprite: _CE/Objects/Weapons/Staff/wooden.rsi
-    state: icon
