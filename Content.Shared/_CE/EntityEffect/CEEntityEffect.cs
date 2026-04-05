@@ -11,6 +11,7 @@ public enum CEEffectTarget : byte
 {
     Target,
     User,
+    Used,
 }
 
 /// <summary>
@@ -97,6 +98,7 @@ public abstract partial class CEEntityEffectSystem<TEffect> : EntitySystem where
         return effectTarget switch
         {
             CEEffectTarget.User => args.Source,
+            CEEffectTarget.Used => args.Used,
             _ => args.Target,
         };
     }
@@ -111,6 +113,12 @@ public abstract partial class CEEntityEffectSystem<TEffect> : EntitySystem where
         if (effectTarget == CEEffectTarget.User)
         {
             coords = Transform(args.Source).Coordinates;
+            return true;
+        }
+
+        if (effectTarget == CEEffectTarget.Used && args.Used is not null)
+        {
+            coords = Transform(args.Used.Value).Coordinates;
             return true;
         }
 

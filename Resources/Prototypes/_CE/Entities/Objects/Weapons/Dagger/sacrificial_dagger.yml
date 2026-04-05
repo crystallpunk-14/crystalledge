@@ -7,6 +7,8 @@
   - type: Sprite
     sprite: _CE/Objects/Weapons/Dagger/sacrifice_dagger.rsi
     state: icon
+  - type: CEDestructible
+    destroyThreshold: 25
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -19,12 +21,22 @@
           damage:
             types:
               Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
         - !type:RestoreMana
-          amount: 2
+          amount: 3
         - !type:SpawnEntity
           spawns:
           - CEEffectManaRestore
       OnHeavyHit: # Apply this effect of self
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
       - !type:Damage
         effectTarget: User
         ignoreArmor: true
@@ -33,7 +45,7 @@
             Physical: 1
       - !type:RestoreMana
         effectTarget: User
-        amount: 2
+        amount: 3
       - !type:SpawnEntity
         effectTarget: User
         spawns:

@@ -1,8 +1,8 @@
-- type: skill
-  parent: BaseNeutralSkill
-  id: Masochism
-  effect: !type:AddStatusEffect
-    effect: CEStatusEffectMasochism
+#- type: skill
+#  parent: BaseNeutralSkill
+#  id: Masochism
+#  effect: !type:AddStatusEffect
+#    effect: CEStatusEffectMasochism
 
 - type: entity
   id: CEStatusEffectMasochism

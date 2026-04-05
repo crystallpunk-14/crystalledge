@@ -18,6 +18,11 @@
           damage:
             types:
               Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.78
@@ -27,3 +32,8 @@
           damage:
             types:
               Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1

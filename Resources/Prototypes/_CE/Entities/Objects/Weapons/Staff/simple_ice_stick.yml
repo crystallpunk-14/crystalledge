@@ -16,12 +16,22 @@
       - !type:ShootProjectile
         prototype: CEProjectileMagicIce
         projectileSpeed: 10
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.8
         arcWidth: 45
         effects:
         - !type:Damage
+          damage:
+            types:
+              Physical: 1
+        - !type:Damage
+          effectTarget: Used
           damage:
             types:
               Physical: 1
