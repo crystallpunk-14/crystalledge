@@ -58,6 +58,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         targets = ValidateArcTargets(user, weapon.Value, targets);
 
         TryAttack(user, weapon.Value, targets);
+        ApplyArcEffects(user, weapon.Value, targets, ev.EffectSlot);
     }
 
     /// <summary>
@@ -66,6 +67,15 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     protected virtual List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
     {
         return targets;
+    }
+
+    /// <summary>
+    /// Runs nested arc effects on validated targets.
+    /// Server overrides to apply damage from the weapon's EffectSlot data.
+    /// Client base does nothing — effects are applied in the Effect() loop during prediction.
+    /// </summary>
+    protected virtual void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    {
     }
 
     private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponEvent args)
@@ -252,7 +262,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     /// Client overrides to send hit list to server. Server overrides to skip (waits for client event)
     /// unless the attacker is an NPC.
     /// </summary>
-    public virtual void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    public virtual void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
     {
         TryAttack(user, weapon, targets);
     }

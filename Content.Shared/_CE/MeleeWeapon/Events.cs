@@ -47,11 +47,18 @@ public sealed class CEWeaponUseEvent(
 [Serializable, NetSerializable]
 public sealed class CEWeaponArcHitEvent(
     NetEntity weapon,
-    List<NetEntity> targets)
+    List<NetEntity> targets,
+    string? effectSlot)
     : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
     public readonly List<NetEntity> Targets = targets;
+
+    /// <summary>
+    /// The EffectSlot key on CEWeaponComponent that triggered this arc attack.
+    /// Used by the server to replay nested effects on validated targets.
+    /// </summary>
+    public readonly string? EffectSlot = effectSlot;
 }
 
 /// <summary>

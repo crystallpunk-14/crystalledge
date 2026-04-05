@@ -116,7 +116,12 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
         var targets = new List<EntityUid>(hitEntities);
 
-        _melee.HandleArcAttackHit(args.Args.Source, (args.Args.Used.Value, weapon), targets);
+        // Find which EffectSlot on the weapon contains this arc attack.
+        // The server uses this to replay nested effects on validated targets.
+        var effectSlot = FindEffectSlot(weapon, args.Effect);
+
+        // Server clears targets for player attacks (damage goes through CEWeaponArcHitEvent).
+        _melee.HandleArcAttackHit(args.Args.Source, (args.Args.Used.Value, weapon), targets, effectSlot);
 
         foreach (var target in targets)
         {
@@ -127,5 +132,22 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
                 effect.Effect(effectArgs);
             }
         }
+    }
+
+    /// <summary>
+    /// Finds the EffectSlot key that contains the given WeaponArcAttack instance.
+    /// </summary>
+    private static string? FindEffectSlot(CEWeaponComponent weapon, WeaponArcAttack effect)
+    {
+        foreach (var (key, effects) in weapon.EffectSlots)
+        {
+            foreach (var e in effects)
+            {
+                if (ReferenceEquals(e, effect))
+                    return key;
+            }
+        }
+
+        return null;
     }
 }
