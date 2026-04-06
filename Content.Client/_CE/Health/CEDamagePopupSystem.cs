@@ -14,16 +14,18 @@ namespace Content.Client._CE.Health;
 
 /// <summary>
 /// Pure client-side system that spawns floating damage/heal numbers.
-/// Subscribes to <see cref="CEDamageChangedEvent"/> raised for entities with <see cref="CEDamagePopupComponent"/>.
+/// Subscribes to <see cref="CEDamageChangedEvent"/> which fires from both:
+/// - <c>ChangeDamage</c> (predicted melee — deduped to first prediction only), and
+/// - <c>HandleState</c> (server-only ranged/environmental — fires once when state diff is detected).
 /// </summary>
 public sealed class CEDamagePopupSystem : EntitySystem
 {
+    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IOverlayManager _overlayMan = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
 
     private static readonly Color HealColor = Color.FromHex("#44DD44");
 
@@ -31,8 +33,6 @@ public sealed class CEDamagePopupSystem : EntitySystem
     /// Maximum horizontal scatter in screen-space pixels.
     /// </summary>
     private const float HorizontalScatterPx = 30f;
-
-    private const float BaseYOffset = 0.5f;
 
     private CEDamagePopupOverlay _overlay = default!;
 
@@ -53,94 +53,49 @@ public sealed class CEDamagePopupSystem : EntitySystem
         _overlayMan.RemoveOverlay(_overlay);
     }
 
-    /// <summary>
-    /// Handles predicted damage events (from TakeDamage/Heal during client prediction).
-    /// These have proper DamageDelta and may have per-type DamageSpecifier.
-    /// </summary>
     private void OnDamageChanged(Entity<CEDamagePopupComponent> ent, ref CEDamageChangedEvent args)
     {
-        // Mirror engine pattern (see AudioSystem): state-sync events bypass the prediction gate.
-        if (!_timing.ApplyingState && !_timing.IsFirstTimePredicted)
+        if (!_timing.IsFirstTimePredicted)
             return;
 
         if (args.DamageDelta == 0)
             return;
 
         var worldPos = _transform.GetWorldPosition(Transform(ent));
-        SpawnFromEvent(args, worldPos);
-    }
 
-    private void SpawnFromEvent(CEDamageChangedEvent args, Vector2 worldPos)
-    {
         if (args.DamageIncreased)
         {
-            if (args.DamageSpecifier is { } spec)
+            // Compare per-type old vs new to show colored numbers.
+            foreach (var (typeId, newAmount) in args.NewDamagePerType)
             {
-                SpawnDamagePopups(spec.Types, worldPos);
-            }
-            else
-            {
-                SpawnSinglePopup(
-                    FormatDamageText(args.DamageDelta),
-                    Color.White,
-                    args.DamageDelta,
-                    worldPos);
+                args.OldDamagePerType.TryGetValue(typeId, out var oldAmount);
+                var typeDelta = newAmount - oldAmount;
+
+                if (typeDelta <= 0)
+                    continue;
+
+                var color = _proto.TryIndex(typeId, out var proto) ? proto.Color : Color.White;
+                SpawnPopup(FormatDamageText(typeDelta), color, typeDelta, worldPos);
             }
         }
         else
         {
             var healAmount = -args.DamageDelta;
-            SpawnSinglePopup($"+{healAmount}", HealColor, healAmount, worldPos);
+            SpawnPopup($"+{healAmount}", HealColor, healAmount, worldPos);
         }
     }
 
-    private void SpawnDamagePopups(
-        Dictionary<ProtoId<CEDamageTypePrototype>, int> types,
-        Vector2 worldPos)
-    {
-        foreach (var (typeId, amount) in types)
-        {
-            if (amount <= 0)
-                continue;
-
-            var color = _proto.TryIndex(typeId, out var proto) ? proto.Color : Color.White;
-            var text = FormatDamageText(amount);
-
-            var spawnPos = worldPos + new Vector2(0f, BaseYOffset);
-            SpawnSinglePopup(text, color, amount, spawnPos);
-        }
-    }
-
-    private void SpawnSinglePopup(string text, Color color, int amount, Vector2 worldPos)
+    private void SpawnPopup(string text, Color color, int amount, Vector2 worldPos)
     {
         var absAmount = Math.Abs(amount);
 
         PopupFontSize fontSize;
-        float duration;
-        float riseHeight;
-
-        if (absAmount <= 5)
+        fontSize = absAmount switch
         {
-            fontSize = PopupFontSize.Small;
-            duration = 0.6f;
-            riseHeight = 0.35f;
-        }
-        else if (absAmount <= 10)
-        {
-            fontSize = PopupFontSize.Medium;
-            duration = 0.8f;
-            riseHeight = 0.45f;
-        }
-        else
-        {
-            fontSize = PopupFontSize.Large;
-            duration = 1.0f;
-            riseHeight = 0.55f;
-        }
-
-        // Randomize duration and rise height slightly so overlapping numbers don't move in lockstep.
-        duration *= _random.NextFloat(0.9f, 1.1f);
-        riseHeight *= _random.NextFloat(0.85f, 1.15f);
+            <= 5 => PopupFontSize.Small,
+            <= 10 => PopupFontSize.Medium,
+            _ => PopupFontSize.Large,
+        };
 
         var entry = new PopupEntry
         {
@@ -148,8 +103,8 @@ public sealed class CEDamagePopupSystem : EntitySystem
             Text = text,
             Color = color,
             FontSize = fontSize,
-            Duration = duration,
-            RiseHeight = riseHeight,
+            Duration = 1.2f * _random.NextFloat(0.9f, 1.1f),
+            RiseHeight = 0.5f * _random.NextFloat(0.9f, 1.1f),
             ScreenXOffset = _random.NextFloat(-HorizontalScatterPx, HorizontalScatterPx),
         };
 
@@ -158,13 +113,12 @@ public sealed class CEDamagePopupSystem : EntitySystem
 
     private static string FormatDamageText(int amount)
     {
-        if (amount <= 5)
-            return amount.ToString();
-
-        if (amount <= 10)
-            return $"{amount}!";
-
-        return $"{amount}!!!";
+        return amount switch
+        {
+            <= 5 => amount.ToString(),
+            <= 10 => $"{amount}!",
+            _ => $"{amount}!!!",
+        };
     }
 
     public override void FrameUpdate(float frameTime)

@@ -3,11 +3,14 @@ using Content.Client.Stylesheets;
 using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.Health.Prototypes;
 using Content.Shared.Effects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.GameStates;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Health;
@@ -22,18 +25,32 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEDamageableComponent, AfterAutoHandleStateEvent>(OnDamageableAfterState);
+        SubscribeLocalEvent<CEDamageableComponent, ComponentHandleState>(OnHandleState);
         Subs.ItemStatus<CEHealthStatusComponent>(ent => new CEHealthStatusControl(ent));
     }
 
-    private void OnDamageableAfterState(EntityUid uid, CEDamageableComponent comp, ref AfterAutoHandleStateEvent args)
+    /// <summary>
+    /// Applies the authoritative server state and raises <see cref="CEDamageChangedEvent"/>
+    /// for game-logic and visual systems when damage actually changed.
+    /// This fires once per state diff — server-only damage (ranged, environmental) arrives here.
+    /// </summary>
+    private void OnHandleState(EntityUid uid, CEDamageableComponent comp, ref ComponentHandleState args)
     {
-        // Compute delta from the tracked previous value (like vanilla DamageableSystem).
-        var delta = comp.TotalDamage - comp.PreviousTotalDamage;
-        comp.PreviousTotalDamage = comp.TotalDamage;
+        if (args.Current is not CEDamageableComponentState state)
+            return;
 
-        var ev = new CEDamageChangedEvent(uid, comp.TotalDamage - delta, comp.TotalDamage);
-        RaiseLocalEvent(uid, ev, true);
+        var oldPerType = new Dictionary<ProtoId<CEDamageTypePrototype>, int>(comp.Damage);
+        var oldTotal = comp.TotalDamage;
+
+        comp.Damage.Clear();
+        foreach (var (key, value) in state.Damage)
+            comp.Damage[key] = value;
+
+        if (oldTotal != comp.TotalDamage)
+        {
+            var ev = new CEDamageChangedEvent(uid, oldPerType, comp.Damage, oldTotal, comp.TotalDamage);
+            RaiseLocalEvent(uid, ev, true);
+        }
     }
 
     protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)

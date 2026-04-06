@@ -13,6 +13,12 @@ public sealed class CEDamagePopupOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
+    /// <summary>
+    /// Initial screen-space Y offset in pixels to spawn the popup above the entity center.
+    /// Applied in screen space so camera rotation doesn't affect direction.
+    /// </summary>
+    private const float InitialScreenYOffset = 32f;
+
     private readonly Font _fontSmall;
     private readonly Font _fontMedium;
     private readonly Font _fontLarge;
@@ -43,8 +49,6 @@ public sealed class CEDamagePopupOverlay : Overlay
         for (var i = Entries.Count - 1; i >= 0; i--)
         {
             var entry = Entries[i];
-            if (entry.Removed)
-                continue;
 
             var progress = (float) entry.Elapsed / entry.Duration;
 
@@ -105,10 +109,11 @@ public sealed class CEDamagePopupOverlay : Overlay
                 _ => _fontLarge,
             };
 
-            // Convert spawn world position to screen, then offset upward in screen space.
-            // Screen Y- is up, so subtract the offset.
+            // Convert spawn world position to screen, then offset in screen space.
+            // All offsets are in pixels so they work correctly regardless of camera rotation.
+            // Initial offset: start above the entity center (like vanilla PopupOverlay).
             var screenPos = Vector2.Transform(entry.WorldPosition, matrix);
-            screenPos.Y -= yPixelOffset;
+            screenPos.Y -= yPixelOffset + InitialScreenYOffset;
             screenPos.X += entry.ScreenXOffset;
 
             var text = entry.Text;
@@ -138,7 +143,6 @@ public sealed class CEDamagePopupOverlay : Overlay
         public float RiseHeight;
         public float ScreenXOffset;
         public double Elapsed;
-        public bool Removed;
     }
 
     public enum PopupFontSize : byte

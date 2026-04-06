@@ -1,23 +1,49 @@
+using Content.Shared._CE.Health.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.Health.Components;
 
 /// <summary>
-/// Stores accumulated damage for an entity as a single integer.
-/// Damage starts at 0 and increases when the entity is hurt.
+/// Stores accumulated damage per type for an entity.
+/// Damage starts at 0 per type and increases when the entity is hurt.
+/// <see cref="TotalDamage"/> is a cached sum of all per-type values, updated by the system.
+/// Uses manual <see cref="ComponentGetState"/>/<see cref="ComponentHandleState"/>
+/// (not AutoGenerateComponentState) so events can be raised cleanly.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(CESharedDamageableSystem))]
 public sealed partial class CEDamageableComponent : Component
 {
-    [DataField, AutoNetworkedField]
-    public int TotalDamage;
+    /// <summary>
+    /// Accumulated damage broken down by type.
+    /// Only types that have been applied appear as keys.
+    /// </summary>
+    [DataField, ViewVariables]
+    public Dictionary<ProtoId<CEDamageTypePrototype>, int> Damage = new();
 
     /// <summary>
-    /// Previous <see cref="TotalDamage"/> before the last state update.
-    /// Used on the client to compute the real damage delta when state syncs from the server.
-    /// Not networked — purely local tracking.
+    /// Total damage across all types. Computed from <see cref="Damage"/>.
     /// </summary>
     [ViewVariables]
-    public int PreviousTotalDamage;
+    public int TotalDamage
+    {
+        get
+        {
+            var total = 0;
+            foreach (var v in Damage.Values)
+            {
+                total += v;
+            }
+
+            return total;
+        }
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class CEDamageableComponentState : ComponentState
+{
+    public Dictionary<ProtoId<CEDamageTypePrototype>, int> Damage = new();
 }
