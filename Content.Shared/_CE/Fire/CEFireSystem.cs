@@ -228,7 +228,7 @@ public sealed partial class CEFireSystem : EntitySystem
                 RaiseLocalEvent(anch, ref attemptEv);
                 if (attemptEv.Cancelled)
                 {
-                    EntityManager.DeleteEntity(ent);
+                    Del(ent);
                     return;
                 }
             }
@@ -256,7 +256,7 @@ public sealed partial class CEFireSystem : EntitySystem
 
         if (ent.Comp.Stacks <= 0)
         {
-            EntityManager.DeleteEntity(ent);
+            Del(ent);
             return;
         }
 
@@ -277,7 +277,7 @@ public sealed partial class CEFireSystem : EntitySystem
 
         if (ent.Comp.Stacks <= 0)
         {
-            EntityManager.DeleteEntity(ent);
+            Del(ent);
             return;
         }
 

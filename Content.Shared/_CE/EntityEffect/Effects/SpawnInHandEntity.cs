@@ -30,9 +30,9 @@ public sealed partial class CESpawnInHandEntityEffectSystem : CEEntityEffectSyst
 
         foreach (var spawn in args.Effect.Spawns)
         {
-            var item = EntityManager.SpawnAtPosition(spawn, transformComponent.Coordinates);
+            var item = SpawnAtPosition(spawn, transformComponent.Coordinates);
             if (!_hands.TryPickupAnyHand(entity, item) && args.Effect.DeleteIfCantPickup)
-                EntityManager.QueueDeleteEntity(item);
+                QueueDel(item);
         }
     }
 }

@@ -23,7 +23,7 @@ public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<Spa
 
         foreach (var spawn in args.Effect.Spawns)
         {
-            EntityManager.SpawnAtPosition(spawn, coords);
+            SpawnAtPosition(spawn, coords);
         }
     }
 }

@@ -81,7 +81,7 @@ public sealed class CEFrostSystem : EntitySystem
             return;
 
         if (!_net.IsClient)
-            EntityManager.DeleteEntity(ent);
+            Del(ent);
 
         args.Cancelled = true;
         _fire.SpawnSteamEffect(args.Coordinates);
