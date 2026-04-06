@@ -1,0 +1,39 @@
+- type: entity
+  parent: CEBaseWeaponStaff
+  id: CEWeaponStaffWooden
+  name: wooden staff
+  description: A long wooden stick with an iron tip.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/wooden.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 100
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1

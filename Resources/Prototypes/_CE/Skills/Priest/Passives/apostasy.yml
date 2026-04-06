@@ -7,13 +7,14 @@
 - type: entity
   id: CEStatusEffectApostasy
   name: Apostasy
-  description: All your healing now deals [color=#E1341E]Fire[/color] damage instead.
+  description: All your healing now deals double [color=#E1341E]Fire[/color] damage instead.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEChangeHealType
   - type: CEChangeHealTypeStatusEffect
     target: Fire
+    damageMultiplier: 2
 
 - type: alert
   id: CEChangeHealType

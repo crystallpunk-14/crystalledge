@@ -111,6 +111,9 @@
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: CESkillScanner
+  - type: CEShowMobHealth
+  - type: CEShowMobMana
+  - type: CEShowMobStamina
 
 - type: entity
   abstract: true

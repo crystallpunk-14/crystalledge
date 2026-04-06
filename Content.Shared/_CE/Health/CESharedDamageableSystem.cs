@@ -1,6 +1,12 @@
 using Content.Shared._CE.Health.Components;
+using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
+using Content.Shared.StatusEffectNew;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
 
@@ -11,11 +17,39 @@ namespace Content.Shared._CE.Health;
 /// </summary>
 public abstract partial class CESharedDamageableSystem : EntitySystem
 {
+    protected static readonly SoundSpecifier CriticalHitSound = new SoundPathSpecifier("/Audio/_CE/Effects/critical.ogg");
+    private static readonly EntProtoId CriticalHitVfx = "CEEffectFocusTelegraphy";
+
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEDamageableComponent, RejuvenateEvent>(OnRejuvenate);
+        SubscribeLocalEvent<DoAfterComponent, CEDamageChangedEvent>(OnDoAfterBreakAttempt);
+    }
+
+    private void OnDoAfterBreakAttempt(Entity<DoAfterComponent> ent, ref CEDamageChangedEvent args)
+    {
+        if (_timing.ApplyingState)
+            return;
+
+        if (!args.InterruptsDoAfters || !args.DamageIncreased)
+            return;
+
+        var delta = args.DamageDelta;
+
+        foreach (var (id, doAfter) in ent.Comp.DoAfters)
+        {
+            if (doAfter.Cancelled || doAfter.Completed)
+                continue;
+
+            if (doAfter.Args.BreakOnDamage && delta >= doAfter.Args.DamageThreshold)
+                _doAfter.Cancel(ent, id, ent.Comp);
+        }
     }
 
     private void OnRejuvenate(Entity<CEDamageableComponent> ent, ref RejuvenateEvent args)
@@ -27,7 +61,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     /// Directly changes damage by a delta. Clamped to minimum 0.
     /// Positive delta = more damage, negative delta = healing.
     /// </summary>
-    public void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta)
+    private void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta, EntityUid? source = null, bool interruptDoAfters = true)
     {
         actualDelta = 0;
 
@@ -43,7 +77,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 
         if (oldDamage != newDamage)
         {
-            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage);
+            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage, source, interruptDoAfters);
             RaiseLocalEvent(ent, ev, true);
         }
     }
@@ -62,34 +96,59 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (delta == 0)
             return;
 
-        ChangeDamage(ent, delta, out _);
+        ChangeDamage(ent, delta, out _, interruptDoAfters: false);
     }
 
     /// <summary>
     /// Applies damage specified by <see cref="CEDamageSpecifier"/>.
     /// The total damage (sum of all types) is added to the entity's accumulated damage.
+    /// When <paramref name="source"/> is set, raises <see cref="CEIsCriticalDamageEvent"/> on it;
+    /// a critical hit doubles the resulting damage.
     /// </summary>
-    public bool TakeDamage(Entity<CEDamageableComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null)
+    public bool TakeDamage(Entity<CEDamageableComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null, EntityUid? weapon = null, bool ignoreArmor = false, bool interruptDoAfters = true)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        var modifiedDamage = new CEDamageSpecifier(damage);
+        int totalDamage;
 
-        var beforeEv = new CEDamageCalculateEvent(modifiedDamage, source);
-        RaiseLocalEvent(ent, beforeEv);
+        if (ignoreArmor)
+            totalDamage = damage.Total;
+        else
+        {
+            var modifiedDamage = new CEDamageSpecifier(damage);
 
-        if (beforeEv.Cancelled)
-            return false;
+            var beforeEv = new CEDamageCalculateEvent(modifiedDamage, source);
+            RaiseLocalEvent(ent, beforeEv);
 
-        var totalDamage = beforeEv.Damage.Total;
+            if (beforeEv.Cancelled)
+                return false;
+
+            totalDamage = beforeEv.Damage.Total;
+        }
+
         if (totalDamage <= 0)
             return false;
 
-        ChangeDamage(ent, totalDamage, out var actualDelta);
+        // Critical damage check
+        var isCritical = false;
+        if (source != null)
+        {
+            var critEv = new CEIsCriticalDamageEvent(ent, weapon);
+            RaiseLocalEvent(source.Value, ref critEv);
+
+            if (critEv.IsCritical)
+            {
+                totalDamage *= 2;
+                isCritical = true;
+                RaiseCriticalHitSound(ent, source.Value);
+            }
+        }
+
+        ChangeDamage(ent, totalDamage, out var actualDelta, source, interruptDoAfters);
 
         if (actualDelta != 0)
-            RaiseDamageEffect(ent, source);
+            RaiseDamageEffect(ent, source, isCritical);
 
         return actualDelta != 0;
     }
@@ -120,7 +179,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (finalAmount <= 0)
             return;
 
-        ChangeDamage(target, -finalAmount, out _);
+        ChangeDamage(target, -finalAmount, out _, interruptDoAfters: false);
     }
 
     public int GetDamage(Entity<CEDamageableComponent?> target)
@@ -132,24 +191,109 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     }
 
     /// <summary>
-    /// Raises a red color flash on the damaged entity.
-    /// Server sends via PVS (excluding source), client shows locally during prediction.
+    /// Returns health info for any damageable entity.
+    /// Uses <see cref="CEMobStateComponent.CriticalThreshold"/> when available,
+    /// falls back to <see cref="CEDestructibleComponent.DestroyThreshold"/> for entities without mob state.
     /// </summary>
-    protected virtual void RaiseDamageEffect(EntityUid target, EntityUid? source)
+    public CEHealthInfo GetHealthInfo(EntityUid uid)
     {
+        if (!TryComp<CEDamageableComponent>(uid, out var damage))
+            return new CEHealthInfo { CurrentHp = 0, MaxHp = 0, Ratio = 1f };
+
+        if (TryComp<CEMobStateComponent>(uid, out var mobState))
+        {
+            var maxHp = mobState.CriticalThreshold;
+            var currentHp = Math.Max(0, maxHp - damage.TotalDamage);
+
+            int? destroyThreshold = null;
+            int? remainingUntilDeath = null;
+            if (TryComp<CEDestructibleComponent>(uid, out var destr))
+            {
+                destroyThreshold = destr.DestroyThreshold;
+                remainingUntilDeath = Math.Max(0, maxHp + destr.DestroyThreshold - damage.TotalDamage);
+            }
+
+            return new CEHealthInfo
+            {
+                CurrentHp = currentHp,
+                MaxHp = maxHp,
+                Ratio = maxHp > 0 ? Math.Clamp((float) currentHp / maxHp, 0f, 1f) : 0f,
+                MobState = mobState.CurrentState,
+                HasMobState = true,
+                DestroyThreshold = destroyThreshold,
+                RemainingUntilDeath = remainingUntilDeath,
+            };
+        }
+
+        if (TryComp<CEDestructibleComponent>(uid, out var destructible) && destructible.DestroyThreshold > 0)
+        {
+            var maxHp = destructible.DestroyThreshold;
+            var currentHp = Math.Max(0, maxHp - damage.TotalDamage);
+
+            return new CEHealthInfo
+            {
+                CurrentHp = currentHp,
+                MaxHp = maxHp,
+                Ratio = Math.Clamp((float) currentHp / maxHp, 0f, 1f),
+                HasMobState = false,
+            };
+        }
+
+        return new CEHealthInfo { CurrentHp = 0, MaxHp = 0, Ratio = 1f };
+    }
+
+    /// <summary>
+    /// Raises visual and audio effects for damage on an entity.
+    /// Server sends via PVS, client shows locally during prediction.
+    /// </summary>
+    protected virtual void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)
+    {
+    }
+
+    /// <summary>
+    /// Plays the critical hit sound and spawns VFX on the target.
+    /// Sound uses <see cref="SharedAudioSystem.PlayPredicted(SoundSpecifier?,EntityUid,EntityUid?,AudioParams?)"/>;
+    /// VFX uses predicted spawn so the attacker sees it instantly.
+    /// </summary>
+    protected virtual void RaiseCriticalHitSound(EntityUid target, EntityUid source)
+    {
+        _audio.PlayPredicted(CriticalHitSound, Transform(target).Coordinates, source);
+        PredictedSpawnAttachedTo(CriticalHitVfx, Transform(target).Coordinates);
     }
 }
 
 /// <summary>
 /// Raised when damage changes on an entity.
 /// </summary>
-public sealed class CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage)
-    : EntityEventArgs
+public sealed class CEDamageChangedEvent : EntityEventArgs
 {
-    public readonly EntityUid Target = target;
-    public readonly int OldDamage = oldDamage;
-    public readonly int NewDamage = newDamage;
+    public readonly EntityUid Target;
+    public readonly int OldDamage;
+    public readonly int NewDamage;
+    public readonly EntityUid? Source;
+
+    /// <summary>
+    /// Was any of the damage change dealing damage, or was it all healing?
+    /// </summary>
+    public readonly bool DamageIncreased;
+
+    /// <summary>
+    /// Does this event interrupt DoAfters?
+    /// Accounts for <see cref="DamageIncreased"/>: only true when damage actually went up.
+    /// </summary>
+    public readonly bool InterruptsDoAfters;
+
     public int DamageDelta => NewDamage - OldDamage;
+
+    public CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage, EntityUid? source = null, bool interruptsDoAfters = true)
+    {
+        Target = target;
+        OldDamage = oldDamage;
+        NewDamage = newDamage;
+        Source = source;
+        DamageIncreased = newDamage > oldDamage;
+        InterruptsDoAfters = interruptsDoAfters && DamageIncreased;
+    }
 }
 
 /// <summary>
@@ -180,4 +324,44 @@ public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : Cance
 {
     public readonly EntityUid Target = target;
     public readonly int HealAmount = healAmount;
+}
+
+/// <summary>
+/// Raised on an entity to calculate its effective maximum health.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final max health = (BaseMaxHealth + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public int BaseMaxHealth = baseMaxHealth;
+    public int FlatModifier;
+    public float Multiplier = 1f;
+
+    public int MaxHealth => (int)((BaseMaxHealth + FlatModifier) * Multiplier);
+}
+
+/// <summary>
+/// Raised directed on the source (attacker) entity after damage calculation but before application.
+/// Subscribers inspect target, attacker and weapon, then set <see cref="IsCritical"/> to true
+/// when the hit should become a critical strike. Critical strikes double the final damage.
+/// Relayed through status effects via <see cref="StatusEffectRelayedEvent{TEvent}"/>.
+/// </summary>
+[ByRefEvent]
+public record struct CEIsCriticalDamageEvent(EntityUid Target, EntityUid? Weapon, bool IsCritical = false);
+
+/// <summary>
+/// Snapshot of an entity's health state. Works for entities with or without <see cref="CEMobStateComponent"/>.
+/// </summary>
+public struct CEHealthInfo
+{
+    public int CurrentHp;
+    public int MaxHp;
+    public float Ratio;
+    public bool HasMobState;
+    public CEMobState MobState;
+    public int? DestroyThreshold;
+    public int? RemainingUntilDeath;
 }

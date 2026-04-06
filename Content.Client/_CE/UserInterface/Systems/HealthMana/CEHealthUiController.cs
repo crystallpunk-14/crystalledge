@@ -1,3 +1,4 @@
+using Content.Client._CE.Health;
 using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
@@ -28,6 +29,7 @@ public sealed class CEHealthUiController : UIController
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<CEDamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<CEMobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CEMaxHealthChangedEvent>(OnMaxHealthChanged);
     }
 
     private void OnScreenLoad()
@@ -55,6 +57,9 @@ public sealed class CEHealthUiController : UIController
     {
         if (UIManager.ActiveScreen is DefaultGameScreen game)
             return game.HealthBar;
+
+        if (UIManager.ActiveScreen is SeparatedChatGameScreen separated)
+            return separated.HealthBar;
 
         return null;
     }
@@ -87,6 +92,14 @@ public sealed class CEHealthUiController : UIController
         UpdateHealth(args.Target);
     }
 
+    private void OnMaxHealthChanged(CEMaxHealthChangedEvent args)
+    {
+        if (_player.LocalEntity != args.Target)
+            return;
+
+        UpdateHealth(args.Target);
+    }
+
     private void UpdateHealth(EntityUid uid)
     {
         if (_healthBar == null)
@@ -98,14 +111,22 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
-        if (!EntityManager.TryGetComponent<CEDamageableComponent>(uid, out var damageable) ||
-            !EntityManager.TryGetComponent<CEMobStateComponent>(uid, out var mobState))
+        if (!EntityManager.TryGetComponent<CEDamageableComponent>(uid, out _))
+        {
+            _healthBar.Visible = false;
+            return;
+        }
+
+        var damageable = EntityManager.System<CESharedDamageableSystem>();
+        var info = damageable.GetHealthInfo(uid);
+
+        if (info.MaxHp <= 0)
         {
             _healthBar.Visible = false;
             return;
         }
 
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(damageable, mobState);
+        _healthBar.UpdateHealthDisplay(info);
     }
 }

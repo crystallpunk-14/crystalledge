@@ -1,3 +1,4 @@
+using Content.Shared._CE.Damage;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Hands;
@@ -17,7 +18,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared._CE.Health;
 
 /// <summary>
-/// Manages CE mob states (Alive, Critical, Dead) based on <see cref="CEDamageableComponent"/> damage
+/// Manages CE mob states (Alive, Critical) based on <see cref="CEDamageableComponent"/> damage
 /// and thresholds in <see cref="CEMobStateComponent"/>.
 /// </summary>
 public sealed partial class CEMobStateSystem : EntitySystem
@@ -27,6 +28,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
     [Dependency] private readonly StandingStateSystem _standing = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
 
     private const float CriticalSpeedModifier = 0.2f;
 
@@ -39,21 +41,17 @@ public sealed partial class CEMobStateSystem : EntitySystem
         SubscribeLocalEvent<CEMobStateComponent, RejuvenateEvent>(OnRejuvenate);
 
         // Action blocking
-        SubscribeLocalEvent<CEMobStateComponent, ChangeDirectionAttemptEvent>(OnBlockIfDead);
-        SubscribeLocalEvent<CEMobStateComponent, UpdateCanMoveEvent>(OnBlockIfDead);
-        SubscribeLocalEvent<CEMobStateComponent, UseAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, AttackAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, ThrowAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, DropAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, PickupAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, StartPullAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, StandAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, PointAttemptEvent>(OnBlockIfIncapacitated);
-        SubscribeLocalEvent<CEMobStateComponent, SpeakAttemptEvent>(OnBlockIfDead);
+        SubscribeLocalEvent<CEMobStateComponent, UseAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, AttackAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, ThrowAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, DropAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, PickupAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, StartPullAttemptEvent>(OnBlockIfCritical);
+        SubscribeLocalEvent<CEMobStateComponent, StandAttemptEvent>(OnBlockIfCritical);
         SubscribeLocalEvent<CEMobStateComponent, IsEquippingAttemptEvent>(OnEquipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, IsUnequippingAttemptEvent>(OnUnequipAttempt);
         SubscribeLocalEvent<CEMobStateComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMoveSpeed);
-        SubscribeLocalEvent<CEMobStateComponent, CEMobStateChangedEvent>(OnMobStateChangedSpeed);
+        SubscribeLocalEvent<CEMobStateComponent, CEMobStateChangedEvent>(OnMobStateChanged);
     }
 
     private void OnRejuvenate(Entity<CEMobStateComponent> ent, ref RejuvenateEvent args)
@@ -67,16 +65,20 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private void OnStartup(Entity<CEMobStateComponent> ent, ref ComponentStartup args)
     {
+        RefreshMaxHealth(ent, ent.Comp);
+
         var damage = 0;
         if (TryComp<CEDamageableComponent>(ent, out var dmg))
             damage = dmg.TotalDamage;
 
         UpdateState(ent, ent.Comp, damage);
+        SetDamageFraction(ent, ent.Comp, damage);
     }
 
     private void OnDamageChanged(Entity<CEMobStateComponent> ent, ref CEDamageChangedEvent args)
     {
         UpdateState(ent, ent.Comp, args.NewDamage);
+        SetDamageFraction(ent, ent.Comp, args.NewDamage);
     }
 
     private void UpdateState(Entity<CEMobStateComponent> ent, CEMobStateComponent mobState, int totalDamage)
@@ -94,9 +96,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
         if (!_timing.ApplyingState)
         {
-            OnStateExited(ent, oldState);
-            OnStateEntered(ent, newState);
-
             var ev = new CEMobStateChangedEvent(ent, oldState, newState);
             RaiseLocalEvent(ent, ev, true);
         }
@@ -104,13 +103,18 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private CEMobState CalculateState(CEMobStateComponent mobState, int totalDamage)
     {
-        if (totalDamage >= mobState.DeadThreshold)
-            return CEMobState.Dead;
-
         if (totalDamage >= mobState.CriticalThreshold)
             return CEMobState.Critical;
 
         return CEMobState.Alive;
+    }
+
+    private void SetDamageFraction(EntityUid ent, CEMobStateComponent mobState, int totalDamage)
+    {
+        var fraction = mobState.CriticalThreshold > 0
+            ? Math.Clamp((float) totalDamage / mobState.CriticalThreshold, 0f, 1f)
+            : 0f;
+        _appearance.SetData(ent, CEDamageVisuals.DamageFraction, fraction);
     }
 
     private void OnStateEntered(EntityUid target, CEMobState state)
@@ -127,11 +131,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
                 var dropEv = new DropHandItemsEvent();
                 RaiseLocalEvent(target, ref dropEv);
                 break;
-            case CEMobState.Dead:
-                _standing.Down(target);
-                var dropDeadEv = new DropHandItemsEvent();
-                RaiseLocalEvent(target, ref dropDeadEv);
-                break;
         }
     }
 
@@ -140,19 +139,17 @@ public sealed partial class CEMobStateSystem : EntitySystem
         switch (state)
         {
             case CEMobState.Critical:
-            case CEMobState.Dead:
                 _standing.Stand(target);
                 break;
         }
     }
 
-    public void SetThresholds(Entity<CEMobStateComponent?> ent, int criticalThreshold, int deadThreshold)
+    public void SetThresholds(Entity<CEMobStateComponent?> ent, int criticalThreshold)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
 
         ent.Comp.CriticalThreshold = criticalThreshold;
-        ent.Comp.DeadThreshold = deadThreshold;
         Dirty(ent);
 
         var damage = 0;
@@ -160,6 +157,43 @@ public sealed partial class CEMobStateSystem : EntitySystem
             damage = dmg.TotalDamage;
 
         UpdateState((ent, ent.Comp), ent.Comp, damage);
+    }
+
+    /// <summary>
+    /// Recalculates effective max health by raising <see cref="CECalculateMaxHealthEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEMobStateComponent.CriticalThreshold"/> and scales current damage proportionally.
+    /// </summary>
+    public void RefreshMaxHealth(EntityUid uid, CEMobStateComponent? mobState = null)
+    {
+        if (!Resolve(uid, ref mobState, false))
+            return;
+
+        var ev = new CECalculateMaxHealthEvent(mobState.BaseMaxHealth);
+        RaiseLocalEvent(uid, ev);
+
+        var newMax = Math.Max(1, ev.MaxHealth);
+        var oldMax = mobState.CriticalThreshold;
+
+        if (newMax == oldMax)
+            return;
+
+        mobState.CriticalThreshold = newMax;
+        Dirty(uid, mobState);
+
+        var hasDamage = TryComp<CEDamageableComponent>(uid, out var dmg);
+
+        // Scale damage proportionally to maintain the same health fraction.
+        if (hasDamage && oldMax > 0 && dmg!.TotalDamage > 0)
+        {
+            var scaledDamage = (int) MathF.Round(dmg.TotalDamage * ((float) newMax / oldMax));
+            _damageable.SetDamage((uid, dmg), scaledDamage);
+        }
+
+        // Recalculate state + visuals with new threshold.
+        var currentDamage = hasDamage ? dmg!.TotalDamage : 0;
+        UpdateState((uid, mobState), mobState, currentDamage);
+        SetDamageFraction(uid, mobState, currentDamage);
     }
 
     #region State Queries
@@ -180,48 +214,34 @@ public sealed partial class CEMobStateSystem : EntitySystem
         return component.CurrentState == CEMobState.Critical;
     }
 
-    public bool IsDead(EntityUid uid, CEMobStateComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return false;
-
-        return component.CurrentState == CEMobState.Dead;
-    }
-
     public bool IsIncapacitated(EntityUid uid, CEMobStateComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))
             return false;
 
-        return component.CurrentState is CEMobState.Critical or CEMobState.Dead;
+        return component.CurrentState == CEMobState.Critical;
     }
 
     #endregion
 
     #region Action Blocking
 
-    private void OnBlockIfDead(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
+    private void OnBlockIfCritical(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
     {
-        if (comp.CurrentState is CEMobState.Dead)
-            args.Cancel();
-    }
-
-    private void OnBlockIfIncapacitated(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
-    {
-        if (comp.CurrentState is CEMobState.Critical or CEMobState.Dead)
+        if (comp.CurrentState == CEMobState.Critical)
             args.Cancel();
     }
 
     private void OnEquipAttempt(EntityUid uid, CEMobStateComponent comp, IsEquippingAttemptEvent args)
     {
         if (args.Equipee == uid)
-            OnBlockIfIncapacitated(uid, comp, args);
+            OnBlockIfCritical(uid, comp, args);
     }
 
     private void OnUnequipAttempt(EntityUid uid, CEMobStateComponent comp, IsUnequippingAttemptEvent args)
     {
         if (args.Unequipee == uid)
-            OnBlockIfIncapacitated(uid, comp, args);
+            OnBlockIfCritical(uid, comp, args);
     }
 
     private void OnRefreshMoveSpeed(EntityUid uid, CEMobStateComponent comp, RefreshMovementSpeedModifiersEvent args)
@@ -230,8 +250,10 @@ public sealed partial class CEMobStateSystem : EntitySystem
             args.ModifySpeed(CriticalSpeedModifier, CriticalSpeedModifier);
     }
 
-    private void OnMobStateChangedSpeed(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
+    private void OnMobStateChanged(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
     {
+        OnStateExited(uid, args.OldState);
+        OnStateEntered(uid, args.NewState);
         _movementSpeed.RefreshMovementSpeedModifiers(uid);
     }
 

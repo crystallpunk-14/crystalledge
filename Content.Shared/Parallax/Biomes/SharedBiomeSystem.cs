@@ -226,7 +226,7 @@ public abstract class SharedBiomeSystem : EntitySystem
                 case BiomeDummyLayer:
                     continue;
                 case IBiomeWorldLayer worldLayer:
-                    if (!worldLayer.AllowedTiles.Contains(tileId))
+                    if (!worldLayer.AllowedTiles.Contains(tileId) && worldLayer.AllowedTiles.Count > 0) //CrystallEdge - count > 0
                         continue;
 
                     break;
@@ -302,7 +302,7 @@ public abstract class SharedBiomeSystem : EntitySystem
                 case BiomeDummyLayer:
                     continue;
                 case IBiomeWorldLayer worldLayer:
-                    if (!worldLayer.AllowedTiles.Contains(tileId))
+                    if (!worldLayer.AllowedTiles.Contains(tileId) && worldLayer.AllowedTiles.Count > 0) //CrystallEdge - count > 0
                         continue;
 
                     break;

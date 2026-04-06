@@ -6,3 +6,6 @@ ce-alert-fire-desc = Вы получаете урон огнем равный к
 
 ce-alert-cold-slowdown-name = Обморожение
 ce-alert-cold-slowdown-desc = Вы двигаетесь медленнее из за сильного переохлаждения!
+
+ce-alert-wet-name = Мокрый
+ce-alert-wet-desc = Вы промокли. Огонь не может вас поджечь, пока вы мокрые.

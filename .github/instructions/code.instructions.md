@@ -42,7 +42,7 @@ public sealed class ExampleSystem : EntitySystem
         SubscribeLocalEvent<ExampleComponent, SomeEvent>(OnSomeEvent);
     }
 
-    private void OnSomeEvent(EntityUid uid, ExampleComponent component, SomeEvent args)
+    private void OnSomeEvent(Entity<ExampleComponent> component, ref SomeEvent args)
     {
         // Logic here
     }

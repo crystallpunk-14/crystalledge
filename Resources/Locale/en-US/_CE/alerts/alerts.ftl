@@ -6,3 +6,6 @@ ce-alert-fire-desc = You take fire damage equal to the number of fire stacks on 
 
 ce-alert-cold-slowdown-name = Frostbite
 ce-alert-cold-slowdown-desc = You're moving more slowly because you're severely chilled!
+
+ce-alert-wet-name = Wet
+ce-alert-wet-desc = You're soaked with water. Fire cannot ignite you while wet.

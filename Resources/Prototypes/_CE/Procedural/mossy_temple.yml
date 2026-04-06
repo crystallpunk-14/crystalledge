@@ -1,0 +1,486 @@
+- type: zMap
+  id: MossyTemple
+  maps:
+  - /Maps/_CE/Dungeon/MossyTemple/MossyTemple0.yml
+  - /Maps/_CE/Dungeon/MossyTemple/MossyTemple1.yml
+  components:
+    - type: MapLight
+      ambientLightColor: "#38d18a"
+
+- type: dungeonRoom3d
+  id: MossyTemple_PillarsWideCrossroad
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_PillarsSmallCrossroad
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_PillarsCorridor
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 25, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssCorridorL
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -1
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssCorridorT
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 12
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, 8
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssCorridorO
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, -1
+
+- type: dungeonRoom3d
+  id: MossyTemple_SmolTCrossroad
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 30, -3
+
+- type: dungeonRoom3d
+  id: MossyTemple_OneSideAbyss
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 14
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 30, 6
+
+- type: dungeonRoom3d
+  id: MossyTemple_LoongO
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, 13
+
+- type: dungeonRoom3d
+  id: MossyTemple_AlchemyRooms
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 39, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_CaveCorridor
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 39, 4
+
+- type: dungeonRoom3d
+  id: MossyTemple_CaveCorridorT
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 39, 13
+
+- type: dungeonRoom3d
+  id: MossyTemple_GrassMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_GrassBox
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 4
+
+- type: dungeonRoom3d
+  id: MossyTemple_GrassAngle
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 13
+
+- type: dungeonRoom3d
+  id: MossyTemple_CorridorDoorMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, 21
+
+- type: dungeonRoom3d
+  id: MossyTemple_WhenCavesAndTempleMeet
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, 21
+
+- type: dungeonRoom3d
+  id: MossyTemple_Garden
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 9, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 30, 21
+
+- type: dungeonRoom3d
+  id: MossyTemple_CaveMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 11, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 40, 21
+
+- type: dungeonRoom3d
+  id: MossyTemple_CaveBigHole
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 12
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 21
+
+- type: dungeonRoom3d
+  id: MossyTemple_CorridorC
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 62, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_DunCaveDun
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, 28
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssWalking
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 12
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, 30
+
+- type: dungeonRoom3d
+  id: MossyTemple_SimmetricalBox
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 62, 4
+
+- type: dungeonRoom3d
+  id: MossyTemple_FloodedCave
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 62, 13
+
+- type: dungeonRoom3d
+  id: MossyTemple_Sewers
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 13
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 73, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_SewersDouble
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 73, 4
+
+- type: dungeonRoom3d
+  id: MossyTemple_FloodedRuinsLake
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 10, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 73, 12
+
+# Dead ends
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_8Potions
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 11, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -24
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_PotionsBehindFrames
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 6, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 12, -24
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_PotionsInCave
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 8, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 19, -21
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_SecretLeafWallStash
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 8, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 28, -21
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_PlanksBridge
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 8, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 37, -23
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_Armory
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 14, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 46, -19
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_WaterBridge
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 11, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -33
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_LeafMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 10, 8
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 12, -33
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_WoodenRoom
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomDeadEnd
+  size: 8, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 23, -29
+
+# Entrance
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_LockedBox
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomEntrance
+  size: 9, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -12, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_Arch
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomEntrance
+  size: 11, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -24, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_AbyssBridge
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomEntrance
+  size: 12, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -37, -10
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_AbyssBridge2
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomEntrance
+  size: 12, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -27, 0
+
+# Exits
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_First
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 11, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -14, 0
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_DoubleRooms
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 11, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -14, 12
+
+# Blessing
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_Dirty2
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -18, -20
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_TripleBaby
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -10, -20
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_Cliff
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -10, -32
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_SmallBoring
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -18, -28

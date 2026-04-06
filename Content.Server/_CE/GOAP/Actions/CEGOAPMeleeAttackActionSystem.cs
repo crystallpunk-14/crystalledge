@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server._CE.Animation.Item;
+using Content.Server._CE.MeleeWeapon;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.Animation.Item.Components;
@@ -64,7 +64,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     {
         _combatMode.SetInCombatMode(ent, true);
 
-        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
+        var target = Goap.GetTarget(ent, args.Action.TargetKey);
         if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
             return;
 
@@ -77,7 +77,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMeleeAttackAction> args)
     {
-        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
+        var target = Goap.GetTarget(ent, args.Action.TargetKey);
         if (target == null)
         {
             args.Status = CEGOAPActionStatus.Failed;

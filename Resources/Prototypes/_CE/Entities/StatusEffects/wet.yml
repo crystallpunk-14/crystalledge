@@ -1,0 +1,46 @@
+- type: entity
+  id: CEStatusEffectWet
+  name: Wet
+  description: Soaked with water. Fire has no power here.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEWettable
+  - type: StatusEffectAlert
+    alert: CEWet
+  - type: RejuvenateRemovedStatusEffect
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/water_status.rsi
+    noRot: true
+    layers:
+    - state: effect
+
+- type: alert
+  id: CEWet
+  alertViewEntity: CEWetAlertSpriteView
+  name: ce-alert-wet-name
+  description: ce-alert-wet-desc
+  icons:
+  - sprite: _CE/Interface/cold.rsi # TODO: replace with wet-specific alert icon
+    state: cold_slowdown
+
+- type: entity
+  id: CEWetAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/cold.rsi # TODO: replace with wet-specific alert icon
+      state: cold_slowdown
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

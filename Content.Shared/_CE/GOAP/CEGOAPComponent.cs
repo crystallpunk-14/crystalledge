@@ -1,4 +1,5 @@
 ﻿using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._CE.GOAP;
@@ -11,29 +12,45 @@ namespace Content.Shared._CE.GOAP;
 public sealed partial class CEGOAPComponent : Component
 {
     /// <summary>
+    /// When true, the entity spawns in a sleeping state (with <see cref="CEGOAPSleepingComponent"/>)
+    /// and must be explicitly woken by a trigger (damage, proximity, etc.).
+    /// </summary>
+    [DataField]
+    public bool StartSleeping = true;
+
+    /// <summary>
     /// List of goals this entity can pursue.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CEGOAPGoal> Goals = new();
 
     /// <summary>
     /// Available actions this entity can perform.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
     /// Sensors that update the world state each frame.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CEGOAPSensor> Sensors = new();
 
     /// <summary>
-    /// Named target providers that resolve entity/coordinate targets.
-    /// Resolved each sensor tick before sensors update.
+    /// Named targets resolved by sensors.
+    /// Keys are logical target names (e.g. "enemy"), values are resolved entity UIDs.
     /// </summary>
-    [DataField(serverOnly: true)]
-    public Dictionary<string, CEGOAPTargetProvider> TargetProviders = new();
+    [ViewVariables]
+    public Dictionary<string, EntityUid?> Targets = new();
+
+    /// <summary>
+    /// Last known coordinates for each target key
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<string, EntityCoordinates> LastKnownPositions = new();
 
     /// <summary>
     /// Current world state as perceived by this entity.
@@ -46,7 +63,7 @@ public sealed partial class CEGOAPComponent : Component
     /// Current plan being executed. Null if no plan.
     /// </summary>
     [ViewVariables]
-    public List<CEGOAPAction>? CurrentPlan;
+    public List<CEGOAPAction> CurrentPlan = new();
 
     /// <summary>
     /// Index of the currently executing action in the plan.
@@ -77,12 +94,10 @@ public sealed partial class CEGOAPComponent : Component
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextPlanTime;
-
-    /// <summary>
-    /// The next game time at which sensors are updated.
-    /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan NextSensorTime;
-
 }
+
+/// <summary>
+/// A remembered target position with an expiry time.
+/// </summary>
+public record struct MemorizedPosition();
 

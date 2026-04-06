@@ -1,0 +1,48 @@
+- type: entity
+  abstract: true
+  id: CEBaseWeaponSkimitar
+  parent:
+  - CEBaseWeapon
+  components:
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 60
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 360
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+    animations:
+      Primary:
+      - anim: SkimitarAttackLight1
+        staminaCost: 1
+      - anim: SkimitarAttackLight2
+        staminaCost: 1
+      Secondary:
+      - anim: SkimitarAttackHeavy1
+        staminaCost: 2
+  - type: Clothing
+    slots:
+    - neck

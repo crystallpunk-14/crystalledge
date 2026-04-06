@@ -6,7 +6,6 @@ namespace Content.Shared._CE.Health.Components;
 /// <summary>
 /// Stores mob state thresholds and the current state.
 /// When damage reaches <see cref="CriticalThreshold"/>, the entity enters Critical.
-/// When damage reaches <see cref="DeadThreshold"/>, the entity dies.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 [Access(typeof(CESharedDamageableSystem), typeof(CEMobStateSystem))]
@@ -16,16 +15,19 @@ public sealed partial class CEMobStateComponent : Component
     public CEMobState CurrentState = CEMobState.Alive;
 
     /// <summary>
-    /// Damage at or above which the entity enters Critical state.
+    /// Base maximum health before modifiers.
+    /// Used as the starting value for <see cref="CECalculateMaxHealthEvent"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int CriticalThreshold = 10;
+    public int BaseMaxHealth = 20;
 
     /// <summary>
-    /// Damage at or above which the entity is Dead.
+    /// Effective maximum health after modifiers (flat + multipliers).
+    /// Damage at or above this value causes the entity to enter Critical state.
+    /// Set by <see cref="CEMobStateSystem.RefreshMaxHealth"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int DeadThreshold = 20;
+    public int CriticalThreshold = 20;
 }
 
 [Serializable, NetSerializable]
@@ -33,7 +35,6 @@ public enum CEMobState : byte
 {
     Alive,
     Critical,
-    Dead,
 }
 
 [Serializable, NetSerializable]

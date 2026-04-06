@@ -19,29 +19,29 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEStatusEffectStackComponent, CEStatusEffectEndingAttemptEvent>(OnBeforeEnded);
-        SubscribeLocalEvent<CEStatusEffectStackComponent, StatusEffectRemovedEvent>(OnEnded);
     }
 
-    private void OnEnded(Entity<CEStatusEffectStackComponent> ent, ref StatusEffectRemovedEvent args)
-    {
-        //We disable prediction because status effects has bugs with constatn deletion and respawns, causes bucnh mispredicts calls
-        if (_net.IsClient)
-            return;
-
-        var ev = new CEStatusEffectStackEffectEvent(1);
-        RaiseLocalEvent(ent, ref ev);
-    }
-
+    /// <summary>
+    /// Handles a burn cycle tick. Applies the effect, adjusts stacks, and extends the timer.
+    /// On the final tick (stacks drop to 0), applies one last effect and lets the status end.
+    /// </summary>
     private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectEndingAttemptEvent args)
     {
         var delta = ent.Comp.StackDelta;
         var newStack = ent.Comp.Stacks + delta;
 
-        // If stacks would reach zero or below, let the effect end naturally.
+        // Always apply the effect on a cycle tick (server-only).
+        if (!_net.IsClient)
+        {
+            var ev = new CEStatusEffectStackEffectEvent(ent.Comp.Stacks);
+            RaiseLocalEvent(ent, ref ev);
+        }
+
+        // Final tick — stacks depleted, let the effect end.
         if (newStack <= 0)
             return;
 
-        // Cancel the ending on both client and server to prevent visual flicker.
+        // More stacks remain — cancel ending and schedule the next cycle.
         args.Cancelled = true;
 
         if (_net.IsClient)
@@ -57,9 +57,6 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         var duration = ent.Comp.BaseDuration;
         if (duration is null)
             return;
-
-        var ev = new CEStatusEffectStackEffectEvent(ent.Comp.Stacks);
-        RaiseLocalEvent(ent, ref ev);
 
         _statusEffect.TryAddTime(statusEffect.AppliedTo.Value, proto, duration.Value);
 
@@ -174,7 +171,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// </summary>
     /// <param name="target">Target entity with StatusEffectContainer</param>
     /// <param name="statusEffect">Type of status effect.</param>
-    public int GetStack(EntityUid target, EntProtoId statusEffect)
+    public int GetFlammableStack(EntityUid target, EntProtoId statusEffect)
     {
         if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
             return 0;

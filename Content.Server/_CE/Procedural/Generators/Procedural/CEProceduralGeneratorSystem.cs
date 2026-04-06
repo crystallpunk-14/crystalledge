@@ -99,6 +99,13 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     /// </summary>
     [DataField]
     public EntProtoId WallPrototype = "CEWallStoneBrick";
+
+    /// <summary>
+    /// Entity prototype spawned as a door at corridor endpoints (between a room and its corridor).
+    /// Rotated so its front faces the room.
+    /// </summary>
+    [DataField]
+    public EntProtoId DoorPrototype = "CEWoodenDoor";
 }
 
 [DataDefinition]
@@ -160,7 +167,6 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
             _proto,
             _random,
             _maps,
-            _dungeon,
             _zLevels,
             this,
             config,

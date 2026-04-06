@@ -1,10 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server._CE.Procedural.Generators;
+using Content.Server._CE.Procedural.PostProcess;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.Decals;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Maps;
 using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.CPUJob.JobQueues.Queues;
@@ -28,6 +30,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
     [Dependency] private readonly TileSystem _tile = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly MetaDataSystem _meta = default!;
+    [Dependency] private readonly CEDungeonPostProcessSystem _postProcess = default!;
 
     private EntityQuery<MetaDataComponent> _metaQuery;
     private EntityQuery<TransformComponent> _xformQuery;
@@ -124,8 +127,30 @@ public sealed partial class CEDungeonSystem : EntitySystem
 
         if (result is { Success: true, MapUid: not null })
         {
+            // Initialize z-network maps now that we are outside the job context,
+            // so InitializeMap does not conflict with PVS parallel jobs.
+            if (result.ZNetworkUid != null
+                && TryComp<CEZLevelsNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
+            {
+                _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
+            }
+
             _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
             Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
+
+            // Run post-processing layers.
+            if (proto.PostProcess.Count > 0)
+            {
+                var ppJob = new CEDungeonPostProcessJob(
+                    DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
+                _dungeonJobQueue.EnqueueJob(ppJob);
+                await ppJob.AsTask;
+
+                if (ppJob.Exception != null)
+                    Log.Error($"CEDungeonSystem: post-processing failed for '{proto.ID}': {ppJob.Exception}");
+                else
+                    Log.Info($"CEDungeonSystem: post-processing complete for '{proto.ID}'.");
+            }
         }
         else
         {
@@ -182,8 +207,23 @@ public sealed partial class CEDungeonSystem : EntitySystem
             var result = job.Result;
             if (result is { Success: true, MapUid: not null })
             {
+                // Initialize z-network maps now that we are outside the job context.
+                if (result.ZNetworkUid != null
+                    && TryComp<CEZLevelsNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
+                {
+                    _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
+                }
+
                 _meta.SetEntityName(result.MapUid.Value, $"{protoId}");
                 Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
+
+                // Enqueue post-processing layers.
+                if (proto.PostProcess.Count > 0)
+                {
+                    var ppJob = new CEDungeonPostProcessJob(
+                        DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
+                    _dungeonJobQueue.EnqueueJob(ppJob);
+                }
             }
             else
             {

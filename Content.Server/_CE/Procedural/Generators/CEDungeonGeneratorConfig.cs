@@ -31,7 +31,8 @@ public abstract partial class CEDungeonGeneratorConfig
 public record struct CEDungeonGenerateResult(
     bool Success,
     EntityUid? MapUid = null,
-    MapId? MapId = null);
+    MapId? MapId = null,
+    EntityUid? ZNetworkUid = null);
 
 public abstract partial class CEDungeonGeneratorConfigBase<T> : CEDungeonGeneratorConfig
     where T : CEDungeonGeneratorConfigBase<T>

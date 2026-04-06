@@ -6,13 +6,17 @@ namespace Content.Shared._CE.Health.Components;
 
 /// <summary>
 /// Destroys the entity (QueueDel) when accumulated damage reaches the threshold.
-/// Works independently from <see cref="CEMobStateComponent"/>.
+/// For entities with <see cref="CEMobStateComponent"/>, the threshold is counted
+/// only after they have entered Critical.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+[Access(typeof(CEDestructibleSystem))]
 public sealed partial class CEDestructibleComponent : Component
 {
     /// <summary>
     /// Damage value at or above which the entity is destroyed.
+    /// For entities with <see cref="CEMobStateComponent"/>, this is the amount of
+    /// extra damage they can take after reaching Critical.
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
     public int DestroyThreshold;
@@ -21,5 +25,5 @@ public sealed partial class CEDestructibleComponent : Component
     public SoundSpecifier? DestroySound;
 
     [DataField]
-    public EntityTableSelector? Loot;
+    public EntityTableSelector? LootTable;
 }

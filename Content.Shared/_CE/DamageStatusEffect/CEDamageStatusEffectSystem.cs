@@ -24,6 +24,6 @@ public sealed partial class CEDamageStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var effect) || effect.AppliedTo is null)
             return;
 
-        _damageable.TakeDamage(effect.AppliedTo.Value, ent.Comp.Damage * stack);
+        _damageable.TakeDamage(effect.AppliedTo.Value, ent.Comp.Damage * stack, interruptDoAfters: ent.Comp.InterruptDoAfters);
     }
 }

@@ -1,6 +1,7 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.Actions.Events;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.GOAP.Actions;
@@ -52,6 +53,15 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
             return;
         }
 
+        //TODO: this should be really inside vanilla Action system, something like CanPerform method
+        var attemptEv = new ActionAttemptEvent(ent);
+        RaiseLocalEvent(actionEntity.Value, ref attemptEv);
+        if (attemptEv.Cancelled)
+        {
+            args.CanExecute = false;
+            return;
+        }
+
         // On cooldown — can't use
         if (_actions.IsCooldownActive(actionComp))
             args.CanExecute = false;
@@ -83,7 +93,7 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
         }
 
         // Determine the target entity for EntityTarget / WorldTarget actions
-        var target = GetTarget(ent.Comp, args.Action.TargetProviderKey);
+        var target = Goap.GetTarget(ent, args.Action.TargetKey);
 
         // Set target on the action event based on auto-detected type
         if (_entityTargetQuery.HasComponent(actionEntity.Value) ||

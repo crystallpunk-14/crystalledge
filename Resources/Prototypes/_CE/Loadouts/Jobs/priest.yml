@@ -29,18 +29,13 @@
   minLimit: 1
   loadouts:
   - CEClothingPriestPantsDark
-  - CEClothingPriestPantsDark2
   - CEClothingPriestPantsWhite
+  - CEClothingGeneralPantsDark
 
 - type: loadout
   id: CEClothingPriestPantsDark
   equipment:
     pants: CEClothingPriestPantsDark
-
-- type: loadout
-  id: CEClothingPriestPantsDark2
-  equipment:
-    pants: CEClothingPriestPantsDark2
 
 - type: loadout
   id: CEClothingPriestPantsWhite
@@ -71,3 +66,32 @@
   id: CEClothingPriestCloakWhite2
   equipment:
     cloak: CEClothingPriestCloakWhite2
+
+
+
+
+- type: loadoutGroup
+  id: CEPriestWeapon
+  name: ce-loadout-weapon
+  minLimit: 1
+  loadouts:
+  - CEWeaponStaffWooden
+
+- type: loadout
+  id: CEWeaponStaffWooden
+  equipment:
+    neck: CEWeaponStaffWooden
+
+
+- type: loadoutGroup
+  id: CEPriestSkill
+  name: ce-loadout-skill
+  minLimit: 1
+  loadouts:
+  - CureWounds
+
+- type: loadout
+  id: CureWounds
+  dummyEntity: CEActionSpellCureWounds
+  skills:
+  - CureWounds

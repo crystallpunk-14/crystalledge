@@ -21,7 +21,7 @@ public sealed partial class CEZLevelViewerComponent : Component
     /// We can look at 1 z-level up.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public bool LookUp;
+    public bool LookUp = true;
 
     [DataField]
     public EntProtoId ActionProto = "CEActionToggleLookUp";

@@ -4,10 +4,16 @@
   abstract: true
   components:
   - type: CEDamageable
-  - type: CEMobState
+  - type: CEDestructible
+    destroyThreshold: 20
+    destroySound:
+      collection: gib
   - type: Pullable
   - type: CEFlammable
     stackDelta: -1
+  - type: CEFreezable
+  - type: CEWettable
+  - type: FloorOcclusion
 
 - type: entity
   id: CEMobMagical
@@ -15,21 +21,6 @@
   categories: [ ForkFiltered ]
   components:
   - type: CEMagicEnergyContainer
-    maxEnergy: 10
-
-- type: entity
-  id: CEMobStatBased
-  abstract: true
-  categories: [ ForkFiltered ]
-  components:
-  - type: CEStats
-    baseStats:
-      Vitality: 5
-      Intelligence: 5
-  - type: CEVitalityMaxHealth
-  - type: CEIntelligenceMaxMana
-  - type: CEBlessingReceiver
-  - type: CESkillStorage
 
 - type: entity
   id: CEMobCombat
@@ -37,17 +28,25 @@
   categories: [ ForkFiltered ]
   components:
   - type: CombatMode
+  - type: StatusIcon #TODO not here!
+  - type: ContentEye
+    maxZoom: 0.6, 0.6
+    targetZoom: 0.6, 0.6
   - type: CEWeapon
-    spriteRotation: -90
-    damage:
-      types:
-        Physical: 1
+    spriteRotation: 0
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.4
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
     animations:
       Primary:
-      - anim: SwordAttackLight1
-      - anim: SwordAttackLight2
-      Secondary:
-      - anim: SwordAttackHeavy1
-        speed: 1
-      - anim: SwordAttackHeavy2
-        speed: 1
+      - anim: Punch1
+        staminaCost: 1
+      - anim: Punch2
+        staminaCost: 1

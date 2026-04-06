@@ -6,6 +6,7 @@ namespace Content.Server.Entry
         public static string[] List => new[] {
             //CrystallEdge zone
             "CEWaveShader",
+            "CEIconSmooth",
             //CrystallEdge zone end
             "ConstructionGhost",
             "IconSmooth",

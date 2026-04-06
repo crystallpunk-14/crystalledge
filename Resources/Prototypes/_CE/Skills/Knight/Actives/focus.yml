@@ -1,0 +1,132 @@
+# Knight active skill: Focus
+# Grants 5 seconds of guaranteed critical strikes (double damage).
+
+- type: skill
+  parent: BaseKnightSkill
+  id: Focus
+  icon:
+    sprite: _CE/Skills/Knight/focus.rsi
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellFocus
+
+- type: entity
+  id: CEActionSpellFocus
+  parent: CEActionSpellBase
+  name: Focus
+  description: Grants [color=#ff0505]3 seconds[/color] of guaranteed [color=#ff0505]critical strikes[/color], dealing double damage.
+  components:
+  - type: CEActionManaCost
+    manaCost: 6
+  - type: CEActionWeaponRequired
+  - type: Action
+    useDelay: 15
+    icon:
+      sprite: _CE/Skills/Knight/focus.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationFocus
+
+- type: entityEffectAnimation
+  id: AnimationFocus
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    - !type:ActiveHandEntityAnimation
+      offsetAnimation:
+      - time: 0
+        offset: -0, -0.3
+        easing: QuadIn
+      - time: 0.4
+        offset: -0.5, -0.2
+      - time: 0.8
+        offset: -0.5, 0.1
+        easing: QuadOut
+      rotationAnimation:
+      - time: 0
+        rotation: 90
+        easing: QuadIn
+      - time: 0.4
+        rotation: -30
+      - time: 0.8
+        rotation: -90
+        easing: QuadOut
+      colorAnimation:
+        - time: 0.9
+          color: "#ffffff"
+        - time: 1
+          color: "#ffffff01"
+    0.6:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEEffectFocusTelegraphy
+      offsetAnimation:
+      - time: 0
+        offset: -0.6, 0.1
+    - !type:ApplyStatusEffect
+      effectTarget: User
+      statusEffect: CEStatusEffectFocus
+      duration: 3
+
+
+- type: entity
+  id: CEStatusEffectFocus
+  name: Focus
+  description: All attacks deal guaranteed [color=#ff8a05]critical[/color] damage.
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Effects/focus_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEFocus
+  - type: CEFocusStatusEffect
+  - type: PointLight
+    color: "#ff0505"
+    radius: 1.9
+
+
+
+- type: entity
+  id: CEEffectFocusTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: focus telegraphy
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/critical_charge.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ff0505"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: alert
+  id: CEFocus
+  icons:
+  - sprite: _CE/Skills/Knight/focus.rsi
+    state: icon

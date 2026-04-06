@@ -1,6 +1,7 @@
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Audio;
 using Content.Shared.Examine;
+using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
 
 namespace Content.Shared._CE.Mana.Core;
@@ -11,10 +12,16 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CEMagicEnergyContainerComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEMagicEnergyContainerComponent, RejuvenateEvent>(OnRejuvenate);
 
         SubscribeLocalEvent<CEMagicEnergyExaminableComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CEMagicEnergyAmbientSoundComponent, CESlotCrystalPowerChangedEvent>(OnSlotPowerChanged);
+    }
+
+    private void OnMapInit(Entity<CEMagicEnergyContainerComponent> ent, ref MapInitEvent args)
+    {
+        RefreshMaxMana(ent, ent.Comp);
     }
 
     private void OnRejuvenate(Entity<CEMagicEnergyContainerComponent> ent, ref RejuvenateEvent args)
@@ -38,7 +45,43 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         _ambient.SetAmbience(ent, args.Powered);
     }
 
-    public void ChangeEnergy(Entity<CEMagicEnergyContainerComponent?> ent,
+    public void Restore(Entity<CEMagicEnergyContainerComponent?> ent, int amount, EntityUid? source = null, bool raiseModifiersEvent = true)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        var finalAmount = amount;
+        if (raiseModifiersEvent)
+        {
+            if (source is not null)
+            {
+                var ev = new CEGetManaRestoreAmountEvent(ent, amount);
+                RaiseLocalEvent(source.Value, ev);
+
+                finalAmount = ev.RestoreAmount;
+            }
+
+            var ev2 = new CEGetManaRestoringAmountEvent(source, finalAmount);
+            RaiseLocalEvent(ent, ev2);
+
+            finalAmount = ev2.RestoreAmount;
+        }
+
+        if (finalAmount <= 0)
+            return;
+
+        ChangeEnergy(ent, finalAmount, out _, out _);
+    }
+
+    public void Take(Entity<CEMagicEnergyContainerComponent?> ent, int amount)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ChangeEnergy(ent, -amount, out _, out _);
+    }
+
+    private void ChangeEnergy(Entity<CEMagicEnergyContainerComponent?> ent,
         int energy,
         out int deltaEnergy,
         out int overloadEnergy)
@@ -58,17 +101,6 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
         if (oldEnergy != newEnergy)
             RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, newEnergy, ent.Comp.MaxEnergy), true);
-    }
-
-    /// <summary>
-    /// Set energy to 0
-    /// </summary>
-    public void ClearEnergy(Entity<CEMagicEnergyContainerComponent?> ent)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return;
-
-        ChangeEnergy(ent, -ent.Comp.Energy, out _, out _);
     }
 
     public void TransferEnergy(Entity<CEMagicEnergyContainerComponent?> sender,
@@ -149,6 +181,24 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 
         RaiseLocalEvent(ent, new CEMagicEnergyLevelChangeEvent(ent, oldEnergy, ent.Comp.Energy, ent.Comp.MaxEnergy), true);
     }
+
+    /// <summary>
+    /// Recalculates effective max mana by raising <see cref="CECalculateMaxManaEvent"/>
+    /// (relayed through inventory and status effects), then updates
+    /// <see cref="CEMagicEnergyContainerComponent.MaxEnergy"/> and scales current energy proportionally.
+    /// </summary>
+    public void RefreshMaxMana(EntityUid uid, CEMagicEnergyContainerComponent? comp = null)
+    {
+        if (!Resolve(uid, ref comp, false))
+            return;
+
+        var ev = new CECalculateMaxManaEvent(comp.BaseMaxEnergy);
+        RaiseLocalEvent(uid, ev);
+
+        var newMax = Math.Max(1, ev.MaxMana);
+
+        SetMaximumEnergy((uid, comp), newMax);
+    }
 }
 
 /// <summary>
@@ -161,4 +211,39 @@ public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue
     public readonly int OldValue = oldValue;
     public readonly int NewValue = newValue;
     public readonly int MaxValue = maxValue;
+}
+
+/// <summary>
+/// Raised on an entity to calculate its effective maximum mana.
+/// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
+/// Handlers can add flat bonuses and multipliers.
+/// Final max mana = (BaseMaxMana + FlatModifier) * Multiplier.
+/// </summary>
+public sealed class CECalculateMaxManaEvent(int baseMaxMana) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+
+    public int BaseMaxMana = baseMaxMana;
+    public int FlatModifier;
+    public float Multiplier = 1f;
+
+    public int MaxMana => (int)((BaseMaxMana + FlatModifier) * Multiplier);
+}
+
+/// <summary>
+/// Called on mana restoring source entity to calculate the amount to heal.
+/// </summary>
+public sealed class CEGetManaRestoreAmountEvent(EntityUid target, int restoreAmount) : EntityEventArgs
+{
+    public EntityUid Target = target;
+    public int RestoreAmount = restoreAmount;
+}
+
+/// <summary>
+/// Called on entity that restoring mana to calculate the amount of mana restore
+/// </summary>
+public sealed class CEGetManaRestoringAmountEvent(EntityUid? source, int restoreAmount) : EntityEventArgs
+{
+    public EntityUid? Source = source;
+    public int RestoreAmount = restoreAmount;
 }

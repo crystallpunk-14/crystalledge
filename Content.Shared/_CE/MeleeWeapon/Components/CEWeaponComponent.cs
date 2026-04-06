@@ -1,5 +1,6 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
-using Content.Shared._CE.Health;
+using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -20,10 +21,11 @@ public sealed partial class CEWeaponComponent : Component
     public Dictionary<CEUseType, List<CEAnimationEntry>> Animations = new();
 
     /// <summary>
-    ///
+    /// Named effect slots that animations can reference via <c>WeaponEffectSlot</c>.
+    /// Allows weapons to define unique effects (e.g. on-hit, on-cast) without duplicating animations.
     /// </summary>
-    [DataField(required: true), AutoNetworkedField]
-    public CEDamageSpecifier Damage = new();
+    [DataField]
+    public Dictionary<string, List<CEEntityEffect>> EffectSlots = new();
 
     /// <summary>
     /// Are we currently holding down the mouse for an attack.
@@ -70,25 +72,25 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField]
     public SoundSpecifier HitSound = new SoundCollectionSpecifier("WeakHit");
-
-    /// <summary>
-    /// Modify weapon attack animations range
-    /// </summary>
-    [DataField]
-    public float RangeMultiplier = 1f;
 }
 
 [DataDefinition, Serializable]
 public sealed partial class CEAnimationEntry
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Anim;
+    public ProtoId<CEEntityEffectAnimationPrototype> Anim;
 
     /// <summary>
     /// animation playback speed modifier
     /// </summary>
     [DataField]
     public float Speed = 1f;
+
+    /// <summary>
+    /// Stamina cost to play this animation. If the user lacks enough stamina, the attack is blocked.
+    /// </summary>
+    [DataField]
+    public float StaminaCost;
 }
 
 /// <summary>

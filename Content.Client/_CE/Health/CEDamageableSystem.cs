@@ -1,7 +1,12 @@
+using Content.Client.Items;
+using Content.Client.Stylesheets;
+using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Effects;
-using Robust.Shared.GameStates;
+using Robust.Client.Graphics;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -10,74 +15,118 @@ namespace Content.Client._CE.Health;
 public sealed class CEDamageableSystem : CESharedDamageableSystem
 {
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private readonly CEScreenshakeSystem _shake = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-
-    private readonly Dictionary<EntityUid, int> _previousDamage = new();
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEDamageableComponent, AfterAutoHandleStateEvent>(OnDamageableAfterState);
-        SubscribeLocalEvent<CEDamageableComponent, ComponentShutdown>(OnDamageableShutdown);
+        Subs.ItemStatus<CEHealthStatusComponent>(ent => new CEHealthStatusControl(ent));
     }
 
     private void OnDamageableAfterState(EntityUid uid, CEDamageableComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        if (!_previousDamage.TryGetValue(uid, out var previousDamage))
-        {
-            _previousDamage[uid] = comp.TotalDamage;
-        }
-        else if (previousDamage != comp.TotalDamage)
-        {
-            _previousDamage[uid] = comp.TotalDamage;
-            var ev = new CEDamageChangedEvent(uid, previousDamage, comp.TotalDamage);
-            RaiseLocalEvent(ev);
-        }
+        var ev = new CEDamageChangedEvent(uid, comp.TotalDamage, comp.TotalDamage);
+        RaiseLocalEvent(uid, ev, true);
     }
 
-    private void OnDamageableShutdown(EntityUid uid, CEDamageableComponent comp, ComponentShutdown args)
-    {
-        _previousDamage.Remove(uid);
-    }
-
-    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source)
+    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)
     {
         if (!_timing.IsFirstTimePredicted)
             return;
 
         _color.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Local());
+
+        var shakeTranslation = new CEScreenshakeParameters() { Trauma = 0.4f, DecayRate = 3f, Frequency = 0.008f };
+        _shake.Screenshake(target, shakeTranslation, null);
     }
 }
 
 public sealed class CEClientMobStateSystem : EntitySystem
 {
-    private readonly Dictionary<EntityUid, CEMobState> _previousStates = new();
-
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEMobStateComponent, AfterAutoHandleStateEvent>(OnMobStateAfterState);
-        SubscribeLocalEvent<CEMobStateComponent, ComponentShutdown>(OnMobStateShutdown);
     }
 
     private void OnMobStateAfterState(EntityUid uid, CEMobStateComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        if (!_previousStates.TryGetValue(uid, out var previousState))
+        var stateEv = new CEMobStateChangedEvent(uid, comp.CurrentState, comp.CurrentState);
+        RaiseLocalEvent(uid, stateEv, true);
+
+        var maxHealthEv = new CEMaxHealthChangedEvent(uid);
+        RaiseLocalEvent(uid, maxHealthEv, true);
+    }
+}
+
+public sealed class CEMaxHealthChangedEvent(EntityUid target) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+}
+
+public sealed class CEHealthStatusControl : Control
+{
+    private readonly EntityUid _owner;
+    private readonly IEntityManager _entMan;
+    private readonly RichTextLabel _label;
+    private readonly ProgressBar _progress;
+
+    public CEHealthStatusControl(Entity<CEHealthStatusComponent> parent)
+    {
+        _entMan = IoCManager.Resolve<IEntityManager>();
+        _owner = parent.Owner;
+        _progress = new ProgressBar
         {
-            _previousStates[uid] = comp.CurrentState;
-        }
-        else if (previousState != comp.CurrentState)
+            MaxValue = 1,
+            Value = 0,
+        };
+        _progress.SetHeight = 8f;
+        _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#c23030"));
+        _progress.BackgroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#010c13"));
+        _progress.Margin = new Thickness(0, 4);
+        _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
+
+        if (!_entMan.HasComponent<CEDamageableComponent>(parent))
+            return;
+
+        var boxContainer = new BoxContainer
         {
-            _previousStates[uid] = comp.CurrentState;
-            var ev = new CEMobStateChangedEvent(uid, previousState, comp.CurrentState);
-            RaiseLocalEvent(ev);
-        }
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+        };
+
+        boxContainer.AddChild(_label);
+        boxContainer.AddChild(_progress);
+
+        AddChild(boxContainer);
     }
 
-    private void OnMobStateShutdown(EntityUid uid, CEMobStateComponent comp, ComponentShutdown args)
+    protected override void FrameUpdate(FrameEventArgs args)
     {
-        _previousStates.Remove(uid);
+        base.FrameUpdate(args);
+
+        var damageable = _entMan.System<CESharedDamageableSystem>();
+        var info = damageable.GetHealthInfo(_owner);
+
+        if (info.MaxHp <= 0)
+        {
+            _progress.Value = 0;
+            _label.Text = "0/0";
+            return;
+        }
+
+        _progress.Value = info.Ratio;
+        _label.Text = $"{info.CurrentHp}/{info.MaxHp}";
+
+        var color = info.Ratio switch
+        {
+            >= 0.66f => "#3fc488",
+            >= 0.33f => "#f2a93a",
+            _ => "#c23030",
+        };
+        _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex(color));
     }
 }

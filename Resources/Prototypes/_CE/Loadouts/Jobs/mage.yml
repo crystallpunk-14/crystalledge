@@ -34,6 +34,7 @@
   equipment:
     shirt: CEClothingMageShirtWhitePurpleDress
 
+
 - type: loadoutGroup
   id: CEMagePants
   name: ce-loadout-pants
@@ -41,6 +42,7 @@
   loadouts:
   - CEClothingMagePantsBlue
   - CEClothingMagePantsPurple
+  - CEClothingGeneralPantsDark
 
 - type: loadout
   id: CEClothingMagePantsBlue
@@ -51,6 +53,7 @@
   id: CEClothingMagePantsPurple
   equipment:
     pants: CEClothingMagePantsPurple
+
 
 - type: loadoutGroup
   id: CEMageCloak
@@ -75,3 +78,43 @@
   id: CEClothingMageHeadTriangular
   equipment:
     head: CEClothingMageHeadTriangular
+
+
+
+- type: loadoutGroup
+  id: CEMageWeapon
+  name: ce-loadout-weapon
+  minLimit: 1
+  loadouts:
+  - CEWeaponMagicStaffFire
+  - CEWeaponMagicStaffIce
+
+- type: loadout
+  id: CEWeaponMagicStaffFire
+  equipment:
+    neck: CEWeaponMagicStaffFire
+
+- type: loadout
+  id: CEWeaponMagicStaffIce
+  equipment:
+    neck: CEWeaponMagicStaffIce
+
+- type: loadoutGroup
+  id: CEMageSkill
+  name: ce-loadout-skill
+  minLimit: 1
+  loadouts:
+  - TripleIcicles
+  - Firebolt
+
+- type: loadout
+  id: TripleIcicles
+  dummyEntity: CEActionTripleIcicles
+  skills:
+  - TripleIcicles
+
+- type: loadout
+  id: Firebolt
+  dummyEntity: CEActionFirebolt
+  skills:
+  - Firebolt

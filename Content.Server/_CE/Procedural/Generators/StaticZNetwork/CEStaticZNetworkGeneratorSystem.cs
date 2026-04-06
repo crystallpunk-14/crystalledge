@@ -93,6 +93,6 @@ public sealed partial class CEStaticZNetworkGeneratorSystem : CEDungeonGenerator
         if (primaryMapUid != null && TryComp<MapComponent>(primaryMapUid.Value, out var mapComp))
             mapId = mapComp.MapId;
 
-        return new CEDungeonGenerateResult(true, primaryMapUid, mapId);
+        return new CEDungeonGenerateResult(true, primaryMapUid, mapId, network.Owner);
     }
 }

@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Item.Components;
-using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.Stamina;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
@@ -16,7 +16,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.Animation.Item;
+namespace Content.Shared._CE.MeleeWeapon;
 
 public abstract partial class CESharedWeaponSystem : EntitySystem
 {
@@ -31,8 +31,8 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] protected readonly CESharedAnimationActionSystem AnimationAction = default!;
     [Dependency] private   readonly IPrototypeManager _proto = default!;
-    [Dependency] private   readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
+    [Dependency] private   readonly CEStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {
@@ -40,8 +40,42 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
         SubscribeAllEvent<CEWeaponUseEvent>(OnClientAttackRequest);
         SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
+        SubscribeAllEvent<CEWeaponArcHitEvent>(OnArcHitEvent);
 
         SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponEvent>(OnGetWeapon);
+    }
+
+    private void OnArcHitEvent(CEWeaponArcHitEvent ev, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not { } user)
+            return;
+
+        if (!TryGetWeapon(user, out var weapon) ||
+            weapon.Value.Owner != GetEntity(ev.Weapon))
+            return;
+
+        var targets = GetEntityList(ev.Targets);
+        targets = ValidateArcTargets(user, weapon.Value, targets);
+
+        TryAttack(user, weapon.Value, targets);
+        ApplyArcEffects(user, weapon.Value, targets, ev.EffectSlot);
+    }
+
+    /// <summary>
+    /// Validates arc attack targets. Server overrides to check range and obstructions.
+    /// </summary>
+    protected virtual List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    {
+        return targets;
+    }
+
+    /// <summary>
+    /// Runs nested arc effects on validated targets.
+    /// Server overrides to apply damage from the weapon's EffectSlot data.
+    /// Client base does nothing — effects are applied in the Effect() loop during prediction.
+    /// </summary>
+    protected virtual void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    {
     }
 
     private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponEvent args)
@@ -114,6 +148,9 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         if (!Blocker.CanAttack(user))
             return false;
 
+        if (AnimationAction.IsPlayingAnimation(user))
+            return false;
+
         //Get animations
         List<CEAnimationEntry> animations = new();
 
@@ -137,9 +174,15 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         if (used.Comp.LastComboUseType == useType && curTime < used.Comp.ComboResetDeadline)
             comboIndex = used.Comp.ComboIndex % animations.Count;
 
-        var animationProtoId = animations[comboIndex].Anim;
+        var entry = animations[comboIndex];
 
-        var animationSpeed = GetAnimationSpeed(user, used) * animations[comboIndex].Speed;
+        // Check stamina cost before starting the animation
+        if (entry.StaminaCost > 0f && !_stamina.TryTakeDamage(user, entry.StaminaCost))
+            return false;
+
+        var animationProtoId = entry.Anim;
+
+        var animationSpeed = GetAnimationSpeed(user, used) * entry.Speed;
         if (!AnimationAction.TryPlayAnimationToAngle(user, animationProtoId, angle, used.Owner, animationSpeed))
             return false;
 
@@ -214,32 +257,44 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         //return !ev.Cancelled;
     }
 
-    public bool TryAttack(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, float power)
+    /// <summary>
+    /// Called from <see cref="WeaponArcAttack"/> when arc trace detects targets.
+    /// Client overrides to send hit list to server. Server overrides to skip (waits for client event)
+    /// unless the attacker is an NPC.
+    /// </summary>
+    public virtual void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
     {
-        List<EntityUid> hitted = new();
+        TryAttack(user, weapon, targets);
+    }
+
+    public bool TryAttack(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    {
+        // Only consider entities that can be attacked (have a damageable component).
+        var valid = new List<EntityUid>();
         foreach (var target in targets)
         {
-            if (!_damageable.TakeDamage(target, weapon.Comp.Damage * power, user))
+            if (!HasComp<CEDamageableComponent>(target))
                 continue;
 
-            var attackedEv = new CEAttackedEvent(user, weapon);
-            RaiseLocalEvent(target, attackedEv);
-
-            hitted.Add(target);
+            valid.Add(target);
         }
 
-        if (!hitted.Any())
+        if (valid.Count == 0)
             return false;
 
-        //Attack confirmed
+        foreach (var target in valid)
+        {
+            var attackedEv = new CEAttackedEvent(user, weapon);
+            RaiseLocalEvent(target, attackedEv);
+        }
 
-        RaiseAttackEffects(user, hitted);
+        RaiseAttackEffects(user, valid);
         _audio.PlayPredicted(weapon.Comp.HitSound, weapon, user);
 
-        var usedEv = new CEAttackUsingEvent(user, hitted);
+        var usedEv = new CEAttackUsingEvent(user, valid);
         RaiseLocalEvent(weapon, usedEv);
 
-        var attackerEv = new CEAfterAttackEvent(weapon, hitted);
+        var attackerEv = new CEAfterAttackEvent(weapon, valid);
         RaiseLocalEvent(user, attackerEv);
 
         return true;

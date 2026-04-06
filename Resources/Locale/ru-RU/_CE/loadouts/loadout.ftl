@@ -10,3 +10,5 @@ ce-loadout-masks = Маски
 
 ce-loadout-music-tool = Музыкальный инструмент
 ce-loadout-instruments = Инструменты
+ce-loadout-weapon = Оружие
+ce-loadout-skill = Навыки

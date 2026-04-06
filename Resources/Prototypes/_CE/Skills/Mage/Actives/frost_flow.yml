@@ -14,11 +14,11 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 4
   - type: Action
-    useDelay: 5
+    useDelay: 8
     icon:
-      sprite: _CE/Skills/frost_flow.rsi
+      sprite: _CE/Skills/Mage/frost_flow.rsi
       state: icon
   - type: TargetAction
     range: 20
@@ -26,14 +26,14 @@
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationFrostFlow
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationFrostFlow
   movementSpeed: 0.3
   duration: 1.0
   lockRotation: true
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEEffectFrostFlowCharge
       offsetAnimation:
       - time: 0.0
@@ -138,15 +138,19 @@
         - HighImpassable
         - LowImpassable
         hard: false
-  - type: Projectile
-    damage:
-      types:
-        Cold: 0
-  - type: CEAnimationActionsSpawner
+  - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3
+    firstDelay: 0.3 # Important to not affect caster, freeze and damage it immediately on spawn
     effects:
     - !type:FreezeArea
       radius: 1.5
       maxStacks: 6
       fallOffFactor: 1
+    - !type:AreaEffect
+      affectCaster: true
+      range: 1.2
+      effects:
+      - !type:Damage
+        damage:
+          types:
+            Cold: 1

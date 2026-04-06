@@ -16,7 +16,7 @@ namespace Content.Server.Physics.Controllers;
 public sealed class ConveyorController : SharedConveyorController
 {
     [Dependency] private readonly FixtureSystem _fixtures = default!;
-    [Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
+    //[Dependency] private readonly DeviceLinkSystem _signalSystem = default!;
     [Dependency] private readonly MaterialReclaimerSystem _materialReclaimer = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly TurfSystem _turf = default!;
@@ -36,7 +36,7 @@ public sealed class ConveyorController : SharedConveyorController
 
     private void OnInit(EntityUid uid, ConveyorComponent component, ComponentInit args)
     {
-        _signalSystem.EnsureSinkPorts(uid, component.ReversePort, component.ForwardPort, component.OffPort);
+        //_signalSystem.EnsureSinkPorts(uid, component.ReversePort, component.ForwardPort, component.OffPort); //CrystallEdge removal
 
         if (PhysicsQuery.TryComp(uid, out var physics))
         {

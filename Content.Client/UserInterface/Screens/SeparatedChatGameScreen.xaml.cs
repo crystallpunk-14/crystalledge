@@ -28,6 +28,23 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(Hotbar, LayoutPreset.BottomWide, margin: 5);
         SetAnchorAndMarginPreset(Alerts, LayoutPreset.CenterRight, margin: 10);
 
+        // CrystallEdge - mana and health spheres
+        var gap = 310f;
+        var manaOffset = ManaBar.MinSize.X / 2f + gap;
+        var healthOffset = -(HealthBar.MinSize.X + manaOffset);
+
+        SetAnchorAndMarginPreset(HealthBar, LayoutPreset.CenterBottom);
+        SetMarginLeft(HealthBar, healthOffset);
+
+        SetAnchorAndMarginPreset(ManaBar, LayoutPreset.CenterBottom);
+        SetMarginLeft(ManaBar, manaOffset);
+
+        // Stamina bar at center bottom
+        SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 80);
+        SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);
+        SetMarginRight(StaminaBar, StaminaBar.MinSize.X / 2f);
+        // CrystallEdge end
+
         ScreenContainer.OnSplitResizeFinished += () =>
             OnChatResized?.Invoke(new Vector2(ScreenContainer.SplitFraction, 0));
 
