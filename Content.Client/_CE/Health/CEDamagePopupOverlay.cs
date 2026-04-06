@@ -24,8 +24,11 @@ public sealed class CEDamagePopupOverlay : Overlay
     private readonly Font _fontLarge;
 
     /// <summary>
-    /// Active popup entries managed by <see cref="CEDamagePopupSystem"/>.
+    /// Outline offset in pixels. Each text is drawn 4 times at this offset in cardinal directions.
     /// </summary>
+    private const float OutlineOffset = 3f;
+
+    private static readonly Color OutlineColor = Color.Black.WithAlpha(0.85f);
     public readonly List<PopupEntry> Entries = new();
 
     public CEDamagePopupOverlay(IResourceCache cache)
@@ -123,6 +126,15 @@ public sealed class CEDamagePopupOverlay : Overlay
             var drawPos = screenPos - new Vector2(dimensions.X / 2f, dimensions.Y);
 
             var color = entry.Color.WithAlpha(alpha);
+            var outline = OutlineColor.WithAlpha(alpha * OutlineColor.A);
+
+            // Draw dark outline (4 cardinal offsets) for readability over sprites.
+            handle.DrawString(font, drawPos + new Vector2(-OutlineOffset, 0), text, scale, outline);
+            handle.DrawString(font, drawPos + new Vector2(OutlineOffset, 0), text, scale, outline);
+            handle.DrawString(font, drawPos + new Vector2(0, -OutlineOffset), text, scale, outline);
+            handle.DrawString(font, drawPos + new Vector2(0, OutlineOffset), text, scale, outline);
+
+            // Main colored text on top.
             handle.DrawString(font, drawPos, text, scale, color);
         }
     }
