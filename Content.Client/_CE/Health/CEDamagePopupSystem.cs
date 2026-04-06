@@ -55,7 +55,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CEDamagePopupComponent> ent, ref CEDamageChangedEvent args)
     {
-        if (!_timing.IsFirstTimePredicted)
+        if (!_timing.ApplyingState)
             return;
 
         if (args.DamageDelta == 0)
@@ -66,9 +66,9 @@ public sealed class CEDamagePopupSystem : EntitySystem
         if (args.DamageIncreased)
         {
             // Compare per-type old vs new to show colored numbers.
-            foreach (var (typeId, newAmount) in args.NewDamagePerType)
+            foreach (var (typeId, newAmount) in args.NewDamage.Types)
             {
-                args.OldDamagePerType.TryGetValue(typeId, out var oldAmount);
+                args.OldDamage.Types.TryGetValue(typeId, out var oldAmount);
                 var typeDelta = newAmount - oldAmount;
 
                 if (typeDelta <= 0)

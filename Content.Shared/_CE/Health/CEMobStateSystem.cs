@@ -60,7 +60,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         if (!TryComp<CEDamageableComponent>(ent, out var dmg))
             return;
 
-        UpdateState(ent, ent.Comp, dmg.TotalDamage);
+        UpdateState(ent, ent.Comp, dmg.Damage.Total);
     }
 
     private void OnStartup(Entity<CEMobStateComponent> ent, ref ComponentStartup args)
@@ -69,7 +69,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
         var damage = 0;
         if (TryComp<CEDamageableComponent>(ent, out var dmg))
-            damage = dmg.TotalDamage;
+            damage = dmg.Damage.Total;
 
         UpdateState(ent, ent.Comp, damage);
         SetDamageFraction(ent, ent.Comp, damage);
@@ -77,8 +77,8 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CEMobStateComponent> ent, ref CEDamageChangedEvent args)
     {
-        UpdateState(ent, ent.Comp, args.NewDamage);
-        SetDamageFraction(ent, ent.Comp, args.NewDamage);
+        UpdateState(ent, ent.Comp, args.NewDamage.Total);
+        SetDamageFraction(ent, ent.Comp, args.NewDamage.Total);
     }
 
     private void UpdateState(Entity<CEMobStateComponent> ent, CEMobStateComponent mobState, int totalDamage)
@@ -154,7 +154,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
         var damage = 0;
         if (TryComp<CEDamageableComponent>(ent, out var dmg))
-            damage = dmg.TotalDamage;
+            damage = dmg.Damage.Total;
 
         UpdateState((ent, ent.Comp), ent.Comp, damage);
     }
@@ -184,14 +184,14 @@ public sealed partial class CEMobStateSystem : EntitySystem
         var hasDamage = TryComp<CEDamageableComponent>(uid, out var dmg);
 
         // Scale damage proportionally to maintain the same health fraction.
-        if (hasDamage && oldMax > 0 && dmg!.TotalDamage > 0)
+        if (hasDamage && oldMax > 0 && dmg!.Damage.Total > 0)
         {
-            var scaledDamage = (int) MathF.Round(dmg.TotalDamage * ((float) newMax / oldMax));
+            var scaledDamage = (int) MathF.Round(dmg.Damage.Total * ((float) newMax / oldMax));
             _damageable.SetDamage((uid, dmg), scaledDamage);
         }
 
         // Recalculate state + visuals with new threshold.
-        var currentDamage = hasDamage ? dmg!.TotalDamage : 0;
+        var currentDamage = hasDamage ? dmg!.Damage.Total : 0;
         UpdateState((uid, mobState), mobState, currentDamage);
         SetDamageFraction(uid, mobState, currentDamage);
     }

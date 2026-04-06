@@ -60,9 +60,9 @@ public sealed class CEDestructibleSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CEDestructibleComponent> ent, ref CEDamageChangedEvent args)
     {
-        var destroyThreshold = GetDestroyThreshold(ent, args.NewDamage);
+        var destroyThreshold = GetDestroyThreshold(ent, args.NewDamage.Total);
 
-        if (args.NewDamage < destroyThreshold)
+        if (args.NewDamage.Total < destroyThreshold)
             return;
 
         if (TerminatingOrDeleted(ent.Owner) || EntityManager.IsQueuedForDeletion(ent.Owner))

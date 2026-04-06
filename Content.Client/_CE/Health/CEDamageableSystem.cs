@@ -3,14 +3,12 @@ using Content.Client.Stylesheets;
 using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
-using Content.Shared._CE.Health.Prototypes;
 using Content.Shared.Effects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameStates;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Health;
@@ -39,18 +37,15 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
         if (args.Current is not CEDamageableComponentState state)
             return;
 
-        var oldPerType = new Dictionary<ProtoId<CEDamageTypePrototype>, int>(comp.Damage);
-        var oldTotal = comp.TotalDamage;
+        var oldDamage = new CEDamageSpecifier(comp.Damage);
 
-        comp.Damage.Clear();
-        foreach (var (key, value) in state.Damage)
-            comp.Damage[key] = value;
+        comp.Damage = new CEDamageSpecifier(state.Damage);
 
-        if (oldTotal != comp.TotalDamage)
-        {
-            var ev = new CEDamageChangedEvent(uid, oldPerType, comp.Damage, oldTotal, comp.TotalDamage);
-            RaiseLocalEvent(uid, ev, true);
-        }
+        if (oldDamage.Equals(comp.Damage))
+            return;
+
+        var ev = new CEDamageChangedEvent(uid, oldDamage, comp.Damage);
+        RaiseLocalEvent(uid, ev);
     }
 
     protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)
