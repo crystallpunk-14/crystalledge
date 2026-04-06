@@ -12,4 +12,12 @@ public sealed partial class CEDamageableComponent : Component
 {
     [DataField, AutoNetworkedField]
     public int TotalDamage;
+
+    /// <summary>
+    /// Previous <see cref="TotalDamage"/> before the last state update.
+    /// Used on the client to compute the real damage delta when state syncs from the server.
+    /// Not networked — purely local tracking.
+    /// </summary>
+    [ViewVariables]
+    public int PreviousTotalDamage;
 }

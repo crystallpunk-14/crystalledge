@@ -1,8 +1,11 @@
 - type: CEDamageType
   id: Physical
+  color: "#FFFFFF"
 
 - type: CEDamageType
   id: Fire
+  color: "#FF4400"
 
 - type: CEDamageType
   id: Cold
+  color: "#44AAFF"

@@ -28,7 +28,11 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
 
     private void OnDamageableAfterState(EntityUid uid, CEDamageableComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        var ev = new CEDamageChangedEvent(uid, comp.TotalDamage, comp.TotalDamage);
+        // Compute delta from the tracked previous value (like vanilla DamageableSystem).
+        var delta = comp.TotalDamage - comp.PreviousTotalDamage;
+        comp.PreviousTotalDamage = comp.TotalDamage;
+
+        var ev = new CEDamageChangedEvent(uid, comp.TotalDamage - delta, comp.TotalDamage);
         RaiseLocalEvent(uid, ev, true);
     }
 

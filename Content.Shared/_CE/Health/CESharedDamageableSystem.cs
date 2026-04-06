@@ -61,7 +61,13 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     /// Directly changes damage by a delta. Clamped to minimum 0.
     /// Positive delta = more damage, negative delta = healing.
     /// </summary>
-    private void ChangeDamage(Entity<CEDamageableComponent?> ent, int delta, out int actualDelta, EntityUid? source = null, bool interruptDoAfters = true)
+    private void ChangeDamage(
+        Entity<CEDamageableComponent?> ent,
+        int delta,
+        out int actualDelta,
+        EntityUid? source = null,
+        bool interruptDoAfters = true,
+        CEDamageSpecifier? specifier = null)
     {
         actualDelta = 0;
 
@@ -73,11 +79,12 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 
         actualDelta = newDamage - oldDamage;
         ent.Comp.TotalDamage = newDamage;
+        ent.Comp.PreviousTotalDamage = newDamage;
         Dirty(ent);
 
         if (oldDamage != newDamage)
         {
-            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage, source, interruptDoAfters);
+            var ev = new CEDamageChangedEvent(ent, oldDamage, newDamage, source, interruptDoAfters, specifier);
             RaiseLocalEvent(ent, ev, true);
         }
     }
@@ -145,7 +152,15 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
             }
         }
 
-        ChangeDamage(ent, totalDamage, out var actualDelta, source, interruptDoAfters);
+        // Build the final specifier reflecting armor and crit modifications.
+        CEDamageSpecifier? finalSpecifier = null;
+        if (damage.Types.Count > 0 && damage.Total > 0)
+        {
+            var ratio = totalDamage / (float) damage.Total;
+            finalSpecifier = damage * ratio;
+        }
+
+        ChangeDamage(ent, totalDamage, out var actualDelta, source, interruptDoAfters, finalSpecifier);
 
         if (actualDelta != 0)
             RaiseDamageEffect(ent, source, isCritical);
@@ -273,6 +288,12 @@ public sealed class CEDamageChangedEvent : EntityEventArgs
     public readonly EntityUid? Source;
 
     /// <summary>
+    /// Per-type breakdown of the damage applied, if available.
+    /// Null for healing, SetDamage, or state-sync events.
+    /// </summary>
+    public readonly CEDamageSpecifier? DamageSpecifier;
+
+    /// <summary>
     /// Was any of the damage change dealing damage, or was it all healing?
     /// </summary>
     public readonly bool DamageIncreased;
@@ -285,12 +306,19 @@ public sealed class CEDamageChangedEvent : EntityEventArgs
 
     public int DamageDelta => NewDamage - OldDamage;
 
-    public CEDamageChangedEvent(EntityUid target, int oldDamage, int newDamage, EntityUid? source = null, bool interruptsDoAfters = true)
+    public CEDamageChangedEvent(
+        EntityUid target,
+        int oldDamage,
+        int newDamage,
+        EntityUid? source = null,
+        bool interruptsDoAfters = true,
+        CEDamageSpecifier? damageSpecifier = null)
     {
         Target = target;
         OldDamage = oldDamage;
         NewDamage = newDamage;
         Source = source;
+        DamageSpecifier = damageSpecifier;
         DamageIncreased = newDamage > oldDamage;
         InterruptsDoAfters = interruptsDoAfters && DamageIncreased;
     }

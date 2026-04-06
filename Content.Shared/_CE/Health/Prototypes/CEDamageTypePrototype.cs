@@ -7,4 +7,7 @@ public sealed partial class CEDamageTypePrototype : IPrototype
 {
     [IdDataField]
     public string ID { get; private set; } = default!;
+
+    [DataField]
+    public Color Color = Color.White;
 }

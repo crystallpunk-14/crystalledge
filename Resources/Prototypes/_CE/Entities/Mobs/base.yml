@@ -4,6 +4,7 @@
   abstract: true
   components:
   - type: CEDamageable
+  - type: CEDamagePopup
   - type: CEDestructible
     destroyThreshold: 20
     destroySound:
