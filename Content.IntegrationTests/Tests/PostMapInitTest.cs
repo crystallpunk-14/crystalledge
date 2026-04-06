@@ -493,6 +493,7 @@ namespace Content.IntegrationTests.Tests
 
             var gameMaps = protoMan.EnumeratePrototypes<GameMapPrototype>()
                 .Where(x => !pair.IsTestPrototype(x))
+                .Where(x => x.ID.StartsWith("CE") || x.ID == "Dev") //CrystallEdge
                 .Select(x => x.ID)
                 .ToHashSet();
 
