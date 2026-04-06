@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.HTN;
+using Content.Shared._CE.GOAP;
 using Content.Shared.CCVar;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -80,7 +81,8 @@ namespace Content.Server.NPC.Systems
 
         public override bool IsNpc(EntityUid uid)
         {
-            return HasComp<HTNComponent>(uid);
+            // CrystallEdge - also recognize CE GOAP mobs as NPCs
+            return HasComp<HTNComponent>(uid) || HasComp<CEGOAPComponent>(uid);
         }
 
         /// <summary>

@@ -60,12 +60,6 @@ public sealed class CombatModeSystem : SharedCombatModeSystem
         UpdateHud(entity);
     }
 
-    protected override bool IsNpc(EntityUid uid)
-    {
-        // CrystallEdge - also recognize CE GOAP mobs as NPCs
-        return HasComp<HTNComponent>(uid) || HasComp<CEGOAPComponent>(uid);
-    }
-
     private void UpdateHud(EntityUid entity)
     {
         if (entity != _playerManager.LocalEntity || !Timing.IsFirstTimePredicted)
