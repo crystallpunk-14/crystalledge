@@ -39,7 +39,10 @@ public sealed partial class CEDamageSpecifier
     {
         var result = new CEDamageSpecifier();
         foreach (var (type, value) in spec.Types)
+        {
             result.Types[type] = (int)(value * multiplier);
+        }
+
         return result;
     }
 

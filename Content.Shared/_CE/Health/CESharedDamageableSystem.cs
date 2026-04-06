@@ -101,9 +101,23 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         }
         else if (delta < 0 && oldTotal > 0)
         {
-            // Healing without specifier: reduce all types proportionally.
-            var targetTotal = Math.Max(0, oldTotal + delta);
-            ScaleDamagePerType(ent.Comp, targetTotal, oldTotal);
+            // Healing without specifier: just reduce types in order until healed.
+            var healLeft = Math.Min(oldTotal, -delta);
+            foreach (var key in new List<ProtoId<CEDamageTypePrototype>>(ent.Comp.Damage.Types.Keys))
+            {
+                if (healLeft <= 0)
+                    break;
+
+                var val = ent.Comp.Damage.Types[key];
+                var heal = Math.Min(healLeft, val);
+
+                if (val - heal > 0)
+                    ent.Comp.Damage.Types[key] = val - heal;
+                else
+                    ent.Comp.Damage.Types.Remove(key);
+
+                healLeft -= heal;
+            }
         }
         else if (delta > 0 && oldTotal > 0)
         {
@@ -121,8 +135,6 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         RaiseLocalEvent(ent, ev, true);
         return true;
     }
-
-
 
     /// <summary>
     /// Scales all per-type damage values so that their sum equals <paramref name="targetTotal"/>.
