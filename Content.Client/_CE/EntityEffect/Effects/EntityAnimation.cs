@@ -47,7 +47,7 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
             return;
 
         // Spawn a client-side clone entity at the entity's position
-        var effectEntity = EntityManager.SpawnEntity("clientsideclone", entityXform.Coordinates);
+        var effectEntity = Spawn("clientsideclone", entityXform.Coordinates);
 
         if (!TryComp<SpriteComponent>(effectEntity, out var effectSprite))
             return;
@@ -59,10 +59,10 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         EntityUid? spriteSource = null;
         if (effect.DummyEntity != null)
         {
-            var dummy = EntityManager.Spawn(effect.DummyEntity);
+            var dummy = Spawn(effect.DummyEntity);
             if (TryComp<SpriteComponent>(dummy, out var dummySprite))
                 _sprite.CopySprite((dummy, dummySprite), (effectEntity, effectSprite));
-            EntityManager.DeleteEntity(dummy);
+            Del(dummy);
 
             var proto = _protoManager.Index(effect.DummyEntity.Value);
             EntityManager.AddComponents(effectEntity, proto, false);

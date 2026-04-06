@@ -131,7 +131,7 @@ public sealed partial class CEProceduralGeneratorSystem
         foreach (var (pos, rot) in doorPlacements)
         {
             var worldPos = new Vector2(pos.X + 0.5f, pos.Y + 0.5f);
-            EntityManager.SpawnAttachedTo(
+            SpawnAttachedTo(
                 config.DoorPrototype,
                 new EntityCoordinates(gridUid, worldPos),
                 rotation: rot);
