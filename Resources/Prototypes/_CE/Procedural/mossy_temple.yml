@@ -287,6 +287,26 @@
   zLevelMap: MossyTemple
   offset: 73, 12
 
+- type: dungeonRoom3d
+  id: MossyTemple_RuinedRiver
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, 38
+
+- type: dungeonRoom3d
+  id: MossyTemple_AbyssWalking2
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 30, 31
+
 # Dead ends
 
 - type: dungeonRoom3d
@@ -442,6 +462,16 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -14, 12
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_Apartments
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 12, 12
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -27, 10
 
 # Blessing
 
