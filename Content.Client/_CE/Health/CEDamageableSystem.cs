@@ -44,7 +44,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
         if (oldDamage.Equals(comp.Damage))
             return;
 
-        var ev = new CEDamageChangedEvent(uid, oldDamage, comp.Damage);
+        var ev = new CEDamageChangedEvent(uid, oldDamage, comp.Damage, predicted: false);
         RaiseLocalEvent(uid, ev);
     }
 

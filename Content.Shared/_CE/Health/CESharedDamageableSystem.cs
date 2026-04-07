@@ -353,6 +353,12 @@ public sealed class CEDamageChangedEvent : EntityEventArgs
     public readonly EntityUid? Source;
 
     /// <summary>
+    /// True when the event was raised from game logic (ChangeDamage / prediction),
+    /// false when it was raised from HandleState (authoritative server correction).
+    /// </summary>
+    public readonly bool Predicted;
+
+    /// <summary>
     /// Was any of the damage change dealing damage, or was it all healing?
     /// </summary>
     public readonly bool DamageIncreased;
@@ -370,12 +376,14 @@ public sealed class CEDamageChangedEvent : EntityEventArgs
         CEDamageSpecifier oldDamage,
         CEDamageSpecifier newDamage,
         EntityUid? source = null,
-        bool interruptsDoAfters = true)
+        bool interruptsDoAfters = true,
+        bool predicted = true)
     {
         Target = target;
         OldDamage = oldDamage;
         NewDamage = newDamage;
         Source = source;
+        Predicted = predicted;
 
         // True if ANY individual type increased, even if the total went down.
         var damageIncreased = false;

@@ -100,10 +100,14 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
                         foreach (var action in actions)
                         {
-                            // Skip EntityAnimation effects for entities we don't predict.
-                            // Non-predicting clients receive these via CEEntityAnimationEvent instead.
-                            if (action is EntityAnimation && !IsLocallyPredicted(uid))
+                            // Skip EntityAnimation and WeaponEffectSlot for entities we don't predict.
+                            // Non-predicting clients receive EntityAnimations via CEEntityAnimationEvent,
+                            // and weapon damage via HandleState instead.
+                            if ((action is EntityAnimation || action is WeaponEffectSlot)
+                                && !IsLocallyPredicted(uid))
+                            {
                                 continue;
+                            }
 
                             action.Effect(effectArgs);
                         }

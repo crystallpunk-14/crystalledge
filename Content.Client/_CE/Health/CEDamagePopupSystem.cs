@@ -34,6 +34,12 @@ public sealed class CEDamagePopupSystem : EntitySystem
     /// </summary>
     private const float HorizontalScatterPx = 30f;
 
+    /// <summary>
+    /// Tracks entities that recently had a predicted popup, so HandleState
+    /// confirmations don't produce a duplicate.
+    /// </summary>
+    private readonly Dictionary<EntityUid, TimeSpan> _predictedPopups = new();
+
     private CEDamagePopupOverlay _overlay = default!;
 
     public override void Initialize()
@@ -55,11 +61,26 @@ public sealed class CEDamagePopupSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CEDamagePopupComponent> ent, ref CEDamageChangedEvent args)
     {
-        if (!_timing.ApplyingState)
-            return;
-
         if (args.DamageDelta == 0)
             return;
+
+        if (args.Predicted)
+        {
+            // Predicted (from ChangeDamage): track entity so HandleState
+            // confirmations don't produce duplicates. Only show on first prediction tick.
+            _predictedPopups[ent.Owner] = _timing.CurTime;
+
+            if (!_timing.IsFirstTimePredicted)
+                return;
+        }
+        else
+        {
+            // Non-predicted (from HandleState): skip if this entity has active
+            // predicted damage. HandleState fires every frame during the prediction
+            // window as the component flips between predicted and server values.
+            if (_predictedPopups.ContainsKey(ent.Owner))
+                return;
+        }
 
         var worldPos = _transform.GetWorldPosition(Transform(ent));
 
@@ -124,6 +145,17 @@ public sealed class CEDamagePopupSystem : EntitySystem
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
+
+        // Clean up stale prediction tracking entries (server never confirmed).
+        if (_predictedPopups.Count > 0)
+        {
+            var now = _timing.CurTime;
+            foreach (var (uid, time) in _predictedPopups)
+            {
+                if (now - time > TimeSpan.FromSeconds(2))
+                    _predictedPopups.Remove(uid);
+            }
+        }
 
         for (var i = _overlay.Entries.Count - 1; i >= 0; i--)
         {
