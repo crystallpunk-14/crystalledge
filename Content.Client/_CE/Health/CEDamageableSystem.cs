@@ -73,15 +73,7 @@ public sealed class CEClientMobStateSystem : EntitySystem
     {
         var stateEv = new CEMobStateChangedEvent(uid, comp.CurrentState, comp.CurrentState);
         RaiseLocalEvent(uid, stateEv, true);
-
-        var maxHealthEv = new CEMaxHealthChangedEvent(uid);
-        RaiseLocalEvent(uid, maxHealthEv, true);
     }
-}
-
-public sealed class CEMaxHealthChangedEvent(EntityUid target) : EntityEventArgs
-{
-    public readonly EntityUid Target = target;
 }
 
 public sealed class CEHealthStatusControl : Control

@@ -97,7 +97,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         if (!_timing.ApplyingState)
         {
             var ev = new CEMobStateChangedEvent(ent, oldState, newState);
-            RaiseLocalEvent(ent, ev, true);
+            RaiseLocalEvent(ent, ev);
         }
     }
 
