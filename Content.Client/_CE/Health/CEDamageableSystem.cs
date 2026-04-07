@@ -45,7 +45,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
             return;
 
         var ev = new CEDamageChangedEvent(uid, oldDamage, comp.Damage, predicted: false);
-        RaiseLocalEvent(uid, ev);
+        RaiseLocalEvent(uid, ev, true);
     }
 
     protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)

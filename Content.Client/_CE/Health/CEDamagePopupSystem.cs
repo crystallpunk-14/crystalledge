@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
-using Content.Shared._CE.Health.Prototypes;
 using Content.Shared.Examine;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -96,7 +95,10 @@ public sealed class CEDamagePopupSystem : EntitySystem
                 return;
 
             var dist = (entityMapPos.Position - playerMapPos.Position).Length();
-            if (!_examine.InRangeUnOccluded(playerMapPos, entityMapPos, dist,
+            if (!_examine.InRangeUnOccluded(
+                    playerMapPos,
+                    entityMapPos,
+                    dist,
                     e => e == ent.Owner || e == localPlayer))
             {
                 return;
@@ -131,8 +133,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
     {
         var absAmount = Math.Abs(amount);
 
-        PopupFontSize fontSize;
-        fontSize = absAmount switch
+        var fontSize = absAmount switch
         {
             <= 5 => PopupFontSize.Small,
             <= 10 => PopupFontSize.Medium,
@@ -182,7 +183,9 @@ public sealed class CEDamagePopupSystem : EntitySystem
             if (toRemove != null)
             {
                 foreach (var uid in toRemove)
+                {
                     _predictedPopups.Remove(uid);
+                }
             }
         }
 

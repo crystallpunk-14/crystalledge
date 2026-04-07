@@ -5,8 +5,6 @@ namespace Content.Shared._CE.Health.Components;
 
 /// <summary>
 /// Stores accumulated damage per type for an entity.
-/// Uses manual <see cref="ComponentGetState"/>/<see cref="ComponentHandleState"/>
-/// (not AutoGenerateComponentState) so events can be raised cleanly.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 [Access(typeof(CESharedDamageableSystem))]

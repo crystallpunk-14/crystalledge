@@ -103,7 +103,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                             // Skip EntityAnimation and WeaponEffectSlot for entities we don't predict.
                             // Non-predicting clients receive EntityAnimations via CEEntityAnimationEvent,
                             // and weapon damage via HandleState instead.
-                            if ((action is EntityAnimation || action is WeaponEffectSlot)
+                            if ((action is EntityAnimation || action is WeaponEffectSlot) //TODO: This is a shitfix.
                                 && !IsLocallyPredicted(uid))
                             {
                                 continue;
