@@ -145,8 +145,8 @@ public sealed class CEDamagePopupSystem : EntitySystem
             Text = text,
             Color = color,
             FontSize = fontSize,
-            Duration = 1.2f * _random.NextFloat(0.9f, 1.1f),
-            RiseHeight = 0.5f * _random.NextFloat(0.9f, 1.1f),
+            Duration = 1.2f * _random.NextFloat(0.7f, 1.3f),
+            RiseHeight = 1f * _random.NextFloat(0.7f, 1.3f),
             ScreenXOffset = _random.NextFloat(-HorizontalScatterPx, HorizontalScatterPx),
         };
 

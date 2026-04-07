@@ -1,9 +1,0 @@
-- type: entity
-  parent: CEBaseWeaponSkimitar
-  id: CEWeaponHeavyClub
-  name: heavy club
-  description: TODO
-  components:
-  - type: Sprite
-    sprite: _CE/Objects/Weapons/heavy_club.rsi
-    state: icon

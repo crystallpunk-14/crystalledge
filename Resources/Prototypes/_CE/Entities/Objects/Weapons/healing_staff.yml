@@ -1,5 +1,5 @@
 - type: entity
-  parent: CEBaseWeaponStaff
+  parent: CEBaseWeapon
   id: CEWeaponMagicStaffHealing
   name: healing staff
   description: A staff imbued with healing magic. Restores health to anything it hit.
@@ -11,7 +11,7 @@
     - state: orb
       shader: unshaded
   - type: CEDestructible
-    destroyThreshold: 25
+    destroyThreshold: 100
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -39,7 +39,20 @@
           effectTarget: Used
           damage:
             types:
-              Physical: 1
+              Physical: 3
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+        staminaCost: 1
+      - anim: StaffAttackLight2
+        staminaCost: 1
+      Secondary:
+      - anim: StaffAttackHeavy
+        staminaCost: 1
+  - type: Clothing
+    slots:
+    - neck
+  - type: Wieldable
 
 - type: entity
   id: CEProjectileMagicHealing

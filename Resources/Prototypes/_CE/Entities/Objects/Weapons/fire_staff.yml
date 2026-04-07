@@ -1,5 +1,5 @@
 - type: entity
-  parent: CEBaseWeaponStaff
+  parent: CEBaseWeapon
   id: CEWeaponMagicStaffFire
   name: fire staff
   description: A staff imbued with fire magic. Launches fiery projectiles at enemies.
@@ -21,6 +21,33 @@
         damage:
           types:
             Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+        staminaCost: 1
+      - anim: StaffAttackLight2
+        staminaCost: 1
+      Secondary:
+      - anim: StaffAttackHeavy
+        staminaCost: 1
+  - type: Clothing
+    slots:
+    - neck
+  - type: Wieldable
 
 - type: entity
   id: CEProjectileMagicFire

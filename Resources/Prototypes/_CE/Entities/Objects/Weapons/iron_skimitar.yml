@@ -1,15 +1,18 @@
 - type: entity
-  abstract: true
-  id: CEBaseWeaponSpear
-  parent:
-  - CEBaseWeapon
+  id: CEWeaponSkimitarIron
+  parent: CEBaseWeapon
+  name: iron skimitar
+  description: TODO
   components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
+    state: icon
   - type: CEWeapon
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 1.26
-        arcWidth: 15
+        range: 0.6
+        arcWidth: 60
         effects:
         - !type:Damage
           damage:
@@ -22,13 +25,13 @@
               Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 1.4
-        arcWidth: 25
+        range: 0.6
+        arcWidth: 360
         effects:
         - !type:Damage
           damage:
             types:
-              Physical: 4
+              Physical: 1
         - !type:Damage
           effectTarget: Used
           damage:
@@ -36,20 +39,13 @@
               Physical: 1
     animations:
       Primary:
-      - anim: SpearAttackLight
-        staminaCost: 2
+      - anim: SkimitarAttackLight1
+        staminaCost: 1
+      - anim: SkimitarAttackLight2
+        staminaCost: 1
       Secondary:
-      - anim: SpearAttackHeavy
-        staminaCost: 3
-      - anim: SpearAttackHeavy2
-        staminaCost: 3
-  #- type: CEWieldedWeapon #TODO: Custom wielded animations
-  #  animations:
-  #    Primary:
-  #    - anim: SpearAttackLight
-  #    Secondary:
-  #    - anim: SpearAttackHeavy
-  - type: Wieldable
+      - anim: SkimitarAttackHeavy1
+        staminaCost: 2
   - type: Clothing
     slots:
     - neck

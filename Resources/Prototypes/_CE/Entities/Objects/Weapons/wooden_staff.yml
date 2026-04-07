@@ -1,9 +1,12 @@
 - type: entity
-  abstract: true
-  id: CEBaseWeaponStaff
-  parent:
-  - CEBaseWeapon
+  parent: CEBaseWeapon
+  id: CEWeaponStaffWooden
+  name: wooden staff
+  description: A long wooden stick with an iron tip.
   components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/wooden.rsi
+    state: icon
   - type: CEWeapon
     effectSlots:
       OnHit:
