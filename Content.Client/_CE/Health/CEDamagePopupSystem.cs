@@ -2,7 +2,9 @@ using System.Numerics;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Health.Prototypes;
+using Content.Shared.Examine;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -24,7 +26,9 @@ public sealed class CEDamagePopupSystem : EntitySystem
     [Dependency] private readonly IOverlayManager _overlayMan = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     private static readonly Color HealColor = Color.FromHex("#44DD44");
@@ -80,6 +84,23 @@ public sealed class CEDamagePopupSystem : EntitySystem
             // window as the component flips between predicted and server values.
             if (_predictedPopups.ContainsKey(ent.Owner))
                 return;
+        }
+
+        // FOV / occlusion check: don't show popups for entities behind walls.
+        if (_player.LocalEntity is { } localPlayer)
+        {
+            var entityMapPos = _transform.GetMapCoordinates(Transform(ent));
+            var playerMapPos = _transform.GetMapCoordinates(Transform(localPlayer));
+
+            if (entityMapPos.MapId != playerMapPos.MapId)
+                return;
+
+            var dist = (entityMapPos.Position - playerMapPos.Position).Length();
+            if (!_examine.InRangeUnOccluded(playerMapPos, entityMapPos, dist,
+                    e => e == ent.Owner || e == localPlayer))
+            {
+                return;
+            }
         }
 
         var worldPos = _transform.GetWorldPosition(Transform(ent));
@@ -150,9 +171,17 @@ public sealed class CEDamagePopupSystem : EntitySystem
         if (_predictedPopups.Count > 0)
         {
             var now = _timing.CurTime;
+            // Can't modify dict during foreach — collect keys to remove first.
+            List<EntityUid>? toRemove = null;
             foreach (var (uid, time) in _predictedPopups)
             {
                 if (now - time > TimeSpan.FromSeconds(2))
+                    (toRemove ??= new List<EntityUid>()).Add(uid);
+            }
+
+            if (toRemove != null)
+            {
+                foreach (var uid in toRemove)
                     _predictedPopups.Remove(uid);
             }
         }
