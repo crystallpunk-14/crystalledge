@@ -21,30 +21,30 @@ public static class CEGOAPPlanner
 
     private struct CompiledAction
     {
-        public int PrecMask;
-        public int PrecRequired;
-        public int EffMask;
-        public int EffRequired;
+        public int PreconditionMask;
+        public int PreconditionRequired;
+        public int EffectMask;
+        public int EffectRequired;
         public float Cost;
     }
 
     // Reusable structures cleared between calls.
     // Safe because the game loop is single-threaded.
-    private static readonly Dictionary<string, int> KeyMap = new();
-    private static readonly List<CompiledAction> CompiledActions = new();
-    private static readonly List<PlanNode> Nodes = new();
+    private static readonly Dictionary<string, int> KeyMap = [];
+    private static readonly List<CompiledAction> CompiledActions = [];
+    private static readonly List<PlanNode> Nodes = [];
     private static readonly PriorityQueue<int, float> OpenList = new();
-    private static readonly HashSet<int> ClosedStates = new();
+    private static readonly HashSet<int> ClosedStates = [];
 
     /// <summary>
     /// Plans a sequence of actions to achieve the goal from the current state.
-    /// Returns true if a plan was found and populates the output plan list.
+    /// Returns true if a plan was found and populates the out parameter <paramref name="plan"/>.
     /// </summary>
     public static bool Plan(
         Dictionary<string, bool> currentState,
         Dictionary<string, bool> goalState,
         List<CEGOAPAction> availableActions,
-        List<CEGOAPAction> outPlan,
+        out List<CEGOAPAction> plan,
         int maxIterations = 100)
     {
         KeyMap.Clear();
@@ -52,6 +52,8 @@ public static class CEGOAPPlanner
         Nodes.Clear();
         OpenList.Clear();
         ClosedStates.Clear();
+
+        plan = [];
 
         BuildKeyMap(currentState, goalState, availableActions);
 
@@ -61,14 +63,14 @@ public static class CEGOAPPlanner
         for (var i = 0; i < availableActions.Count; i++)
         {
             var action = availableActions[i];
-            ToBitmaskCondition(action.Preconditions, out var precMask, out var precReq);
-            ToBitmaskCondition(action.Effects, out var effMask, out var effReq);
+            ToBitmaskCondition(action.Preconditions, out var preconditionMask, out var preconditionReq);
+            ToBitmaskCondition(action.Effects, out var effectMask, out var effectReq);
             CompiledActions.Add(new CompiledAction
             {
-                PrecMask = precMask,
-                PrecRequired = precReq,
-                EffMask = effMask,
-                EffRequired = effReq,
+                PreconditionMask = preconditionMask,
+                PreconditionRequired = preconditionReq,
+                EffectMask = effectMask,
+                EffectRequired = effectReq,
                 Cost = action.Cost,
             });
         }
@@ -86,7 +88,7 @@ public static class CEGOAPPlanner
 
             if ((current.State & goalMask) == goalRequired)
             {
-                ReconstructPlan(currentIdx, availableActions, outPlan);
+                plan = ReconstructPlan(currentIdx, availableActions);
                 return true;
             }
 
@@ -97,10 +99,10 @@ public static class CEGOAPPlanner
             {
                 var compiled = CompiledActions[i];
 
-                if ((current.State & compiled.PrecMask) != compiled.PrecRequired)
+                if ((current.State & compiled.PreconditionMask) != compiled.PreconditionRequired)
                     continue;
 
-                var newState = (current.State & ~compiled.EffMask) | compiled.EffRequired;
+                var newState = (current.State & ~compiled.EffectMask) | compiled.EffectRequired;
 
                 if (ClosedStates.Contains(newState))
                     continue;
@@ -189,15 +191,15 @@ public static class CEGOAPPlanner
     private static float Heuristic(int state, int goalMask, int goalRequired)
     {
         var diff = (state ^ goalRequired) & goalMask;
-        return BitOperations.PopCount((uint) diff);
+        return BitOperations.PopCount((uint)diff);
     }
 
-    private static void ReconstructPlan(
+    private static List<CEGOAPAction> ReconstructPlan(
         int goalNodeIndex,
-        List<CEGOAPAction> availableActions,
-        List<CEGOAPAction> outPlan)
+        List<CEGOAPAction> availableActions
+        )
     {
-        outPlan.Clear();
+        List<CEGOAPAction> outPlan = [];
 
         var idx = goalNodeIndex;
         while (idx >= 0)
@@ -209,5 +211,7 @@ public static class CEGOAPPlanner
         }
 
         outPlan.Reverse();
+
+        return outPlan;
     }
 }

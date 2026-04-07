@@ -30,7 +30,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
     private readonly List<int> _candidateGoals = new();
 
     /// <summary>
-    /// Note: CurrentPlan lists in entity components are reused and cleared/repopulated 
+    /// Note: CurrentPlan lists in entity components are reused and cleared/repopulated
     /// rather than creating new lists each time to minimize GC allocations.
     /// </summary>
 
@@ -196,7 +196,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
             ent.Comp.CurrentActionStarted = false;
             ent.Comp.CurrentPlan.Clear();
 
-            if (!CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions, ent.Comp.CurrentPlan))
+            if (!CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions, out ent.Comp.CurrentPlan))
                 continue;
 
             if (ent.Comp.CurrentPlan.Count == 0)
