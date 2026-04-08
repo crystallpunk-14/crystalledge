@@ -63,7 +63,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (delta < 0)
             TryRemoveStack(statusEffect.AppliedTo.Value, proto, -delta);
         else if (delta > 0)
-            TryAddStack(statusEffect.AppliedTo.Value, proto, delta);
+            TryAddStack(statusEffect.AppliedTo.Value, proto, out _, delta);
     }
 
     /// <summary>
@@ -75,8 +75,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// <param name="stack">Optional, default 1. Number of stacks. Cannot be a negative number.</param>
     /// <param name="duration">Optional: status effect duration. If specified, the new status effect will have the specified duration, and the duration of the existing status effect will be edited.</param>
     /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
-    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, int stack = 1, TimeSpan? duration = null)
+    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null)
     {
+        effectEntity = null;
+
         if (stack <= 0)
             return false;
 
@@ -85,6 +87,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             if (!_statusEffect.TrySetStatusEffectDuration(target, statusEffect, out statusEnt, duration))
                 return false;
 
+            effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
             stackComp.BaseDuration = duration;
             SetStack(target, (statusEnt.Value, stackComp), stack);
@@ -92,6 +95,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         }
         else
         {
+            effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
             SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks + stack);
             if (duration != null)

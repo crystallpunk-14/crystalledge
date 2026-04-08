@@ -89,7 +89,7 @@ public sealed partial class CEFireSystem : EntitySystem
             stacks = Math.Min(stacks, allowed);
         }
 
-        _stack.TryAddStack(ent, ent.Comp.StatusEffect, stacks, cycleDuration);
+        _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, stacks, cycleDuration);
         _stack.SetStackDelta(ent, ent.Comp.StatusEffect, ent.Comp.StackDelta);
     }
 

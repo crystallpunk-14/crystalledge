@@ -1,0 +1,33 @@
+- type: skill
+  parent: BasePriestSkill
+  id: WaterShield
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectWaterShield
+
+- type: entity
+  id: CEStatusEffectWaterShield
+  name: Water Shield
+  description: When the [color=#1defa9]divine shield[/color] you've cast breaks, it triggers a repulsive [color=#1db7ef]water blast[/color].
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEWaterShield
+  - type: CEDivineShieldBreakEffect
+    effects:
+    - !type:WetArea
+      radius: 3
+      fallOffFactor: 0.5
+      maxStacks: 10
+    - !type:AreaEffect
+      affectCaster: true
+      range: 3
+      effects:
+      - !type:ThrowFromPosition
+        throwPower: 7
+        distance: 3
+
+- type: alert
+  id: CEWaterShield
+  icons:
+  - sprite: _CE/Skills/Priest/water_shield.rsi
+    state: icon

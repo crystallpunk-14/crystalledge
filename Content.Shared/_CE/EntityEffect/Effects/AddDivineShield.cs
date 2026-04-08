@@ -17,6 +17,6 @@ public sealed partial class CEAddDivineShieldEffectSystem : CEEntityEffectSystem
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _divine.TryAddShield(entity, args.Effect.Amount);
+        _divine.TryAddShield(entity, args.Args.Source, args.Effect.Amount);
     }
 }

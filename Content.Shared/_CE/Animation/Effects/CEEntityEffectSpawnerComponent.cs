@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Animation.Effects;
 public sealed partial class CEEntityEffectSpawnerComponent : Component
 {
     [DataField]
-    public List<CEEntityEffect> Effects = default!;
+    public List<CEEntityEffect> Effects = new();
 
     [DataField]
     public TimeSpan FirstDelay = TimeSpan.FromSeconds(1f);

@@ -5,7 +5,7 @@ namespace Content.Shared._CE.EntityEffect.Effects;
 public sealed partial class AreaEffect : CEEntityEffectBase<AreaEffect>
 {
     [DataField(required: true)]
-    public List<CEEntityEffect> Effects { get; set; } = new();
+    public List<CEEntityEffect> Effects = new();
 
     [DataField]
     public EntityWhitelist? Whitelist;

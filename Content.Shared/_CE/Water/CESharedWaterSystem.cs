@@ -94,7 +94,7 @@ public abstract class CESharedWaterSystem : EntitySystem
             stacks = Math.Min(stacks, allowed);
         }
 
-        _stack.TryAddStack(ent, ent.Comp.StatusEffect, stacks, cycleDuration);
+        _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, stacks, cycleDuration);
     }
 
     public int GetWettableStacks(Entity<CEWettableComponent?> ent)
