@@ -5,11 +5,9 @@
   description: A staff imbued with water magic. Launches slow water orbs that drench and repel their target.
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/Staff/ice_staff.rsi
+    sprite: _CE/Objects/Weapons/Staff/water_staff.rsi
     layers:
     - state: icon
-    - state: orb
-      shader: unshaded
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -75,3 +73,14 @@
     - !type:ThrowFromUser
       throwPower: 7
       distance: 2
+    - !type:Damage
+      damage:
+        types:
+          Physical: 1
+    - !type:AreaEffect
+      affectCaster: true
+      range: 2
+      effects:
+      - !type:ThrowFromPosition
+        throwPower: 7
+        distance: 0.25

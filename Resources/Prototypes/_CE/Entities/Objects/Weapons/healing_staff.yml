@@ -25,7 +25,7 @@
         effectTarget: Used
         damage:
           types:
-            Physical: 1
+            Physical: 3
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.78
@@ -39,7 +39,7 @@
           effectTarget: Used
           damage:
             types:
-              Physical: 3
+              Physical: 1
     animations:
       Primary:
       - anim: StaffAttackLight1

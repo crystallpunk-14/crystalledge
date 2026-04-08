@@ -65,9 +65,9 @@
   components:
   - type: Sprite
     drawdepth: BelowMobs
-    sprite: _CE/Effects/area_healing_telegraphy.rsi
+    sprite: _CE/Effects/water_burst_telegraphy.rsi
     layers:
-    - state: area
+    - state: effect
       shader: unshaded
   - type: PointLight
     color: "#1e90ff"
