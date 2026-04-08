@@ -1,0 +1,77 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponMagicStaffWater
+  name: water staff
+  description: A staff imbued with water magic. Launches slow water orbs that drench and repel their target.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/ice_staff.rsi
+    layers:
+    - state: icon
+    - state: orb
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicWater
+        projectileSpeed: 7
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+        speed: 0.6
+        staminaCost: 1
+      - anim: StaffAttackLight2
+        speed: 0.6
+        staminaCost: 1
+      Secondary:
+      - anim: StaffAttackHeavy
+        staminaCost: 1
+  - type: Clothing
+    slots:
+    - neck
+  - type: Wieldable
+
+- type: entity
+  id: CEProjectileMagicWater
+  name: water bolt
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/water_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#1e90ff"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:WetArea
+      radius: 2
+      fallOffFactor: 0.5
+      maxStacks: 10
+    - !type:ThrowFromUser
+      throwPower: 7
+      distance: 2

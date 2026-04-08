@@ -15,6 +15,7 @@
     children:
     - id: CEWeaponDaggerSacrificial
     - id: CEWeaponMagicStaffHealing
+    - id: CEWeaponMagicStaffWater
     - id: CEWeaponSwordBone
 
 - type: entityTable

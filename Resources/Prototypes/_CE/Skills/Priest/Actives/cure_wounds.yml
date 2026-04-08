@@ -30,6 +30,7 @@
     whitelist:
       components:
       - CEMobState
+      - CEGOAP
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationCureWounds
 
