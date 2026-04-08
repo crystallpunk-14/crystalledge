@@ -17,7 +17,7 @@
     manaCost: 1
   - type: CEActionFreeHandsRequired
   - type: Action
-    useDelay: 1
+    useDelay: 10
     icon:
       sprite: _CE/Skills/General/sphere_of_light.rsi
       state: icon
@@ -46,7 +46,7 @@
     0.5:
     - !type:ApplyStatusEffect
       statusEffect: CEStatusEffectGlowing
-      duration: 60
+      duration: 120
     - !type:SayChat
       sentence: "sphaera lucis"
 
@@ -79,7 +79,7 @@
       shader: unshaded
   - type: PointLight
     radius: 5.0
-    energy: 1
+    energy: 3
     color: "#efedff"
 
 - type: alert

@@ -188,7 +188,7 @@ public abstract class CESharedWaterSystem : EntitySystem
             if (_fireQuery.TryComp(ent, out var fireComp))
             {
                 Fire.SpawnSteamEffect(coordinates);
-                EntityManager.DeleteEntity(ent);
+                QueueDel(ent);
             }
         }
 

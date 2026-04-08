@@ -14,9 +14,9 @@
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
-    manaCost: 2
+    manaCost: 1
   - type: Action
-    useDelay: 2
+    useDelay: 5
     icon:
       sprite: _CE/Interface/divine_shield.rsi
       state: shield

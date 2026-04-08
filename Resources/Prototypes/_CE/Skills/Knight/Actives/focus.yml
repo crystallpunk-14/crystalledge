@@ -14,10 +14,10 @@
   id: CEActionSpellFocus
   parent: CEActionSpellBase
   name: Focus
-  description: Grants [color=#ff0505]3 seconds[/color] of guaranteed [color=#ff0505]critical strikes[/color], dealing double damage.
+  description: Grants [color=#ff0505]5 seconds[/color] of guaranteed [color=#ff0505]critical strikes[/color], dealing double damage.
   components:
   - type: CEActionManaCost
-    manaCost: 6
+    manaCost: 4
   - type: CEActionWeaponRequired
   - type: Action
     useDelay: 15
@@ -70,7 +70,7 @@
     - !type:ApplyStatusEffect
       effectTarget: User
       statusEffect: CEStatusEffectFocus
-      duration: 3
+      duration: 5
 
 
 - type: entity
