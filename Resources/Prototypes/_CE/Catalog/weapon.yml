@@ -8,6 +8,7 @@
     - id: CEWeaponSpearIron
     - id: CEWeaponSwordIron
     - id: CEWeaponHeavyClub
+    - id: CEWeaponStaffWooden
 
 - type: entityTable
   id: CEUncommonWeapon

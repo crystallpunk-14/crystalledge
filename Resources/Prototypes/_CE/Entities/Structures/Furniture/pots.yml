@@ -30,8 +30,17 @@
       collection: CEPotBreak
     lootTable: !type:AllSelector
       children:
-      - id: CECoinCopper1
-        amount: 2
+      - !type:GroupSelector
+        rolls: !type:RangeNumberSelector
+          range: 0, 2
+        children:
+        - !type:NestedSelector
+          tableId: CERandomPotion
+          weight: 0.3
+        - id: CERat
+          weight: 0.1
+        - id: CECoinCopper1
+          weight: 0.6
   - type: Fixtures
     fixtures:
       fix1:

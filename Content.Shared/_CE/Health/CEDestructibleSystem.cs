@@ -4,8 +4,8 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Storage;
-using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
@@ -28,7 +28,7 @@ public sealed class CEDestructibleSystem : EntitySystem
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
@@ -194,7 +194,7 @@ public sealed class CEDestructibleSystem : EntitySystem
         EmptyNestedStorage(item, position);
 
         _transform.SetLocalRotation(item, _random.NextAngle());
-        _throwing.TryThrow(item, _random.NextAngle().ToVec() * _random.NextFloat(0, 0.25f), 2f);
+        _physics.SetLinearVelocity(item, _random.NextAngle().ToVec() * _random.NextFloat(0.5f, 2f));
     }
 
     private void EmptyNestedStorage(EntityUid item, EntityCoordinates position)
