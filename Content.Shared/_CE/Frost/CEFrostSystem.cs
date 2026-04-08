@@ -149,7 +149,7 @@ public sealed class CEFrostSystem : EntitySystem
     /// <summary>
     /// Freezes all entities on the given tile by calling <see cref="FreezeEntity"/> on each.
     /// </summary>
-    public void FreezeTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1, int? maxStacks = null, TimeSpan? duration = null)
+    public void FreezeTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1, int? maxStacks = null, TimeSpan? duration = null, bool playSound = true)
     {
         if (_net.IsClient)
             return;
@@ -177,7 +177,8 @@ public sealed class CEFrostSystem : EntitySystem
 
         // Spawn freeze visual effect.
         var fx = _entManager.SpawnEntity(_freezeEffect, coordinates);
-        _audio.PlayPvs(_freezeSound, fx);
+        if (playSound)
+            _audio.PlayPvs(_freezeSound, fx);
     }
 
     /// <summary>
@@ -185,22 +186,15 @@ public sealed class CEFrostSystem : EntitySystem
     /// </summary>
     public void FreezeArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 3)
     {
-        var mapCoords = _transform.ToMapCoordinates(center);
-        FreezeArea(mapCoords, radius, falloffFactor, maxStacks);
-    }
-
-    /// <summary>
-    /// Freezes an area: spawns ice on tiles and applies cold slowdown to entities in range.
-    /// </summary>
-    public void FreezeArea(MapCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 3)
-    {
         if (radius <= 0f)
             return;
 
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
+        var mapCenter = _transform.ToMapCoordinates(center);
+
+        if (!_mapManager.TryFindGridAt(mapCenter, out var gridUid, out var grid))
             return;
 
-        var centerWorld = center.Position;
+        var centerWorld = mapCenter.Position;
         var tileSize = grid.TileSize;
 
         var minX = (int) MathF.Floor((centerWorld.X - radius) / tileSize);
@@ -214,21 +208,23 @@ public sealed class CEFrostSystem : EntitySystem
             {
                 var tileIndices = new Vector2i(x, y);
                 var tileWorldPos = _mapSystem.GridTileToWorldPos(gridUid, grid, tileIndices);
-                var tileCoords = new MapCoordinates(tileWorldPos, center.MapId);
+                var tileCoords = new MapCoordinates(tileWorldPos, mapCenter.MapId);
 
                 var distance = (tileWorldPos - centerWorld).Length();
 
                 if (distance > radius)
                     continue;
 
-                if (!_examine.InRangeUnOccluded(center, tileCoords, radius, null))
+                if (!_examine.InRangeUnOccluded(mapCenter, tileCoords, radius, null))
                     continue;
 
                 var normalizedDist = distance / radius;
                 var stacks = CalculateStacks(normalizedDist, falloffFactor, maxStacks);
-                FreezeTile((gridUid, grid), tileCoords, stacks, maxStacks);
+                FreezeTile((gridUid, grid), tileCoords, stacks, maxStacks, playSound: false);
             }
         }
+
+        _audio.PlayPvs(_freezeSound, center);
     }
 
     private int CalculateStacks(float normalizedDistance, float falloffFactor, int maxStacks)

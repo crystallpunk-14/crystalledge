@@ -167,7 +167,7 @@ public abstract class CESharedWaterSystem : EntitySystem
     /// <summary>
     /// Wets a single tile: extinguishes fire on the tile and applies wet stacks to all entities.
     /// </summary>
-    public void WetTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1, int? maxStacks = null, TimeSpan? duration = null)
+    public void WetTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1, int? maxStacks = null, TimeSpan? duration = null, bool playSound = true)
     {
         if (_net.IsClient)
             return;
@@ -202,7 +202,8 @@ public abstract class CESharedWaterSystem : EntitySystem
 
         // Spawn water splash effect.
         var fx = _entManager.SpawnEntity(_waterImpactEffect, coordinates);
-        _audio.PlayPvs(_waterSplashSound, fx);
+        if (playSound)
+            _audio.PlayPvs(_waterSplashSound, fx);
     }
 
     /// <summary>
@@ -210,22 +211,15 @@ public abstract class CESharedWaterSystem : EntitySystem
     /// </summary>
     public void WetArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 3)
     {
-        var mapCoords = _transform.ToMapCoordinates(center);
-        WetArea(mapCoords, radius, falloffFactor, maxStacks);
-    }
-
-    /// <summary>
-    /// Wets an area of tiles: extinguishes fire and applies wet stacks to all entities in range.
-    /// </summary>
-    public void WetArea(MapCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 3)
-    {
         if (radius <= 0f)
             return;
 
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
+        var mapCenter = _transform.ToMapCoordinates(center);
+
+        if (!_mapManager.TryFindGridAt(mapCenter, out var gridUid, out var grid))
             return;
 
-        var centerWorld = center.Position;
+        var centerWorld = mapCenter.Position;
         var tileSize = grid.TileSize;
 
         var minX = (int)MathF.Floor((centerWorld.X - radius) / tileSize);
@@ -239,22 +233,24 @@ public abstract class CESharedWaterSystem : EntitySystem
             {
                 var tileIndices = new Vector2i(x, y);
                 var tileWorldPos = _mapSystem.GridTileToWorldPos(gridUid, grid, tileIndices);
-                var tileCoords = new MapCoordinates(tileWorldPos, center.MapId);
+                var tileCoords = new MapCoordinates(tileWorldPos, mapCenter.MapId);
 
                 var distance = (tileWorldPos - centerWorld).Length();
 
                 if (distance > radius)
                     continue;
 
-                if (!_examine.InRangeUnOccluded(center, tileCoords, radius, null))
+                if (!_examine.InRangeUnOccluded(mapCenter, tileCoords, radius, null))
                     continue;
 
                 var normalizedDistance = distance / radius;
                 var stacks = (int)MathF.Ceiling((1f - MathF.Pow(normalizedDistance, falloffFactor)) * maxStacks);
 
-                WetTile((gridUid, grid), tileCoords, Math.Max(1, stacks), stacks, null);
+                WetTile((gridUid, grid), tileCoords, Math.Max(1, stacks), stacks, null, playSound: false);
             }
         }
+
+        _audio.PlayPvs(_waterSplashSound, center);
     }
 
     #endregion

@@ -31,7 +31,7 @@ public sealed partial class CEFireSystem
     /// <summary>
     /// Creates or adds stacks to fire on the tile and ignites all entities on the tile.
     /// </summary>
-    public void IgniteTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1)
+    public void IgniteTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1, bool playSound = true)
     {
         if (_net.IsClient)
             return;
@@ -77,7 +77,8 @@ public sealed partial class CEFireSystem
         }
 
         var fx = _entManager.SpawnEntity(_fireImpactEffect, coordinates);
-        _audio.PlayPvs(_fireSound, fx);
+        if (playSound)
+            _audio.PlayPvs(_fireSound, fx);
 
         // Ignite all entities on the tile.
         var entities = _lookup.GetEntitiesInRange(coordinates, 0.5f, LookupFlags.Uncontained);
@@ -89,19 +90,15 @@ public sealed partial class CEFireSystem
 
     public void IgniteArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 10)
     {
-        var mapCoords = _transform.ToMapCoordinates(center);
-        IgniteArea(mapCoords, radius, falloffFactor, maxStacks);
-    }
-
-    public void IgniteArea(MapCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 10)
-    {
         if (radius <= 0f)
             return;
 
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
+        var mapCenter = _transform.ToMapCoordinates(center);
+
+        if (!_mapManager.TryFindGridAt(mapCenter, out var gridUid, out var grid))
             return;
 
-        var centerWorld = center.Position;
+        var centerWorld = mapCenter.Position;
         var tileSize = grid.TileSize;
 
         var minX = (int)MathF.Floor((centerWorld.X - radius) / tileSize);
@@ -115,21 +112,23 @@ public sealed partial class CEFireSystem
             {
                 var tileIndices = new Vector2i(x, y);
                 var tileWorldPos = _mapSystem.GridTileToWorldPos(gridUid, grid, tileIndices);
-                var tileCoords = new MapCoordinates(tileWorldPos, center.MapId);
+                var tileCoords = new MapCoordinates(tileWorldPos, mapCenter.MapId);
 
                 var distance = (tileWorldPos - centerWorld).Length();
 
                 if (distance > radius)
                     continue;
 
-                if (!_examine.InRangeUnOccluded(center, tileCoords, radius, null))
+                if (!_examine.InRangeUnOccluded(mapCenter, tileCoords, radius, null))
                     continue;
 
                 var normalizedDistance = distance / radius;
                 var stacks = CalculateFireStacks(normalizedDistance, falloffFactor, maxStacks);
 
-                IgniteTile((gridUid, grid), tileCoords, stacks);
+                IgniteTile((gridUid, grid), tileCoords, stacks, playSound: false);
             }
         }
+
+        _audio.PlayPvs(_fireSound, center);
     }
 }
