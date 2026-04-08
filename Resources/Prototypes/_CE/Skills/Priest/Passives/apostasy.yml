@@ -19,7 +19,7 @@
 - type: alert
   id: CEChangeHealType
   icons:
-  - sprite: _CE/Skills/apostasy.rsi
+  - sprite: _CE/Skills/Priest/apostasy.rsi
     state: icon
 
 - type: entity

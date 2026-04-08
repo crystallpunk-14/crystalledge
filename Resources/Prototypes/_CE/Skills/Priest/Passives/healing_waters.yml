@@ -1,29 +1,29 @@
 - type: skill
   parent: BasePriestSkill
-  id: ExperiencedHealer
+  id: HealingWaters
   effect: !type:AddStatusEffect
-    effect: CEStatusEffectExperiencedHealer
+    effect: CEStatusEffectHealingWaters
 
 - type: entity
-  id: CEStatusEffectExperiencedHealer
-  name: Experienced Healer
-  description: When you heal something, you heal [color=#1defa9]1 health[/color] more.
+  id: CEStatusEffectHealingWaters
+  name: Healing Waters
+  description: When you heal a [color=#1db7ef]wet target[/color], you heal [color=#1defa9]2 health[/color] more and dry it off.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
-    alert: CEExperiencedHealer
-  - type: CEEffectiveHealingStatusEffect
-    additionalHeal: 1
+    alert: CEHealingWaters
+  - type: CEHealingWatersStatusEffect
+    additionalHeal: 2
 
 - type: alert
-  id: CEExperiencedHealer
-  alertViewEntity: CEExperiencedHealerAlertSpriteView
+  id: CEHealingWaters
+  alertViewEntity: CEHealingWatersAlertSpriteView
   icons:
-  - sprite: _CE/Skills/Priest/experienced_healer.rsi
+  - sprite: _CE/Skills/Priest/healing_waters.rsi
     state: icon
 
 - type: entity
-  id: CEExperiencedHealerAlertSpriteView
+  id: CEHealingWatersAlertSpriteView
   categories: [ HideSpawnMenu ]
   components:
   - type: GenericCounterAlert
@@ -32,7 +32,7 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Skills/Priest/experienced_healer.rsi
+    - sprite: _CE/Skills/Priest/healing_waters.rsi
       state: icon
     - map: [ "1" ]
       offset: 0.65, 0

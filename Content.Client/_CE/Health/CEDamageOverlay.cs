@@ -20,7 +20,6 @@ public sealed class CEDamageOverlay : Overlay
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     private readonly ShaderInstance _painShader;
-    private readonly ShaderInstance _critShader;
 
     /// <summary>
     /// Pain level 0..1 where 0 = full health, 1 = 0% health.
@@ -47,7 +46,6 @@ public sealed class CEDamageOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
         _painShader = _prototypeManager.Index(CircleMaskShader).InstanceUnique();
-        _critShader = _prototypeManager.Index(CircleMaskShader).InstanceUnique();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -97,17 +95,14 @@ public sealed class CEDamageOverlay : Overlay
             var heartRate = InCrit ? 0.5f : MathHelper.Lerp(0.3f, 0.6f, painToDraw);
             var t = time * heartRate;
 
-            // "lub-dub" pattern: two peaks close together, then a longer gap.
+            //Some pulsing
             var beat1 = MathF.Max(0f, MathF.Sin(t * MathF.Tau));
             var beat2 = MathF.Max(0f, MathF.Sin((t + 0.15f) * MathF.Tau));
             var pulse = MathF.Max(beat1, beat2 * 0.7f);
 
-            // Scale pulse amplitude by pain level (stronger effect at lower health).
             var pulseStrength = MathHelper.Lerp(0.15f, 0.45f, painToDraw);
             var effectivePulse = pulse * pulseStrength;
 
-            // Circle radii: at low pain, overlay is barely visible at edges.
-            // At high pain, it closes in significantly.
             var outerMaxRadius = 2.0f * distance;
             var outerMinRadius = 0.7f * distance;
             var innerMaxRadius = 0.5f * distance;
@@ -144,14 +139,13 @@ public sealed class CEDamageOverlay : Overlay
             // Inner circle: always slightly smaller than outer for smooth gradient edge.
             var innerRadius = outerRadius * 0.4f;
 
-            _critShader.SetParameter("time", 0f);
-            _critShader.SetParameter("color", new Vector3(0f, 0f, 0f));
-            _critShader.SetParameter("darknessAlphaOuter", 1.0f);
-            _critShader.SetParameter("outerCircleRadius", outerRadius);
-            _critShader.SetParameter("outerCircleMaxRadius", outerRadius + 0.15f * distance);
-            _critShader.SetParameter("innerCircleRadius", innerRadius);
-            _critShader.SetParameter("innerCircleMaxRadius", innerRadius);
-            handle.UseShader(_critShader);
+            _painShader.SetParameter("time", 0f);
+            _painShader.SetParameter("color", new Vector3(0f, 0f, 0f));
+            _painShader.SetParameter("darknessAlphaOuter", 1.0f);
+            _painShader.SetParameter("outerCircleRadius", outerRadius);
+            _painShader.SetParameter("outerCircleMaxRadius", outerRadius + 0.15f * distance);
+            _painShader.SetParameter("innerCircleRadius", innerRadius);
+            _painShader.SetParameter("innerCircleMaxRadius", innerRadius);
             handle.DrawRect(viewport, Color.White);
         }
 

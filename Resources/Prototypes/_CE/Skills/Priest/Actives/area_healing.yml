@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/area_healing.rsi
+      sprite: _CE/Skills/Priest/area_healing.rsi
       state: icon
   - type: TargetAction
     range: 3

@@ -1,6 +1,7 @@
 using Content.Shared._CE.Fire;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -14,6 +15,7 @@ public abstract class CESharedWaterSystem : EntitySystem
 {
     [Dependency] protected readonly CEFireSystem Fire = default!;
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
@@ -93,6 +95,20 @@ public abstract class CESharedWaterSystem : EntitySystem
         }
 
         _stack.TryAddStack(ent, ent.Comp.StatusEffect, stacks, cycleDuration);
+    }
+
+    public int GetWettableStacks(Entity<CEWettableComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return 0;
+
+        if (!_status.TryGetStatusEffect(ent, ent.Comp.StatusEffect, out var wetEffect))
+            return 0;
+
+        if (!TryComp<CEStatusEffectStackComponent>(wetEffect, out var stack))
+            return 1;
+
+        return stack.Stacks;
     }
 
     #endregion
