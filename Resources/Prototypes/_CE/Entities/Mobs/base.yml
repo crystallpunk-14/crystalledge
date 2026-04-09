@@ -48,6 +48,7 @@
     animations:
       Primary:
       - anim: Punch1
-        staminaCost: 1
       - anim: Punch2
-        staminaCost: 1
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
