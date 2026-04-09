@@ -1008,6 +1008,15 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("age");
 
+                    b.Property<float>("BarkPitch")
+                        .HasColumnType("REAL")
+                        .HasColumnName("bark_pitch");
+
+                    b.Property<string>("BarkVoice")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("bark_voice");
+
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("TEXT")

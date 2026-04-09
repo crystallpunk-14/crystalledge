@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared._CE.Speech;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -95,6 +96,14 @@ namespace Content.Shared.Preferences
         [DataField]
         public HumanoidCharacterAppearance Appearance { get; set; } = new();
 
+        // CrystallEdge: bark voice profile and pitch
+        [DataField]
+        public ProtoId<CEBarkSpeechPrototype> BarkVoice { get; set; } = "Baritone";
+
+        [DataField]
+        public float BarkPitch { get; set; } = 1.0f;
+        // CrystallEdge end
+
         /// <summary>
         /// When spawning into a round what's the preferred spot to spawn.
         /// </summary>
@@ -183,6 +192,9 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
+            //CrystallEdge barks
+            BarkVoice = other.BarkVoice;
+            BarkPitch = other.BarkPitch;
         }
 
         /// <summary>
@@ -303,6 +315,18 @@ namespace Content.Shared.Preferences
         {
             return new(this) { Appearance = appearance };
         }
+
+        //CrystallEdge
+        public HumanoidCharacterProfile WithBarkVoice(ProtoId<CEBarkSpeechPrototype> barkVoice)
+        {
+            return new(this) { BarkVoice = barkVoice };
+        }
+
+        public HumanoidCharacterProfile WithBarkPitch(float barkPitch)
+        {
+            return new(this) { BarkPitch = barkPitch };
+        }
+        //CrystallEdge end
 
         public HumanoidCharacterProfile WithSpawnPriorityPreference(SpawnPriorityPreference spawnPriority)
         {
@@ -608,6 +632,13 @@ namespace Content.Shared.Preferences
             Gender = gender;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
+
+            // CrystallEdge: validate bark voice and pitch
+            if (!prototypeManager.HasIndex(BarkVoice))
+                BarkVoice = "CEBarkBaritone";
+
+            BarkPitch = Math.Clamp(BarkPitch, 0.5f, 2.0f);
+            // CrystallEdge end
 
             _jobPriorities.Clear();
 

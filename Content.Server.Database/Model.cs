@@ -354,6 +354,12 @@ namespace Content.Server.Database
         public string EyeColor { get; set; } = null!;
         public string SkinColor { get; set; } = null!;
         public int SpawnPriority { get; set; } = 0;
+
+        // CrystallEdge: bark speech voice profile and pitch
+        public string BarkVoice { get; set; } = "Baritone";
+        public float BarkPitch { get; set; } = 1.0f;
+        // CrystallEdge end
+
         public List<Job> Jobs { get; } = new();
         public List<Antag> Antags { get; } = new();
         public List<Trait> Traits { get; } = new();
