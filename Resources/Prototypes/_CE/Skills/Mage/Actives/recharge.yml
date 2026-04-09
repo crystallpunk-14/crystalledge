@@ -1,0 +1,49 @@
+- type: skill
+  parent: BaseMageSkill
+  id: Recharge
+  effect: !type:AddAction
+    action: CEActionRecharge
+
+- type: entity
+  id: CEActionRecharge
+  parent: CEActionSpellBase
+  name: Recharge
+  description: You fully restore all [color=#fff01e]charges[/color] of the selected item
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: CEActionManaCost
+    manaCost: 10
+  - type: Action
+    useDelay: 2
+    icon:
+      sprite: _CE/Skills/Mage/recharge.rsi
+      state: icon
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components:
+      - CECharges
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationRecharge
+
+- type: entityEffectAnimation
+  id: AnimationRecharge
+  movementSpeed: 0.5
+  duration: 0.5
+  events:
+    0:
+    - !type:SayChat
+      sentence: "Reficere"
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+    0.45:
+    - !type:Recharge
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore

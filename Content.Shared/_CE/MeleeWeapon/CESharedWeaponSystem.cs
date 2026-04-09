@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
-using Content.Shared._CE.Stamina;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
@@ -32,11 +31,12 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected readonly CESharedAnimationActionSystem AnimationAction = default!;
     [Dependency] private   readonly IPrototypeManager _proto = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
-    [Dependency] private   readonly CEStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        InitializeCosts();
 
         SubscribeAllEvent<CEWeaponUseEvent>(OnClientAttackRequest);
         SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
@@ -176,8 +176,10 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
         var entry = animations[comboIndex];
 
-        // Check stamina cost before starting the animation
-        if (entry.StaminaCost > 0f && !_stamina.TryTakeDamage(user, entry.StaminaCost))
+        // Check all cost components (stamina, mana, charges, etc.)
+        var attemptEv = new CEWeaponUseAttemptEvent(user, useType);
+        RaiseLocalEvent(used, attemptEv);
+        if (attemptEv.Cancelled)
             return false;
 
         var animationProtoId = entry.Anim;
@@ -185,6 +187,10 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         var animationSpeed = GetAnimationSpeed(user, used) * entry.Speed;
         if (!AnimationAction.TryPlayAnimationToAngle(user, animationProtoId, angle, used.Owner, animationSpeed))
             return false;
+
+        // Consume resources after animation starts
+        var usedEv = new CEWeaponUsedEvent(user, useType);
+        RaiseLocalEvent(used, usedEv);
 
         // Calculate the deadline: animation duration + configurable delay.
         var animDuration = _proto.Index(animationProtoId).Duration;

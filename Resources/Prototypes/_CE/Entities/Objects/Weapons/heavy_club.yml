@@ -18,11 +18,6 @@
           damage:
             types:
               Physical: 3
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.6
@@ -32,26 +27,21 @@
           damage:
             types:
               Physical: 3
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
     animations:
       Primary:
       - anim: StaffAttackLight1
-        staminaCost: 2
         speed: 0.7
       - anim: StaffAttackLight2
-        staminaCost: 2
         speed: 0.7
       Secondary:
       - anim: SwordAttackHeavy1
-        staminaCost: 3
         speed: 0.7
       - anim: SwordAttackHeavy2
-        staminaCost: 3
         speed: 0.7
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 2
+      Secondary: 3
   - type: Clothing
     slots:
     - neck
