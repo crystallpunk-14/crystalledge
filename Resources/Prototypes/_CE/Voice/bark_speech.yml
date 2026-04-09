@@ -1,0 +1,98 @@
+# Bark speech voice profiles for Animal Crossing-style syllable playback.
+
+# Alto — higher-pitched female/neutral voice (~0.22s samples).
+# Slightly faster syllables, wider pitch variation for expressiveness.
+- type: ceBarkSpeech
+  id: Alto
+  saySound:
+    path: /Audio/Voice/Talk/speak_2.ogg
+  askSound:
+    path: /Audio/Voice/Talk/speak_2_ask.ogg
+  exclaimSound:
+    path: /Audio/Voice/Talk/speak_2_exclaim.ogg
+  syllableInterval: 0.07
+  charsPerSyllable: 2
+  wordPauseMultiplier: 2.5
+  commaPauseMultiplier: 4.0
+  pitchVariation: 0.06
+  questionPitchRise: 0.3
+  declarativePitchDrop: 0.08
+  exclaimVolumeBoost: 3
+  exclaimPitchBoost: 0.18
+  maxSyllables: 45
+  audioParams:
+    volume: -2
+    rolloffFactor: 4.5
+
+# Baritone — mid-low male voice (~0.22s samples).
+# Standard timing, moderate pitch variation.
+- type: ceBarkSpeech
+  id: Baritone
+  saySound:
+    path: /Audio/Voice/Talk/speak_1.ogg
+  askSound:
+    path: /Audio/Voice/Talk/speak_1_ask.ogg
+  exclaimSound:
+    path: /Audio/Voice/Talk/speak_1_exclaim.ogg
+  syllableInterval: 0.08
+  charsPerSyllable: 2
+  wordPauseMultiplier: 2.5
+  commaPauseMultiplier: 4.0
+  pitchVariation: 0.05
+  questionPitchRise: 0.25
+  declarativePitchDrop: 0.1
+  exclaimVolumeBoost: 3
+  exclaimPitchBoost: 0.15
+  maxSyllables: 40
+  audioParams:
+    volume: -2
+    rolloffFactor: 4.5
+
+# Bass — deep low voice (~0.34s samples, noticeably longer).
+# Slower syllable rate to match longer samples, less pitch variation,
+# stronger declarative drop for gravitas.
+- type: ceBarkSpeech
+  id: Bass
+  saySound:
+    path: /Audio/Voice/Talk/speak_4.ogg
+  askSound:
+    path: /Audio/Voice/Talk/speak_4_ask.ogg
+  exclaimSound:
+    path: /Audio/Voice/Talk/speak_4_exclaim.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 3
+  wordPauseMultiplier: 2.0
+  commaPauseMultiplier: 3.5
+  pitchVariation: 0.04
+  questionPitchRise: 0.2
+  declarativePitchDrop: 0.14
+  exclaimVolumeBoost: 4
+  exclaimPitchBoost: 0.12
+  maxSyllables: 30
+  audioParams:
+    volume: -1
+    rolloffFactor: 4.5
+
+# Tenor — higher male voice (~0.22s samples).
+# Slightly faster than baritone, brighter pitch variation.
+- type: ceBarkSpeech
+  id: Tenor
+  saySound:
+    path: /Audio/Voice/Talk/speak_3.ogg
+  askSound:
+    path: /Audio/Voice/Talk/speak_3_ask.ogg
+  exclaimSound:
+    path: /Audio/Voice/Talk/speak_3_exclaim.ogg
+  syllableInterval: 0.075
+  charsPerSyllable: 2
+  wordPauseMultiplier: 2.5
+  commaPauseMultiplier: 4.0
+  pitchVariation: 0.055
+  questionPitchRise: 0.28
+  declarativePitchDrop: 0.09
+  exclaimVolumeBoost: 3
+  exclaimPitchBoost: 0.16
+  maxSyllables: 42
+  audioParams:
+    volume: -2
+    rolloffFactor: 4.5
