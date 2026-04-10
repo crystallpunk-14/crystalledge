@@ -4,6 +4,7 @@
     enum.HumanoidVisualLayers.Hair:
       limit: 1
       required: false
+      default: [ CEHumanHair_part ]
     enum.HumanoidVisualLayers.FacialHair:
       limit: 1
       required: false

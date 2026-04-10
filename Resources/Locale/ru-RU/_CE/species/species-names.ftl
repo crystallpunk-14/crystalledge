@@ -1,4 +1,4 @@
-# HUMAN
+﻿# HUMAN
 
 ce-species-name-human-male-first-1 = Леонард
 ce-species-name-human-male-first-2 = Даниэль

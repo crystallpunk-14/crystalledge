@@ -17,3 +17,23 @@
   values:
     prefix: ce-species-name-tiefling-last-
     count: 24
+
+# Elf
+
+- type: localizedDataset
+  id: CE_Names_Elf_Male_First
+  values:
+    prefix: ce-species-name-elf-male-first-
+    count: 28
+
+- type: localizedDataset
+  id: CE_Names_Elf_Female_First
+  values:
+    prefix: ce-species-name-elf-female-first-
+    count: 30
+
+- type: localizedDataset
+  id: CE_Names_Elf_Last
+  values:
+    prefix: ce-species-name-elf-last-
+    count: 18
