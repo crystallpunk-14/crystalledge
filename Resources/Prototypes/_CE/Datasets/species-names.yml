@@ -1,0 +1,19 @@
+# Tiefling
+
+- type: localizedDataset
+  id: CE_Names_Tiefling_Male_First
+  values:
+    prefix: ce-species-name-tiefling-male-first-
+    count: 58
+
+- type: localizedDataset
+  id: CE_Names_Tiefling_Female_First
+  values:
+    prefix: ce-species-name-tiefling-female-first-
+    count: 53
+
+- type: localizedDataset
+  id: CE_Names_Tiefling_Last
+  values:
+    prefix: ce-species-name-tiefling-last-
+    count: 24
