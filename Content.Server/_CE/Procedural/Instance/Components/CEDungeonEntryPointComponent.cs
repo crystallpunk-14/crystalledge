@@ -16,6 +16,12 @@ public sealed partial class CEDungeonEntryPointComponent : Component
     public bool Active = true;
 
     /// <summary>
+    /// If stable - never deactivates. Used for stable safezones.
+    /// </summary>
+    [DataField]
+    public bool Stable = false;
+
+    /// <summary>
     /// Game time after which this entry automatically deactivates.
     /// Prevents late joins into long-running dungeon runs.
     /// </summary>

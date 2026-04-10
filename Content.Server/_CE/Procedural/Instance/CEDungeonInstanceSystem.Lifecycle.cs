@@ -13,7 +13,7 @@ public sealed partial class CEDungeonInstanceSystem
     /// Attaches <see cref="CEDungeonInstanceComponent"/> to the z-network entity if one exists,
     /// otherwise to the map entity itself. Initializes entry point timers.
     /// </summary>
-    private EntityUid RegisterInstance(EntityUid mapUid, CEDungeonLevelPrototype proto)
+    private void RegisterInstance(EntityUid mapUid, CEDungeonLevelPrototype proto)
     {
         // Determine the anchor entity: z-network entity if the map belongs to one, else the map itself.
         var anchorUid = _zLevels.TryGetZNetwork(mapUid, out var zLevelNetwork) ? zLevelNetwork.Value.Owner : mapUid;
@@ -54,7 +54,6 @@ public sealed partial class CEDungeonInstanceSystem
         }
 
         Log.Info($"registered instance '{proto.ID}' on entity {anchorUid} (stable={proto.Stable}).");
-        return anchorUid;
     }
 
     /// <summary>
@@ -94,7 +93,7 @@ public sealed partial class CEDungeonInstanceSystem
         var query = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
         while (query.MoveNext(out var entUid, out var entry, out var xform))
         {
-            if (!proto.Stable && !entry.Active)
+            if (!entry.Active)
                 continue;
 
             if (curTime >= entry.DeactivateAt)

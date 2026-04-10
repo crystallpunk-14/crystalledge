@@ -6,6 +6,7 @@ using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.ZLevels.Core.Components;
+using Content.Shared.SSDIndicator;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -34,7 +35,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// <summary>
     /// How long an empty unstable instance persists before cleanup.
     /// </summary>
-    private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(5);
+    private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(1);
 
     /// <summary>
     /// How often the cleanup check runs (avoid per-frame iteration).
@@ -77,8 +78,11 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         // Build a set of MapIds with at least one living player.
         var occupiedMaps = new HashSet<MapId>();
         var mobQuery = EntityQueryEnumerator<CEDungeonPlayerComponent, CEMobStateComponent, TransformComponent>();
-        while (mobQuery.MoveNext(out _, out _, out var mobState, out var xform))
+        while (mobQuery.MoveNext(out var uid, out _, out var mobState, out var xform))
         {
+            if (TryComp<SSDIndicatorComponent>(uid, out var ssd) && ssd.IsSSD)
+                continue;
+
             occupiedMaps.Add(xform.MapID);
         }
 

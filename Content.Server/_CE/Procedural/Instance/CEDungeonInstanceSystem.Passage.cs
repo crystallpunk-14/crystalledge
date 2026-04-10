@@ -73,7 +73,8 @@ public sealed partial class CEDungeonInstanceSystem
 
                 if (TryFindEnterPoint(proto, out var entry))
                 {
-                    entry.Value.Comp.Active = false;
+                    if (!proto.Stable)
+                        entry.Value.Comp.Active = false;
                     var activeComp2 = EnsureComp<CEDungeonActivePassageComponent>(passageUid);
                     activeComp2.TargetPosition = Transform(entry.Value).Coordinates;
                 }
@@ -94,7 +95,8 @@ public sealed partial class CEDungeonInstanceSystem
                 if (!TryFindEnterPoint(resolvedTarget, out var targetEntry))
                     continue;
 
-                targetEntry.Value.Comp.Active = false;
+                if (!resolvedTarget.Stable)
+                    targetEntry.Value.Comp.Active = false;
                 passage.TargetPosition = Transform(targetEntry.Value).Coordinates;
             }
 
@@ -118,11 +120,6 @@ public sealed partial class CEDungeonInstanceSystem
         }
     }
 
-    /// <summary>
-    /// Player activates an exit portal:
-    /// 1) Immediately determine or start generating the target instance.
-    /// 2) Start a DoAfter (minimum wait time so players can't tell if it's a new or existing instance).
-    /// </summary>
     private void OnPassageInWorldActivated(Entity<CEDungeonPassageComponent> ent, ref ActivateInWorldEvent args)
     {
         if (args.Handled)
@@ -149,7 +146,8 @@ public sealed partial class CEDungeonInstanceSystem
 
         if (TryFindEnterPoint(proto, out var targetEntry))
         {
-            targetEntry.Value.Comp.Active = false; //Disable that entry point
+            if (!proto.Stable)
+                targetEntry.Value.Comp.Active = false; //Disable that entry point
             activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates; //Set target coordinates
         }
         else
