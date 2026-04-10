@@ -1,11 +1,15 @@
+using System.Linq;
 using Content.Server._CE.Skills.Blessing.Components;
 using Content.Shared._CE.Skill.Blessing;
 using Content.Shared._CE.Skill.Blessing.Components;
 using Content.Shared._CE.Skill.Core;
+using Content.Shared._CE.Skill.Core.Components;
+using Content.Shared._CE.Skill.Core.Effects;
 using Content.Shared._CE.Skill.Core.Prototypes;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CE.Skills.Blessing;
 
@@ -112,24 +116,24 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         if (!TryComp<CEBlessingReceiverComponent>(player, out var receiver))
             return;
 
-        // Use cached offerings or generate new ones for this statue
-        if (!statue.Comp.OfferedSkills.TryGetValue(player, out var skills))
+        // We dont have cached offering, so generate new ones for this statue & player
+        if (!statue.Comp.OfferedSkills.TryGetValue(player, out var statueOffering))
         {
-            skills = new List<ProtoId<CESkillPrototype>>();
+            statueOffering = new List<ProtoId<CESkillPrototype>>();
 
             foreach (var _ in statue.Comp.LinkedTables)
             {
-                var skill = GetNextSkill((player, receiver), skills);
+                var skill = GetNextSkill((player, receiver), statueOffering);
                 if (skill is not null)
-                    skills.Add(skill.Value);
+                    statueOffering.Add(skill.Value);
             }
 
-            statue.Comp.OfferedSkills[player] = skills;
+            statue.Comp.OfferedSkills[player] = statueOffering;
 
             // Immediately mark all generated skills as proposed to prevent
             // other statues from duplicating them this session.
             var dirty = false;
-            foreach (var skill in skills)
+            foreach (var skill in statueOffering)
             {
                 if (!receiver.ProposedSkills.Contains(skill))
                 {
@@ -153,10 +157,10 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
                 continue;
             }
 
-            if (tableIndex >= skills.Count)
+            if (tableIndex >= statueOffering.Count)
                 break;
 
-            var skill = skills[tableIndex];
+            var skill = statueOffering[tableIndex];
             var coords = Transform(table).Coordinates;
             var blessing = Spawn(statue.Comp.BlessingPrototype, coords);
 
@@ -209,16 +213,19 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
     /// </summary>
     private ProtoId<CESkillPrototype>? GetNextSkill(
         Entity<CEBlessingReceiverComponent> receiver,
-        List<ProtoId<CESkillPrototype>> alreadyPicked)
+        List<ProtoId<CESkillPrototype>> alreadyOfferedByStatue)
     {
-        var candidates = GetSkillCandidates(receiver, alreadyPicked);
+        if (!TryComp<CESkillStorageComponent>(receiver.Owner, out var storage))
+            return null;
+
+        var candidates = GetSkillCandidates((receiver, receiver.Comp, storage), alreadyOfferedByStatue);
 
         if (candidates.Count == 0)
         {
             // Pool exhausted — clear proposed list and retry
             receiver.Comp.ProposedSkills.Clear();
             Dirty(receiver);
-            candidates = GetSkillCandidates(receiver, alreadyPicked);
+            candidates = GetSkillCandidates((receiver, receiver.Comp, storage), alreadyOfferedByStatue);
         }
 
         if (candidates.Count == 0)
@@ -230,43 +237,54 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         return _random.Pick(candidates);
     }
 
-    private List<ProtoId<CESkillPrototype>> GetSkillCandidates(
-        Entity<CEBlessingReceiverComponent> receiver,
-        List<ProtoId<CESkillPrototype>> alreadyPicked)
+    private List<CESkillPrototype> GetSkillCandidates(
+        Entity<CEBlessingReceiverComponent, CESkillStorageComponent> receiver,
+        List<ProtoId<CESkillPrototype>> alreadyOfferedByStatue)
     {
-        var candidates = new List<ProtoId<CESkillPrototype>>();
+        var candidates = new List<CESkillPrototype>();
+
+        var filterType = receiver.Comp1.SkillTypeOrder.TryGetValue(receiver.Comp2.LearnedSkills.Count, out var filterActives);
 
         foreach (var proto in _proto.EnumeratePrototypes<CESkillPrototype>())
         {
             if (proto.Abstract)
                 continue;
 
+            if (filterType)
+            {
+                if (filterActives && proto.Effect is not AddAction)
+                    continue;
+
+                if (!filterActives && proto.Effect is not AddStatusEffect)
+                    continue;
+            }
+
             if (proto.Unique && _skill.HaveSkill(receiver, proto))
                 continue;
 
-            if (proto.Unique && alreadyPicked.Contains(proto.ID))
+            if (alreadyOfferedByStatue.Contains(proto.ID))
                 continue;
 
-            if (receiver.Comp.ProposedSkills.Contains(proto.ID))
+            if (receiver.Comp1.ProposedSkills.Contains(proto.ID))
                 continue;
 
-            if (!CheckRestrictions(proto, receiver))
+            var restrictionPassed = true;
+            foreach (var restriction in proto.Restrictions)
+            {
+                if (!restriction.Check(EntityManager, receiver))
+                {
+                    restrictionPassed = false;
+                    break;
+                }
+            }
+
+            if (!restrictionPassed)
                 continue;
 
-            candidates.Add(proto.ID);
+
+            candidates.Add(proto);
         }
 
         return candidates;
-    }
-
-    private bool CheckRestrictions(CESkillPrototype proto, EntityUid player)
-    {
-        foreach (var restriction in proto.Restrictions)
-        {
-            if (!restriction.Check(EntityManager, player))
-                return false;
-        }
-
-        return true;
     }
 }

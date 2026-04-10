@@ -492,6 +492,7 @@
   - CEDunGenRoomBlessing
   size: 7, 7
   height: 2
+  weight: 0.2 # Rare triple offering
   zLevelMap: MossyTemple
   offset: -10, -20
 
@@ -512,5 +513,6 @@
   - CEDunGenRoomBlessing
   size: 7, 7
   height: 2
+  weight: 0.2 # Rare triple offering
   zLevelMap: MossyTemple
   offset: -18, -28
