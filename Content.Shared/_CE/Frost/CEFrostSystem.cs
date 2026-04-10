@@ -186,6 +186,9 @@ public sealed class CEFrostSystem : EntitySystem
     /// </summary>
     public void FreezeArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 3)
     {
+        if (_net.IsClient)
+            return;
+
         if (radius <= 0f)
             return;
 

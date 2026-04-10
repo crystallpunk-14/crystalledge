@@ -90,6 +90,9 @@ public sealed partial class CEFireSystem
 
     public void IgniteArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 10)
     {
+        if (_net.IsClient)
+            return;
+
         if (radius <= 0f)
             return;
 
