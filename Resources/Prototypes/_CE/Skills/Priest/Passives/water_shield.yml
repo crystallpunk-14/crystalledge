@@ -18,13 +18,6 @@
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 10
-    - !type:AreaEffect
-      affectCaster: true
-      range: 3
-      effects:
-      - !type:ThrowFromPosition
-        throwPower: 7
-        distance: 3
 
 - type: alert
   id: CEWaterShield

@@ -1,8 +1,6 @@
 # Bark speech voice profiles for Animal Crossing-style syllable playback.
 
-# Alto — higher-pitched female/neutral voice (~0.22s samples).
-# Slightly faster syllables, wider pitch variation for expressiveness.
-- type: ceBarkSpeech
+- type: barkSpeech
   id: Alto
   saySound:
     path: /Audio/Voice/Talk/speak_2.ogg
@@ -24,9 +22,7 @@
     volume: -2
     rolloffFactor: 4.5
 
-# Baritone — mid-low male voice (~0.22s samples).
-# Standard timing, moderate pitch variation.
-- type: ceBarkSpeech
+- type: barkSpeech
   id: Baritone
   saySound:
     path: /Audio/Voice/Talk/speak_1.ogg
@@ -43,39 +39,11 @@
   declarativePitchDrop: 0.1
   exclaimVolumeBoost: 3
   exclaimPitchBoost: 0.15
-  maxSyllables: 40
   audioParams:
     volume: -2
     rolloffFactor: 4.5
 
-# Bass — deep low voice (~0.34s samples, noticeably longer).
-# Slower syllable rate to match longer samples, less pitch variation,
-# stronger declarative drop for gravitas.
-- type: ceBarkSpeech
-  id: Bass
-  saySound:
-    path: /Audio/Voice/Talk/speak_4.ogg
-  askSound:
-    path: /Audio/Voice/Talk/speak_4_ask.ogg
-  exclaimSound:
-    path: /Audio/Voice/Talk/speak_4_exclaim.ogg
-  syllableInterval: 0.12
-  charsPerSyllable: 3
-  wordPauseMultiplier: 2.0
-  commaPauseMultiplier: 3.5
-  pitchVariation: 0.04
-  questionPitchRise: 0.2
-  declarativePitchDrop: 0.14
-  exclaimVolumeBoost: 4
-  exclaimPitchBoost: 0.12
-  maxSyllables: 30
-  audioParams:
-    volume: -1
-    rolloffFactor: 4.5
-
-# Tenor — higher male voice (~0.22s samples).
-# Slightly faster than baritone, brighter pitch variation.
-- type: ceBarkSpeech
+- type: barkSpeech
   id: Tenor
   saySound:
     path: /Audio/Voice/Talk/speak_3.ogg
@@ -92,7 +60,27 @@
   declarativePitchDrop: 0.09
   exclaimVolumeBoost: 3
   exclaimPitchBoost: 0.16
-  maxSyllables: 42
   audioParams:
     volume: -2
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Bass
+  saySound:
+    path: /Audio/Voice/Talk/speak_4.ogg
+  askSound:
+    path: /Audio/Voice/Talk/speak_4_ask.ogg
+  exclaimSound:
+    path: /Audio/Voice/Talk/speak_4_exclaim.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 3
+  wordPauseMultiplier: 2.0
+  commaPauseMultiplier: 3.5
+  pitchVariation: 0.04
+  questionPitchRise: 0.2
+  declarativePitchDrop: 0.14
+  exclaimVolumeBoost: 4
+  exclaimPitchBoost: 0.12
+  audioParams:
+    volume: -1
     rolloffFactor: 4.5

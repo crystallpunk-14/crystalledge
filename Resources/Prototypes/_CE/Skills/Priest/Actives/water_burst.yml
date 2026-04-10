@@ -8,13 +8,13 @@
   id: CEActionSpellWaterBurst
   parent: CEActionSpellBase
   name: Water Burst
-  description: You call upon the waters, drenching a targeted area and repelling all creatures within it.
+  description: You call upon the waters, drenching a targeted area.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 3.0
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 1
   - type: Action
     useDelay: 8
     icon:
@@ -48,12 +48,6 @@
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 10
-    - !type:AreaEffect
-      range: 3
-      effects:
-      - !type:ThrowFromPosition
-        throwPower: 7
-        distance: 3
 
 - type: entity
   id: CEEffectWaterBurstTelegraphy
