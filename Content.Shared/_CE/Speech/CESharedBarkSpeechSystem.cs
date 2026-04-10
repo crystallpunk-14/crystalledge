@@ -15,6 +15,11 @@ public abstract class CESharedBarkSpeechSystem : EntitySystem
 
     private static readonly Regex MarkupRegex = new(@"\[.*?\]", RegexOptions.Compiled);
 
+    // CrystallEdge: pitch range that maps to speech speed scaling
+    public const float MinPitchScale = 0.75f;
+    public const float MaxPitchScale = 1.5f;
+    // CrystallEdge end
+
     /// <summary>
     /// Strips rich-text markup tags from a chat message.
     /// </summary>
@@ -31,6 +36,10 @@ public abstract class CESharedBarkSpeechSystem : EntitySystem
         var result = new List<BarkSyllable>();
         var sentences = SplitSentences(message);
         var totalSyllables = 0;
+
+        // CrystallEdge: scale interval inversely with pitch so higher-pitched voices speak faster
+        var effectiveInterval = profile.SyllableInterval / Math.Clamp(basePitch, MinPitchScale, MaxPitchScale);
+        // CrystallEdge end
 
         foreach (var sentence in sentences)
         {
@@ -54,7 +63,7 @@ public abstract class CESharedBarkSpeechSystem : EntitySystem
                     sentenceSyllables.Add(new BarkSyllable
                     {
                         IsPause = true,
-                        Duration = profile.SyllableInterval * profile.WordPauseMultiplier,
+                        Duration = effectiveInterval * profile.WordPauseMultiplier,
                     });
                     charIndex++;
                     continue;
@@ -65,7 +74,7 @@ public abstract class CESharedBarkSpeechSystem : EntitySystem
                     sentenceSyllables.Add(new BarkSyllable
                     {
                         IsPause = true,
-                        Duration = profile.SyllableInterval * profile.CommaPauseMultiplier,
+                        Duration = effectiveInterval * profile.CommaPauseMultiplier,
                     });
                     charIndex++;
                     continue;
@@ -100,7 +109,7 @@ public abstract class CESharedBarkSpeechSystem : EntitySystem
                 sentenceSyllables.Add(new BarkSyllable
                 {
                     Pitch = pitch,
-                    Duration = profile.SyllableInterval,
+                    Duration = effectiveInterval,
                 });
 
                 totalSyllables++;
@@ -143,7 +152,7 @@ public abstract class CESharedBarkSpeechSystem : EntitySystem
                 result.Add(new BarkSyllable
                 {
                     IsPause = true,
-                    Duration = profile.SyllableInterval * profile.CommaPauseMultiplier,
+                    Duration = effectiveInterval * profile.CommaPauseMultiplier,
                 });
             }
         }

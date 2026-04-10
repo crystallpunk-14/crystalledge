@@ -102,7 +102,7 @@
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-bark-pitch-label'}" />
                                     <Control HorizontalExpand="True"/>
-                                    <Slider Name="BarkPitchSlider" HorizontalExpand="True" MinValue="50" MaxValue="200" Value="100" MinSize="100 0" />
+                                    <Slider Name="BarkPitchSlider" HorizontalExpand="True" MinValue="0" MaxValue="100" Value="50" MinSize="100 0" />
                                     <Button Name="BarkPreviewButton" Text="▶" MinSize="32 0" />
                                 </BoxContainer>
                             </BoxContainer>

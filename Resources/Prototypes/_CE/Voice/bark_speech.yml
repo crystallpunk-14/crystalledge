@@ -1,86 +1,207 @@
 # Bark speech voice profiles for Animal Crossing-style syllable playback.
 
 - type: barkSpeech
-  id: Alto
+  id: Ed
   saySound:
-    path: /Audio/Voice/Talk/speak_2.ogg
+    path: /Audio/_CE/Voice/Ed/ed.ogg
   askSound:
-    path: /Audio/Voice/Talk/speak_2_ask.ogg
+    path: /Audio/_CE/Voice/Ed/ed_a.ogg
   exclaimSound:
-    path: /Audio/Voice/Talk/speak_2_exclaim.ogg
+    path: /Audio/_CE/Voice/Ed/ed_e.ogg
   syllableInterval: 0.07
   charsPerSyllable: 2
-  wordPauseMultiplier: 2.5
-  commaPauseMultiplier: 4.0
-  pitchVariation: 0.06
-  questionPitchRise: 0.3
-  declarativePitchDrop: 0.08
-  exclaimVolumeBoost: 3
-  exclaimPitchBoost: 0.18
-  maxSyllables: 45
   audioParams:
-    volume: -2
+    volume: 12
     rolloffFactor: 4.5
 
 - type: barkSpeech
-  id: Baritone
+  id: Ezik
   saySound:
-    path: /Audio/Voice/Talk/speak_1.ogg
+    path: /Audio/_CE/Voice/Ed/ez3.ogg
   askSound:
-    path: /Audio/Voice/Talk/speak_1_ask.ogg
+    path: /Audio/_CE/Voice/Ed/ez1.ogg
   exclaimSound:
-    path: /Audio/Voice/Talk/speak_1_exclaim.ogg
+    path: /Audio/_CE/Voice/Ed/ez4.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Angel
+  saySound:
+    path: /Audio/_CE/Voice/Ed/angel1.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/angel2.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/angel3.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Mirinda
+  saySound:
+    path: /Audio/_CE/Voice/Ed/mirinda2_b.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/mirinda2_b3.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/mirinda2_b2.ogg
+  syllableInterval: 0.16
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Straymer
+  saySound:
+    path: /Audio/_CE/Voice/Ed/straymer2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/straymer2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/straymer2_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Stepa
+  saySound:
+    path: /Audio/_CE/Voice/Ed/stepa_2_1.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/stepa_2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/stepa_2_e.ogg
+  syllableInterval: 0.13
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Nimfar
+  saySound:
+    path: /Audio/_CE/Voice/Ed/nimfar1.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/nimfar3.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/nimfar2.ogg
+  syllableInterval: 0.1
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Jaba
+  saySound:
+    path: /Audio/_CE/Voice/Ed/jaba.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/jaba_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/jaba_e2.ogg
   syllableInterval: 0.08
   charsPerSyllable: 2
-  wordPauseMultiplier: 2.5
-  commaPauseMultiplier: 4.0
-  pitchVariation: 0.05
-  questionPitchRise: 0.25
-  declarativePitchDrop: 0.1
-  exclaimVolumeBoost: 3
-  exclaimPitchBoost: 0.15
   audioParams:
-    volume: -2
+    volume: -5
     rolloffFactor: 4.5
 
 - type: barkSpeech
-  id: Tenor
+  id: Altnight
   saySound:
-    path: /Audio/Voice/Talk/speak_3.ogg
+    path: /Audio/_CE/Voice/Ed/altnight1.ogg
   askSound:
-    path: /Audio/Voice/Talk/speak_3_ask.ogg
+    path: /Audio/_CE/Voice/Ed/altnight2.ogg
   exclaimSound:
-    path: /Audio/Voice/Talk/speak_3_exclaim.ogg
-  syllableInterval: 0.075
+    path: /Audio/_CE/Voice/Ed/altnight3.ogg
+  syllableInterval: 0.13
   charsPerSyllable: 2
-  wordPauseMultiplier: 2.5
-  commaPauseMultiplier: 4.0
-  pitchVariation: 0.055
-  questionPitchRise: 0.28
-  declarativePitchDrop: 0.09
-  exclaimVolumeBoost: 3
-  exclaimPitchBoost: 0.16
   audioParams:
-    volume: -2
+    volume: 4
     rolloffFactor: 4.5
 
 - type: barkSpeech
-  id: Bass
+  id: Eglow
   saySound:
-    path: /Audio/Voice/Talk/speak_4.ogg
+    path: /Audio/_CE/Voice/Ed/eglow1.ogg
   askSound:
-    path: /Audio/Voice/Talk/speak_4_ask.ogg
+    path: /Audio/_CE/Voice/Ed/eglow3.ogg
   exclaimSound:
-    path: /Audio/Voice/Talk/speak_4_exclaim.ogg
-  syllableInterval: 0.12
-  charsPerSyllable: 3
-  wordPauseMultiplier: 2.0
-  commaPauseMultiplier: 3.5
-  pitchVariation: 0.04
-  questionPitchRise: 0.2
-  declarativePitchDrop: 0.14
-  exclaimVolumeBoost: 4
-  exclaimPitchBoost: 0.12
+    path: /Audio/_CE/Voice/Ed/eglow2.ogg
+  syllableInterval: 0.13
+  charsPerSyllable: 2
   audioParams:
-    volume: -1
+    volume: 4
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Eglow2
+  saySound:
+    path: /Audio/_CE/Voice/Ed/eglow3_2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/eglow3_5.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/eglow3_3.ogg
+  syllableInterval: 0.11
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Eglow3
+  saySound:
+    collection: eglowLaugh
+  askSound:
+    path: /Audio/_CE/Voice/Ed/eglow4_e2.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/eglow4_e.ogg
+  syllableInterval: 0.08
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: soundCollection
+  id: eglowLaugh
+  files:
+  - /Audio/_CE/Voice/Ed/eglow4_1.ogg
+  - /Audio/_CE/Voice/Ed/eglow4_2.ogg
+  - /Audio/_CE/Voice/Ed/eglow4_3.ogg
+  - /Audio/_CE/Voice/Ed/eglow4_4.ogg
+  - /Audio/_CE/Voice/Ed/eglow4_5.ogg
+
+
+- type: barkSpeech
+  id: Shishka
+  saySound:
+    path: /Audio/_CE/Voice/Ed/shishka1.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/shishka2.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/shishka3.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Nimfar2
+  saySound:
+    path: /Audio/_CE/Voice/Ed/nimfar2_1.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Ed/nimfar2_3.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Ed/nimfar2_2.ogg
+  syllableInterval: 0.05
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
     rolloffFactor: 4.5

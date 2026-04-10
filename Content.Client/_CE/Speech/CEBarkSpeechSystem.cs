@@ -23,18 +23,12 @@ public sealed class CEBarkSpeechSystem : CESharedBarkSpeechSystem
     /// </summary>
     private static readonly string[] SamplePhrases =
     {
-        "Hello, nice to meet you!",
-        "What do you think about that?",
-        "Look out, danger ahead!",
-        "The station needs repairs.",
-        "Can I help you with something?",
-        "Great work on the engine today.",
-        "Why is the power out again?",
-        "Watch your step, the floor is slippery!",
-        "Does anyone have a spare wrench?",
-        "I heard something strange in maintenance.",
-        "Security to the bridge, immediately!",
-        "All systems nominal, captain.",
+        "Бутерброд мне все рассказал!",
+        "Ты видишь Луркера? И я не вижу. А он есть.",
+        "Нету ручек - нету зелья!",
+        "Однажды и меня вела дорога приключений...",
+        "Я бы на нем курочку отжарила бы!",
+        "ЕБАТЬ ТАРЕЛКИ!!",
     };
 
     /// <summary>

@@ -644,7 +644,7 @@ namespace Content.Shared.Preferences
             if (BarkPitch <= 0f)
                 BarkPitch = 1.0f;
 
-            BarkPitch = Math.Clamp(BarkPitch, 0.5f, 2.0f);
+            BarkPitch = Math.Clamp(BarkPitch, 0.75f, 1.5f);
             // CrystallEdge end
 
             _jobPriorities.Clear();
