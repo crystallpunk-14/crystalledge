@@ -356,7 +356,7 @@ namespace Content.Server.Database
         public int SpawnPriority { get; set; } = 0;
 
         // CrystallEdge: bark speech voice profile and pitch
-        public string BarkVoice { get; set; } = "Baritone";
+        public string BarkVoice { get; set; } = "Ed";
         public float BarkPitch { get; set; } = 1.0f;
         // CrystallEdge end
 

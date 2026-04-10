@@ -1,0 +1,81 @@
+- files: ["ed.ogg", "ed_e.ogg", "ed_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Ed"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["ezik.ogg", "ezik_e.ogg", "ezik_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Ezik"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["angel.ogg", "angel_e.ogg", "angel_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Angel"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["mirinda.ogg", "mirinda_e.ogg", "mirinda_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Mirinda"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["straymer.ogg", "straymer_e.ogg", "straymer_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Straymer"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["stepa.ogg", "stepa_e.ogg", "stepa_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Stepa"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["nimfar.ogg", "nimfar_e.ogg", "nimfar_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Nimfar"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["nimfar2.ogg", "nimfar2_e.ogg", "nimfar2_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Nimfar"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["jaba.ogg", "jaba_e.ogg", "jaba_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Jaba"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["altnight.ogg", "altnight_e.ogg", "altnight_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Altnight"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["eglow.ogg", "eglow_e.ogg", "eglow_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Eglow"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["eglow2.ogg", "eglow2_e.ogg", "eglow2_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Eglow"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files:
+  - "eglow3_1.ogg"
+  - "eglow3_2.ogg"
+  - "eglow3_3.ogg"
+  - "eglow3_4.ogg"
+  - "eglow3_5.ogg"
+  - "eglow3_e.ogg"
+  - "eglow3_a.ogg"
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Eglow"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["shishka.ogg", "shishka_e.ogg", "shishka_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Shishka"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["lucson1.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Lucson"
+  source: "https://github.com/crystallpunk-14/crystalledge"

@@ -3,11 +3,11 @@
 - type: barkSpeech
   id: Ed
   saySound:
-    path: /Audio/_CE/Voice/Ed/ed.ogg
+    path: /Audio/_CE/Voice/ed.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/ed_a.ogg
+    path: /Audio/_CE/Voice/ed_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/ed_e.ogg
+    path: /Audio/_CE/Voice/ed_e.ogg
   syllableInterval: 0.07
   charsPerSyllable: 2
   audioParams:
@@ -17,11 +17,11 @@
 - type: barkSpeech
   id: Ezik
   saySound:
-    path: /Audio/_CE/Voice/Ed/ez3.ogg
+    path: /Audio/_CE/Voice/ezik.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/ez1.ogg
+    path: /Audio/_CE/Voice/ezik_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/ez4.ogg
+    path: /Audio/_CE/Voice/ezik_e.ogg
   syllableInterval: 0.09
   charsPerSyllable: 2
   audioParams:
@@ -31,11 +31,11 @@
 - type: barkSpeech
   id: Angel
   saySound:
-    path: /Audio/_CE/Voice/Ed/angel1.ogg
+    path: /Audio/_CE/Voice/angel.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/angel2.ogg
+    path: /Audio/_CE/Voice/angel_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/angel3.ogg
+    path: /Audio/_CE/Voice/angel_e.ogg
   syllableInterval: 0.09
   charsPerSyllable: 2
   audioParams:
@@ -45,11 +45,11 @@
 - type: barkSpeech
   id: Mirinda
   saySound:
-    path: /Audio/_CE/Voice/Ed/mirinda2_b.ogg
+    path: /Audio/_CE/Voice/mirinda.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/mirinda2_b3.ogg
+    path: /Audio/_CE/Voice/mirinda_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/mirinda2_b2.ogg
+    path: /Audio/_CE/Voice/mirinda_e.ogg
   syllableInterval: 0.16
   charsPerSyllable: 2
   audioParams:
@@ -59,11 +59,11 @@
 - type: barkSpeech
   id: Straymer
   saySound:
-    path: /Audio/_CE/Voice/Ed/straymer2.ogg
+    path: /Audio/_CE/Voice/straymer.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/straymer2_a.ogg
+    path: /Audio/_CE/Voice/straymer_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/straymer2_e.ogg
+    path: /Audio/_CE/Voice/straymer_e.ogg
   syllableInterval: 0.12
   charsPerSyllable: 2
   audioParams:
@@ -73,11 +73,11 @@
 - type: barkSpeech
   id: Stepa
   saySound:
-    path: /Audio/_CE/Voice/Ed/stepa_2_1.ogg
+    path: /Audio/_CE/Voice/stepa.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/stepa_2_a.ogg
+    path: /Audio/_CE/Voice/stepa_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/stepa_2_e.ogg
+    path: /Audio/_CE/Voice/stepa_e.ogg
   syllableInterval: 0.13
   charsPerSyllable: 2
   audioParams:
@@ -87,11 +87,11 @@
 - type: barkSpeech
   id: Nimfar
   saySound:
-    path: /Audio/_CE/Voice/Ed/nimfar1.ogg
+    path: /Audio/_CE/Voice/nimfar.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/nimfar3.ogg
+    path: /Audio/_CE/Voice/nimfar_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/nimfar2.ogg
+    path: /Audio/_CE/Voice/nimfar_e.ogg
   syllableInterval: 0.1
   charsPerSyllable: 2
   audioParams:
@@ -101,11 +101,11 @@
 - type: barkSpeech
   id: Jaba
   saySound:
-    path: /Audio/_CE/Voice/Ed/jaba.ogg
+    path: /Audio/_CE/Voice/jaba.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/jaba_a.ogg
+    path: /Audio/_CE/Voice/jaba_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/jaba_e2.ogg
+    path: /Audio/_CE/Voice/jaba_e.ogg
   syllableInterval: 0.08
   charsPerSyllable: 2
   audioParams:
@@ -115,11 +115,11 @@
 - type: barkSpeech
   id: Altnight
   saySound:
-    path: /Audio/_CE/Voice/Ed/altnight1.ogg
+    path: /Audio/_CE/Voice/altnight.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/altnight2.ogg
+    path: /Audio/_CE/Voice/altnight_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/altnight3.ogg
+    path: /Audio/_CE/Voice/altnight_e.ogg
   syllableInterval: 0.13
   charsPerSyllable: 2
   audioParams:
@@ -129,25 +129,25 @@
 - type: barkSpeech
   id: Eglow
   saySound:
-    path: /Audio/_CE/Voice/Ed/eglow1.ogg
+    path: /Audio/_CE/Voice/eglow.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/eglow3.ogg
+    path: /Audio/_CE/Voice/eglow_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/eglow2.ogg
+    path: /Audio/_CE/Voice/eglow_e.ogg
   syllableInterval: 0.13
   charsPerSyllable: 2
   audioParams:
-    volume: 4
+    volume: -8
     rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Eglow2
   saySound:
-    path: /Audio/_CE/Voice/Ed/eglow3_2.ogg
+    path: /Audio/_CE/Voice/eglow2.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/eglow3_5.ogg
+    path: /Audio/_CE/Voice/eglow2_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/eglow3_3.ogg
+    path: /Audio/_CE/Voice/eglow2_e.ogg
   syllableInterval: 0.11
   charsPerSyllable: 2
   audioParams:
@@ -159,9 +159,9 @@
   saySound:
     collection: eglowLaugh
   askSound:
-    path: /Audio/_CE/Voice/Ed/eglow4_e2.ogg
+    path: /Audio/_CE/Voice/eglow3_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/eglow4_e.ogg
+    path: /Audio/_CE/Voice/eglow3_e.ogg
   syllableInterval: 0.08
   charsPerSyllable: 2
   audioParams:
@@ -171,21 +171,21 @@
 - type: soundCollection
   id: eglowLaugh
   files:
-  - /Audio/_CE/Voice/Ed/eglow4_1.ogg
-  - /Audio/_CE/Voice/Ed/eglow4_2.ogg
-  - /Audio/_CE/Voice/Ed/eglow4_3.ogg
-  - /Audio/_CE/Voice/Ed/eglow4_4.ogg
-  - /Audio/_CE/Voice/Ed/eglow4_5.ogg
+  - /Audio/_CE/Voice/eglow3_1.ogg
+  - /Audio/_CE/Voice/eglow3_2.ogg
+  - /Audio/_CE/Voice/eglow3_3.ogg
+  - /Audio/_CE/Voice/eglow3_4.ogg
+  - /Audio/_CE/Voice/eglow3_5.ogg
 
 
 - type: barkSpeech
   id: Shishka
   saySound:
-    path: /Audio/_CE/Voice/Ed/shishka1.ogg
+    path: /Audio/_CE/Voice/shishka.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/shishka2.ogg
+    path: /Audio/_CE/Voice/shishka_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/shishka3.ogg
+    path: /Audio/_CE/Voice/shishka_e.ogg
   syllableInterval: 0.09
   charsPerSyllable: 2
   audioParams:
@@ -195,11 +195,11 @@
 - type: barkSpeech
   id: Nimfar2
   saySound:
-    path: /Audio/_CE/Voice/Ed/nimfar2_1.ogg
+    path: /Audio/_CE/Voice/nimfar2.ogg
   askSound:
-    path: /Audio/_CE/Voice/Ed/nimfar2_3.ogg
+    path: /Audio/_CE/Voice/nimfar2_a.ogg
   exclaimSound:
-    path: /Audio/_CE/Voice/Ed/nimfar2_2.ogg
+    path: /Audio/_CE/Voice/nimfar2_e.ogg
   syllableInterval: 0.05
   charsPerSyllable: 2
   audioParams:
