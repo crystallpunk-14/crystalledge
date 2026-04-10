@@ -61,7 +61,7 @@
   - type: Speech
     speechSounds: Alto
   - type: CEBarkSpeech
-    barkSpeech: Alto
+    barkSpeech: Ed
   - type: DamageForceSay
   - type: Vocal
     sounds:
