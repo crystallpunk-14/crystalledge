@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Speech;
 /// Defines a bark voice profile: sounds for different intonations,
 /// timing, and pitch parameters.
 /// </summary>
-[Prototype("ceBarkSpeech")]
+[Prototype("barkSpeech")]
 public sealed partial class CEBarkSpeechPrototype : IPrototype
 {
     [ViewVariables]

@@ -498,6 +498,10 @@ namespace Content.Shared.Preferences
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
+            // CrystallEdge: bark voice comparison
+            if (BarkVoice != other.BarkVoice) return false;
+            if (!BarkPitch.Equals(other.BarkPitch)) return false;
+            // CrystallEdge end
             return Appearance.Equals(other.Appearance);
         }
 
@@ -635,7 +639,10 @@ namespace Content.Shared.Preferences
 
             // CrystallEdge: validate bark voice and pitch
             if (!prototypeManager.HasIndex(BarkVoice))
-                BarkVoice = "CEBarkBaritone";
+                BarkVoice = "Baritone";
+
+            if (BarkPitch <= 0f)
+                BarkPitch = 1.0f;
 
             BarkPitch = Math.Clamp(BarkPitch, 0.5f, 2.0f);
             // CrystallEdge end
@@ -760,6 +767,10 @@ namespace Content.Shared.Preferences
             hashCode.Add(Appearance);
             hashCode.Add((int)SpawnPriority);
             hashCode.Add((int)PreferenceUnavailable);
+            // CrystallEdge: bark voice hash
+            hashCode.Add(BarkVoice);
+            hashCode.Add(BarkPitch);
+            // CrystallEdge end
             return hashCode.ToHashCode();
         }
 
