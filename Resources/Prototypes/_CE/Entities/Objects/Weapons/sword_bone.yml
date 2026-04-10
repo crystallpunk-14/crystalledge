@@ -8,6 +8,8 @@
   - type: Sprite
     sprite: _CE/Objects/Weapons/Sword/bone.rsi
     state: icon
+  - type: CEDestructible
+    destroyThreshold: 40
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -19,6 +21,11 @@
           damage:
             types:
               Physical: 3
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 1.1
@@ -28,17 +35,21 @@
           damage:
             types:
               Physical: 4
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 2
     animations:
       Primary:
       - anim: SwordAttackLight1
+        staminaCost: 1
       - anim: SwordAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: SpearAttackHeavy2
         speed: 1.2
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 2
+        staminaCost: 2
   - type: Clothing
     slots:
     - neck

@@ -18,6 +18,11 @@
           damage:
             types:
               Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.6
@@ -27,16 +32,20 @@
           damage:
             types:
               Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
     animations:
       Primary:
       - anim: SkimitarAttackLight1
+        staminaCost: 1
       - anim: SkimitarAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: SkimitarAttackHeavy1
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 2
+        staminaCost: 2
   - type: Clothing
     slots:
     - neck

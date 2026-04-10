@@ -14,6 +14,11 @@
       - !type:ShootProjectile
         prototype: CEProjectileMagicWater
         projectileSpeed: 7
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.78
@@ -23,21 +28,22 @@
           damage:
             types:
               Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
     animations:
       Primary:
       - anim: StaffAttackLight1
         speed: 0.6
+        staminaCost: 1
       - anim: StaffAttackLight2
         speed: 0.6
+        staminaCost: 1
       Secondary:
       - anim: StaffAttackHeavy
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: CEWeaponManaCost
-    costs:
-      Primary: 1
+        staminaCost: 1
   - type: Clothing
     slots:
     - neck
@@ -70,7 +76,7 @@
     - !type:Damage
       damage:
         types:
-          Physical: 3
+          Physical: 1
     - !type:AreaEffect
       affectCaster: true
       range: 2

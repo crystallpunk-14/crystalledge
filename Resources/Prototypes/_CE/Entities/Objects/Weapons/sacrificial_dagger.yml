@@ -10,6 +10,8 @@
   - type: Sprite
     sprite: _CE/Objects/Weapons/Dagger/sacrifice_dagger.rsi
     state: icon
+  - type: CEDestructible
+    destroyThreshold: 25
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -21,14 +23,29 @@
           ignoreArmor: true
           damage:
             types:
-              Physical: 2
+              Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+        - !type:RestoreMana
+          amount: 3
+        - !type:SpawnEntity
+          spawns:
+          - CEEffectManaRestore
       OnHeavyHit: # Apply this effect of self
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
       - !type:Damage
         effectTarget: User
         ignoreArmor: true
         damage:
           types:
-            Physical: 2
+            Physical: 1
       - !type:RestoreMana
         effectTarget: User
         amount: 3
@@ -40,20 +57,13 @@
       Primary:
       - anim: DaggerAttackLight1
         speed: 2
+        staminaCost: 1
       - anim: DaggerAttackLight2
         speed: 2
+        staminaCost: 1
       Secondary:
       - anim: SelfCut
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: CEWeaponChargesCost
-    costs:
-      Secondary: 1
-  - type: CECharges
-    maxCharges: 10
-    currentCharges: 10
+        staminaCost: 1
   - type: Clothing
     slots:
     - belt

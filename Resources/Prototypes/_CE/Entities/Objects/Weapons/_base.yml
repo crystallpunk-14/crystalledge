@@ -13,3 +13,7 @@
     equipWhileMoving: true
     equipDelay: 1
     unequipDelay: 1
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 100
+  - type: CEHealthStatus

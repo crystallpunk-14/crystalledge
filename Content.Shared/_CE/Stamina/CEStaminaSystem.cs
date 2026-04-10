@@ -81,32 +81,6 @@ public sealed class CEStaminaSystem : EntitySystem
     }
 
     /// <summary>
-    /// Returns whether the entity has enough stamina to spend (not exhausted and stamina > 0).
-    /// Does NOT consume stamina.
-    /// </summary>
-    public bool CanAfford(Entity<CEStaminaComponent?> ent)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return true; // Entities without stamina always succeed
-
-        if (ent.Comp.Exhausted)
-        {
-            TryPopupNotEnough(ent, ent.Comp);
-            return false;
-        }
-
-        var current = GetStamina(ent);
-
-        if (current <= 0)
-        {
-            TryPopupNotEnough(ent, ent.Comp);
-            return false;
-        }
-
-        return true;
-    }
-
-    /// <summary>
     /// Tries to spend stamina. Returns true if stamina was available (>0 and not exhausted),
     /// false if the entity is exhausted or has no stamina.
     /// </summary>

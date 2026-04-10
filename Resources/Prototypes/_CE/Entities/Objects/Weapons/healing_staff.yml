@@ -10,6 +10,8 @@
     - state: icon
     - state: orb
       shader: unshaded
+  - type: CEDestructible
+    destroyThreshold: 100
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -18,7 +20,12 @@
         projectileCount: 3
         projectileSpeed: 3
         projectileMaxSpeed: 7
-        spread: 0.2
+        spread: 0.4
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 3
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.78
@@ -28,22 +35,20 @@
           damage:
             types:
               Physical: 2
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
     animations:
       Primary:
       - anim: StaffAttackLight1
+        staminaCost: 1
       - anim: StaffAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: StaffAttackHeavy
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: CEWeaponChargesCost
-    costs:
-      Primary: 1
-  - type: CECharges
-    maxCharges: 10
-    currentCharges: 10
+        staminaCost: 1
   - type: Clothing
     slots:
     - neck
