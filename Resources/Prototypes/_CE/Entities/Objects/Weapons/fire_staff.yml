@@ -16,6 +16,11 @@
       - !type:ShootProjectile
         prototype: CEProjectileMagicFire
         projectileSpeed: 10
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.78
@@ -25,16 +30,20 @@
           damage:
             types:
               Physical: 1
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
     animations:
       Primary:
       - anim: StaffAttackLight1
+        staminaCost: 1
       - anim: StaffAttackLight2
+        staminaCost: 1
       Secondary:
       - anim: StaffAttackHeavy
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
+        staminaCost: 1
   - type: Clothing
     slots:
     - neck

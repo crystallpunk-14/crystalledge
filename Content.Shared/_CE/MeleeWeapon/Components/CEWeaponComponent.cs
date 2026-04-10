@@ -85,6 +85,12 @@ public sealed partial class CEAnimationEntry
     /// </summary>
     [DataField]
     public float Speed = 1f;
+
+    /// <summary>
+    /// Stamina cost to play this animation. If the user lacks enough stamina, the attack is blocked.
+    /// </summary>
+    [DataField]
+    public float StaminaCost;
 }
 
 /// <summary>
