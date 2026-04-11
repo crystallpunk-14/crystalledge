@@ -10,7 +10,6 @@
       uiWindowPos: 0,1
       strippingWindowPos: 0,4
       displayName: Shoes
-      stripHidden: true
     - name: pants
       slotTexture: pants
       fullTextureName: SlotBackgroundVanity
@@ -18,7 +17,6 @@
       uiWindowPos: 0,2
       strippingWindowPos: 0,3
       displayName: Pants
-      stripHidden: true
     - name: shirt
       slotTexture: shirt
       fullTextureName: SlotBackgroundVanity
@@ -26,7 +24,6 @@
       uiWindowPos: 0,3
       strippingWindowPos: 0,2
       displayName: Shirt
-      stripHidden: true
     - name: cloak
       slotTexture: cloak
       fullTextureName: SlotBackgroundVanity
@@ -34,7 +31,6 @@
       uiWindowPos: 0,4
       strippingWindowPos: 0,1
       displayName: Cloak
-      stripHidden: true
     # 1, y
     - name: acsecsory1
       slotTexture: acsessory

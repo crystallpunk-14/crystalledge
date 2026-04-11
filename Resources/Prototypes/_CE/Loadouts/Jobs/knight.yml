@@ -39,19 +39,6 @@
 
 
 - type: loadoutGroup
-  id: CEKnightGloves
-  name: ce-loadout-gloves
-  minLimit: 1
-  loadouts:
-  - CEClothingKnightGlovesFighter
-
-- type: loadout
-  id: CEClothingKnightGlovesFighter
-  equipment:
-    gloves: CEClothingKnightGlovesFighter
-
-
-- type: loadoutGroup
   id: CEKnightWeapon
   name: ce-loadout-weapon
   minLimit: 1
