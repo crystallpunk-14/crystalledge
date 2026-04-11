@@ -79,3 +79,13 @@
   license: "CC0-1.0"
   copyright: "Voice recorded by Omsoyk"
   source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["twig.ogg", "twig_e.ogg", "twig_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Twig"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["driftwood.ogg", "driftwood_e.ogg", "driftwood_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Driftwood"
+  source: "https://github.com/crystallpunk-14/crystalledge"

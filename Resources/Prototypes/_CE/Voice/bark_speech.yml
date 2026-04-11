@@ -214,3 +214,30 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
+
+- type: barkSpeech
+  id: Twig
+  saySound:
+    path: /Audio/_CE/Voice/twig.ogg
+  askSound:
+    path: /Audio/_CE/Voice/twig_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/twig_e.ogg
+  syllableInterval: 0.14
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Driftwood
+  saySound:
+    path: /Audio/_CE/Voice/driftwood.ogg
+  askSound:
+    path: /Audio/_CE/Voice/driftwood_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/driftwood_e.ogg
+  syllableInterval: 0.14
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
