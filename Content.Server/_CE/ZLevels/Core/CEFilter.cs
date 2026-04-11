@@ -30,9 +30,11 @@ public static class CEFilter
         var filter = Filter.PvsExcept(origin, entityManager: entManager);
 
         var zSystem = entManager.System<CEZLevelsSystem>();
+        var transformSystem = entManager.System<SharedTransformSystem>();
+
         var xform = entManager.GetComponent<TransformComponent>(origin);
 
-        var worldPos = xform.WorldPosition;
+        var worldPos = transformSystem.GetWorldPosition(origin);
 
         if (xform.MapUid is not { } currentMap)
             return filter;
@@ -40,12 +42,12 @@ public static class CEFilter
         var visibleMap = new List<EntityUid>();
 
         if (zSystem.TryMapOffset(currentMap, 1, out var mapAbove))
-            visibleMap.Add(mapAbove.Value);
+            visibleMap.Add(mapAbove);
 
-        for (var i = 1; i <= CESharedZLevelsSystem.MaxZLevelsBelowRendering; i++)
+        for (var i = 1; i <= zSystem.MaxZLevelsBelowRendering; i++)
         {
             if (zSystem.TryMapOffset(currentMap, -i, out var mapBelow))
-                visibleMap.Add(mapBelow.Value);
+                visibleMap.Add(mapBelow);
         }
 
         foreach (var map in visibleMap)
@@ -71,9 +73,11 @@ public static class CEFilter
         var filter = Filter.Pvs(origin, entityManager: entManager);
 
         var zSystem = entManager.System<CEZLevelsSystem>();
+        var transformSystem = entManager.System<SharedTransformSystem>();
+
         var xform = entManager.GetComponent<TransformComponent>(origin);
 
-        var worldPos = xform.WorldPosition;
+        var worldPos = transformSystem.GetWorldPosition(origin);
 
         if (xform.MapUid is not { } currentMap)
             return filter;
@@ -81,12 +85,12 @@ public static class CEFilter
         var visibleMap = new List<EntityUid>();
 
         if (zSystem.TryMapOffset(currentMap, 1, out var mapAbove))
-            visibleMap.Add(mapAbove.Value);
+            visibleMap.Add(mapAbove);
 
-        for (var i = 1; i <= CESharedZLevelsSystem.MaxZLevelsBelowRendering; i++)
+        for (var i = 1; i <= zSystem.MaxZLevelsBelowRendering; i++)
         {
             if (zSystem.TryMapOffset(currentMap, -i, out var mapBelow))
-                visibleMap.Add(mapBelow.Value);
+                visibleMap.Add(mapBelow);
         }
 
         foreach (var map in visibleMap)

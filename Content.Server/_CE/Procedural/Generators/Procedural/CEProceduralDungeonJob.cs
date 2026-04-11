@@ -133,7 +133,7 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
                     config.MainZLevel,
                     out var mainLevelMap))
             {
-                corridorGridUid = mainLevelMap.Value;
+                corridorGridUid = mainLevelMap;
                 corridorGrid = _entManager.EnsureComponent<MapGridComponent>(corridorGridUid);
             }
             else

@@ -45,5 +45,5 @@ public sealed partial class CCVars
      */
 
     public static readonly CVarDef<int>
-        CEZLevelsRenderingMaxZLevelsBelowRendering = CVarDef.Create("ce.zlevels.rendering.max_zLevels_below_rendering", 3, CVar.SERVER | CVar.REPLICATED);
+        CEZLevelsRenderingMaxZLevelsBelowRendering = CVarDef.Create("ce.zlevels.rendering.max_zLevels_below_rendering", 1, CVar.SERVER | CVar.REPLICATED);
 }

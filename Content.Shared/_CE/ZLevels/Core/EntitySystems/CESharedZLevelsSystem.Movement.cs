@@ -7,25 +7,15 @@ using System.Numerics;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Chasm;
 using Content.Shared.Inventory;
-using Content.Shared.Throwing;
 using JetBrains.Annotations;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Physics.Components;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    private const float ZGravityForce = 9.8f;
-    private const float ZVelocityLimit = 20.0f;
-
-    /// <summary>
-    /// The minimum speed required to trigger LandEvent events.
-    /// </summary>
-    private const float ImpactVelocityLimit = 3f;
-
     private EntityQuery<CEZLevelHighGroundComponent> _highgroundQuery;
 
     private void InitMovement()

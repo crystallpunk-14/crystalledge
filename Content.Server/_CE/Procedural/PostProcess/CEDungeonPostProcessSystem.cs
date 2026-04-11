@@ -31,7 +31,7 @@ public sealed class CEDungeonPostProcessSystem : EntitySystem
 
         if (_zLevels.TryGetZNetwork(mapUid, out var zNet))
         {
-            foreach (var (_, zMapUid) in zNet.Value.Comp.ZLevels)
+            foreach (var (_, zMapUid) in zNet.Comp.ZLevels)
             {
                 if (zMapUid != null)
                     maps.Add(zMapUid.Value);
@@ -55,7 +55,7 @@ public sealed class CEDungeonPostProcessSystem : EntitySystem
         if (!_zLevels.TryGetZNetwork(mapUid, out var zNet))
             return mapUid;
 
-        var zLevels = zNet.Value.Comp.ZLevels;
+        var zLevels = zNet.Comp.ZLevels;
         return zLevels.TryGetValue(depth, out var target) && target != null
             ? target.Value
             : mapUid;
