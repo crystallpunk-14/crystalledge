@@ -62,10 +62,14 @@ public abstract partial class CESharedZLevelsSystem
         switch (offset)
         {
             case 1 when entity.Comp.MapAbove is not null:
-                return new Entity<CEZLevelMapComponent>(entity.Comp.MapAbove.Value, _zMapQuery.GetComponent(entity.Comp.MapAbove.Value));
+                return _zMapQuery.TryGetComponent(entity.Comp.MapAbove.Value, out var componentAbove)
+                    ? new Entity<CEZLevelMapComponent>(entity.Comp.MapAbove.Value, componentAbove)
+                    : null;
 
             case -1 when entity.Comp.MapBelow is not null:
-                return new Entity<CEZLevelMapComponent>(entity.Comp.MapBelow.Value, _zMapQuery.GetComponent(entity.Comp.MapBelow.Value));
+                return _zMapQuery.TryGetComponent(entity.Comp.MapBelow.Value, out var componentBelow)
+                    ? new Entity<CEZLevelMapComponent>(entity.Comp.MapBelow.Value, componentBelow)
+                    : null;
         }
 
         if (!_zNetworkQuery.TryComp(entity.Comp.NetworkUid, out var zLevelsNetworkComponent))
