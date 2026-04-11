@@ -127,7 +127,7 @@
     rolloffFactor: 4.5
 
 - type: barkSpeech
-  id: Eglow
+  id: 4g10w
   saySound:
     path: /Audio/_CE/Voice/eglow.ogg
   askSound:
@@ -141,7 +141,7 @@
     rolloffFactor: 4.5
 
 - type: barkSpeech
-  id: Eglow2
+  id: 4g10w_2
   saySound:
     path: /Audio/_CE/Voice/eglow2.ogg
   askSound:
@@ -155,7 +155,7 @@
     rolloffFactor: 4.5
 
 - type: barkSpeech
-  id: Eglow3
+  id: 4g10w_3
   saySound:
     collection: eglowLaugh
   askSound:
@@ -201,6 +201,34 @@
   exclaimSound:
     path: /Audio/_CE/Voice/nimfar2_e.ogg
   syllableInterval: 0.05
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Dantanat
+  saySound:
+    path: /Audio/_CE/Voice/dantanat.ogg
+  askSound:
+    path: /Audio/_CE/Voice/dantanat_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/dantanat_e.ogg
+  syllableInterval: 0.08
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Omsoyk
+  saySound:
+    path: /Audio/_CE/Voice/omsoyk2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/omsoyk_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/omsoyk.ogg
+  syllableInterval: 0.1
   charsPerSyllable: 2
   audioParams:
     volume: 10
