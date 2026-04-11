@@ -25,13 +25,13 @@ public abstract partial class CESharedZLevelsSystem
 
         if (TerminatingOrDeleted(entity.Comp.NetworkUid))
         {
-            Log.Error($"Trying access to terminated z-network, map: {entity}, outdated network uid: {entity.Comp.NetworkUid}");
+            Log.Warning($"Trying access to terminated z-network, map: {entity}, outdated network uid: {entity.Comp.NetworkUid}");
             return false;
         }
 
         if (!TryComp<CEZLevelsNetworkComponent>(entity.Comp.NetworkUid, out var zNetworkComponent))
         {
-            Log.Error($"Trying access to z-network without component??? WHY?! map: {entity}, network uid: {entity.Comp.NetworkUid}");
+            Log.Warning($"Trying access to z-network without component??? WHY?! map: {entity}, network uid: {entity.Comp.NetworkUid}");
             return false;
         }
 
