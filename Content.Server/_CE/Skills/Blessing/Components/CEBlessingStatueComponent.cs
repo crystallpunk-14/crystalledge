@@ -27,6 +27,7 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// <summary>
     /// References to linked table (pedestal) entities, found during initialization.
     /// </summary>
+    [DataField]
     public HashSet<EntityUid> LinkedTables = new();
 
     /// <summary>
@@ -39,11 +40,13 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// <summary>
     /// The player currently inside the trigger zone receiving blessing options.
     /// </summary>
+    [DataField]
     public EntityUid? ActivePlayer;
 
     /// <summary>
     /// Currently spawned blessing entities on the pedestals for the active player.
     /// </summary>
+    [DataField]
     public List<EntityUid> ActiveBlessings = new();
 
     /// <summary>
@@ -52,4 +55,10 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// Cleared when the player claims a blessing (non-chosen become skipped).
     /// </summary>
     public Dictionary<EntityUid, List<ProtoId<CESkillPrototype>>> OfferedSkills = new();
+
+    [DataField]
+    public bool StatueInitialized = false;
+
+    [DataField]
+    public string TriggerFixtureId = "trigger";
 }

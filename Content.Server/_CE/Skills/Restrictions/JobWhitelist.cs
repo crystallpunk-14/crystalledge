@@ -25,6 +25,9 @@ public sealed partial class JobWhitelist : CESkillRestriction
         if (jobId is null)
             return false;
 
+        if (Inverted)
+            return !Jobs.Contains(jobId.Value);
+
         return Jobs.Contains(jobId.Value);
     }
 }

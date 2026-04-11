@@ -1,0 +1,57 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponHeavyClub
+  name: heavy club
+  description: TODO
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/heavy_club.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 60
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 3
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 180
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 3
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+        staminaCost: 2
+        speed: 0.7
+      - anim: StaffAttackLight2
+        staminaCost: 2
+        speed: 0.7
+      Secondary:
+      - anim: SwordAttackHeavy1
+        staminaCost: 3
+        speed: 0.7
+      - anim: SwordAttackHeavy2
+        staminaCost: 3
+        speed: 0.7
+  - type: Clothing
+    slots:
+    - neck

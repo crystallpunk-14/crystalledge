@@ -49,6 +49,7 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     /// Skill restriction. Restrictions on this skill entering the pool of possible skills when the player levels up.
     /// </summary>
     [DataField(serverOnly: true)]
+    [AlwaysPushInheritance]
     public List<CESkillRestriction> Restrictions = new();
 
     /// <summary>
@@ -62,6 +63,13 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     /// </summary>
     [DataField]
     public Color Color = Color.White;
+
+    /// <summary>
+    /// Whether this skill can only be learned once. When false, the skill can be offered
+    /// and taken multiple times (each application adds a stack).
+    /// </summary>
+    [DataField]
+    public bool Unique = true;
 }
 
 [ImplicitDataDefinitionForInheritors]
@@ -84,5 +92,8 @@ public abstract partial class CESkillEffect
 [MeansImplicitUse]
 public abstract partial class CESkillRestriction
 {
+    [DataField]
+    public bool Inverted;
+
     public abstract bool Check(IEntityManager entManager, EntityUid target);
 }

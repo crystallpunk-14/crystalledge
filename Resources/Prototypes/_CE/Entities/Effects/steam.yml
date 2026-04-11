@@ -1,0 +1,14 @@
+- type: entity
+  id: CESteamEffect
+  name: steam
+  description: A burst of steam from opposing elements colliding.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/steam_cloud.rsi
+    state: effect
+    noRot: true
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 1.5

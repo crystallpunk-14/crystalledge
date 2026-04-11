@@ -1,0 +1,74 @@
+- type: entity
+  id: CEHighBush
+  name: high bush
+  parent: BaseStructure
+  categories: [ ForkFiltered ]
+  description: Very tall and dense thickets. Perhaps someone is watching you from them
+  components:
+  - type: CEWaveShader
+    speed: 2.5
+    dis: 4
+  - type: Clickable
+  - type: Sprite
+    noRot: true
+    sprite: _CE/Structures/Nature/high_bush.rsi
+    drawdepth: Mobs
+    offset: 0,0.3
+    layers:
+      - state: bush-1
+        map: ["random"]
+  - type: RandomSprite
+    available:
+    - random:
+        bush-1: ""
+        bush-2: ""
+        bush-3: ""
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        density: 1000
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+  - type: EmitSoundOnTrigger
+    sound:
+      params:
+        volume: -8
+      collection: CEGrassGathering
+  - type: TriggerOnCollide
+    fixtureID: fix1
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 5
+    destroySound:
+      collection: CEGrassGathering
+  - type: CEFlammable
+    stackDelta: 2
+
+- type: entity
+  id: CERandomBushOffsetSpawner
+  name: random bush offset spawner
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Structures/Nature/high_bush.rsi
+      state: bush-1
+  - type: RandomSpawner
+    prototypes:
+    - CEHighBush
+    chance: 1
+    offset: 0.35
+

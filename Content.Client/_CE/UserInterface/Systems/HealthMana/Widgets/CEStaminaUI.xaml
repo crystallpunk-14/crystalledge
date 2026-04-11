@@ -1,0 +1,11 @@
+<widgets:CEStaminaUI xmlns="https://spacestation14.io"
+                     xmlns:widgets="clr-namespace:Content.Client._CE.UserInterface.Systems.HealthMana.Widgets"
+                     Orientation="Vertical"
+                     HorizontalExpand="False"
+                     VerticalExpand="False">
+    <Label Name="StaminaLabel"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           HorizontalExpand="True"
+           FontColorOverride="#FFFFFF" />
+</widgets:CEStaminaUI>

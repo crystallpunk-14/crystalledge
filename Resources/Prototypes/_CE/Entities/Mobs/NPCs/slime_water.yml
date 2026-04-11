@@ -1,0 +1,237 @@
+- type: entity
+  parent:
+  - BaseMob
+  - MobFlammable
+  - CEMobDamageable
+  - CEMobCombat
+  id: CESlimeWater
+  name: water slime
+  description: A wobbly blob of animated water. Pops into a splash when destroyed.
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/slime_alert.ogg
+      params:
+        variation: 0.1
+  - type: CEDestructible
+    destroyThreshold: 10
+  - type: CEDestructionEffect
+    effects:
+    - !type:WetArea
+      radius: 3
+      maxStacks: 10
+      fallOffFactor: 0.5
+  - type: CEGOAP
+    goals:
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+    actions:
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 1.5
+    - !type:CEGOAPMeleeAttackAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyInMeleeRange: true
+      cost: 0.5
+      actionPrototype: CEActionWaterSlimeJump
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+    sensors:
+    - !type:CEGOAPNearestHostileSensor
+      conditionKey: EnemyVisible
+      outputTargetKey: enemy
+      visionRadius: 8
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
+      targetKey: enemy
+      range: 1.5
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#37beef"
+  - type: SpriteMovement
+    movementLayers:
+      movement:
+        state: jump
+    noMovementLayers:
+      movement:
+        state: base
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 1.5
+  - type: CEWeapon
+    spriteRotation: -90
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.5
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 1
+        - !type:WetEntity
+          stacks: 1
+          maxStacks: 5
+    animations:
+      Primary:
+      - anim: SlimeBite
+  - type: CEArmor
+    flat:
+      Fire: 5
+
+
+
+- type: entityEffectAnimation
+  id: SlimeBite
+  movementSpeed: 0.8
+  duration: 0.8
+  events:
+    0:
+    - !type:UsedEntityAnimation
+      dummyEntity: CERatBiteEffectTelegraphy
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.3
+        easing: QuadIn
+      - time: 0.2
+        offset: 0, -0.2
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    0.2:
+    - !type:UsedEntityAnimation
+      dummyEntity: CERatBiteEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.2
+        easing: QuadIn
+      - time: 0.3
+        offset: 0, -0.7
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/slime_alert.ogg
+        params:
+          pitch: 0.3
+          variation: 0.1
+    0.25:
+    - !type:WeaponEffectSlot
+      slot: OnHit
+    - !type:Dash
+      effectTarget: User
+      distance: 0.1
+
+# -- Slime Jump (leap toward target) --
+
+- type: entity
+  id: CEActionWaterSlimeJump
+  name: water slime jump
+  description: The slime leaps toward a target.
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 1
+  - type: Action
+    useDelay: 5
+  - type: TargetAction
+    range: 8
+    interactOnMiss: false
+  - type: EntityTargetAction
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: WaterSlimeJump
+      cancelAnimation: true
+
+- type: entityEffectAnimation
+  id: WaterSlimeJump
+  movementSpeed: 0
+  duration: 0.7
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/Fluids/watersplash.ogg
+        params:
+          variation: 0.1
+    0.4:
+    - !type:WetArea
+      effectTarget: User
+      radius: 1
+      maxStacks: 3
+      fallOffFactor: 1
+    - !type:Dash
+      distance: 4
+      speed: 8
+    0.65:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/Fluids/splash.ogg
+        params:
+          variation: 0.1
+    - !type:WetArea
+      effectTarget: User
+      radius: 1
+      maxStacks: 3
+      fallOffFactor: 1

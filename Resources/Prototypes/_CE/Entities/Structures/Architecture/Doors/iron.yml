@@ -1,0 +1,22 @@
+- type: entity
+  id: CEIronDoor
+  parent:
+  - CEBaseDoor
+  name: iron door
+  description: Well, if there's a solid iron door, there must be something valuable behind it.
+  suffix: Opened
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Architecture/Doors/iron_door.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+
+- type: entity
+  id: CEIronDoorMirrored
+  parent: CEIronDoor
+  suffix: Opened, Mirrored
+  components:
+  - type: Door
+    openSpriteState: open_mirrored
+    closedSpriteState: closed_mirrored

@@ -3,63 +3,63 @@
   slots:
     # Left hotbar
     # 0, y
-    - name: gloves
-      slotTexture: gloves
-      slotFlags: GLOVES
+    - name: shoes
+      slotTexture: shoes
+      slotFlags: FEET
       uiWindowPos: 0,1
-      strippingWindowPos: 0,2
-      displayName: Gloves
-    - name: mask
-      slotTexture: mask
-      slotFlags: MASK
-      uiWindowPos: 0,2
-      strippingWindowPos: 2,0
-      displayName: Mask
-    - name: eyes
-      slotTexture: eyes
-      slotFlags: EYES
-      uiWindowPos: 0,3
-      strippingWindowPos: 0,1
-      displayName: Eyes
-    # 1, y
+      strippingWindowPos: 1,5
+      displayName: Shoes
     - name: pants
       slotTexture: pants
       slotFlags: PANTS
-      uiWindowPos: 1,1
+      uiWindowPos: 0,2
       strippingWindowPos: 1,4
       displayName: Pants
     - name: shirt
       slotTexture: shirt
       slotFlags: SHIRT
-      uiWindowPos: 1,2
+      uiWindowPos: 0,3
       strippingWindowPos: 1,3
       displayName: Shirt
     - name: head
       slotTexture: head
       slotFlags: HEAD
-      uiWindowPos: 1,3
+      uiWindowPos: 0,4
       strippingWindowPos: 1,1
       displayName: Head
-    # 2, y
-    - name: shoes
-      slotTexture: shoes
-      slotFlags: FEET
-      uiWindowPos: 2,1
-      strippingWindowPos: 1,5
-      displayName: Shoes
+    # 1, y
+    - name: gloves
+      slotTexture: gloves
+      slotFlags: GLOVES
+      uiWindowPos: 1,2
+      strippingWindowPos: 0,2
+      displayName: Gloves
     - name: outerClothing
       slotTexture: suit
       slotFlags: OUTERCLOTHING
       stripTime: 6
-      uiWindowPos: 2,2
+      uiWindowPos: 1,3
       strippingWindowPos: 2,1
       displayName: Suit
+    - name: mask
+      slotTexture: mask
+      slotFlags: MASK
+      uiWindowPos: 1,4
+      strippingWindowPos: 2,0
+      displayName: Mask
+    # 2, y
     - name: cloak
       slotTexture: cloak
       slotFlags: CLOAK
       uiWindowPos: 2,3
       strippingWindowPos: 2,2
       displayName: Cloak
+    - name: eyes
+      slotTexture: eyes
+      slotFlags: EYES
+      uiWindowPos: 2,4
+      strippingWindowPos: 0,1
+      displayName: Eyes
     # Main hotbar
     - name: belt
       slotTexture: belt

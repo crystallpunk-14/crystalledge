@@ -1,0 +1,23 @@
+- type: skill
+  parent: BaseMageSkill
+  id: AffinityFire
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectAffinityFire
+
+- type: entity
+  id: CEStatusEffectAffinityFire
+  name: Fire Affinity
+  description: You take 3 less [color=#ff8a05]fire damage[/color] from all sources.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEAffinityFire
+  - type: CEArmor
+    flat:
+      Fire: 3
+
+- type: alert
+  id: CEAffinityFire
+  icons:
+  - sprite: _CE/Skills/Mage/affinity_fire.rsi
+    state: icon

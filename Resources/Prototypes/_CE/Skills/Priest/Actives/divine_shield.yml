@@ -14,7 +14,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 1
   - type: Action
     useDelay: 5
     icon:
@@ -26,23 +26,23 @@
   - type: EntityTargetAction
     whitelist:
       components:
-      - CEHealth
+      - CEDamageable
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationDivineShield
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationDivineShield
   movementSpeed: 0.5
   duration: 1.5
   events:
     0:
-    #- !type:SpawnEntityOnTarget
+    #- !type:SpawnEntity
     #  spawns:
     #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat
       sentence: "Et in necessitate"
     0.2:
-    #- !type:SpawnEntityOnTarget
+    #- !type:SpawnEntity
     #  spawns:
     #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat

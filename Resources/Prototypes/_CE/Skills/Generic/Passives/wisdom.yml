@@ -1,0 +1,18 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: Wisdom
+  unique: false
+  icon:
+    sprite: _CE/Skills/General/mana_upgrade.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectWisdom
+
+- type: entity
+  id: CEStatusEffectWisdom
+  name: Wisdom
+  description: Your maximum mana is increased by [color=#3296fa]10[/color].
+  components:
+  - type: StatusEffect
+  - type: CEWisdomStatusEffect
+    flatManaBonus: 10

@@ -46,4 +46,12 @@ public sealed partial class CEVisualizeAoEZoneActionComponent : Component
     /// </summary>
     [DataField]
     public float FillAlpha = 0.05f;
+
+    /// <summary>
+    /// When true, the AoE zone is drawn at the end of the cast range in the cursor direction,
+    /// reflecting projectile behavior (projectile flies toward cursor, explodes at max range).
+    /// When false (default), the zone follows the cursor position.
+    /// </summary>
+    [DataField]
+    public bool ProjectileMode;
 }

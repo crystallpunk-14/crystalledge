@@ -1,0 +1,21 @@
+- type: entity
+  id: CEFreezeEffect
+  name: freeze
+  description: A cold burst of frost.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/freeze_effect.rsi
+    layers:
+    - state: effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 2.0
+  - type: PointLight
+    color: "#6ec6ff"
+    radius: 1.2
+    energy: 1.5
+    enabled: true
+  - type: LightFade
+    duration: 1.0

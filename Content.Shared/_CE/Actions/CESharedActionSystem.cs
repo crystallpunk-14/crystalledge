@@ -7,7 +7,6 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Actions;
 
@@ -17,7 +16,6 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hand = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
 
     private EntityQuery<ActionComponent> _actionQuery;
@@ -83,7 +81,7 @@ public abstract partial class CESharedActionSystem : EntitySystem
 public sealed partial class CEInstantActionAnimationEvent : InstantActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;
@@ -95,7 +93,7 @@ public sealed partial class CEInstantActionAnimationEvent : InstantActionEvent
 public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;
@@ -107,7 +105,7 @@ public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActio
 public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;
@@ -120,7 +118,7 @@ public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
 public sealed partial class CEEntityTargetActionAnimationEvent : EntityTargetActionEvent
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Animation;
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation;
 
     [DataField]
     public float Speed = 1f;

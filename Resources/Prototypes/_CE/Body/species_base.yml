@@ -6,7 +6,6 @@
   - CEMobCombat
   - CEMobDamageable
   - CEMobMagical
-  - CEMobStatBased
   - StripableInventoryBase
   - BaseSpeciesAppearance
   id: CEBaseSpeciesMob
@@ -61,6 +60,8 @@
   - type: Puller
   - type: Speech
     speechSounds: Alto
+  - type: CEBarkSpeech
+    barkSpeech: Ed
   - type: DamageForceSay
   - type: Vocal
     sounds:
@@ -76,3 +77,23 @@
   - type: Tag
     tags:
     - FootstepSound
+  - type: WarpPoint
+    follow: true
+  - type: CEBlinker
+  - type: CEBlessingReceiver
+  - type: CESkillStorage
+  - type: CEStamina
+  - type: CEMobState
+  - type: CEDungeonPlayer
+  - type: CEDamageVisuals
+    thresholds: [ 0.1, 0.2, 0.3, 0.5, 0.7, 1.0 ]
+    targetLayers:
+    - "enum.HumanoidVisualLayers.Chest"
+    - "enum.HumanoidVisualLayers.Head"
+    - "enum.HumanoidVisualLayers.LArm"
+    - "enum.HumanoidVisualLayers.LLeg"
+    - "enum.HumanoidVisualLayers.RArm"
+    - "enum.HumanoidVisualLayers.RLeg"
+    sprite: _CE/Mobs/Effects/brute_damage.rsi
+    color: "#FF0000"
+    statePrefix: Brute

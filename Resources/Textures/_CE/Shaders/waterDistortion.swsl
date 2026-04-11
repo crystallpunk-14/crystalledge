@@ -1,0 +1,41 @@
+uniform sampler2D SCREEN_TEXTURE;
+uniform sampler2D NOISE_TEXTURE; // Pre-generated perlin noise
+
+// These are overwritten by the overlay
+uniform highp float spatial_scale; // Makes more waves
+uniform highp float strength_scale; // Makes waves stronger
+uniform highp float speed_scale; // Makes waves run faster
+
+void fragment()
+{
+    // Calculate scrolling noise coordinates
+    highp vec2 flow1 = vec2(0.0, TIME * speed_scale);
+    highp vec2 flow2 = vec2(TIME * speed_scale * 0.7, TIME * speed_scale * 0.3);
+
+    highp vec2 noiseUV = fract((UV * spatial_scale) - flow1);
+    highp vec2 noiseUV2 = fract((UV * spatial_scale) - flow2 + vec2(0.43, 0.12));
+
+    // Texel size for gradient calculation (noise texture is 512x512)
+    highp float texel = 1.0 / 512.0;
+
+    // Use noise gradient (derivative) instead of raw value.
+    // Gradients are inherently zero-mean, eliminating directional bias.
+    highp float dx1 = texture2D(NOISE_TEXTURE, noiseUV + vec2(texel, 0.0)).r
+                     - texture2D(NOISE_TEXTURE, noiseUV - vec2(texel, 0.0)).r;
+    highp float dy1 = texture2D(NOISE_TEXTURE, noiseUV2 + vec2(0.0, texel)).r
+                     - texture2D(NOISE_TEXTURE, noiseUV2 - vec2(0.0, texel)).r;
+
+    // Distortion from noise gradient — naturally zero-centered
+    highp vec2 distortion = vec2(dx1, dy1);
+
+    highp float waterStrength = texture2D(TEXTURE, UV).r;
+
+    // Non-linear curve to make the effect more visible in the center of water tiles
+    waterStrength = clamp(-waterStrength * waterStrength + 2.0 * waterStrength, 0.0, 1.0);
+
+    highp vec2 offset = distortion * strength_scale * waterStrength;
+
+    // Sample screen at distorted UV
+    COLOR = texture2D(SCREEN_TEXTURE, UV + offset);
+}
+

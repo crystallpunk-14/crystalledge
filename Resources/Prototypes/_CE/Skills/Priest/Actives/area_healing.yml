@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/area_healing.rsi
+      sprite: _CE/Skills/Priest/area_healing.rsi
       state: icon
   - type: TargetAction
     range: 3
@@ -27,19 +27,19 @@
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationAreaHealing
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationAreaHealing
   movementSpeed: 0.5
   duration: 1.5
   events:
     0:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectAreaHealingTelegraphy
     - !type:SayChat
       sentence: "Et curabuntur"
     1.2:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectAreaHealingEffect
     - !type:SayChat
@@ -48,7 +48,7 @@
       range: 1.2
       affectCaster: true
       effects:
-      - !type:SpawnEntityOnTarget
+      - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric
       - !type:Heal
@@ -57,7 +57,9 @@
 - type: entity
   id: CEEffectAreaHealingTelegraphy
   parent: CEBaseMagicImpact
-  categories: [ HideSpawnMenu ]
+  categories: [ ForkFiltered ]
+  name: area healing telegraphy
+  suffix: VFX
   save: false
   components:
   - type: Sprite
@@ -85,6 +87,7 @@
 - type: entity
   parent: CEEffectAreaHealingTelegraphy
   id: CEEffectAreaHealingEffect
+  name: area healing impact
   components:
   - type: Sprite
     sprite: _CE/Effects/area_healing_effect.rsi
@@ -97,6 +100,7 @@
 - type: entity
   parent: CEEffectAreaHealingTelegraphy
   id: CEEffectHealingGeneric
+  name: healing impact
   components:
   - type: Sprite
     drawdepth: Effects

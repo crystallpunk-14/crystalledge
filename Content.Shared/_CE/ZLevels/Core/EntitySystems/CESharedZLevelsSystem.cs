@@ -6,7 +6,6 @@
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
-using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map.Components;
@@ -24,7 +23,6 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
     [Dependency] private readonly ActionBlockerSystem _blocker = null!;
     [Dependency] private readonly EntityLookupSystem _lookup = null!;
     [Dependency] private readonly SharedMapSystem _map = null!;
-    [Dependency] private readonly SharedPopupSystem _popup = null!;
 
     private EntityQuery<MapComponent> _mapQuery;
     private EntityQuery<CEZLevelMapComponent> _zMapQuery;

@@ -18,6 +18,14 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
+    private const float ZGravityForce = 9.8f;
+    private const float ZVelocityLimit = 20.0f;
+
+    /// <summary>
+    /// The minimum speed required to trigger LandEvent events.
+    /// </summary>
+    private const float ImpactVelocityLimit = 3f;
+
     private EntityQuery<CEZLevelHighGroundComponent> _highgroundQuery;
 
     private void InitMovement()
@@ -91,6 +99,10 @@ public abstract partial class CESharedZLevelsSystem
         args.VelocityDelta -= ZGravityForce * ent.Comp.GravityMultiplier;
     }
 
+    // Currently we have no need for active z-physics, so we can skip this costly loop.
+    // We will return to it when we ready.
+
+    /*
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -190,6 +202,7 @@ public abstract partial class CESharedZLevelsSystem
                 DirtyField(uid, zPhys, nameof(CEZPhysicsComponent.LocalPosition));
         }
     }
+    */
 
     /// <summary>
     /// Returns the last cached distance to the floor.
@@ -235,6 +248,7 @@ public abstract partial class CESharedZLevelsSystem
             {
                 if (!TryMapOffset((checkingMap.Owner, checkingMap.Comp), -floor, out var tempCheckingMap))
                     continue;
+
                 if (!_gridQuery.TryComp(tempCheckingMap, out var tempCheckingGrid))
                     continue;
 
@@ -441,7 +455,7 @@ public abstract partial class CESharedZLevelsSystem
         if (TryMoveDown(ent))
             return true;
 
-        //w elp, that default Chasm behavior. Not really good, but ok for now.
+        // Welp, that default Chasm behavior. Not really good, but ok for now.
         if (HasComp<ChasmFallingComponent>(ent))
             return false; // Already falling
 

@@ -57,4 +57,12 @@ public sealed partial class CEVisualizeWideLineActionComponent : Component
     /// </summary>
     [DataField]
     public float FillAlpha = 0.05f;
+
+    /// <summary>
+    /// When true, the line always extends to full cast range in the cursor direction,
+    /// reflecting projectile behavior (fires toward cursor, travels up to max range).
+    /// When false (default), the line ends at the cursor position (clamped to range).
+    /// </summary>
+    [DataField]
+    public bool ProjectileMode;
 }

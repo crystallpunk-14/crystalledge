@@ -3,3 +3,31 @@
   files:
   - /Audio/_CE/Effects/crystal_ding.ogg
   - /Audio/_CE/Effects/crystal_ding2.ogg
+
+- type: soundCollection
+  id: CECoins
+  files:
+  - /Audio/_CE/Effects/coins1.ogg
+  - /Audio/_CE/Effects/coins2.ogg
+  - /Audio/_CE/Effects/coins3.ogg
+
+- type: soundCollection
+  id: CEDoorknob
+  files:
+  - /Audio/_CE/Effects/doorknob_1.ogg
+  - /Audio/_CE/Effects/doorknob_2.ogg
+
+- type: soundCollection
+  id: CEPotBreak
+  files:
+  - /Audio/_CE/Effects/pot_break1.ogg
+  - /Audio/_CE/Effects/pot_break2.ogg
+  - /Audio/_CE/Effects/pot_break3.ogg
+  - /Audio/_CE/Effects/pot_break4.ogg
+
+- type: soundCollection
+  id: CEGrassGathering
+  files:
+    - /Audio/_CE/Effects/grass_gather.ogg
+    - /Audio/_CE/Effects/grass_gather2.ogg
+    - /Audio/_CE/Effects/grass_gather3.ogg

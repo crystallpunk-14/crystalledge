@@ -383,7 +383,7 @@ public abstract class SharedEntityStorageSystem : EntitySystem
             return _whitelistSystem.IsValid(component.Whitelist, toInsert);
 
         // The inserted entity must be a mob or an item.
-        return HasComp<MobStateComponent>(toInsert) || HasComp<ItemComponent>(toInsert) || HasComp<CEHealthComponent>(toInsert); //CrystallEdge - Allow entities with health component to be stored
+        return HasComp<MobStateComponent>(toInsert) || HasComp<ItemComponent>(toInsert) || HasComp<CEDamageableComponent>(toInsert); //CrystallEdge - Allow entities with damageable component to be stored
 
 }
 

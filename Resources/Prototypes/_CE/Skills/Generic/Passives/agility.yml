@@ -1,0 +1,19 @@
+# TODO: Replace masochism.rsi with a dedicated agility sprite
+- type: skill
+  parent: BaseNeutralSkill
+  id: Agility
+  unique: false
+  icon:
+    sprite: _CE/Skills/General/stamina_upgrade.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectAgility
+
+- type: entity
+  id: CEStatusEffectAgility
+  name: Agility
+  description: Your maximum stamina is increased by [color=#2bef1d]5[/color].
+  components:
+  - type: StatusEffect
+  - type: CEAgilityStatusEffect
+    flatStaminaBonus: 5

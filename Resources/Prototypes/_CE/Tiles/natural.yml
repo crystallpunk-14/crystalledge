@@ -3,25 +3,6 @@
 # 0
 
 - type: tile
-  id: CEIce
-  editorHidden: false
-  name: tiles-ice
-  sprite: /Textures/_CE/Tiles/ice.png
-  variants: 4
-  placementVariants:
-  - 1.0
-  - 1.0
-  - 1.0
-  - 1.0
-  baseTurf: Space
-  isSubfloor: true
-  transparent: true
-  heatCapacity: 10000
-  friction: 0.05
-  mobAcceleration: 0.1
-  weather: true
-
-- type: tile
   editorHidden: false
   id: CEDirt
   name: ce-tiles-dirt
@@ -54,6 +35,7 @@
     East: /Textures/_CE/Tiles/Dirt/double_edge_E.png
     North: /Textures/_CE/Tiles/Dirt/double_edge_N.png
     West: /Textures/_CE/Tiles/Dirt/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/dirt.rsi
   baseTurf: CEStone
   isSubfloor: true
   footstepSounds:
@@ -83,6 +65,7 @@
     East: /Textures/_CE/Tiles/Cobblestone/double_edge_E.png
     North: /Textures/_CE/Tiles/Cobblestone/double_edge_N.png
     West: /Textures/_CE/Tiles/Cobblestone/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/dirt.rsi
   baseTurf: CEDirt
   isSubfloor: true
   footstepSounds:
@@ -115,6 +98,7 @@
     East: /Textures/_CE/Tiles/Mycelium/double_edge_E.png
     North: /Textures/_CE/Tiles/Mycelium/double_edge_N.png
     West: /Textures/_CE/Tiles/Mycelium/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/dirt.rsi
   baseTurf: CEDirt
   isSubfloor: true
   footstepSounds:
@@ -147,6 +131,7 @@
     East: /Textures/_CE/Tiles/MyceliumLight/double_edge_E.png
     North: /Textures/_CE/Tiles/MyceliumLight/double_edge_N.png
     West: /Textures/_CE/Tiles/MyceliumLight/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/dirt.rsi
   baseTurf: CEMycelium
   isSubfloor: true
   footstepSounds:

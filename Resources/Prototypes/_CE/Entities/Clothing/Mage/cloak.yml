@@ -1,0 +1,8 @@
+- type: entity
+  parent: CEClothingCloakBase
+  id: CEClothingMageCloakCape
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Cloak/Mage/cape.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Cloak/Mage/cape.rsi

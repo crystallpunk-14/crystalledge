@@ -1,0 +1,207 @@
+# Bark speech voice profiles for Animal Crossing-style syllable playback.
+
+- type: barkSpeech
+  id: Ed
+  saySound:
+    path: /Audio/_CE/Voice/ed.ogg
+  askSound:
+    path: /Audio/_CE/Voice/ed_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/ed_e.ogg
+  syllableInterval: 0.07
+  charsPerSyllable: 2
+  audioParams:
+    volume: 12
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Ezik
+  saySound:
+    path: /Audio/_CE/Voice/ezik.ogg
+  askSound:
+    path: /Audio/_CE/Voice/ezik_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/ezik_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Angel
+  saySound:
+    path: /Audio/_CE/Voice/angel.ogg
+  askSound:
+    path: /Audio/_CE/Voice/angel_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/angel_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Mirinda
+  saySound:
+    path: /Audio/_CE/Voice/mirinda.ogg
+  askSound:
+    path: /Audio/_CE/Voice/mirinda_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/mirinda_e.ogg
+  syllableInterval: 0.16
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Straymer
+  saySound:
+    path: /Audio/_CE/Voice/straymer.ogg
+  askSound:
+    path: /Audio/_CE/Voice/straymer_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/straymer_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Stepa
+  saySound:
+    path: /Audio/_CE/Voice/stepa.ogg
+  askSound:
+    path: /Audio/_CE/Voice/stepa_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/stepa_e.ogg
+  syllableInterval: 0.13
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Nimfar
+  saySound:
+    path: /Audio/_CE/Voice/nimfar.ogg
+  askSound:
+    path: /Audio/_CE/Voice/nimfar_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/nimfar_e.ogg
+  syllableInterval: 0.1
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Jaba
+  saySound:
+    path: /Audio/_CE/Voice/jaba.ogg
+  askSound:
+    path: /Audio/_CE/Voice/jaba_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/jaba_e.ogg
+  syllableInterval: 0.08
+  charsPerSyllable: 2
+  audioParams:
+    volume: -5
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Altnight
+  saySound:
+    path: /Audio/_CE/Voice/altnight.ogg
+  askSound:
+    path: /Audio/_CE/Voice/altnight_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/altnight_e.ogg
+  syllableInterval: 0.13
+  charsPerSyllable: 2
+  audioParams:
+    volume: 4
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Eglow
+  saySound:
+    path: /Audio/_CE/Voice/eglow.ogg
+  askSound:
+    path: /Audio/_CE/Voice/eglow_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/eglow_e.ogg
+  syllableInterval: 0.13
+  charsPerSyllable: 2
+  audioParams:
+    volume: -8
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Eglow2
+  saySound:
+    path: /Audio/_CE/Voice/eglow2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/eglow2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/eglow2_e.ogg
+  syllableInterval: 0.11
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Eglow3
+  saySound:
+    collection: eglowLaugh
+  askSound:
+    path: /Audio/_CE/Voice/eglow3_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/eglow3_e.ogg
+  syllableInterval: 0.08
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: soundCollection
+  id: eglowLaugh
+  files:
+  - /Audio/_CE/Voice/eglow3_1.ogg
+  - /Audio/_CE/Voice/eglow3_2.ogg
+  - /Audio/_CE/Voice/eglow3_3.ogg
+  - /Audio/_CE/Voice/eglow3_4.ogg
+  - /Audio/_CE/Voice/eglow3_5.ogg
+
+
+- type: barkSpeech
+  id: Shishka
+  saySound:
+    path: /Audio/_CE/Voice/shishka.ogg
+  askSound:
+    path: /Audio/_CE/Voice/shishka_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/shishka_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5
+
+- type: barkSpeech
+  id: Nimfar2
+  saySound:
+    path: /Audio/_CE/Voice/nimfar2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/nimfar2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/nimfar2_e.ogg
+  syllableInterval: 0.05
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+    rolloffFactor: 4.5

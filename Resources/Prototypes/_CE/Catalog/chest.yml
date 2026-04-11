@@ -1,0 +1,19 @@
+- type: entity
+  parent: CEChestWooden
+  id: CEChestWoodenFilled
+  suffix: Filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        # Single cool unique item
+        - !type:NestedSelector
+          tableId: CERandomWeapon
+        # Some additional fills
+        - !type:GroupSelector
+          rolls: !type:RangeNumberSelector
+            range: 3, 5
+          children:
+          - !type:NestedSelector
+            tableId: CERandomPotion
