@@ -1,5 +1,5 @@
 - type: entity
-  parent: CEFlem
+  parent: CEMobFlem
   id: CEMobFlem2
   suffix: Fire
   components:
@@ -45,7 +45,7 @@
       Fire: 5
 
 - type: entity
-  parent: CEFlem
+  parent: CEMobFlem
   id: CEMobFlem3
   suffix: Frost
   components:

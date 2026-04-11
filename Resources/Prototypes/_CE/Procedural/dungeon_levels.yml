@@ -257,18 +257,15 @@
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CERat
+    - proto: CEMobRat
       cost: 1
       weight: 3
-    - proto: CESlimeWater
+    - proto: CEMobSlimeWater
       cost: 2
       weight: 1
-    - proto: CEFlem
-      cost: 3
+    - proto: CEMobFireConstruct
+      cost: 10
       weight: 1
-    - proto: CEFlem2
-      cost: 5
-      weight: 0.5
 
 # Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
@@ -304,12 +301,9 @@
     - proto: CEMobSlimeWater
       cost: 2
       weight: 1
-    - proto: CEMobFlem
-      cost: 3
+    - proto: CEMobFireConstruct
+      cost: 10
       weight: 1
-    - proto: CEMobFlem2
-      cost: 5
-      weight: 0.5
     - proto: CEMobSlimeFire
       cost: 3
       weight: 1
@@ -348,17 +342,11 @@
     - proto: CEMobSlimeWater
       cost: 2
       weight: 1
-    - proto: CEMobFlem
-      cost: 3
-      weight: 1
-    - proto: CEMobFlem2
-      cost: 5
-      weight: 1
-    - proto: CEMobFlem3
-      cost: 5
-      weight: 1
     - proto: CEMobSlimeFire
       cost: 3
+      weight: 1
+    - proto: CEMobFireConstruct
+      cost: 10
       weight: 1
 
 - type: dungeonLevel
@@ -445,18 +433,9 @@
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CEMobSlimeWater
-      cost: 2
-      weight: 1
-    - proto: CEMobFlem
-      cost: 3
-      weight: 1
-    - proto: CEMobFlem2
-      cost: 3
-      weight: 1
-    - proto: CEMobFlem3
-      cost: 5
-      weight: 1
     - proto: CEMobSlimeFire
       cost: 3
+      weight: 1
+    - proto: CEMobFireConstruct
+      cost: 10
       weight: 1

@@ -121,7 +121,7 @@
       radius: 1.5
       maxStacks: 6
     - !type:AreaEffect
-      affectCaster: true
+      affectCaster: false
       range: 1.5
       effects:
       - !type:Damage

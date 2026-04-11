@@ -27,6 +27,13 @@
     - !type:FreezeArea
       radius: 2
       maxStacks: 6
+    - !type:AreaEffect
+      range: 2
+      effects:
+      - !type:Damage
+        damage:
+          types:
+            Cold: 4
   - type: CEDestructible
   - type: PointLight
     color: "#00d9ff"

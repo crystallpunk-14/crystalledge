@@ -57,3 +57,22 @@
   license: "CC-BY-3.0"
   copyright: 'Created by CpawsMusic on Freesound.org'
   source: "https://freesound.org/people/CpawsMusic/sounds/437113/"
+
+- files: ["steam_burst.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Created by pengo_au on Freesound.org'
+  source: "https://freesound.org/people/pengo_au/sounds/90143/"
+
+- files: ["ice_burst.ogg"]
+  license: "CC-BY-SA-4.0"
+  copyright: 'Created by EminYILDIRIM on Freesound.org'
+  source: "https://freesound.org/people/EminYILDIRIM/sounds/550267/"
+
+- files: ["pyro_burst.ogg"]
+  license: "Custom"
+  copyright: "Multiple sounds, edited and layered by GonTar and TheShuEd"
+  source: https://freesound.org/people/Robinhood76/sounds/612277/
+  # additional sources:
+  # source: https://freesound.org/people/Fission9/sounds/474850/
+  # source: https://pixabay.com/sound-effects/rubber-stretch-sound-effect-201310/ (Pixabay license)
+  # source: https://pixabay.com/sound-effects/fx-collection-of-flame-sword-swoosh-sound-design-elements-275902/ (Pixabay license)

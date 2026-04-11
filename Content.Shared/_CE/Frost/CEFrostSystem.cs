@@ -25,7 +25,7 @@ public sealed class CEFrostSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private readonly EntProtoId _freezeEffect = "CEFreezeEffect";
-    private readonly SoundSpecifier _freezeSound = new SoundPathSpecifier("/Audio/Items/Anomaly/ice_crit.ogg");
+    private readonly SoundSpecifier _freezeSound = new SoundPathSpecifier("/Audio/_CE/Effects/ice_burst.ogg");
 
     public override void Initialize()
     {

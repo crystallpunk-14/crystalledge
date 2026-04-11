@@ -22,7 +22,6 @@
       priority: 3
 
     actions:
-    # Move to target
     - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
       preconditions:
@@ -31,12 +30,14 @@
         EnemyInMeleeRange: true
       cost: 2
       range: 1.5
-    # Wander to a random nearby tile
     - !type:CEGOAPExploreAction
       effects:
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
+    - !type:CEGOAPFleeAction
+      effects:
+        EnemyInMeleeRange: false
     # Move to enemy's last known position
     - !type:CEGOAPMoveToLastKnownPositionAction
       positionTargetKey: enemy
@@ -95,6 +96,12 @@
     flat:
       Fire: 100
       Physical: 2
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepThud
+  - type: Tag
+    tags:
+      - FootstepSound
 
 
 
@@ -118,21 +125,25 @@
   duration: 1.5
   events:
     0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/pyro_burst.ogg
     - !type:SpawnEntity
       spawns:
-      - CEEffectWaterBurstTelegraphy
-    - !type:SayChat
-      sentence: "EXPLOSION"
-    1.2:
+      - CEEffectPotionAlchemicalFire
+    1.4:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:SpawnEntity
       spawns:
-      - CEEffectWaterBurstEffect
-    - !type:SayChat
-      sentence: "flumine!"
+      - CEEffectPotionAlchemicalFire
     - !type:IgniteArea
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 5
+    - !type:Dash
+      distance: 3
 
 
 - type: entity
@@ -147,7 +158,7 @@
   - type: CEActionManaCost
     manaCost: 3
   - type: Action
-    useDelay: 3
+    useDelay: 8
     icon:
       sprite: _CE/Skills/Mage/firebolt.rsi
       state: icon

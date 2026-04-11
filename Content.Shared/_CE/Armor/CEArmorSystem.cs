@@ -47,6 +47,9 @@ public sealed partial class CEArmorSystem : EntitySystem
 
         foreach (var (damageType, damageAmount) in originalDamage.Types)
         {
+            if (damageAmount <= 0)
+                continue;
+
             var dmg = damageAmount;
 
             for (var i = 0; i < armorStack; i++)
@@ -58,7 +61,6 @@ public sealed partial class CEArmorSystem : EntitySystem
                     dmg -= flat;
             }
 
-            //Block healing
             dmg = Math.Max(dmg, 0);
 
             newDamage.Types.Add(damageType, dmg);

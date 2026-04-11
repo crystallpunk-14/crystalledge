@@ -35,7 +35,7 @@ public sealed partial class CEFireSystem : EntitySystem
     private readonly EntProtoId _steamEffect = "CESteamEffect";
 
     private readonly SoundSpecifier _fireSound = new SoundPathSpecifier("/Audio/_CE/Effects/fire_whoosh.ogg");
-    private readonly SoundSpecifier _steamSound = new SoundPathSpecifier("/Audio/Effects/sizzle.ogg");
+    private readonly SoundSpecifier _steamSound = new SoundPathSpecifier("/Audio/_CE/Effects/steam_burst.ogg");
 
     private EntityQuery<CEFireComponent> _fireQuery;
     private EntityQuery<CEFlammableComponent> _flammableQuery;
