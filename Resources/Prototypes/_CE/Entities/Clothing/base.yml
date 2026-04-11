@@ -83,9 +83,9 @@
 - type: entity
   abstract: true
   parent: Clothing
-  id: CEClothingGlovesBase
+  id: CEClothingAccessoryBase
   categories: [ ForkFiltered ]
-  name: gloves
+  name: accessory
   description: TODO
   components:
   - type: Clothing
@@ -93,7 +93,7 @@
     unequipDelay: 0.5
     equipWhileMoving: true
     slots:
-    - gloves
+    - eyes
   - type: Sprite
     state: icon
 

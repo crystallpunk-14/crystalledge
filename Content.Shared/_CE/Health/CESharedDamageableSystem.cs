@@ -262,6 +262,10 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
                 return;
         }
 
+        var incomingHealEv = new CEGetIncomingHealEvent(finalAmount);
+        RaiseLocalEvent(target, incomingHealEv);
+        finalAmount = incomingHealEv.HealAmount;
+
         if (finalAmount <= 0)
             return;
 
@@ -447,6 +451,15 @@ public sealed class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventAr
     public float Multiplier = 1f;
 
     public int MaxHealth => (int)((BaseMaxHealth + FlatModifier) * Multiplier);
+}
+
+/// <summary>
+/// Raised on the target entity to allow inventory items to modify incoming healing.
+/// </summary>
+public sealed class CEGetIncomingHealEvent(int healAmount) : EntityEventArgs, IInventoryRelayEvent
+{
+    public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
+    public int HealAmount = healAmount;
 }
 
 /// <summary>

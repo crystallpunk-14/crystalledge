@@ -8,8 +8,12 @@
       storagebase: !type:AllSelector
         children:
         # Single cool unique item
-        - !type:NestedSelector
-          tableId: CERandomWeapon
+        - !type:GroupSelector
+          children:
+          - !type:NestedSelector
+            tableId: CERandomWeapon
+          - !type:NestedSelector
+            tableId: CEAccessories
         # Some additional fills
         - !type:GroupSelector
           rolls: !type:RangeNumberSelector

@@ -1,0 +1,40 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryRingFire
+  name: fire ring
+  description: A protective ring that shields the carrier from the heat of the fire.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/ring_fire.rsi
+  - type: CEArmor
+    flat:
+      Fire: 1
+
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryRingFrost
+  name: frost ring
+  description: A protective ring that shields the carrier from the cold.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/ring_frost.rsi
+  - type: CEArmor
+    flat:
+      Cold: 1
+
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryAmuletVitality
+  name: vitality amulet
+  description: An amulet that enhances the body's ability to heal, increasing all incoming healing by 1.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/vitality_amulet.rsi
+  - type: CEClothingHealBonus
+    flat: 1
