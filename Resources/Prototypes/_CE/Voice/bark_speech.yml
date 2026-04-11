@@ -205,7 +205,7 @@
 - type: barkSpeech
   id: Omsoyk
   saySound:
-    path: /Audio/_CE/Voice/omsoyk2.ogg
+    path: /Audio/_CE/Voice/omsoyk.ogg
   askSound:
     path: /Audio/_CE/Voice/omsoyk_a.ogg
   exclaimSound:
