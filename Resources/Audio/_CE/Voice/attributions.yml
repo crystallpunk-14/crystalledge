@@ -104,3 +104,8 @@
   license: "CC0-1.0"
   copyright: "Voice recorded by Vojner"
   source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["pinto.ogg", "pinto_e.ogg", "pinto_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Pinto"
+  source: "https://github.com/crystallpunk-14/crystalledge"

@@ -293,5 +293,18 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Pinto
+  saySound:
+    path: /Audio/_CE/Voice/pinto.ogg
+  askSound:
+    path: /Audio/_CE/Voice/pinto_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/pinto_e.ogg
+  syllableInterval: 0.07
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
 
 
