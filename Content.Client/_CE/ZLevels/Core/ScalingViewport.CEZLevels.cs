@@ -119,7 +119,7 @@ public sealed partial class ScalingViewport
         var lookUp = zLevelViewer.LookUp ? 1 : 0;
 
         var lowestDepth = 0;
-        for (var i = 0; i >= -CEClientZLevelsSystem.MaxZLevelsBelowRendering; i--)
+        for (var i = 0; i >= -_zLevels.MaxZLevelsBelowRendering; i--)
         {
             var checkingMap = playerXform.MapUid.Value;
 

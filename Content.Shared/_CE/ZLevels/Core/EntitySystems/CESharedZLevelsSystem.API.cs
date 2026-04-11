@@ -16,25 +16,26 @@ public abstract partial class CESharedZLevelsSystem
     /// Checks whether the map is in the zLevels network. If so, returns true and the current depth + Entity of the current zLevels network.
     /// </summary>
     [PublicAPI]
-    public bool TryGetZNetwork(EntityUid mapUid, out Entity<CEZLevelsNetworkComponent> zLevel)
+    public bool TryGetZNetwork(Entity<CEZLevelMapComponent?> entity, out Entity<CEZLevelsNetworkComponent> zLevel)
     {
         zLevel = default;
-        if (!TryComp<CEZLevelMapComponent>(mapUid, out var zLevelMapComponent))
+
+        if (!Resolve(entity, ref entity.Comp, false))
             return false;
 
-        if (TerminatingOrDeleted(zLevelMapComponent.NetworkUid))
+        if (TerminatingOrDeleted(entity.Comp.NetworkUid))
         {
-            Log.Error($"Trying access to terminated z-network, map: {mapUid}, outdated network uid: {zLevelMapComponent.NetworkUid}");
+            Log.Error($"Trying access to terminated z-network, map: {entity}, outdated network uid: {entity.Comp.NetworkUid}");
             return false;
         }
 
-        if (!TryComp<CEZLevelsNetworkComponent>(zLevelMapComponent.NetworkUid, out var zNetworkComponent))
+        if (!TryComp<CEZLevelsNetworkComponent>(entity.Comp.NetworkUid, out var zNetworkComponent))
         {
-            Log.Error($"Trying access to z-network without component??? WHY?! map: {mapUid}, network uid: {zLevelMapComponent.NetworkUid}");
+            Log.Error($"Trying access to z-network without component??? WHY?! map: {entity}, network uid: {entity.Comp.NetworkUid}");
             return false;
         }
 
-        zLevel = new Entity<CEZLevelsNetworkComponent>(zLevelMapComponent.NetworkUid, zNetworkComponent);
+        zLevel = new Entity<CEZLevelsNetworkComponent>(entity.Comp.NetworkUid, zNetworkComponent);
         return true;
     }
 
