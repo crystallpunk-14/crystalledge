@@ -1,5 +1,3 @@
-# Bark speech voice profiles for Animal Crossing-style syllable playback.
-
 - type: barkSpeech
   id: Ed
   saySound:
@@ -12,7 +10,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 12
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Ezik
@@ -26,7 +23,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 18
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Angel
@@ -40,7 +36,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 18
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Mirinda
@@ -54,7 +49,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 18
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Straymer
@@ -68,7 +62,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 18
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Stepa
@@ -82,7 +75,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 18
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Nimfar
@@ -96,7 +88,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 18
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Jaba
@@ -110,7 +101,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: -5
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Altnight
@@ -124,7 +114,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 4
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: 4g10w
@@ -138,7 +127,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: -8
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: 4g10w_2
@@ -152,7 +140,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: 4g10w_3
@@ -166,7 +153,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
-    rolloffFactor: 4.5
 
 - type: soundCollection
   id: eglowLaugh
@@ -176,7 +162,6 @@
   - /Audio/_CE/Voice/eglow3_3.ogg
   - /Audio/_CE/Voice/eglow3_4.ogg
   - /Audio/_CE/Voice/eglow3_5.ogg
-
 
 - type: barkSpeech
   id: Shishka
@@ -190,7 +175,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Nimfar2
@@ -204,7 +188,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Dantanat
@@ -218,7 +201,6 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
-    rolloffFactor: 4.5
 
 - type: barkSpeech
   id: Omsoyk
@@ -232,4 +214,3 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
-    rolloffFactor: 4.5
