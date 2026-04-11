@@ -13,22 +13,6 @@ namespace Content.Server._CE.ZLevels.Core;
 public sealed partial class CEZLevelsSystem
 {
     /// <summary>
-    /// Creates a new entity zLevelNetwork
-    /// </summary>
-    [PublicAPI]
-    public Entity<CEZLevelsNetworkComponent> CreateZNetwork(ComponentRegistry? components = null)
-    {
-        var ent = Spawn();
-
-        var zLevel = EnsureComp<CEZLevelsNetworkComponent>(ent);
-        EnsureComp<CEPvsOverrideComponent>(ent);
-
-        zLevel.Components = components ?? new ComponentRegistry();
-
-        return (ent, zLevel);
-    }
-
-    /// <summary>
     /// Attempts to add the specified map to the zNetwork network at the specified depth
     /// </summary>
     private bool TryAddMapIntoZNetwork(Entity<CEZLevelsNetworkComponent> network, EntityUid mapUid, int depth)
@@ -52,14 +36,43 @@ public sealed partial class CEZLevelsSystem
         }
 
         network.Comp.ZLevels.Add(depth, mapUid);
-        var zlevel = EnsureComp<CEZLevelMapComponent>(mapUid);
-        zlevel.Depth = depth;
         Dirty(network);
-        Dirty(mapUid, zlevel);
 
-        RaiseLocalEvent(mapUid, new CEMapAddedIntoZNetworkEvent(network, depth));
+        // Welcome to fast api code
+        QuickApiCache(network, mapUid, depth);
+
+        var levelMapComponent = EnsureComp<CEZLevelMapComponent>(mapUid);
+        levelMapComponent.Depth = depth;
+        levelMapComponent.NetworkUid = network;
+
+        if (network.Comp.ZLevels.TryGetValue(depth + 1, out var aboveMapUid))
+            levelMapComponent.MapAbove = aboveMapUid;
+
+        if (network.Comp.ZLevels.TryGetValue(depth - 1, out var belowMapUid))
+            levelMapComponent.MapBelow = belowMapUid;
+
+        Dirty(mapUid, levelMapComponent);
+
+        var ev = new CEMapAddedIntoZNetworkEvent(network, depth);
+        RaiseLocalEvent(mapUid, ref ev);
 
         return true;
+    }
+
+    /// <summary>
+    /// Creates a new entity zLevelNetwork
+    /// </summary>
+    [PublicAPI]
+    public Entity<CEZLevelsNetworkComponent> CreateZNetwork(ComponentRegistry? components = null)
+    {
+        var ent = Spawn();
+
+        var zLevel = EnsureComp<CEZLevelsNetworkComponent>(ent);
+        EnsureComp<CEPvsOverrideComponent>(ent);
+
+        zLevel.Components = components ?? new ComponentRegistry();
+
+        return (ent, zLevel);
     }
 
     public bool TryAddMapsIntoZNetwork(Entity<CEZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
@@ -71,7 +84,8 @@ public sealed partial class CEZLevelsSystem
                 success = false;
         }
 
-        RaiseLocalEvent(network, new CEZLevelNetworkUpdatedEvent());
+        var ev = new CEZLevelNetworkUpdatedEvent();
+        RaiseLocalEvent(network, ref ev);
 
         return success;
     }
@@ -80,13 +94,15 @@ public sealed partial class CEZLevelsSystem
 /// <summary>
 /// Called on ZLevel Network Entity, when maps added or removed from network
 /// </summary>
-public sealed class CEZLevelNetworkUpdatedEvent : EntityEventArgs;
+[ByRefEvent]
+public readonly struct CEZLevelNetworkUpdatedEvent;
 
 /// <summary>
 /// Called on map, when it added to ZNetwork
 /// </summary>
-public sealed class CEMapAddedIntoZNetworkEvent(Entity<CEZLevelsNetworkComponent> network, int depth) : EntityEventArgs
+[ByRefEvent]
+public readonly struct CEMapAddedIntoZNetworkEvent(Entity<CEZLevelsNetworkComponent> network, int depth)
 {
-    public Entity<CEZLevelsNetworkComponent> Network = network;
-    public int Depth = depth;
+    public readonly Entity<CEZLevelsNetworkComponent> Network = network;
+    public readonly int Depth = depth;
 }

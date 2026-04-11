@@ -4,7 +4,6 @@
  */
 
 using System.Numerics;
-using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.ZLevels.Core.Components;
@@ -12,8 +11,8 @@ namespace Content.Shared._CE.ZLevels.Core.Components;
 /// <summary>
 /// Allows an entity to move up and down the z-levels by gravity or jumping
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true),
- Access(typeof(CESharedZLevelsSystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
+// [Access(typeof(CESharedZLevelsSystem))] // I Hate this access
 public sealed partial class CEZPhysicsComponent : Component
 {
     /// <summary>

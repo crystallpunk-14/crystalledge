@@ -13,6 +13,15 @@ namespace Content.Shared._CE.ZLevels.Core.Components;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, UnsavedComponent]
 public sealed partial class CEZLevelMapComponent : Component
 {
+    [ViewVariables, AutoNetworkedField]
+    public EntityUid NetworkUid;
+
+    [ViewVariables, AutoNetworkedField]
+    public EntityUid? MapAbove;
+
+    [ViewVariables, AutoNetworkedField]
+    public EntityUid? MapBelow;
+
     [DataField, AutoNetworkedField]
-    public int Depth = 0;
+    public int Depth;
 }

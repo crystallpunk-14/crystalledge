@@ -45,7 +45,7 @@ public abstract partial class CESharedZLevelsSystem
     {
         CheckActivation(ent);
 
-        if (ZPhyzQuery.TryComp(args.OldParent, out var oldParentZPhys))
+        if (ZPhysicsQuery.TryComp(args.OldParent, out var oldParentZPhys))
             SetZPosition((ent, ent), oldParentZPhys.LocalPosition);
     }
 
@@ -56,13 +56,7 @@ public abstract partial class CESharedZLevelsSystem
 
         var xform = Transform(ent);
 
-        if (xform.ParentUid != xform.MapUid)
-        {
-            SetActiveStatus(ent, false);
-            return;
-        }
-
-        if (xform.Anchored)
+        if (xform.ParentUid != xform.MapUid || xform.Anchored)
         {
             SetActiveStatus(ent, false);
             return;
