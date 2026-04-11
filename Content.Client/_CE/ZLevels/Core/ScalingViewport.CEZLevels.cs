@@ -119,7 +119,7 @@ public sealed partial class ScalingViewport
         var lookUp = zLevelViewer.LookUp ? 1 : 0;
 
         var lowestDepth = 0;
-        for (var i = 0; i >= -CESharedZLevelsSystem.MaxZLevelsBelowRendering; i--)
+        for (var i = 0; i >= -CEClientZLevelsSystem.MaxZLevelsBelowRendering; i--)
         {
             var checkingMap = playerXform.MapUid.Value;
 
@@ -128,7 +128,7 @@ public sealed partial class ScalingViewport
                 if (!_zLevels.TryMapOffset(playerXform.MapUid.Value, i, out var mapUidBelow))
                     continue;
 
-                checkingMap = mapUidBelow.Value;
+                checkingMap = mapUidBelow;
             }
 
             lowestDepth = i;
@@ -147,7 +147,7 @@ public sealed partial class ScalingViewport
                 if (!_zLevels.TryMapOffset(playerXform.MapUid.Value, depth, out var mapUidBelow))
                     continue;
 
-                if (!_mapQuery.Value.TryComp(mapUidBelow.Value, out var mapComp))
+                if (!_mapQuery.Value.TryComp(mapUidBelow, out var mapComp))
                     continue;
 
                 Angle rotation = _fallbackEye.Rotation * -1;
