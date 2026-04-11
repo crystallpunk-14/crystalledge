@@ -25,6 +25,19 @@
     volume: 18
 
 - type: barkSpeech
+  id: Ezik_2
+  saySound:
+    path: /Audio/_CE/Voice/ezik2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/ezik2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/ezik2_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 18
+
+- type: barkSpeech
   id: Angel
   saySound:
     path: /Audio/_CE/Voice/angel.ogg
@@ -177,7 +190,7 @@
     volume: 10
 
 - type: barkSpeech
-  id: Nimfar2
+  id: Nimfar_2
   saySound:
     path: /Audio/_CE/Voice/nimfar2.ogg
   askSound:
@@ -240,4 +253,45 @@
   charsPerSyllable: 2
   audioParams:
     volume: 10
+
+- type: barkSpeech
+  id: Wordolon
+  saySound:
+    path: /Audio/_CE/Voice/wordolon.ogg
+  askSound:
+    path: /Audio/_CE/Voice/wordolon_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/wordolon_e.ogg
+  syllableInterval: 0.11
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Wordolon_2
+  saySound:
+    path: /Audio/_CE/Voice/wordolon2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/wordolon2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/wordolon2_e.ogg
+  syllableInterval: 0.11
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Vojner
+  saySound:
+    path: /Audio/_CE/Voice/vojner.ogg
+  askSound:
+    path: /Audio/_CE/Voice/vojner_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/vojner_e.ogg
+  syllableInterval: 0.11
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+
 

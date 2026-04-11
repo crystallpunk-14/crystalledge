@@ -89,3 +89,18 @@
   license: "CC0-1.0"
   copyright: "Voice recorded by Driftwood"
   source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["wordolon.ogg", "wordolon_e.ogg", "wordolon_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Wordolon"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["wordolon2.ogg", "wordolon2_e.ogg", "wordolon2_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Wordolon"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["vojner.ogg", "vojner_e.ogg", "vojner_a.ogg"]
+  license: "CC0-1.0"
+  copyright: "Voice recorded by Vojner"
+  source: "https://github.com/crystallpunk-14/crystalledge"

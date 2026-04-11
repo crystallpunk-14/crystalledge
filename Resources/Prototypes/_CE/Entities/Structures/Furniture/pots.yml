@@ -37,8 +37,8 @@
         - !type:NestedSelector
           tableId: CERandomPotion
           weight: 0.3
-        - id: CERat
-          weight: 0.1
+        - id: CEMobRat
+          weight: 0.2
         - id: CECoinCopper1
           weight: 0.6
   - type: Fixtures
