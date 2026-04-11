@@ -4,7 +4,7 @@
   - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CEFlem
+  id: CEMobFlem
   name: flem
   description: TODO
   categories: [ ForkFiltered ]

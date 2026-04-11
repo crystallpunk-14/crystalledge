@@ -4,7 +4,7 @@
   - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CESlimeWater
+  id: CEMobSlimeWater
   name: water slime
   description: A wobbly blob of animated water. Pops into a splash when destroyed.
   categories: [ ForkFiltered ]

@@ -219,10 +219,10 @@
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CERat
+    - proto: CEMobRat
       cost: 1
       weight: 3
-    - proto: CESlimeWater
+    - proto: CEMobSlimeWater
       cost: 3
       weight: 1
 
@@ -298,19 +298,19 @@
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CERat
+    - proto: CEMobRat
       cost: 1
       weight: 3
-    - proto: CESlimeWater
+    - proto: CEMobSlimeWater
       cost: 2
       weight: 1
-    - proto: CEFlem
+    - proto: CEMobFlem
       cost: 3
       weight: 1
-    - proto: CEFlem2
+    - proto: CEMobFlem2
       cost: 5
       weight: 0.5
-    - proto: CESlimeFire
+    - proto: CEMobSlimeFire
       cost: 3
       weight: 1
 
@@ -342,22 +342,22 @@
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CERat
+    - proto: CEMobRat
       cost: 1
       weight: 1
-    - proto: CESlimeWater
+    - proto: CEMobSlimeWater
       cost: 2
       weight: 1
-    - proto: CEFlem
+    - proto: CEMobFlem
       cost: 3
       weight: 1
-    - proto: CEFlem2
+    - proto: CEMobFlem2
       cost: 5
       weight: 1
-    - proto: CEFlem3
+    - proto: CEMobFlem3
       cost: 5
       weight: 1
-    - proto: CESlimeFire
+    - proto: CEMobSlimeFire
       cost: 3
       weight: 1
 
@@ -445,18 +445,18 @@
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CESlimeWater
+    - proto: CEMobSlimeWater
       cost: 2
       weight: 1
-    - proto: CEFlem
+    - proto: CEMobFlem
       cost: 3
       weight: 1
-    - proto: CEFlem2
+    - proto: CEMobFlem2
       cost: 3
       weight: 1
-    - proto: CEFlem3
+    - proto: CEMobFlem3
       cost: 5
       weight: 1
-    - proto: CESlimeFire
+    - proto: CEMobSlimeFire
       cost: 3
       weight: 1

@@ -4,7 +4,7 @@
   - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CESlimeFire
+  id: CEMobSlimeFire
   name: fire slime
   description: A wobbly blob of animated fire. Pops into a burst of flames when destroyed.
   categories: [ ForkFiltered ]
