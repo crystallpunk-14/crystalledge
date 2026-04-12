@@ -36,6 +36,12 @@
       weight: 0.5
     - id: CEConsumablePotionAlchemicalFire
       weight: 0.5
+    - id: CEConsumablePotionPhysicalShield
+      weight: 0.5
+    - id: CEConsumablePotionFireShield
+      weight: 0.5
+    - id: CEConsumablePotionColdShield
+      weight: 0.5
 
 - type: entity
   id: CESpawnerRandomPotion

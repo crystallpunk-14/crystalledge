@@ -1,0 +1,122 @@
+- type: entity
+  id: CEConsumablePotionPhysicalShield
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionCube
+  name: potion of physical protection
+  description: A thick, metallic brew that coats the body in a shimmering barrier. Grants temporary shields against physical damage.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#b2e3eb"
+  - type: CEConsumable
+    effects:
+    - !type:AddTempShield
+      amount: 30
+      damageType: Physical
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:AddTempShield
+        amount: 15
+        damageType: Physical
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible
+
+- type: entity
+  id: CEConsumablePotionFireShield
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionCube
+  name: potion of fire protection
+  description: A cool, shimmering liquid that surrounds the drinker with a flame-dampening aura. Grants temporary shields against fire damage.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#dfad57"
+  - type: CEConsumable
+    effects:
+    - !type:AddTempShield
+      amount: 30
+      damageType: Fire
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:AddTempShield
+        amount: 15
+        damageType: Fire
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible
+
+- type: entity
+  id: CEConsumablePotionColdShield
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionCube
+  name: potion of cold protection
+  description: A warm, glowing elixir that insulates against freezing temperatures. Grants temporary shields against cold damage.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#5d9ee2"
+  - type: CEConsumable
+    effects:
+    - !type:AddTempShield
+      amount: 30
+      damageType: Cold
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:AddTempShield
+        amount: 15
+        damageType: Cold
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible

@@ -55,6 +55,15 @@
   - type: CEConsumable
     replacementEntity: CEPotionEmptyMedium
 
+- type: entity
+  id: CEPotionCube
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/cube_bottle.rsi
+  - type: CEConsumable
+    replacementEntity: CEPotionEmptyCube
+
 
 # Empty potion vial (trash left after a multi-charge potion)
 - type: entity
@@ -72,6 +81,15 @@
   components:
   - type: Sprite
     sprite: _CE/Objects/Consumable/Potions/small_bottle.rsi
+    layers:
+    - state: icon
+
+- type: entity
+  id: CEPotionEmptyCube
+  parent: CEPotionBase
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Potions/cube_bottle.rsi
     layers:
     - state: icon
 

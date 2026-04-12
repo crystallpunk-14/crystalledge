@@ -36,7 +36,7 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Interface/water.rsi # TODO: replace with wet-specific alert icon
+    - sprite: _CE/Interface/water.rsi
       state: water
     - map: [ "1" ]
       offset: 0.65, 0

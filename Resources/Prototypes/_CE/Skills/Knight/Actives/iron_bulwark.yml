@@ -1,0 +1,40 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: IronBulwark
+  icon:
+    sprite: _CE/Skills/Knight/iron_bulwark.rsi
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellIronBulwark
+
+- type: entity
+  id: CEActionSpellIronBulwark
+  parent: CEActionSpellBase
+  name: Iron Bulwark
+  description: Grants [color=#b2e3eb]40 temporary physical shields[/color] that absorb damage. Shields decay over time.
+  components:
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Skills/Knight/iron_bulwark.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationIronBulwark
+
+- type: entityEffectAnimation
+  id: AnimationIronBulwark
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    0.6:
+    - !type:AddTempShield
+      effectTarget: User
+      amount: 40
+      damageType: Physical
