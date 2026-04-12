@@ -14,6 +14,8 @@
             tableId: CERandomWeapon
           - !type:NestedSelector
             tableId: CEAccessories
+          - !type:NestedSelector
+            tableId: CECommonArmor
         # Some additional fills
         - !type:GroupSelector
           rolls: !type:RangeNumberSelector
