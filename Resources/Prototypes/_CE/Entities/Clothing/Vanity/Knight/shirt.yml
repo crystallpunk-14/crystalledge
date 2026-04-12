@@ -3,6 +3,6 @@
   id: CEClothingKnightShirtFighter
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Shirt/Knight/fighter_shirt.rsi
+    sprite: _CE/Clothing/Vanity/Shirt/Knight/fighter_shirt.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Shirt/Knight/fighter_shirt.rsi
+    sprite: _CE/Clothing/Vanity/Shirt/Knight/fighter_shirt.rsi

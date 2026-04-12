@@ -3,15 +3,15 @@
   id: CEClothingGeneralShoesAristocraticBlack
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Shoes/General/aristocratic_black.rsi
+    sprite: _CE/Clothing/Vanity/Shoes/General/aristocratic_black.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Shoes/General/aristocratic_black.rsi
+    sprite: _CE/Clothing/Vanity/Shoes/General/aristocratic_black.rsi
 
 - type: entity
   parent: CEClothingShoesBase
   id: CEClothingGeneralShoesLongLeatherBoots
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Shoes/General/long_leather_boots.rsi
+    sprite: _CE/Clothing/Vanity/Shoes/General/long_leather_boots.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Shoes/General/long_leather_boots.rsi
+    sprite: _CE/Clothing/Vanity/Shoes/General/long_leather_boots.rsi

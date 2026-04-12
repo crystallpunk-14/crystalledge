@@ -3,6 +3,6 @@
   id: CEClothingMageCloakCape
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Cloak/Mage/cape.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Mage/cape.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Cloak/Mage/cape.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Mage/cape.rsi

@@ -3,6 +3,6 @@
   id: CEClothingMageHeadTriangular
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Head/Mage/triangular.rsi
+    sprite: _CE/Clothing/Vanity/Head/Mage/triangular.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Head/Mage/triangular.rsi
+    sprite: _CE/Clothing/Vanity/Head/Mage/triangular.rsi

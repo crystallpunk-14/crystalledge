@@ -5,6 +5,6 @@
   id: CEClothingGeneralPantsDark
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Pants/General/dark.rsi
+    sprite: _CE/Clothing/Vanity/Pants/General/dark.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Pants/General/dark.rsi
+    sprite: _CE/Clothing/Vanity/Pants/General/dark.rsi

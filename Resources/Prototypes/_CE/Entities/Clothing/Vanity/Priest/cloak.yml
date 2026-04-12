@@ -4,9 +4,9 @@
   id: CEClothingPriestCloakDark
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Cloak/Priest/dark.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Priest/dark.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Cloak/Priest/dark.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Priest/dark.rsi
 
 - type: entity
   parent:
@@ -14,9 +14,9 @@
   id: CEClothingPriestCloakWhite
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Cloak/Priest/white.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Priest/white.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Cloak/Priest/white.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Priest/white.rsi
 
 - type: entity
   parent:
@@ -24,6 +24,6 @@
   id: CEClothingPriestCloakWhite2
   components:
   - type: Sprite
-    sprite: _CE/Clothing/Cloak/Priest/white2.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Priest/white2.rsi
   - type: Clothing
-    sprite: _CE/Clothing/Cloak/Priest/white2.rsi
+    sprite: _CE/Clothing/Vanity/Cloak/Priest/white2.rsi
