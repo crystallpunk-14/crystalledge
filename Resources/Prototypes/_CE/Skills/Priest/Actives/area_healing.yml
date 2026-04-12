@@ -8,7 +8,7 @@
   id: CEActionSpellAreaHealing
   parent: CEActionSpellBase
   name: Prayer for health
-  description: You restore [color=1defa9]2 health[/color] to all creatures in a small area.
+  description: You restore [color=1defa9]10 health[/color] to all creatures in a small area.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
@@ -52,7 +52,7 @@
         spawns:
         - CEEffectHealingGeneric
       - !type:Heal
-        amount: 2
+        amount: 10
 
 - type: entity
   id: CEEffectAreaHealingTelegraphy

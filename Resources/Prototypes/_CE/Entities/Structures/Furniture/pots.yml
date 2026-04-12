@@ -25,7 +25,7 @@
           pot2: ""
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 1
+    destroyThreshold: 5
     destroySound:
       collection: CEPotBreak
     lootTable: !type:AllSelector

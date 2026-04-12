@@ -15,7 +15,7 @@
       params:
         variation: 0.1
   - type: CEDestructible
-    destroyThreshold: 3
+    destroyThreshold: 15
     lootTable: !type:AllSelector
       children:
       - id: CECoinCopper1
@@ -98,7 +98,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 1
+              Physical: 5
     animations:
       Primary:
       - anim: RatBite

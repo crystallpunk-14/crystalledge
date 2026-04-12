@@ -42,7 +42,7 @@
       cost: 0.5
   - type: CEArmor
     flat:
-      Fire: 5
+      Fire: 25
 
 - type: entity
   parent: CEMobFlem
@@ -88,4 +88,4 @@
       cost: 0.5
   - type: CEArmor
     flat:
-      Cold: 5
+      Cold: 25

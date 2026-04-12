@@ -29,7 +29,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 1
+              Physical: 5
         - !type:Damage
           effectTarget: Used
           damage:
@@ -69,4 +69,4 @@
     - !type:Damage
       damage:
         types:
-          Fire: 1
+          Fire: 5

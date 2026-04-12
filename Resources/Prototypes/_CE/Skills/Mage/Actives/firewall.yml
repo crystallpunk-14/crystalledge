@@ -149,5 +149,5 @@
     effects:
     - !type:IgniteArea
       radius: 1.5
-      maxStacks: 3
+      maxStacks: 6
       fallOffFactor: 1

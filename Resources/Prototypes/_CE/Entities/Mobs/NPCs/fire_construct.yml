@@ -11,7 +11,7 @@
   components:
   - type: CEGOAPAlarm
   - type: CEDestructible
-    destroyThreshold: 30
+    destroyThreshold: 150
   - type: CEMagicEnergyContainer
     energy: 100
     baseMaxEnergy: 100
@@ -95,7 +95,7 @@
   - type: CEArmor
     flat:
       Fire: 100
-      Physical: 1
+      Physical: 5
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepThud

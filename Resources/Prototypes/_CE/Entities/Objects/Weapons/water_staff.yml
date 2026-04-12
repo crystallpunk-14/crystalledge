@@ -29,7 +29,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 1
+              Physical: 5
         - !type:Damage
           effectTarget: Used
           damage:
@@ -78,7 +78,7 @@
     - !type:Damage
       damage:
         types:
-          Physical: 2
+          Physical: 10
     - !type:AreaEffect
       affectCaster: true
       range: 2

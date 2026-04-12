@@ -23,7 +23,7 @@
           ignoreArmor: true
           damage:
             types:
-              Physical: 1
+              Physical: 5
         - !type:Damage
           effectTarget: Used
           damage:
@@ -39,7 +39,7 @@
         effectTarget: Used
         damage:
           types:
-            Physical: 1
+            Physical: 5
       - !type:Damage
         effectTarget: User
         ignoreArmor: true

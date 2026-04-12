@@ -7,13 +7,13 @@
 - type: entity
   id: CEStatusEffectExperiencedHealer
   name: Experienced Healer
-  description: When you heal something, you heal [color=#1defa9]1 health[/color] more.
+  description: When you heal something, you heal [color=#1defa9]5 health[/color] more.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEExperiencedHealer
   - type: CEEffectiveHealingStatusEffect
-    additionalHeal: 1
+    additionalHeal: 5
 
 - type: alert
   id: CEExperiencedHealer

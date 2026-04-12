@@ -6,12 +6,12 @@
   components:
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 20
+    destroyThreshold: 100
     destroySound:
       collection: WoodDestroy
   - type: CEArmor
     flat:
-      Physical: 1
+      Physical: 5
   - type: CEFlammable
     stackDelta: 2
 

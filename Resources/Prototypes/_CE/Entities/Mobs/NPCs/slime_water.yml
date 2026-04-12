@@ -15,7 +15,7 @@
       params:
         variation: 0.1
   - type: CEDestructible
-    destroyThreshold: 10
+    destroyThreshold: 50
   - type: CEDestructionEffect
     effects:
     - !type:WetArea
@@ -110,7 +110,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 1
+              Physical: 5
         - !type:WetEntity
           stacks: 1
           maxStacks: 5
@@ -119,7 +119,7 @@
       - anim: SlimeBite
   - type: CEArmor
     flat:
-      Fire: 5
+      Cold: 15
 
 
 

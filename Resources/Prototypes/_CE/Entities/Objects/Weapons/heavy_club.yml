@@ -31,7 +31,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 3
+              Physical: 15
         - !type:Damage
           effectTarget: Used
           damage:

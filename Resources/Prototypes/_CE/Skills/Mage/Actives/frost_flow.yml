@@ -153,4 +153,4 @@
       - !type:Damage
         damage:
           types:
-            Cold: 1
+            Cold: 15

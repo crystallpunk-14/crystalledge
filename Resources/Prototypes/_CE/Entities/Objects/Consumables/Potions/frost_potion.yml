@@ -33,7 +33,7 @@
       - !type:Damage
         damage:
           types:
-            Cold: 4
+            Cold: 20
   - type: CEDestructible
   - type: PointLight
     color: "#00d9ff"

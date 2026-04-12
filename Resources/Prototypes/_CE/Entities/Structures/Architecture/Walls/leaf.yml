@@ -57,7 +57,7 @@
     - 0
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 20
+    destroyThreshold: 50
     destroySound:
       collection: CEGrassGathering
   - type: CEFlammable

@@ -106,10 +106,10 @@
     - !type:Damage
       damage:
         types:
-          Fire: 3
+          Fire: 15
     - !type:IgniteArea
       radius: 2
-      maxStacks: 2
+      maxStacks: 5
     - !type:SpawnEntity
       effectTarget: Target
       spawns:

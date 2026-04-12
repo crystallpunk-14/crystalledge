@@ -6,7 +6,7 @@
   - type: CEDamageable
   - type: CEDamagePopup
   - type: CEDestructible
-    destroyThreshold: 20
+    destroyThreshold: 100
     destroySound:
       collection: gib
   - type: Pullable
@@ -44,7 +44,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 1
+              Physical: 5
     animations:
       Primary:
       - anim: Punch1

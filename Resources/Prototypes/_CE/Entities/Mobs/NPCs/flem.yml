@@ -105,7 +105,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 2
+              Physical: 10
     animations:
       Primary:
       - anim: FlemAttack1

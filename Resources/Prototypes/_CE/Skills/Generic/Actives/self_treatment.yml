@@ -13,7 +13,7 @@
   id: CEActionSpellSelfTreatment
   parent: CEActionSpellBase
   name: Self Treatment
-  description: You restore [color=#1defa9]2 health[/color] to yourself.
+  description: You restore [color=#1defa9]10 health[/color] to yourself.
   components:
   - type: CEActionManaCost
     manaCost: 4
@@ -40,4 +40,4 @@
       spawns:
       - CEEffectHealingGeneric
     - !type:Heal
-      amount: 2
+      amount: 10

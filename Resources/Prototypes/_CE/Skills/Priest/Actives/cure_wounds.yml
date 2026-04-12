@@ -8,7 +8,7 @@
   id: CEActionSpellCureWounds
   parent: CEActionSpellBase
   name: Cure wounds
-  description: You restore [color=#1defa9]5 health[/color] to the creature you touch.
+  description: You restore [color=#1defa9]25 health[/color] to the creature you touch.
   components:
   - type: Sprite
     sprite: _CE/Skills/Priest/cure_wounds.rsi
@@ -58,6 +58,6 @@
       spawns:
       - CEEffectHealingGeneric
     - !type:Heal
-      amount: 5
+      amount: 25
     - !type:SayChat
       sentence: "vulnera tua"

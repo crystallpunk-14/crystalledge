@@ -26,7 +26,7 @@
     effects:
     - !type:IgniteArea
       radius: 2
-      maxStacks: 6
+      maxStacks: 9
     - !type:SpawnEntity
       effectTarget: User
       spawns:
