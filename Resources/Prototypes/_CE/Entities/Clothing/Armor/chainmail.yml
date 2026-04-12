@@ -12,4 +12,4 @@
     sprite: _CE/Clothing/Armor/Body/chainmail.rsi
   - type: CEArmor
     flat:
-      Physical: 5
+      Physical: 2

@@ -10,7 +10,7 @@
     sprite: _CE/Clothing/Accessory/ring_fire.rsi
   - type: CEArmor
     flat:
-      Fire: 5
+      Fire: 1
 
 - type: entity
   parent: CEClothingAccessoryBase
@@ -24,7 +24,7 @@
     sprite: _CE/Clothing/Accessory/ring_frost.rsi
   - type: CEArmor
     flat:
-      Cold: 5
+      Cold: 1
 
 - type: entity
   parent: CEClothingAccessoryBase
