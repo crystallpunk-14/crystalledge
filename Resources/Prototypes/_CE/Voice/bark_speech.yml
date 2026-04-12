@@ -358,5 +358,31 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Trifa
+  saySound:
+    path: /Audio/_CE/Voice/trifa.ogg
+  askSound:
+    path: /Audio/_CE/Voice/trifa_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/trifa_e.ogg
+  syllableInterval: 0.1
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: FoLi
+  saySound:
+    path: /Audio/_CE/Voice/FoLi.ogg
+  askSound:
+    path: /Audio/_CE/Voice/FoLi_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/FoLi_a.ogg
+  syllableInterval: 0.07
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
 
 

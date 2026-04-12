@@ -129,3 +129,13 @@
   license: "All rights reserved"
   copyright: "Voice recorded by Kazne"
   source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["trifa.ogg", "trifa_e.ogg", "trifa_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Trifa"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["FoLi.ogg", "FoLi_e.ogg", "FoLi_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by FoLi"
+  source: "https://github.com/crystallpunk-14/crystalledge"
