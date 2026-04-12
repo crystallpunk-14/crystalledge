@@ -48,7 +48,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
         RaiseLocalEvent(uid, ev, true);
     }
 
-    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)
+    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source)
     {
         if (!_timing.IsFirstTimePredicted)
             return;

@@ -10,7 +10,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
     [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
     [Dependency] private readonly CEScreenshakeSystem _shake = default!;
 
-    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source, bool isCritical)
+    protected override void RaiseDamageEffect(EntityUid target, EntityUid? source)
     {
         // Exclude the source's session — they already see the effect from client prediction.
         var filter = source != null
