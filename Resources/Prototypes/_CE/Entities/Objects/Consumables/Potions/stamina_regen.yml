@@ -90,6 +90,8 @@
     alert: CEStaminaRegenBuff
   - type: CEStaminaRegenBuff
     flatRegenBonus: 5
+  - type: CESpeedModifierStatusEffect
+    speed: 1.1
 
 - type: alert
   id: CEStaminaRegenBuff
