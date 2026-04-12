@@ -3,7 +3,7 @@
   parent:
   - CEBaseWeapon
   name: bone sword
-  description: A serrated sword forged from the spine of a reckless adventurer
+  description: Nicks on the blade leave bruise wounds, increasing the damage dealt to the target
   components:
   - type: Sprite
     sprite: _CE/Objects/Weapons/Sword/bone.rsi
@@ -20,7 +20,11 @@
         - !type:Damage
           damage:
             types:
-              Physical: 15
+              Physical: 3
+        - !type:AddDamageVulnerability
+          damageType: Physical
+          amount: 1
+          maxStacks: 10
         - !type:Damage
           effectTarget: Used
           damage:
@@ -34,7 +38,11 @@
         - !type:Damage
           damage:
             types:
-              Physical: 20
+              Physical: 6
+        - !type:AddDamageVulnerability
+          damageType: Physical
+          amount: 2
+          maxStacks: 10
         - !type:Damage
           effectTarget: Used
           damage:

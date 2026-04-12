@@ -11,9 +11,6 @@ public sealed partial class AddTempShield : CEEntityEffectBase<AddTempShield>
 
     [DataField]
     public ProtoId<CEDamageTypePrototype> DamageType = "Physical";
-
-    [DataField]
-    public TimeSpan? CycleDuration;
 }
 
 public sealed partial class CEAddTempShieldEffectSystem : CEEntityEffectSystem<AddTempShield>
@@ -25,6 +22,6 @@ public sealed partial class CEAddTempShieldEffectSystem : CEEntityEffectSystem<A
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _tempShield.TryAddTempShield(entity, args.Effect.DamageType, args.Effect.Amount, args.Effect.CycleDuration);
+        _tempShield.TryAddTempShield(entity, args.Effect.DamageType, args.Effect.Amount);
     }
 }

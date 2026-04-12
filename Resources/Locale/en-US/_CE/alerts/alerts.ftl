@@ -11,10 +11,19 @@ ce-alert-wet-name = Wet
 ce-alert-wet-desc = You're soaked with water. Fire cannot ignite you while wet.
 
 ce-alert-temp-shield-name = Temporary shield
-ce-alert-temp-shield-desc = Absorbs physical damage. Fades over time.
+ce-alert-temp-shield-desc = Absorbs physical damage.
 
 ce-alert-temp-shield-fire-name = Fire shield
-ce-alert-temp-shield-fire-desc = Absorbs fire damage. Fades over time.
+ce-alert-temp-shield-fire-desc = Absorbs fire damage.
 
 ce-alert-temp-shield-cold-name = Cold shield
-ce-alert-temp-shield-cold-desc = Absorbs cold damage. Fades over time.
+ce-alert-temp-shield-cold-desc = Absorbs cold damage.
+
+ce-alert-bruise-name = Bruise
+ce-alert-bruise-desc = Increases incoming physical damage.
+
+ce-alert-burn-name = Burn
+ce-alert-burn-desc = Increases incoming fire damage.
+
+ce-alert-frostbite-name = Frostbite
+ce-alert-frostbite-desc = Increases incoming cold damage.

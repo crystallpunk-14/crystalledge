@@ -24,7 +24,7 @@
 - type: roleLoadout
   id: JobCEKnight
   groups:
-  # Knight skills TODO
+  - CEKnightSkill
   - CEKnightWeapon
   - CEKnightCloak
   - CEKnightShirt

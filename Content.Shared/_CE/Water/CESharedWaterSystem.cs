@@ -86,7 +86,7 @@ public abstract class CESharedWaterSystem : EntitySystem
 
         if (args.MaxStacks != null)
         {
-            var current = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
             var allowed = Math.Max(0, args.MaxStacks.Value - current);
             if (allowed <= 0)
                 return;
@@ -124,7 +124,7 @@ public abstract class CESharedWaterSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var wetStacks = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+        var wetStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
         if (wetStacks <= 0)
             return;
 

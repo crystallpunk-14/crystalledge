@@ -26,14 +26,15 @@ public sealed class CETempShieldSystem : EntitySystem
         SubscribeLocalEvent<CETempShieldStatusEffectComponent, StatusEffectRelayedEvent<CEDamageCalculateEvent>>(OnBeforeDamage);
     }
 
+    private static readonly TimeSpan DefaultCycleDuration = TimeSpan.FromSeconds(10);
+
     /// <summary>
     /// Adds temporary shield stacks of the specified damage type to the target.
     /// </summary>
     public bool TryAddTempShield(
         EntityUid target,
         ProtoId<CEDamageTypePrototype> damageType,
-        int stacks = 1,
-        TimeSpan? cycleDuration = null)
+        int stacks = 1)
     {
         if (stacks <= 0)
             return false;
@@ -51,9 +52,7 @@ public sealed class CETempShieldSystem : EntitySystem
         if (stacks <= 0)
             return false;
 
-        cycleDuration ??= TimeSpan.FromSeconds(10);
-
-        if (!_stacks.TryAddStack(target, statusEffect, out _, stacks, cycleDuration))
+        if (!_stacks.TryAddStack(target, statusEffect, out _, stacks, DefaultCycleDuration))
             return false;
 
         _stacks.SetStackDelta(target, statusEffect, -1);

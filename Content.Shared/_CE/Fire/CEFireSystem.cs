@@ -81,7 +81,7 @@ public sealed partial class CEFireSystem : EntitySystem
 
         if (args.MaxStacks != null)
         {
-            var current = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
             var allowed = Math.Max(0, args.MaxStacks.Value - current);
             if (allowed <= 0)
                 return;
@@ -102,7 +102,7 @@ public sealed partial class CEFireSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var fireStacks = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
         if (fireStacks <= 0)
             return;
 
@@ -125,7 +125,7 @@ public sealed partial class CEFireSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var fireStacks = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
         if (fireStacks <= 0)
             return;
 
@@ -314,7 +314,7 @@ public sealed partial class CEFireSystem : EntitySystem
         if (!_flammableQuery.Resolve(target, ref target.Comp, logMissing: false))
             return false;
 
-        var stacks = _stack.GetFlammableStack(target, target.Comp.StatusEffect);
+        var stacks = _stack.GetStack(target, target.Comp.StatusEffect);
         if (stacks <= 0)
             return false;
 

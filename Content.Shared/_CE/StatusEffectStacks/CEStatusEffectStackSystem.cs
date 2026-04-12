@@ -74,8 +74,9 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// <param name="statusEffect">Type of status effect.</param>
     /// <param name="stack">Optional, default 1. Number of stacks. Cannot be a negative number.</param>
     /// <param name="duration">Optional: status effect duration. If specified, the new status effect will have the specified duration, and the duration of the existing status effect will be edited.</param>
+    /// <param name="resetTimer">If true and the effect already exists, resets the cycle timer to the full duration instead of letting it continue from the current point.</param>
     /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
-    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null)
+    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null, bool resetTimer = false)
     {
         effectEntity = null;
 
@@ -102,6 +103,9 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             {
                 stackComp.BaseDuration = duration;
                 Dirty(statusEnt.Value, stackComp);
+
+                if (resetTimer)
+                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, duration);
             }
             return true;
         }
@@ -175,7 +179,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// </summary>
     /// <param name="target">Target entity with StatusEffectContainer</param>
     /// <param name="statusEffect">Type of status effect.</param>
-    public int GetFlammableStack(EntityUid target, EntProtoId statusEffect)
+    public int GetStack(EntityUid target, EntProtoId statusEffect)
     {
         if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
             return 0;

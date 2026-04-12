@@ -57,7 +57,7 @@ public sealed class CEFrostSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var frostStacks = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+        var frostStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
         if (frostStacks <= 0)
             return;
 
@@ -97,7 +97,7 @@ public sealed class CEFrostSystem : EntitySystem
 
         if (args.MaxStacks != null)
         {
-            var current = _stack.GetFlammableStack(ent, ent.Comp.StatusEffect);
+            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
             var allowed = Math.Max(0, args.MaxStacks.Value - current);
             if (allowed <= 0)
                 return;

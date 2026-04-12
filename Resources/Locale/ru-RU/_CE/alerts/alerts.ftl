@@ -11,10 +11,19 @@ ce-alert-wet-name = Мокрый
 ce-alert-wet-desc = Вы промокли. Огонь не может вас поджечь, пока вы мокрые.
 
 ce-alert-temp-shield-name = Временный щит
-ce-alert-temp-shield-desc = Поглощает физический урон. Со временем исчезает.
+ce-alert-temp-shield-desc = Поглощает физический урон.
 
 ce-alert-temp-shield-fire-name = Огненный щит
-ce-alert-temp-shield-fire-desc = Поглощает урон огнём. Со временем исчезает.
+ce-alert-temp-shield-fire-desc = Поглощает урон огнём.
 
 ce-alert-temp-shield-cold-name = Ледяной щит
-ce-alert-temp-shield-cold-desc = Поглощает урон холодом. Со временем исчезает.
+ce-alert-temp-shield-cold-desc = Поглощает урон холодом.
+
+ce-alert-bruise-name = Ушиб
+ce-alert-bruise-desc = Увеличивает входящий физический урон.
+
+ce-alert-burn-name = Ожог
+ce-alert-burn-desc = Увеличивает входящий урон огнём.
+
+ce-alert-frostbite-name = Обморожение
+ce-alert-frostbite-desc = Увеличивает входящий урон холодом.
