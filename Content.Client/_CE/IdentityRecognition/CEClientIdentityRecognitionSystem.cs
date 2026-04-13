@@ -1,14 +1,11 @@
 using Content.Shared._CE.IdentityRecognition;
 using Content.Shared.IdentityManagement;
-using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 
 namespace Content.Client._CE.IdentityRecognition;
 
 public sealed partial class CEClientIdentityRecognitionSystem : CESharedIdentityRecognitionSystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-
     public override void Initialize()
     {
         base.Initialize();
