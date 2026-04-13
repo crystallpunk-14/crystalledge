@@ -203,6 +203,9 @@ public sealed class CEStaminaSystem : EntitySystem
 
         comp.MaxStamina = newMax;
         Dirty(uid, comp);
+
+        // Regen rate depends on MaxStamina, so refresh it too.
+        RefreshStaminaRegen(uid, comp);
     }
 
     /// <summary>
@@ -215,7 +218,11 @@ public sealed class CEStaminaSystem : EntitySystem
         if (!Resolve(uid, ref comp, false))
             return;
 
-        var ev = new CECalculateStaminaRegenEvent(comp.BaseRegenRate);
+        var baseRate = comp.FullRegenDuration > 0f
+            ? comp.MaxStamina / comp.FullRegenDuration
+            : 0f;
+
+        var ev = new CECalculateStaminaRegenEvent(baseRate);
         RaiseLocalEvent(uid, ev);
 
         var newRate = MathF.Max(0f, ev.RegenRate);

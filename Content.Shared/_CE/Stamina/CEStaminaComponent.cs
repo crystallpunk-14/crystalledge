@@ -35,14 +35,15 @@ public sealed partial class CEStaminaComponent : Component
     public float Stamina = 10f;
 
     /// <summary>
-    /// Base stamina regeneration per second before modifiers.
-    /// Used as the starting value for <see cref="CECalculateStaminaRegenEvent"/>.
+    /// Time in seconds for stamina to fully regenerate from 0 to max.
+    /// The effective regen rate is computed as MaxStamina / FullRegenDuration.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float BaseRegenRate = 2f;
+    public float FullRegenDuration = 5f;
 
     /// <summary>
     /// Effective stamina regeneration per second after modifiers.
+    /// Computed from MaxStamina / FullRegenDuration, then modified by <see cref="CECalculateStaminaRegenEvent"/>.
     /// Set by <see cref="CEStaminaSystem.RefreshStaminaRegen"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
