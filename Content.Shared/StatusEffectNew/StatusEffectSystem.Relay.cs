@@ -4,6 +4,7 @@ using Content.Shared._CE.Fire;
 using Content.Shared._CE.Frost;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
+using Content.Shared._CE.MeleeWeapon;
 using Content.Shared._CE.Stamina;
 using Content.Shared._CE.TempShield;
 using Content.Shared.Body.Events;
@@ -37,9 +38,9 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, CEGetManaRestoreAmountEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEDivineShieldBrokenEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateTempShieldStacksEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEAfterAttackEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEFreezeEntityAttemptEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEIgniteEntityAttemptEvent>(RefRelayStatusEffectEvent);
-
         //CrystallEdge zone end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);
