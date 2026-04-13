@@ -108,8 +108,8 @@
 
 - type: entity
   parent:
-  - CEAppearanceHuman
   - CEBaseSpeciesMob
+  - CEAppearanceHuman
   id: CEMobHuman
   name: Mr. Human
 
