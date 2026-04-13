@@ -3,6 +3,8 @@ using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew.Components;
 
+namespace Content.Shared._CE.DamageStatusEffect;
+
 public sealed partial class CEDamageStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;

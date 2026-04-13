@@ -22,11 +22,17 @@ public sealed class CETempShieldSystem : EntitySystem
         { "Cold",     "CEStatusEffectTempShieldCold" },
     };
 
-    private static readonly Dictionary<ProtoId<CEDamageTypePrototype>, EntProtoId> SpawnEffects = new()
+    private static readonly Dictionary<ProtoId<CEDamageTypePrototype>, EntProtoId> AddEffects = new()
     {
         { "Physical", "CEEffectAddTempShieldPhysical" },
         { "Fire",     "CEEffectAddTempShieldFire" },
         { "Cold",     "CEEffectAddTempShieldFrost" },
+    };
+    private static readonly Dictionary<ProtoId<CEDamageTypePrototype>, EntProtoId> TakeDamageEffects = new()
+    {
+        { "Physical", "CEEffectTakeDamageTempShieldPhysical" },
+        { "Fire",     "CEEffectTakeDamageTempShieldFire" },
+        { "Cold",     "CEEffectTakeDamageTempShieldFrost" },
     };
 
     public override void Initialize()
@@ -65,7 +71,7 @@ public sealed class CETempShieldSystem : EntitySystem
         if (!_stacks.TryAddStack(target, statusEffect, out _, stacks, DefaultCycleDuration))
             return false;
 
-        if (_net.IsServer && SpawnEffects.TryGetValue(damageType, out var effectProto))
+        if (_net.IsServer && AddEffects.TryGetValue(damageType, out var effectProto))
         {
             var vfx = Spawn(effectProto, Transform(target).Coordinates);
             _transform.SetParent(vfx, target);
@@ -109,6 +115,13 @@ public sealed class CETempShieldSystem : EntitySystem
             var absorbed = Math.Min(damageAmount, absorbBudget);
             absorbBudget -= absorbed;
             totalAbsorbed += absorbed;
+
+
+            if (TakeDamageEffects.TryGetValue(damageType, out var damageEffect))
+            {
+                var effectEnt = PredictedSpawnAtPosition(damageEffect, Transform(statusEffect.AppliedTo.Value).Coordinates);
+                _transform.SetParent(effectEnt, statusEffect.AppliedTo.Value);
+            }
 
             var remaining = damageAmount - absorbed;
             if (remaining > 0)

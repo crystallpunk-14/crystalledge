@@ -17,7 +17,7 @@
     sprite: _CE/Skills/Knight/iron_bulwark.rsi
     state: icon
   - type: CEActionManaCost
-    manaCost: 2
+    manaCost: 4
   - type: Action
     useDelay: 10
     icon:
