@@ -15,14 +15,6 @@
     - id: CEConsumablePotionManaSmall
 
 - type: entityTable
-  id: CEStaminaPotion
-  table: !type:GroupSelector
-    children:
-    - id: CEConsumablePotionStaminaMedium
-      weight: 0.5
-    - id: CEConsumablePotionStaminaSmall
-
-- type: entityTable
   id: CERandomPotion
   table: !type:GroupSelector
     children:
@@ -30,8 +22,6 @@
       tableId: CEHealingPotion
     - !type:NestedSelector
       tableId: CEManaPotion
-    - !type:NestedSelector
-      tableId: CEStaminaPotion
     - id: CEConsumablePotionFrost
       weight: 0.5
     - id: CEConsumablePotionAlchemicalFire
@@ -57,4 +47,4 @@
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomPotion
-      prob: 0.3
+      prob: 0.15
