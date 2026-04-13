@@ -11,6 +11,7 @@
     alert: CEFire
   - type: RejuvenateRemovedStatusEffect
   - type: CEDamageStatusEffect
+    interruptDoAfters: false
     damage:
       types:
         Fire: 1
