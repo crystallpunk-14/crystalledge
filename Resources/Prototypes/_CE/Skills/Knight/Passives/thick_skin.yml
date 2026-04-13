@@ -1,0 +1,25 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: ThickSkin
+  icon:
+    sprite: _CE/Skills/Knight/thick_skin.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectThickSkin
+
+- type: entity
+  id: CEStatusEffectThickSkin
+  name: Thick Skin
+  description: All temporary shields you receive are [color=#b2e3eb]doubled[/color].
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEThickSkin
+  - type: CEThickSkinStatusEffect
+    tempShieldMultiplier: 2
+
+- type: alert
+  id: CEThickSkin
+  icons:
+  - sprite: _CE/Skills/Knight/thick_skin.rsi
+    state: icon

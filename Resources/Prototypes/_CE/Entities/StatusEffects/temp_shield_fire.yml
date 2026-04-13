@@ -1,0 +1,46 @@
+- type: entity
+  id: CEStatusEffectTempShieldFire
+  name: Fire Shield
+  description: Absorbs fire damage, then fades over time.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CETempShieldFire
+  - type: CETempShieldStatusEffect
+    absorbPerStack: 1
+    absorbedTypes:
+    - Fire
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+
+- type: alert
+  id: CETempShieldFire
+  alertViewEntity: CETempShieldFireAlertSpriteView
+  name: ce-alert-temp-shield-fire-name
+  description: ce-alert-temp-shield-fire-desc
+  icons:
+  - sprite: _CE/Interface/temp_shield.rsi
+    state: fire
+
+- type: entity
+  id: CETempShieldFireAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/temp_shield.rsi
+      state: fire
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

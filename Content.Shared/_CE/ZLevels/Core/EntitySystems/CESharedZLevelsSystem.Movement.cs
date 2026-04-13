@@ -18,8 +18,6 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    public const int MaxZLevelsBelowRendering = 3;
-
     private const float ZGravityForce = 9.8f;
     private const float ZVelocityLimit = 20.0f;
 
@@ -99,6 +97,10 @@ public abstract partial class CESharedZLevelsSystem
         args.VelocityDelta -= ZGravityForce * ent.Comp.GravityMultiplier;
     }
 
+    //Currently we have no need for active z-physics, so we can skip this costly loop.
+    //We will return to it when we ready.
+
+    /*
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -196,6 +198,7 @@ public abstract partial class CESharedZLevelsSystem
                 DirtyField(uid, zPhys, nameof(CEZPhysicsComponent.LocalPosition));
         }
     }
+    */
 
     /// <summary>
     /// Returns the last cached distance to the floor.

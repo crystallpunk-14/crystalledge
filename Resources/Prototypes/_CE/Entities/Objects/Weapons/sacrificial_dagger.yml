@@ -1,0 +1,69 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponDaggerSacrificial
+  name: sacrificial dagger
+  description: An enchanted dagger that restores mana to whoever it cuts.
+  components:
+  - type: Item
+    shape:
+    - 0, 0, 1, 1
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Dagger/sacrifice_dagger.rsi
+    state: icon
+  - type: CEDestructible
+    destroyThreshold: 25
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.4
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          ignoreArmor: true
+          damage:
+            types:
+              Physical: 10
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+        - !type:RestoreMana
+          amount: 3
+        - !type:SpawnEntity
+          spawns:
+          - CEEffectManaRestore
+      OnHeavyHit: # Apply this effect of self
+      - !type:Damage
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
+      - !type:Damage
+        effectTarget: User
+        ignoreArmor: true
+        damage:
+          types:
+            Physical: 10
+      - !type:RestoreMana
+        effectTarget: User
+        amount: 3
+      - !type:SpawnEntity
+        effectTarget: User
+        spawns:
+        - CEEffectManaRestore
+    animations:
+      Primary:
+      - anim: DaggerAttackLight1
+        speed: 2
+        staminaCost: 1
+      - anim: DaggerAttackLight2
+        speed: 2
+        staminaCost: 1
+      Secondary:
+      - anim: SelfCut
+        staminaCost: 1
+  - type: Clothing
+    slots:
+    - belt

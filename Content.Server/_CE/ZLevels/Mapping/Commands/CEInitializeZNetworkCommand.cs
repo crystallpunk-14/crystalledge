@@ -3,12 +3,11 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using Content.Server._CE.ZLevels.Core;
 using Content.Server.Administration;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Administration;
-using Robust.Server.GameObjects;
 using Robust.Shared.Console;
-using Robust.Shared.Map.Components;
 
 namespace Content.Server._CE.ZLevels.Mapping.Commands;
 
@@ -16,7 +15,7 @@ namespace Content.Server._CE.ZLevels.Mapping.Commands;
 public sealed class CEInitializeZNetworkCommand : LocalizedEntityCommands
 {
     [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
 
     public override string Command => "znetwork-initialize";
     public override string Description => "Initialize all zNetwork maps.";
@@ -57,27 +56,7 @@ public sealed class CEInitializeZNetworkCommand : LocalizedEntityCommands
             return;
         }
 
-        foreach (var (_, mapUid) in levelComp.ZLevels)
-        {
-            if (!_entities.TryGetComponent<MapComponent>(mapUid, out var mapComp))
-            {
-                shell.WriteError($"Map entity {mapUid} doesnt have MapComponent.");
-                continue;
-            }
-
-            if (!_map.MapExists(mapComp.MapId))
-            {
-                shell.WriteError($"Map with ID {mapComp.MapId} does not exist.");
-                continue;
-            }
-
-            if (_map.IsInitialized(mapComp.MapId))
-            {
-                shell.WriteLine($"Map with ID {mapComp.MapId} is already initialized.");
-                continue;
-            }
-            _map.InitializeMap(mapComp.MapId);
-            shell.WriteLine($"Map with ID {mapComp.MapId} has been initialized.");
-        }
+        _zLevels.InitializeZNetwork((target.Value, levelComp));
+        shell.WriteLine("Done.");
     }
 }

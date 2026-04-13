@@ -18,4 +18,26 @@ public sealed partial class CEBlessingReceiverComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public List<ProtoId<CESkillPrototype>> ProposedSkills = new();
+
+    /// <summary>
+    /// True - Active, False - passive. The order of the items in this list will determine the order in which
+    /// active and passive skills are offered to the player (based on the number of skills the player has).
+    /// Once the list is exhausted, any available skills will be offered.
+    /// </summary>
+    public List<bool> SkillTypeOrder = new()
+    {
+        true, //Level 0 not interesting - we always have starter ability.
+        true, //Level 1 and 2 - actives
+        true,
+        false, //First passive on level 3
+        true,
+        false, //TODO: should be true active here, but we dont have enough content yet
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+    };
 }

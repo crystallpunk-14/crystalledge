@@ -1,0 +1,41 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: SmallBarrierFrost
+  weight: 0.15 # 3 small barrier skills pretty similar to each other so we merge it probabilities (0.15 + 0.15 + 0.15 = 0.45 and that ~ 0.5 default for neutral skill)
+  icon:
+    sprite: _CE/Interface/temp_shield.rsi
+    state: frost
+  effect: !type:AddAction
+    action: CEActionSpellSmallBarrierFrost
+
+- type: entity
+  id: CEActionSpellSmallBarrierFrost
+  parent: CEActionSpellBase
+  name: Small frost barrier
+  description: Grants [color=#b2e3eb]20 temporary Frost shields[/color] that absorb damage. Shields decay over time.
+  components:
+  - type: CEActionManaCost
+    manaCost: 1 #TODO: Change to 3, when cold damage become more frequent
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Interface/temp_shield.rsi
+      state: frost
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: SmallBarrierFrost
+
+- type: entityEffectAnimation
+  id: SmallBarrierFrost
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    0.6:
+    - !type:AddTempShield
+      effectTarget: User
+      amount: 20
+      damageType: Cold

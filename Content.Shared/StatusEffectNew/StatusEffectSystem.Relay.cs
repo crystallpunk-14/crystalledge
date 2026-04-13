@@ -1,5 +1,12 @@
+using System.Linq;
+using Content.Shared._CE.DivineShield;
+using Content.Shared._CE.Fire;
+using Content.Shared._CE.Frost;
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Stats.Core;
+using Content.Shared._CE.Mana.Core;
+using Content.Shared._CE.MeleeWeapon;
+using Content.Shared._CE.Stamina;
+using Content.Shared._CE.TempShield;
 using Content.Shared.Body.Events;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
@@ -19,11 +26,21 @@ public sealed partial class StatusEffectsSystem
     private void InitializeRelay()
     {
         //CrystallEdge zone
-        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateStatEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEGetHealAmountEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptHealEvent>(RelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, CEHealthChangedEvent>(RelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, CEBeforeDamageEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEDamageChangedEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEDamageCalculateEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateMaxHealthEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateMaxManaEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateMaxStaminaEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateStaminaRegenEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEGetManaRestoringAmountEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEGetManaRestoreAmountEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEDivineShieldBrokenEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CECalculateTempShieldStacksEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEAfterAttackEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEFreezeEntityAttemptEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEIgniteEntityAttemptEvent>(RefRelayStatusEffectEvent);
         //CrystallEdge zone end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);
@@ -62,8 +79,16 @@ public sealed partial class StatusEffectsSystem
     {
         // this copies the by-ref event if it is a struct
         var ev = new StatusEffectRelayedEvent<T>(args);
-        foreach (var activeEffect in statusEffect.Comp.ActiveStatusEffects?.ContainedEntities ?? [])
+        // CrystallEdge:  Snapshot the list: handlers may add/remove status effects during iteration.
+        var effects = statusEffect.Comp.ActiveStatusEffects?.ContainedEntities;
+        if (effects is null)
+            return;
+
+        foreach (var activeEffect in effects.ToArray())
         {
+            if (!Exists(activeEffect))
+                continue;
+
             RaiseLocalEvent(activeEffect, ref ev);
         }
         // and now we copy it back
@@ -74,8 +99,16 @@ public sealed partial class StatusEffectsSystem
     {
         // this copies the by-ref event if it is a struct
         var ev = new StatusEffectRelayedEvent<T>(args);
-        foreach (var activeEffect in statusEffect.Comp.ActiveStatusEffects?.ContainedEntities ?? [])
+        // CrystallEdge: Snapshot the list: handlers may add/remove status effects during iteration.
+        var effects = statusEffect.Comp.ActiveStatusEffects?.ContainedEntities;
+        if (effects is null)
+            return;
+
+        foreach (var activeEffect in effects.ToArray())
         {
+            if (!Exists(activeEffect))
+                continue;
+
             RaiseLocalEvent(activeEffect, ref ev);
         }
     }

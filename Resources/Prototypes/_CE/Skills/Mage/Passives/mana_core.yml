@@ -1,0 +1,21 @@
+- type: skill
+  parent: BaseMageSkill
+  id: ManaCore 
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectManaCore
+
+- type: entity
+  id: CEStatusEffectManaCore
+  name: Magic Core
+  description: "[color=#1776eb]Mana regeneration[/color] from all sources has been [color=#1776eb]doubled[/color]"
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEManaCore
+  - type: CEManaCoreStatusEffect
+
+- type: alert
+  id: CEManaCore
+  icons:
+  - sprite: _CE/Skills/Mage/mana_core.rsi
+    state: icon

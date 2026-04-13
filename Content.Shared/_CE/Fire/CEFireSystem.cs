@@ -1,6 +1,9 @@
+using Content.Shared._CE.Frost;
 using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.Water;
 using Content.Shared.Examine;
-using Robust.Shared.GameStates;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -8,12 +11,11 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Fire;
 
-public sealed class CEFireSystem : EntitySystem
+public sealed partial class CEFireSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
@@ -26,21 +28,155 @@ public sealed class CEFireSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     private readonly EntProtoId _defaultFireProto = "CEFireTileLow";
+    private readonly EntProtoId _fireImpactEffect = "CEFireImpactEffect";
+    private readonly EntProtoId _steamEffect = "CESteamEffect";
 
-    private readonly EntProtoId _statusFire = "CEStatusEffectFire";
+    private readonly SoundSpecifier _fireSound = new SoundPathSpecifier("/Audio/_CE/Effects/fire_whoosh.ogg");
+    private readonly SoundSpecifier _steamSound = new SoundPathSpecifier("/Audio/_CE/Effects/steam_burst.ogg");
 
     private EntityQuery<CEFireComponent> _fireQuery;
+    private EntityQuery<CEFlammableComponent> _flammableQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
         _fireQuery = GetEntityQuery<CEFireComponent>();
+        _flammableQuery = GetEntityQuery<CEFlammableComponent>();
 
         SubscribeLocalEvent<CEFireComponent, MapInitEvent>(OnFireMapInit);
         SubscribeLocalEvent<CEFireComponent, StartCollideEvent>(OnCollide);
+        SubscribeLocalEvent<CEMeltTransformComponent, CEIgnitedEvent>(OnMeltingIgnited);
+        SubscribeLocalEvent<CEFlammableComponent, CEIgnitedEvent>(OnFlammableIgnited);
+        SubscribeLocalEvent<CEFlammableComponent, CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
+        SubscribeLocalEvent<CEFlammableComponent, CEWetEntityAttemptEvent>(OnFireWetAttempt);
+
+        SubscribeLocalEvent<CEFlammableComponent, MapInitEvent>(OnMapInit);
+
+        // Tile attempt: melt-transform entities block fire tile placement by transforming.
+        SubscribeLocalEvent<CEMeltTransformComponent, CEIgniteTileAttemptEvent>(OnMeltTileIgniteAttempt);
+    }
+
+    private void OnMapInit(Entity<CEFlammableComponent> ent, ref MapInitEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        //We just wanna randomize some flame time duration duration
+        var dur = ent.Comp.BurnCycleDuration.TotalSeconds;
+        ent.Comp.BurnCycleDuration = TimeSpan.FromSeconds(_random.NextDouble(dur * 0.75, dur * 1.25));
+        Dirty(ent);
+    }
+
+    private void OnFlammableIgnited(Entity<CEFlammableComponent> ent, ref CEIgnitedEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        var stacks = args.Stacks;
+        var cycleDuration = ent.Comp.BurnCycleDuration;
+
+        if (args.MaxStacks != null)
+        {
+            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
+            var allowed = Math.Max(0, args.MaxStacks.Value - current);
+            if (allowed <= 0)
+                return;
+
+            stacks = Math.Min(stacks, allowed);
+        }
+
+        _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, stacks, cycleDuration);
+        _stack.SetStackDelta(ent, ent.Comp.StatusEffect, ent.Comp.StackDelta);
+    }
+
+    /// <summary>
+    /// Fire neutralizes frost: when something tries to freeze a burning entity,
+    /// fire stacks cancel out an equal number of incoming frost stacks.
+    /// </summary>
+    private void OnFreezeEntityAttempt(Entity<CEFlammableComponent> ent, ref CEFreezeEntityAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
+        if (fireStacks <= 0)
+            return;
+
+        var neutralized = Math.Min(fireStacks, args.Stacks);
+        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
+        args.Stacks -= neutralized;
+
+        SpawnSteamEffect(ent);
+
+        if (args.Stacks <= 0)
+            args.Cancelled = true;
+    }
+
+    /// <summary>
+    /// Fire neutralizes wet: when something tries to wet a burning entity,
+    /// fire stacks cancel out an equal number of incoming wet stacks.
+    /// </summary>
+    private void OnFireWetAttempt(Entity<CEFlammableComponent> ent, ref CEWetEntityAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
+        if (fireStacks <= 0)
+            return;
+
+        var neutralized = Math.Min(fireStacks, args.Stacks);
+        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
+        args.Stacks -= neutralized;
+
+        SpawnSteamEffect(ent);
+
+        if (args.Stacks <= 0)
+            args.Cancelled = true;
+    }
+
+    /// <summary>
+    /// When fire tile is about to be placed on a tile with a melt-transform entity (e.g. ice),
+    /// the entity transforms into its melted form and fire placement is cancelled.
+    /// </summary>
+    private void OnMeltTileIgniteAttempt(Entity<CEMeltTransformComponent> ent, ref CEIgniteTileAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (_net.IsClient)
+            return;
+
+        var xform = Transform(ent);
+        var rotation = xform.LocalRotation;
+        var coordinates = _transform.GetMapCoordinates(ent, xform);
+
+        _entManager.DeleteEntity(ent);
+
+        var restored = _entManager.SpawnEntity(ent.Comp.MeltsInto, coordinates);
+        _transform.SetLocalRotation(restored, rotation);
+
+        args.Cancelled = true;
+        SpawnSteamEffect(args.Coordinates);
+    }
+
+    private void OnMeltingIgnited(Entity<CEMeltTransformComponent> ent, ref CEIgnitedEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        var xform = Transform(ent);
+        var rotation = xform.LocalRotation;
+        var coordinates = _transform.GetMapCoordinates(ent, xform);
+
+        _entManager.DeleteEntity(ent);
+
+        var restored = _entManager.SpawnEntity(ent.Comp.MeltsInto, coordinates);
+        _transform.SetLocalRotation(restored, rotation);
     }
 
     public override void Update(float frameTime)
@@ -77,9 +213,29 @@ public sealed class CEFireSystem : EntitySystem
         // Update appearance for initial stacks.
         UpdateAppearance(ent);
 
-        // Ignite entities already on the tile.
+        // Element interaction: check for opposing element on the tile.
         var coords = _transform.GetMapCoordinates(ent);
-        var entitiesOnTile = _lookup.GetEntitiesInRange(coords, 0.5f);
+        var xform = Transform(ent);
+        if (xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
+        {
+            var attemptEv = new CEIgniteTileAttemptEvent(coords, ent.Comp.Stacks, false);
+            var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), coords);
+            foreach (var anch in anchored)
+            {
+                if (anch == ent.Owner)
+                    continue;
+
+                RaiseLocalEvent(anch, ref attemptEv);
+                if (attemptEv.Cancelled)
+                {
+                    EntityManager.DeleteEntity(ent);
+                    return;
+                }
+            }
+        }
+
+        // Ignite entities already on the tile.
+        var entitiesOnTile = _lookup.GetEntitiesInRange(coords, 0.5f, LookupFlags.Uncontained);
         foreach (var entity in entitiesOnTile)
         {
             IgniteEntity(entity, ent, ent.Comp.Stacks, ent.Comp.Stacks);
@@ -139,121 +295,57 @@ public sealed class CEFireSystem : EntitySystem
         _appearance.SetData(ent, CEFireTileVisuals.Level, level);
     }
 
-    public void IgniteEntity(EntityUid target, EntityUid? source = null, int stack = 1, int? maxStack = null)
-    {
-        if (stack <= 0)
-            return;
-
-        if (_net.IsClient)
-            return;
-
-        // If a maxStack is provided, ensure we don't exceed it.
-        if (maxStack != null)
-        {
-            var current = _stack.GetStack(target, _statusFire);
-            var allowed = Math.Max(0, maxStack.Value - current);
-            if (allowed <= 0)
-                return;
-
-            var toAdd = Math.Min(stack, allowed);
-
-            _stack.TryAddStack(target, _statusFire, toAdd, TimeSpan.FromSeconds(2f));
-            return;
-        }
-
-        _stack.TryAddStack(target, _statusFire, stack, TimeSpan.FromSeconds(2f));
-    }
-
-    /// <summary>
-    /// Creates fire on the tile or adds stacks to existing fire.
-    /// </summary>
-    public void IgniteTile(Entity<MapGridComponent?> grid, MapCoordinates coordinates, int stacks = 1)
-    {
-        if (_net.IsClient)
-            return;
-
-        if (stacks <= 0)
-            return;
-
-        if (!Resolve(grid, ref grid.Comp))
-            return;
-
-        // Don't ignite empty tiles (space / no turf).
-        if (!_mapSystem.TryGetTileRef(grid.Owner, grid.Comp, coordinates.Position, out var tileRef) || tileRef.Tile.IsEmpty)
-            return;
-
-        var existingFires = _mapSystem.GetAnchoredEntities((grid, grid.Comp), coordinates);
-
-        foreach (var fire in existingFires)
-        {
-            if (_fireQuery.TryComp(fire, out var existingComp))
-            {
-                // Fire already exists on this tile — add stacks to it.
-                AddStacks((fire, existingComp), stacks);
-                return;
-            }
-        }
-
-        // No existing fire — spawn a new one and set stacks.
-        var newFire = _entManager.SpawnEntity(_defaultFireProto, coordinates);
-        if (_fireQuery.TryComp(newFire, out var newComp))
-        {
-            // Set stacks directly (MapInit already set it to initial value, so we override).
-            SetStacks((newFire, newComp), stacks);
-        }
-    }
-
-    public void IgniteArea(EntityCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 10)
-    {
-        var mapCoords = _transform.ToMapCoordinates(center);
-        IgniteArea(mapCoords, radius, falloffFactor, maxStacks);
-    }
-
-    public void IgniteArea(MapCoordinates center, float radius = 3f, float falloffFactor = 0.5f, int maxStacks = 10)
-    {
-        if (radius <= 0f)
-            return;
-
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
-            return;
-
-        var centerWorld = center.Position;
-        var tileSize = grid.TileSize;
-
-        var minX = (int)MathF.Floor((centerWorld.X - radius) / tileSize);
-        var maxX = (int)MathF.Ceiling((centerWorld.X + radius) / tileSize);
-        var minY = (int)MathF.Floor((centerWorld.Y - radius) / tileSize);
-        var maxY = (int)MathF.Ceiling((centerWorld.Y + radius) / tileSize);
-
-        for (var x = minX; x <= maxX; x++)
-        {
-            for (var y = minY; y <= maxY; y++)
-            {
-                var tileIndices = new Vector2i(x, y);
-                var tileWorldPos = _mapSystem.GridTileToWorldPos(gridUid, grid, tileIndices);
-                var tileCoords = new MapCoordinates(tileWorldPos, center.MapId);
-
-                var distance = (tileWorldPos - centerWorld).Length();
-
-                if (distance > radius)
-                    continue;
-
-                if (!_examine.InRangeUnOccluded(center, tileCoords, radius, null))
-                    continue;
-
-                var normalizedDistance = distance / radius;
-                var stacks = CalculateFireStacks(normalizedDistance, falloffFactor, maxStacks);
-
-                IgniteTile((gridUid, grid), tileCoords, stacks);
-            }
-        }
-    }
-
     private int CalculateFireStacks(float normalizedDistance, float falloffFactor, int maxStacks)
     {
         var adjustedDistance = MathF.Pow(normalizedDistance, falloffFactor);
         var intensity = 1f - adjustedDistance;
         return Math.Max(1, (int)MathF.Ceiling(intensity * maxStacks));
+    }
+
+    /// <summary>
+    /// Removes all CE fire stacks from an entity and spawns a steam effect.
+    /// </summary>
+    /// <returns>True if the entity had fire and was extinguished.</returns>
+    public bool ExtinguishEntity(Entity<CEFlammableComponent?> target)
+    {
+        if (_net.IsClient)
+            return false;
+
+        if (!_flammableQuery.Resolve(target, ref target.Comp, logMissing: false))
+            return false;
+
+        var stacks = _stack.GetStack(target, target.Comp.StatusEffect);
+        if (stacks <= 0)
+            return false;
+
+        _stack.TryRemoveStack(target, target.Comp.StatusEffect, stacks);
+        SpawnSteamEffect(target);
+        return true;
+    }
+
+    /// <summary>
+    /// Spawns a steam effect at an entity's position.
+    /// </summary>
+    public void SpawnSteamEffect(EntityUid target)
+    {
+        if (_net.IsClient)
+            return;
+
+        var pos = Transform(target).Coordinates;
+        Spawn(_steamEffect, pos);
+        _audio.PlayPvs(_steamSound, pos);
+    }
+
+    /// <summary>
+    /// Spawns a steam effect at map coordinates.
+    /// </summary>
+    public void SpawnSteamEffect(MapCoordinates coordinates)
+    {
+        if (_net.IsClient)
+            return;
+
+        var steam = _entManager.SpawnEntity(_steamEffect, coordinates);
+        _audio.PlayPvs(_steamSound, Transform(steam).Coordinates);
     }
 }
 
@@ -277,43 +369,25 @@ public enum CEFireTileVisualLevel
     High,
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class CEFireComponent : Component
-{
-    /// <summary>
-    /// Current number of fire stacks on this tile. Can be infinite.
-    /// At 0, the fire entity is deleted.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public int Stacks = 1;
+/// <summary>
+/// Raised as a directed event on the target entity before fire stacks are applied.
+/// Handlers can modify <see cref="Stacks"/> or set <see cref="Cancelled"/> to prevent ignition.
+/// Handled by <c>CEFrostSystem</c> for frost neutralization and <c>CESharedWaterSystem</c> for water blocking.
+/// </summary>
+[ByRefEvent]
+public record struct CEIgniteEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
 
-    /// <summary>
-    /// Minimum seconds between decay ticks (loses 1 stack per tick).
-    /// </summary>
-    [DataField]
-    public float MinDecayInterval = 5f;
+/// <summary>
+/// Raised as a directed event on each anchored entity on a tile before fire is placed.
+/// Handlers can set <see cref="Cancelled"/> to block fire tile placement.
+/// Handled by <c>CEMeltTransformComponent</c> (ice melting) and <c>CEWaterComponent</c> (water blocking).
+/// </summary>
+[ByRefEvent]
+public record struct CEIgniteTileAttemptEvent(MapCoordinates Coordinates, int Stacks, bool Cancelled);
 
-    /// <summary>
-    /// Maximum seconds between decay ticks (loses 1 stack per tick).
-    /// </summary>
-    [DataField]
-    public float MaxDecayInterval = 10f;
-
-    /// <summary>
-    /// Next time a decay tick should happen.
-    /// </summary>
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
-    public TimeSpan NextDecayTime = TimeSpan.Zero;
-
-    /// <summary>
-    /// Stack threshold for medium visual appearance.
-    /// </summary>
-    [DataField]
-    public int MediumThreshold = 5;
-
-    /// <summary>
-    /// Stack threshold for high visual appearance.
-    /// </summary>
-    [DataField]
-    public int HighThreshold = 10;
-}
+/// <summary>
+/// Raised as a directed event on an entity when it receives a fire/ignite effect.
+/// Carries the fire intensity for handlers to apply their specific effects.
+/// </summary>
+[ByRefEvent]
+public record struct CEIgnitedEvent(int Stacks = 0, int? MaxStacks = null);

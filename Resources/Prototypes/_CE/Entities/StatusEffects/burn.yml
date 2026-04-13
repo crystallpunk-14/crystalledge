@@ -1,0 +1,47 @@
+- type: entity
+  id: CEStatusEffectBurn
+  name: Burn
+  description: Increases incoming fire damage.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: RejuvenateRemovedStatusEffect
+  - type: StatusEffectAlert
+    alert: CEBurn
+  - type: CEDamageVulnerabilityStatusEffect
+    extraDamagePerStack: 1
+    affectedTypes:
+    - Fire
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+
+- type: alert
+  id: CEBurn
+  alertViewEntity: CEBurnAlertSpriteView
+  name: ce-alert-burn-name
+  description: ce-alert-burn-desc
+  icons:
+  - sprite: _CE/Interface/vulnerability.rsi
+    state: fire
+
+- type: entity
+  id: CEBurnAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/vulnerability.rsi
+      state: fire
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

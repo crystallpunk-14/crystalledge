@@ -1,4 +1,6 @@
 using System.Linq;
+using Content.Shared._CE.Skill.Core;
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
@@ -23,6 +25,7 @@ public abstract class SharedStationSpawningSystem : EntitySystem
     [Dependency] private readonly MetaDataSystem _metadata = default!;
     [Dependency] private readonly SharedStorageSystem _storage = default!;
     [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
+    [Dependency] private readonly CESharedSkillSystem _skill = default!;
 
     private EntityQuery<HandsComponent> _handsQuery;
     private EntityQuery<InventoryComponent> _inventoryQuery;
@@ -88,6 +91,7 @@ public abstract class SharedStationSpawningSystem : EntitySystem
     {
         EquipStartingGear(entity, loadout.StartingGear, raiseEvent);
         EquipStartingGear(entity, (IEquipmentLoadout) loadout, raiseEvent);
+        EquipStartingSkills(entity, loadout.Skills); //CrystallEdge loadout skills
     }
 
     /// <summary>
@@ -177,6 +181,17 @@ public abstract class SharedStationSpawningSystem : EntitySystem
         {
             var ev = new StartingGearEquippedEvent(entity);
             RaiseLocalEvent(entity, ref ev);
+        }
+    }
+
+    /// <summary>
+    /// CrystallEdge - equipping selected skills from loadout
+    /// </summary>
+    private void EquipStartingSkills(EntityUid entity, List<ProtoId<CESkillPrototype>> loadoutSkills)
+    {
+        foreach (var skill in loadoutSkills)
+        {
+            _skill.TryAddSkill(entity, skill);
         }
     }
 

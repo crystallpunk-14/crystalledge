@@ -1,5 +1,4 @@
 using Content.Shared._CE.GOAP;
-using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP;
 
@@ -9,47 +8,31 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public abstract partial class CEGOAPSensorSystem<T> : EntitySystem where T : CEGOAPSensorBase<T>
 {
+    [Dependency] protected readonly CEGOAPSystem Goap = default!;
+
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CEGOAPComponent, CEGOAPSensorUpdateEvent<T>>(OnSensorUpdate);
+        SubscribeLocalEvent<CEGOAPComponent, CEGOAPSensorUpdateEvent<T>>(HandleSensorUpdate);
+    }
+
+    private void HandleSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<T> args)
+    {
+        var newState = OnSensorUpdate(ent, ref args);
+
+        if (newState is null)
+            return;
+
+        args.WorldState[args.Sensor.ConditionKey] = newState.Value;
     }
 
     /// <summary>
-    /// Called with each sensor update tick (default 0.2s).
-    /// The sensor scans information about the world and sets the key to which this sensor is bound to true or false.
-    /// The sensor MUST NOT affect the world around it or influence the entity itself in any way,
-    /// except by setting GOAP state via <see cref="SetState"/>.
+    /// Evaluate a world-state condition and return true/false or null (dont change).
+    /// Called on each poll tick and during forced updates.
+    /// Must NOT affect the world or entity — only observe.
     /// </summary>
-    protected abstract void OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<T> args);
-
-    /// <summary>
-    /// Updates the state of the world known to entity. The key we update is automatically taken from the sensor.
-    /// </summary>
-    protected void SetState(ref CEGOAPSensorUpdateEvent<T> args, bool newState)
+    protected virtual bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<T> args)
     {
-        args.WorldState[args.Sensor.ConditionKey] = newState;
-    }
-
-    /// <summary>
-    /// Returns the resolved entity target from the named target provider, or null if the key is absent or unresolved.
-    /// </summary>
-    protected EntityUid? GetTarget(CEGOAPComponent goap, string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
-
-        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetEntity : null;
-    }
-
-    /// <summary>
-    /// Returns the resolved coordinate target from the named target provider, or null if the key is absent or unresolved.
-    /// </summary>
-    protected EntityCoordinates? GetTargetCoordinates(CEGOAPComponent goap, string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
-
-        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetCoordinates : null;
+        return null;
     }
 }

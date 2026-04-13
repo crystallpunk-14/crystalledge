@@ -91,21 +91,21 @@ public abstract class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
         return false;
     }
 
-    public bool TryChangeEnergy(Entity<CEMagicEnergyCrystalSlotComponent?> ent,
-        int energy,
-        EntityUid? user = null)
-    {
-        if (!TryGetEnergyCrystalFromSlot(ent, out var energyEnt))
-        {
-            if (user is not null)
-                _popup.PopupEntity(Loc.GetString("ce-magic-energy-no-crystal"), ent, user.Value);
-
-            return false;
-        }
-
-        _magicEnergy.ChangeEnergy((energyEnt.Value, energyEnt.Value), energy, out _, out _);
-        return true;
-    }
+    //public bool TryChangeEnergy(Entity<CEMagicEnergyCrystalSlotComponent?> ent,
+    //    int energy,
+    //    EntityUid? user = null)
+    //{
+    //    if (!TryGetEnergyCrystalFromSlot(ent, out var energyEnt))
+    //    {
+    //        if (user is not null)
+    //            _popup.PopupEntity(Loc.GetString("ce-magic-energy-no-crystal"), ent, user.Value);
+//
+    //        return false;
+    //    }
+//
+    //    _magicEnergy.ChangeEnergy((energyEnt.Value, energyEnt.Value), energy, out _, out _);
+    //    return true;
+    //}
 
     private void OnCrystalChanged(Entity<CEMagicEnergyCrystalSlotComponent> ent, ref CESlotCrystalChangedEvent args)
     {

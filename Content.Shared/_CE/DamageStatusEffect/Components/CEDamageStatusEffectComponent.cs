@@ -17,4 +17,7 @@ public sealed partial class CEDamageStatusEffectComponent : Component
     /// </summary>
     [DataField]
     public bool ScaleWithStacks = true;
+
+    [DataField]
+    public bool InterruptDoAfters = true;
 }

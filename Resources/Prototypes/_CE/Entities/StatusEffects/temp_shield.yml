@@ -1,0 +1,46 @@
+- type: entity
+  id: CEStatusEffectTempShield
+  name: Temporary Shield
+  description: Absorbs physical damage, then fades over time.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CETempShield
+  - type: CETempShieldStatusEffect
+    absorbPerStack: 1
+    absorbedTypes:
+    - Physical
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+
+- type: alert
+  id: CETempShield
+  alertViewEntity: CETempShieldAlertSpriteView
+  name: ce-alert-temp-shield-name
+  description: ce-alert-temp-shield-desc
+  icons:
+  - sprite: _CE/Interface/temp_shield.rsi
+    state: physical
+
+- type: entity
+  id: CETempShieldAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/temp_shield.rsi
+      state: physical
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

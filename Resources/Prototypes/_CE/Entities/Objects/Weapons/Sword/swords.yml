@@ -1,9 +1,0 @@
-- type: entity
-  parent: CEBaseWeaponSword
-  id: CEWeaponSwordIron
-  name: iron sword
-  description: A finely crafted sword favored by imperial officers. Its blade gleams with authority and tradition.
-  components:
-  - type: Sprite
-    sprite: _CE/Objects/Weapons/Sword/iron.rsi
-    state: icon

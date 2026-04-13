@@ -17,7 +17,7 @@ public sealed partial class CEGOAPGoal
     /// If empty, the goal is always considered.
     /// </summary>
     [DataField]
-    public Dictionary<string, bool> ActivationConditions = new();
+    public Dictionary<string, bool> Preconditions = new();
 
     /// <summary>
     /// Higher priority goals are preferred when multiple goals are active.

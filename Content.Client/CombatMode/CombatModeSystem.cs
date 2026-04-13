@@ -1,5 +1,6 @@
 using Content.Client.Hands.Systems;
 using Content.Client.NPC.HTN;
+using Content.Shared._CE.GOAP;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Robust.Client.Graphics;
@@ -61,7 +62,8 @@ public sealed class CombatModeSystem : SharedCombatModeSystem
 
     protected override bool IsNpc(EntityUid uid)
     {
-        return HasComp<HTNComponent>(uid);
+        // CrystallEdge - also recognize CE GOAP mobs as NPCs
+        return HasComp<HTNComponent>(uid) || HasComp<CEGOAPComponent>(uid);
     }
 
     private void UpdateHud(EntityUid entity)

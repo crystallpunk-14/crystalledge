@@ -1,3 +1,4 @@
+using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Preferences.Loadouts.Effects;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
@@ -49,4 +50,10 @@ public sealed partial class LoadoutPrototype : IPrototype, IEquipmentLoadout
     /// <inheritdoc />
     [DataField]
     public Dictionary<string, List<EntProtoId>> Storage { get; set; } = new();
+
+    /// <summary>
+    /// CrystallEdge - ability to select skills via loadout.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<CESkillPrototype>> Skills = new();
 }

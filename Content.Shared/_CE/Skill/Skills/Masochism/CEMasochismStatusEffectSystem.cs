@@ -14,12 +14,12 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEMasochismStatusEffectComponent, StatusEffectRelayedEvent<CEHealthChangedEvent>>(OnDamageTaken);
+        SubscribeLocalEvent<CEMasochismStatusEffectComponent, StatusEffectRelayedEvent<CEDamageChangedEvent>>(OnDamageTaken);
     }
 
-    private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEHealthChangedEvent> args)
+    private void OnDamageTaken(Entity<CEMasochismStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEDamageChangedEvent> args)
     {
-        if (args.Args.NewHealth >= args.Args.OldHealth)
+        if (args.Args.DamageDelta <= 0)
             return;
 
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect))
@@ -31,8 +31,8 @@ public sealed partial class CEMasochismStatusEffectSystem : EntitySystem
         var count = ent.Comp.ManaRestore;
 
         if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
-            count *= stackComp.Stack;
+            count *= stackComp.Stacks;
 
-        _magic.ChangeEnergy(statusEffect.AppliedTo.Value, count, out _, out _);
+        _magic.Restore(statusEffect.AppliedTo.Value, count, statusEffect.AppliedTo.Value);
     }
 }

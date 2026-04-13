@@ -8,7 +8,7 @@
   id: CEActionSpellAreaHealing
   parent: CEActionSpellBase
   name: Prayer for health
-  description: You restore [color=1defa9]2 health[/color] to all creatures in a small area.
+  description: You restore [color=1defa9]10 health[/color] to all creatures in a small area.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/area_healing.rsi
+      sprite: _CE/Skills/Priest/area_healing.rsi
       state: icon
   - type: TargetAction
     range: 3
@@ -27,19 +27,19 @@
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationAreaHealing
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationAreaHealing
   movementSpeed: 0.5
   duration: 1.5
   events:
     0:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectAreaHealingTelegraphy
     - !type:SayChat
       sentence: "Et curabuntur"
     1.2:
-    - !type:SpawnEntityOnTarget
+    - !type:SpawnEntity
       spawns:
       - CEEffectAreaHealingEffect
     - !type:SayChat
@@ -48,11 +48,11 @@
       range: 1.2
       affectCaster: true
       effects:
-      - !type:SpawnEntityOnTarget
+      - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric
       - !type:Heal
-        amount: 2
+        amount: 10
 
 - type: entity
   id: CEEffectAreaHealingTelegraphy

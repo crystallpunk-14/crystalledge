@@ -1,0 +1,10 @@
+- type: skinColoration
+  id: CETieflingHues
+  strategy: !type:ClampedHsvColoration
+    hue: [0.6, 1.05]
+    saturation: [0.15, 0.8]
+    value: [0.25, 0.55]
+
+- type: skinColoration
+  id: CEElf
+  strategy: !type:CEElfTonedSkinColoration {}

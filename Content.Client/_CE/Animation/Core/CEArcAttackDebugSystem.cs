@@ -1,4 +1,4 @@
-using Content.Shared._CE.Animation.Core.Actions;
+using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.Graphics;
 using Robust.Shared.Console;
 

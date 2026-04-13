@@ -4,9 +4,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.DivineShield;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEDivineShieldStatusEffectComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public EntityUid? Applier;
+
     [DataField]
     public EntProtoId? BreakVfx = "CEEffectBreakDivineShield";
 

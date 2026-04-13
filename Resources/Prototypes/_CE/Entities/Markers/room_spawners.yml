@@ -20,3 +20,18 @@
   components:
   - type: CERoomSpawner3D
     maxSize: 20, 20
+
+- type: entity
+  parent: MarkerBase
+  id: CERoomPasswayMarker
+  name: room passway marker
+  categories: [ ForkFiltered ]
+  components:
+  - type: CERoomPasswayMarker
+  - type: PlacementReplacement
+    key: CERoomPasswayMarker
+  - type: Sprite
+    sprite: Markers/jobs.rsi
+    layers:
+    - sprite: _CE/Interface/arrow.rsi
+      state: arrow

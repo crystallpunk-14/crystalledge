@@ -1,9 +1,0 @@
-- type: entity
-  parent: CEBaseWeaponTwoHandedSword
-  id: CEWeaponTwoHandedSwordIron
-  name: iron two-handed sword
-  description: A large and heavy two-handed sword. Heavy means reliable.
-  components:
-  - type: Sprite
-    sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
-    state: icon

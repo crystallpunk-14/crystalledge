@@ -1,0 +1,75 @@
+- type: entity
+  id: CEWeaponTwoHandedSwordIron
+  parent:
+  - CEBaseWeapon
+  name: iron two-handed sword
+  description: A large and heavy two-handed sword. Heavy means reliable.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.84
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 20
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.72
+        arcWidth: 180
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 20
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+    animations:
+      Primary:
+      - anim: SwordAttackLight1
+        speed: 0.5
+        staminaCost: 2.5
+      - anim: SwordAttackLight2
+        speed: 0.5
+        staminaCost: 2.5
+      Secondary:
+      - anim: SwordAttackLight1
+        speed: 0.5
+        staminaCost: 2.5
+      - anim: SwordAttackLight2
+        speed: 0.5
+        staminaCost: 2.5
+  - type: CEWieldedWeapon
+    animations:
+      Primary:
+      - anim: SwordAttackHeavy1
+        speed: 0.5
+        staminaCost: 2.5
+      - anim: SwordAttackHeavy2
+        speed: 0.5
+        staminaCost: 2.5
+      Secondary:
+      - anim: SwordAttackHeavy1
+        speed: 0.5
+        staminaCost: 2.5
+      - anim: SwordAttackHeavy2
+        speed: 0.5
+        staminaCost: 2.5
+  - type: Clothing
+    slots:
+    - neck
+  - type: Wieldable

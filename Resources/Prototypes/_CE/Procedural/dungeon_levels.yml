@@ -1,0 +1,441 @@
+- type: dungeonLevel
+  id: BaseMossyTemplePostProcess
+  abstract: true
+  postProcess:
+  - !type:CETileVariantizePostProcess
+  - !type:CEEntitySwapPostProcess
+    source: CEWallStoneBrick
+    target: CEWallStone
+    chance: 0.05
+  - !type:CEEntitySwapPostProcess
+    source: CEWallStoneBrick
+    target: CEWallDirt
+    chance: 0.05
+  - !type:CEBiomeApplyPostProcess
+    seed: 42
+    layers:
+    - !type:BiomeTileLayer
+      tile: CEDirt
+      threshold: 0.15
+      noise:
+        seed: 0
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+    - !type:BiomeTileLayer
+      tile: CEGrass
+      threshold: 0.5
+      noise:
+        seed: 0
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+    - !type:BiomeDecalLayer #Grass decal
+      threshold: 0.3
+      divisions: 1
+      noise:
+        seed: 12
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+        - CEFloraGrass1
+        - CEFloraGrass2
+        - CEFloraGrass3
+        - CEFloraGrass4
+        - CEFloraGrass5
+        - CEFloraGrass6
+        - CEFloraGrass7
+        - CEFloraGrass8
+        - CEFloraGrass9
+        - CEFloraGrass10
+        - CEFloraGrass11
+        - CEFloraGrass12
+        - CEFloraGrass13
+        - CEFloraGrass14
+    - !type:BiomeDecalLayer #Rock decal
+      threshold: 0.7
+      divisions: 1
+      noise:
+        seed: 18
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.11
+        octaves: 3
+        lacunarity: 1.7
+        gain: 0.8
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+        - CEFloraRock01
+        - CEFloraRock02
+        - CEFloraRock03
+        - CEFloraRock04
+        - CEFloraRock05
+    - !type:BiomeDecalLayer #Bush decal
+      threshold: 0.5
+      divisions: 1
+      noise:
+        seed: 12
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+        - CEGrassBushes1
+        - CEGrassBushes2
+        - CEGrassBushes3
+        - CEGrassBushes4
+        - CEGrassBushes5
+        - CEGrassBushes6
+        - CEGrassBushes7
+        - CEGrassBushes8
+        - CEGrassBushes9
+    - !type:BiomeEntityLayer # Tall grass!
+      threshold: 0.6
+      noise:
+        seed: 23
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+        - CERandomBushOffsetSpawner
+    - !type:BiomeEntityLayer # God rays!
+      threshold: 0.3
+      noise:
+        seed: 877
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.03
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+        - CEGodRaysMoon
+
+
+
+
+- type: dungeonLevel
+  id: BaseMossyTempleProcedural
+  abstract: true
+  stable: false
+  config:
+    !type:CEProceduralConfig
+    corridorTile: CEStonebricks
+    corridorWander: 0
+    maxRoomSize: 16
+    components:
+    - type: MapLight
+      ambientLightColor: "#31455a"
+    - type: Gravity
+      enabled: true
+      inherent: true
+    generalRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomGeneral
+    exitRoom:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomExit
+    entranceRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomEntrance
+    blessingRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomBlessing
+    deadEndRooms:
+      whitelist:
+        requireAll: true
+        tags:
+        - CEDunGenMossyTemple
+        - CEDunGenRoomDeadEnd
+
+# Floor 1: Small introductory level.
+- type: dungeonLevel
+  id: MossyTemple1
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Floor 1
+  exits:
+    default: MossyTemple2
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 7
+      max: 10
+    entranceCount: #We dont wanna PvP so early
+      min: 1
+      max: 1
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 1
+      max: 2
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 10
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobRat
+      cost: 1
+      weight: 3
+    - proto: CEMobSlimeWater
+      cost: 3
+      weight: 1
+
+# Floor 2: Medium-sized level with more rooms.
+- type: dungeonLevel
+  id: MossyTemple2
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Floor 2
+  exits:
+    default: MossyTemple3
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 10
+      max: 15
+    entranceCount: # 50% chances to group encaunters
+      min: 1
+      max: 2
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 2
+      max: 3
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 15
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobRat
+      cost: 1
+      weight: 3
+    - proto: CEMobSlimeWater
+      cost: 2
+      weight: 1
+    - proto: CEMobFireConstruct
+      cost: 10
+      weight: 1
+
+# Floor 3: Large final level with many rooms and cycles.
+- type: dungeonLevel
+  id: MossyTemple3
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Floor 3
+  exits:
+    default: MossyTemple4
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 10
+      max: 15
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 2
+      max: 4
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 20
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobRat
+      cost: 1
+      weight: 3
+    - proto: CEMobSlimeWater
+      cost: 2
+      weight: 1
+    - proto: CEMobFireConstruct
+      cost: 10
+      weight: 1
+    - proto: CEMobSlimeFire
+      cost: 3
+      weight: 1
+
+
+- type: dungeonLevel
+  id: MossyTemple4
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Floor 4
+  exits:
+    default: MossyTempleSafe
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 10
+      max: 15
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 2
+      max: 4
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 40
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobRat
+      cost: 1
+      weight: 1
+    - proto: CEMobSlimeWater
+      cost: 2
+      weight: 1
+    - proto: CEMobSlimeFire
+      cost: 3
+      weight: 1
+    - proto: CEMobFireConstruct
+      cost: 10
+      weight: 1
+
+- type: dungeonLevel
+  id: MossyTempleSafe
+  stable: true
+  parent:
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Safe Zone
+  exits:
+    default: MossyTemple5
+  config:
+    !type:CEStaticZNetworkConfig
+    zMapProto: MossyTempleSafe
+
+- type: zMap
+  id: MossyTempleSafe
+  maps:
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe0.yml
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true
+
+- type: entity
+  id: CEMapEndText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map end text
+  components:
+  - type: MapText
+    text: "This is the end of the demo! Thanks for playing :). \n The next level will be incredibly, absurdly difficult—meaning you'll most likely die."
+
+
+- type: entity
+  id: CEMapStartText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map start text EN
+  components:
+  - type: MapText
+    text: "A maximum of 4 players can enter the portal at the same time. \nA short demo adventure awaits you, spanning 4 floors that gradually get more challenging. \nYou may randomly encounter other groups of players inside, and it’s up to you to decide whether you’re friends or foes.\nOn each level, there is 1 statue that will boost your character’s stats.\nYour goal is to reach the end and have fun!"
+
+- type: entity
+  id: CEMapStartTextRU
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map start text RU
+  components:
+  - type: MapText
+    text: "Максимум 4 игрока могут войти в портал одновременно. \nКороткое демо-приключение ждет вас, охватывающее 4 этажа, которые постепенно становятся более сложными. \nВы можете случайно встретить другие группы игроков внутри, и вам решать, друзья они или враги.\nНа каждом уровне есть 1 статуя, которая повысит ваши характеристики.\nВаша цель — дойти до конца и получить удовольствие!"
+
+
+# Floor 3: Large final level with many rooms and cycles.
+- type: dungeonLevel
+  id: MossyTemple5
+  parent:
+  - BaseMossyTempleProcedural
+  - BaseMossyTemplePostProcess
+  name: Mossy Temple — Floor 5
+  exits:
+    default: MossyTempleSafe # Loops back for now
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 15
+      max: 20
+    blessingCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 10
+      max: 10
+    entranceCount:
+      min: 2
+      max: 3
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 150
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobSlimeFire
+      cost: 3
+      weight: 1
+    - proto: CEMobFireConstruct
+      cost: 10
+      weight: 1

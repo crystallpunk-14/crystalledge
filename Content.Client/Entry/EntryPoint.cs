@@ -133,6 +133,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
             _prototypeManager.RegisterIgnore("codewordGenerator");
             _prototypeManager.RegisterIgnore("codewordFaction");
+            _prototypeManager.RegisterIgnore("dungeonLevel"); // CrystallEdge — server-only dungeon level prototype
 
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();

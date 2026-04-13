@@ -1,0 +1,47 @@
+- type: entity
+  id: CEStatusEffectBruise
+  name: Bruise
+  description: Increases incoming physical damage.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: RejuvenateRemovedStatusEffect
+  - type: StatusEffectAlert
+    alert: CEBruise
+  - type: CEDamageVulnerabilityStatusEffect
+    extraDamagePerStack: 1
+    affectedTypes:
+    - Physical
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+
+- type: alert
+  id: CEBruise
+  alertViewEntity: CEBruiseAlertSpriteView
+  name: ce-alert-bruise-name
+  description: ce-alert-bruise-desc
+  icons:
+  - sprite: _CE/Interface/vulnerability.rsi
+    state: physical
+
+- type: entity
+  id: CEBruiseAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/vulnerability.rsi
+      state: physical
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

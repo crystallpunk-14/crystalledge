@@ -19,16 +19,16 @@
      - CEMage
 
 - type: skill
-  id: BaseWarriorSkill
+  id: BaseKnightSkill
   abstract: true
   vfx:
     sprite: _CE/Effects/upgrade.rsi
-    state: warrior
+    state: knight
   color: "#f70d0d"
   restrictions:
    - !type:JobWhitelist
      jobs:
-     - CEWarrior
+     - CEKnight
 
 - type: skill
   id: BasePriestSkill

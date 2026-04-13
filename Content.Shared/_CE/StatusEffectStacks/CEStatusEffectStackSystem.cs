@@ -4,7 +4,6 @@ using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
-using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.StatusEffectStacks;
 
@@ -20,29 +19,31 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEStatusEffectStackComponent, CEStatusEffectEndingAttemptEvent>(OnBeforeEnded);
-        SubscribeLocalEvent<CEStatusEffectStackComponent, StatusEffectRemovedEvent>(OnEnded);
     }
 
-    private void OnEnded(Entity<CEStatusEffectStackComponent> ent, ref StatusEffectRemovedEvent args)
-    {
-        //We disable prediction because status effects has bugs with constatn deletion and respawns, causes bucnh mispredicts calls
-        if (_net.IsClient)
-            return;
-
-        var ev = new CEStatusEffectStackEffectEvent(1);
-        RaiseLocalEvent(ent, ref ev);
-    }
-
+    /// <summary>
+    /// Handles a burn cycle tick. Applies the effect, adjusts stacks, and extends the timer.
+    /// On the final tick (stacks drop to 0), applies one last effect and lets the status end.
+    /// </summary>
     private void OnBeforeEnded(Entity<CEStatusEffectStackComponent> ent, ref CEStatusEffectEndingAttemptEvent args)
     {
-        if (ent.Comp.Stack <= 1)
+        var delta = ent.Comp.StackDelta;
+        var newStack = ent.Comp.Stacks + delta;
+
+        // Always apply the effect on a cycle tick (server-only).
+        if (!_net.IsClient)
+        {
+            var ev = new CEStatusEffectStackEffectEvent(ent.Comp.Stacks);
+            RaiseLocalEvent(ent, ref ev);
+        }
+
+        // Final tick — stacks depleted, let the effect end.
+        if (newStack <= 0)
             return;
 
-        // Always cancel the ending on both client and server to prevent visual flicker.
-        // The client predicts the same cancellation, avoiding a brief deletion-then-reappear cycle.
+        // More stacks remain — cancel ending and schedule the next cycle.
         args.Cancelled = true;
 
-        // Server handles the actual stack removal and timer extension.
         if (_net.IsClient)
             return;
 
@@ -53,16 +54,16 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var statusEffect) || statusEffect.AppliedTo is null)
             return;
 
-        // Use the stored base duration instead of calculating from time difference
         var duration = ent.Comp.BaseDuration;
         if (duration is null)
             return;
 
-        var ev = new CEStatusEffectStackEffectEvent(ent.Comp.Stack);
-        RaiseLocalEvent(ent, ref ev);
-
         _statusEffect.TryAddTime(statusEffect.AppliedTo.Value, proto, duration.Value);
-        TryRemoveStack(statusEffect.AppliedTo.Value, proto, 1);
+
+        if (delta < 0)
+            TryRemoveStack(statusEffect.AppliedTo.Value, proto, -delta);
+        else if (delta > 0)
+            TryAddStack(statusEffect.AppliedTo.Value, proto, out _, delta);
     }
 
     /// <summary>
@@ -73,9 +74,12 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// <param name="statusEffect">Type of status effect.</param>
     /// <param name="stack">Optional, default 1. Number of stacks. Cannot be a negative number.</param>
     /// <param name="duration">Optional: status effect duration. If specified, the new status effect will have the specified duration, and the duration of the existing status effect will be edited.</param>
+    /// <param name="resetTimer">If true and the effect already exists, resets the cycle timer to the full duration instead of letting it continue from the current point.</param>
     /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
-    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, int stack = 1, TimeSpan? duration = null)
+    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null, bool resetTimer = false)
     {
+        effectEntity = null;
+
         if (stack <= 0)
             return false;
 
@@ -84,6 +88,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             if (!_statusEffect.TrySetStatusEffectDuration(target, statusEffect, out statusEnt, duration))
                 return false;
 
+            effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
             stackComp.BaseDuration = duration;
             SetStack(target, (statusEnt.Value, stackComp), stack);
@@ -91,12 +96,16 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         }
         else
         {
+            effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
-            SetStack(target, (statusEnt.Value, stackComp), stackComp.Stack + stack);
+            SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks + stack);
             if (duration != null)
             {
                 stackComp.BaseDuration = duration;
                 Dirty(statusEnt.Value, stackComp);
+
+                if (resetTimer)
+                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, duration);
             }
             return true;
         }
@@ -121,13 +130,13 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
             return false;
 
-        if (stackComp.Stack <= stack)
+        if (stackComp.Stacks <= stack)
         {
             _statusEffect.TryRemoveStatusEffect(target, statusEffect);
             return true;
         }
 
-        SetStack(target, (statusEnt.Value, stackComp), stackComp.Stack - stack);
+        SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks - stack);
         return true;
     }
 
@@ -154,13 +163,13 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (proto is null)
             return false;
 
-        if (effect.Comp.Stack <= stack)
+        if (effect.Comp.Stacks <= stack)
         {
             _statusEffect.TryRemoveStatusEffect(statusEffect.AppliedTo.Value, proto);
             return true;
         }
 
-        SetStack(statusEffect.AppliedTo.Value, (effect, effect.Comp), effect.Comp.Stack - stack);
+        SetStack(statusEffect.AppliedTo.Value, (effect, effect.Comp), effect.Comp.Stacks - stack);
         return true;
     }
 
@@ -178,17 +187,17 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
             return 0;
 
-        return stackComp.Stack;
+        return stackComp.Stacks;
     }
 
     private void SetStack(EntityUid target, Entity<CEStatusEffectStackComponent> ent, int newStack)
     {
-        if (ent.Comp.Stack == newStack)
+        if (ent.Comp.Stacks == newStack)
             return;
 
-        var oldStack = ent.Comp.Stack;
+        var oldStack = ent.Comp.Stacks;
 
-        ent.Comp.Stack = newStack;
+        ent.Comp.Stacks = newStack;
         Dirty(ent);
 
         var ev = new CEStatusEffectStackEditedEvent(target, oldStack, newStack);
@@ -209,6 +218,21 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             appearanceState = CEStatusEffectStackPowerVisuals.High;
 
         _appearance.SetData(ent, CEStatusEffectStackVisuals.Level, appearanceState);
+    }
+
+    /// <summary>
+    /// Sets the StackDelta on a specific status effect applied to a target entity.
+    /// </summary>
+    public void SetStackDelta(EntityUid target, EntProtoId statusEffect, int delta)
+    {
+        if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
+            return;
+
+        if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
+            return;
+
+        stackComp.StackDelta = delta;
+        Dirty(statusEnt.Value, stackComp);
     }
 }
 

@@ -13,7 +13,7 @@ namespace Content.Shared._CE.Animation.Core.Components;
 public sealed partial class CEActiveAnimationActionComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public ProtoId<CEAnimationActionPrototype>? ActiveAnimation;
+    public ProtoId<CEEntityEffectAnimationPrototype>? ActiveAnimation;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]
     public TimeSpan? StartAnimationTime;

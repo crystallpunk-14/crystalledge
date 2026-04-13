@@ -1,0 +1,46 @@
+- type: entity
+  id: CEStatusEffectTempShieldCold
+  name: Cold Shield
+  description: Absorbs cold damage, then fades over time.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CETempShieldCold
+  - type: CETempShieldStatusEffect
+    absorbPerStack: 1
+    absorbedTypes:
+    - Cold
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+
+- type: alert
+  id: CETempShieldCold
+  alertViewEntity: CETempShieldColdAlertSpriteView
+  name: ce-alert-temp-shield-cold-name
+  description: ce-alert-temp-shield-cold-desc
+  icons:
+  - sprite: _CE/Interface/temp_shield.rsi
+    state: frost
+
+- type: entity
+  id: CETempShieldColdAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/temp_shield.rsi
+      state: frost
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

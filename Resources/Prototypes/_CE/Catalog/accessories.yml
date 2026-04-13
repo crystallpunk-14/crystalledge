@@ -1,0 +1,7 @@
+- type: entityTable
+  id: CEAccessories
+  table: !type:GroupSelector
+    children:
+    - id: CEClothingAccessoryRingFire
+    - id: CEClothingAccessoryRingFrost
+    - id: CEClothingAccessoryAmuletVitality

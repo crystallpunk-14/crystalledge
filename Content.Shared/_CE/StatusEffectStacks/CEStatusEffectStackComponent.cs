@@ -12,7 +12,7 @@ namespace Content.Shared._CE.StatusEffectStacks;
 public sealed partial class CEStatusEffectStackComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public int Stack = 1;
+    public int Stacks = 1;
 
     /// <summary>
     /// Base duration of the status effect per stack.
@@ -20,6 +20,13 @@ public sealed partial class CEStatusEffectStackComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan? BaseDuration = null;
+
+    /// <summary>
+    /// How many stacks to add/remove each cycle.
+    /// Negative values decrease stacks, positive increase, zero keeps stable.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int StackDelta = -1;
 
     /// <summary>
     /// Used for Appearance system to modify visuals of status effect

@@ -1,0 +1,15 @@
+- type: entity
+  parent: CEClothingArmorBase
+  id: CEClothingArmorChainmail
+  name: chainmail
+  description: TODO
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _CE/Clothing/Armor/Body/chainmail.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Armor/Body/chainmail.rsi
+  - type: CEArmor
+    flat:
+      Physical: 2

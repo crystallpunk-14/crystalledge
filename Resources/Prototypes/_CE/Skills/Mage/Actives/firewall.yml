@@ -14,11 +14,11 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 6
   - type: Action
-    useDelay: 5
+    useDelay: 8
     icon:
-      sprite: _CE/Skills/firewall.rsi
+      sprite: _CE/Skills/Mage/firewall.rsi
       state: icon
   - type: TargetAction
     range: 20
@@ -26,14 +26,14 @@
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationFirewall
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationFirewall
   movementSpeed: 0.3
   duration: 1.8
   lockRotation: true
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEEffectFireballCharge
       offsetAnimation:
       - time: 0.0
@@ -143,11 +143,11 @@
     damage:
       types:
         Heat: 0
-  - type: CEAnimationActionsSpawner
+  - type: CEEntityEffectSpawner
     frequency: 0.2
     firstDelay: 0.3
     effects:
     - !type:IgniteArea
       radius: 1.5
-      maxStacks: 3
+      maxStacks: 6
       fallOffFactor: 1
