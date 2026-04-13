@@ -4,6 +4,7 @@ using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Inventory;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.TempShield;
@@ -11,12 +12,21 @@ namespace Content.Shared._CE.TempShield;
 public sealed class CETempShieldSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _stacks = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
-    private static readonly Dictionary<string, EntProtoId> ShieldEffects = new()
+    private static readonly Dictionary<ProtoId<CEDamageTypePrototype>, EntProtoId> ShieldEffects = new()
     {
         { "Physical", "CEStatusEffectTempShield" },
-        { "Fire", "CEStatusEffectTempShieldFire" },
-        { "Cold", "CEStatusEffectTempShieldCold" },
+        { "Fire",     "CEStatusEffectTempShieldFire" },
+        { "Cold",     "CEStatusEffectTempShieldCold" },
+    };
+
+    private static readonly Dictionary<ProtoId<CEDamageTypePrototype>, EntProtoId> SpawnEffects = new()
+    {
+        { "Physical", "CEEffectAddTempShieldPhysical" },
+        { "Fire",     "CEEffectAddTempShieldFire" },
+        { "Cold",     "CEEffectAddTempShieldFrost" },
     };
 
     public override void Initialize()
@@ -54,6 +64,12 @@ public sealed class CETempShieldSystem : EntitySystem
 
         if (!_stacks.TryAddStack(target, statusEffect, out _, stacks, DefaultCycleDuration))
             return false;
+
+        if (_net.IsServer && SpawnEffects.TryGetValue(damageType, out var effectProto))
+        {
+            var vfx = Spawn(effectProto, Transform(target).Coordinates);
+            _transform.SetParent(vfx, target);
+        }
 
         _stacks.SetStackDelta(target, statusEffect, -1);
         return true;

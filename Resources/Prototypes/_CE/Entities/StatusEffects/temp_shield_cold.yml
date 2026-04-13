@@ -44,3 +44,23 @@
       offset: 0.45, 0
     - map: [ "100" ]
       offset: 0.25, 0
+
+- type: entity
+  id: CEEffectAddTempShieldFrost
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/temp_shield.rsi
+    layers:
+    - state: frost
+      shader: unshaded
+  - type: LightFade
+    duration: 2
+  - type: TimedDespawn
+    lifetime: 2
+  - type: PointLight
+    radius: 1.5
+    energy: 3
+    color: "#30caf5"
