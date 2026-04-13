@@ -16,9 +16,6 @@
     - !type:AddTempShield
       amount: 30
       damageType: Physical
-    - !type:SpawnEntity
-      spawns:
-      - CEEffectHealingGeneric
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -30,9 +27,6 @@
       - !type:AddTempShield
         amount: 15
         damageType: Physical
-      - !type:SpawnEntity
-        spawns:
-        - CEEffectHealingGeneric
     - !type:SpawnEntity
       effectTarget: User
       spawns:
@@ -57,9 +51,6 @@
     - !type:AddTempShield
       amount: 30
       damageType: Fire
-    - !type:SpawnEntity
-      spawns:
-      - CEEffectHealingGeneric
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -71,9 +62,6 @@
       - !type:AddTempShield
         amount: 15
         damageType: Fire
-      - !type:SpawnEntity
-        spawns:
-        - CEEffectHealingGeneric
     - !type:SpawnEntity
       effectTarget: User
       spawns:
@@ -98,9 +86,6 @@
     - !type:AddTempShield
       amount: 30
       damageType: Cold
-    - !type:SpawnEntity
-      spawns:
-      - CEEffectHealingGeneric
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -112,9 +97,6 @@
       - !type:AddTempShield
         amount: 15
         damageType: Cold
-      - !type:SpawnEntity
-        spawns:
-        - CEEffectHealingGeneric
     - !type:SpawnEntity
       effectTarget: User
       spawns:
