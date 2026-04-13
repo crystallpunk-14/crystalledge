@@ -234,7 +234,18 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
             return null;
         }
 
-        return _random.Pick(candidates);
+        // Weighted random selection: skills with higher Weight appear more often
+        var totalWeight = candidates.Sum(c => c.Weight);
+        var roll = _random.NextFloat() * totalWeight;
+        var accumulated = 0f;
+        foreach (var candidate in candidates)
+        {
+            accumulated += candidate.Weight;
+            if (roll < accumulated)
+                return candidate.ID;
+        }
+
+        return candidates[^1].ID;
     }
 
     private List<CESkillPrototype> GetSkillCandidates(

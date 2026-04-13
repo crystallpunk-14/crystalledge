@@ -1,6 +1,7 @@
 - type: skill
   parent: BaseNeutralSkill
   id: SelfTreatment
+  weight: 0.5
   effect: !type:AddAction
     action: CEActionSpellSelfTreatment
   restrictions:

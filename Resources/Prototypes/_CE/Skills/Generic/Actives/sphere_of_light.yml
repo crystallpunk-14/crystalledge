@@ -1,6 +1,7 @@
 - type: skill
   parent: BaseNeutralSkill
   id: SphereOfLight
+  weight: 0.5
   effect: !type:AddAction
     action: CEActionSpellSphereOfLight
 

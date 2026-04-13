@@ -6,11 +6,20 @@ namespace Content.Shared._CE.MeleeWeapon;
 /// <summary>
 /// Is called on the object being used to determine what animations it provides
 /// </summary>
-public sealed class CEGetWeaponEvent(Entity<CEWeaponComponent> used, CEUseType useType) : HandledEntityEventArgs
+public sealed class CEGetWeaponAnimationsEvent(Entity<CEWeaponComponent> used, CEUseType useType) : HandledEntityEventArgs
 {
     public Entity<CEWeaponComponent> Used = used;
     public CEUseType UseType = useType;
     public List<CEAnimationEntry> Animations = new();
+}
+
+/// <summary>
+/// Event raised on entity in GetWeapon function to allow systems to manually
+/// specify what the weapon should be.
+/// </summary>
+public sealed class CEGetWeaponEvent : HandledEntityEventArgs
+{
+    public Entity<CEWeaponComponent>? Used;
 }
 
 /// <summary>
@@ -59,15 +68,6 @@ public sealed class CEWeaponArcHitEvent(
     /// Used by the server to replay nested effects on validated targets.
     /// </summary>
     public readonly string? EffectSlot = effectSlot;
-}
-
-/// <summary>
-/// Event raised on entity in GetWeapon function to allow systems to manually
-/// specify what the weapon should be.
-/// </summary>
-public sealed class CEGetAnimationItemForUseEvent : HandledEntityEventArgs
-{
-    public Entity<CEWeaponComponent>? Used;
 }
 
 /// <summary>

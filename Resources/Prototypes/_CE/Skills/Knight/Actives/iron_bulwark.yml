@@ -25,10 +25,10 @@
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
-      animation: AnimationIronBulwark
+      animation: IronBulwark
 
 - type: entityEffectAnimation
-  id: AnimationIronBulwark
+  id: IronBulwark
   movementSpeed: 0.5
   duration: 1
   events:

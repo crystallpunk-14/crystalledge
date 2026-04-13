@@ -1,0 +1,46 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: SmallBarrierPhysical
+  weight: 0.15 # 3 small barrier skills pretty similar to each other so we merge it probabilities (0.15 + 0.15 + 0.15 = 0.45 and that ~ 0.5 default for neutral skill)
+  icon:
+    sprite: _CE/Interface/temp_shield.rsi
+    state: physical
+  effect: !type:AddAction
+    action: CEActionSpellSmallBarrierPhysical
+  restrictions:
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEKnight #This skill is useless for knight
+
+- type: entity
+  id: CEActionSpellSmallBarrierPhysical
+  parent: CEActionSpellBase
+  name: Small physical barrier
+  description: Grants [color=#b2e3eb]20 temporary Physical shields[/color] that absorb damage. Shields decay over time.
+  components:
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Interface/temp_shield.rsi
+      state: physical
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: SmallBarrierPhysical
+
+- type: entityEffectAnimation
+  id: SmallBarrierPhysical
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    0.6:
+    - !type:AddTempShield
+      effectTarget: User
+      amount: 20
+      damageType: Physical

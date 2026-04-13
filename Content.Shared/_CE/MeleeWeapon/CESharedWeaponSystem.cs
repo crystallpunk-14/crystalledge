@@ -42,7 +42,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
         SubscribeAllEvent<CEWeaponArcHitEvent>(OnArcHitEvent);
 
-        SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponEvent>(OnGetWeapon);
+        SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponAnimationsEvent>(OnGetWeapon);
     }
 
     private void OnArcHitEvent(CEWeaponArcHitEvent ev, EntitySessionEventArgs args)
@@ -78,7 +78,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     {
     }
 
-    private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponEvent args)
+    private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponAnimationsEvent args)
     {
         if (args.Handled)
             return;
@@ -154,7 +154,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         //Get animations
         List<CEAnimationEntry> animations = new();
 
-        var animEv = new CEGetWeaponEvent(used, useType);
+        var animEv = new CEGetWeaponAnimationsEvent(used, useType);
         RaiseLocalEvent(used, animEv);
 
         if (animEv.Handled && animEv.Animations.Count != 0)
@@ -201,7 +201,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     {
         used = null;
 
-        var ev = new CEGetAnimationItemForUseEvent();
+        var ev = new CEGetWeaponEvent();
         RaiseLocalEvent(entity, ev);
         if (ev.Handled && ev.Used != null)
         {
@@ -242,19 +242,10 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
     /// <summary>
     /// Returns whether the user is allowed to attack.
-    /// Checks container state and raises <see cref="CEAttackAttemptEvent"/>.
     /// </summary>
     public bool CanAttack(EntityUid user, EntityUid? target = null, Entity<CEWeaponComponent>? weapon = null)
     {
         return Blocker.CanAttack(user, target);
-
-        //if (!Blocker.CanAttack(user, target))
-        //    return false;
-//
-        //var ev = new CEAttackAttemptEvent(user, target, weapon);
-        //RaiseLocalEvent(user, ev);
-//
-        //return !ev.Cancelled;
     }
 
     /// <summary>
