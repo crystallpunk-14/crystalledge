@@ -249,7 +249,7 @@ public abstract class CESharedWaterSystem : EntitySystem
                 var normalizedDistance = distance / radius;
                 var stacks = (int)MathF.Ceiling((1f - MathF.Pow(normalizedDistance, falloffFactor)) * maxStacks);
 
-                WetTile((gridUid, grid), tileCoords, Math.Max(1, stacks), stacks, null, playSound: false);
+                WetTile((gridUid, grid), tileCoords, Math.Max(1, stacks), stacks, playSound: false);
             }
         }
 
@@ -261,7 +261,7 @@ public abstract class CESharedWaterSystem : EntitySystem
     /// <summary>
     /// Checks if an entity is standing on a tile that contains a water entity.
     /// </summary>
-    protected bool IsOnWater(Entity<TransformComponent> ent)
+    private bool IsOnWater(Entity<TransformComponent> ent)
     {
         var xform = ent.Comp;
         if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
