@@ -35,7 +35,7 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
     protected float ZImpactVelocityLimit { get; private set; }
     protected float ZVelocityLimit { get; private set; }
 
-    public float MaxZLevelsBelowRendering { get; private set; }
+    public int MaxZLevelsBelowRendering { get; private set; }
 
     public override void Initialize()
     {
