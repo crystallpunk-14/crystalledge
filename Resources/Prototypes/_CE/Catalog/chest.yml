@@ -9,6 +9,8 @@
         children:
         # Single cool unique item
         - !type:GroupSelector
+          rolls: !type:RangeNumberSelector
+            range: 1, 2
           children:
           - !type:NestedSelector
             tableId: CERandomWeapon
@@ -19,7 +21,7 @@
         # Some additional fills
         - !type:GroupSelector
           rolls: !type:RangeNumberSelector
-            range: 3, 5
+            range: 0, 2
           children:
           - !type:NestedSelector
             tableId: CERandomPotion
