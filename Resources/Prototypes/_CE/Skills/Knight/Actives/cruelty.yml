@@ -2,7 +2,7 @@
   parent: BaseKnightSkill
   id: Cruelty
   icon:
-    sprite: _CE/Skills/Knight/cruelty.rsi
+    sprite: _CE/Skills/Knight/focus.rsi
     state: icon
   effect: !type:AddAction
     action: CEActionSpellCruelty
@@ -19,7 +19,7 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _CE/Skills/Knight/cruelty.rsi
+      sprite: _CE/Skills/Knight/focus.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
