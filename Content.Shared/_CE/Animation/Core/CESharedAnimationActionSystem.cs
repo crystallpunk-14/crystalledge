@@ -77,6 +77,15 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             //Processing animation events
             if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
             {
+                var effectArgs = new CEEntityEffectArgs(
+                    EntityManager,
+                    uid,
+                    controller.Used,
+                    _transform.GetWorldRotation(uid),
+                    controller.AnimationSpeed,
+                    controller.TargetEntity,
+                    controller.TargetCoordinates);
+
                 var startTime = controller.StartAnimationTime.Value;
                 foreach (var (keyFrame, actions) in animation.Events)
                 {
@@ -87,36 +96,15 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
                     var eventTime = startTime + realKeyFrame;
                     // Only trigger if event time is within this frame
-                    if (eventTime > controller.LastEvent && eventTime <= _timing.CurTime)
+                    if (eventTime <= controller.LastEvent || eventTime > _timing.CurTime)
+                        continue;
+
+                    foreach (var action in actions)
                     {
-                        var effectArgs = new CEEntityEffectArgs(
-                            EntityManager,
-                            uid,
-                            controller.Used,
-                            _transform.GetWorldRotation(uid),
-                            controller.AnimationSpeed,
-                            controller.TargetEntity,
-                            controller.TargetCoordinates);
-
-                        foreach (var action in actions)
-                        {
-                            // Skip EntityAnimation and WeaponEffectSlot for entities we don't predict.
-                            // Non-predicting clients receive EntityAnimations via CEEntityAnimationEvent,
-                            // and weapon damage via HandleState instead.
-                            if ((action is EntityAnimation || action is WeaponEffectSlot) //TODO: This is a shitfix.
-                                && !IsLocallyPredicted(uid))
-                            {
-                                continue;
-                            }
-
-                            action.Effect(effectArgs);
-                        }
-
-                        OnKeyFrameProcessed(uid, controller.Used, effectArgs.Angle, keyFrame, actions);
-
-                        controller.LastEvent = realKeyFrame;
-                        Dirty(uid, controller);
+                        action.Effect(effectArgs);
                     }
+
+                    controller.LastEvent = realKeyFrame;
                 }
             }
         }
@@ -287,29 +275,6 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     {
         RemComp<CEActiveAnimationActionComponent>(entity);
         _movement.RefreshMovementSpeedModifiers(entity);
-    }
-
-    /// <summary>
-    /// Called after all effects at a keyframe have been processed.
-    /// Server override sends visual sync events to non-predicting clients.
-    /// </summary>
-    protected virtual void OnKeyFrameProcessed(
-        EntityUid uid,
-        EntityUid? used,
-        Angle angle,
-        TimeSpan keyFrame,
-        List<CEEntityEffect> actions)
-    {
-    }
-
-    /// <summary>
-    /// Returns true if the entity is locally predicted (i.e., the local player on the client).
-    /// On the server, all entities are considered locally predicted.
-    /// Client override checks against <c>IPlayerManager.LocalEntity</c>.
-    /// </summary>
-    protected virtual bool IsLocallyPredicted(EntityUid uid)
-    {
-        return true;
     }
 }
 

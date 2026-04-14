@@ -122,16 +122,6 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
         // Server clears targets for player attacks (damage goes through CEWeaponArcHitEvent).
         _melee.HandleArcAttackHit(args.Args.Source, (args.Args.Used.Value, weapon), targets, effectSlot);
-
-        foreach (var target in targets)
-        {
-            var effectArgs = args.Args with { EntityManager = EntityManager, Target = target, Position = null };
-
-            foreach (var effect in args.Effect.Effects)
-            {
-                effect.Effect(effectArgs);
-            }
-        }
     }
 
     /// <summary>

@@ -48,45 +48,6 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
         TryAttack(user, weapon, targets);
     }
 
-    /// <summary>
-    /// Runs the weapon's nested arc effects on the validated target list.
-    /// This ensures the server applies damage only to targets the client actually hit.
-    /// </summary>
-    protected override void ApplyArcEffects(
-        EntityUid user,
-        Entity<CEWeaponComponent> weapon,
-        List<EntityUid> targets,
-        string? effectSlot)
-    {
-        if (effectSlot == null
-            || !weapon.Comp.EffectSlots.TryGetValue(effectSlot, out var slotEffects)
-            || targets.Count == 0)
-            return;
-
-        foreach (var target in targets)
-        {
-            var effectArgs = new CEEntityEffectArgs(
-                EntityManager,
-                user,
-                weapon.Owner,
-                Angle.Zero,
-                1f,
-                target,
-                null);
-
-            foreach (var slotEffect in slotEffects)
-            {
-                if (slotEffect is WeaponArcAttack arc)
-                {
-                    foreach (var childEffect in arc.Effects)
-                    {
-                        childEffect.Effect(effectArgs);
-                    }
-                }
-            }
-        }
-    }
-
     protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
     {
         if (targets.Count > MaxTargets)

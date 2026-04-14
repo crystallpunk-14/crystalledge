@@ -56,9 +56,4 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
             }
         }
     }
-
-    protected override bool IsLocallyPredicted(EntityUid uid)
-    {
-        return _player.LocalEntity == uid;
-    }
 }

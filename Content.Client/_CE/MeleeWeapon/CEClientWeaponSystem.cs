@@ -39,17 +39,6 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
         SubscribeAllEvent<CEMeleeAttackEffectEvent>(OnAttackEffectEvent);
     }
 
-    private void ClientUseItem(
-        Entity<CEWeaponComponent> used,
-        Angle angle,
-        CEUseType useType)
-    {
-        if (!Timing.IsFirstTimePredicted)
-            return;
-
-        RaisePredictiveEvent(new CEWeaponUseEvent(angle, GetNetEntity(used), useType));
-    }
-
     private void OnAttackEffectEvent(CEMeleeAttackEffectEvent args)
     {
         var user = GetEntity(args.User);

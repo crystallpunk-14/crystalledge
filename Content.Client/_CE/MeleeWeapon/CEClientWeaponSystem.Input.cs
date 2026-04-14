@@ -70,13 +70,13 @@ public sealed partial class CEClientWeaponSystem
 
         if (primaryDown == BoundKeyState.Down)
         {
-            ClientUseItem(used.Value, angle, CEUseType.Primary);
+            RaisePredictiveEvent(new CEWeaponUseEvent(angle, GetNetEntity(used.Value), CEUseType.Primary));
             return;
         }
 
         if (secondaryDown == BoundKeyState.Down)
         {
-            ClientUseItem(used.Value, angle, CEUseType.Secondary);
+            RaisePredictiveEvent(new CEWeaponUseEvent(angle, GetNetEntity(used.Value), CEUseType.Secondary));
         }
     }
 }

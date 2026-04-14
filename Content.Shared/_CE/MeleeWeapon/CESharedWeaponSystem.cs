@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Item.Components;
+using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Stamina;
 using Content.Shared.ActionBlocker;
@@ -43,6 +45,9 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
     private void OnClientAttackRequest(CEWeaponUseEvent ev, EntitySessionEventArgs args)
     {
+        if (Timing.ApplyingState)
+            return;
+
         if (args.SenderSession.AttachedEntity is not {} user)
             return;
 
@@ -73,6 +78,9 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
     private void OnArcHitEvent(CEWeaponArcHitEvent ev, EntitySessionEventArgs args)
     {
+        if (Timing.ApplyingState)
+            return;
+
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
@@ -100,8 +108,35 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     /// Server overrides to apply damage from the weapon's EffectSlot data.
     /// Client base does nothing — effects are applied in the Effect() loop during prediction.
     /// </summary>
-    protected virtual void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    private void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
     {
+        if (effectSlot == null
+            || !weapon.Comp.EffectSlots.TryGetValue(effectSlot, out var slotEffects)
+            || targets.Count == 0)
+            return;
+
+        foreach (var target in targets)
+        {
+            var effectArgs = new CEEntityEffectArgs(
+                EntityManager,
+                user,
+                weapon.Owner,
+                Angle.Zero,
+                1f,
+                target,
+                null);
+
+            foreach (var slotEffect in slotEffects)
+            {
+                if (slotEffect is WeaponArcAttack arc)
+                {
+                    foreach (var childEffect in arc.Effects)
+                    {
+                        childEffect.Effect(effectArgs);
+                    }
+                }
+            }
+        }
     }
 
     private void OnGetWeaponAnimation(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponAnimationsEvent args)
