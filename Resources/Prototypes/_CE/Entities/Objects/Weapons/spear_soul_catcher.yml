@@ -1,0 +1,66 @@
+- type: entity
+  id: CEWeaponSpearSoulCatcher
+  parent:
+  - CEBaseWeapon
+  name: soul catcher
+  description: A rare magical weapon that does not deal physical damage but wounds the soul, draining mana from it and transferring it to the wielder
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Spear/soul_catcher.rsi
+    layers:
+    - state: icon
+    - state: blade
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 1.26
+        arcWidth: 15
+        effects:
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+        - !type:StealMana
+          amount: 1
+        - !type:SpawnEntity
+          effectTarget: Target
+          spawns:
+          - CEEffectManaDrain
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 1.4
+        arcWidth: 25
+        effects:
+        - !type:Damage
+          effectTarget: Used
+          damage:
+            types:
+              Physical: 1
+        - !type:StealMana
+          amount: 2
+        - !type:SpawnEntity
+          effectTarget: Target
+          spawns:
+          - CEEffectManaDrain
+    animations:
+      Primary:
+      - anim: SpearAttackLight
+        staminaCost: 2
+      Secondary:
+      - anim: SpearAttackHeavy
+        staminaCost: 3
+      - anim: SpearAttackHeavy2
+        staminaCost: 3
+  #- type: CEWieldedWeapon #TODO: Custom wielded animations
+  #  animations:
+  #    Primary:
+  #    - anim: SpearAttackLight
+  #    Secondary:
+  #    - anim: SpearAttackHeavy
+  - type: Wieldable
+  - type: Clothing
+    slots:
+    - neck

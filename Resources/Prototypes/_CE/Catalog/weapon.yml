@@ -18,6 +18,7 @@
     - id: CEWeaponMagicStaffHealing
     - id: CEWeaponMagicStaffWater
     - id: CEWeaponSwordBone
+    - id: CEWeaponSpearSoulCatcher
 
 - type: entityTable
   id: CERandomWeapon
