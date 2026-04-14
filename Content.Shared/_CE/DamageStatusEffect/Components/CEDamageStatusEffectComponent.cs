@@ -10,7 +10,7 @@ namespace Content.Shared._CE.DamageStatusEffect.Components;
 public sealed partial class CEDamageStatusEffectComponent : Component
 {
     [DataField(required: true)]
-    public CEDamageSpecifier Damage;
+    public CEDamageSpecifier Damage = new();
 
     /// <summary>
     /// Should damage be scaled based on the number of stacks of this status effect?

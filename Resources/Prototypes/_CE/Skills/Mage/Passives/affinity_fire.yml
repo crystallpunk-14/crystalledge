@@ -7,14 +7,14 @@
 - type: entity
   id: CEStatusEffectAffinityFire
   name: Fire Affinity
-  description: You take 10 less [color=#ff8a05]fire damage[/color] from all sources.
+  description: You take 5 less [color=#ff8a05]fire damage[/color] from all sources.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEAffinityFire
   - type: CEArmor
     flat:
-      Fire: 10
+      Fire: 5
 
 - type: alert
   id: CEAffinityFire

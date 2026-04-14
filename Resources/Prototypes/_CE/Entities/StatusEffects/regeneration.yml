@@ -1,0 +1,53 @@
+- type: entity
+  id: CEStatusEffectRegeneration
+  name: "Regeneration"
+  description: "Regenerating health over time."
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEMobState
+      - CEGOAP
+  - type: StatusEffectAlert
+    alert: CERegeneration
+  - type: CERegenerationStatusEffect
+    amount: 1
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/regeneration_status.rsi
+    noRot: true
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 1.3
+    energy: 1
+    color: "#aeeef9"
+
+- type: alert
+  id: CERegeneration
+  alertViewEntity: CERegenerationAlertSpriteView
+  name: ce-alert-regeneration-name
+  description: ce-alert-regeneration-desc
+  icons:
+  - sprite: _CE/Interface/regeneration.rsi
+    state: icon
+
+- type: entity
+  id: CERegenerationAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/regeneration.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0
