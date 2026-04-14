@@ -410,15 +410,15 @@
   - BaseMossyTemplePostProcess
   name: Mossy Temple — Floor 5
   exits:
-    default: MossyTempleSafe # Loops back for now
+    default: MossyTemple5 # Loops back for now
   config:
     !type:CEProceduralConfig
     generalCount:
       min: 15
       max: 20
     blessingCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 0
     cycleCount:
       min: 10
       max: 10
@@ -439,3 +439,9 @@
     - proto: CEMobFireConstruct
       cost: 10
       weight: 1
+    - proto: CEMobFlem
+      cost: 3
+    - proto: CEMobFlem2
+      cost: 3
+    - proto: CEMobFlem3
+      cost: 5

@@ -1,7 +1,6 @@
 - type: roleLoadout
   id: JobCEMage
   groups:
-  - CEMageSkill
   - CEMageWeapon
   - CEMageHead
   - CEMageCloak
@@ -13,7 +12,6 @@
 - type: roleLoadout
   id: JobCEPriest
   groups:
-  - CEPriestSkill
   - CEPriestWeapon
   - CEPriestCloak
   - CEPriestShirt
@@ -24,7 +22,6 @@
 - type: roleLoadout
   id: JobCEKnight
   groups:
-  - CEKnightSkill
   - CEKnightWeapon
   - CEKnightCloak
   - CEKnightShirt

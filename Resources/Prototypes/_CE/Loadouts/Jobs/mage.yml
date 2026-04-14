@@ -98,23 +98,3 @@
   id: CEWeaponMagicStaffIce
   equipment:
     neck: CEWeaponMagicStaffIce
-
-- type: loadoutGroup
-  id: CEMageSkill
-  name: ce-loadout-skill
-  minLimit: 1
-  loadouts:
-  - TripleIcicles
-  - Firebolt
-
-- type: loadout
-  id: TripleIcicles
-  dummyEntity: CEActionTripleIcicles
-  skills:
-  - TripleIcicles
-
-- type: loadout
-  id: Firebolt
-  dummyEntity: CEActionFirebolt
-  skills:
-  - Firebolt
