@@ -9,6 +9,14 @@
   rules:
     - Secret
 
+- type: weightedRandom
+  id: Secret
+  weights:
+    BaselineSandbox: 1
+
+
+
+
 - type: gamePreset
   id: BaselineSandbox
   alias:
@@ -16,13 +24,6 @@
   name: sandbox-title
   description: sandbox-description
   showInVote: false
-  maxPlayers: 5
-  rules:
-    - Sandbox
-
-- type: gamePreset
-  id: Roguelike
-  name: sandbox-title #TODO
-  description: sandbox-description #TODO
-  showInVote: true
-  maxPlayers: 500
+  maxPlayers: 50
+  #rules:
+  #  - Sandbox
