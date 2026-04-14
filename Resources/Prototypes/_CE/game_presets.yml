@@ -19,3 +19,10 @@
   maxPlayers: 5
   rules:
     - Sandbox
+
+- type: gamePreset
+  id: Roguelike
+  name: sandbox-title #TODO
+  description: sandbox-description #TODO
+  showInVote: true
+  maxPlayers: 500
