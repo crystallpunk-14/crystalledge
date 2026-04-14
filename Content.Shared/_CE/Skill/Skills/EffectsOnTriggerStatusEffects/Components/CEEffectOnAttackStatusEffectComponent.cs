@@ -2,7 +2,7 @@ using Content.Shared._CE.EntityEffect;
 using Content.Shared.Whitelist;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Skill.Skills.Cruelty;
+namespace Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects.Components;
 
 /// <summary>
 /// Apply CEEntityEffects on melee attack targets, then remove stacks of this status effect

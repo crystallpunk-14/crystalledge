@@ -1,0 +1,24 @@
+- type: skill
+  parent: BasePriestSkill
+  id: Recovery
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectRecovery
+
+- type: entity
+  id: CEStatusEffectRecovery
+  name: Recovery
+  description: When you heal something, you also restore  [color=#208be8]1 mana[/color] to the target.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CERecovery
+  - type: CEEffectOnHealStatusEffect
+    effects:
+    - !type:RestoreMana
+      amount: 1
+
+- type: alert
+  id: CERecovery
+  icons:
+  - sprite: _CE/Skills/Priest/recovery.rsi
+    state: icon

@@ -1,15 +1,15 @@
-using Content.Shared._CE.DivineShield;
 using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.Health;
 using Content.Shared._CE.MeleeWeapon;
-using Content.Shared._CE.Skill.Skills.DivineShieldBreakEffect;
+using Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects.Components;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Whitelist;
 
-namespace Content.Shared._CE.Skill.Skills.Cruelty;
+namespace Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects;
 
-public sealed class CEEffectOnAttackStatusEffectSystem : EntitySystem
+public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
@@ -18,6 +18,7 @@ public sealed class CEEffectOnAttackStatusEffectSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEEffectOnAttackStatusEffectComponent, StatusEffectRelayedEvent<CEAfterAttackEvent>>(OnAfterAttack);
+        SubscribeLocalEvent<CEEffectOnHealStatusEffectComponent, StatusEffectRelayedEvent<CEHealEvent>>(OnHeal);
     }
 
     private void OnAfterAttack(Entity<CEEffectOnAttackStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterAttackEvent> args)
@@ -46,6 +47,28 @@ public sealed class CEEffectOnAttackStatusEffectSystem : EntitySystem
             {
                 effect.Effect(effectArgs);
             }
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnHeal(Entity<CEEffectOnHealStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEHealEvent> args)
+    {
+        if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            null,
+            Angle.Zero,
+            1f,
+            args.Args.Target,
+            Transform(args.Args.Target).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            effect.Effect(effectArgs);
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);

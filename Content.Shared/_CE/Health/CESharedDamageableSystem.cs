@@ -246,6 +246,12 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (finalAmount <= 0)
             return;
 
+        if (source is not null)
+        {
+            var healEv = new CEHealEvent(target, finalAmount);
+            RaiseLocalEvent(source.Value, healEv);
+        }
+
         ChangeDamage(target, -finalAmount, interruptDoAfters: false);
     }
 
@@ -397,6 +403,15 @@ public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : Ent
 /// Raised on an entity that is trying to heal another entity. Can be cancelled.
 /// </summary>
 public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : CancellableEntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly int HealAmount = healAmount;
+}
+
+/// <summary>
+/// Raised on healer when its heal another entity.
+/// </summary>
+public sealed class CEHealEvent(EntityUid target, int healAmount) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly int HealAmount = healAmount;
