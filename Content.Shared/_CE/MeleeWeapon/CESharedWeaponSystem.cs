@@ -4,11 +4,9 @@ using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Stamina;
 using Content.Shared.ActionBlocker;
-using Content.Shared.Administration.Logs;
 using Content.Shared.CombatMode;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
-using Content.Shared.Popups;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -22,14 +20,12 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 {
     [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] protected readonly IMapManager MapManager = default!;
-    [Dependency] protected readonly ISharedAdminLogManager AdminLogger = default!;
     [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
     [Dependency] private   readonly SharedHandsSystem _hands = default!;
     [Dependency] protected readonly SharedCombatModeSystem CombatMode = default!;
     [Dependency] protected readonly SharedInteractionSystem Interaction = default!;
-    [Dependency] protected readonly SharedPopupSystem PopupSystem = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    [Dependency] protected readonly CESharedAnimationActionSystem AnimationAction = default!;
+    [Dependency] private   readonly CESharedAnimationActionSystem _animationAction = default!;
     [Dependency] private   readonly IPrototypeManager _proto = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
     [Dependency] private   readonly CEStaminaSystem _stamina = default!;
@@ -42,7 +38,37 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
         SubscribeAllEvent<CEWeaponArcHitEvent>(OnArcHitEvent);
 
-        SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponAnimationsEvent>(OnGetWeapon);
+        SubscribeLocalEvent<CEWieldedWeaponComponent, CEGetWeaponAnimationsEvent>(OnGetWeaponAnimation);
+    }
+
+    private void OnClientAttackRequest(CEWeaponUseEvent ev, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not {} user)
+            return;
+
+        if (!TryGetWeapon(user, out var weapon) ||
+            weapon.Value.Owner != GetEntity(ev.Weapon))
+            return;
+
+        TryUse(user, weapon.Value, ev.UseType, ev.Angle);
+    }
+
+    private void OnClientStopRequest(CEStopWeaponUseEvent ev, EntitySessionEventArgs args)
+    {
+        var user = args.SenderSession.AttachedEntity;
+
+        if (user == null)
+            return;
+
+        if (!TryGetWeapon(user.Value, out var weapon) ||
+            weapon.Value.Owner != GetEntity(ev.Weapon))
+            return;
+
+        if (!weapon.Value.Comp.Using)
+            return;
+
+        weapon.Value.Comp.Using = false;
+        DirtyField(weapon.Value.Owner, weapon.Value.Comp, nameof(CEWeaponComponent.Using));
     }
 
     private void OnArcHitEvent(CEWeaponArcHitEvent ev, EntitySessionEventArgs args)
@@ -78,7 +104,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     {
     }
 
-    private void OnGetWeapon(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponAnimationsEvent args)
+    private void OnGetWeaponAnimation(Entity<CEWieldedWeaponComponent> ent, ref CEGetWeaponAnimationsEvent args)
     {
         if (args.Handled)
             return;
@@ -96,47 +122,6 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnClientStopRequest(CEStopWeaponUseEvent ev, EntitySessionEventArgs args)
-    {
-        var user = args.SenderSession.AttachedEntity;
-
-        if (user == null)
-            return;
-
-        if (!TryGetWeapon(user.Value, out var weapon) ||
-            weapon.Value.Owner != GetEntity(ev.Weapon))
-            return;
-
-        if (!weapon.Value.Comp.Using)
-            return;
-
-        weapon.Value.Comp.Using = false;
-        DirtyField(weapon.Value.Owner, weapon.Value.Comp, nameof(CEWeaponComponent.Using));
-    }
-
-    private void OnClientAttackRequest(CEWeaponUseEvent ev, EntitySessionEventArgs args)
-    {
-        if (args.SenderSession.AttachedEntity is not {} user)
-            return;
-
-        if (!TryGetWeapon(user, out var weapon) ||
-            weapon.Value.Owner != GetEntity(ev.Weapon))
-            return;
-
-        TryUse(user, weapon.Value, ev.UseType, ev.Angle);
-    }
-
-    public bool TryUse(
-        EntityUid user,
-        CEUseType useType,
-        Angle angle)
-    {
-        if (!TryGetWeapon(user, out var weapon))
-            return false;
-
-        return TryUse(user, weapon.Value, useType, angle);
-    }
-
     public bool TryUse(
         EntityUid user,
         Entity<CEWeaponComponent> used,
@@ -148,7 +133,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         if (!Blocker.CanAttack(user))
             return false;
 
-        if (AnimationAction.IsPlayingAnimation(user))
+        if (_animationAction.IsPlayingAnimation(user))
             return false;
 
         //Get animations
@@ -183,7 +168,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         var animationProtoId = entry.Anim;
 
         var animationSpeed = GetAnimationSpeed(user, used) * entry.Speed;
-        if (!AnimationAction.TryPlayAnimationToAngle(user, animationProtoId, angle, used.Owner, animationSpeed))
+        if (!_animationAction.TryPlayAnimationToAngle(user, animationProtoId, angle, used.Owner, animationSpeed))
             return false;
 
         // Calculate the deadline: animation duration + configurable delay.
@@ -238,14 +223,6 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
         var speed = ev.GetSpeed();
         return speed;
-    }
-
-    /// <summary>
-    /// Returns whether the user is allowed to attack.
-    /// </summary>
-    public bool CanAttack(EntityUid user, EntityUid? target = null, Entity<CEWeaponComponent>? weapon = null)
-    {
-        return Blocker.CanAttack(user, target);
     }
 
     /// <summary>
