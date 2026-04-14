@@ -12,10 +12,12 @@
 - type: weightedRandom
   id: Secret
   weights:
-    BaselineSandbox: 1
+    Roguelike: 1
 
 
-
+- type: entity
+  id: CEDummyRule
+  parent: BaseGameRule
 
 - type: gamePreset
   id: BaselineSandbox
@@ -24,6 +26,15 @@
   name: sandbox-title
   description: sandbox-description
   showInVote: false
-  maxPlayers: 50
-  #rules:
-  #  - Sandbox
+  maxPlayers: 5
+  rules:
+    - Sandbox
+
+- type: gamePreset
+  id: Roguelike
+  name: sandbox-title #TODO
+  description: sandbox-description #TODO
+  showInVote: true
+  maxPlayers: 100
+  rules:
+    - CEDummyRule
