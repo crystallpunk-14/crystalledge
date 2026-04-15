@@ -116,19 +116,6 @@
     volume: -5
 
 - type: barkSpeech
-  id: Altnight
-  saySound:
-    path: /Audio/_CE/Voice/altnight.ogg
-  askSound:
-    path: /Audio/_CE/Voice/altnight_a.ogg
-  exclaimSound:
-    path: /Audio/_CE/Voice/altnight_e.ogg
-  syllableInterval: 0.13
-  charsPerSyllable: 2
-  audioParams:
-    volume: 4
-
-- type: barkSpeech
   id: 4g10w
   saySound:
     path: /Audio/_CE/Voice/eglow.ogg
@@ -384,5 +371,69 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Hhhdjdjhe
+  saySound:
+    path: /Audio/_CE/Voice/hhhdjdjhe.ogg
+  askSound:
+    path: /Audio/_CE/Voice/hhhdjdjhe_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/hhhdjdjhe_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Maximus
+  saySound:
+    path: /Audio/_CE/Voice/maximus.ogg
+  askSound:
+    path: /Audio/_CE/Voice/maximus_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/maximus_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Blleb
+  saySound:
+    path: /Audio/_CE/Voice/blleb.ogg
+  askSound:
+    path: /Audio/_CE/Voice/blleb_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/blleb_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Manya
+  saySound:
+    path: /Audio/_CE/Voice/manya.ogg
+  askSound:
+    path: /Audio/_CE/Voice/manya_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/manya_e.ogg
+  syllableInterval: 0.14
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Viator
+  saySound:
+    path: /Audio/_CE/Voice/viator.ogg
+  askSound:
+    path: /Audio/_CE/Voice/viator_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/viator_e.ogg
+  syllableInterval: 0.1
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
 
 
