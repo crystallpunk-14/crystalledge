@@ -21,6 +21,7 @@
     East: /Textures/_CE/Tiles/Grass/double_edge_E.png
     North: /Textures/_CE/Tiles/Grass/double_edge_N.png
     West: /Textures/_CE/Tiles/Grass/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/grass.rsi
   baseTurf: CEDirt
   isSubfloor: true
   footstepSounds:
@@ -51,6 +52,7 @@
     East: /Textures/_CE/Tiles/GrassLight/double_edge_E.png
     North: /Textures/_CE/Tiles/GrassLight/double_edge_N.png
     West: /Textures/_CE/Tiles/GrassLight/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/grass_light.rsi
   baseTurf: CEGrass
   isSubfloor: true
   footstepSounds:
@@ -81,6 +83,7 @@
     East: /Textures/_CE/Tiles/GrassTall/double_edge_E.png
     North: /Textures/_CE/Tiles/GrassTall/double_edge_N.png
     West: /Textures/_CE/Tiles/GrassTall/double_edge_W.png
+  iconSmoothSprite: /Textures/_CE/Tiles/Edges/grass_tall.rsi
   baseTurf: CEGrassLight
   isSubfloor: true
   footstepSounds:
