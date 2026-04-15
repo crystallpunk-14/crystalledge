@@ -228,10 +228,10 @@ namespace Content.Server.Ghost
         private void OnMapInit(EntityUid uid, GhostComponent component, MapInitEvent args)
         {
             //_actions.AddAction(uid, ref component.BooActionEntity, component.BooAction); //CrystallEdge - dont need this
-            _actions.AddAction(uid, ref component.ToggleGhostHearingActionEntity, component.ToggleGhostHearingAction);
+            //_actions.AddAction(uid, ref component.ToggleGhostHearingActionEntity, component.ToggleGhostHearingAction);
             _actions.AddAction(uid, ref component.ToggleLightingActionEntity, component.ToggleLightingAction);
             _actions.AddAction(uid, ref component.ToggleFoVActionEntity, component.ToggleFoVAction);
-            _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
+            //_actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
             //CrystallEdge
             _actions.AddAction(uid, ref component.CERespawnActionEntity, component.CERespawnAction);
             //CrystallEdge end
