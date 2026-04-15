@@ -1,0 +1,42 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: ShieldBurst
+  icon:
+    sprite: _CE/Skills/Knight/shield_explosion.rsi
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellShieldBurst
+
+- type: entity
+  id: CEActionSpellShieldBurst
+  parent: CEActionSpellBase
+  name: Shield Burst
+  description: Consumes all temporary shields and deals their stacks as [color=#b2e3eb]area damage[/color] in a 2-tile radius. Each shield type deals its matching damage type.
+  components:
+  - type: Sprite
+    sprite: _CE/Skills/Knight/shield_explosion.rsi
+    state: icon
+  - type: CEActionManaCost
+    manaCost: 4
+  - type: Action
+    useDelay: 12
+    icon:
+      sprite: _CE/Skills/Knight/shield_explosion.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: ShieldBurst
+
+- type: entityEffectAnimation
+  id: ShieldBurst
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    0.6:
+    - !type:ShieldBurst
+      effectTarget: User
+      range: 2
