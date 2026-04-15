@@ -28,51 +28,17 @@ public abstract class CESharedWaterSystem : EntitySystem
     private readonly EntProtoId _waterImpactEffect = "CEWaterTileImpactEffect";
     private readonly SoundSpecifier _waterSplashSound = new SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
 
-    private EntityQuery<CEWaterComponent> _waterQuery;
     private EntityQuery<CEFireComponent> _fireQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        _waterQuery = GetEntityQuery<CEWaterComponent>();
         _fireQuery = GetEntityQuery<CEFireComponent>();
-
-        // Water blocks fire on tiles and on entities standing on water.
-        SubscribeLocalEvent<TransformComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
-        SubscribeLocalEvent<CEWaterComponent, CEIgniteTileAttemptEvent>(OnIgniteTileAttempt);
 
         SubscribeLocalEvent<CEWettableComponent, CEIgniteEntityAttemptEvent>(OnWetIgniteAttempt);
         SubscribeLocalEvent<CEWettableComponent, CEWettedEvent>(OnWettableWetted);
     }
-
-    #region Fire Blocking (tile-level)
-
-    private void OnIgniteEntityAttempt(Entity<TransformComponent> ent, ref CEIgniteEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        if (!IsOnWater(ent))
-            return;
-
-        args.Cancelled = true;
-        Fire.SpawnSteamEffect(args.Target);
-    }
-
-    /// <summary>
-    /// Water blocks fire tile placement. Water is NOT consumed.
-    /// </summary>
-    private void OnIgniteTileAttempt(Entity<CEWaterComponent> ent, ref CEIgniteTileAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        args.Cancelled = true;
-        Fire.SpawnSteamEffect(args.Coordinates);
-    }
-
-    #endregion
 
     #region Wet Status Effect
 
@@ -257,27 +223,6 @@ public abstract class CESharedWaterSystem : EntitySystem
     }
 
     #endregion
-
-    /// <summary>
-    /// Checks if an entity is standing on a tile that contains a water entity.
-    /// </summary>
-    private bool IsOnWater(Entity<TransformComponent> ent)
-    {
-        var xform = ent.Comp;
-        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
-            return false;
-
-        var coords = _transform.GetMapCoordinates(ent);
-        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), coords);
-
-        foreach (var anchEnt in anchored)
-        {
-            if (_waterQuery.HasComp(anchEnt))
-                return true;
-        }
-
-        return false;
-    }
 }
 
 /// <summary>
