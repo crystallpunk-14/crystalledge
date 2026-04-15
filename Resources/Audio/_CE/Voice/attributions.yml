@@ -43,11 +43,6 @@
   copyright: "Voice recorded by Jaba"
   source: "https://github.com/crystallpunk-14/crystalledge"
 
-- files: ["altnight.ogg", "altnight_e.ogg", "altnight_a.ogg"]
-  license: "All rights reserved"
-  copyright: "Voice recorded by Altnight"
-  source: "https://github.com/crystallpunk-14/crystalledge"
-
 - files: ["eglow.ogg", "eglow_e.ogg", "eglow_a.ogg"]
   license: "All rights reserved"
   copyright: "Voice recorded by Eglow"
@@ -138,4 +133,29 @@
 - files: ["FoLi.ogg", "FoLi_e.ogg", "FoLi_a.ogg"]
   license: "All rights reserved"
   copyright: "Voice recorded by FoLi"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["hhhdjdjhe.ogg", "hhhdjdjhe_e.ogg", "hhhdjdjhe_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Hhhdjdjhe"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["maximus.ogg", "maximus_e.ogg", "maximus_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Maximus"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["blleb.ogg", "blleb_e.ogg", "blleb_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Blleb"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["manya.ogg", "manya_e.ogg", "manya_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Manya"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["viator.ogg", "viator_e.ogg", "viator_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Viator"
   source: "https://github.com/crystallpunk-14/crystalledge"
