@@ -27,3 +27,9 @@ ce-alert-burn-desc = Increases incoming fire damage.
 
 ce-alert-frostbite-name = Frostbite
 ce-alert-frostbite-desc = Increases incoming cold damage.
+
+ce-alert-regeneration-name = Regeneration
+ce-alert-regeneration-desc = Your health will restore itself over time
+
+ce-alert-fight-for-survival-name = Fight for survival
+ce-alert-fight-for-survival-desc = You are resisting death as it slowly approaches you.

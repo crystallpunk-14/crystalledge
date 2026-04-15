@@ -27,3 +27,9 @@ ce-alert-burn-desc = Увеличивает входящий урон огнём
 
 ce-alert-frostbite-name = Обморожение
 ce-alert-frostbite-desc = Увеличивает входящий урон холодом.
+
+ce-alert-regeneration-name = Регенерация
+ce-alert-regeneration-desc = Ваше здоровье медленно восстанавливается со временем.
+
+ce-alert-fight-for-survival-name = Борьба за жизнь
+ce-alert-fight-for-survival-desc = Вы сопротивляетесь медленно приближающейся к вам смерти.

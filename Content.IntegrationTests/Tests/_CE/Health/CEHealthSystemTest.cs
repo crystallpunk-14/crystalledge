@@ -1,3 +1,5 @@
+using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Pair;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Health.Prototypes;
@@ -11,7 +13,7 @@ namespace Content.IntegrationTests.Tests._CE.Health;
 
 [TestFixture]
 [TestOf(typeof(CESharedDamageableSystem))]
-public sealed class CEHealthSystemTest
+public sealed class CEHealthSystemTest : GameTest
 {
     private static readonly ProtoId<CEDamageTypePrototype> TestDamageType = "Physical";
 
@@ -36,8 +38,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task TakeDamageMultipleTypes()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
@@ -55,8 +56,6 @@ public sealed class CEHealthSystemTest
 
             entManager.DeleteEntity(ent);
         });
-
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -65,8 +64,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task TakeDamageZeroDamageNoEffect()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
@@ -86,8 +84,6 @@ public sealed class CEHealthSystemTest
 
             entManager.DeleteEntity(ent);
         });
-
-        await pair.CleanReturnAsync();
     }
 
     #endregion
@@ -100,8 +96,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task HealCapsAtZero()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
@@ -117,8 +112,6 @@ public sealed class CEHealthSystemTest
 
             entManager.DeleteEntity(ent);
         });
-
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -127,8 +120,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task HealZeroNoEffect()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
 
@@ -148,8 +140,6 @@ public sealed class CEHealthSystemTest
 
             entManager.DeleteEntity(ent);
         });
-
-        await pair.CleanReturnAsync();
     }
 
     #endregion
@@ -163,8 +153,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task MobStateTransitions()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
         var mobStateSystem = entManager.System<CEMobStateSystem>();
@@ -222,8 +211,6 @@ public sealed class CEHealthSystemTest
 
             entManager.DeleteEntity(ent);
         });
-
-        await pair.CleanReturnAsync();
     }
 
     #endregion
@@ -236,8 +223,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task RejuvenateRestoresFullHealth()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
         var mobStateSystem = entManager.System<CEMobStateSystem>();
@@ -269,8 +255,6 @@ public sealed class CEHealthSystemTest
 
             entManager.DeleteEntity(ent);
         });
-
-        await pair.CleanReturnAsync();
     }
 
     #endregion
@@ -278,8 +262,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task CriticalDamageLimitDeletesEntity()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var damageableSystem = entManager.System<CESharedDamageableSystem>();
         EntityUid ent = default;
@@ -309,8 +292,6 @@ public sealed class CEHealthSystemTest
         {
             Assert.That(entManager.EntityExists(ent), Is.False);
         });
-
-        await pair.CleanReturnAsync();
     }
     */
 
@@ -328,8 +309,7 @@ public sealed class CEHealthSystemTest
     [TestCase(8, 0.4f, 3)]  // 3.4 rounds down to 3
     public async Task DamageSpecifierMultiplyFloat(int a, float b, int result)
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
 
         await server.WaitAssertion(() =>
         {
@@ -338,8 +318,6 @@ public sealed class CEHealthSystemTest
             var multiplied = spec * b;
             Assert.That(multiplied.Total, Is.EqualTo(result));
         });
-
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -348,8 +326,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task DamageSpecifierAdd()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
 
         await server.WaitAssertion(() =>
         {
@@ -360,8 +337,6 @@ public sealed class CEHealthSystemTest
             Assert.That(sum.Total, Is.EqualTo(35));
             Assert.That(sum.Types[TestDamageType], Is.EqualTo(35));
         });
-
-        await pair.CleanReturnAsync();
     }
 
     /// <summary>
@@ -370,8 +345,7 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task DamageSpecifierCopy()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var server = Server;
 
         await server.WaitAssertion(() =>
         {
@@ -386,8 +360,6 @@ public sealed class CEHealthSystemTest
                 Assert.That(copy.Total, Is.EqualTo(999));
             });
         });
-
-        await pair.CleanReturnAsync();
     }
 
     #endregion
@@ -401,8 +373,8 @@ public sealed class CEHealthSystemTest
     [Test]
     public async Task AllCEHealthPrototypesLackVanillaComponents()
     {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
+        var pair = Pair;
+        var server = Server;
         var entManager = server.ResolveDependency<IEntityManager>();
         var protoManager = server.ResolveDependency<IPrototypeManager>();
 
@@ -433,9 +405,8 @@ public sealed class CEHealthSystemTest
                 });
             }
         });
-
-        await pair.CleanReturnAsync();
     }
 
     #endregion
 }
+

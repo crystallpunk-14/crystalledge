@@ -336,6 +336,7 @@ public sealed partial class CEAfterAttackEvent(EntityUid weapon, List<EntityUid>
 /// <summary>
 /// Raised on the server and sent to clients to play melee attack visual effects.
 /// </summary>
+[Serializable, NetSerializable]
 public sealed class CEMeleeAttackEffectEvent(NetEntity user, List<NetEntity> targets) : EntityEventArgs
 {
     /// <summary>
