@@ -49,7 +49,7 @@ public sealed partial class CEDungeonInstanceSystem
         {
             if (!mapIds.Contains(xform.MapID))
                 continue;
-            
+
             if (proto.Stable)
             {
                 entry.Stable = true;

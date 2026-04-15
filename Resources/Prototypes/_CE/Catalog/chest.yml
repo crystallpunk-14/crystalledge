@@ -25,3 +25,9 @@
           children:
           - !type:NestedSelector
             tableId: CERandomPotion
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomInstrument
+            weight: 0.3
