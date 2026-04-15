@@ -3,21 +3,21 @@ using Robust.Client.Graphics;
 namespace Content.Client._CE.Water;
 
 /// <summary>
-/// System responsible for rendering water distortion using <see cref="CEWaterDistortionOverlay"/>.
+/// System responsible for rendering tile distortion using <see cref="CETileDistortionOverlay"/>.
 /// </summary>
-public sealed class CEWaterDistortionOverlaySystem : EntitySystem
+public sealed class CETileDistortionOverlaySystem : EntitySystem
 {
     [Dependency] private readonly IOverlayManager _overlayMan = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _overlayMan.AddOverlay(new CEWaterDistortionOverlay(EntityManager));
+        _overlayMan.AddOverlay(new CETileDistortionOverlay(EntityManager));
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
-        _overlayMan.RemoveOverlay<CEWaterDistortionOverlay>();
+        _overlayMan.RemoveOverlay<CETileDistortionOverlay>();
     }
 }

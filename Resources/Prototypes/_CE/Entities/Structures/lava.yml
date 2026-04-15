@@ -46,7 +46,7 @@
   #    collection: FootstepWater #TODO
   #    params:
   #      volume: 8
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.4
   - type: CEEntityEffectOnCollide
     effects:
@@ -64,7 +64,7 @@
     - state: moving
       shader: unshaded
     snapCardinals: false
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.6
   - type: CEAutoConveyor
   - type: Conveyor

@@ -25,6 +25,6 @@
   path: "/Textures/_CE/Shaders/zblur.swsl"
 
 - type: shader
-  id: CEWaterDistortion
+  id: CETileDistortion
   kind: source
   path: "/Textures/_CE/Shaders/waterDistortion.swsl"

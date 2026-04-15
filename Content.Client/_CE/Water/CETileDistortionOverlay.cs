@@ -14,16 +14,16 @@ using Content.Client.Resources;
 namespace Content.Client._CE.Water;
 
 /// <summary>
-/// Overlay responsible for rendering water distortion shader on tiles
-/// with an anchored <see cref="CEWaterDistortionComponent"/> entity.
+/// Overlay responsible for rendering tile distortion shader on tiles
+/// with an anchored <see cref="CETileDistortionComponent"/> entity.
 /// </summary>
-public sealed class CEWaterDistortionOverlay : Overlay
+public sealed class CETileDistortionOverlay : Overlay
 {
     public override bool RequestScreenTexture { get; set; } = true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
-    private static readonly ProtoId<ShaderPrototype> WaterDistortionShader = "CEWaterDistortion";
+    private static readonly ProtoId<ShaderPrototype> TileDistortionShader = "CETileDistortion";
 
     // Reduced motion multipliers
     private const float ReducedMotionStrengthMul = 0.15f;
@@ -49,11 +49,11 @@ public sealed class CEWaterDistortionOverlay : Overlay
     private readonly ShaderInstance _shader;
     private readonly Texture _noiseTexture;
 
-    private readonly HashSet<Entity<CEWaterDistortionComponent>> _entities = new();
+    private readonly HashSet<Entity<CETileDistortionComponent>> _entities = new();
     private List<Entity<MapGridComponent>> _grids = new();
     private readonly OverlayResourceCache<CachedResources> _resources = new();
 
-    public CEWaterDistortionOverlay(IEntityManager entManager)
+    public CETileDistortionOverlay(IEntityManager entManager)
     {
         IoCManager.InjectDependencies(this);
 
@@ -62,7 +62,7 @@ public sealed class CEWaterDistortionOverlay : Overlay
         _xformQuery = entManager.GetEntityQuery<TransformComponent>();
 
         _noiseTexture = _resourceCache.GetTexture("/Textures/_CE/Shaders/perlin_noise.png");
-        _shader = _proto.Index(WaterDistortionShader).InstanceUnique();
+        _shader = _proto.Index(TileDistortionShader).InstanceUnique();
 
         _configManager.OnValueChanged(CCVars.ReducedMotion, SetReducedMotion, invokeImmediately: true);
     }
@@ -86,7 +86,7 @@ public sealed class CEWaterDistortionOverlay : Overlay
             res.WaterTarget = _clyde.CreateRenderTarget(
                 target.Size,
                 new RenderTargetFormatParameters(RenderTargetColorFormat.Rgba8Srgb),
-                name: nameof(CEWaterDistortionOverlay));
+                name: nameof(CETileDistortionOverlay));
         }
 
         var worldHandle = args.WorldHandle;

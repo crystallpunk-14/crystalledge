@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._CE.Water;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class CEWaterDistortionComponent : Component
+public sealed partial class CETileDistortionComponent : Component
 {
     /// <summary>
     /// Intensity of the water distortion effect, from 0 (none) to 1 (maximum).

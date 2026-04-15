@@ -42,7 +42,7 @@
       collection: FootstepWater
       params:
         volume: 8
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.4
   - type: CEPreventIgniteTile
   - type: CEEntityEffectOnCollide
@@ -68,7 +68,7 @@
   - type: Sprite
     state: moving
     snapCardinals: false
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.6
   - type: CEAutoConveyor
   - type: CEFreezeTransform
