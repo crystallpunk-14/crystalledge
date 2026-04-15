@@ -19,7 +19,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 3
+              Physical: 5
         - !type:AddDamageVulnerability
           damageType: Physical
           amount: 1
@@ -37,7 +37,7 @@
         - !type:Damage
           damage:
             types:
-              Physical: 6
+              Physical: 8
         - !type:AddDamageVulnerability
           damageType: Physical
           amount: 2
