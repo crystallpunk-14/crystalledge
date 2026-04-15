@@ -5,7 +5,7 @@ namespace Content.Shared._CE.EntityEffect.Effects;
 public sealed partial class AddRegeneration : CEEntityEffectBase<AddRegeneration>
 {
     [DataField]
-    public int Stacks = 1;
+    public int Amount = 1;
 }
 
 public sealed partial class CEAddRegenerationEffectSystem : CEEntityEffectSystem<AddRegeneration>
@@ -17,6 +17,6 @@ public sealed partial class CEAddRegenerationEffectSystem : CEEntityEffectSystem
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _regen.AddRegeneration(entity, args.Args.Source, args.Effect.Stacks);
+        _regen.AddRegeneration(entity, args.Args.Source, args.Effect.Amount);
     }
 }
