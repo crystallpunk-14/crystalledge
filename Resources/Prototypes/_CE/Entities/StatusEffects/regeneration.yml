@@ -23,6 +23,8 @@
     radius: 1.3
     energy: 1
     color: "#aeeef9"
+  - type: CEStatusEffectStack
+    stackDelta: -1
 
 - type: alert
   id: CERegeneration

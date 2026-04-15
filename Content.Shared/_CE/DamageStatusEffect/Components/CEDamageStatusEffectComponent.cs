@@ -20,4 +20,7 @@ public sealed partial class CEDamageStatusEffectComponent : Component
 
     [DataField]
     public bool InterruptDoAfters = true;
+
+    [DataField]
+    public bool IgnoreArmor = false;
 }

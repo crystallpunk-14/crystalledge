@@ -12,7 +12,9 @@ using Content.Shared.Pulling.Events;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Speech;
 using Content.Shared.Standing;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Throwing;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
@@ -29,8 +31,11 @@ public sealed partial class CEMobStateSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
 
     private const float CriticalSpeedModifier = 0.2f;
+
+    private readonly EntProtoId _fightStatus = "CEStatusEffectFightForSurvival";
 
     public override void Initialize()
     {
@@ -125,9 +130,11 @@ public sealed partial class CEMobStateSystem : EntitySystem
         {
             case CEMobState.Alive:
                 _standing.Stand(target);
+                _status.TryRemoveStatusEffect(target, _fightStatus);
                 break;
             case CEMobState.Critical:
                 _standing.Down(target);
+                _status.TryAddStatusEffectDuration(target, _fightStatus, TimeSpan.FromSeconds(5));
                 var dropEv = new DropHandItemsEvent();
                 RaiseLocalEvent(target, ref dropEv);
                 break;
@@ -140,6 +147,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         {
             case CEMobState.Critical:
                 _standing.Stand(target);
+                _status.TryRemoveStatusEffect(target, _fightStatus);
                 break;
         }
     }

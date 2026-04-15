@@ -84,7 +84,6 @@ public sealed class CETempShieldSystem : EntitySystem
             _transform.SetParent(vfx, target);
         }
 
-        _stacks.SetStackDelta(target, statusEffect, -1);
         return true;
     }
 

@@ -1,0 +1,49 @@
+- type: entity
+  id: CEStatusEffectFightForSurvival
+  name: Fight for Survival
+  description: TODO
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEMobState
+  - type: StatusEffectAlert
+    alert: CEFightForSurvival
+  - type: RejuvenateRemovedStatusEffect
+  - type: CEDamageStatusEffect
+    interruptDoAfters: false
+    ignoreArmor: true
+    damage:
+      types:
+        Cold: 1
+  - type: CEStatusEffectStack
+    stackDelta: 1
+    baseDuration: 5
+
+- type: alert
+  id: CEFightForSurvival
+  alertViewEntity: CEFightForSurvivalAlertSpriteView
+  name: ce-alert-fight-for-survival-name
+  description: ce-alert-fight-for-survival-desc
+  icons:
+  - sprite: _CE/Interface/fight_for_survival.rsi
+    state: icon
+
+- type: entity
+  id: CEFightForSurvivalAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/fight_for_survival.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

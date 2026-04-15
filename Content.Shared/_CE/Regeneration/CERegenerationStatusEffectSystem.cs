@@ -33,8 +33,6 @@ public sealed class CERegenerationStatusEffectSystem : EntitySystem
         if (!_stack.TryAddStack(target, _regenerationStatus, out var effect, amount, _healInterval))
             return;
 
-        _stack.SetStackDelta(target, _regenerationStatus, -1);
-
         if (!TryComp<CERegenerationStatusEffectComponent>(effect, out var regen))
             return;
 

@@ -18,6 +18,8 @@
   - type: Sprite
     drawdepth: Effects
     noRot: true
+  - type: CEStatusEffectStack
+    stackDelta: -1
 
 - type: alert
   id: CETempShieldFire
