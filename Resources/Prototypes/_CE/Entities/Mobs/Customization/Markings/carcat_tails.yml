@@ -1,9 +1,7 @@
 - type: marking
   id: CECarcatTail
   bodyPart: Tail
-  markingCategory: Tail
   groupWhitelist: [ CECarcat ]
-  followSkinColor: true
   forcedColoring: false
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
@@ -12,9 +10,7 @@
 - type: marking
   id: CECarcatTailAnimated
   bodyPart: Tail
-  markingCategory: Tail
   groupWhitelist: []
-  followSkinColor: true
   forcedColoring: false
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
@@ -23,9 +19,7 @@
 - type: marking
   id: CECarcatTailFluffy
   bodyPart: Tail
-  markingCategory: Tail
   groupWhitelist: [ CECarcat ]
-  followSkinColor: true
   forcedColoring: false
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
@@ -36,9 +30,7 @@
 - type: marking
   id: CECarcatTailFluffyAnimated
   bodyPart: Tail
-  markingCategory: Tail
   groupWhitelist: []
-  followSkinColor: true
   forcedColoring: false
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi

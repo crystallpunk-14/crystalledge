@@ -1,8 +1,6 @@
 - type: marking
   id: CECarcatEars
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  followSkinColor: true
   forcedColoring: true
   groupWhitelist: [ CECarcat ]
   sprites:
@@ -12,8 +10,6 @@
 - type: marking
   id: CECarcatEars2
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  followSkinColor: true
   forcedColoring: true
   groupWhitelist: [ CECarcat ]
   sprites:
@@ -23,8 +19,6 @@
 - type: marking
   id: CECarcatEars3
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  followSkinColor: true
   forcedColoring: true
   groupWhitelist: [ CECarcat ]
   sprites:
@@ -34,8 +28,6 @@
 - type: marking
   id: CECarcatEars4
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  followSkinColor: true
   forcedColoring: true
   groupWhitelist: [ CECarcat ]
   sprites:
@@ -45,8 +37,6 @@
 - type: marking
   id: CECarcatEars5
   bodyPart: HeadTop
-  markingCategory: HeadTop
-  followSkinColor: true
   forcedColoring: true
   groupWhitelist: [ CECarcat ]
   sprites:
