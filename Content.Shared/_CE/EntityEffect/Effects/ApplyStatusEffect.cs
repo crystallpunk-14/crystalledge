@@ -29,7 +29,7 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
         if (!_statusEffect.TrySetStatusEffectDuration(entity, args.Effect.StatusEffect, out var statusEnt, args.Effect.Duration))
             return;
 
-        if (statusEnt != null && args.Args.Source != default)
+        if (statusEnt != null && Exists(args.Args.Source))
         {
             var sourceComp = EnsureComp<CEStatusEffectSourceComponent>(statusEnt.Value);
             sourceComp.Source = args.Args.Source;

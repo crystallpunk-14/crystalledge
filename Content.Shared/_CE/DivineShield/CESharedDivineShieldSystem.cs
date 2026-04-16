@@ -27,7 +27,7 @@ public sealed class CESharedDivineShieldSystem : EntitySystem
             return;
 
         TryComp<CEStatusEffectSourceComponent>(ent, out var sourceComp);
-        var applier = sourceComp?.Source;
+        var applier = sourceComp?.Source is { } s && Exists(s) ? s : (EntityUid?) null;
 
         _status.TryRemoveStack(ent.Owner);
 

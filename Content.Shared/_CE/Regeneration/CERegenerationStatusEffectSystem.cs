@@ -21,6 +21,7 @@ public sealed class CERegenerationStatusEffectSystem : EntitySystem
             return;
 
         TryComp<CEStatusEffectSourceComponent>(ent, out var sourceComp);
-        _damageable.Heal(effect.AppliedTo.Value, ent.Comp.Amount * args.Stack, sourceComp?.Source);
+        var source = sourceComp?.Source is { } s && Exists(s) ? s : (EntityUid?) null;
+        _damageable.Heal(effect.AppliedTo.Value, ent.Comp.Amount * args.Stack, source);
     }
 }

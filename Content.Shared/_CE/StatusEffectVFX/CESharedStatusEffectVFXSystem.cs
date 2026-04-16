@@ -55,7 +55,9 @@ public abstract class CESharedStatusEffectVFXSystem : EntitySystem
 
     private EntityUid? GetSource(EntityUid effectEntity)
     {
-        return TryComp<CEStatusEffectSourceComponent>(effectEntity, out var src) ? src.Source : null;
+        if (!TryComp<CEStatusEffectSourceComponent>(effectEntity, out var src))
+            return null;
+        return src.Source is { } s && Exists(s) ? s : null;
     }
 
     /// <summary>

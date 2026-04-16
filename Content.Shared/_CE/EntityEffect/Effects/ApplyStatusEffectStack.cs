@@ -47,11 +47,11 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
         if (!_effectStack.TryAddStack(entity, args.Effect.StatusEffect, out var statusEnt, stacks, args.Effect.Duration))
             return;
 
-        if (statusEnt != null && args.Args.Source != default)
-        {
-            var sourceComp = EnsureComp<CEStatusEffectSourceComponent>(statusEnt.Value);
-            sourceComp.Source = args.Args.Source;
-            Dirty(statusEnt.Value, sourceComp);
-        }
+        if (statusEnt == null || !Exists(args.Args.Source))
+            return;
+
+        var sourceComp = EnsureComp<CEStatusEffectSourceComponent>(statusEnt.Value);
+        sourceComp.Source = args.Args.Source;
+        Dirty(statusEnt.Value, sourceComp);
     }
 }
