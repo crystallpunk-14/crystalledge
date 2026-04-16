@@ -1,10 +1,8 @@
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
-using Content.Shared._CE.Health.Prototypes;
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.TempShield;
 using Content.Shared.Examine;
 using Robust.Shared.Map;
-using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -21,45 +19,35 @@ public sealed partial class ShieldBurst : CEEntityEffectBase<ShieldBurst>
 
 public sealed partial class CEShieldBurstEffectSystem : CEEntityEffectSystem<ShieldBurst>
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _stacks = default!;
+    [Dependency] private readonly CETempShieldSystem _tempShield = default!;
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
 
-    /// <summary>
-    /// Maps temp shield status effects back to their damage types.
-    /// </summary>
-    private static readonly Dictionary<EntProtoId, ProtoId<CEDamageTypePrototype>> ShieldToDamage = new()
-    {
-        { "CEStatusEffectTempShield", "Physical" },
-        { "CEStatusEffectTempShieldFire", "Fire" },
-        { "CEStatusEffectTempShieldCold", "Cold" },
-    };
-
     protected override void Effect(ref CEEntityEffectEvent<ShieldBurst> args)
     {
         var caster = args.Args.Source;
 
-        // Collect all shield stacks on the caster.
+        // Collect shield stacks across all damage types.
         var damage = new CEDamageSpecifier();
         var totalStacks = 0;
 
-        foreach (var (shieldEffect, damageType) in ShieldToDamage)
+        foreach (var damageType in _tempShield.SupportedDamageTypes)
         {
-            var stackCount = _stacks.GetStack(caster, shieldEffect);
-            if (stackCount <= 0)
+            var stacks = _tempShield.GetShieldStacks(caster, damageType);
+            if (stacks <= 0)
                 continue;
 
-            damage.Types[damageType] = stackCount;
-            totalStacks += stackCount;
-
-            // Remove all stacks of this shield.
-            _stacks.TryRemoveStack(caster, shieldEffect, stackCount);
+            damage.Types[damageType] = stacks;
+            totalStacks += stacks;
         }
 
         if (totalStacks <= 0)
             return;
+
+        // Consume all shields.
+        _tempShield.RemoveAllShieldStacks(caster);
 
         // Deal area damage centered on the caster, excluding the caster.
         // Respects line-of-sight (does not pass through walls).

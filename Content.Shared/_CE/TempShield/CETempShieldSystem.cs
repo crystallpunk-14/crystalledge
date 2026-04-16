@@ -87,6 +87,49 @@ public sealed class CETempShieldSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// All damage types that have a corresponding temporary shield status effect.
+    /// </summary>
+    public IReadOnlyCollection<ProtoId<CEDamageTypePrototype>> SupportedDamageTypes => ShieldEffects.Keys;
+
+    /// <summary>
+    /// Gets the number of shield stacks for a specific damage type.
+    /// </summary>
+    public int GetShieldStacks(EntityUid target, ProtoId<CEDamageTypePrototype> damageType)
+    {
+        if (!ShieldEffects.TryGetValue(damageType, out var statusEffect))
+            return 0;
+
+        return _stacks.GetStack(target, statusEffect);
+    }
+
+    /// <summary>
+    /// Removes a specific number of shield stacks of the given damage type.
+    /// </summary>
+    public bool TryRemoveShieldStacks(EntityUid target, ProtoId<CEDamageTypePrototype> damageType, int count)
+    {
+        if (count <= 0)
+            return false;
+
+        if (!ShieldEffects.TryGetValue(damageType, out var statusEffect))
+            return false;
+
+        return _stacks.TryRemoveStack(target, statusEffect, count);
+    }
+
+    /// <summary>
+    /// Removes all temporary shield stacks of every type from the target.
+    /// </summary>
+    public void RemoveAllShieldStacks(EntityUid target)
+    {
+        foreach (var (_, statusEffect) in ShieldEffects)
+        {
+            var stackCount = _stacks.GetStack(target, statusEffect);
+            if (stackCount > 0)
+                _stacks.TryRemoveStack(target, statusEffect, stackCount);
+        }
+    }
+
     private void OnBeforeDamage(Entity<CETempShieldStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEDamageCalculateEvent> args)
     {
         if (args.Args.Cancelled)
