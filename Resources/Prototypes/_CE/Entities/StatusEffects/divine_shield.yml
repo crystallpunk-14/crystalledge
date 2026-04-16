@@ -10,6 +10,17 @@
   - type: StatusEffectAlert
     alert: CEDivineShield
   - type: CEDivineShieldStatusEffect
+  - type: CEStatusEffectVFX
+    onStacksRemovedVfx: CEEffectBreakDivineShield
+    onStacksRemovedSound:
+      path: /Audio/_CE/Effects/divine_shield_break.ogg
+      params:
+        variation: 0.1
+    onRemovedVfx: CEEffectBreakDivineShield
+    onRemovedSound:
+      path: /Audio/_CE/Effects/divine_shield_break.ogg
+      params:
+        variation: 0.1
   - type: Sprite
     drawdepth: Effects
     sprite: _CE/Effects/divine_shield.rsi

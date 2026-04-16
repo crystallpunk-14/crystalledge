@@ -24,10 +24,4 @@ public sealed partial class CETempShieldStatusEffectComponent : Component
     /// </summary>
     [DataField]
     public HashSet<ProtoId<CEDamageTypePrototype>> AbsorbedTypes = new() { "Physical" };
-
-    [DataField]
-    public EntProtoId? BreakEffect;
-
-    [DataField]
-    public EntProtoId? TakeDamageEffect;
 }

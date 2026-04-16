@@ -10,11 +10,13 @@
   - type: StatusEffectAlert
     alert: CETempShield
   - type: CETempShieldStatusEffect
-    takeDamageEffect: CEEffectTakeDamageTempShieldPhysical
-    breakEffect: CEEffectBreakTempShieldPhysical
     absorbPerStack: 1
     absorbedTypes:
     - Physical
+  - type: CEStatusEffectVFX
+    onStacksAddedVfx: CEEffectAddTempShieldPhysical
+    onStacksRemovedVfx: CEEffectTakeDamageTempShieldPhysical
+    onRemovedVfx: CEEffectBreakTempShieldPhysical
   - type: Sprite
     drawdepth: Effects
     noRot: true
