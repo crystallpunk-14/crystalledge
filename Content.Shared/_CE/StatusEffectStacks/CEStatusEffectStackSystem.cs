@@ -208,6 +208,14 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         return stackComp.Stacks;
     }
 
+    public int GetStack(EntityUid effect)
+    {
+        if (!TryComp<CEStatusEffectStackComponent>(effect, out var stackComp))
+            return 0;
+
+        return stackComp.Stacks;
+    }
+
     private void SetStack(EntityUid target, Entity<CEStatusEffectStackComponent> ent, int newStack)
     {
         if (ent.Comp.Stacks == newStack)

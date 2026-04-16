@@ -40,3 +40,24 @@
     - !type:ShieldBurst
       effectTarget: User
       range: 2
+      vfx: CEEffectShieldBurst
+
+- type: entity
+  id: CEEffectShieldBurst
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/shield_burst.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 2.5
+  - type: PointLight
+    radius: 2
+    energy: 4
+    color: "#b2e3eb"
+  - type: LightFade
+    duration: 2.5

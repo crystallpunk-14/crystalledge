@@ -13,9 +13,9 @@
       color: "#b2e3eb"
   - type: CEConsumable
     effects:
-    - !type:AddTempShield
-      amount: 30
-      damageType: Physical
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectTempShield
+      stack: 30
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -24,9 +24,9 @@
         components:
         - CEMobState
       effects:
-      - !type:AddTempShield
-        amount: 15
-        damageType: Physical
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectTempShield
+        stack: 15
     - !type:SpawnEntity
       effectTarget: User
       spawns:
@@ -48,9 +48,9 @@
       color: "#dfad57"
   - type: CEConsumable
     effects:
-    - !type:AddTempShield
-      amount: 30
-      damageType: Fire
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectTempShieldFire
+      stack: 30
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -59,9 +59,9 @@
         components:
         - CEMobState
       effects:
-      - !type:AddTempShield
-        amount: 15
-        damageType: Fire
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectTempShieldFire
+        stack: 15
     - !type:SpawnEntity
       effectTarget: User
       spawns:
@@ -83,9 +83,9 @@
       color: "#5d9ee2"
   - type: CEConsumable
     effects:
-    - !type:AddTempShield
-      amount: 30
-      damageType: Cold
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectTempShieldCold
+      stack: 30
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -94,9 +94,9 @@
         components:
         - CEMobState
       effects:
-      - !type:AddTempShield
-        amount: 15
-        damageType: Cold
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectTempShieldCold
+        stack: 15
     - !type:SpawnEntity
       effectTarget: User
       spawns:

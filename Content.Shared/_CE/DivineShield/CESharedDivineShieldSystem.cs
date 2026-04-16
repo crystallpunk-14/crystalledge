@@ -5,7 +5,7 @@ using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._CE.DivineShield;
 
-public class CESharedDivineShieldSystem : EntitySystem
+public sealed class CESharedDivineShieldSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _status = default!;
 
