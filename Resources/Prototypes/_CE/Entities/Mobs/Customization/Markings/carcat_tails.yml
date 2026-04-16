@@ -1,0 +1,47 @@
+- type: marking
+  id: CECarcatTail
+  bodyPart: Tail
+  markingCategory: Tail
+  groupWhitelist: [ CECarcat ]
+  followSkinColor: true
+  forcedColoring: false
+  sprites:
+    - sprite: _CE/Mobs/Customization/carcat_tail.rsi
+      state: tail
+
+- type: marking
+  id: CECarcatTailAnimated
+  bodyPart: Tail
+  markingCategory: Tail
+  groupWhitelist: []
+  followSkinColor: true
+  forcedColoring: false
+  sprites:
+    - sprite: _CE/Mobs/Customization/carcat_tail.rsi
+      state: tail_wagging
+
+- type: marking
+  id: CECarcatTailFluffy
+  bodyPart: Tail
+  markingCategory: Tail
+  groupWhitelist: [ CECarcat ]
+  followSkinColor: true
+  forcedColoring: false
+  sprites:
+    - sprite: _CE/Mobs/Customization/carcat_tail.rsi
+      state: tail_fluffy
+    - sprite: _CE/Mobs/Customization/carcat_tail.rsi
+      state: tail_fluffy_end
+
+- type: marking
+  id: CECarcatTailFluffyAnimated
+  bodyPart: Tail
+  markingCategory: Tail
+  groupWhitelist: []
+  followSkinColor: true
+  forcedColoring: false
+  sprites:
+    - sprite: _CE/Mobs/Customization/carcat_tail.rsi
+      state: tail_fluffy_wagging
+    - sprite: _CE/Mobs/Customization/carcat_tail.rsi
+      state: tail_fluffy_wagging_end
