@@ -1,6 +1,7 @@
 using Content.Shared._CE.Damage;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.ActionBlocker;
+using Content.Shared.CombatMode;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
@@ -32,6 +33,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
 
     private const float CriticalSpeedModifier = 0.2f;
 
@@ -135,6 +137,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
             case CEMobState.Critical:
                 _standing.Down(target);
                 _status.TryAddStatusEffectDuration(target, _fightStatus, TimeSpan.FromSeconds(5));
+                _combat.SetInCombatMode(target, false);
                 var dropEv = new DropHandItemsEvent();
                 RaiseLocalEvent(target, ref dropEv);
                 break;

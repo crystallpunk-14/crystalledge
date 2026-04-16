@@ -47,9 +47,9 @@
     costs:
       Primary: 1
       Secondary: 1
-  - type: CEWeaponManaCost
-    costs:
-      Primary: 1
+  - type: CECharges
+    maxCharges: 20
+    currentCharges: 20
   - type: Clothing
     slots:
     - neck
