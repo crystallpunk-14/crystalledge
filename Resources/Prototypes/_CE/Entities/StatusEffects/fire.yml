@@ -10,6 +10,13 @@
   - type: StatusEffectAlert
     alert: CEFire
   - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectColdSlowdown
+    - CEStatusEffectWet
+    vfx: CESteamEffect
+    sound:
+      path: /Audio/_CE/Effects/steam_burst.ogg
   - type: CEDamageStatusEffect
     interruptDoAfters: false
     damage:

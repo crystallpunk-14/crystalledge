@@ -65,8 +65,6 @@ public sealed partial class CEFireSystem : EntitySystem
         SubscribeLocalEvent<CEFireComponent, StartCollideEvent>(OnCollide);
         SubscribeLocalEvent<CEMeltTransformComponent, CEIgnitedEvent>(OnMeltingIgnited);
         SubscribeLocalEvent<CEFlammableComponent, CEIgnitedEvent>(OnFlammableIgnited);
-        SubscribeLocalEvent<CEFlammableComponent, CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
-        SubscribeLocalEvent<CEFlammableComponent, CEWetEntityAttemptEvent>(OnFireWetAttempt);
 
         SubscribeLocalEvent<CEFlammableComponent, MapInitEvent>(OnMapInit);
 
@@ -154,52 +152,6 @@ public sealed partial class CEFireSystem : EntitySystem
 
         _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, stacks, cycleDuration);
         _stack.SetStackDelta(ent, ent.Comp.StatusEffect, ent.Comp.StackDelta);
-    }
-
-    /// <summary>
-    /// Fire neutralizes frost: when something tries to freeze a burning entity,
-    /// fire stacks cancel out an equal number of incoming frost stacks.
-    /// </summary>
-    private void OnFreezeEntityAttempt(Entity<CEFlammableComponent> ent, ref CEFreezeEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
-        if (fireStacks <= 0)
-            return;
-
-        var neutralized = Math.Min(fireStacks, args.Stacks);
-        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
-        args.Stacks -= neutralized;
-
-        SpawnSteamEffect(ent);
-
-        if (args.Stacks <= 0)
-            args.Cancelled = true;
-    }
-
-    /// <summary>
-    /// Fire neutralizes wet: when something tries to wet a burning entity,
-    /// fire stacks cancel out an equal number of incoming wet stacks.
-    /// </summary>
-    private void OnFireWetAttempt(Entity<CEFlammableComponent> ent, ref CEWetEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
-        if (fireStacks <= 0)
-            return;
-
-        var neutralized = Math.Min(fireStacks, args.Stacks);
-        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
-        args.Stacks -= neutralized;
-
-        SpawnSteamEffect(ent);
-
-        if (args.Stacks <= 0)
-            args.Cancelled = true;
     }
 
     /// <summary>

@@ -36,7 +36,6 @@ public abstract class CESharedWaterSystem : EntitySystem
 
         _fireQuery = GetEntityQuery<CEFireComponent>();
 
-        SubscribeLocalEvent<CEWettableComponent, CEIgniteEntityAttemptEvent>(OnWetIgniteAttempt);
         SubscribeLocalEvent<CEWettableComponent, CEWettedEvent>(OnWettableWetted);
     }
 
@@ -75,33 +74,6 @@ public abstract class CESharedWaterSystem : EntitySystem
             return 1;
 
         return stack.Stacks;
-    }
-
-    #endregion
-
-    #region Mutual Exclusion
-
-    /// <summary>
-    /// Wet neutralizes fire: when something tries to ignite a wet entity,
-    /// wet stacks cancel out an equal number of incoming fire stacks.
-    /// </summary>
-    private void OnWetIgniteAttempt(Entity<CEWettableComponent> ent, ref CEIgniteEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        var wetStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
-        if (wetStacks <= 0)
-            return;
-
-        var neutralized = Math.Min(wetStacks, args.Stacks);
-        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
-        args.Stacks -= neutralized;
-
-        Fire.SpawnSteamEffect(ent);
-
-        if (args.Stacks <= 0)
-            args.Cancelled = true;
     }
 
     #endregion

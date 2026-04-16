@@ -1,6 +1,7 @@
 using Content.Shared.Alert;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -12,6 +13,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
     [Dependency] private readonly AlertsSystem _alerts = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly INetManager _net = default!;
 
     public override void Initialize()
@@ -19,6 +21,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEStatusEffectStackComponent, CEStatusEffectEndingAttemptEvent>(OnBeforeEnded);
+        SubscribeLocalEvent<CEStatusEffectNeutralizationComponent, StatusEffectRelayedEvent<CEStackAddAttemptEvent>>(OnNeutralize);
     }
 
     /// <summary>
@@ -82,6 +85,15 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
         if (stack <= 0)
             return false;
+
+        // Raise attempt event so neutralization and other handlers can modify or cancel stacks.
+        var attemptEv = new CEStackAddAttemptEvent(statusEffect, stack);
+        RaiseLocalEvent(target, attemptEv);
+
+        if (attemptEv.Cancelled || attemptEv.Stacks <= 0)
+            return false;
+
+        stack = attemptEv.Stacks;
 
         if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
         {
@@ -216,6 +228,36 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         return stackComp.Stacks;
     }
 
+    private void OnNeutralize(EntityUid uid, CEStatusEffectNeutralizationComponent comp,
+        ref StatusEffectRelayedEvent<CEStackAddAttemptEvent> args)
+    {
+        if (args.Args.Cancelled || args.Args.Stacks <= 0)
+            return;
+
+        if (!comp.Neutralizes.Contains(args.Args.StatusEffect))
+            return;
+
+        var myStacks = GetStack(uid);
+        if (myStacks <= 0)
+            return;
+
+        var neutralized = Math.Min(myStacks, args.Args.Stacks);
+        TryRemoveStack(uid, neutralized);
+        args.Args.Stacks -= neutralized;
+
+        if (comp.Vfx != null && TryComp<StatusEffectComponent>(uid, out var statusComp) && statusComp.AppliedTo is { } target)
+        {
+            var coords = Transform(target).Coordinates;
+            Spawn(comp.Vfx, coords);
+
+            if (comp.Sound != null)
+                _audio.PlayPvs(comp.Sound, coords);
+        }
+
+        if (args.Args.Stacks <= 0)
+            args.Args.Cancel();
+    }
+
     private void SetStack(EntityUid target, Entity<CEStatusEffectStackComponent> ent, int newStack)
     {
         if (ent.Comp.Stacks == newStack)
@@ -286,4 +328,14 @@ public enum CEStatusEffectStackPowerVisuals
     Low,
     Medium,
     High,
+}
+
+/// <summary>
+/// Raised on the target entity before stacks of a status effect are added.
+/// Relayed to all active status effects via <see cref="StatusEffectRelayedEvent{T}"/>.
+/// </summary>
+public sealed class CEStackAddAttemptEvent(EntProtoId statusEffect, int stacks) : CancellableEntityEventArgs
+{
+    public EntProtoId StatusEffect = statusEffect;
+    public int Stacks = stacks;
 }

@@ -9,6 +9,12 @@
   - type: StatusEffectAlert
     alert: CEColdSlowdown
   - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectFire
+    vfx: CESteamEffect
+    sound:
+      path: /Audio/_CE/Effects/steam_burst.ogg
   - type: CESpeedModifierStatusEffect
     speed: 0.8
   - type: Sprite
