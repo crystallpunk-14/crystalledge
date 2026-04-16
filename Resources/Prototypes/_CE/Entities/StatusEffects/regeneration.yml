@@ -25,6 +25,7 @@
     color: "#aeeef9"
   - type: CEStatusEffectStack
     stackDelta: -1
+    baseDuration: 10
 
 - type: alert
   id: CERegeneration

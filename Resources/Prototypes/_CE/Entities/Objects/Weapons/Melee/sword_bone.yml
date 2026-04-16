@@ -20,9 +20,9 @@
           damage:
             types:
               Physical: 5
-        - !type:AddDamageVulnerability
-          damageType: Physical
-          amount: 1
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectBruise
+          stack: 1
           maxStacks: 10
         - !type:Damage
           effectTarget: Used
@@ -38,9 +38,9 @@
           damage:
             types:
               Physical: 8
-        - !type:AddDamageVulnerability
-          damageType: Physical
-          amount: 2
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectBruise
+          stack: 2
           maxStacks: 10
         - !type:Damage
           effectTarget: Used

@@ -77,8 +77,9 @@
     energy: 3.0
   - type: CEProjectile
     hitEffects:
-    - !type:AddRegeneration
-      amount: 2
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectRegeneration
+      stack: 2
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric

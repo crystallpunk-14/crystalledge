@@ -49,8 +49,6 @@ public sealed class CETempShieldSystem : EntitySystem
         _transform.SetParent(vfx, statusEffect.AppliedTo.Value);
     }
 
-    private static readonly TimeSpan DefaultCycleDuration = TimeSpan.FromSeconds(10);
-
     /// <summary>
     /// Adds temporary shield stacks of the specified damage type to the target.
     /// </summary>
@@ -75,7 +73,7 @@ public sealed class CETempShieldSystem : EntitySystem
         if (stacks <= 0)
             return false;
 
-        if (!_stacks.TryAddStack(target, statusEffect, out _, stacks, DefaultCycleDuration))
+        if (!_stacks.TryAddStack(target, statusEffect, out _, stacks))
             return false;
 
         if (_net.IsServer && AddEffects.TryGetValue(damageType, out var effectProto))

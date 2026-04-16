@@ -29,6 +29,13 @@ public sealed partial class CEStatusEffectStackComponent : Component
     public int StackDelta = -1;
 
     /// <summary>
+    /// When true, adding stacks resets the cycle timer to BaseDuration
+    /// instead of letting the current timer continue.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool ResetTimerOnStack;
+
+    /// <summary>
     /// Used for Appearance system to modify visuals of status effect
     /// </summary>
     [DataField]

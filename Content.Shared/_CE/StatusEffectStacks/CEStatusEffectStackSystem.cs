@@ -90,7 +90,18 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
             effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
-            stackComp.BaseDuration = duration;
+
+            // Use the explicit duration, or fall back to the prototype-defined BaseDuration.
+            var effectiveDuration = duration ?? stackComp.BaseDuration;
+            if (effectiveDuration != null)
+            {
+                stackComp.BaseDuration = effectiveDuration;
+
+                // If we used the prototype default, set the actual timer now.
+                if (duration == null)
+                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, effectiveDuration);
+            }
+
             SetStack(target, (statusEnt.Value, stackComp), stack);
             return true;
         }
@@ -99,14 +110,21 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
             SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks + stack);
+
             if (duration != null)
             {
                 stackComp.BaseDuration = duration;
                 Dirty(statusEnt.Value, stackComp);
-
-                if (resetTimer)
-                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, duration);
             }
+
+            var shouldReset = resetTimer || stackComp.ResetTimerOnStack;
+            if (shouldReset)
+            {
+                var effectiveDuration = duration ?? stackComp.BaseDuration;
+                if (effectiveDuration != null)
+                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, effectiveDuration);
+            }
+
             return true;
         }
     }

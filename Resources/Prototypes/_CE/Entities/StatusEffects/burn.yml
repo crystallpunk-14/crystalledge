@@ -19,6 +19,8 @@
     noRot: true
   - type: CEStatusEffectStack
     stackDelta: -1
+    baseDuration: 20
+    resetTimerOnStack: true
 
 - type: alert
   id: CEBurn
