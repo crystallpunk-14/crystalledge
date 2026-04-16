@@ -25,6 +25,7 @@ public sealed class CEMarkingDisplacementSystem : EntitySystem
 
         SubscribeLocalEvent<CEMarkingDisplacementComponent, OrganGotInsertedEvent>(OnInserted, after: [typeof(VisualBodySystem)]);
         SubscribeLocalEvent<CEMarkingDisplacementComponent, OrganGotRemovedEvent>(OnRemoved, after: [typeof(VisualBodySystem)]);
+        SubscribeLocalEvent<CEMarkingDisplacementComponent, BodyRelayedEvent<ApplyOrganMarkingsEvent>>(OnMarkingsApplied, after: [typeof(SharedVisualBodySystem)]);
     }
 
     private void OnInserted(Entity<CEMarkingDisplacementComponent> ent, ref OrganGotInsertedEvent args)
@@ -35,6 +36,14 @@ public sealed class CEMarkingDisplacementSystem : EntitySystem
     private void OnRemoved(Entity<CEMarkingDisplacementComponent> ent, ref OrganGotRemovedEvent args)
     {
         RemoveDisplacements(ent, args.Target);
+    }
+
+    private void OnMarkingsApplied(Entity<CEMarkingDisplacementComponent> ent, ref BodyRelayedEvent<ApplyOrganMarkingsEvent> args)
+    {
+        if (Comp<OrganComponent>(ent).Body is not { } body)
+            return;
+
+        ApplyDisplacements(ent, body);
     }
 
     private void ApplyDisplacements(Entity<CEMarkingDisplacementComponent> ent, EntityUid body)
