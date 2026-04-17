@@ -81,17 +81,3 @@
   id: CEWeaponStaffWooden
   equipment:
     neck: CEWeaponStaffWooden
-
-
-- type: loadoutGroup
-  id: CEPriestSkill
-  name: ce-loadout-skill
-  minLimit: 1
-  loadouts:
-  - CureWounds
-
-- type: loadout
-  id: CureWounds
-  dummyEntity: CEActionSpellCureWounds
-  skills:
-  - CureWounds

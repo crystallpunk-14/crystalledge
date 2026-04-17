@@ -1,0 +1,277 @@
+- type: markingsGroup
+  id: CECarcat
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Head:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
+      required: true
+      onlyGroupWhitelisted: true
+      default: [ CECarcatNose ]
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
+      required: true
+      onlyGroupWhitelisted: true
+      default: [ CECarcatTail ]
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
+      required: true
+      onlyGroupWhitelisted: true
+      default: [ CECarcatEars ]
+    enum.HumanoidVisualLayers.Chest:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.LArm:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.RArm:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.LHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Special:
+      limit: 0
+      required: false
+
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: CEAppearanceCarcat
+  categories: [ ForkFiltered, HideSpawnMenu ]
+  components:
+  - type: Inventory
+    templateId: CECarcat
+    speciesId: carcat
+    displacements:
+      belt:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: cloak
+      cloak:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: cloak
+      back:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: cloak
+      eyes:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: eyes
+      head:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement48.rsi
+            state: head
+          48:
+            sprite: _CE/Mobs/Species/Carcat/displacement48.rsi
+            state: head
+      mask:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: mask
+      pants:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: pants
+      shirt:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: shirt
+      outerClothing:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: shirt
+      gloves:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: gloves
+      neck:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement48.rsi
+            state: neck
+          48:
+            sprite: _CE/Mobs/Species/Carcat/displacement48.rsi
+            state: neck
+  - type: InitialBody
+    organs:
+      Torso: CEOrganCarcatTorso
+      Head: CEOrganCarcatHead
+      ArmLeft: CEOrganCarcatArmLeft
+      ArmRight: CEOrganCarcatArmRight
+      HandRight: CEOrganCarcatHandRight
+      HandLeft: CEOrganCarcatHandLeft
+      LegLeft: CEOrganCarcatLegLeft
+      LegRight: CEOrganCarcatLegRight
+      FootLeft: CEOrganCarcatFootLeft
+      FootRight: CEOrganCarcatFootRight
+      Eyes: CEOrganCarcatEyes
+  - type: HumanoidProfile
+    species: CECarcat
+
+- type: entity
+  parent:
+  - CEBaseSpeciesMob
+  - CEAppearanceCarcat
+  id: CEMobCarcat
+  name: Mr. Cat
+  components:
+  - type: Vocal
+    sounds:
+      Male: CEUnisexCarcat
+      Female: CEUnisexCarcat
+      Unsexed: CEUnisexCarcat
+  - type: Speech
+    speechSounds: CECarcat
+  - type: Hands
+    leftHandDisplacement:
+      sizeMaps:
+        32:
+          sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+          state: hands_left
+    rightHandDisplacement:
+      sizeMaps:
+        32:
+          sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+          state: hands_right
+  - type: Wagging
+
+# Base carcat organ
+- type: entity
+  parent: OrganBase
+  id: CEOrganCarcat
+  categories: [ ForkFiltered ]
+  abstract: true
+  suffix: carcat
+
+- type: entity
+  parent: CEOrganCarcat
+  id: CEOrganCarcatExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Mobs/Species/Carcat/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: _CE/Mobs/Species/Carcat/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: CECarcat
+
+# All carcat organs are non-sexed (no _m/_f sprite variants)
+- type: entity
+  parent: [ OrganBaseTorso, CEOrganCarcatExternal ]
+  id: CEOrganCarcatTorso
+
+- type: entity
+  parent: [ OrganBaseHead, CEOrganCarcatExternal ]
+  id: CEOrganCarcatHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+    - enum.HumanoidVisualLayers.Snout
+  - type: CEMarkingDisplacement
+    displacements:
+      Hair:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: hair
+          48:
+            sprite: _CE/Mobs/Species/Carcat/displacement48.rsi
+            state: hair
+      FacialHair:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Carcat/displacement.rsi
+            state: hair
+          48:
+            sprite: _CE/Mobs/Species/Carcat/displacement48.rsi
+            state: hair
+
+- type: entity
+  parent: [ OrganBaseArmLeft, CEOrganCarcatExternal ]
+  id: CEOrganCarcatArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, CEOrganCarcatExternal ]
+  id: CEOrganCarcatArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, CEOrganCarcatExternal ]
+  id: CEOrganCarcatHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, CEOrganCarcatExternal ]
+  id: CEOrganCarcatHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, CEOrganCarcatExternal ]
+  id: CEOrganCarcatLegLeft
+
+- type: entity
+  parent: [ OrganBaseLegRight, CEOrganCarcatExternal ]
+  id: CEOrganCarcatLegRight
+
+- type: entity
+  parent: [ OrganBaseFootLeft, CEOrganCarcatExternal ]
+  id: CEOrganCarcatFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, CEOrganCarcatExternal ]
+  id: CEOrganCarcatFootRight
+
+- type: entity
+  parent: CEOrganCarcat
+  id: CEOrganCarcatEyes
+  components:
+  - type: Organ
+    category: Eyes
+  - type: Sprite
+    sprite: _CE/Mobs/Species/Carcat/parts.rsi
+    state: eyes
+  - type: VisualOrgan
+    layer: enum.HumanoidVisualLayers.Eyes
+    data:
+      sprite: _CE/Mobs/Species/Carcat/parts.rsi
+      state: eyes

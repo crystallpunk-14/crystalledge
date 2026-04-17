@@ -43,14 +43,21 @@ public sealed partial class CEDungeonInstanceSystem
             }
         }
 
-        // Initialize entry point deactivation timers.
+        // Initialize entry point deactivation timers (stable levels never expire).
         var dungeonQuery = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
         while (dungeonQuery.MoveNext(out _, out var entry, out var xform))
         {
             if (!mapIds.Contains(xform.MapID))
                 continue;
 
-            entry.DeactivateAt = _timing.CurTime + entry.ActiveDuration;
+            if (proto.Stable)
+            {
+                entry.Stable = true;
+            }
+            else
+            {
+                entry.DeactivateAt = _timing.CurTime + entry.ActiveDuration;
+            }
         }
 
         Log.Info($"registered instance '{proto.ID}' on entity {anchorUid} (stable={proto.Stable}).");
@@ -96,7 +103,7 @@ public sealed partial class CEDungeonInstanceSystem
             if (!entry.Active)
                 continue;
 
-            if (curTime >= entry.DeactivateAt)
+            if (!entry.Stable && curTime >= entry.DeactivateAt)
             {
                 entry.Active = false;
                 continue;

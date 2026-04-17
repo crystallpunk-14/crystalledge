@@ -10,14 +10,19 @@
   - type: StatusEffectAlert
     alert: CETempShieldFire
   - type: CETempShieldStatusEffect
-    takeDamageEffect: CEEffectTakeDamageTempShieldFire
-    breakEffect: CEEffectBreakTempShieldFire
     absorbPerStack: 1
     absorbedTypes:
     - Fire
+  - type: CEStatusEffectVFX
+    onStacksAddedVfx: CEEffectAddTempShieldFire
+    onStacksRemovedVfx: CEEffectTakeDamageTempShieldFire
+    onRemovedVfx: CEEffectBreakTempShieldFire
   - type: Sprite
     drawdepth: Effects
     noRot: true
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    #baseDuration: 10
 
 - type: alert
   id: CETempShieldFire

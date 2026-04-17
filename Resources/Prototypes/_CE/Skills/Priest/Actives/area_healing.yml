@@ -14,7 +14,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1.2 # Healing radius
   - type: CEActionManaCost
-    manaCost: 2
+    manaCost: 4
   - type: Action
     useDelay: 5
     icon:

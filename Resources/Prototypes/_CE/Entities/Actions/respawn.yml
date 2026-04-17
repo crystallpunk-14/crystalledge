@@ -1,0 +1,16 @@
+
+- type: entity
+  id: CEActionRespawn
+  name: Respawn
+  description: Return to the lobby to start new game.
+  components:
+  - type: Action
+    priority: 20
+    startDelay: true
+    useDelay: 60
+    checkCanInteract: false
+    icon:
+      sprite: _CE/Actions/respawn.rsi
+      state: respawn
+  - type: InstantAction
+    event: !type:CERespawnAction

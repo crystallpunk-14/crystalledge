@@ -202,9 +202,9 @@
     generalCount:
       min: 7
       max: 10
-    entranceCount: #We dont wanna PvP so early
-      min: 1
-      max: 1
+    entranceCount:
+      min: 2
+      max: 2
     blessingCount:
       min: 1
       max: 1
@@ -240,8 +240,8 @@
     generalCount:
       min: 10
       max: 15
-    entranceCount: # 50% chances to group encaunters
-      min: 1
+    entranceCount:
+      min: 2
       max: 2
     blessingCount:
       min: 1
@@ -393,13 +393,13 @@
     text: "A maximum of 4 players can enter the portal at the same time. \nA short demo adventure awaits you, spanning 4 floors that gradually get more challenging. \nYou may randomly encounter other groups of players inside, and it’s up to you to decide whether you’re friends or foes.\nOn each level, there is 1 statue that will boost your character’s stats.\nYour goal is to reach the end and have fun!"
 
 - type: entity
-  id: CEMapStartTextRU
+  id: CEMapStartBlockedText
   parent: MapText
   categories: [ ForkFiltered ]
-  name: Map start text RU
+  name: Map blocked text
   components:
   - type: MapText
-    text: "Максимум 4 игрока могут войти в портал одновременно. \nКороткое демо-приключение ждет вас, охватывающее 4 этажа, которые постепенно становятся более сложными. \nВы можете случайно встретить другие группы игроков внутри, и вам решать, друзья они или враги.\nНа каждом уровне есть 1 статуя, которая повысит ваши характеристики.\nВаша цель — дойти до конца и получить удовольствие!"
+    text: "The playtest is coming to an end. You can no longer start new runs. \nWe’re waiting for players to finish their adventures before shutting down the server."
 
 
 # Floor 3: Large final level with many rooms and cycles.

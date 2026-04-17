@@ -17,6 +17,10 @@
   - type: Sprite
     drawdepth: Effects
     noRot: true
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 20
+    resetTimerOnStack: true
 
 - type: alert
   id: CEFrostbite

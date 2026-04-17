@@ -222,16 +222,19 @@ namespace Content.Server.Ghost
 
             // Entity can't see ghosts anymore.
             _eye.RefreshVisibilityMask(uid);
-            _actions.RemoveAction(uid, component.BooActionEntity);
+            //_actions.RemoveAction(uid, component.BooActionEntity); //CrystallEdge - dont need this
         }
 
         private void OnMapInit(EntityUid uid, GhostComponent component, MapInitEvent args)
         {
-            _actions.AddAction(uid, ref component.BooActionEntity, component.BooAction);
-            _actions.AddAction(uid, ref component.ToggleGhostHearingActionEntity, component.ToggleGhostHearingAction);
+            //_actions.AddAction(uid, ref component.BooActionEntity, component.BooAction); //CrystallEdge - dont need this
+            //_actions.AddAction(uid, ref component.ToggleGhostHearingActionEntity, component.ToggleGhostHearingAction);
             _actions.AddAction(uid, ref component.ToggleLightingActionEntity, component.ToggleLightingAction);
             _actions.AddAction(uid, ref component.ToggleFoVActionEntity, component.ToggleFoVAction);
-            _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
+            //_actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
+            //CrystallEdge
+            _actions.AddAction(uid, ref component.CERespawnActionEntity, component.CERespawnAction);
+            //CrystallEdge end
         }
 
         #region Ghost Deletion

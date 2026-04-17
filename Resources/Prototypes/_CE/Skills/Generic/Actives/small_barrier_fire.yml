@@ -35,7 +35,7 @@
       sound:
         path: /Audio/Magic/rumble.ogg
     0.6:
-    - !type:AddTempShield
+    - !type:ApplyStatusEffectStack
       effectTarget: User
-      amount: 20
-      damageType: Fire
+      statusEffect: CEStatusEffectTempShieldFire
+      stack: 20

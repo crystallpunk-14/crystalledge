@@ -1,0 +1,301 @@
+- type: markingsGroup
+  id: CEGoblin
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Chest:
+      limit: 1
+      required: false
+      onlyGroupWhitelisted: true
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
+      required: true
+      onlyGroupWhitelisted: true
+      default: [ CEGoblinNose ]
+    enum.HumanoidVisualLayers.LArm:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
+      required: true
+      onlyGroupWhitelisted: true
+      default: [ CEGoblinEars ]
+    enum.HumanoidVisualLayers.Special:
+      limit: 0
+      required: false
+
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: CEAppearanceGoblin
+  categories: [ ForkFiltered, HideSpawnMenu ]
+  components:
+  - type: Inventory
+    templateId: CEHuman
+    speciesId: goblin
+    displacements:
+      belt:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: belt
+      cloak:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: cloak
+      outerClothing:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: cloak
+      eyes:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: eyes
+      gloves:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: gloves
+      head:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: head
+          48:
+            sprite: _CE/Mobs/Species/Goblin/displacement48.rsi
+            state: head
+      mask:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: mask
+      pants:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: pants
+      shirt:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: shirt
+      shoes:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: shoes
+      neck:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: neck
+          48:
+            sprite: _CE/Mobs/Species/Goblin/displacement48.rsi
+            state: neck
+  - type: InitialBody
+    organs:
+      Torso: CEOrganGoblinTorso
+      Head: CEOrganGoblinHead
+      ArmLeft: CEOrganGoblinArmLeft
+      ArmRight: CEOrganGoblinArmRight
+      HandRight: CEOrganGoblinHandRight
+      HandLeft: CEOrganGoblinHandLeft
+      LegLeft: CEOrganGoblinLegLeft
+      LegRight: CEOrganGoblinLegRight
+      FootLeft: CEOrganGoblinFootLeft
+      FootRight: CEOrganGoblinFootRight
+      Eyes: CEOrganGoblinEyes
+  - type: HumanoidProfile
+    species: CEGoblin
+
+- type: entity
+  parent:
+  - CEBaseSpeciesMob
+  - CEAppearanceGoblin
+  id: CEMobGoblin
+  name: Mr. Goblin
+  components:
+  - type: Vocal
+    sounds:
+      Male: CEUnisexGoblin
+      Female: CEUnisexGoblin
+      Unsexed: CEUnisexGoblin
+  - type: Speech
+    speechSounds: CEGoblin
+  - type: Hands
+    handDisplacement:
+      sizeMaps:
+        32:
+          sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+          state: hands
+
+# Base goblin organ
+- type: entity
+  parent: OrganBase
+  id: CEOrganGoblin
+  categories: [ ForkFiltered ]
+  abstract: true
+  suffix: goblin
+
+- type: entity
+  parent: CEOrganGoblin
+  id: CEOrganGoblinExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _CE/Mobs/Species/Goblin/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: _CE/Mobs/Species/Goblin/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: CEGoblin
+
+# Sexed organs (head & torso have _m/_f sprites)
+- type: entity
+  parent: [ CEOrganBaseTorsoSexed, OrganBaseTorso, CEOrganGoblinExternal ]
+  id: CEOrganGoblinTorso
+
+- type: entity
+  parent: [ CEOrganBaseHeadSexed, OrganBaseHead, CEOrganGoblinExternal ]
+  id: CEOrganGoblinHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+    - enum.HumanoidVisualLayers.Snout
+  - type: CEMarkingDisplacement
+    displacements:
+      Hair:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: hair
+          48:
+            sprite: _CE/Mobs/Species/Goblin/displacement48.rsi
+            state: hair
+      FacialHair:
+        sizeMaps:
+          32:
+            sprite: _CE/Mobs/Species/Goblin/displacement.rsi
+            state: hair
+          48:
+            sprite: _CE/Mobs/Species/Goblin/displacement48.rsi
+            state: hair
+
+# Non-sexed organs (goblin limbs have no _m/_f sprite variants)
+- type: entity
+  parent: [ OrganBaseArmLeft, CEOrganGoblinExternal ]
+  id: CEOrganGoblinArmLeft
+  components:
+  - type: Sprite
+    state: l_arm
+  - type: VisualOrgan
+    data:
+      state: l_arm
+
+- type: entity
+  parent: [ OrganBaseArmRight, CEOrganGoblinExternal ]
+  id: CEOrganGoblinArmRight
+  components:
+  - type: Sprite
+    state: r_arm
+  - type: VisualOrgan
+    data:
+      state: r_arm
+
+- type: entity
+  parent: [ OrganBaseHandLeft, CEOrganGoblinExternal ]
+  id: CEOrganGoblinHandLeft
+  components:
+  - type: Sprite
+    state: l_hand
+  - type: VisualOrgan
+    data:
+      state: l_hand
+
+- type: entity
+  parent: [ OrganBaseHandRight, CEOrganGoblinExternal ]
+  id: CEOrganGoblinHandRight
+  components:
+  - type: Sprite
+    state: r_hand
+  - type: VisualOrgan
+    data:
+      state: r_hand
+
+- type: entity
+  parent: [ OrganBaseLegLeft, CEOrganGoblinExternal ]
+  id: CEOrganGoblinLegLeft
+  components:
+  - type: Sprite
+    state: l_leg
+  - type: VisualOrgan
+    data:
+      state: l_leg
+
+- type: entity
+  parent: [ OrganBaseLegRight, CEOrganGoblinExternal ]
+  id: CEOrganGoblinLegRight
+  components:
+  - type: Sprite
+    state: r_leg
+  - type: VisualOrgan
+    data:
+      state: r_leg
+
+- type: entity
+  parent: [ OrganBaseFootLeft, CEOrganGoblinExternal ]
+  id: CEOrganGoblinFootLeft
+  components:
+  - type: Sprite
+    state: l_foot
+  - type: VisualOrgan
+    data:
+      state: l_foot
+
+- type: entity
+  parent: [ OrganBaseFootRight, CEOrganGoblinExternal ]
+  id: CEOrganGoblinFootRight
+  components:
+  - type: Sprite
+    state: r_foot
+  - type: VisualOrgan
+    data:
+      state: r_foot
+
+- type: entity
+  parent: [ OrganBaseEyes, OrganHumanInternal, CEOrganGoblinExternal ]
+  id: CEOrganGoblinEyes
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: _CE/Mobs/Customization/eyes.rsi
+      state: goblin_eyes

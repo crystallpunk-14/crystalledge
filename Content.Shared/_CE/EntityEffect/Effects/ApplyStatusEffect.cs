@@ -1,3 +1,4 @@
+using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 
@@ -25,6 +26,14 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _statusEffect.TrySetStatusEffectDuration(entity, args.Effect.StatusEffect, args.Effect.Duration);
+        if (!_statusEffect.TrySetStatusEffectDuration(entity, args.Effect.StatusEffect, out var statusEnt, args.Effect.Duration))
+            return;
+
+        if (statusEnt != null && Exists(args.Args.Source))
+        {
+            var sourceComp = EnsureComp<CEStatusEffectSourceComponent>(statusEnt.Value);
+            sourceComp.Source = args.Args.Source;
+            Dirty(statusEnt.Value, sourceComp);
+        }
     }
 }

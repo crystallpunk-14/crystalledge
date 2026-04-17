@@ -10,6 +10,12 @@
   - type: StatusEffectAlert
     alert: CEWet
   - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectFire
+    vfx: CESteamEffect
+    sound:
+      path: /Audio/_CE/Effects/steam_burst.ogg
   - type: Sprite
     drawdepth: Effects
     sprite: _CE/Effects/water_status.rsi

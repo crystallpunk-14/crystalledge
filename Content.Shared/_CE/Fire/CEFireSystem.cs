@@ -39,6 +39,15 @@ public sealed partial class CEFireSystem : EntitySystem
 
     private EntityQuery<CEFireComponent> _fireQuery;
     private EntityQuery<CEFlammableComponent> _flammableQuery;
+    private EntityQuery<CEPreventIgniteTileComponent> _preventIgniteQuery;
+
+    /// <summary>
+    /// Maximum number of steam sounds allowed per game tick to prevent audio engine overload.
+    /// Visual steam effects still spawn on every tile/entity.
+    /// </summary>
+    private const int MaxSteamSoundsPerTick = 2;
+    private GameTick _lastSteamSoundTick;
+    private int _steamSoundCount;
 
     public override void Initialize()
     {
@@ -46,19 +55,71 @@ public sealed partial class CEFireSystem : EntitySystem
 
         _fireQuery = GetEntityQuery<CEFireComponent>();
         _flammableQuery = GetEntityQuery<CEFlammableComponent>();
+        _preventIgniteQuery = GetEntityQuery<CEPreventIgniteTileComponent>();
+
+        // Prevent fire on tiles with CEPreventIgniteTileComponent (water, etc.).
+        SubscribeLocalEvent<CEPreventIgniteTileComponent, CEIgniteTileAttemptEvent>(OnPreventIgniteTile);
+        SubscribeLocalEvent<TransformComponent, CEIgniteEntityAttemptEvent>(OnPreventIgniteOnTile);
 
         SubscribeLocalEvent<CEFireComponent, MapInitEvent>(OnFireMapInit);
         SubscribeLocalEvent<CEFireComponent, StartCollideEvent>(OnCollide);
         SubscribeLocalEvent<CEMeltTransformComponent, CEIgnitedEvent>(OnMeltingIgnited);
         SubscribeLocalEvent<CEFlammableComponent, CEIgnitedEvent>(OnFlammableIgnited);
-        SubscribeLocalEvent<CEFlammableComponent, CEFreezeEntityAttemptEvent>(OnFreezeEntityAttempt);
-        SubscribeLocalEvent<CEFlammableComponent, CEWetEntityAttemptEvent>(OnFireWetAttempt);
 
         SubscribeLocalEvent<CEFlammableComponent, MapInitEvent>(OnMapInit);
 
         // Tile attempt: melt-transform entities block fire tile placement by transforming.
         SubscribeLocalEvent<CEMeltTransformComponent, CEIgniteTileAttemptEvent>(OnMeltTileIgniteAttempt);
     }
+
+    #region Fire Prevention (tile-level)
+
+    /// <summary>
+    /// Blocks fire tile placement on tiles with <see cref="CEPreventIgniteTileComponent"/> (e.g. water).
+    /// </summary>
+    private void OnPreventIgniteTile(Entity<CEPreventIgniteTileComponent> ent, ref CEIgniteTileAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        args.Cancelled = true;
+        SpawnSteamEffect(args.Coordinates);
+    }
+
+    /// <summary>
+    /// Prevents ignition of entities standing on a tile with <see cref="CEPreventIgniteTileComponent"/>.
+    /// </summary>
+    private void OnPreventIgniteOnTile(Entity<TransformComponent> ent, ref CEIgniteEntityAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (!IsOnPreventIgniteTile(ent))
+            return;
+
+        args.Cancelled = true;
+        SpawnSteamEffect(args.Target);
+    }
+
+    private bool IsOnPreventIgniteTile(Entity<TransformComponent> ent)
+    {
+        var xform = ent.Comp;
+        if (xform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var coords = _transform.GetMapCoordinates(ent);
+        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), coords);
+
+        foreach (var anchEnt in anchored)
+        {
+            if (_preventIgniteQuery.HasComp(anchEnt))
+                return true;
+        }
+
+        return false;
+    }
+
+    #endregion
 
     private void OnMapInit(Entity<CEFlammableComponent> ent, ref MapInitEvent args)
     {
@@ -91,52 +152,6 @@ public sealed partial class CEFireSystem : EntitySystem
 
         _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, stacks, cycleDuration);
         _stack.SetStackDelta(ent, ent.Comp.StatusEffect, ent.Comp.StackDelta);
-    }
-
-    /// <summary>
-    /// Fire neutralizes frost: when something tries to freeze a burning entity,
-    /// fire stacks cancel out an equal number of incoming frost stacks.
-    /// </summary>
-    private void OnFreezeEntityAttempt(Entity<CEFlammableComponent> ent, ref CEFreezeEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
-        if (fireStacks <= 0)
-            return;
-
-        var neutralized = Math.Min(fireStacks, args.Stacks);
-        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
-        args.Stacks -= neutralized;
-
-        SpawnSteamEffect(ent);
-
-        if (args.Stacks <= 0)
-            args.Cancelled = true;
-    }
-
-    /// <summary>
-    /// Fire neutralizes wet: when something tries to wet a burning entity,
-    /// fire stacks cancel out an equal number of incoming wet stacks.
-    /// </summary>
-    private void OnFireWetAttempt(Entity<CEFlammableComponent> ent, ref CEWetEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        var fireStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
-        if (fireStacks <= 0)
-            return;
-
-        var neutralized = Math.Min(fireStacks, args.Stacks);
-        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
-        args.Stacks -= neutralized;
-
-        SpawnSteamEffect(ent);
-
-        if (args.Stacks <= 0)
-            args.Cancelled = true;
     }
 
     /// <summary>
@@ -325,6 +340,7 @@ public sealed partial class CEFireSystem : EntitySystem
 
     /// <summary>
     /// Spawns a steam effect at an entity's position.
+    /// Sound is throttled to <see cref="MaxSteamSoundsPerTick"/> per tick.
     /// </summary>
     public void SpawnSteamEffect(EntityUid target)
     {
@@ -333,11 +349,14 @@ public sealed partial class CEFireSystem : EntitySystem
 
         var pos = Transform(target).Coordinates;
         Spawn(_steamEffect, pos);
-        _audio.PlayPvs(_steamSound, pos);
+
+        if (CanPlaySteamSound())
+            _audio.PlayPvs(_steamSound, pos);
     }
 
     /// <summary>
     /// Spawns a steam effect at map coordinates.
+    /// Sound is throttled to <see cref="MaxSteamSoundsPerTick"/> per tick.
     /// </summary>
     public void SpawnSteamEffect(MapCoordinates coordinates)
     {
@@ -345,7 +364,25 @@ public sealed partial class CEFireSystem : EntitySystem
             return;
 
         var steam = _entManager.SpawnEntity(_steamEffect, coordinates);
-        _audio.PlayPvs(_steamSound, Transform(steam).Coordinates);
+
+        if (CanPlaySteamSound())
+            _audio.PlayPvs(_steamSound, Transform(steam).Coordinates);
+    }
+
+    private bool CanPlaySteamSound()
+    {
+        var curTick = _timing.CurTick;
+        if (curTick != _lastSteamSoundTick)
+        {
+            _lastSteamSoundTick = curTick;
+            _steamSoundCount = 0;
+        }
+
+        if (_steamSoundCount >= MaxSteamSoundsPerTick)
+            return false;
+
+        _steamSoundCount++;
+        return true;
     }
 }
 

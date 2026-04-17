@@ -42,9 +42,14 @@
       collection: FootstepWater
       params:
         volume: 8
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.4
-  - type: CEWater
+  - type: CEPreventIgniteTile
+  - type: CEEntityEffectOnCollide
+    effects:
+    - !type:WetEntity
+      stacks: 1
+      maxStacks: 10
   - type: CEFreezeTransform
     freezesInto: CEIce
   - type: RandomSpawner
@@ -63,10 +68,9 @@
   - type: Sprite
     state: moving
     snapCardinals: false
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.6
-  - type: CEWater
-    flowing: true
+  - type: CEAutoConveyor
   - type: CEFreezeTransform
     freezesInto: CEIceFrozenStream
   - type: Conveyor

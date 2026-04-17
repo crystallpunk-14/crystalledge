@@ -4,7 +4,6 @@ using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Health.Components;
-using Content.Shared._CE.Stamina;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CombatMode;
 using Content.Shared.Hands.EntitySystems;
@@ -30,11 +29,12 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] private   readonly CESharedAnimationActionSystem _animationAction = default!;
     [Dependency] private   readonly IPrototypeManager _proto = default!;
     [Dependency] private   readonly SharedAudioSystem _audio = default!;
-    [Dependency] private   readonly CEStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        InitializeCosts();
 
         SubscribeAllEvent<CEWeaponUseEvent>(OnClientAttackRequest);
         SubscribeAllEvent<CEStopWeaponUseEvent>(OnClientStopRequest);
@@ -196,8 +196,10 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
 
         var entry = animations[comboIndex];
 
-        // Check stamina cost before starting the animation
-        if (entry.StaminaCost > 0f && !_stamina.TryTakeDamage(user, entry.StaminaCost))
+        // Check all cost components (stamina, mana, charges, etc.)
+        var attemptEv = new CEWeaponUseAttemptEvent(user, useType);
+        RaiseLocalEvent(used, attemptEv);
+        if (attemptEv.Cancelled)
             return false;
 
         var animationProtoId = entry.Anim;
@@ -205,6 +207,10 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         var animationSpeed = GetAnimationSpeed(user, used) * entry.Speed;
         if (!_animationAction.TryPlayAnimationToAngle(user, animationProtoId, angle, used.Owner, animationSpeed))
             return false;
+
+        // Consume resources after animation starts
+        var usedEv = new CEWeaponUsedEvent(user, useType);
+        RaiseLocalEvent(used, usedEv);
 
         // Calculate the deadline: animation duration + configurable delay.
         var animDuration = _proto.Index(animationProtoId).Duration;
@@ -324,7 +330,7 @@ public sealed partial class CEAttackUsingEvent(EntityUid user, List<EntityUid> t
 /// <summary>
 /// Raised on attacked entity when it gets hit by a CEMeleeWeaponComponent attack.
 /// </summary>
-public sealed partial class CEAttackedEvent(EntityUid attacker, EntityUid weapon)
+public sealed partial class CEAttackedEvent(EntityUid attacker, EntityUid weapon) : EntityEventArgs
 {
     public EntityUid Attacker = attacker;
     public EntityUid Weapon = weapon;
@@ -333,7 +339,7 @@ public sealed partial class CEAttackedEvent(EntityUid attacker, EntityUid weapon
 /// <summary>
 /// Raised on attacker, after it attacks something with a CEMeleeWeaponComponent
 /// </summary>
-public sealed partial class CEAfterAttackEvent(EntityUid weapon, List<EntityUid> targets)
+public sealed partial class CEAfterAttackEvent(EntityUid weapon, List<EntityUid> targets) : EntityEventArgs
 {
     public EntityUid Weapon = weapon;
     public List<EntityUid> Targets = targets;

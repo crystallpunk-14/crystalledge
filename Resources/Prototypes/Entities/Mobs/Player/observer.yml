@@ -28,7 +28,6 @@
         layer:
         - GhostImpassable
   #CrystallEdge
-  - type: CEZLevelGhostMover
   - type: CEZPhysics
     autoStep: false
 

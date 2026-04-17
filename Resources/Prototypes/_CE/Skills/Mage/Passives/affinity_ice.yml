@@ -7,14 +7,14 @@
 - type: entity
   id: CEStatusEffectAffinityIce
   name: Ice Affinity
-  description: You take 10 less [color=#05eeff]cold damage[/color] from all sources and are immune to [color=#05eeff]cold slowdown[/color].
+  description: You take 5 less [color=#05eeff]cold damage[/color] from all sources and are immune to [color=#05eeff]cold slowdown[/color].
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEAffinityIce
   - type: CEArmor
     flat:
-      Cold: 10
+      Cold: 5
   - type: CEFreezeImmunityStatusEffect
 
 - type: alert

@@ -92,10 +92,11 @@ public sealed class CEHealthStatusControl : Control
             MaxValue = 1,
             Value = 0,
         };
-        _progress.SetHeight = 8f;
+        _progress.SetWidth = 70f;
+        _progress.SetHeight = 10f;
         _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#c23030"));
         _progress.BackgroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#010c13"));
-        _progress.Margin = new Thickness(0, 4);
+        _progress.Margin = new Thickness(5, 7, 0, 0);
         _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
 
         if (!_entMan.HasComponent<CEDamageableComponent>(parent))
@@ -103,7 +104,7 @@ public sealed class CEHealthStatusControl : Control
 
         var boxContainer = new BoxContainer
         {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
         };
 
         boxContainer.AddChild(_label);

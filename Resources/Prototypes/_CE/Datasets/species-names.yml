@@ -37,3 +37,25 @@
   values:
     prefix: ce-species-name-elf-last-
     count: 18
+
+# Goblin
+
+- type: localizedDataset
+  id: CE_Names_Goblin_Male_First
+  values:
+    prefix: ce-species-name-goblin-male-first-
+    count: 26
+
+- type: localizedDataset
+  id: CE_Names_Goblin_Female_First
+  values:
+    prefix: ce-species-name-goblin-female-first-
+    count: 24
+
+# Carcat
+
+- type: localizedDataset
+  id: CE_Names_Carcat_First
+  values:
+    prefix: ce-species-name-carcat-first-
+    count: 50

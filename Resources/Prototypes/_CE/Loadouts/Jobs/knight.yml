@@ -1,17 +1,4 @@
 - type: loadoutGroup
-  id: CEKnightSkill
-  name: ce-loadout-skill
-  minLimit: 1
-  loadouts:
-  - IronBulwark
-
-- type: loadout
-  id: IronBulwark
-  dummyEntity: CEActionSpellIronBulwark
-  skills:
-  - IronBulwark
-
-- type: loadoutGroup
   id: CEKnightShirt
   name: ce-loadout-shirt
   minLimit: 1

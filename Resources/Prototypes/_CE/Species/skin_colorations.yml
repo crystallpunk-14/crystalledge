@@ -6,5 +6,12 @@
     value: [0.25, 0.55]
 
 - type: skinColoration
+  id: CECarcatHues
+  strategy: !type:ClampedHsvColoration
+    hue: [0.05, 0.10]
+    saturation: [0.15, 0.7]
+    value: [0.25, 0.95]
+
+- type: skinColoration
   id: CEElf
   strategy: !type:CEElfTonedSkinColoration {}

@@ -1,0 +1,50 @@
+- type: entity
+  id: CEWeaponSpearIron
+  parent:
+  - CEBaseWeapon
+  name: iron spear
+  description: A long iron-tipped spear. Excellent reach keeps enemies at bay.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Spear/iron.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 1.26
+        arcWidth: 15
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 10
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 1.4
+        arcWidth: 25
+        effects:
+        - !type:Damage
+          damage:
+            types:
+              Physical: 20
+    animations:
+      Primary:
+      - anim: SpearAttackLight
+      Secondary:
+      - anim: SpearAttackHeavy
+      - anim: SpearAttackHeavy2
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 2
+      Secondary: 3
+  #- type: CEWieldedWeapon #TODO: Custom wielded animations
+  #  animations:
+  #    Primary:
+  #    - anim: SpearAttackLight
+  #    Secondary:
+  #    - anim: SpearAttackHeavy
+  - type: Wieldable
+  - type: Clothing
+    slots:
+    - neck

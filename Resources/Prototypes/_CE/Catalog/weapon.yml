@@ -1,5 +1,5 @@
 - type: entityTable
-  id: CECommonWeapon
+  id: CELoadoutWeapon
   table: !type:GroupSelector
     children:
     - id: CEWeaponMagicStaffFire
@@ -7,8 +7,15 @@
     - id: CEWeaponSkimitarIron
     - id: CEWeaponSpearIron
     - id: CEWeaponSwordIron
-    - id: CEWeaponHeavyClub
     - id: CEWeaponStaffWooden
+
+- type: entityTable
+  id: CECommonWeapon
+  table: !type:GroupSelector
+    children:
+    - id: CEWeaponMagicStaffWater
+    - id: CEWeaponHeavyClub
+
 
 - type: entityTable
   id: CEUncommonWeapon
@@ -16,8 +23,8 @@
     children:
     - id: CEWeaponDaggerSacrificial
     - id: CEWeaponMagicStaffHealing
-    - id: CEWeaponMagicStaffWater
     - id: CEWeaponSwordBone
+    - id: CEWeaponSpearSoulCatcher
 
 - type: entityTable
   id: CERandomWeapon
@@ -28,7 +35,10 @@
       weight: 1
     - !type:NestedSelector
       tableId: CEUncommonWeapon
-      weight: 0.3
+      weight: 0.75
+    - !type:NestedSelector
+      tableId: CELoadoutWeapon
+      weight: 0.5
 
 - type: entity
   id: CESpawnerRandomWeapon

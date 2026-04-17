@@ -2,8 +2,7 @@
   abstract: true
   id: CEBaseWeapon
   categories: [ ForkFiltered ]
-  parent:
-  - BaseItem
+  parent: BaseItem
   components:
   - type: Item
     size: Large
@@ -13,6 +12,12 @@
     equipWhileMoving: true
     equipDelay: 1
     unequipDelay: 1
+
+- type: entity
+  abstract: true
+  id: CEBaseWeaponDestructible
+  categories: [ ForkFiltered ]
+  components:
   - type: CEDamageable
   - type: CEDestructible
     destroyThreshold: 100
