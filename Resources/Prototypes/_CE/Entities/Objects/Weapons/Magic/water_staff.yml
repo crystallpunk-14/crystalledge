@@ -22,6 +22,7 @@
         arcWidth: 45
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Physical: 5
@@ -73,6 +74,7 @@
       throwPower: 7
       distance: 2
     - !type:Damage
+      attackType: Ranged
       damage:
         types:
           Physical: 15

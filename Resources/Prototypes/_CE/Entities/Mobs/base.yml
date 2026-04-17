@@ -42,6 +42,7 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Physical: 5

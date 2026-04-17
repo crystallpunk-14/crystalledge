@@ -46,6 +46,7 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
         }
 
         TryAttack(user, weapon, targets);
+        ApplyArcEffects(user, weapon, targets, effectSlot);
     }
 
     protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)

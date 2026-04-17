@@ -15,6 +15,7 @@
         arcWidth: 60
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Physical: 15
@@ -27,6 +28,7 @@
         arcWidth: 180
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Physical: 15

@@ -1,0 +1,44 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: FlameAbsorption
+  icon:
+    sprite: _CE/Skills/Knight/fire_absorption.rsi
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellFlameAbsorption
+
+- type: entity
+  id: CEActionSpellFlameAbsorption
+  parent: CEActionSpellBase
+  name: Flame Absorption
+  description: Converts all [color=#ff8a05]fire[/color] stacks into [color=#b2e3eb]Strength[/color].
+  components:
+  - type: Sprite
+    sprite: _CE/Skills/Knight/fire_absorption.rsi
+    state: icon
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: _CE/Skills/Knight/fire_absorption.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationFlameAbsorption
+
+- type: entityEffectAnimation
+  id: AnimationFlameAbsorption
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    0.6:
+    - !type:StatusEffectConversion
+      effectTarget: User
+      sourceEffect: CEStatusEffectFire
+      targetEffect: CEStatusEffectStrength
+      ratio: 1

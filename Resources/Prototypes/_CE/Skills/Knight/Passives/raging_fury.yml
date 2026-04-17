@@ -1,0 +1,29 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: RagingFury
+  icon:
+    sprite: _CE/Skills/Knight/raging_fury.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectRagingFury
+
+- type: entity
+  id: CEStatusEffectRagingFury
+  name: Raging Fury
+  description: Taking damage grants [color=#b2e3eb]4 Strength[/color] stacks.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CERagingFury
+  - type: CEEffectOnDamagedStatusEffect
+    effects:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectStrength
+      stack: 4
+
+- type: alert
+  id: CERagingFury
+  icons:
+  - sprite: _CE/Skills/Knight/raging_fury.rsi
+    state: icon

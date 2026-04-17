@@ -1,4 +1,0 @@
-- type: entity
-  parent: HandheldHealthAnalyzer
-  id: BaselineHealthAnalyzer
-  categories: [ ForkFiltered ]

@@ -18,6 +18,7 @@
         arcWidth: 15
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Cold: 5
@@ -33,6 +34,7 @@
         arcWidth: 25
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Cold: 10

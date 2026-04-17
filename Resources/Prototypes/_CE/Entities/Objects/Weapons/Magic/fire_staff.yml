@@ -22,6 +22,7 @@
         arcWidth: 45
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Physical: 5
@@ -58,6 +59,7 @@
   - type: CEProjectile
     hitEffects:
     - !type:Damage
+      attackType: Ranged
       damage:
         types:
           Fire: 5

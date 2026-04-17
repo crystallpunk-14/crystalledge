@@ -18,11 +18,13 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Physical: 8
       OnHeavyHit: # Apply this effect of self
       - !type:Damage
+        attackType: Melee
         effectTarget: User
         ignoreArmor: true
         damage:

@@ -108,7 +108,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     /// Server overrides to apply damage from the weapon's EffectSlot data.
     /// Client base does nothing — effects are applied in the Effect() loop during prediction.
     /// </summary>
-    private void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    protected void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
     {
         if (effectSlot == null
             || !weapon.Comp.EffectSlots.TryGetValue(effectSlot, out var slotEffects)

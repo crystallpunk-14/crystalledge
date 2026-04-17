@@ -113,6 +113,7 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
               Fire: 5

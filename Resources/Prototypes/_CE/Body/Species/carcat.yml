@@ -210,8 +210,7 @@
     hideableLayers:
     - enum.HumanoidVisualLayers.Hair
     - enum.HumanoidVisualLayers.Snout
-  - type: CEMarkingDisplacement
-    displacements:
+    markingsDisplacement:
       Hair:
         sizeMaps:
           32:

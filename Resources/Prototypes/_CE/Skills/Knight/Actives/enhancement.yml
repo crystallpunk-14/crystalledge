@@ -1,0 +1,43 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: Amplification
+  icon:
+    sprite: _CE/Interface/strength.rsi
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellAmplification
+
+- type: entity
+  id: CEActionSpellAmplification
+  parent: CEActionSpellBase
+  name: Amplification
+  description: Gives you [color=#b2e3eb]10 stacks of Strength[/color], increasing melee damage.
+  components:
+  - type: Sprite
+    sprite: _CE/Interface/strength.rsi
+    state: icon
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Interface/strength.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationAmplification
+
+- type: entityEffectAnimation
+  id: AnimationAmplification
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/rumble.ogg
+    0.6:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectStrength
+      stack: 10

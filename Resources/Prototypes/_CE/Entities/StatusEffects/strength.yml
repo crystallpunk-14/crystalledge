@@ -1,0 +1,56 @@
+- type: entity
+  id: CEStatusEffectStrength
+  name: Strength
+  description: Increases melee damage per stack.
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Effects/focus_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#602222"
+    radius: 1.9
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CEStrength
+  - type: CEStrengthStatusEffect
+    bonusDamagePerStack:
+      types:
+        Physical: 1
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 1
+
+- type: alert
+  id: CEStrength
+  alertViewEntity: CEStrengthAlertSpriteView
+  name: ce-alert-strength-name
+  description: ce-alert-strength-desc
+  icons:
+  - sprite: _CE/Interface/strength.rsi
+    state: icon
+
+- type: entity
+  id: CEStrengthAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/strength.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

@@ -19,6 +19,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         SubscribeLocalEvent<CEEffectOnAttackStatusEffectComponent, StatusEffectRelayedEvent<CEAfterAttackEvent>>(OnAfterAttack);
         SubscribeLocalEvent<CEEffectOnHealStatusEffectComponent, StatusEffectRelayedEvent<CEHealEvent>>(OnHeal);
+        SubscribeLocalEvent<CEEffectOnDamagedStatusEffectComponent, StatusEffectRelayedEvent<CEDamageChangedEvent>>(OnDamaged);
     }
 
     private void OnAfterAttack(Entity<CEEffectOnAttackStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterAttackEvent> args)
@@ -65,6 +66,31 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             1f,
             args.Args.Target,
             Transform(args.Args.Target).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            effect.Effect(effectArgs);
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnDamaged(Entity<CEEffectOnDamagedStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEDamageChangedEvent> args)
+    {
+        if (args.Args.DamageDelta <= 0)
+            return;
+
+        if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            null,
+            Angle.Zero,
+            1f,
+            args.Args.Source,
+            Transform(status.AppliedTo.Value).Coordinates);
 
         foreach (var effect in ent.Comp.Effects)
         {

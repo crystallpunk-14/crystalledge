@@ -125,6 +125,7 @@
       range: 1.5
       effects:
       - !type:Damage
+        attackType: Ranged
         damage:
           types:
             Cold: 10

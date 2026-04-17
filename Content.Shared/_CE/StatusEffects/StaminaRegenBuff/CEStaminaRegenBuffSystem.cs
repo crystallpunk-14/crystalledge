@@ -1,8 +1,8 @@
+using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
-using Content.Shared.StatusEffectNew.Components;
 
-namespace Content.Shared._CE.Stamina.StaminaRegenBuff;
+namespace Content.Shared._CE.StatusEffects.StaminaRegenBuff;
 
 public sealed partial class CEStaminaRegenBuffSystem : EntitySystem
 {

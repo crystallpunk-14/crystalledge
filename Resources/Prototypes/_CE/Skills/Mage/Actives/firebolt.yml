@@ -104,6 +104,7 @@
   - type: CEProjectile
     hitEffects:
     - !type:Damage
+      attackType: Ranged
       damage:
         types:
           Fire: 15

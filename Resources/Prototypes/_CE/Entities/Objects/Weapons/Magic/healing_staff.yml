@@ -20,37 +20,31 @@
         projectileMaxSpeed: 7
         spread: 0.2
       - !type:Damage
+        attackType: Melee
         effectTarget: Used
         damage:
           types:
             Physical: 1
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.78
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          damage:
-            types:
-              Physical: 5
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectRegeneration
+        stack: 4
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
     animations:
       Primary:
       - anim: StaffAttackLight1
       - anim: StaffAttackLight2
       Secondary:
-      - anim: StaffAttackHeavy
+      - anim: SelfCut
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-      Secondary: 1
   - type: CEWeaponChargesCost
     costs:
       Primary: 1
+      Secondary: 1
   - type: CECharges
     maxCharges: 15
     currentCharges: 15
