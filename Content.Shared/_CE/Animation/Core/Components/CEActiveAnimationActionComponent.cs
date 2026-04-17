@@ -43,5 +43,6 @@ public sealed partial class CEActiveAnimationActionComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? Used;
 
+    [AutoNetworkedField]
     public TimeSpan LastEvent = TimeSpan.FromSeconds(-1);
 }

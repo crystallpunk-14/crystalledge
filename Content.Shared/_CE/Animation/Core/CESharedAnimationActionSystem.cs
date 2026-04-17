@@ -87,6 +87,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     controller.TargetCoordinates);
 
                 var startTime = controller.StartAnimationTime.Value;
+                var anyEventFired = false;
                 foreach (var (keyFrame, actions) in animation.Events)
                 {
                     var realKeyFrame = keyFrame * speedMultiplier;
@@ -96,7 +97,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
                     var eventTime = startTime + realKeyFrame;
                     // Only trigger if event time is within this frame
-                    if (eventTime <= controller.LastEvent || eventTime > _timing.CurTime)
+                    if (eventTime > _timing.CurTime)
                         continue;
 
                     foreach (var action in actions)
@@ -105,7 +106,13 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     }
 
                     controller.LastEvent = realKeyFrame;
+                    anyEventFired = true;
                 }
+
+                // CrystallEdge: Dirty LastEvent so resimulation doesn't re-fire keyframe effects (e.g. Dash)
+                if (anyEventFired)
+                    Dirty(uid, controller);
+                // CrystallEdge end
             }
         }
     }
