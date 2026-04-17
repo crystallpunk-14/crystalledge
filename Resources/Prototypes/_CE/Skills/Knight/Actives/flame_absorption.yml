@@ -36,9 +36,41 @@
     - !type:PlaySound
       sound:
         path: /Audio/Magic/rumble.ogg
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectFlameAbsorption
+      reparent: true
     0.6:
     - !type:StatusEffectConversion
       effectTarget: User
       sourceEffect: CEStatusEffectFire
       targetEffect: CEStatusEffectStrength
       ratio: 1
+
+- type: entity
+  id: CEEffectFlameAbsorption
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/fire_absorbtion.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ef6b19"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

@@ -7,11 +7,15 @@ public sealed partial class SpawnEntity : CEEntityEffectBase<SpawnEntity>
 {
     [DataField]
     public List<EntProtoId> Spawns = new();
+
+    [DataField]
+    public bool Reparent;
 }
 
 public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<SpawnEntity>
 {
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<SpawnEntity> args)
     {
@@ -23,7 +27,10 @@ public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<Spa
 
         foreach (var spawn in args.Effect.Spawns)
         {
-            SpawnAtPosition(spawn, coords);
+            var spawned = SpawnAtPosition(spawn, coords);
+
+            if (args.Effect.Reparent && args.Args.Target != null)
+                _transform.SetParent(spawned, args.Args.Target.Value);
         }
     }
 }

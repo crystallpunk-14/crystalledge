@@ -34,10 +34,12 @@
   events:
     0:
     - !type:SpawnEntity
+      reparent: true
       spawns:
       - CEEffectHealingGeneric
     0.5:
     - !type:SpawnEntity
+      reparent: true
       spawns:
       - CEEffectHealingGeneric
     - !type:Heal
