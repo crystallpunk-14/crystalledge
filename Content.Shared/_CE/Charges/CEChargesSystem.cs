@@ -59,14 +59,18 @@ public sealed class CEChargesSystem : EntitySystem
     }
 
     /// <summary>
-    /// Fully restores all charges to max.
+    /// Restores charges by a fraction of max charges.
     /// </summary>
-    public void RestoreFull(EntityUid uid, CEChargesComponent? comp = null)
+    /// <param name="uid">Target entity.</param>
+    /// <param name="percentage">Fraction of max charges to restore. 1.0 = 100%.</param>
+    /// <param name="comp">Optional resolved component.</param>
+    public void RestorePercentage(EntityUid uid, float percentage, CEChargesComponent? comp = null)
     {
         if (!Resolve(uid, ref comp, false))
             return;
 
-        comp.CurrentCharges = comp.MaxCharges;
+        var amount = (int)(comp.MaxCharges * percentage);
+        comp.CurrentCharges = Math.Min(comp.CurrentCharges + amount, comp.MaxCharges);
         Dirty(uid, comp);
     }
 }

@@ -107,10 +107,10 @@
       attackType: Ranged
       damage:
         types:
-          Fire: 15
+          Fire: 20
     - !type:IgniteArea
       radius: 2
-      maxStacks: 5
+      maxStacks: 10
     - !type:SpawnEntity
       effectTarget: Target
       spawns:

@@ -140,9 +140,16 @@
         - LowImpassable
         hard: false
   - type: Projectile
-    damage:
-      types:
-        Heat: 0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Fire: 20
+    - !type:IgniteArea
+      radius: 3
+      maxStacks: 10
   - type: CEEntityEffectSpawner
     frequency: 0.2
     firstDelay: 0.3
