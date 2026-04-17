@@ -1,0 +1,32 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: PathOfKnight
+  weight: 0.1
+  icon:
+    sprite: _CE/Skills/General/path_classes.rsi
+    state: knight
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectPathOfKnight
+  restrictions:
+  - !type:JobWhitelist
+    inverted: true
+    jobs:
+    - CEKnight
+
+- type: entity
+  id: CEStatusEffectPathOfKnight
+  name: Path of the Knight
+  description: Knight skills may now appear in your blessing pool.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEPathOfKnight
+  - type: CEAdditionalRoleSkillsStatusEffect
+    roles:
+    - CEKnight
+
+- type: alert
+  id: CEPathOfKnight
+  icons:
+  - sprite: _CE/Skills/General/path_classes.rsi
+    state: knight

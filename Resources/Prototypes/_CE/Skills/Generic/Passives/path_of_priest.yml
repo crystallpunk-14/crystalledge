@@ -1,0 +1,32 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: PathOfPriest
+  weight: 0.1
+  icon:
+    sprite: _CE/Skills/General/path_classes.rsi
+    state: priest
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectPathOfPriest
+  restrictions:
+  - !type:JobWhitelist
+    inverted: true
+    jobs:
+    - CEPriest
+
+- type: entity
+  id: CEStatusEffectPathOfPriest
+  name: Path of the Priest
+  description: Priest skills may now appear in your blessing pool.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEPathOfPriest
+  - type: CEAdditionalRoleSkillsStatusEffect
+    roles:
+    - CEPriest
+
+- type: alert
+  id: CEPathOfPriest
+  icons:
+  - sprite: _CE/Skills/General/path_classes.rsi
+    state: priest

@@ -35,7 +35,10 @@
     0:
     - !type:PlaySound
       sound:
-        path: /Audio/Magic/rumble.ogg
+        path: /Audio/_CE/Effects/apostasy_fire.ogg
+        params:
+          pitch: 0.5
+          volume: 10
     - !type:SpawnEntity
       spawns:
       - CEEffectFlameAbsorption

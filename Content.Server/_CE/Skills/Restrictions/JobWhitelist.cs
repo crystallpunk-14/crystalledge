@@ -1,7 +1,9 @@
 using Content.Server.Roles.Jobs;
 using Content.Shared._CE.Skill.Core.Prototypes;
+using Content.Shared._CE.StatusEffects;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
+using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Skills.Restrictions;
@@ -28,6 +30,22 @@ public sealed partial class JobWhitelist : CESkillRestriction
         if (Inverted)
             return !Jobs.Contains(jobId.Value);
 
-        return Jobs.Contains(jobId.Value);
+        if (Jobs.Contains(jobId.Value))
+            return true;
+
+        if (entManager.TryGetComponent<StatusEffectContainerComponent>(target, out var container)
+            && container.ActiveStatusEffects is not null)
+        {
+            foreach (var effect in container.ActiveStatusEffects.ContainedEntities)
+            {
+                if (entManager.TryGetComponent<CEAdditionalRoleSkillsStatusEffectComponent>(effect, out var roles)
+                    && roles.Roles.Overlaps(Jobs))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

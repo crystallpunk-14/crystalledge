@@ -1,0 +1,32 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: PathOfMage
+  weight: 0.1
+  icon:
+    sprite: _CE/Skills/General/path_classes.rsi
+    state: mage
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectPathOfMage
+  restrictions:
+  - !type:JobWhitelist
+    inverted: true
+    jobs:
+    - CEMage
+
+- type: entity
+  id: CEStatusEffectPathOfMage
+  name: Path of the Mage
+  description: Mage skills may now appear in your blessing pool.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEPathOfMage
+  - type: CEAdditionalRoleSkillsStatusEffect
+    roles:
+    - CEMage
+
+- type: alert
+  id: CEPathOfMage
+  icons:
+  - sprite: _CE/Skills/General/path_classes.rsi
+    state: mage
