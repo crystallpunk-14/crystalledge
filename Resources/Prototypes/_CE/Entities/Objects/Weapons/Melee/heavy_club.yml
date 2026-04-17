@@ -25,6 +25,9 @@
           damage:
             types:
               Physical: 1
+        - !type:ThrowFromUser
+          throwPower: 10
+          distance: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.6
