@@ -1,5 +1,5 @@
 - type: entity
-  parent: [CEBaseWeapon, CEBaseWeaponDestructible]
+  parent: CEBaseWeapon
   id: CEWeaponDaggerSacrificial
   name: sacrificial dagger
   description: An enchanted dagger that restores mana to whoever it cuts.
@@ -22,22 +22,12 @@
           damage:
             types:
               Physical: 10
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
         - !type:RestoreMana
           amount: 3
         - !type:SpawnEntity
           spawns:
           - CEEffectManaRestore
       OnHeavyHit: # Apply this effect of self
-      - !type:Damage
-        effectTarget: Used
-        damage:
-          types:
-            Physical: 2
       - !type:Damage
         effectTarget: User
         ignoreArmor: true

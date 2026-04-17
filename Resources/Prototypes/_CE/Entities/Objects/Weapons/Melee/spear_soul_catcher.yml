@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSpearSoulCatcher
-  parent: [CEBaseWeapon, CEBaseWeaponDestructible]
+  parent: CEBaseWeapon
   name: soul catcher
   description: A rare magical weapon that does not deal physical damage but wounds the soul, draining mana from it and transferring it to the wielder
   components:
@@ -17,11 +17,6 @@
         range: 1.26
         arcWidth: 15
         effects:
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
         - !type:StealMana
           amount: 1
         - !type:SpawnEntity
@@ -33,11 +28,6 @@
         range: 1.4
         arcWidth: 25
         effects:
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
         - !type:StealMana
           amount: 2
         - !type:SpawnEntity

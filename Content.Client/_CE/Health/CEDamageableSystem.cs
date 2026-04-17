@@ -1,12 +1,8 @@
-using Content.Client.Items;
-using Content.Client.Stylesheets;
 using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Effects;
 using Robust.Client.Graphics;
-using Robust.Client.UserInterface;
-using Robust.Client.UserInterface.Controls;
 using Robust.Shared.GameStates;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -24,7 +20,6 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
         base.Initialize();
 
         SubscribeLocalEvent<CEDamageableComponent, ComponentHandleState>(OnHandleState);
-        Subs.ItemStatus<CEHealthStatusComponent>(ent => new CEHealthStatusControl(ent));
     }
 
     /// <summary>
@@ -73,69 +68,5 @@ public sealed class CEClientMobStateSystem : EntitySystem
     {
         var stateEv = new CEMobStateChangedEvent(uid, comp.CurrentState, comp.CurrentState);
         RaiseLocalEvent(uid, stateEv, true);
-    }
-}
-
-public sealed class CEHealthStatusControl : Control
-{
-    private readonly EntityUid _owner;
-    private readonly IEntityManager _entMan;
-    private readonly RichTextLabel _label;
-    private readonly ProgressBar _progress;
-
-    public CEHealthStatusControl(Entity<CEHealthStatusComponent> parent)
-    {
-        _entMan = IoCManager.Resolve<IEntityManager>();
-        _owner = parent.Owner;
-        _progress = new ProgressBar
-        {
-            MaxValue = 1,
-            Value = 0,
-        };
-        _progress.SetWidth = 70f;
-        _progress.SetHeight = 10f;
-        _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#c23030"));
-        _progress.BackgroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#010c13"));
-        _progress.Margin = new Thickness(5, 7, 0, 0);
-        _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
-
-        if (!_entMan.HasComponent<CEDamageableComponent>(parent))
-            return;
-
-        var boxContainer = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-        };
-
-        boxContainer.AddChild(_label);
-        boxContainer.AddChild(_progress);
-
-        AddChild(boxContainer);
-    }
-
-    protected override void FrameUpdate(FrameEventArgs args)
-    {
-        base.FrameUpdate(args);
-
-        var damageable = _entMan.System<CESharedDamageableSystem>();
-        var info = damageable.GetHealthInfo(_owner);
-
-        if (info.MaxHp <= 0)
-        {
-            _progress.Value = 0;
-            _label.Text = "0/0";
-            return;
-        }
-
-        _progress.Value = info.Ratio;
-        _label.Text = $"{info.CurrentHp}/{info.MaxHp}";
-
-        var color = info.Ratio switch
-        {
-            >= 0.66f => "#3fc488",
-            >= 0.33f => "#f2a93a",
-            _ => "#c23030",
-        };
-        _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex(color));
     }
 }

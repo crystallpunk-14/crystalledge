@@ -1,5 +1,5 @@
 - type: entity
-  parent: [CEBaseWeapon, CEBaseWeaponDestructible]
+  parent: CEBaseWeapon
   id: CEWeaponMagicStaffWater
   name: water staff
   description: A staff imbued with water magic. Launches slow water orbs that drench and repel their target.
@@ -16,11 +16,6 @@
       - !type:ShootProjectile
         prototype: CEProjectileMagicWater
         projectileSpeed: 7
-      - !type:Damage
-        effectTarget: Used
-        damage:
-          types:
-            Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.78
@@ -30,11 +25,6 @@
           damage:
             types:
               Physical: 5
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -47,9 +37,12 @@
     costs:
       Primary: 1
       Secondary: 1
+  - type: CEWeaponChargesCost
+    costs:
+      Primary: 1
   - type: CECharges
-    maxCharges: 20
-    currentCharges: 20
+    maxCharges: 30
+    currentCharges: 30
   - type: Clothing
     slots:
     - neck

@@ -1,7 +1,6 @@
 - type: entity
   id: CEWeaponSpearIron
-  parent:
-  - CEBaseWeapon
+  parent: CEBaseWeapon
   name: iron spear
   description: A long iron-tipped spear. Excellent reach keeps enemies at bay.
   components:

@@ -4,14 +4,12 @@ using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Animation.Core;
 
 public sealed partial class CEAnimationActionSystem : CESharedAnimationActionSystem
 {
-    [Dependency] private readonly IPrototypeManager _protoServer = default!;
-    [Dependency] private readonly SharedTransformSystem _transformServer = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     /// <summary>
     /// Sends <see cref="CEEntityAnimationEvent"/> to all clients in PVS (except the entity's own player)
@@ -27,7 +25,7 @@ public sealed partial class CEAnimationActionSystem : CESharedAnimationActionSys
         if (controller.ActiveAnimation is not { } animId)
             return;
 
-        var angle = _transformServer.GetWorldRotation(uid);
+        var angle = _transform.GetWorldRotation(uid);
 
         var ev = new CEEntityAnimationEvent(
             GetNetEntity(uid),

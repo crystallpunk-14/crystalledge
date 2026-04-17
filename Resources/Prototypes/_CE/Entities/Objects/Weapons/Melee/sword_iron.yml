@@ -1,7 +1,6 @@
 - type: entity
   id: CEWeaponSwordIron
-  parent:
-  - CEBaseWeapon
+  parent: CEBaseWeapon
   name: iron sword
   description: A finely crafted sword favored by imperial officers. Its blade gleams with authority and tradition.
   components:

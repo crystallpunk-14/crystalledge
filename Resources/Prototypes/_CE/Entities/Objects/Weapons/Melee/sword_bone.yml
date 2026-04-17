@@ -1,14 +1,12 @@
 - type: entity
   id: CEWeaponSwordBone
-  parent: [CEBaseWeapon, CEBaseWeaponDestructible]
+  parent: CEBaseWeapon
   name: bone sword
   description: Nicks on the blade leave bruise wounds, increasing the damage dealt to the target
   components:
   - type: Sprite
     sprite: _CE/Objects/Weapons/Sword/bone.rsi
     state: icon
-  - type: CEDestructible
-    destroyThreshold: 50
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -24,11 +22,6 @@
           statusEffect: CEStatusEffectBruise
           stack: 1
           maxStacks: 10
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 1.1
@@ -42,11 +35,6 @@
           statusEffect: CEStatusEffectBruise
           stack: 2
           maxStacks: 10
-        - !type:Damage
-          effectTarget: Used
-          damage:
-            types:
-              Physical: 2
     animations:
       Primary:
       - anim: SwordAttackLight1
