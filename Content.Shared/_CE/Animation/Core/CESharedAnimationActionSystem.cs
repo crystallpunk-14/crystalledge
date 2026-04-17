@@ -107,12 +107,11 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
                     controller.LastEvent = realKeyFrame;
                     anyEventFired = true;
+                    OnKeyframeActions(uid, controller, keyFrame, actions);
                 }
 
-                // CrystallEdge: Dirty LastEvent so resimulation doesn't re-fire keyframe effects (e.g. Dash)
                 if (anyEventFired)
                     Dirty(uid, controller);
-                // CrystallEdge end
             }
         }
     }
@@ -282,6 +281,14 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     {
         RemComp<CEActiveAnimationActionComponent>(entity);
         _movement.RefreshMovementSpeedModifiers(entity);
+    }
+
+    /// <summary>
+    /// Called server-side after a keyframe's actions have been executed.
+    /// Override to send network events (e.g. <see cref="CEEntityAnimationEvent"/>) to non-predicting clients.
+    /// </summary>
+    protected virtual void OnKeyframeActions(EntityUid uid, CEActiveAnimationActionComponent controller, TimeSpan keyFrame, List<CEEntityEffect> actions)
+    {
     }
 }
 
