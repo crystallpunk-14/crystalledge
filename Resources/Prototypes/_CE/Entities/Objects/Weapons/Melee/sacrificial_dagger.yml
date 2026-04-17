@@ -18,15 +18,9 @@
         arcWidth: 40
         effects:
         - !type:Damage
-          ignoreArmor: true
           damage:
             types:
-              Physical: 10
-        - !type:RestoreMana
-          amount: 3
-        - !type:SpawnEntity
-          spawns:
-          - CEEffectManaRestore
+              Physical: 8
       OnHeavyHit: # Apply this effect of self
       - !type:Damage
         effectTarget: User
@@ -52,7 +46,6 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-      Secondary: 1
   - type: CEWeaponChargesCost
     costs:
       Secondary: 1
