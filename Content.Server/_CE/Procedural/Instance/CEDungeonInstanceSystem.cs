@@ -54,6 +54,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
 
         InitializePassage();
+        InitializeEntryAnnounce();
     }
 
     public override void Update(float frameTime)
