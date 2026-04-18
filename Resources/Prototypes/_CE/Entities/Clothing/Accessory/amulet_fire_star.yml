@@ -1,0 +1,27 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryAmuletFireStar
+  name: "Laozel's Scorching Edge"
+  description: A mystical amulet shaped like a fire. Increases all outgoing [color=#ff4500]fire damage[/color] by 3.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/fire_star.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectAmuletFireStar
+
+- type: entity
+  id: CEStatusEffectAmuletFireStar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+    stackDelta: 0
+  - type: CEBonusDamageStatusEffect
+    bonusDamagePerStack:
+      types:
+        Fire: 3
+    attackTypes:
+    - Melee
+    - Ranged

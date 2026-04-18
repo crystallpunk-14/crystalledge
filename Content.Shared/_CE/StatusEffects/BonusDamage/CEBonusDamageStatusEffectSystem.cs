@@ -2,22 +2,22 @@ using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 
-namespace Content.Shared._CE.StatusEffects.Strength;
+namespace Content.Shared._CE.StatusEffects.BonusDamage;
 
-public sealed class CEStrengthStatusEffectSystem : EntitySystem
+public sealed class CEBonusDamageStatusEffectSystem : EntitySystem
 {
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEStrengthStatusEffectComponent, StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent>>(OnOutgoingDamage);
+        SubscribeLocalEvent<CEBonusDamageStatusEffectComponent, StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent>>(OnOutgoingDamage);
     }
 
     private void OnOutgoingDamage(
-        Entity<CEStrengthStatusEffectComponent> ent,
+        Entity<CEBonusDamageStatusEffectComponent> ent,
         ref StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent> args)
     {
-        if (args.Args.Cancelled || args.Args.AttackType != CEAttackType.Melee)
+        if (args.Args.Cancelled || !ent.Comp.AttackTypes.Contains(args.Args.AttackType))
             return;
 
         if (!TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))

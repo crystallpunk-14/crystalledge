@@ -1,9 +1,8 @@
 using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffectStacks;
-using Content.Shared.Inventory;
 using Content.Shared.StatusEffectNew;
 
-namespace Content.Shared._CE.Armor;
+namespace Content.Shared._CE.StatusEffects.Armor;
 
 public sealed partial class CEArmorSystem : EntitySystem
 {
@@ -12,7 +11,6 @@ public sealed partial class CEArmorSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CEArmorComponent, CEDamageCalculateEvent>(OnBeforeDamage);
-        SubscribeLocalEvent<CEArmorComponent, InventoryRelayedEvent<CEDamageCalculateEvent>>(OnBeforeInventoryDamage);
         SubscribeLocalEvent<CEArmorComponent, StatusEffectRelayedEvent<CEDamageCalculateEvent>>(OnBeforeStatusDamage);
     }
 
@@ -23,14 +21,6 @@ public sealed partial class CEArmorSystem : EntitySystem
             stack = stacks.Stacks;
 
         args.Args.Damage = GetNewDamage(args.Args.Damage, ent, stack);
-    }
-
-    private void OnBeforeInventoryDamage(Entity<CEArmorComponent> ent, ref InventoryRelayedEvent<CEDamageCalculateEvent> args)
-    {
-        if (args.Args.Cancelled)
-            return;
-
-        args.Args.Damage = GetNewDamage(args.Args.Damage, ent);
     }
 
     private void OnBeforeDamage(Entity<CEArmorComponent> ent, ref CEDamageCalculateEvent args)

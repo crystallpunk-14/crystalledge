@@ -268,7 +268,9 @@ namespace Content.Shared.Examine
             //Add an entity description if one is declared
             if (!string.IsNullOrEmpty(metadata.EntityDescription))
             {
-                message.AddText(metadata.EntityDescription);
+                // CrystallEdge: use PushMarkup to support [color] tags in descriptions
+                message.PushMarkup(metadata.EntityDescription);
+                // CrystallEdge end
                 hasDescription = true;
             }
 

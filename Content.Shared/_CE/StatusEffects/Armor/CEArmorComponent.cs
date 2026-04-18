@@ -2,11 +2,8 @@ using Content.Shared._CE.Health.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.Armor;
+namespace Content.Shared._CE.StatusEffects.Armor;
 
-/// <summary>
-///
-/// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 [Access(typeof(CEArmorSystem))]
 public sealed partial class CEArmorComponent : Component

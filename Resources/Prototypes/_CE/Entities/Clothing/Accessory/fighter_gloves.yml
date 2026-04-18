@@ -1,0 +1,26 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryFighterGloves
+  name: fighter Gloves
+  description: Heavyweight fighting gloves. Increases all outgoing melee [color=#05eeff]physical damage[/color] by 3.
+  components:
+  - type: Item
+    size: Normal
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/fighter_gloves.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectAmuletFighterGloves
+
+- type: entity
+  id: CEStatusEffectAmuletFighterGloves
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+    stackDelta: 0
+  - type: CEBonusDamageStatusEffect
+    bonusDamagePerStack:
+      types:
+        Physical: 3
+    attackTypes:
+    - Melee

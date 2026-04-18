@@ -10,6 +10,15 @@
     sprite: _CE/Clothing/Armor/Body/chainmail.rsi
   - type: Clothing
     sprite: _CE/Clothing/Armor/Body/chainmail.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectChainmail
+
+- type: entity
+  id: CEStatusEffectChainmail
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
   - type: CEArmor
     flat:
       Physical: 2

@@ -32,19 +32,19 @@
       strippingWindowPos: 0,1
       displayName: Cloak
     # 1, y
-    - name: acsecsory1
+    - name: accessory1
       slotTexture: acsessory
       slotFlags: EYES
       uiWindowPos: 1,0
       strippingWindowPos: 1,4
       displayName: Eyes
-    - name: acsecsory2
+    - name: accessory2
       slotTexture: acsessory
       slotFlags: EYES
       uiWindowPos: 1,1
       strippingWindowPos: 1,3
       displayName: Eyes
-    - name: acsecsory3
+    - name: accessory3
       slotTexture: acsessory
       slotFlags: EYES
       uiWindowPos: 1,2

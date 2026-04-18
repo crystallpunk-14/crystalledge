@@ -19,10 +19,12 @@
       - CEDamageable
   - type: StatusEffectAlert
     alert: CEStrength
-  - type: CEStrengthStatusEffect
+  - type: CEBonusDamageStatusEffect
     bonusDamagePerStack:
       types:
         Physical: 1
+    attackTypes:
+    - Melee
   - type: CEStatusEffectStack
     stackDelta: -1
     baseDuration: 1
