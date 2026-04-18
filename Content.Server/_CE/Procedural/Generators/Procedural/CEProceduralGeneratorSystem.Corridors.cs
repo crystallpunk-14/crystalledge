@@ -35,7 +35,9 @@ public sealed partial class CEProceduralGeneratorSystem
         // Index rooms.
         var roomByIndex = new Dictionary<int, CEProceduralAbstractRoom>();
         foreach (var room in comp.Rooms)
+        {
             roomByIndex[room.Index] = room;
+        }
 
         // Resolve the corridor tile.
         var tileDef = _tileDef[config.CorridorTile];

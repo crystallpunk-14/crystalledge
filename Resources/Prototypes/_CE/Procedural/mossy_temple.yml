@@ -473,6 +473,36 @@
   zLevelMap: MossyTemple
   offset: -27, 10
 
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_LargeCicleRiver
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 15, 15
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -18, 23
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_LargeCave
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 15, 15
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -34, 23
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_LargeMaze
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomExit
+  size: 15, 15
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -18, 39
+
 # Blessing
 
 - type: dungeonRoom3d
