@@ -4,7 +4,7 @@
     children:
     - id: CEWeaponMagicStaffWater
     - id: CEWeaponHeavyClub
-    - id: CEWeaponMagicStaffFire
+    - id: CEWeaponMagicStaffSparkle
     - id: CEWeaponMagicStaffIce
     - id: CEWeaponSkimitarIron
     - id: CEWeaponSpearIron

@@ -51,7 +51,6 @@
   - type: Clothing
     slots:
     - neck
-  - type: Wieldable
 
 - type: entity
   id: CEProjectileMagicHealing

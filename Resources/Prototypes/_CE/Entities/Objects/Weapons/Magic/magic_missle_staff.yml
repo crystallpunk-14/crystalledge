@@ -1,11 +1,11 @@
 - type: entity
   parent: CEBaseWeapon
-  id: CEWeaponMagicStaffFire
-  name: fire staff
-  description: A staff imbued with fire magic. Launches fiery projectiles at enemies.
+  id: CEWeaponMagicStaffMagicMissile
+  name: magic missile staff
+  description: "A mage's standard weapon that fires compressed beams of energy."
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/Staff/fire_staff.rsi
+    sprite: _CE/Objects/Weapons/Staff/magic_missile_staff.rsi
     layers:
     - state: icon
     - state: orb
@@ -14,18 +14,15 @@
     effectSlots:
       OnHit:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicFire
+        prototype: CEProjectileMagicMissile
         projectileSpeed: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.78
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicMissile
+        projectileSpeed: 10
+        projectileMaxSpeed: 5
+        projectileCount: 5
+        spread: 150
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -35,25 +32,24 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-      Secondary: 1
+      Secondary: 4
   - type: Clothing
     slots:
     - neck
-  - type: Wieldable
 
 - type: entity
-  id: CEProjectileMagicFire
-  name: fire bolt
+  id: CEProjectileMagicMissile
+  name: magic missile
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/fire_status.rsi
+    sprite: _CE/Effects/magic_missile.rsi
     layers:
     - state: effect
       shader: unshaded
   - type: PointLight
-    color: "#ff9603"
+    color: "#ffffff"
     radius: 1.5
     energy: 3.0
   - type: CEProjectile
@@ -62,4 +58,4 @@
       attackType: Ranged
       damage:
         types:
-          Fire: 5
+          Physical: 5

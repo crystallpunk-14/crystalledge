@@ -28,6 +28,7 @@ CEZLevelLadderStoneCornerInner: null
 
 CEConsumablePotionStaminaMedium: CEConsumablePotionFireShield
 CEConsumablePotionStaminaSmall: CEConsumablePotionFireShield
+CEWeaponMagicStaffFire: CEWeaponMagicStaffMagicMissile
 
 # CrystallEdge zone end
 

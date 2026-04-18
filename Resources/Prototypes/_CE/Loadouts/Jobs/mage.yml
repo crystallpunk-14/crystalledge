@@ -86,13 +86,19 @@
   name: ce-loadout-weapon
   minLimit: 1
   loadouts:
-  - CEWeaponMagicStaffFire
+  - CEWeaponMagicStaffMagicMissile
+  - CEWeaponMagicStaffSparkle
   - CEWeaponMagicStaffIce
 
 - type: loadout
-  id: CEWeaponMagicStaffFire
+  id: CEWeaponMagicStaffMagicMissile
   equipment:
-    neck: CEWeaponMagicStaffFire
+    neck: CEWeaponMagicStaffMagicMissile
+
+- type: loadout
+  id: CEWeaponMagicStaffSparkle
+  equipment:
+    neck: CEWeaponMagicStaffSparkle
 
 - type: loadout
   id: CEWeaponMagicStaffIce
