@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/18/2026 08:39:21
-  entityCount: 3945
+  time: 04/18/2026 09:52:13
+  entityCount: 3973
 maps:
 - 1
 grids:
@@ -4164,6 +4164,174 @@ entities:
     - type: Transform
       anchored: False
       pos: 0.5,-31.5
+      parent: 1
+  - uid: 3946
+    components:
+    - type: Transform
+      anchored: False
+      pos: -23.5,29.5
+      parent: 1
+  - uid: 3947
+    components:
+    - type: Transform
+      anchored: False
+      pos: -22.5,29.5
+      parent: 1
+  - uid: 3948
+    components:
+    - type: Transform
+      anchored: False
+      pos: -21.5,31.5
+      parent: 1
+  - uid: 3949
+    components:
+    - type: Transform
+      anchored: False
+      pos: -22.5,31.5
+      parent: 1
+  - uid: 3950
+    components:
+    - type: Transform
+      anchored: False
+      pos: -23.5,31.5
+      parent: 1
+  - uid: 3951
+    components:
+    - type: Transform
+      anchored: False
+      pos: -24.5,31.5
+      parent: 1
+  - uid: 3952
+    components:
+    - type: Transform
+      anchored: False
+      pos: -24.5,32.5
+      parent: 1
+  - uid: 3953
+    components:
+    - type: Transform
+      anchored: False
+      pos: -23.5,32.5
+      parent: 1
+  - uid: 3954
+    components:
+    - type: Transform
+      anchored: False
+      pos: -22.5,32.5
+      parent: 1
+  - uid: 3955
+    components:
+    - type: Transform
+      anchored: False
+      pos: -23.5,33.5
+      parent: 1
+  - uid: 3956
+    components:
+    - type: Transform
+      anchored: False
+      pos: -28.5,27.5
+      parent: 1
+  - uid: 3957
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,27.5
+      parent: 1
+  - uid: 3958
+    components:
+    - type: Transform
+      anchored: False
+      pos: -30.5,27.5
+      parent: 1
+  - uid: 3959
+    components:
+    - type: Transform
+      anchored: False
+      pos: -30.5,26.5
+      parent: 1
+  - uid: 3960
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,26.5
+      parent: 1
+  - uid: 3961
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,29.5
+      parent: 1
+  - uid: 3962
+    components:
+    - type: Transform
+      anchored: False
+      pos: -31.5,29.5
+      parent: 1
+  - uid: 3963
+    components:
+    - type: Transform
+      anchored: False
+      pos: -30.5,29.5
+      parent: 1
+  - uid: 3964
+    components:
+    - type: Transform
+      anchored: False
+      pos: -30.5,30.5
+      parent: 1
+  - uid: 3965
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,30.5
+      parent: 1
+  - uid: 3966
+    components:
+    - type: Transform
+      anchored: False
+      pos: -30.5,33.5
+      parent: 1
+  - uid: 3967
+    components:
+    - type: Transform
+      anchored: False
+      pos: -30.5,34.5
+      parent: 1
+  - uid: 3968
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,33.5
+      parent: 1
+  - uid: 3969
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,34.5
+      parent: 1
+  - uid: 3970
+    components:
+    - type: Transform
+      anchored: False
+      pos: -28.5,33.5
+      parent: 1
+  - uid: 3971
+    components:
+    - type: Transform
+      anchored: False
+      pos: -28.5,34.5
+      parent: 1
+  - uid: 3972
+    components:
+    - type: Transform
+      anchored: False
+      pos: -28.5,35.5
+      parent: 1
+  - uid: 3973
+    components:
+    - type: Transform
+      anchored: False
+      pos: -29.5,35.5
       parent: 1
 - proto: CEChestWoodenFilled
   entities:
