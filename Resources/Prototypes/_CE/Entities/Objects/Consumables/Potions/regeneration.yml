@@ -1,0 +1,40 @@
+- type: entity
+  id: CEConsumablePotionRegeneration
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionStar
+  name: regeneration potion
+  description: Slowly restores health over time.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#ef1deb"
+  - type: CEConsumable
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectRegeneration
+      stack: 6
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectRegeneration
+        stack: 3
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible

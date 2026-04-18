@@ -4,6 +4,8 @@
     children:
     - id: CEConsumablePotionHealingMedium
       weight: 0.5
+    - id: CEConsumablePotionRegeneration
+      weight: 0.75
     - id: CEConsumablePotionHealingSmall
 
 - type: entityTable
