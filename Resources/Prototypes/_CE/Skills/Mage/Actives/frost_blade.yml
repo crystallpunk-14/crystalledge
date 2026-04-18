@@ -1,0 +1,142 @@
+- type: skill
+  parent: BaseMageSkill
+  id: FrostBlade
+  effect: !type:AddAction
+    action: CEActionFrostBlade
+
+- type: entity
+  id: CEActionFrostBlade
+  parent: CEActionSpellBase
+  name: Frost blade
+  description: You create a powerful temporary weapon made of ice that deals high damage and [color=#30caf5]freezes[/color] targets.
+  components:
+  - type: CEActionManaCost
+    manaCost: 1
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Objects/Weapons/Sword/ice_temporary.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationFrostBlade
+
+- type: entityEffectAnimation
+  id: AnimationFrostBlade
+  movementSpeed: 0.3
+  duration: 1.5
+  lockRotation: true
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectFrostBladeSpawn
+    0.9:
+    - !type:SpawnInHandEntity
+      spawns:
+      - CEWeaponSwordFrostTemporary
+
+- type: entity
+  id: CEWeaponSwordFrostTemporary
+  parent: CEBaseWeapon
+  name: frost blade
+  suffix: 120 seconds
+  description: A magical weapon woven from ice, which will soon melt away.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Sword/ice_temporary.rsi
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.7
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 7
+              Cold: 9
+        - !type:FreezeEntity
+          stacks: 1
+          maxStacks: 10
+        - !type:SpawnEntity
+          spawns:
+          - CEFreezeEffect
+          reparent: true
+          effectTarget: Target
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 180
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 7
+              Cold: 9
+        - !type:FreezeEntity
+          stacks: 1
+          maxStacks: 10
+        - !type:SpawnEntity
+          spawns:
+          - CEFreezeEffect
+          reparent: true
+          effectTarget: Target
+    animations:
+      Primary:
+      - anim: SwordAttackLight1
+      - anim: SwordAttackLight2
+      Secondary:
+      - anim: SwordAttackHeavy1
+        speed: 1.2
+      - anim: SwordAttackHeavy2
+        speed: 1.2
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 1
+  - type: Clothing
+    slots:
+    - neck
+  - type: TimedDespawn
+    lifetime: 120
+  - type: PointLight
+    color: "#159fee"
+    radius: 2.5
+    energy: 2
+
+- type: entity
+  id: CEEffectFrostBladeSpawn
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/ice_consume.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#159fee"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

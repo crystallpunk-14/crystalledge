@@ -180,11 +180,11 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        int totalDamage;
+        // CrystallEdge: use per-type armor-modified specifier instead of a ratio applied to original damage,
+        // so mixed-type attacks apply flat/multiplier armor correctly to each type independently.
+        var effectiveDamage = damage;
 
-        if (ignoreArmor)
-            totalDamage = damage.Total;
-        else
+        if (!ignoreArmor)
         {
             var modifiedDamage = new CEDamageSpecifier(damage);
 
@@ -194,19 +194,17 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
             if (beforeEv.Cancelled)
                 return false;
 
-            totalDamage = beforeEv.Damage.Total;
+            effectiveDamage = beforeEv.Damage;
         }
+
+        var totalDamage = effectiveDamage.Total;
 
         if (totalDamage <= 0)
             return false;
 
-        // Build the final specifier reflecting armor modifications.
-        CEDamageSpecifier? finalSpecifier = null;
-        if (damage.Types.Count > 0 && damage.Total > 0)
-        {
-            var ratio = totalDamage / (float) damage.Total;
-            finalSpecifier = damage * ratio;
-        }
+        // Build the final specifier using the armor-modified per-type values directly.
+        CEDamageSpecifier? finalSpecifier = effectiveDamage.Types.Count > 0 ? effectiveDamage : null;
+        // CrystallEdge end
 
         var changed = ChangeDamage(ent, totalDamage, source, interruptDoAfters, finalSpecifier);
 

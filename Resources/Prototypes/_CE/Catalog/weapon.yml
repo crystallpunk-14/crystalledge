@@ -2,15 +2,14 @@
   id: CECommonWeapon
   table: !type:GroupSelector
     children:
-    - id: CEWeaponMagicStaffWater
     - id: CEWeaponHeavyClub
     - id: CEWeaponMagicStaffSparkle
+    - id: CEWeaponMagicStaffMagicMissile
     - id: CEWeaponMagicStaffIce
     - id: CEWeaponSkimitarIron
     - id: CEWeaponSpearIron
     - id: CEWeaponSwordIron
     - id: CEWeaponStaffWooden
-
 
 - type: entityTable
   id: CEUncommonWeapon
@@ -20,6 +19,7 @@
     - id: CEWeaponMagicStaffHealing
     - id: CEWeaponSwordBone
     - id: CEWeaponSpearSoulCatcher
+    - id: CEWeaponMagicStaffWater
 
 - type: entityTable
   id: CERandomWeapon
