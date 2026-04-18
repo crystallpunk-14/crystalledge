@@ -9,6 +9,10 @@
      inverted: true
      jobs:
      - CEPriest #This skill is useless for priest
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEMage #This skill is useless for mage
 
 - type: entity
   id: CEActionSpellSelfTreatment

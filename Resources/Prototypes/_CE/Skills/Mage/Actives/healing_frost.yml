@@ -1,0 +1,82 @@
+- type: skill
+  parent: BaseMageSkill
+  id: HealingFrost
+  effect: !type:AddAction
+    action: CEActionHealingFrost
+
+- type: entity
+  id: CEActionHealingFrost
+  parent: CEActionSpellBase
+  name: Healing Frost
+  description: You restore [color=#1defa9]15 health[/color] to a target and apply [color=#30caf5]5 freeze stacks[/color].
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: CEActionManaCost
+    manaCost: 4
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: _CE/Skills/Mage/healing_frost.rsi
+      state: icon
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CEDamageable
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationHealingFrost
+
+- type: entityEffectAnimation
+  id: AnimationHealingFrost
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: Target
+      spawns:
+      - CEEffectHealingFrostVFX
+    0.5:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: Target
+      spawns:
+      - CEEffectHealingGeneric
+    - !type:Heal
+      amount: 15
+    - !type:FreezeArea
+      radius: 1
+      maxStacks: 5
+
+- type: entity
+  id: CEEffectHealingFrostVFX
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/ice_consume.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

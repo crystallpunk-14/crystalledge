@@ -1,0 +1,21 @@
+- type: skill
+  parent: BaseMageSkill
+  id: DanceOfFireAndIce
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectDanceOfFireAndIce
+
+- type: entity
+  id: CEStatusEffectDanceOfFireAndIce
+  name: Dance of Fire and Ice
+  description: You deal [color=#ff8a05]5 bonus fire damage[/color] to [color=#05eeff]frozen[/color] targets and [color=#05eeff]5 bonus cold damage[/color] to [color=#ff8a05]burning[/color] targets.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEDanceOfFireAndIce
+  - type: CEDanceOfFireAndIce
+
+- type: alert
+  id: CEDanceOfFireAndIce
+  icons:
+  - sprite: _CE/Skills/Mage/dance_of_fire_and_ice.rsi
+    state: icon
