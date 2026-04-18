@@ -436,4 +436,16 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Tudibidab
+  saySound:
+    path: /Audio/_CE/Voice/tudibidab.ogg
+  askSound:
+    path: /Audio/_CE/Voice/tudibidab_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/tudibidab_e.ogg
+  syllableInterval: 0.08
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
 

@@ -159,3 +159,8 @@
   license: "All rights reserved"
   copyright: "Voice recorded by Viator"
   source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["tudibidab.ogg", "tudibidab_e.ogg", "tudibidab_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Tudibidab"
+  source: "https://github.com/crystallpunk-14/crystalledge"
