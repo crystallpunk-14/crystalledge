@@ -10,6 +10,7 @@
   name: Mana Steal
   description: Steal [color=#3082f5]4 mana[/color] from the selected target and transfer it to yourself.
   components:
+  - type: CEActionDangerous
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5

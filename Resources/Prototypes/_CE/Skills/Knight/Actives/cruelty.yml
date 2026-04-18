@@ -13,6 +13,7 @@
   name: Cruelty
   description: Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.
   components:
+  - type: CEActionDangerous
   - type: CEActionManaCost
     manaCost: 4
   - type: CEActionWeaponRequired

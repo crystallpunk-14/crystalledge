@@ -12,7 +12,6 @@
     target: CEWallDirt
     chance: 0.05
   - !type:CEBiomeApplyPostProcess
-    seed: 42
     layers:
     - !type:BiomeTileLayer
       tile: CEDirt
@@ -373,6 +372,9 @@
   - type: Gravity
     enabled: true
     inherent: true
+  - type: CEMapStatusEffects
+    effects:
+    - CEStatusEffectPacifism
 
 - type: entity
   id: CEMapEndText

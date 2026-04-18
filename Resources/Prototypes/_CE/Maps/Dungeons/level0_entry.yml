@@ -15,6 +15,9 @@
     - type: SunShadow
     - type: MapLight
       ambientLightColor: "#c8fdff"
+    - type: CEMapStatusEffects
+      effects:
+      - CEStatusEffectPacifism
 
 - type: gameMap
   id: CELevel0Entry
@@ -49,3 +52,6 @@
             - type: SunShadow
             - type: MapLight
               ambientLightColor: "#75e3ff"
+            - type: CEMapStatusEffects
+              effects:
+              - CEStatusEffectPacifism

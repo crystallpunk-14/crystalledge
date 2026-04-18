@@ -10,6 +10,7 @@
   name: Frost blade
   description: You create a powerful temporary weapon made of ice that deals high damage and [color=#30caf5]freezes[/color] targets.
   components:
+  - type: CEActionDangerous
   - type: CEActionManaCost
     manaCost: 3
   - type: Action

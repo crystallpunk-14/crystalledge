@@ -36,3 +36,6 @@ ce-alert-fight-for-survival-desc = Вы сопротивляетесь медл�
 
 ce-alert-strength-name = Сила
 ce-alert-strength-desc = Ваши атаки в ближнем бою наносят дополнительный урон.
+
+ce-alert-pacifism-name = Безопасная зона
+ce-alert-pacifism-desc = The soothing effect of a safe shelter prevents you from harming those around you.

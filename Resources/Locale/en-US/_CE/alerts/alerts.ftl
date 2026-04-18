@@ -36,3 +36,6 @@ ce-alert-fight-for-survival-desc = You are resisting death as it slowly approach
 
 ce-alert-strength-name = Strength
 ce-alert-strength-desc = Your melee attacks deal bonus damage.
+
+ce-alert-pacifism-name = Safe Zone
+ce-alert-pacifism-desc = You are in a safe zone. All combat is disabled.
