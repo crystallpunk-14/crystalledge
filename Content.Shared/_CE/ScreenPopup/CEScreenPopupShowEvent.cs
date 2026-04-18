@@ -13,10 +13,10 @@ namespace Content.Shared._CE.ScreenPopup;
 public sealed class CEScreenPopupShowEvent : EntityEventArgs
 {
     /// <summary>Localization key for the title, resolved per-client locale.</summary>
-    public LocId? TitleLocId;
+    public LocId? Title;
 
     /// <summary>Localization key for the description, resolved per-client locale.</summary>
-    public LocId? DescLocId;
+    public LocId? Desc;
 
     /// <summary>Optional sound played when the popup is shown.</summary>
     public SoundSpecifier? Sound;

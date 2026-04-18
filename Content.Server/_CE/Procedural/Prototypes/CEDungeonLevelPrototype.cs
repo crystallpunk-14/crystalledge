@@ -37,7 +37,7 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     /// When set, the client resolves this key in its own locale.
     /// </summary>
     [DataField]
-    public LocId? NameLoc;
+    public LocId? Name;
 
     /// <summary>
     /// Localization key for the description shown in the entry popup.

@@ -58,7 +58,7 @@ public sealed partial class CEDungeonInstanceSystem
             return;
 
         // Only show when at least a name or description localization key is configured.
-        if (!proto.NameLoc.HasValue && !proto.Desc.HasValue)
+        if (!proto.Name.HasValue && !proto.Desc.HasValue)
             return;
 
         // Ensure per-player visit tracking and skip if already announced.
@@ -77,8 +77,8 @@ public sealed partial class CEDungeonInstanceSystem
 
         var ev = new CEScreenPopupShowEvent
         {
-            TitleLocId = proto.NameLoc,
-            DescLocId = proto.Desc,
+            Title = proto.Name,
+            Desc = proto.Desc,
             Sound = proto.EntrySound,
         };
         RaiseNetworkEvent(ev, actor.PlayerSession);

@@ -81,8 +81,8 @@ public sealed class CEClientScreenPopupSystem : EntitySystem
         _isPlaying = true;
 
         // Resolve localized strings per the client's locale.
-        var title = ev.TitleLocId.HasValue ? _loc.GetString(ev.TitleLocId.Value) : string.Empty;
-        var desc = ev.DescLocId.HasValue ? _loc.GetString(ev.DescLocId.Value) : string.Empty;
+        var title = ev.Title.HasValue ? _loc.GetString(ev.Title.Value) : string.Empty;
+        var desc = ev.Desc.HasValue ? _loc.GetString(ev.Desc.Value) : string.Empty;
 
         _ui.AnimationStart(title, desc);
     }
