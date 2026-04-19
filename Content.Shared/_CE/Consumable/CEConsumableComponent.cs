@@ -52,4 +52,11 @@ public sealed partial class CEConsumableComponent : Component
     /// </summary>
     [DataField]
     public EntityWhitelist? Blacklist;
+
+    /// <summary>
+    /// If false, the item is not deleted after use and can be consumed repeatedly.
+    /// Defaults to true (single-use behavior).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool SingleUse = true;
 }

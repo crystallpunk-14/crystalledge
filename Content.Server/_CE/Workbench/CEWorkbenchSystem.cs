@@ -33,6 +33,7 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
     [Dependency] private readonly PhysicsSystem _physics = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly CERecipeKnowledgeSystem _recipeKnowledge = default!;
 
     private EntityQuery<CEWorkbenchComponent> _workbenchQuery;
     private EntityQuery<ContainerManagerComponent> _containerQuery;
@@ -67,6 +68,7 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
 
     private void OnBeforeUIOpen(Entity<CEWorkbenchComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
+        ent.Comp.CurrentUser = args.User;
         UpdateUIRecipes((ent, ent.Comp));
     }
 
@@ -95,6 +97,10 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
             if (!_proto.Resolve(recipeId, out var indexedRecipe))
                 continue;
 
+            // Only show recipes the current user knows (if they have knowledge tracking)
+            if (entity.Comp.CurrentUser is { } user && !_recipeKnowledge.KnowsRecipe(user, recipeId))
+                continue;
+
             var canCraft = true;
 
             foreach (var requirement in indexedRecipe.Requirements)
@@ -116,6 +122,10 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
 
     private bool CanCraftRecipe(CEWorkbenchRecipePrototype recipe, HashSet<EntityUid> entities, EntityUid? user = null)
     {
+        // Validate the user knows the recipe (server-side)
+        if (user is { } u && !_recipeKnowledge.KnowsRecipe(u, recipe.ID))
+            return false;
+
         foreach (var req in recipe.Requirements)
         {
             if (!req.CheckRequirement(EntityManager, _proto, entities))

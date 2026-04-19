@@ -8,8 +8,4 @@ namespace Content.Server._CE.Workbench.Components;
 [Access(typeof(CEWorkbenchSystem))]
 public sealed partial class CEWorkbenchUserContainersProviderComponent : Component
 {
-    /// <summary>
-    /// The entity currently interacting with this workbench, captured when the UI is opened.
-    /// </summary>
-    public EntityUid? CurrentUser;
 }

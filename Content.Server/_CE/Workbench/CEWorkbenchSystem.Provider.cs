@@ -17,7 +17,6 @@ public sealed partial class CEWorkbenchSystem
         SubscribeLocalEvent<CEWorkbenchContainerProviderComponent, EntInsertedIntoContainerMessage>(OnInsertedToContainer);
         SubscribeLocalEvent<CEWorkbenchContainerProviderComponent, EntRemovedFromContainerMessage>(OnRemovedFromContainer);
 
-        SubscribeLocalEvent<CEWorkbenchUserContainersProviderComponent, BeforeActivatableUIOpenEvent>(OnUserContainersUIOpen);
         SubscribeLocalEvent<CEWorkbenchUserContainersProviderComponent, CEWorkbenchGetResourcesEvent>(OnGetUserContainersResource);
     }
 
@@ -58,14 +57,12 @@ public sealed partial class CEWorkbenchSystem
         UpdateUIRecipes(ent.Owner);
     }
 
-    private void OnUserContainersUIOpen(Entity<CEWorkbenchUserContainersProviderComponent> ent, ref BeforeActivatableUIOpenEvent args)
-    {
-        ent.Comp.CurrentUser = args.User;
-    }
-
     private void OnGetUserContainersResource(Entity<CEWorkbenchUserContainersProviderComponent> ent, ref CEWorkbenchGetResourcesEvent args)
     {
-        if (ent.Comp.CurrentUser is not { } user || TerminatingOrDeleted(user))
+        if (!TryComp<CEWorkbenchComponent>(ent, out var workbench))
+            return;
+
+        if (workbench.CurrentUser is not { } user || TerminatingOrDeleted(user))
             return;
 
         var containerStack = new Stack<ContainerManagerComponent>();

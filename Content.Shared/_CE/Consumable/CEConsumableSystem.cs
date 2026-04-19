@@ -126,8 +126,11 @@ public sealed class CEConsumableSystem : EntitySystem
         }
 
         // Item is depleted (or single-use without charges) — spawn replacement and delete.
-        SpawnReplacement(ent, args.User);
-        PredictedQueueDel(ent.Owner);
+        if (ent.Comp.SingleUse)
+        {
+            SpawnReplacement(ent, args.User);
+            PredictedQueueDel(ent.Owner);
+        }
     }
 
     private void SpawnReplacement(Entity<CEConsumableComponent> ent, EntityUid? user)
