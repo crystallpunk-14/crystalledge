@@ -38,4 +38,4 @@ ce-alert-strength-name = Сила
 ce-alert-strength-desc = Ваши атаки в ближнем бою наносят дополнительный урон.
 
 ce-alert-pacifism-name = Безопасная зона
-ce-alert-pacifism-desc = The soothing effect of a safe shelter prevents you from harming those around you.
+ce-alert-pacifism-desc = Успокаивающий эффект безопасного убежища не позволяет вам причинять вред окружающим.

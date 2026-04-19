@@ -17,6 +17,7 @@ public sealed class CEScreenPopupControl : Control
 {
     private const float FadeDuration = 4f;
     private const float HoldTime = 3f;
+    private const float FadeOutDuration = 2f;
 
     [Dependency] private readonly IResourceCache _resourceCache = default!;
     [Dependency] private readonly FontTagHijackHolder _fontHijack = default!;
@@ -28,6 +29,8 @@ public sealed class CEScreenPopupControl : Control
 
     private float _elapsedTime;
     private float _holdElapsedTime;
+    private float _fadeOutElapsedTime;
+    private bool _completed;
 
     public CEScreenPopupControl()
     {
@@ -91,6 +94,8 @@ public sealed class CEScreenPopupControl : Control
 
         _elapsedTime = 0f;
         _holdElapsedTime = 0f;
+        _fadeOutElapsedTime = 0f;
+        _completed = false;
 
         Modulate = Color.White.WithAlpha(0f);
     }
@@ -99,6 +104,10 @@ public sealed class CEScreenPopupControl : Control
     {
         base.FrameUpdate(args);
 
+        if (_completed)
+            return;
+
+        // Phase 1: fade in.
         if (_elapsedTime < FadeDuration)
         {
             _elapsedTime += args.DeltaSeconds;
@@ -107,8 +116,23 @@ public sealed class CEScreenPopupControl : Control
             return;
         }
 
-        _holdElapsedTime += args.DeltaSeconds;
-        if (_holdElapsedTime >= HoldTime)
+        // Phase 2: hold at full opacity.
+        if (_holdElapsedTime < HoldTime)
+        {
+            _holdElapsedTime += args.DeltaSeconds;
+            Modulate = Color.White;
+            return;
+        }
+
+        // Phase 3: fade out.
+        _fadeOutElapsedTime += args.DeltaSeconds;
+        var fadeAlpha = MathHelper.Lerp(1f, 0f, _fadeOutElapsedTime / FadeOutDuration);
+        Modulate = Color.White.WithAlpha(Math.Max(fadeAlpha, 0f));
+
+        if (_fadeOutElapsedTime >= FadeOutDuration)
+        {
+            _completed = true;
             OnAnimationEnd?.Invoke();
+        }
     }
 }

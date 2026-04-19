@@ -1,7 +1,6 @@
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.ScreenPopup;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 
 namespace Content.Server._CE.Procedural.Instance;
@@ -37,23 +36,8 @@ public sealed partial class CEDungeonInstanceSystem
         if (newMapUid == oldMapUid || newMapUid == null)
             return;
 
-        // Determine the new MapId.
-        if (!TryComp<MapComponent>(newMapUid.Value, out var mapComp))
-            return;
-
-        // Find the dungeon instance that owns this map (inline scan).
-        CEDungeonInstanceComponent? instance = null;
-        var scanQuery = EntityQueryEnumerator<CEDungeonInstanceComponent>();
-        while (scanQuery.MoveNext(out var scanUid, out var scanInst))
-        {
-            if (!GetInstanceMapIds(scanUid).Contains(mapComp.MapId))
-                continue;
-
-            instance = scanInst;
-            break;
-        }
-
-        if (instance == null)
+        // Resolve the owning dungeon instance directly via z-network or map entity.
+        if (!TryResolveInstance(newMapUid.Value, out var instance))
             return;
 
         // Look up the prototype.
