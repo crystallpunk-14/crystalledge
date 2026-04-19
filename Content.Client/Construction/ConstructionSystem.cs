@@ -50,8 +50,10 @@ namespace Content.Client.Construction
             SubscribeNetworkEvent<ResponseConstructionGuide>(OnConstructionGuideReceived);
 
             CommandBinds.Builder
-                .Bind(ContentKeyFunctions.OpenCraftingMenu,
-                    new PointerInputCmdHandler(HandleOpenCraftingMenu, outsidePrediction: true))
+                // CrystallEdge - vanilla crafting binding removed
+                //.Bind(ContentKeyFunctions.OpenCraftingMenu,
+                //    new PointerInputCmdHandler(HandleOpenCraftingMenu, outsidePrediction: true))
+                // CrystallEdge end
                 .Bind(EngineKeyFunctions.Use,
                     new PointerInputCmdHandler(HandleUse, outsidePrediction: true))
                 .Bind(ContentKeyFunctions.EditorFlipObject,

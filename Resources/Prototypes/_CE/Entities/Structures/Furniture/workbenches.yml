@@ -32,6 +32,7 @@
         type: CEWorkbenchBoundUserInterface
   - type: PlaceableSurface
   - type: CEWorkbenchPlaceableProvider
+  - type: CEWorkbenchUserContainersProvider
   - type: ItemPlacer
     maxEntities: 0
   - type: Fixtures

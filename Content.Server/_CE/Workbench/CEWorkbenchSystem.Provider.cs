@@ -1,4 +1,6 @@
+using Content.Server._CE.Workbench.Components;
 using Content.Shared.Placeable;
+using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
 
 namespace Content.Server._CE.Workbench;
@@ -14,6 +16,9 @@ public sealed partial class CEWorkbenchSystem
         SubscribeLocalEvent<CEWorkbenchContainerProviderComponent, CEWorkbenchGetResourcesEvent>(OnGetContainerResource);
         SubscribeLocalEvent<CEWorkbenchContainerProviderComponent, EntInsertedIntoContainerMessage>(OnInsertedToContainer);
         SubscribeLocalEvent<CEWorkbenchContainerProviderComponent, EntRemovedFromContainerMessage>(OnRemovedFromContainer);
+
+        SubscribeLocalEvent<CEWorkbenchUserContainersProviderComponent, BeforeActivatableUIOpenEvent>(OnUserContainersUIOpen);
+        SubscribeLocalEvent<CEWorkbenchUserContainersProviderComponent, CEWorkbenchGetResourcesEvent>(OnGetUserContainersResource);
     }
 
     private void OnGetPlaceableResource(Entity<CEWorkbenchPlaceableProviderComponent> ent, ref CEWorkbenchGetResourcesEvent args)
@@ -51,6 +56,55 @@ public sealed partial class CEWorkbenchSystem
     private void OnRemovedFromContainer(Entity<CEWorkbenchContainerProviderComponent> ent, ref EntRemovedFromContainerMessage args)
     {
         UpdateUIRecipes(ent.Owner);
+    }
+
+    private void OnUserContainersUIOpen(Entity<CEWorkbenchUserContainersProviderComponent> ent, ref BeforeActivatableUIOpenEvent args)
+    {
+        ent.Comp.CurrentUser = args.User;
+    }
+
+    private void OnGetUserContainersResource(Entity<CEWorkbenchUserContainersProviderComponent> ent, ref CEWorkbenchGetResourcesEvent args)
+    {
+        if (ent.Comp.CurrentUser is not { } user || TerminatingOrDeleted(user))
+            return;
+
+        var containerStack = new Stack<ContainerManagerComponent>();
+
+        // Add items held in hands
+        foreach (var held in _hands.EnumerateHeld(user))
+        {
+            args.AddResource(held);
+            if (_containerQuery.TryGetComponent(held, out var cm))
+                containerStack.Push(cm);
+        }
+
+        // Add items equipped in inventory slots (clothing, pockets, etc.)
+        if (_inventory.TryGetSlots(user, out var slots))
+        {
+            foreach (var slot in slots)
+            {
+                if (!_inventory.TryGetSlotEntity(user, slot.Name, out var slotEnt))
+                    continue;
+
+                args.AddResource(slotEnt.Value);
+                if (_containerQuery.TryGetComponent(slotEnt.Value, out var cm))
+                    containerStack.Push(cm);
+            }
+        }
+
+        // Recursively scan all containers
+        while (containerStack.TryPop(out var manager))
+        {
+            foreach (var container in manager.Containers.Values)
+            {
+                foreach (var entity in container.ContainedEntities)
+                {
+                    args.AddResource(entity);
+                    if (_containerQuery.TryGetComponent(entity, out var cm))
+                        containerStack.Push(cm);
+                }
+            }
+        }
     }
 }
 

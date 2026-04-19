@@ -4,10 +4,13 @@ using Content.Server.Popups;
 using Content.Server.Stack;
 using Content.Shared._CE.Workbench;
 using Content.Shared._CE.Workbench.Prototypes;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
 using Content.Shared.UserInterface;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -28,8 +31,11 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
     [Dependency] private readonly ContainerSystem _container = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly PhysicsSystem _physics = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
 
     private EntityQuery<CEWorkbenchComponent> _workbenchQuery;
+    private EntityQuery<ContainerManagerComponent> _containerQuery;
 
     public override void Initialize()
     {
@@ -38,6 +44,7 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
         InitUserCrafter();
 
         _workbenchQuery = GetEntityQuery<CEWorkbenchComponent>();
+        _containerQuery = GetEntityQuery<ContainerManagerComponent>();
 
         SubscribeLocalEvent<CEWorkbenchComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEWorkbenchComponent, BeforeActivatableUIOpenEvent>(OnBeforeUIOpen);
