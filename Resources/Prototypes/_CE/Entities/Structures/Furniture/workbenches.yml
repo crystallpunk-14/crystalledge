@@ -83,3 +83,5 @@
     destroyThreshold: 50
     destroySound:
       collection: WoodDestroy
+  - type: CEFlammable
+    stackDelta: 1

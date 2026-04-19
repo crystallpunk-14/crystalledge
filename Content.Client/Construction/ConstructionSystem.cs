@@ -50,10 +50,8 @@ namespace Content.Client.Construction
             SubscribeNetworkEvent<ResponseConstructionGuide>(OnConstructionGuideReceived);
 
             CommandBinds.Builder
-                // CrystallEdge - vanilla crafting binding removed
-                //.Bind(ContentKeyFunctions.OpenCraftingMenu,
-                //    new PointerInputCmdHandler(HandleOpenCraftingMenu, outsidePrediction: true))
-                // CrystallEdge end
+                .Bind(ContentKeyFunctions.OpenCraftingMenu,
+                    new PointerInputCmdHandler(HandleOpenCraftingMenu, outsidePrediction: true))
                 .Bind(EngineKeyFunctions.Use,
                     new PointerInputCmdHandler(HandleUse, outsidePrediction: true))
                 .Bind(ContentKeyFunctions.EditorFlipObject,
@@ -234,8 +232,9 @@ namespace Content.Client.Construction
             if (entity == default)
                 return false;
 
-            // TODO: Decide if entity can craft, using capabilities or something
-            return true;
+            // CrystallEdge: vanilla crafting disabled — always unavailable
+            return false;
+            // CrystallEdge end
         }
 
         private bool HandleUse(in PointerInputCmdHandler.PointerInputCmdArgs args)
