@@ -91,6 +91,7 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
 
         var resources = getResource.Resources;
 
+
         var recipes = new List<CEWorkbenchUiRecipesEntry>();
         foreach (var recipeId in entity.Comp.Recipes)
         {
@@ -98,7 +99,10 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
                 continue;
 
             // Only show recipes the current user knows (if they have knowledge tracking)
-            if (entity.Comp.CurrentUser is { } user && !_recipeKnowledge.KnowsRecipe(user, recipeId))
+            if (entity.Comp.CurrentUser is null)
+                continue;
+
+            if (!_recipeKnowledge.KnowsRecipe(entity.Comp.CurrentUser.Value, recipeId))
                 continue;
 
             var canCraft = true;

@@ -1,0 +1,11 @@
+- type: CERecipe
+  id: CEWeaponStaffWooden
+  tag: CERecipeWorkbench
+  category: Weapon
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEWeaponSpearIron
+    count: 1
+  result: CEWeaponStaffWooden
+  resultCount: 1

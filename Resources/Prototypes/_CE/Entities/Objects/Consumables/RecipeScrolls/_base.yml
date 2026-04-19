@@ -25,4 +25,4 @@
     effects:
     - !type:LearnWorkbenchRecipes
       recipes:
-      - CEWeaponStaffWoodenRecipe
+      - CEWeaponStaffWooden

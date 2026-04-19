@@ -20,11 +20,7 @@ public sealed class CERecipeKnowledgeSystem : EntitySystem
         if (!Resolve(target, ref component, false))
             return false;
 
-        var added = component.KnownRecipes.Add(recipe);
-        if (added)
-            Dirty(target, component);
-
-        return added;
+        return component.KnownRecipes.Add(recipe);
     }
 
     /// <summary>
@@ -38,11 +34,7 @@ public sealed class CERecipeKnowledgeSystem : EntitySystem
         if (!Resolve(target, ref component, false))
             return false;
 
-        var removed = component.KnownRecipes.Remove(recipe);
-        if (removed)
-            Dirty(target, component);
-
-        return removed;
+        return component.KnownRecipes.Remove(recipe);
     }
 
     /// <summary>
