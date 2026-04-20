@@ -73,6 +73,10 @@
     footstepSoundCollection:
       collection: FootstepWood
   - type: CEWorkbench
+    craftSound:
+      path: /Audio/Effects/Chemistry/bubbles.ogg
+      params:
+        variation: 0.1
     recipeTags:
     - CERecipeAlchemyTable
   - type: CEArmor
