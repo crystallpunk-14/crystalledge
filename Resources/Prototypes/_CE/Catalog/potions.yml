@@ -28,6 +28,17 @@
       weight: 0.5
 
 - type: entityTable
+  id: CEEmptyVials
+  table: !type:GroupSelector
+    children:
+    - id: CEPotionEmptyMedium
+    - id: CEPotionEmptySmall
+    - id: CEPotionEmptyCube
+    - id: CEPotionEmptyStar
+    - id: CEGlassShard
+      weight: 0.5
+
+- type: entityTable
   id: CERandomPotion
   table: !type:GroupSelector
     children:

@@ -1,0 +1,67 @@
+- type: entity
+  abstract: true
+  id: CEBaseKnowledgeBook
+  categories: [ ForkFiltered ]
+  parent: BaseItem
+  name: knowledge scroll
+  description: An ancient scroll containing knowledge of item creation. Read it to learn recipes.
+  components:
+  - type: Item
+    size: Tiny
+    shape:
+    - 0, 0, 0, 1
+  - type: Sprite
+    sprite: _CE/Objects/Bureaucracy/books.rsi
+  - type: CEKnowledgeBook
+    useDelay: 1
+  - type: Tag
+    tags:
+    - Book
+
+- type: entity
+  parent: CEBaseKnowledgeBook
+  id: CEKnowledgeBook_BasicAlchemy
+  name: basic alchemy
+  description: A Guide to Alchemy for Complete Beginners. This book describes basic recipes for brewing the most common and simple potions
+  components:
+  - type: Sprite
+    state: basic_alchemy
+  - type: CEKnowledgeBook
+    recipes:
+    - CEConsumablePotionManaSmall
+    - CEConsumablePotionManaMedium
+    - CEConsumablePotionHealingSmall
+    - CEConsumablePotionHealingMedium
+
+
+
+
+- type: entity
+  id: CEEffectKnowledgeSparks
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: knowledge sparks
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/knowledge_spark.rsi
+    layers:
+    - state: sparks
+      shader: unshaded
+  - type: PointLight
+    color: "#fff15b"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 0.85
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 0.85
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

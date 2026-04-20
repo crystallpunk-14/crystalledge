@@ -1,0 +1,5 @@
+- type: entityTable
+  id: CECommonBooks
+  table: !type:GroupSelector
+    children:
+    - id: CEKnowledgeBook_BasicAlchemy

@@ -76,3 +76,8 @@
   # source: https://freesound.org/people/Fission9/sounds/474850/
   # source: https://pixabay.com/sound-effects/rubber-stretch-sound-effect-201310/ (Pixabay license)
   # source: https://pixabay.com/sound-effects/fx-collection-of-flame-sword-swoosh-sound-design-elements-275902/ (Pixabay license)
+
+- files: ["knowledge_learned.ogg"]
+  license: "CC-BY-SA-4.0"
+  copyright: 'Created by Headphaze on Freesound.org'
+  source: "https://freesound.org/people/Headphaze/sounds/277033/"

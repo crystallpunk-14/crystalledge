@@ -61,20 +61,20 @@
 - type: entity
   parent:
   - CEBaseWorkbench
-  id: CEWorkbench
-  name: workbench
-  description: Table for the production of various basic tools.
+  id: CEWorkbenchAlchemyTable
+  name: alchemy lab
+  description: A small setup with everything needed for brewing potions
   components:
   - type: Sprite
-    state: workbench
+    state: alchemy_table
   - type: Icon
-    state: workbench
+    state: alchemy_table
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepWood
   - type: CEWorkbench
     recipeTags:
-    - CERecipeWorkbench
+    - CERecipeAlchemyTable
   - type: CEArmor
     flat:
       Physical: 5
@@ -83,5 +83,16 @@
     destroyThreshold: 50
     destroySound:
       collection: WoodDestroy
+    lootTable: !type:AllSelector
+      children:
+      - !type:GroupSelector
+        rolls: !type:RangeNumberSelector
+          range: 1, 3
+        children:
+        - !type:NestedSelector
+          tableId: CERandomFlowers
+        - !type:NestedSelector
+          tableId: CEEmptyVials
+          weight: 2
   - type: CEFlammable
     stackDelta: 1
