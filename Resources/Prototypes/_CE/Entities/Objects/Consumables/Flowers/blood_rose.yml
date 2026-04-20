@@ -1,0 +1,41 @@
+- type: entity
+  id: CEConsumableBloodRose
+  parent: BaseItem
+  categories: [ ForkFiltered ]
+  name: blood rose
+  description: A scarlet rose that grows in places where much blood has been shed. In the right hands, it serves as an ingredient for healing potions.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Flowers/blood_rose.rsi
+    layers:
+    - state: base1
+      map: ["random"]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+    - random:
+        base1: ""
+        base2: ""
+  - type: Clothing 
+    sprite: _CE/Objects/Consumable/Flowers/blood_rose.rsi
+    slots:
+    - head 
+  - type: Foldable
+    canFoldInsideContainer: true
+    unfoldVerbText: fold-flip-verb
+    foldVerbText: fold-flip-verb
+  - type: FoldableClothing
+    foldedEquippedPrefix: flipped
+    foldedHeldPrefix: flipped
+  - type: CEConsumable
+    useSound:
+      collection: eating
+    effects:
+    - !type:Heal
+      amount: 5
+    - !type:ApplyStatusEffectStack
+      effectTarget: Target
+      statusEffect: CEStatusEffectPoison
+      stack: 2

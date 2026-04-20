@@ -3,6 +3,7 @@
   table: !type:GroupSelector
     children:
     - id: CEConsumableBlueAelyta
+    - id: CEConsumableBloodRose
 
 
 - type: entityTable
@@ -10,6 +11,7 @@
   table: !type:GroupSelector
     children:
     - id: CEGatherableBlueAelyta
+    - id: CEGatherableBloodRose
 
 - type: entity
   id: CESpawnerRandomFlowers
