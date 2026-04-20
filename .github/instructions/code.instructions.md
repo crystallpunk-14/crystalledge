@@ -30,7 +30,7 @@ CrystallEdge uses an ECS architecture:
 - Components should not contain logic; systems should process component data
 - Use `[Dependency]` for dependency injection
 - Use `EntityQuery<T>` for performance-critical component lookups
-- Никогда не сохраняй данные внутрни систем, они не сохраняются при сохранении и загрузки игры.
+- Никогда не сохраняй данные внутри систем, они не сохраняются при сохранении и загрузки игры.
 
 ### Example System Structure
 ```csharp
