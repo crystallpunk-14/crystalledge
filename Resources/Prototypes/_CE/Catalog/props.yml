@@ -10,6 +10,7 @@
 - type: entity
   id: CESpawnerRandomDungeonProp
   name: random dungeon prop spawner
+  suffix: 10%
   parent: MarkerBase
   categories: [ ForkFiltered ]
   components:

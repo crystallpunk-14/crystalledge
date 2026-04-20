@@ -123,6 +123,20 @@
         domainWarpAmp: 120
       entities:
         - CERandomBushOffsetSpawner
+    - !type:BiomeEntityLayer # Random herbs
+      threshold: 0.7
+      noise:
+        seed: 29
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+        - CESpawnerRandomFlowers
     - !type:BiomeEntityLayer # God rays!
       threshold: 0.3
       noise:
@@ -376,36 +390,7 @@
     effects:
     - CEStatusEffectPacifism
 
-- type: entity
-  id: CEMapEndText
-  parent: MapText
-  categories: [ ForkFiltered ]
-  name: Map end text
-  components:
-  - type: MapText
-    text: "This is the end of the demo! Thanks for playing :). \n The next level will be incredibly, absurdly difficult—meaning you'll most likely die."
 
-
-- type: entity
-  id: CEMapStartText
-  parent: MapText
-  categories: [ ForkFiltered ]
-  name: Map start text EN
-  components:
-  - type: MapText
-    text: "A maximum of 4 players can enter the portal at the same time. \nA short demo adventure awaits you, spanning 4 floors that gradually get more challenging. \nYou may randomly encounter other groups of players inside, and it’s up to you to decide whether you’re friends or foes.\nOn each level, there is 1 statue that will boost your character’s stats.\nYour goal is to reach the end and have fun!"
-
-- type: entity
-  id: CEMapStartBlockedText
-  parent: MapText
-  categories: [ ForkFiltered ]
-  name: Map blocked text
-  components:
-  - type: MapText
-    text: "The playtest is coming to an end. You can no longer start new runs. \nWe’re waiting for players to finish their adventures before shutting down the server."
-
-
-# Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
   id: MossyTemple5
   parent:
@@ -414,7 +399,7 @@
   name: ce-dungeon-mossy-temple-5-name
   desc: ce-dungeon-mossy-temple-5-desc
   exits:
-    default: MossyTemple5 # Loops back for now
+    default: MossyTempleSafe # Loops back for now
   config:
     !type:CEProceduralConfig
     generalCount:
@@ -447,3 +432,36 @@
       cost: 5
     - proto: CEMobFireConstruct
       cost: 10
+
+
+
+
+
+
+- type: entity
+  id: CEMapEndText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map end text
+  components:
+  - type: MapText
+    text: "This is the end of the demo! Thanks for playing :). \n The next level will be incredibly, absurdly difficult—meaning you'll most likely die."
+
+
+- type: entity
+  id: CEMapStartText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map start text EN
+  components:
+  - type: MapText
+    text: "A maximum of 4 players can enter the portal at the same time. \nA short demo adventure awaits you, spanning 4 floors that gradually get more challenging. \nYou may randomly encounter other groups of players inside, and it’s up to you to decide whether you’re friends or foes.\nOn each level, there is 1 statue that will boost your character’s stats.\nYour goal is to reach the end and have fun!"
+
+- type: entity
+  id: CEMapStartBlockedText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map blocked text
+  components:
+  - type: MapText
+    text: "The playtest is coming to an end. You can no longer start new runs. \nWe’re waiting for players to finish their adventures before shutting down the server."
