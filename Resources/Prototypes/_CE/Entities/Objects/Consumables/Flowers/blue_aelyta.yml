@@ -35,8 +35,7 @@
     effects:
     - !type:RestoreMana
       amount: 2
-    - !type:Damage
-      attackType: Melee
-      damage:
-        types:
-          Poison: 5 #TODO poison stack effect
+    - !type:ApplyStatusEffectStack
+      effectTarget: Target
+      statusEffect: CEStatusEffectPoison
+      stack: 1

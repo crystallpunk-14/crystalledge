@@ -1,39 +1,38 @@
 - type: entity
-  id: CEStatusEffectFightForSurvival
-  name: Fight for Survival
+  id: CEStatusEffectPoison
+  name: Poison
   description: TODO
   components:
   - type: StatusEffect
     whitelist:
       components:
+      - CEGOAP
       - CEMobState
-  - type: StatusEffectAlert
-    alert: CEFightForSurvival
-  - type: RejuvenateRemovedStatusEffect
-  - type: CERemoveStackOnHeal
-    amount: 20
-    canRemoveStatusEffect: false
   - type: CEDamageStatusEffect
     interruptDoAfters: false
-    ignoreArmor: true
     damage:
       types:
-        Cold: 1
+        Poison: 1
+  - type: StatusEffectAlert
+    alert: CEPoisoned
+  - type: CERemoveStackOnHeal
+    amount: 1
+  - type: RejuvenateRemovedStatusEffect
   - type: CEStatusEffectStack
-    stackDelta: 1
-    baseDuration: 5
+    stackDelta: 0
+    baseDuration: 60
 
 - type: alert
-  id: CEFightForSurvival
-  alertViewEntity: CEFightForSurvivalAlertSpriteView
-  name: ce-alert-fight-for-survival-name
-  description: ce-alert-fight-for-survival-desc
+  id: CEPoisoned
+  alertViewEntity: CEPoisonedAlertSpriteView
+  name: ce-alert-poisoned-name
+  description: ce-alert-poisoned-desc
   icons:
-  - sprite: _CE/Interface/fight_for_survival.rsi
+  - sprite: _CE/Interface/poison.rsi
     state: icon
 
 - type: entity
-  id: CEFightForSurvivalAlertSpriteView
+  id: CEPoisonedAlertSpriteView
   categories: [ HideSpawnMenu ]
   components:
   - type: GenericCounterAlert
@@ -42,7 +41,7 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Interface/fight_for_survival.rsi
+    - sprite: _CE/Interface/poison.rsi
       state: icon
     - map: [ "1" ]
       offset: 0.65, 0

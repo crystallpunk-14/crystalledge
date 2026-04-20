@@ -36,3 +36,6 @@ ce-alert-fight-for-survival-desc = Вы сопротивляетесь медл�
 
 ce-alert-strength-name = Сила
 ce-alert-strength-desc = Ваши атаки в ближнем бою наносят дополнительный урон.
+
+ce-alert-poisoned-name = Отравлен
+ce-alert-poisoned-desc = Вы медленно получаете урон. Любой источник исцеления снимает 1 стак яда.

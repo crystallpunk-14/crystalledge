@@ -241,14 +241,17 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         RaiseLocalEvent(target, incomingHealEv);
         finalAmount = incomingHealEv.HealAmount;
 
-        if (finalAmount <= 0)
-            return;
+        var healedEv = new CEHealedEvent(source, finalAmount);
+        RaiseLocalEvent(target, healedEv);
 
         if (source is not null)
         {
             var healEv = new CEHealEvent(target, finalAmount);
             RaiseLocalEvent(source.Value, healEv);
         }
+
+        if (finalAmount <= 0)
+            return;
 
         ChangeDamage(target, -finalAmount, interruptDoAfters: false);
     }
@@ -389,7 +392,7 @@ public sealed class CEDamageCalculateEvent(CEDamageSpecifier damage, EntityUid? 
 }
 
 /// <summary>
-/// Called on healing source entity to calculate the amount to heal.
+/// Called on healer to calculate the amount to heal.
 /// </summary>
 public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : EntityEventArgs
 {
@@ -398,7 +401,7 @@ public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : Ent
 }
 
 /// <summary>
-/// Raised on an entity that is trying to heal another entity. Can be cancelled.
+/// Raised on healer. Can be cancelled.
 /// </summary>
 public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : CancellableEntityEventArgs
 {
@@ -415,6 +418,14 @@ public sealed class CEHealEvent(EntityUid target, int healAmount) : EntityEventA
     public readonly int HealAmount = healAmount;
 }
 
+/// <summary>
+/// Raised on healed entity.
+/// </summary>
+public sealed class CEHealedEvent(EntityUid? source, int healAmount) : EntityEventArgs
+{
+    public readonly EntityUid? Source = source;
+    public readonly int HealAmount = healAmount;
+}
 /// <summary>
 /// Raised on an entity to calculate its effective maximum health.
 /// Relayed through inventory (<see cref="IInventoryRelayEvent"/>) and status effects.
