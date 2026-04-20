@@ -1,0 +1,27 @@
+- type: entity
+  id: CEConsumableSlimeCoreWater
+  parent: CESlimeCoreBase
+  name: Water slime core
+  description: A pulsating core from a water slime. It humidifies the surrounding air. It seems fragile.
+  components:
+  - type: Sprite
+    layers:
+    - state: base1
+      color: "#00ccff"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana #TODO remove later once more mana sources are added
+      amount: 3
+    - !type:SpawnEntity #TODO remove alongside RestoreMana
+      spawns:
+      - CEEffectManaRestore
+    - !type:WetArea
+      radius: 1
+      maxStacks: 10
+      fallOffFactor: 0.5
+  - type: CEDestructionEffect
+    effects:
+    - !type:WetArea
+      radius: 3
+      maxStacks: 10
+      fallOffFactor: 0.5

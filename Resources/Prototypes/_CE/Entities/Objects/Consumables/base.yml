@@ -132,3 +132,29 @@
       - random:
           shard1: ""
           shard2: ""
+
+#slimecores
+- type: entity
+  id: CESlimeCoreBase
+  abstract: true
+  parent: BaseItem
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Cores/slimecore.rsi
+  - type: CEConsumable
+    whitelist:
+      components:
+      - CEMobState
+    useDelay: 1.5
+    useSound:
+      path: /Audio/Effects/Fluids/watersplash.ogg
+  - type: Item
+    size: Tiny
+  - type: CEDamageable
+  - type: CEDamageOnLand
+    damage:
+      types:
+        Physical: 1
+  - type: CEDestructible
+    destroyThreshold: 1

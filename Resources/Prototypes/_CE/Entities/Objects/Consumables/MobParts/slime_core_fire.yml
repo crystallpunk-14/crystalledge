@@ -1,0 +1,28 @@
+- type: entity
+  id: CEConsumableSlimeCoreFire
+  parent: CESlimeCoreBase
+  name: Fire slime core
+  description: A pulsating core from a fire slime. It heats the surrounding air but is cool to the touch. It seems fragile.
+  components:
+  - type: Sprite
+    layers:
+    - state: base1
+      color: "#ffa500"
+  - type: CEConsumable
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectTempShieldFire
+      stack: 10
+    - !type:RestoreMana #TODO remove later once more mana scources are added
+      amount: 3
+    - !type:SpawnEntity #TODO remove alongside RestoreMana
+      spawns:
+      - CEEffectManaRestore
+  - type: CEDestructionEffect
+    effects:
+    - !type:IgniteArea
+      radius: 3
+      maxStacks: 4
+      fallOffFactor: 0.5
+
+

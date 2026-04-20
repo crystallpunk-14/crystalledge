@@ -16,6 +16,11 @@
         variation: 0.1
   - type: CEDestructible
     destroyThreshold: 50
+    lootTable: !type:AllSelector
+      children:
+      - id: CEConsumableSlimeCoreFire
+        amount: 1
+        prob: 0.75
   - type: CEDestructionEffect
     effects:
     - !type:IgniteArea
