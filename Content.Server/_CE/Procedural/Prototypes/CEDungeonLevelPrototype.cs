@@ -1,5 +1,6 @@
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.PostProcess;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 
@@ -32,10 +33,25 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     public CEDungeonGeneratorConfig Config = default!;
 
     /// <summary>
-    /// Optional human-readable name for this level, used for debugging / admin tools.
+    /// Localization key for the display name shown in the entry popup.
+    /// When set, the client resolves this key in its own locale.
     /// </summary>
     [DataField]
-    public string Name = string.Empty;
+    public LocId? Name;
+
+    /// <summary>
+    /// Localization key for the description shown in the entry popup.
+    /// When set, the client resolves this key in its own locale.
+    /// </summary>
+    [DataField]
+    public LocId? Desc;
+
+    /// <summary>
+    /// Optional sound played for a player when they see the entry popup for the first time.
+    /// Leave null for no sound.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? EntrySound;
 
     /// <summary>
     /// Whether this level is stable (singleton — one instance per server, e.g. safe zones)

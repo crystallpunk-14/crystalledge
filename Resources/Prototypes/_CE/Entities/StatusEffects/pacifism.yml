@@ -1,0 +1,20 @@
+# Full pacifism status effect — applied by safe zone maps.
+- type: entity
+  id: CEStatusEffectPacifism
+  name: Pacifism
+  description: All combat is disabled.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEPacifism
+    showDuration: false
+  - type: CEStatusEffectStack
+  - type: CEPacifismEffect
+
+- type: alert
+  id: CEPacifism
+  icons:
+  - sprite: _CE/Interface/pacifism.rsi
+    state: shield
+  name: ce-alert-pacifism-name
+  description: ce-alert-pacifism-desc

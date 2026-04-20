@@ -10,6 +10,7 @@
   name: Firewall
   description: You create a wall of fire that sets creatures and the ground [color=#ff8a05]on fire[/color].
   components:
+  - type: CEActionDangerous
   - type: CEVisualizeWideLineAction
     width: 2.5
     projectileMode: true

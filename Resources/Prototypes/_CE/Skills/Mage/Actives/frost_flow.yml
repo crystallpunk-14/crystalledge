@@ -10,6 +10,7 @@
   name: Frost Flow
   description: You unleash a stream of frost that covers the ground in [color=#30caf5]ice[/color] and [color=#30caf5]slows[/color] creatures caught in it.
   components:
+  - type: CEActionDangerous
   - type: CEVisualizeWideLineAction
     width: 2.5
     projectileMode: true

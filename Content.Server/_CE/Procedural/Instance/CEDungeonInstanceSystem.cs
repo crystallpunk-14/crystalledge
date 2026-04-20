@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
@@ -54,6 +55,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
 
         InitializePassage();
+        InitializeEntryAnnounce();
     }
 
     public override void Update(float frameTime)
@@ -117,5 +119,17 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
             Log.Info($"cleaning up empty unstable instance '{inst.PrototypeId}'.");
             _zLevels.DeleteZNetwork(uid);
         }
+    }
+
+    /// <summary>
+    /// Resolves the dungeon instance that owns a given map entity.
+    /// Checks the z-network anchor first, then falls back to the map entity itself.
+    /// </summary>
+    private bool TryResolveInstance(EntityUid mapUid, [NotNullWhen(true)] out CEDungeonInstanceComponent? instance)
+    {
+        if (_zLevels.TryGetZNetwork(mapUid, out var zNet) && _instanceQuery.TryComp(zNet.Value.Owner, out instance))
+            return true;
+
+        return _instanceQuery.TryComp(mapUid, out instance);
     }
 }

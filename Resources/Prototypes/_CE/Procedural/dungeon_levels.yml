@@ -12,7 +12,6 @@
     target: CEWallDirt
     chance: 0.05
   - !type:CEBiomeApplyPostProcess
-    seed: 42
     layers:
     - !type:BiomeTileLayer
       tile: CEDirt
@@ -194,7 +193,7 @@
   parent:
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
-  name: Mossy Temple — Floor 1
+  name: ce-dungeon-mossy-temple-1-name
   exits:
     default: MossyTemple2
   config:
@@ -232,7 +231,7 @@
   parent:
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
-  name: Mossy Temple — Floor 2
+  name: ce-dungeon-mossy-temple-2-name
   exits:
     default: MossyTemple3
   config:
@@ -273,7 +272,7 @@
   parent:
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
-  name: Mossy Temple — Floor 3
+  name: ce-dungeon-mossy-temple-3-name
   exits:
     default: MossyTemple4
   config:
@@ -314,7 +313,7 @@
   parent:
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
-  name: Mossy Temple — Floor 4
+  name: ce-dungeon-mossy-temple-4-name
   exits:
     default: MossyTempleSafe
   config:
@@ -354,7 +353,8 @@
   stable: true
   parent:
   - BaseMossyTemplePostProcess
-  name: Mossy Temple — Safe Zone
+  name: ce-dungeon-mossy-temple-safe-name
+  desc: ce-dungeon-mossy-temple-safe-desc
   exits:
     default: MossyTemple5
   config:
@@ -372,6 +372,9 @@
   - type: Gravity
     enabled: true
     inherent: true
+  - type: CEMapStatusEffects
+    effects:
+    - CEStatusEffectPacifism
 
 - type: entity
   id: CEMapEndText
@@ -408,7 +411,8 @@
   parent:
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
-  name: Mossy Temple — Floor 5
+  name: ce-dungeon-mossy-temple-5-name
+  desc: ce-dungeon-mossy-temple-5-desc
   exits:
     default: MossyTemple5 # Loops back for now
   config:
