@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text;
 using Content.Server.Chat.Managers;
 using Content.Server.Popups;

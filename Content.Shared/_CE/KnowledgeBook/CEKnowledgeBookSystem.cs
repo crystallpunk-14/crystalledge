@@ -20,7 +20,6 @@ public abstract class CESharedKnowledgeBookSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CESharedKnowledgeBookSystem _knowledge = default!;
 
     private static readonly SoundSpecifier KnowledgeLearnedSound =
         new SoundPathSpecifier("/Audio/_CE/Effects/knowledge_learned.ogg");
