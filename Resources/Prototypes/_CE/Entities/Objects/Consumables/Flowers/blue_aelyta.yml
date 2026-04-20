@@ -34,7 +34,7 @@
       collection: eating
     effects:
     - !type:RestoreMana
-      manaRestored: 2
+      amount: 2
     - !type:Damage
       attackType: Melee
       damage:
