@@ -46,7 +46,9 @@
       tableId: CEHealingPotion
     - !type:NestedSelector
       tableId: CEManaPotion
-      weight: 1.5
+    - !type:NestedSelector
+      tableId: CEEmptyVials
+      weight: 0.8
     - !type:NestedSelector
       tableId: CEShieldPotion
       weight: 0.5
@@ -69,4 +71,4 @@
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomPotion
-      prob: 0.15
+      prob: 0.1

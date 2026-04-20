@@ -20,13 +20,13 @@ public sealed partial class CEFireComponent : Component
     /// Minimum seconds between decay ticks (loses 1 stack per tick).
     /// </summary>
     [DataField]
-    public float MinDecayInterval = 5f;
+    public float MinDecayInterval = 2f;
 
     /// <summary>
     /// Maximum seconds between decay ticks (loses 1 stack per tick).
     /// </summary>
     [DataField]
-    public float MaxDecayInterval = 10f;
+    public float MaxDecayInterval = 5f;
 
     /// <summary>
     /// Next time a decay tick should happen.
