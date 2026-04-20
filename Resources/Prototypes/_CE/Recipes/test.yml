@@ -1,11 +1,14 @@
 - type: CERecipe
-  id: CEWeaponStaffWooden
+  id: CEConsumablePotionManaMedium
   tag: CERecipeWorkbench
   category: Weapon
   craftTime: 1
   requirements:
   - !type:ProtoIdResource
-    protoId: CEWeaponSpearIron
+    protoId: CEConsumableBlueAelyta
+    count: 2  
+  - !type:ProtoIdResource
+    protoId: CEPotionEmptyMedium
     count: 1
-  result: CEWeaponStaffWooden
+  result: CEConsumablePotionManaMedium
   resultCount: 1

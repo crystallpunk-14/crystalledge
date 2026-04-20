@@ -1,0 +1,42 @@
+- type: entity
+  id: CEConsumableBlueAelyta
+  parent: BaseItem
+  categories: [ ForkFiltered ]
+  name: blue aelyta
+  description: A blue flower that grows in areas where magical energy congregates. In the right hands, it serves as an ingredient for mana-restoring potions.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Flowers/blue_aelyta.rsi
+    layers:
+    - state: base1
+      map: ["random"]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+    - random:
+        base1: ""
+        base2: ""
+  - type: Clothing 
+    sprite: _CE/Objects/Consumable/Flowers/blue_aelyta.rsi
+    slots:
+    - head 
+  - type: Foldable
+    canFoldInsideContainer: true
+    unfoldVerbText: fold-flip-verb
+    foldVerbText: fold-flip-verb
+  - type: FoldableClothing
+    foldedEquippedPrefix: flipped
+    foldedHeldPrefix: flipped
+  - type: CEConsumable
+    useSound:
+      collection: eating
+    effects:
+    - !type:RestoreMana
+      manaRestored: 2
+    - !type:Damage
+      attackType: Melee
+      damage:
+        types:
+          Poison: 5 #TODO poison stack effect

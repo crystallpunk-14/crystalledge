@@ -19,10 +19,10 @@
 
 - type: entity
   parent: CEBaseRecipeScroll
-  id: CERecipeScrollWeaponStaffWooden
+  id: CERecipeScrollConsumablePotionManaMedium
   components:
   - type: CEConsumable
     effects:
     - !type:LearnWorkbenchRecipes
       recipes:
-      - CEWeaponStaffWooden
+      - CEConsumablePotionManaMedium
