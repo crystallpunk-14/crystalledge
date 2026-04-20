@@ -53,3 +53,14 @@
         - MachineMask
         layer:
         - MachineLayer
+
+- type: entity
+  id: CEBookshelfWoodenFilled
+  parent: CEBookshelfWooden
+  suffix: Random filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        prob: 0.1
+        tableId: CECommonBooks

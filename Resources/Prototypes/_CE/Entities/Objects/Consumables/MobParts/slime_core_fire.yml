@@ -1,28 +1,36 @@
 - type: entity
   id: CEConsumableSlimeCoreFire
-  parent: CESlimeCoreBase
+  parent: BaseItem
+  categories: [ ForkFiltered ]
   name: Fire slime core
   description: A pulsating core from a fire slime. It heats the surrounding air but is cool to the touch. It seems fragile.
   components:
+  - type: Item
+    size: Tiny
+  - type: CEDamageable
+  - type: CEDamageOnLand
+    damage:
+      types:
+        Physical: 1
+  - type: CEDestructible
+    destroyThreshold: 1
   - type: Sprite
+    sprite: _CE/Objects/Consumable/slimecore.rsi
     layers:
     - state: base1
       color: "#ffa500"
+      shader: unshaded
   - type: CEConsumable
+    useDelay: 1.5
+    useSound:
+      path: /Audio/Effects/Fluids/watersplash.ogg
     effects:
-    - !type:ApplyStatusEffectStack
-      statusEffect: CEStatusEffectTempShieldFire
-      stack: 10
-    - !type:RestoreMana #TODO remove later once more mana scources are added
-      amount: 3
-    - !type:SpawnEntity #TODO remove alongside RestoreMana
-      spawns:
-      - CEEffectManaRestore
+    - !type:IgniteEntity
+      stacks: 2
   - type: CEDestructionEffect
     effects:
     - !type:IgniteArea
-      radius: 3
-      maxStacks: 4
-      fallOffFactor: 0.5
+      radius: 1
+      maxStacks: 3
 
 

@@ -8,6 +8,9 @@
     protoId: CEConsumableBlueAelyta
     count: 2
   - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreWater
+    count: 1
+  - !type:ProtoIdResource
     protoId: CEPotionEmptyMedium
     count: 1
   result: CEConsumablePotionManaSmall
@@ -21,6 +24,9 @@
   requirements:
   - !type:ProtoIdResource
     protoId: CEConsumableBlueAelyta
+    count: 1
+  - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreWater
     count: 1
   - !type:ProtoIdResource
     protoId: CEPotionEmptyMedium
@@ -38,6 +44,9 @@
     protoId: CEConsumableBloodRose
     count: 1
   - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreWater
+    count: 1
+  - !type:ProtoIdResource
     protoId: CEPotionEmptyMedium
     count: 1
   result: CEConsumablePotionHealingSmall
@@ -52,6 +61,9 @@
   - !type:ProtoIdResource
     protoId: CEConsumableBloodRose
     count: 2
+  - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreWater
+    count: 1
   - !type:ProtoIdResource
     protoId: CEPotionEmptyMedium
     count: 1
