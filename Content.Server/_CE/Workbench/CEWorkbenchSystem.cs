@@ -53,13 +53,13 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
     {
         foreach (var recipe in _proto.EnumeratePrototypes<CEWorkbenchRecipePrototype>())
         {
-            if (ent.Comp.Recipes.Contains(recipe))
+            if (ent.Comp.Recipes.Contains(recipe.ID))
                 continue;
 
             if (!ent.Comp.RecipeTags.Contains(recipe.Tag))
                 continue;
 
-            ent.Comp.Recipes.Add(recipe);
+            ent.Comp.Recipes.Add(recipe.ID);
         }
     }
 

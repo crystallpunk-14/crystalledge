@@ -31,11 +31,6 @@ public readonly struct CEWorkbenchUiRecipesEntry(ProtoId<CEWorkbenchRecipeProtot
     public readonly ProtoId<CEWorkbenchRecipePrototype> ProtoId = protoId;
     public readonly bool Craftable = craftable;
 
-    public int CompareTo(CEWorkbenchUiRecipesEntry other)
-    {
-        return Craftable.CompareTo(other.Craftable);
-    }
-
     public override bool Equals(object? obj)
     {
         return obj is CEWorkbenchUiRecipesEntry other && Equals(other);
@@ -43,7 +38,7 @@ public readonly struct CEWorkbenchUiRecipesEntry(ProtoId<CEWorkbenchRecipeProtot
 
     public bool Equals(CEWorkbenchUiRecipesEntry other)
     {
-        return ProtoId.Id == other.ProtoId.Id;
+        return ProtoId.Id == other.ProtoId.Id && Craftable == other.Craftable;
     }
 
     public override int GetHashCode()
@@ -54,10 +49,5 @@ public readonly struct CEWorkbenchUiRecipesEntry(ProtoId<CEWorkbenchRecipeProtot
     public override string ToString()
     {
         return $"{ProtoId} ({Craftable})";
-    }
-
-    public static int CompareTo(CEWorkbenchUiRecipesEntry left, CEWorkbenchUiRecipesEntry right)
-    {
-        return right.CompareTo(left);
     }
 }
