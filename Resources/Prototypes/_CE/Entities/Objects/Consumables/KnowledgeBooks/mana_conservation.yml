@@ -21,11 +21,13 @@
   - !type:MagicEnergyResource
     amount: 6
   - !type:ProtoIdResource
+    protoId: CEConsumableBlueAelyta
+    count: 1
+  - !type:ProtoIdResource
     protoId: CEPotionEmptySmall
     count: 1
   result: CEConsumablePotionManaSmall
   resultCount: 1
-
 
 - type: CERecipe
   id: CEConsumablePotionManaMedium_Conservation
@@ -35,6 +37,9 @@
   requirements:
   - !type:MagicEnergyResource
     amount: 11
+  - !type:ProtoIdResource
+    protoId: CEConsumableBlueAelyta
+    count: 2
   - !type:ProtoIdResource
     protoId: CEPotionEmptyMedium
     count: 1
