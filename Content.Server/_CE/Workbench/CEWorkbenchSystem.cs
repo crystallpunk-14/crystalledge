@@ -124,8 +124,8 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
 
     private bool CanCraftRecipe(CEWorkbenchRecipePrototype recipe, HashSet<EntityUid> entities, EntityUid? user = null)
     {
-        // Validate the user knows the recipe (server-side)
-        if (user is { } u && !_recipeKnowledge.KnowsRecipe(u, recipe.ID))
+        // Validate the user knows the recipe (server-side), unless it is roundstart.
+        if (!recipe.RoundStart && user is { } u && !_recipeKnowledge.KnowsRecipe(u, recipe.ID))
             return false;
 
         foreach (var req in recipe.Requirements)
