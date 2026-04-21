@@ -3,7 +3,7 @@
   id: PathOfKnight
   weight: 0.1
   icon:
-    sprite: _CE/Skills/General/path_classes.rsi
+    sprite: _CE/Skills/Neutral/path_classes.rsi
     state: knight
   effect: !type:AddStatusEffect
     effect: CEStatusEffectPathOfKnight
@@ -28,5 +28,5 @@
 - type: alert
   id: CEPathOfKnight
   icons:
-  - sprite: _CE/Skills/General/path_classes.rsi
+  - sprite: _CE/Skills/Neutral/path_classes.rsi
     state: knight

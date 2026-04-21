@@ -3,7 +3,7 @@
   id: Vitality
   unique: false
   icon:
-    sprite: _CE/Skills/General/health_upgrade.rsi
+    sprite: _CE/Skills/Neutral/health_upgrade.rsi
     state: icon
   effect: !type:AddStatusEffect
     effect: CEStatusEffectVitality

@@ -25,7 +25,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/General/self_treatment.rsi
+      sprite: _CE/Skills/Neutral/self_treatment.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent

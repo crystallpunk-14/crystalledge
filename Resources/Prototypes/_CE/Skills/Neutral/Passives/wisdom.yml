@@ -3,7 +3,7 @@
   id: Wisdom
   unique: false
   icon:
-    sprite: _CE/Skills/General/mana_upgrade.rsi
+    sprite: _CE/Skills/Neutral/mana_upgrade.rsi
     state: icon
   effect: !type:AddStatusEffect
     effect: CEStatusEffectWisdom

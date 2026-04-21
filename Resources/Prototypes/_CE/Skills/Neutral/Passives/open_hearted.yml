@@ -1,0 +1,28 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: OpenHearted 
+  weight: 0.5
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectOpenHearted
+  restrictions:
+  - !type:JobWhitelist
+    inverted: true
+    jobs:
+    - CEMage
+
+- type: entity
+  id: CEStatusEffectOpenHearted
+  name: Open-Hearted
+  description: When you [color=#1776eb]restore mana[/color], you restore [color=#1776eb]1[/color] more mana
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEOpenHearted
+  - type: CEBonusIncomingManaStatusEffect
+    amount: 1
+
+- type: alert
+  id: CEOpenHearted
+  icons:
+  - sprite: _CE/Skills/Neutral/todo.rsi
+    state: icon

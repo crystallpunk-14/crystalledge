@@ -1,0 +1,26 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: ThickSkin
+  weight: 0.5
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectThickSkin
+
+- type: entity
+  id: CEStatusEffectThickSkin
+  name:  Thick Skin
+  description: You take 2 less damage from all sources.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEThickSkin
+  - type: CEArmor
+    flat:
+      Cold: 2
+      Fire: 2
+      Physical: 2
+
+- type: alert
+  id: CEThickSkin
+  icons:
+  - sprite: _CE/Skills/Neutral/todo.rsi
+    state: icon

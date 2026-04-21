@@ -3,7 +3,7 @@
   id: PathOfMage
   weight: 0.1
   icon:
-    sprite: _CE/Skills/General/path_classes.rsi
+    sprite: _CE/Skills/Neutral/path_classes.rsi
     state: mage
   effect: !type:AddStatusEffect
     effect: CEStatusEffectPathOfMage
@@ -28,5 +28,5 @@
 - type: alert
   id: CEPathOfMage
   icons:
-  - sprite: _CE/Skills/General/path_classes.rsi
+  - sprite: _CE/Skills/Neutral/path_classes.rsi
     state: mage

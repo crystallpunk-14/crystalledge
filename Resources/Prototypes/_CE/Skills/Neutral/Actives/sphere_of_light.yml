@@ -20,7 +20,7 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _CE/Skills/General/sphere_of_light.rsi
+      sprite: _CE/Skills/Neutral/sphere_of_light.rsi
       state: icon
   - type: TargetAction
     range: 5
