@@ -8,7 +8,7 @@
   - !type:JobWhitelist
     inverted: true
     jobs:
-    - CEMage
+    - CEMage #Mage has more powerfull skill with same effect (Mana core)
 
 - type: entity
   id: CEStatusEffectOpenHearted

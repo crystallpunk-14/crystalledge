@@ -8,11 +8,11 @@
    - !type:JobWhitelist
      inverted: true
      jobs:
-     - CEPriest #This skill is useless for priest
+     - CEPriest #Priest has more powerfull skill with same effect (Cure wounds)
    - !type:JobWhitelist
      inverted: true
      jobs:
-     - CEMage #This skill is useless for mage
+     - CEMage #Mage has more powerfull skill with same effect (Healing frost)
 
 - type: entity
   id: CEActionSpellSelfTreatment
