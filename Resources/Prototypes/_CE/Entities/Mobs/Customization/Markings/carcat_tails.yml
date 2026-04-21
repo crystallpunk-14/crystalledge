@@ -2,7 +2,7 @@
   id: CECarcatTail
   bodyPart: Tail
   groupWhitelist: [ CECarcat ]
-  forcedColoring: false
+  forcedColoring: true
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
       state: tail
@@ -11,7 +11,7 @@
   id: CECarcatTailAnimated
   bodyPart: Tail
   groupWhitelist: []
-  forcedColoring: false
+  forcedColoring: true
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
       state: tail_wagging
@@ -20,7 +20,7 @@
   id: CECarcatTailFluffy
   bodyPart: Tail
   groupWhitelist: [ CECarcat ]
-  forcedColoring: false
+  forcedColoring: true
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
       state: tail_fluffy
@@ -31,7 +31,7 @@
   id: CECarcatTailFluffyAnimated
   bodyPart: Tail
   groupWhitelist: []
-  forcedColoring: false
+  forcedColoring: true
   sprites:
     - sprite: _CE/Mobs/Customization/carcat_tail.rsi
       state: tail_fluffy_wagging

@@ -465,3 +465,12 @@
   components:
   - type: MapText
     text: "The playtest is coming to an end. You can no longer start new runs. \nWe’re waiting for players to finish their adventures before shutting down the server."
+
+- type: entity
+  id: CEMapStartNotStartedText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map not started text
+  components:
+  - type: MapText
+    text: "The playtest hasn't started yet. Please wait..."

@@ -30,6 +30,10 @@
     foldedEquippedPrefix: flipped
     foldedHeldPrefix: flipped
   - type: CEConsumable
+    whitelist:
+      components:
+      - CEGOAP
+      - CEMobState
     useSound:
       collection: eating
     effects:

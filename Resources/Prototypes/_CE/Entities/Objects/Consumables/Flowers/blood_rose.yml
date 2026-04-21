@@ -18,10 +18,10 @@
     - random:
         base1: ""
         base2: ""
-  - type: Clothing 
+  - type: Clothing
     sprite: _CE/Objects/Consumable/Flowers/blood_rose.rsi
     slots:
-    - head 
+    - head
   - type: Foldable
     canFoldInsideContainer: true
     unfoldVerbText: fold-flip-verb
@@ -30,6 +30,10 @@
     foldedEquippedPrefix: flipped
     foldedHeldPrefix: flipped
   - type: CEConsumable
+    whitelist:
+      components:
+      - CEGOAP
+      - CEMobState
     useSound:
       collection: eating
     effects:

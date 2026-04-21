@@ -45,7 +45,14 @@ public sealed partial class CEConsumableComponent : Component
     /// If set, only entities matching this whitelist can be targeted by this consumable.
     /// </summary>
     [DataField]
-    public EntityWhitelist? Whitelist;
+    public EntityWhitelist Whitelist = new()
+    {
+        Components = new []
+        {
+            "CEGOAP",
+            "CEMobState",
+        }
+    };
 
     /// <summary>
     /// If set, entities matching this blacklist cannot be targeted by this consumable.
