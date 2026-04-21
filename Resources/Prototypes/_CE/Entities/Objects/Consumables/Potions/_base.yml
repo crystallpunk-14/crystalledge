@@ -83,6 +83,9 @@
     sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
     layers:
     - state: icon
+  - type: CETag
+    tags:
+    - Vials
 
 - type: entity
   id: CEPotionEmptySmall
@@ -92,6 +95,9 @@
     sprite: _CE/Objects/Consumable/Potions/small_bottle.rsi
     layers:
     - state: icon
+  - type: CETag
+    tags:
+    - Vials
 
 - type: entity
   id: CEPotionEmptyCube
@@ -101,6 +107,9 @@
     sprite: _CE/Objects/Consumable/Potions/cube_bottle.rsi
     layers:
     - state: icon
+  - type: CETag
+    tags:
+    - Vials
 
 - type: entity
   id: CEPotionEmptyStar
@@ -110,6 +119,9 @@
     sprite: _CE/Objects/Consumable/Potions/star_bottle.rsi
     layers:
     - state: icon
+  - type: CETag
+    tags:
+    - Vials
 
 #Shards
 - type: entity

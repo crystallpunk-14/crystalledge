@@ -23,8 +23,8 @@
   - !type:ProtoIdResource
     protoId: CEConsumableBlueAelyta
     count: 1
-  - !type:ProtoIdResource
-    protoId: CEPotionEmptySmall
+  - !type:TagResource
+    tag: Vials
     count: 1
   result: CEConsumablePotionManaSmall
   resultCount: 1
@@ -40,8 +40,8 @@
   - !type:ProtoIdResource
     protoId: CEConsumableBlueAelyta
     count: 2
-  - !type:ProtoIdResource
-    protoId: CEPotionEmptyMedium
+  - !type:TagResource
+    tag: Vials
     count: 1
   result: CEConsumablePotionManaMedium
   resultCount: 1

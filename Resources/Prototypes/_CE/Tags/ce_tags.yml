@@ -1,0 +1,6 @@
+- type: CETag
+  id: Vials
+  name: ce-tag-vials
+  icon:
+    sprite: _CE/Objects/Consumable/Potions/medium_bottle.rsi
+    state: icon
