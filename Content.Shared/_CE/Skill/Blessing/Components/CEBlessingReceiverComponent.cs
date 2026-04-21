@@ -27,17 +27,10 @@ public sealed partial class CEBlessingReceiverComponent : Component
     public List<bool> SkillTypeOrder = new()
     {
         true,
-        true,
-        false, //First passive on level 2
-        true,
+        false,
         true,
         false,
         true,
-        true,
-        false,
-        true,
-        true,
-        false,
         false,
     };
 }
