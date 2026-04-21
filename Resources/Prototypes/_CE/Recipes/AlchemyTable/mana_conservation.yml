@@ -1,0 +1,33 @@
+- type: CERecipe
+  id: CEConsumablePotionManaSmall_Conservation
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:MagicEnergyResource
+    amount: 5
+  - !type:ProtoIdResource
+    protoId: CEConsumableBlueAelyta
+    count: 1
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionManaSmall
+  resultCount: 1
+
+- type: CERecipe
+  id: CEConsumablePotionManaMedium_Conservation
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:MagicEnergyResource
+    amount: 10
+  - !type:ProtoIdResource
+    protoId: CEConsumableBlueAelyta
+    count: 2
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionManaMedium
+  resultCount: 1

@@ -1,0 +1,32 @@
+
+- type: CERecipe
+  id: CEConsumablePotionManaSmall
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  roundStart: true
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEConsumableBlueAelyta
+    count: 2
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionManaSmall
+  resultCount: 1
+
+- type: CERecipe
+  id: CEConsumablePotionHealingSmall
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  roundStart: true
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEConsumableBloodRose
+    count: 2
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionHealingSmall
+  resultCount: 1

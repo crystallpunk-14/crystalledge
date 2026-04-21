@@ -45,4 +45,10 @@ public sealed partial class CEFireComponent : Component
     /// </summary>
     [DataField]
     public int HighThreshold = 10;
+
+    /// <summary>
+    /// Maximum number of stacks this fire tile can accumulate. 0 means no limit.
+    /// </summary>
+    [DataField]
+    public int MaxStacks = 11;
 }

@@ -266,7 +266,10 @@ public sealed partial class CEFireSystem : EntitySystem
             return;
 
         var oldStacks = ent.Comp.Stacks;
-        ent.Comp.Stacks = Math.Max(0, ent.Comp.Stacks + delta);
+        var newStacks = Math.Max(0, ent.Comp.Stacks + delta);
+        if (ent.Comp.MaxStacks > 0)
+            newStacks = Math.Min(newStacks, ent.Comp.MaxStacks);
+        ent.Comp.Stacks = newStacks;
         Dirty(ent);
 
         if (ent.Comp.Stacks <= 0)
@@ -284,10 +287,14 @@ public sealed partial class CEFireSystem : EntitySystem
     /// </summary>
     public void SetStacks(Entity<CEFireComponent> ent, int stacks)
     {
-        if (ent.Comp.Stacks == stacks)
+        var capped = Math.Max(0, stacks);
+        if (ent.Comp.MaxStacks > 0)
+            capped = Math.Min(capped, ent.Comp.MaxStacks);
+
+        if (ent.Comp.Stacks == capped)
             return;
 
-        ent.Comp.Stacks = Math.Max(0, stacks);
+        ent.Comp.Stacks = capped;
         Dirty(ent);
 
         if (ent.Comp.Stacks <= 0)
