@@ -501,7 +501,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 55.5,16.5
       parent: 1
-- proto: CEBookshelfWoodenFilled
+- proto: CEBookshelfStoneFilled
   entities:
   - uid: 639
     components:
