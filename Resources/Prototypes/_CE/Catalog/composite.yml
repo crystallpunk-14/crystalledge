@@ -5,9 +5,12 @@
     - !type:NestedSelector
       tableId: CERandomPotion
       weight: 1
-    #- !type:NestedSelector
-    #  tableId: CERandomWeapon
-    #  weight: 0.5
+    - !type:NestedSelector
+      tableId: CERandomFlowers
+      weight: 0.5
+    - !type:NestedSelector
+      tableId: CERandomInstrument
+      weight: 0.25
 
 - type: entity
   id: CESpawnerRandomLoot
