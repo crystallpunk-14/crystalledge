@@ -41,6 +41,9 @@ public sealed partial class TagResource : CEWorkbenchCraftRequirement
         var requiredCount = Count;
         foreach (var ent in placedEntities)
         {
+            if (requiredCount <= 0)
+                break;
+
             if (!tagSys.HasTag(ent, Tag))
                 continue;
 
