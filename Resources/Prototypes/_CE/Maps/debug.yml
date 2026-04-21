@@ -29,6 +29,7 @@
             CEKnight: [ -1, -1 ]
             CEMage: [ -1, -1 ]
             CEPriest: [ -1, -1 ]
+            CEWanderer: [ -1, -1 ]
         - type: CEStationZLevels
           mapsAbove:
           - /Maps/_CE/Empty.yml

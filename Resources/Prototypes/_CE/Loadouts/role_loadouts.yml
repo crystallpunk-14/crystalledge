@@ -28,3 +28,10 @@
   - CEKnightPants
   - CEGeneralShoes
   - CEGeneralBag
+
+- type: roleLoadout
+  id: JobCEWanderer
+  groups:
+  - CEWandererShirt
+  - CEGeneralShoes
+  - CEGeneralBag

@@ -35,6 +35,7 @@
             CEKnight: [ -1, -1 ]
             CEMage: [ -1, -1 ]
             CEPriest: [ -1, -1 ]
+            CEWanderer: [ -1, -1 ]
         - type: CEStationZLevels
           mapsAbove:
           - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
