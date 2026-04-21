@@ -13,9 +13,7 @@ public sealed partial class StackResource : CEWorkbenchCraftRequirement
     [DataField]
     public int Count = 1;
 
-    public override bool CheckRequirement(IEntityManager entManager,
-        IPrototypeManager protoManager,
-        HashSet<EntityUid> placedEntities)
+    public override bool CheckRequirement(IEntityManager entManager, IPrototypeManager protoManager, HashSet<EntityUid> placedEntities, EntityUid? user)
     {
         var count = 0;
         foreach (var ent in placedEntities)
@@ -35,9 +33,7 @@ public sealed partial class StackResource : CEWorkbenchCraftRequirement
         return true;
     }
 
-    public override void PostCraft(IEntityManager entManager,
-        IPrototypeManager protoManager,
-        HashSet<EntityUid> placedEntities)
+    public override void PostCraft(IEntityManager entManager, IPrototypeManager protoManager, HashSet<EntityUid> placedEntities, EntityUid? user)
     {
         var stackSystem = entManager.System<SharedStackSystem>();
 
@@ -55,7 +51,7 @@ public sealed partial class StackResource : CEWorkbenchCraftRequirement
             if (stack.Count - count <= 0)
                 entManager.DeleteEntity(placedEntity);
             else
-                stackSystem.SetCount(placedEntity, stack.Count - count, stack);
+                stackSystem.SetCount((placedEntity, stack), stack.Count - count);
 
             requiredCount -= count;
         }

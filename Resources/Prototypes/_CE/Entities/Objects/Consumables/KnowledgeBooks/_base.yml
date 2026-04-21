@@ -11,30 +11,13 @@
     shape:
     - 0, 0, 0, 1
   - type: Sprite
-    sprite: _CE/Objects/Bureaucracy/books.rsi
+    sprite: _CE/Objects/Consumable/books.rsi
+    state: template
   - type: CEKnowledgeBook
     useDelay: 1
   - type: Tag
     tags:
     - Book
-
-- type: entity
-  parent: CEBaseKnowledgeBook
-  id: CEKnowledgeBook_BasicAlchemy
-  name: basic alchemy
-  description: A Guide to Alchemy for Complete Beginners. This book describes basic recipes for brewing the most common and simple potions
-  components:
-  - type: Sprite
-    state: basic_alchemy
-  - type: CEKnowledgeBook
-    recipes:
-    - CEConsumablePotionManaSmall
-    - CEConsumablePotionManaMedium
-    - CEConsumablePotionHealingSmall
-    - CEConsumablePotionHealingMedium
-
-
-
 
 - type: entity
   id: CEEffectKnowledgeSparks

@@ -1,4 +1,3 @@
-using System.Numerics;
 using Content.Shared._CE.Workbench;
 using Content.Shared._CE.Workbench.Prototypes;
 using Content.Shared.DoAfter;
@@ -75,10 +74,9 @@ public sealed partial class CEWorkbenchSystem
             return;
         }
 
-        ConsumeRecipeResources(recipe, resources);
+        ConsumeRecipeResources(recipe, resources, args.User);
 
-        if (CheckRecipeConditions(recipe, ent, args.User))
-            SpawnRecipeResult(recipe, ent);
+        SpawnRecipeResult(recipe, ent);
 
         SpawnAtPosition(workbench.Vfx, Transform(ent).Coordinates);
 

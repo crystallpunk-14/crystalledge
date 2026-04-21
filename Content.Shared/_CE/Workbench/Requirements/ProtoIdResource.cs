@@ -11,16 +11,14 @@ public sealed partial class ProtoIdResource : CEWorkbenchCraftRequirement
     [DataField]
     public int Count = 1;
 
-    public override bool CheckRequirement(IEntityManager entManager,
-        IPrototypeManager protoManager,
-        HashSet<EntityUid> placedEntities)
+    public override bool CheckRequirement(IEntityManager entManager, IPrototypeManager protoManager, HashSet<EntityUid> placedEntities, EntityUid? user)
     {
         var indexedIngredients = IndexIngredients(entManager, placedEntities);
 
         return indexedIngredients.TryGetValue(ProtoId, out var availableQuantity) && availableQuantity >= Count;
     }
 
-    public override void PostCraft(IEntityManager entManager,IPrototypeManager protoManager, HashSet<EntityUid> placedEntities)
+    public override void PostCraft(IEntityManager entManager,IPrototypeManager protoManager, HashSet<EntityUid> placedEntities, EntityUid? user)
     {
         var requiredCount = Count;
 
@@ -81,10 +79,8 @@ public sealed partial class ProtoIdResource : CEWorkbenchCraftRequirement
             if (protoId == null)
                 continue;
 
-            if (indexedIngredients.ContainsKey(protoId))
+            if (!indexedIngredients.TryAdd(protoId, 1))
                 indexedIngredients[protoId]++;
-            else
-                indexedIngredients[protoId] = 1;
         }
 
         return indexedIngredients;

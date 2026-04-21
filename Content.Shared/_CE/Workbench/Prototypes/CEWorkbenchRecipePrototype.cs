@@ -25,14 +25,6 @@ public sealed partial class CEWorkbenchRecipePrototype : IPrototype
     [DataField(required: true)]
     public List<CEWorkbenchCraftRequirement> Requirements = new();
 
-    /// <summary>
-    /// Mandatory conditions for completion, but not blocking the craft button.
-    /// Players must monitor compliance themselves.
-    /// If the conditions are not met, negative effects occur.
-    /// </summary>
-    [DataField]
-    public List<CEWorkbenchCraftCondition> Conditions = new();
-
     [DataField(required: true)]
     public EntProtoId Result;
 
