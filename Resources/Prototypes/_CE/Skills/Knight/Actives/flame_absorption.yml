@@ -1,9 +1,6 @@
 - type: skill
   parent: BaseKnightSkill
   id: FlameAbsorption
-  icon:
-    sprite: _CE/Skills/Knight/fire_absorption.rsi
-    state: icon
   effect: !type:AddAction
     action: CEActionSpellFlameAbsorption
 

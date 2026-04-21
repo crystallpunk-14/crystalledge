@@ -20,9 +20,10 @@
   - type: Sprite
     drawdepth: Effects
     noRot: true
+  - type: CEFreezeImmunityStatusEffect
   - type: CEStatusEffectStack
     stackDelta: -1
-    #baseDuration: 10
+    baseDuration: 1
 
 - type: alert
   id: CETempShieldCold

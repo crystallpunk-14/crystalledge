@@ -1,9 +1,6 @@
 - type: skill
   parent: BaseKnightSkill
   id: Amplification
-  icon:
-    sprite: _CE/Interface/strength.rsi
-    state: icon
   effect: !type:AddAction
     action: CEActionSpellAmplification
 

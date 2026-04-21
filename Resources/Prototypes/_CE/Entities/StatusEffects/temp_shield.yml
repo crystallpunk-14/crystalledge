@@ -22,7 +22,7 @@
     noRot: true
   - type: CEStatusEffectStack
     stackDelta: -1
-    #baseDuration: 10
+    baseDuration: 1
 
 - type: alert
   id: CETempShield

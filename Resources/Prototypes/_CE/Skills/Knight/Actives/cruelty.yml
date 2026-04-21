@@ -1,9 +1,6 @@
 - type: skill
   parent: BaseKnightSkill
   id: Cruelty
-  icon:
-    sprite: _CE/Skills/Knight/focus.rsi
-    state: icon
   effect: !type:AddAction
     action: CEActionSpellCruelty
 

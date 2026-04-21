@@ -1,0 +1,81 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: RaiseShields
+  effect: !type:AddAction
+    action: CEActionSpellRaiseShields
+
+- type: entity
+  id: CEActionSpellRaiseShields
+  parent: CEActionSpellBase
+  name: Raise Shields
+  description: You grant [color=#b2e3eb]25 physical shields[/color] to all creatures in a small area.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 1.5
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 15
+    icon:
+      sprite: _CE/Skills/Neutral/todo.rsi
+      state: icon
+  - type: TargetAction
+    range: 3
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationRaiseShields
+
+- type: entityEffectAnimation
+  id: AnimationRaiseShields
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectRaiseShieldsTelegraphy
+    - !type:PlaySound
+      sound:
+        path: /Audio/Magic/forcewall.ogg
+        params:
+          pitch: 0.7
+    1.0:
+    - !type:AreaEffect
+      range: 1.5
+      affectCaster: true
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectTempShield
+        stack: 25
+
+- type: entity
+  id: CEEffectRaiseShieldsTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: raise shields telegraphy
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/shield_up_telegraphy.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#b2e3eb"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

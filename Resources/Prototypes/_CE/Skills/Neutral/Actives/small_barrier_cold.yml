@@ -15,7 +15,7 @@
   description: Grants [color=#b2e3eb]20 temporary Frost shields[/color] that absorb damage. Shields decay over time.
   components:
   - type: CEActionManaCost
-    manaCost: 1 #TODO: Change to 3, when cold damage become more frequent
+    manaCost: 1
   - type: Action
     useDelay: 10
     icon:
@@ -33,7 +33,9 @@
     0:
     - !type:PlaySound
       sound:
-        path: /Audio/Magic/rumble.ogg
+        path: /Audio/Effects/clang.ogg
+        params:
+          pitch: 0.7
     0.6:
     - !type:ApplyStatusEffectStack
       effectTarget: User
