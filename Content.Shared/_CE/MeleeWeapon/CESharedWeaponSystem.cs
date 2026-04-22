@@ -27,9 +27,9 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected readonly SharedCombatModeSystem CombatMode = default!;
     [Dependency] protected readonly SharedInteractionSystem Interaction = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    [Dependency] private   readonly CESharedAnimationActionSystem _animationAction = default!;
-    [Dependency] private   readonly IPrototypeManager _proto = default!;
-    [Dependency] private   readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly CESharedAnimationActionSystem _animationAction = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -49,7 +49,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         if (Timing.ApplyingState)
             return;
 
-        if (args.SenderSession.AttachedEntity is not {} user)
+        if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
         if (!TryGetWeapon(user, out var weapon) ||
