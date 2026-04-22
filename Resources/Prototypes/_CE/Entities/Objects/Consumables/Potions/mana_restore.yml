@@ -35,7 +35,6 @@
       effectTarget: User
       spawns:
       - CEEffectAreaHealingEffect
-  - type: CEDestructible
 
 - type: entity
   id: CEConsumablePotionManaMedium
@@ -74,7 +73,88 @@
       effectTarget: User
       spawns:
       - CEEffectPotionManaRestore
-  - type: CEDestructible
+
+- type: entity
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionSmall
+  id: CEConsumablePotionManaSmallCondensated
+  suffix: Condensated, mana restoring modifiers doesnt work.
+  name: condensated small mana potion
+  description: Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#1f36b6"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 5
+      applyModifiers: false
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:RestoreMana
+        amount: 2
+        applyModifiers: false
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectManaRestore
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectPotionManaRestore
+
+- type: entity
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
+  id: CEConsumablePotionManaMediumCondensated
+  suffix: Condensated, mana restoring modifiers doesnt work.
+  name: condensated mana potion
+  description: Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#1f36b6"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 10
+      applyModifiers: false
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:RestoreMana
+        amount: 5
+        applyModifiers: false
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectManaRestore
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectPotionManaRestore
 
 - type: entity
   id: CEEffectPotionManaRestore

@@ -8,5 +8,5 @@
     state: mana_conservation
   - type: CEKnowledgeBook
     recipes:
-    - CEConsumablePotionManaSmall_Conservation
-    - CEConsumablePotionManaMedium_Conservation
+    - CEConsumablePotionManaSmallCondensated
+    - CEConsumablePotionManaMediumCondensated
