@@ -1,14 +1,17 @@
 using Content.Server._CE.ZLevels.Core;
+using Content.Server.Movement.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.MeleeWeapon;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 
 namespace Content.Server._CE.MeleeWeapon;
 
 public sealed class CEWeaponSystem : CESharedWeaponSystem
 {
+    [Dependency] private readonly LagCompensationSystem _lag = default!;
     private const int MaxTargets = 10;
 
     /// <summary>
@@ -49,7 +52,7 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
         ApplyArcEffects(user, weapon, targets, effectSlot);
     }
 
-    protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, ICommonSession? session)
     {
         if (targets.Count > MaxTargets)
             targets = targets.GetRange(0, MaxTargets);
@@ -62,7 +65,16 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
             if (!Exists(target) || target == user)
                 continue;
 
-            if (!Interaction.InRangeUnobstructed(user, target, range))
+            if (session is { } pSession)
+            {
+                EntityCoordinates targetCoordinates;
+                Angle targetLocalAngle;
+
+                (targetCoordinates, targetLocalAngle) = _lag.GetCoordinatesAngle(target, pSession);
+                if (!Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, overlapCheck: false))
+                    continue;
+            }
+            else if (!Interaction.InRangeUnobstructed(user, target, range))
                 continue;
 
             validated.Add(target);

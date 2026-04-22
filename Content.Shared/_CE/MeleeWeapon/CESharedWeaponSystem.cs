@@ -11,6 +11,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
@@ -22,7 +23,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected readonly IGameTiming Timing = default!;
     [Dependency] protected readonly IMapManager MapManager = default!;
     [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
-    [Dependency] private   readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] protected readonly SharedCombatModeSystem CombatMode = default!;
     [Dependency] protected readonly SharedInteractionSystem Interaction = default!;
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
@@ -89,7 +90,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
             return;
 
         var targets = GetEntityList(ev.Targets);
-        targets = ValidateArcTargets(user, weapon.Value, targets);
+        targets = ValidateArcTargets(user, weapon.Value, targets, args.SenderSession);
 
         TryAttack(user, weapon.Value, targets);
         ApplyArcEffects(user, weapon.Value, targets, ev.EffectSlot);
@@ -98,7 +99,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     /// <summary>
     /// Validates arc attack targets. Server overrides to check range and obstructions.
     /// </summary>
-    protected virtual List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    protected virtual List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, ICommonSession? session)
     {
         return targets;
     }
