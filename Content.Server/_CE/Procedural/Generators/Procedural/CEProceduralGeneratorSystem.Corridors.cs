@@ -53,19 +53,7 @@ public sealed partial class CEProceduralGeneratorSystem
         var roomTypeProtos = new Dictionary<int, CERoomTypePrototype?>();
         foreach (var room in comp.Rooms)
         {
-            CERoomTypePrototype? roomTypeProto = null;
-            var protoId = room.RoomType switch
-            {
-                CEProceduralRoomType.Exit => config.ExitRoom,
-                CEProceduralRoomType.Entrance => config.EntranceRooms,
-                CEProceduralRoomType.Blessing => config.BlessingRooms,
-                CEProceduralRoomType.Treasure => config.TreasureRooms,
-                CEProceduralRoomType.DeadEnd => config.DeadEndRooms,
-                _ => config.GeneralRooms,
-            };
-            if (protoId != null)
-                _proto.TryIndex(protoId.Value, out roomTypeProto);
-            roomTypeProtos[room.Index] = roomTypeProto;
+            roomTypeProtos[room.Index] = GetRoomTypeProto(config, room.RoomType);
         }
 
         // --- Process connections ---
@@ -111,7 +99,17 @@ public sealed partial class CEProceduralGeneratorSystem
             if (isWideMode)
             {
                 // Wide-mode: place floor tiles at all aligned passway gaps (no doors).
-                CollectFloorConnectionTiles(roomA, roomB, mainZLevel, corridorPositions);
+                var pwA = GetPasswayWorldTiles(roomA, roomA.Position, mainZLevel);
+                var pwB = GetPasswayWorldTiles(roomB, roomB.Position, mainZLevel);
+                foreach (var (posA, dirA) in pwA)
+                {
+                    var outsideA = posA + dirA.ToIntVec();
+                    foreach (var (posB, dirB) in pwB)
+                    {
+                        if (IsOppositeCardinal(dirA, dirB) && outsideA == posB + dirB.ToIntVec())
+                            corridorPositions.Add(outsideA);
+                    }
+                }
             }
             else
             {
@@ -153,36 +151,6 @@ public sealed partial class CEProceduralGeneratorSystem
         }
     }
 
-    /// <summary>
-    /// Collects the gap tiles between all aligned passway pairs of two close rooms.
-    /// Used in floor-mode to create an open passage.
-    /// </summary>
-    private void CollectFloorConnectionTiles(
-        CEProceduralAbstractRoom roomA,
-        CEProceduralAbstractRoom roomB,
-        int mainZLevel,
-        HashSet<Vector2i> corridorPositions)
-    {
-        var pwA = GetPasswayWorldTiles(roomA, roomA.Position, mainZLevel);
-        var pwB = GetPasswayWorldTiles(roomB, roomB.Position, mainZLevel);
-
-        foreach (var (posA, dirA) in pwA)
-        {
-            var outsideA = posA + dirA.ToIntVec();
-
-            foreach (var (posB, dirB) in pwB)
-            {
-                if (!IsOppositeCardinal(dirA, dirB))
-                    continue;
-
-                var outsideB = posB + dirB.ToIntVec();
-
-                // Aligned = the "outside" tiles coincide (1-tile gap).
-                if (outsideA == outsideB)
-                    corridorPositions.Add(outsideA);
-            }
-        }
-    }
 
     /// <summary>
     /// Finds the best passway pair between two rooms, runs A* to connect them,

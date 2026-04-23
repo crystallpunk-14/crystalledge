@@ -36,7 +36,7 @@
 
 - type: dungeonRoomType
   id: MossyTempleTreasureRoom
-  doorPrototype: CEIronDoor
+  doorPrototype: CEGoldenLockedDoor
   supportsWideConnection: false
   whitelist:
     requireAll: true

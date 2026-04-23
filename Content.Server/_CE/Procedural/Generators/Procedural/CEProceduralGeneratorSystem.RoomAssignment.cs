@@ -6,8 +6,7 @@ using Robust.Shared.Random;
 namespace Content.Server._CE.Procedural.Generators.Procedural;
 
 /// <summary>
-/// Partial: room type assignment (Exit, Entrance, Blessing, DeadEnd)
-/// and real room prototype selection.
+/// Partial: room type assignment, special room graph expansion, and real prototype selection.
 /// </summary>
 public sealed partial class CEProceduralGeneratorSystem
 {
@@ -76,7 +75,11 @@ public sealed partial class CEProceduralGeneratorSystem
 
                 // Try each of the 4 cardinal rotations to see if one satisfies all required exits.
                 // Shuffle the order so results are not biased toward 0°.
-                ShuffleArray(candidateRotations, random);
+                for (var s = candidateRotations.Length - 1; s > 0; s--)
+                {
+                    var t = random.Next(s + 1);
+                    (candidateRotations[s], candidateRotations[t]) = (candidateRotations[t], candidateRotations[s]);
+                }
 
                 foreach (var rot in candidateRotations)
                 {
@@ -188,18 +191,6 @@ public sealed partial class CEProceduralGeneratorSystem
             { Y: < 0 } => Direction.South,
             _ => Direction.Invalid,
         };
-    }
-
-    /// <summary>
-    /// Fisher–Yates shuffle for a small array.
-    /// </summary>
-    private static void ShuffleArray<T>(T[] array, Random random)
-    {
-        for (var i = array.Length - 1; i > 0; i--)
-        {
-            var j = random.Next(i + 1);
-            (array[i], array[j]) = (array[j], array[i]);
-        }
     }
 
     /// <summary>
