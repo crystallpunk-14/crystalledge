@@ -222,8 +222,8 @@
       min: 1
       max: 1
     treasureCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 2
     cycleCount:
       min: 1
       max: 2
@@ -263,8 +263,8 @@
       min: 1
       max: 1
     treasureCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 2
     cycleCount:
       min: 2
       max: 3
@@ -304,8 +304,8 @@
       min: 1
       max: 1
     treasureCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 2
     cycleCount:
       min: 2
       max: 4
@@ -348,8 +348,8 @@
       min: 1
       max: 1
     treasureCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 2
     cycleCount:
       min: 2
       max: 4
@@ -421,8 +421,8 @@
       min: 0
       max: 0
     treasureCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 2
     cycleCount:
       min: 10
       max: 10
