@@ -307,6 +307,60 @@
   zLevelMap: MossyTemple
   offset: 30, 31
 
+- type: dungeonRoom3d
+  id: MossyTemple_BushCircle
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 13, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, 43
+
+- type: dungeonRoom3d
+  id: MossyTemple_PoisonRiver
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 15, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 30, 42
+
+- type: dungeonRoom3d
+  id: MossyTemple_PoisonBoxes
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 14, 14
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 46, 42
+
+- type: dungeonRoom3d
+  id: MossyTemple_PoisonRiverT
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 8, 10
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 43, 31
+
+- type: dungeonRoom3d
+  id: MossyTemple_PoisonRoom
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomGeneral
+  size: 12, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 52, 34
+
+
+
+
+
 # Dead ends
 
 - type: dungeonRoom3d
@@ -409,6 +463,10 @@
   zLevelMap: MossyTemple
   offset: 46, -27
 
+
+
+
+
 # Entrance
 
 - type: dungeonRoom3d
@@ -450,6 +508,11 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -27, 0
+
+
+
+
+
 
 # Exits
 
@@ -513,6 +576,10 @@
   zLevelMap: MossyTemple
   offset: -18, 39
 
+
+
+
+
 # Blessing
 
 - type: dungeonRoom3d
@@ -554,6 +621,22 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -18, -28
+
+- type: dungeonRoom3d
+  id: MossyTemple_Blessing_FuckYou
+  tags:
+  - CEDunGenMossyTemple
+  - CEDunGenRoomBlessing
+  size: 7, 12
+  weight: 0.1
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -26, -25
+
+
+
+
+
 
 # Treasure
 
