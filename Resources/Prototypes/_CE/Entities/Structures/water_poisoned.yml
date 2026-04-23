@@ -1,0 +1,56 @@
+- type: entity
+  parent: CEWater
+  id: CEWaterPoisoned
+  suffix: Poisoned
+  name: poisoned water
+  description: This water has been contaminated with a dangerous substance.
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Nature/water_poisoned.rsi
+    state: static
+  - type: CEEntityEffectOnCollide
+    effects:
+    - !type:WetEntity
+      stacks: 1
+      maxStacks: 10
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectPoison
+      stack: 1
+      maxStacks: 5
+  - type: CEFreezeTransform
+    freezesInto: CEIcePoisoned
+  - type: RandomSpawner
+    prototypes: []
+
+- type: entity
+  parent: CEWaterPoisoned
+  id: CEWaterPoisonedMoving
+  suffix: Moving
+  components:
+  - type: Sprite
+    state: moving
+    snapCardinals: false
+  - type: CETileDistortion
+    intensity: 0.6
+  - type: CEAutoConveyor
+  - type: CEFreezeTransform
+    freezesInto: CEIceFrozenPoisonedStream
+  - type: Conveyor
+    speed: 0.25
+
+- type: entity
+  parent: CEIce
+  id: CEIcePoisoned
+  suffix: Poisoned
+  components:
+  - type: CEMeltTransform
+    meltsInto: CEWaterPoisoned
+
+- type: entity
+  parent: CEIcePoisoned
+  id: CEIceFrozenPoisonedStream
+  suffix: Poisoned Frozen Stream
+  description: A frozen stream, the current trapped under ice.
+  components:
+  - type: CEMeltTransform
+    meltsInto: CEWaterPoisonedMoving
