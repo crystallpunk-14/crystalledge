@@ -1,6 +1,6 @@
 - type: skill
   parent: BaseNeutralSkill
-  id: OpenHearted 
+  id: OpenHearted
   weight: 0.5
   effect: !type:AddStatusEffect
     effect: CEStatusEffectOpenHearted
@@ -24,5 +24,5 @@
 - type: alert
   id: CEOpenHearted
   icons:
-  - sprite: _CE/Skills/Neutral/todo.rsi
+  - sprite: _CE/Skills/Neutral/open_hearted.rsi
     state: icon

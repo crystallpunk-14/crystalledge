@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 15
     icon:
-      sprite: _CE/Skills/Neutral/todo.rsi
+      sprite: _CE/Skills/Knight/raise_shields.rsi
       state: icon
   - type: TargetAction
     range: 3

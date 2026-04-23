@@ -155,4 +155,4 @@
         attackType: Ranged
         damage:
           types:
-            Cold: 25
+            Cold: 15

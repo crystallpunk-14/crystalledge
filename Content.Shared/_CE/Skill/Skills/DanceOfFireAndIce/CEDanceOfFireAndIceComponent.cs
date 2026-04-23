@@ -11,13 +11,13 @@ public sealed partial class CEDanceOfFireAndIceComponent : Component
     /// Bonus fire damage dealt to frozen targets.
     /// </summary>
     [DataField]
-    public int FireBonusVsFrozen = 5;
+    public int FireBonusVsFrozen = 15;
 
     /// <summary>
     /// Bonus cold damage dealt to burning targets.
     /// </summary>
     [DataField]
-    public int ColdBonusVsBurning = 5;
+    public int ColdBonusVsBurning = 15;
 
     /// <summary>
     /// Status effect prototype that indicates a target is frozen.

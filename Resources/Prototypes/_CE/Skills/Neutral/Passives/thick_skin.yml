@@ -22,5 +22,5 @@
 - type: alert
   id: CEThickSkin
   icons:
-  - sprite: _CE/Skills/Neutral/todo.rsi
+  - sprite: _CE/Skills/Neutral/thick_skin.rsi
     state: icon
