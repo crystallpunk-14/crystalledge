@@ -34,4 +34,5 @@
   groups:
   - CEWandererShirt
   - CEGeneralShoes
+  - CEKnightPants #TODO: make wanderer pants
   - CEGeneralBag
