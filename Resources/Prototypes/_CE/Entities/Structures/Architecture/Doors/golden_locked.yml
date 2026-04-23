@@ -8,7 +8,7 @@
   components:
   - type: Sprite
     color: "#FFCC00"
-    sprite: _CE/Structures/Architecture/Doors/iron_door.rsi
+    sprite: _CE/Structures/Architecture/Doors/golden_door.rsi
     layers:
     - state: closed
       map: ["enum.DoorVisualLayers.Base"]
