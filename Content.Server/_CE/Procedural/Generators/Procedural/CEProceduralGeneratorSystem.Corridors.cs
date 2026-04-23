@@ -1,8 +1,10 @@
 using System.Numerics;
 using System.Threading.Tasks;
+using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural;
 
@@ -11,10 +13,12 @@ namespace Content.Server._CE.Procedural.Generators.Procedural;
 /// <para>
 /// Connection modes:
 /// <list type="bullet">
-///   <item><b>Far (gap ≥ 3)</b> or <b>close in door-mode</b>:
-///     A* corridor from passway to passway, doors at both endpoints.</item>
-///   <item><b>Close in floor-mode</b> (rooms with &gt;1 close connections, 50 % chance):
+///   <item><b>Wide (both rooms have <see cref="CERoomTypePrototype.SupportsWideConnection"/> = true, gap = 1)</b>:
 ///     floor tiles at every aligned passway gap — open passage, no doors.</item>
+///   <item><b>Door-mode</b> (default):
+///     A* corridor from passway to passway, doors at both endpoints.
+///     Each door uses the <see cref="CERoomTypePrototype.DoorPrototype"/> of the <em>opposite</em> room,
+///     so the player sees the special door before entering the room (e.g. gold door visible from outside the treasury).</item>
 /// </list>
 /// </para>
 /// </summary>
@@ -45,22 +49,23 @@ public sealed partial class CEProceduralGeneratorSystem
 
         var mainZLevel = config.MainZLevel;
 
-        // --- Determine floor-mode rooms (>1 close connection, 50 % chance) ---
-        var closeCountByRoom = new Dictionary<int, int>();
-        foreach (var conn in comp.Connections)
+        // --- Pre-resolve room type prototypes for door and connection-mode lookups. ---
+        var roomTypeProtos = new Dictionary<int, CERoomTypePrototype?>();
+        foreach (var room in comp.Rooms)
         {
-            if (!conn.IsClose)
-                continue;
-
-            closeCountByRoom[conn.RoomA] = closeCountByRoom.GetValueOrDefault(conn.RoomA) + 1;
-            closeCountByRoom[conn.RoomB] = closeCountByRoom.GetValueOrDefault(conn.RoomB) + 1;
-        }
-
-        var floorModeRooms = new HashSet<int>();
-        foreach (var (roomIdx, count) in closeCountByRoom)
-        {
-            if (count > 1 && random.Next(2) == 0)
-                floorModeRooms.Add(roomIdx);
+            CERoomTypePrototype? roomTypeProto = null;
+            var protoId = room.RoomType switch
+            {
+                CEProceduralRoomType.Exit => config.ExitRoom,
+                CEProceduralRoomType.Entrance => config.EntranceRooms,
+                CEProceduralRoomType.Blessing => config.BlessingRooms,
+                CEProceduralRoomType.Treasure => config.TreasureRooms,
+                CEProceduralRoomType.DeadEnd => config.DeadEndRooms,
+                _ => config.GeneralRooms,
+            };
+            if (protoId != null)
+                _proto.TryIndex(protoId.Value, out roomTypeProto);
+            roomTypeProtos[room.Index] = roomTypeProto;
         }
 
         // --- Process connections ---
@@ -80,8 +85,9 @@ public sealed partial class CEProceduralGeneratorSystem
         }
 
         // Collect tile positions and door placements in batches.
+        // Each door placement records the tile position, rotation and the door prototype to spawn.
         var corridorPositions = new HashSet<Vector2i>();
-        var doorPlacements = new List<(Vector2i Pos, Angle Rotation)>();
+        var doorPlacements = new List<(Vector2i Pos, Angle Rotation, EntProtoId DoorProto)>();
 
         var connCounter = 0;
         foreach (var conn in comp.Connections)
@@ -94,22 +100,29 @@ public sealed partial class CEProceduralGeneratorSystem
                 !roomByIndex.TryGetValue(conn.RoomB, out var roomB))
                 continue;
 
-            var isFloorMode = conn.IsClose
-                              && (floorModeRooms.Contains(conn.RoomA)
-                                  || floorModeRooms.Contains(conn.RoomB));
+            var protoA = roomTypeProtos.GetValueOrDefault(conn.RoomA);
+            var protoB = roomTypeProtos.GetValueOrDefault(conn.RoomB);
 
-            if (isFloorMode)
+            // Wide connection: both room types explicitly support it and rooms are adjacent.
+            var isWideMode = conn.IsClose
+                             && (protoA?.SupportsWideConnection ?? false)
+                             && (protoB?.SupportsWideConnection ?? false);
+
+            if (isWideMode)
             {
-                // Floor-mode: place floor tiles at all aligned passway gaps (no doors).
+                // Wide-mode: place floor tiles at all aligned passway gaps (no doors).
                 CollectFloorConnectionTiles(roomA, roomB, mainZLevel, corridorPositions);
             }
             else
             {
-                // Door-mode: A* corridor with doors at the endpoints.
+                // Door-mode: A* corridor with per-room-type doors at the endpoints.
+                var doorProtoA = protoA?.DoorPrototype ?? config.DoorPrototype;
+                var doorProtoB = protoB?.DoorPrototype ?? config.DoorPrototype;
                 await BuildDoorCorridor(
                     roomA, roomB, mainZLevel, random,
                     config.CorridorWander, roomBuffer,
-                    corridorPositions, doorPlacements, suspend);
+                    corridorPositions, doorPlacements,
+                    doorProtoA, doorProtoB, suspend);
             }
         }
 
@@ -130,11 +143,11 @@ public sealed partial class CEProceduralGeneratorSystem
         }
 
         // --- Spawn doors ---
-        foreach (var (pos, rot) in doorPlacements)
+        foreach (var (pos, rot, doorProto) in doorPlacements)
         {
             var worldPos = new Vector2(pos.X + 0.5f, pos.Y + 0.5f);
             SpawnAttachedTo(
-                config.DoorPrototype,
+                doorProto,
                 new EntityCoordinates(gridUid, worldPos),
                 rotation: rot);
         }
@@ -174,6 +187,8 @@ public sealed partial class CEProceduralGeneratorSystem
     /// <summary>
     /// Finds the best passway pair between two rooms, runs A* to connect them,
     /// and records corridor tile positions + door placements at the endpoints.
+    /// Door prototypes are per-room: <paramref name="doorProtoA"/> is placed at the
+    /// RoomA end of the corridor; <paramref name="doorProtoB"/> at the RoomB end.
     /// </summary>
     private async Task BuildDoorCorridor(
         CEProceduralAbstractRoom roomA,
@@ -183,7 +198,9 @@ public sealed partial class CEProceduralGeneratorSystem
         float wanderWeight,
         HashSet<Vector2i> obstacles,
         HashSet<Vector2i> corridorPositions,
-        List<(Vector2i Pos, Angle Rotation)> doorPlacements,
+        List<(Vector2i Pos, Angle Rotation, EntProtoId DoorProto)> doorPlacements,
+        EntProtoId doorProtoA,
+        EntProtoId doorProtoB,
         Func<ValueTask> suspend)
     {
         var exitsA = GetPasswayWorldTiles(roomA, roomA.Position, mainZLevel);
@@ -237,16 +254,16 @@ public sealed partial class CEProceduralGeneratorSystem
         foreach (var pos in path)
             corridorPositions.Add(pos);
 
-        // Door at the start (faces toward room A).
+        // Door at the start (faces toward room A, uses roomB's prototype — the player sees roomB's door when approaching from outside).
         if (path.Count > 0)
         {
-            doorPlacements.Add((path[0], dirBtoA.ToAngle()));
+            doorPlacements.Add((path[0], dirBtoA.ToAngle(), doorProtoB));
         }
 
-        // Door at the end (faces toward room B) — only if it is a different tile.
+        // Door at the end (faces toward room B, uses roomA's prototype) — only if different tile.
         if (path.Count > 1)
         {
-            doorPlacements.Add((path[^1], dirAtoB.ToAngle()));
+            doorPlacements.Add((path[^1], dirAtoB.ToAngle(), doorProtoA));
         }
     }
 

@@ -1,10 +1,10 @@
 using System.Threading;
+using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Destructible.Thresholds;
 using Content.Shared.Maps;
-using Content.Shared.Whitelist;
 using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -29,41 +29,53 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     [DataField]
     public int MaxRoomSize = 20;
 
+    /// <summary>
+    /// Room type prototype for general rooms.
+    /// </summary>
     [DataField]
-    public CEProceduralRoomPack GeneralRooms = new();
+    public ProtoId<CERoomTypePrototype>? GeneralRooms;
 
     [DataField]
     public MinMax GeneralCount = new(30, 50);
 
     /// <summary>
-    /// Pack used for the exit room (placed at grid origin).
+    /// Room type prototype for the exit room (placed at grid origin).
     /// </summary>
     [DataField]
-    public CEProceduralRoomPack ExitRoom = new();
+    public ProtoId<CERoomTypePrototype>? ExitRoom;
 
     /// <summary>
-    /// Pack used for entrance rooms (dead-ends, maximally far apart).
+    /// Room type prototype for entrance rooms (dead-ends, maximally far apart).
     /// </summary>
     [DataField]
-    public CEProceduralRoomPack EntranceRooms = new();
+    public ProtoId<CERoomTypePrototype>? EntranceRooms;
 
     [DataField]
     public MinMax EntranceCount = new(2, 2);
 
     /// <summary>
-    /// Pack used for blessing/treasure rooms (dead-ends, maximally far apart).
+    /// Room type prototype for blessing rooms (dead-ends, maximally far apart).
     /// </summary>
     [DataField]
-    public CEProceduralRoomPack BlessingRooms = new();
+    public ProtoId<CERoomTypePrototype>? BlessingRooms;
 
     [DataField]
     public MinMax BlessingCount = new(2, 2);
 
     /// <summary>
-    /// Pack used for dead-end rooms (remaining dead-ends after entrances and blessings).
+    /// Room type prototype for treasure rooms (dead-ends, generated after blessing rooms).
     /// </summary>
     [DataField]
-    public CEProceduralRoomPack DeadEndRooms = new();
+    public ProtoId<CERoomTypePrototype>? TreasureRooms;
+
+    [DataField]
+    public MinMax TreasureCount = new(0, 0);
+
+    /// <summary>
+    /// Room type prototype for dead-end rooms (remaining dead-ends after special types).
+    /// </summary>
+    [DataField]
+    public ProtoId<CERoomTypePrototype>? DeadEndRooms;
 
     /// <summary>
     /// Shared components applied to every z-level map in the dungeon's z-network
@@ -106,16 +118,6 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     /// </summary>
     [DataField]
     public EntProtoId DoorPrototype = "CEWoodenDoor";
-}
-
-[DataDefinition]
-public sealed partial class CEProceduralRoomPack
-{
-    /// <summary>
-    /// Filtering rooms that are suitable for this pack
-    /// </summary>
-    [DataField]
-    public EntityWhitelist? Whitelist;
 }
 
 /// <summary>

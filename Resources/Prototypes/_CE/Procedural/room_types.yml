@@ -1,0 +1,53 @@
+# Room type prototypes for the Mossy Temple dungeon.
+# Each prototype defines the room whitelist, wide-connection support and
+# the door variant placed at corridor endpoints that lead into this room type.
+
+- type: dungeonRoomType
+  id: MossyTempleGeneralRoom
+  whitelist:
+    requireAll: true
+    tags:
+    - CEDunGenMossyTemple
+    - CEDunGenRoomGeneral
+
+- type: dungeonRoomType
+  id: MossyTempleExitRoom
+  whitelist:
+    requireAll: true
+    tags:
+    - CEDunGenMossyTemple
+    - CEDunGenRoomExit
+
+- type: dungeonRoomType
+  id: MossyTempleEntranceRoom
+  whitelist:
+    requireAll: true
+    tags:
+    - CEDunGenMossyTemple
+    - CEDunGenRoomEntrance
+
+- type: dungeonRoomType
+  id: MossyTempleBlessingRoom
+  whitelist:
+    requireAll: true
+    tags:
+    - CEDunGenMossyTemple
+    - CEDunGenRoomBlessing
+
+- type: dungeonRoomType
+  id: MossyTempleTreasureRoom
+  doorPrototype: CEIronDoor
+  supportsWideConnection: false
+  whitelist:
+    requireAll: true
+    tags:
+    - CEDunGenMossyTemple
+    - CEDunGenRoomTreasure
+
+- type: dungeonRoomType
+  id: MossyTempleDeadEndRoom
+  whitelist:
+    requireAll: true
+    tags:
+    - CEDunGenMossyTemple
+    - CEDunGenRoomDeadEnd

@@ -4,8 +4,12 @@
     children:
     - id: CEPot
       weight: 1
-    - id: CEChestWoodenFilled
+    - id: CEChestWoodenOldFilled
       weight: 0.1
+    - id: CEChestWoodenFilled
+      weight: 0.05
+    - id: CEChestGoldFilled
+      weight: 0.01
 
 - type: entity
   id: CESpawnerRandomDungeonProp

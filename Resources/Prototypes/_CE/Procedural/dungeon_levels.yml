@@ -170,36 +170,12 @@
     - type: Gravity
       enabled: true
       inherent: true
-    generalRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomGeneral
-    exitRoom:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomExit
-    entranceRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomEntrance
-    blessingRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomBlessing
-    deadEndRooms:
-      whitelist:
-        requireAll: true
-        tags:
-        - CEDunGenMossyTemple
-        - CEDunGenRoomDeadEnd
+    generalRooms: MossyTempleGeneralRoom
+    exitRoom: MossyTempleExitRoom
+    entranceRooms: MossyTempleEntranceRoom
+    blessingRooms: MossyTempleBlessingRoom
+    treasureRooms: MossyTempleTreasureRoom
+    deadEndRooms: MossyTempleDeadEndRoom
 
 # Floor 1: Small introductory level.
 - type: dungeonLevel
@@ -213,12 +189,15 @@
   config:
     !type:CEProceduralConfig
     generalCount:
-      min: 7
-      max: 10
+      min: 5
+      max: 7
     entranceCount:
       min: 2
       max: 2
     blessingCount:
+      min: 1
+      max: 1
+    treasureCount:
       min: 1
       max: 1
     cycleCount:
@@ -251,12 +230,15 @@
   config:
     !type:CEProceduralConfig
     generalCount:
-      min: 10
-      max: 15
+      min: 7
+      max: 10
     entranceCount:
       min: 2
       max: 2
     blessingCount:
+      min: 1
+      max: 1
+    treasureCount:
       min: 1
       max: 1
     cycleCount:
@@ -295,6 +277,9 @@
       min: 10
       max: 15
     blessingCount:
+      min: 1
+      max: 1
+    treasureCount:
       min: 1
       max: 1
     cycleCount:
@@ -336,6 +321,9 @@
       min: 10
       max: 15
     blessingCount:
+      min: 1
+      max: 1
+    treasureCount:
       min: 1
       max: 1
     cycleCount:
@@ -408,6 +396,9 @@
     blessingCount:
       min: 0
       max: 0
+    treasureCount:
+      min: 1
+      max: 1
     cycleCount:
       min: 10
       max: 10

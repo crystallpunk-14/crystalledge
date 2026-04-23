@@ -92,10 +92,12 @@ public enum CEProceduralRoomType : byte
     Exit,
     /// <summary>Dungeon entrance (dead-end, far from others).</summary>
     Entrance,
-    /// <summary>Blessing/treasure room (dead-end, far from others).</summary>
+    /// <summary>Blessing room (dead-end, far from others).</summary>
     Blessing,
     /// <summary>Dead-end room (1 connection, not assigned a special role).</summary>
     DeadEnd,
+    /// <summary>Treasure room (dead-end, generated after blessing rooms).</summary>
+    Treasure,
 }
 
 /// <summary>

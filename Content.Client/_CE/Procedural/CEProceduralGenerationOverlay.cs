@@ -27,8 +27,9 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         { CEProceduralRoomType.General,   Color.Gray.WithAlpha(0.08f) },
         { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.12f) },
         { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.12f) },
-        { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.12f) },
+        { CEProceduralRoomType.Blessing,  Color.CornflowerBlue.WithAlpha(0.12f) },
         { CEProceduralRoomType.DeadEnd,   Color.Orange.WithAlpha(0.10f) },
+        { CEProceduralRoomType.Treasure,  Color.Gold.WithAlpha(0.15f) },
     };
 
     /// <summary>
@@ -39,8 +40,9 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         { CEProceduralRoomType.General,   Color.Gray.WithAlpha(0.8f) },
         { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.8f) },
         { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.8f) },
-        { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.8f) },
+        { CEProceduralRoomType.Blessing,  Color.CornflowerBlue.WithAlpha(0.8f) },
         { CEProceduralRoomType.DeadEnd,   Color.Orange.WithAlpha(0.8f) },
+        { CEProceduralRoomType.Treasure,  Color.Gold.WithAlpha(0.8f) },
     };
 
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);
