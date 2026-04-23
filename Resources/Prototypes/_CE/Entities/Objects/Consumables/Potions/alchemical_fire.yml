@@ -31,6 +31,14 @@
       effectTarget: User
       spawns:
       - CEEffectPotionAlchemicalFire
+    - !type:AreaEffect
+      range: 2
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 20
   - type: CEDestructible
   - type: PointLight
     color: "#ffae00"

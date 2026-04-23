@@ -40,9 +40,6 @@
         - !type:NestedSelector
           tableId: CEEmptyVials
           weight: 0.1
-        - !type:NestedSelector
-          tableId: CERandomFlowers
-          weight: 0.3
         - id: CEMobRat
           weight: 0.2
         #- id: CECoinCopper1

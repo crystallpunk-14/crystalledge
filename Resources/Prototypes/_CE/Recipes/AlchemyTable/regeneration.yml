@@ -1,0 +1,20 @@
+- type: CERecipe
+  id: CEConsumablePotionRegeneration
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEConsumableBlueAelyta
+    count: 1
+  - !type:ProtoIdResource
+    protoId: CEConsumableBloodRose
+    count: 1
+  - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreWater
+    count: 1
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionRegeneration
+  resultCount: 1

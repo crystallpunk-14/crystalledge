@@ -2,6 +2,8 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Procedural;
+using Content.Shared.EntityTable;
+using Content.Shared.EntityTable.EntitySelectors;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
 using Robust.Shared.Map;
@@ -11,11 +13,11 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CE.Procedural.PostProcess;
 
 /// <summary>
-/// Post-process layer: spends a budget to spawn weighted entries across dungeon tiles.
+/// Post-process layer: spends a budget to spawn entries resolved via <see cref="EntityTableSelector"/>
+/// across dungeon tiles. Each entry rolls its table to produce one or more entity prototypes.
 /// Supports optional filtering by tile type and anchored entity whitelist (e.g., tables).
-/// Each entry has a cost; the layer keeps spawning until the budget runs out.
 /// </summary>
-public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
+public sealed partial class CEEntityTableBudgetSpawnPostProcess : CEDungeonPostProcessLayer
 {
     /// <summary>
     /// Total budget available for this layer.
@@ -27,7 +29,7 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
     /// Weighted list of entries that can be spawned.
     /// </summary>
     [DataField(required: true)]
-    public List<BudgetSpawnEntry> Entries = new();
+    public List<EntityTableBudgetEntry> Entries = new();
 
     /// <summary>
     /// If set, only spawn on tiles whose prototype ID is in this list.
@@ -69,16 +71,16 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         var map = entMan.System<SharedMapSystem>();
         var turf = entMan.System<TurfSystem>();
         var whitelistSys = entMan.System<EntityWhitelistSystem>();
+        var entityTable = entMan.System<EntityTableSystem>();
         var random = new Random();
 
         var maps = MainZLevelOnly
             ? new List<EntityUid> { postProcess.GetMapAtZLevel(mapUid, mainZLevel) }
             : postProcess.GetAllMaps(mapUid);
+
         var totalWeight = 0f;
         foreach (var entry in Entries)
-        {
             totalWeight += entry.Weight;
-        }
 
         if (totalWeight <= 0 || Entries.Count == 0)
             return;
@@ -178,24 +180,26 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
                     break;
             }
 
-            // Find the next valid candidate position.
             if (candidateIdx >= candidates.Count)
                 break;
 
             var (_, _, coords) = candidates[candidateIdx];
             candidateIdx++;
 
-            entMan.SpawnEntity(entry.Proto, coords);
+            // Resolve the entity table and spawn all resulting prototypes at the same tile.
+            foreach (var proto in entityTable.GetSpawns(entry.Table, random))
+            {
+                entMan.SpawnEntity(proto, coords);
+            }
 
-            // Wake mob if requested.
             if (WakeOnSpawn)
-                WakeSpawnedEntity(entMan, coords);
+                WakeSpawnedEntities(entMan, coords);
 
             remaining -= entry.Cost;
         }
     }
 
-    private BudgetSpawnEntry? PickWeightedEntry(Random random, float totalWeight)
+    private EntityTableBudgetEntry? PickWeightedEntry(Random random, float totalWeight)
     {
         var roll = random.NextSingle() * totalWeight;
         var cumulative = 0f;
@@ -208,9 +212,8 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         return Entries.Count > 0 ? Entries[^1] : null;
     }
 
-    private BudgetSpawnEntry? FindAffordableEntry(int remaining, Random random)
+    private EntityTableBudgetEntry? FindAffordableEntry(int remaining, Random random)
     {
-        // Build a sub-list of affordable entries and pick one.
         var affordableWeight = 0f;
         foreach (var entry in Entries)
         {
@@ -234,7 +237,7 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         return null;
     }
 
-    private static void WakeSpawnedEntity(IEntityManager entMan, EntityCoordinates coords)
+    private static void WakeSpawnedEntities(IEntityManager entMan, EntityCoordinates coords)
     {
         var sleepingSystem = entMan.System<GOAP.CEGOAPSleepingSystem>();
         var lookup = entMan.System<EntityLookupSystem>();
@@ -248,10 +251,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         }
     }
 
-    /// <summary>
-    /// Reads room data from the dungeon component on the map and builds
-    /// a list of bounding boxes for rooms whose type is in <see cref="ExcludedRoomTypes"/>.
-    /// </summary>
     private List<(Vector2i Pos, Vector2i Size)> BuildExcludedZones(IEntityManager entMan, EntityUid mapUid)
     {
         var zones = new List<(Vector2i Pos, Vector2i Size)>();
@@ -284,19 +283,20 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
 }
 
 /// <summary>
-/// A single entry in the budget spawn table.
+/// A single entry in the entity-table budget spawn list.
 /// </summary>
 [DataDefinition]
-public sealed partial class BudgetSpawnEntry
+public sealed partial class EntityTableBudgetEntry
 {
     /// <summary>
-    /// Entity prototype to spawn.
+    /// Entity table selector to roll when this entry is picked.
+    /// Can produce one or more entity prototypes.
     /// </summary>
     [DataField(required: true)]
-    public EntProtoId Proto;
+    public EntityTableSelector Table = default!;
 
     /// <summary>
-    /// Budget cost for spawning one of this entity.
+    /// Budget cost for picking this entry once.
     /// </summary>
     [DataField]
     public int Cost = 1;

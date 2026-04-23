@@ -216,12 +216,30 @@ public sealed partial class CEProceduralGeneratorSystem
     }
 
     /// <summary>
-    /// Assigns the Exit type to the room at grid (0,0) and marks all remaining
-    /// dead-end rooms (1 connection) as <see cref="CEProceduralRoomType.DeadEnd"/>.
-    /// All special room types (Entrance, Blessing, Treasure) are appended as new
-    /// graph nodes via <see cref="AppendSpecialRooms"/>.
+    /// Marks the room at grid (0,0) as <see cref="CEProceduralRoomType.Exit"/>.
+    /// Call this before <see cref="AppendSpecialRooms"/> so that corridor rooms are still
+    /// <see cref="CEProceduralRoomType.General"/> and available as parents for special rooms.
     /// </summary>
-    internal void AssignRoomTypes(CEGeneratingProceduralDungeonComponent comp)
+    internal void AssignExitRoom(CEGeneratingProceduralDungeonComponent comp)
+    {
+        foreach (var room in comp.Rooms)
+        {
+            if (room.GridCoord == Vector2i.Zero)
+            {
+                room.RoomType = CEProceduralRoomType.Exit;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Marks all <see cref="CEProceduralRoomType.General"/> rooms that have exactly one
+    /// connection as <see cref="CEProceduralRoomType.DeadEnd"/>.
+    /// Call this <em>after</em> <see cref="AppendSpecialRooms"/> so that special rooms
+    /// are attached to corridors first, and only the truly unassigned leaf rooms become
+    /// dead-ends.
+    /// </summary>
+    internal void AssignDeadEnds(CEGeneratingProceduralDungeonComponent comp)
     {
         // Count connections per room.
         var connectionCount = new Dictionary<int, int>();
@@ -231,17 +249,6 @@ public sealed partial class CEProceduralGeneratorSystem
             connectionCount[conn.RoomB] = connectionCount.GetValueOrDefault(conn.RoomB) + 1;
         }
 
-        // 1. Exit at (0, 0).
-        foreach (var room in comp.Rooms)
-        {
-            if (room.GridCoord == Vector2i.Zero)
-            {
-                room.RoomType = CEProceduralRoomType.Exit;
-                break;
-            }
-        }
-
-        // 2. All dead-end rooms (1 connection, not the exit) become DeadEnd.
         foreach (var room in comp.Rooms)
         {
             if (room.RoomType != CEProceduralRoomType.General)
@@ -257,8 +264,8 @@ public sealed partial class CEProceduralGeneratorSystem
     /// the dungeon graph, each attached to a random <see cref="CEProceduralRoomType.General"/>
     /// (corridor) room that still has at least one free cardinal grid cell.
     /// <para>
-    /// Unlike picking from existing dead-ends, this method <em>guarantees</em> the requested
-    /// number of special rooms as long as there is space to expand the grid.
+    /// Call this <em>before</em> <see cref="AssignDeadEnds"/> so that corridor rooms are
+    /// still <see cref="CEProceduralRoomType.General"/> and available as parents.
     /// </para>
     /// </summary>
     internal void AppendSpecialRooms(
@@ -278,7 +285,7 @@ public sealed partial class CEProceduralGeneratorSystem
         foreach (var room in comp.Rooms)
             occupied.Add(room.GridCoord);
 
-        // Candidate parents: only General rooms (not dead-ends, entrances or exits), must have at least one free cardinal neighbor.
+        // Candidate parents: General corridor rooms with at least one free cardinal neighbor.
         var candidates = new List<CEProceduralAbstractRoom>();
         foreach (var room in comp.Rooms)
         {

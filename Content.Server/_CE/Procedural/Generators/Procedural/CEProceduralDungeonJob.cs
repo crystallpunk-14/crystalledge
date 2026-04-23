@@ -67,18 +67,22 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
         await _generator.BuildRoomGraph(comp, config.MaxRoomSize, targetCount, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
-        // Assign room types before selecting real prototypes.
-        _generator.AssignRoomTypes(comp);
+        // Mark the exit room before appending specials so it is excluded from candidates.
+        _generator.AssignExitRoom(comp);
         await SuspendIfOutOfTime();
 
-        // Append all special room types as new graph nodes attached to General corridor rooms.
-        // This guarantees their presence regardless of available dead-ends.
+        // Attach special rooms to General corridor rooms while all corridors are still General.
+        // Dead-ends are calculated afterwards so that only truly unassigned leaf rooms become DeadEnd.
         var entranceCount = _random.Next(config.EntranceCount.Min, config.EntranceCount.Max + 1);
         _generator.AppendSpecialRooms(comp, entranceCount, CEProceduralRoomType.Entrance, config.MaxRoomSize);
         var blessingCount = _random.Next(config.BlessingCount.Min, config.BlessingCount.Max + 1);
         _generator.AppendSpecialRooms(comp, blessingCount, CEProceduralRoomType.Blessing, config.MaxRoomSize);
         var treasureCount = _random.Next(config.TreasureCount.Min, config.TreasureCount.Max + 1);
         _generator.AppendSpecialRooms(comp, treasureCount, CEProceduralRoomType.Treasure, config.MaxRoomSize);
+        await SuspendIfOutOfTime();
+
+        // Now mark remaining 1-connection General rooms as DeadEnd.
+        _generator.AssignDeadEnds(comp);
         await SuspendIfOutOfTime();
 
         // Add cyclic connections between adjacent General rooms (farthest from center first).

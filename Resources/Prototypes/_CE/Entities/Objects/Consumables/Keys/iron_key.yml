@@ -11,6 +11,16 @@
     sprite: _CE/Objects/Consumable/keys.rsi
     layers:
     - state: iron
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_CE/Effects/key_drop.ogg
+      params:
+        variation: 0.05
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_CE/Effects/key_drop.ogg
+      params:
+        variation: 0.05
   - type: CEConsumable
     whitelist:
       components:

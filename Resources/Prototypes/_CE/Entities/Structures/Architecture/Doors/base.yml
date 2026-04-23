@@ -53,3 +53,7 @@
         layer:
         - AirlockLayer
         - Impassable
+  - type: ConditionalSpawner
+    prototypes:
+    - CEGodRaysMoon
+

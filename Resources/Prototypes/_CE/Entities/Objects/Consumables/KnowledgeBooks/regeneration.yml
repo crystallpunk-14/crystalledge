@@ -1,0 +1,11 @@
+﻿- type: entity
+  parent: CEBaseKnowledgeBook
+  id: CEKnowledgeBook_Regeneration
+  name: regeneration
+  description: This slim volume contains a detailed recipe for brewing a health-regeneration potion. Useful information!
+  components:
+  - type: Sprite
+    state: regeneration
+  - type: CEKnowledgeBook
+    recipes:
+    - CEConsumablePotionRegeneration

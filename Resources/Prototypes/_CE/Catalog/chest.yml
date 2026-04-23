@@ -14,8 +14,6 @@
           prob: 1
           children:
           - !type:NestedSelector
-            tableId: CERandomFlowers
-          - !type:NestedSelector
             tableId: CERandomPotion
             weight: 0.25
         - !type:GroupSelector

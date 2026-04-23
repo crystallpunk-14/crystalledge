@@ -15,6 +15,9 @@
     },
     {
         "name": "mana_conservation"
+    },
+    {
+        "name": "regeneration"
     }
   ]
 }
