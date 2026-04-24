@@ -623,12 +623,11 @@
   offset: -18, -28
 
 - type: dungeonRoom3d
-  id: MossyTemple_Blessing_FuckYou
+  id: MossyTemple_Blessing_River
   tags:
   - CEDunGenMossyTemple
   - CEDunGenRoomBlessing
   size: 7, 12
-  weight: 0.1
   height: 2
   zLevelMap: MossyTemple
   offset: -26, -25
