@@ -53,10 +53,7 @@ public sealed class CEAdminDungeonOverviewSystem : EntitySystem
         if (!TryGetEntity(args.Target, out var target))
             return;
 
-        if (!TryComp<TransformComponent>(target, out var targetXform))
-            return;
-
-        _transform.SetCoordinates(ent.Owner, targetXform.Coordinates);
+        _transform.SetCoordinates(ent.Owner, Transform(target.Value).Coordinates);
         _transform.AttachToGridOrMap(ent.Owner);
     }
 
