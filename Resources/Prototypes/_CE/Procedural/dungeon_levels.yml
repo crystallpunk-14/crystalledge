@@ -238,13 +238,13 @@
     entries:
     - proto: CEMobRat
       cost: 1
-      weight: 3
+      weight: 2
     - proto: CEMobSlimeWater
       cost: 3
-      weight: 1
+    - proto: CEMobSlimeWaterBig
+      cost: 6
     - proto: CEMobPredatoryVine
       cost: 3
-      weight: 1
 
 # Floor 2: Medium-sized level with more rooms.
 - type: dungeonLevel
@@ -283,16 +283,13 @@
     entries:
     - proto: CEMobRat
       cost: 1
-      weight: 3
+      weight: 2
     - proto: CEMobSlimeWater
       cost: 2
-      weight: 1
     - proto: CEMobFireConstruct
       cost: 10
-      weight: 1
     - proto: CEMobPredatoryVine
       cost: 3
-      weight: 1
 
 # Floor 3: Large final level with many rooms and cycles.
 - type: dungeonLevel
@@ -328,19 +325,19 @@
     entries:
     - proto: CEMobRat
       cost: 1
-      weight: 3
+      weight: 2
     - proto: CEMobSlimeWater
       cost: 2
-      weight: 1
     - proto: CEMobFireConstruct
       cost: 10
-      weight: 1
     - proto: CEMobSlimeFire
       cost: 3
-      weight: 1
     - proto: CEMobPredatoryVine
       cost: 3
-      weight: 1
+    - proto: CEMobSlimeFireBig
+      cost: 7
+    - proto: CEMobSlimeWaterBig
+      cost: 4
 
 
 - type: dungeonLevel
@@ -376,19 +373,18 @@
     entries:
     - proto: CEMobRat
       cost: 1
-      weight: 1
     - proto: CEMobSlimeWater
       cost: 2
-      weight: 1
+    - proto: CEMobSlimeWaterBig
+      cost: 2
     - proto: CEMobSlimeFire
       cost: 3
-      weight: 1
     - proto: CEMobFireConstruct
       cost: 10
-      weight: 1
     - proto: CEMobPredatoryVine
       cost: 3
-      weight: 1
+    - proto: CEMobSlimeFireBig
+      cost: 3
 
 - type: dungeonLevel
   id: MossyTempleSafe
@@ -467,6 +463,10 @@
       cost: 10
     - proto: CEMobPredatoryVine
       cost: 3
+    - proto: CEMobSlimeFireBig
+      cost: 8
+    - proto: CEMobSlimeWaterBig
+      cost: 2
 
 
 

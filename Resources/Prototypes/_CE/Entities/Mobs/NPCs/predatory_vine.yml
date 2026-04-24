@@ -66,7 +66,7 @@
 - type: entity
   id: CEActionPredatoryVineShot
   parent: CEActionSpellBase
-  name: Predatorry vine Shoot
+  name: Predatory vine Shoot
   description: Ranged poison attack
   components:
   - type: CEVisualizeConeAction

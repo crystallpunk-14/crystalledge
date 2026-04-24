@@ -3,7 +3,6 @@
   - BaseMob
   - MobFlammable
   - CEMobDamageable
-  - CEMobCombat
   id: CEMobFireConstruct
   name: fire construct
   description: TODO

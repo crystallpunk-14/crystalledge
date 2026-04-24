@@ -4,9 +4,9 @@
   - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CEMobSlimeWater
-  name: water slime
-  description: A wobbly blob of animated water. Pops into a splash when destroyed.
+  id: CEMobSlimeWaterBig
+  name: big water slime
+  description: TODO
   categories: [ ForkFiltered ]
   components:
   - type: CEGOAPAlarm
@@ -14,17 +14,24 @@
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
+        pitch: 0.6
   - type: CEDestructible
-    destroyThreshold: 50
+    destroyThreshold: 150
     lootTable: !type:AllSelector
       children:
-      - id: CEConsumableSlimeCoreWater
+      - id: CEMobSlimeWater
+        amount: 2
+        prob: 1
+      - id: CEMobSlimeWater
         amount: 1
-        prob: 0.75
+        prob: 0.25
+      - id: CEMobSlimeWater
+        amount: 1
+        prob: 0.25
   - type: CEDestructionEffect
     effects:
     - !type:WetArea
-      radius: 3
+      radius: 6
       maxStacks: 10
       fallOffFactor: 0.5
   - type: CEGOAP
@@ -35,6 +42,15 @@
       priority: 1
 
     actions:
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 0.5
+      actionPrototype: CEActionBigSlimeWaterShoot
     - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
       preconditions:
@@ -51,16 +67,7 @@
         EnemyDead: true
       cost: 1
       useType: Primary
-      angleVariation: 5
-    - !type:CEGOAPUseAction
-      targetKey: enemy
-      preconditions:
-        EnemyVisible: true
-        EnemyInMeleeRange: false
-      effects:
-        EnemyInMeleeRange: true
-      cost: 0.5
-      actionPrototype: CEActionWaterSlimeJump
+      angleVariation: 5 
     - !type:CEGOAPExploreAction
       effects:
         EnemyVisible: true
@@ -88,11 +95,13 @@
       positionTargetKey: enemy
     - !type:CEGOAPAlarmSensor
       outputTargetKey: enemy
+
   - type: NpcFactionMember
     factions:
     - SimpleHostile
   - type: Sprite
     drawdepth: Mobs
+    scale: 2, 2
     sprite: _CE/Mobs/slime.rsi
     layers:
     - map: [ "base", "movement" ]
@@ -106,114 +115,34 @@
       movement:
         state: base
   - type: MovementSpeedModifier
-    baseSprintSpeed: 1.5
+    baseSprintSpeed: 0.75
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
       OnHit:
+      - !type:WetArea
+        effectTarget: User
+        radius: 2
+        maxStacks: 5
       - !type:WeaponArcAttack
-        range: 0.5
-        arcWidth: 40
+        range: 0.9
+        arcWidth: 360
         effects:
         - !type:Damage
           attackType: Melee
           damage:
             types:
-              Physical: 5
-        - !type:WetEntity
-          stacks: 1
-          maxStacks: 5
+              Physical: 15
+        - !type:ThrowFromUser
+          distance: 1
     animations:
       Primary:
-      - anim: SlimeBite
-
-
+      - anim: BigSlimeWaterAttack
 
 - type: entityEffectAnimation
-  id: SlimeBite
+  id: BigSlimeWaterAttack
   movementSpeed: 0.8
   duration: 0.8
-  events:
-    0:
-    - !type:UsedEntityAnimation
-      dummyEntity: CERatBiteEffectTelegraphy
-      offsetAnimation:
-      - time: 0.0
-        offset: 0, -0.3
-        easing: QuadIn
-      - time: 0.2
-        offset: 0, -0.2
-        easing: QuadIn
-
-      rotationAnimation:
-      - time: 0.0
-        rotation: 90
-
-      colorAnimation:
-      - time: 0.1
-        color: "#ffffff"
-      - time: 0.3
-        color: "#ffffff00"  # Fade out
-        easing: QuadOut
-    0.2:
-    - !type:UsedEntityAnimation
-      dummyEntity: CERatBiteEffect
-      offsetAnimation:
-      - time: 0.0
-        offset: 0, -0.2
-        easing: QuadIn
-      - time: 0.3
-        offset: 0, -0.7
-        easing: QuadIn
-
-      rotationAnimation:
-      - time: 0.0
-        rotation: 90
-
-      colorAnimation:
-      - time: 0.1
-        color: "#ffffff"
-      - time: 0.3
-        color: "#ffffff00"  # Fade out
-        easing: QuadOut
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Mobs/slime_alert.ogg
-        params:
-          pitch: 0.3
-          variation: 0.1
-    0.25:
-    - !type:WeaponEffectSlot
-      slot: OnHit
-    - !type:Dash
-      effectTarget: User
-      distance: 0.1
-
-# -- Slime Jump (leap toward target) --
-
-- type: entity
-  id: CEActionWaterSlimeJump
-  name: water slime jump
-  description: The slime leaps toward a target.
-  categories: [ ForkFiltered ]
-  components:
-  - type: CEVisualizeRadiusTargetAction
-  - type: CEVisualizeAoEZoneAction
-    radius: 1
-  - type: Action
-    useDelay: 2
-  - type: TargetAction
-    range: 8
-    interactOnMiss: false
-  - type: EntityTargetAction
-    event: !type:CEEntityTargetActionAnimationEvent
-      animation: WaterSlimeJump
-      cancelAnimation: true
-
-- type: entityEffectAnimation
-  id: WaterSlimeJump
-  movementSpeed: 0
-  duration: 0.7
   events:
     0:
     - !type:PlaySound
@@ -221,23 +150,80 @@
         path: /Audio/Effects/Fluids/watersplash.ogg
         params:
           variation: 0.1
+          pitch: 0.6
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectWaterBurstTelegraphy
+    0.6:
+    - !type:WeaponEffectSlot
+      slot: OnHit
+
+
+- type: entity
+  id: CEActionBigSlimeWaterShoot
+  parent: CEActionSpellBase
+  name: Big slime shoot
+  description: Ranged push attack
+  components:
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Mage/firebolt.rsi
+      state: icon
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: BigSlimeWaterShoot
+
+- type: entityEffectAnimation
+  id: BigSlimeWaterShoot
+  movementSpeed: 0.3
+  duration: 0.7
+  lockRotation: true
+  events:
     0.4:
-    - !type:WetArea
-      effectTarget: User
-      radius: 1
-      maxStacks: 3
-      fallOffFactor: 1
-    - !type:Dash
-      distance: 4
-      speed: 8
-    0.65:
     - !type:PlaySound
       sound:
-        path: /Audio/Effects/Fluids/splash.ogg
+        path: /Audio/Effects/Fluids/watersplash.ogg
         params:
           variation: 0.1
+          pitch: 0.6
+    - !type:ShootProjectile
+      projectileSpeed: 6
+      projectileMaxSpeed: 10
+      prototype: CEProjectileBigSlimeWaterShoot
+      projectileCount: 1
+      spread: 0.4
+
+- type: entity
+  id: CEProjectileBigSlimeWaterShoot
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/firebolt.rsi
+    layers:
+    - state: effect
+      color: blue
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 8
     - !type:WetArea
-      effectTarget: User
-      radius: 1
-      maxStacks: 3
-      fallOffFactor: 1
+      radius: 2
+      maxStacks: 5
+    - !type:AreaEffect
+      affectCaster: false
+      range: 2
+      effects:
+      - !type:ThrowFromUser
+        distance: 2
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Physical: 4
