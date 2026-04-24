@@ -11,7 +11,7 @@
     alert: CEFightForSurvival
   - type: RejuvenateRemovedStatusEffect
   - type: CERemoveStackOnHeal
-    amount: 20
+    healPerStack: 1
     canRemoveStatusEffect: false
   - type: CEDamageStatusEffect
     interruptDoAfters: false
