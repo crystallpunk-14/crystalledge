@@ -166,7 +166,7 @@ public sealed class CEAdminDungeonOverviewSystem : EntitySystem
 
     private string? TryGetCurrentLevelId(EntityUid user)
     {
-        if (!TryComp<TransformComponent>(user, out var xform) || xform.MapUid is not { } mapUid)
+        if (Transform(user).MapUid is not { } mapUid)
             return null;
 
         if (_zLevels.TryGetZNetwork(mapUid, out var zNetAnchor)
