@@ -152,9 +152,9 @@
   name: Firebolt
   description: You hurl a 3 fireballs that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].
   components:
-  - type: CEVisualizeWideLineAction
-    width: 1.0
-    projectileMode: true
+  - type: CEVisualizeConeAction
+    width: 35
+    range: 5
   - type: CEActionManaCost
     manaCost: 3
   - type: Action

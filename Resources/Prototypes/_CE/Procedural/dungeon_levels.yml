@@ -242,6 +242,9 @@
     - proto: CEMobSlimeWater
       cost: 3
       weight: 1
+    - proto: CEMobPredatoryVine
+      cost: 3
+      weight: 1
 
 # Floor 2: Medium-sized level with more rooms.
 - type: dungeonLevel
@@ -286,6 +289,9 @@
       weight: 1
     - proto: CEMobFireConstruct
       cost: 10
+      weight: 1
+    - proto: CEMobPredatoryVine
+      cost: 3
       weight: 1
 
 # Floor 3: Large final level with many rooms and cycles.
@@ -332,6 +338,9 @@
     - proto: CEMobSlimeFire
       cost: 3
       weight: 1
+    - proto: CEMobPredatoryVine
+      cost: 3
+      weight: 1
 
 
 - type: dungeonLevel
@@ -376,6 +385,9 @@
       weight: 1
     - proto: CEMobFireConstruct
       cost: 10
+      weight: 1
+    - proto: CEMobPredatoryVine
+      cost: 3
       weight: 1
 
 - type: dungeonLevel
@@ -453,6 +465,8 @@
       cost: 5
     - proto: CEMobFireConstruct
       cost: 10
+    - proto: CEMobPredatoryVine
+      cost: 3
 
 
 

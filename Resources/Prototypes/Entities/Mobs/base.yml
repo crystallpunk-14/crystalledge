@@ -36,9 +36,9 @@
   - type: ContentEye
   - type: CameraRecoil
   - type: MindContainer
-  - type: RequireProjectileTarget
-    active: False
   #CrystallEdge
+  #- type: RequireProjectileTarget
+  #  active: False
   - type: CEZPhysics
 
 # The progenitor. This should only container the most basic components possible.
