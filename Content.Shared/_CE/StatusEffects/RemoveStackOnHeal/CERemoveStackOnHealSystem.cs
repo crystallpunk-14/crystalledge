@@ -20,7 +20,7 @@ public sealed class CERemoveStackOnHealSystem : EntitySystem
         if (!TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
             return;
 
-        var stacksToRemove = args.Event.HealAmount / ent.Comp.HealPerStack;
+        var stacksToRemove = args.Args.HealAmount / ent.Comp.HealPerStack;
         if (stacksToRemove <= 0)
             return;
 

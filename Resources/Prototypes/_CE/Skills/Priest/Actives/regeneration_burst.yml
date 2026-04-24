@@ -37,6 +37,8 @@
       effectTarget: User
       spawns:
       - CEEffectHealingGeneric
+    - !type:SayChat
+      sentence: "Sana vulnera"
     0.4:
     - !type:ShootProjectile
       projectileSpeed: 3
