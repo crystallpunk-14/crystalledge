@@ -9,7 +9,6 @@
       - CEWettable
   - type: StatusEffectAlert
     alert: CEWet
-  - type: RejuvenateRemovedStatusEffect
   - type: CEStatusEffectNeutralization
     neutralizes:
     - CEStatusEffectFire

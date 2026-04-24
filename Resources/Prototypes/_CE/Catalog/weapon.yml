@@ -20,6 +20,7 @@
     - id: CEWeaponSwordBone
     - id: CEWeaponSpearSoulCatcher
     - id: CEWeaponMagicStaffWater
+    - id: CEWeaponDaggerPurification
 
 - type: entityTable
   id: CERandomWeapon

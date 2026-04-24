@@ -1,0 +1,49 @@
+- type: skill
+  parent: BasePriestSkill
+  id: Purification
+  effect: !type:AddAction
+    action: CEActionPurification
+
+- type: entity
+  id: CEActionPurification
+  parent: CEActionSpellBase
+  name: Purification
+  description: You cleanse the target of all negative status effects.
+  components:
+  - type: CEActionDangerous
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Neutral/todo.rsi
+      state: icon
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CEMobState
+      - CEGOAP
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationPurification
+
+- type: entityEffectAnimation
+  id: AnimationPurification
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    - !type:SayChat
+      sentence: "Mundemini"
+    0.5:
+    - !type:SayChat
+      sentence: "et liberamini"
+    - !type:CleanDebuffs

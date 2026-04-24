@@ -1,0 +1,21 @@
+- type: skill
+  parent: BasePriestSkill
+  id: InnocentPurity
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectInnocentPurity
+
+- type: entity
+  id: CEStatusEffectInnocentPurity
+  name: Innocent Purity
+  description: When you cleanse debuffs from a target, you restore [color=#1defa9]1 health[/color] to them per removed debuff stack.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEInnocentPurity
+  - type: CEInnocentPurity
+
+- type: alert
+  id: CEInnocentPurity
+  icons:
+  - sprite: _CE/Skills/Neutral/todo.rsi
+    state: icon
