@@ -16,7 +16,7 @@
         variation: 0.1
         pitch: 0.6
   - type: CEDestructible
-    destroyThreshold: 150
+    destroyThreshold: 75
     lootTable: !type:AllSelector
       children:
       - id: CEMobSlimeWater
@@ -31,7 +31,7 @@
   - type: CEDestructionEffect
     effects:
     - !type:WetArea
-      radius: 6
+      radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
   - type: CEGOAP
@@ -42,15 +42,6 @@
       priority: 1
 
     actions:
-    - !type:CEGOAPUseAction
-      targetKey: enemy
-      preconditions:
-        EnemyVisible: true
-        EnemyInMeleeRange: false
-      effects:
-        EnemyDead: true
-      cost: 0.5
-      actionPrototype: CEActionBigSlimeWaterShoot
     - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
       preconditions:
@@ -67,7 +58,7 @@
         EnemyDead: true
       cost: 1
       useType: Primary
-      angleVariation: 5 
+      angleVariation: 5
     - !type:CEGOAPExploreAction
       effects:
         EnemyVisible: true
@@ -141,8 +132,8 @@
 
 - type: entityEffectAnimation
   id: BigSlimeWaterAttack
-  movementSpeed: 0.8
-  duration: 0.8
+  movementSpeed: 0
+  duration: 1.5
   events:
     0:
     - !type:PlaySound
@@ -154,76 +145,6 @@
     - !type:SpawnEntity
       spawns:
       - CEEffectWaterBurstTelegraphy
-    0.6:
+    1.4:
     - !type:WeaponEffectSlot
       slot: OnHit
-
-
-- type: entity
-  id: CEActionBigSlimeWaterShoot
-  parent: CEActionSpellBase
-  name: Big slime shoot
-  description: Ranged push attack
-  components:
-  - type: Action
-    useDelay: 5
-    icon:
-      sprite: _CE/Skills/Mage/firebolt.rsi
-      state: icon
-  - type: TargetAction
-    range: 20
-  - type: WorldTargetAction
-    event: !type:CEWorldTargetActionAnimationEvent
-      animation: BigSlimeWaterShoot
-
-- type: entityEffectAnimation
-  id: BigSlimeWaterShoot
-  movementSpeed: 0.3
-  duration: 0.7
-  lockRotation: true
-  events:
-    0.4:
-    - !type:PlaySound
-      sound:
-        path: /Audio/Effects/Fluids/watersplash.ogg
-        params:
-          variation: 0.1
-          pitch: 0.6
-    - !type:ShootProjectile
-      projectileSpeed: 6
-      projectileMaxSpeed: 10
-      prototype: CEProjectileBigSlimeWaterShoot
-      projectileCount: 1
-      spread: 0.4
-
-- type: entity
-  id: CEProjectileBigSlimeWaterShoot
-  parent: BaseBullet
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _CE/Effects/firebolt.rsi
-    layers:
-    - state: effect
-      color: blue
-  - type: CEProjectile
-    hitEffects:
-    - !type:Damage
-      attackType: Ranged
-      damage:
-        types:
-          Physical: 8
-    - !type:WetArea
-      radius: 2
-      maxStacks: 5
-    - !type:AreaEffect
-      affectCaster: false
-      range: 2
-      effects:
-      - !type:ThrowFromUser
-        distance: 2
-      - !type:Damage
-        attackType: Ranged
-        damage:
-          types:
-            Physical: 4

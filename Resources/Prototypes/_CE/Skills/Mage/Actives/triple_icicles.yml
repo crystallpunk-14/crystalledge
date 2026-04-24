@@ -14,13 +14,14 @@
   - type: Sprite
     sprite: _CE/Skills/Mage/triple_icicle.rsi
     state: icon
-  - type: CEVisualizeConeAction
-    width: 25
+  - type: CEVisualizeWideLineAction
+    projectileMode: true
+    width: 0.5
     range: 5
   - type: CEActionManaCost
     manaCost: 3
   - type: Action
-    useDelay: 5
+    useDelay: 3
     icon:
       sprite: _CE/Skills/Mage/triple_icicle.rsi
       state: icon
@@ -33,7 +34,7 @@
 - type: entityEffectAnimation
   id: AnimationTripleIcicles
   movementSpeed: 0.3
-  duration: 1.0
+  duration: 0.7
   lockRotation: true
   events:
     0:
@@ -44,35 +45,16 @@
         offset: -0.5, 0
       - time: 0.2
         offset: -0.4, -0.2
-      - time: 0.4
+      - time: 0.25
         offset: -0.3, -0.5
         easing: QuadIn
-      - time: 0.6
-        offset: 0.2, -0.6
-        easing: QuadOut
-      rotationAnimation:
-      - time: 0.0
-        rotation: -45
-      - time: 0.6
-        rotation: 15
-    0.1:
-    - !type:UsedEntityAnimation
-      dummyEntity: CEProjectileTripleIcicle
-      offsetAnimation:
-      - time: 0.0
-        offset: -0.5, 0
-      - time: 0.2
-        offset: -0.4, -0.2
-      - time: 0.4
-        offset: -0.3, -0.5
-        easing: QuadIn
-      - time: 0.5
+      - time: 0.3
         offset: 0, -0.7
         easing: QuadOut
       rotationAnimation:
       - time: 0.0
         rotation: -45
-      - time: 0.5
+      - time: 0.3
         rotation: 0
     0.2:
     - !type:UsedEntityAnimation
@@ -82,24 +64,52 @@
         offset: -0.5, 0
       - time: 0.2
         offset: -0.4, -0.2
-      - time: 0.3
+      - time: 0.25
         offset: -0.3, -0.5
         easing: QuadIn
-      - time: 0.4
-        offset: -0.2, -0.5
+      - time: 0.3
+        offset: 0, -0.7
         easing: QuadOut
       rotationAnimation:
       - time: 0.0
         rotation: -45
-      - time: 0.4
-        rotation: -15
-    0.9:
+      - time: 0.3
+        rotation: 0
     - !type:ShootProjectile
-      projectileSpeed: 10
+      projectileSpeed: 12
       projectileMaxSpeed: 12
       prototype: CEProjectileTripleIcicle
-      projectileCount: 3
-      spread: 0.2
+      projectileCount: 1
+    0.4:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEProjectileTripleIcicle
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.5, 0
+      - time: 0.2
+        offset: -0.4, -0.2
+      - time: 0.25
+        offset: -0.3, -0.5
+        easing: QuadIn
+      - time: 0.3
+        offset: 0, -0.7
+        easing: QuadOut
+      rotationAnimation:
+      - time: 0.0
+        rotation: -45
+      - time: 0.3
+        rotation: 0
+    - !type:ShootProjectile
+      projectileSpeed: 12
+      projectileMaxSpeed: 12
+      prototype: CEProjectileTripleIcicle
+      projectileCount: 1
+    0.6:
+    - !type:ShootProjectile
+      projectileSpeed: 12
+      projectileMaxSpeed: 12
+      prototype: CEProjectileTripleIcicle
+      projectileCount: 1
 
 - type: entity
   id: CEProjectileTripleIcicle
@@ -130,3 +140,5 @@
         damage:
           types:
             Cold: 10
+      - !type:FreezeEntity
+        stacks: 3

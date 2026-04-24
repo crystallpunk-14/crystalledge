@@ -15,7 +15,7 @@
       params:
         variation: 0.1
   - type: CEDestructible
-    destroyThreshold: 50
+    destroyThreshold: 25
     lootTable: !type:AllSelector
       children:
       - id: CEConsumableSlimeCoreFire
@@ -24,7 +24,7 @@
   - type: CEDestructionEffect
     effects:
     - !type:IgniteArea
-      radius: 3
+      radius: 1
       maxStacks: 4
       fallOffFactor: 0.5
   - type: CEGOAP
@@ -144,7 +144,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1
   - type: Action
-    useDelay: 2
+    useDelay: 6
   - type: TargetAction
     range: 8
     interactOnMiss: false
@@ -156,7 +156,7 @@
 - type: entityEffectAnimation
   id: FireSlimeJump
   movementSpeed: 0
-  duration: 0.7
+  duration: 1
   events:
     0:
     - !type:PlaySound
@@ -165,11 +165,6 @@
         params:
           variation: 0.1
     0.4:
-    - !type:IgniteArea
-      effectTarget: User
-      radius: 1
-      maxStacks: 3
-      fallOffFactor: 1
     - !type:Dash
       distance: 4
       speed: 8

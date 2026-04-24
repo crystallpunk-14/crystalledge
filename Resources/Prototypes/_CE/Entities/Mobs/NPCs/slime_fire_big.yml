@@ -16,7 +16,7 @@
         variation: 0.1
         pitch: 0.6
   - type: CEDestructible
-    destroyThreshold: 150
+    destroyThreshold: 75
     lootTable: !type:AllSelector
       children:
       - id: CEMobSlimeFire
@@ -31,7 +31,7 @@
   - type: CEDestructionEffect
     effects:
     - !type:IgniteArea
-      radius: 6
+      radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
   - type: CEGOAP
@@ -42,15 +42,6 @@
       priority: 1
 
     actions:
-    - !type:CEGOAPUseAction
-      targetKey: enemy
-      preconditions:
-        EnemyVisible: true
-        EnemyInMeleeRange: false
-      effects:
-        EnemyDead: true
-      cost: 0.5
-      actionPrototype: CEActionBigSlimeFireShoot
     - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
       preconditions:
@@ -67,7 +58,7 @@
         EnemyDead: true
       cost: 1
       useType: Primary
-      angleVariation: 5 
+      angleVariation: 5
     - !type:CEGOAPExploreAction
       effects:
         EnemyVisible: true
@@ -148,8 +139,8 @@
 
 - type: entityEffectAnimation
   id: BigSlimeFireAttack
-  movementSpeed: 0.8
-  duration: 0.8
+  movementSpeed: 0
+  duration: 1.5
   events:
     0:
     - !type:PlaySound
@@ -161,76 +152,6 @@
     - !type:SpawnEntity
       spawns:
       - CEEffectPotionAlchemicalFire
-    0.6:
+    1.4:
     - !type:WeaponEffectSlot
       slot: OnHit
-
-
-- type: entity
-  id: CEActionBigSlimeFireShoot
-  parent: CEActionSpellBase
-  name: Big slime shoot
-  description: Ranged push attack
-  components:
-  - type: Action
-    useDelay: 5
-    icon:
-      sprite: _CE/Skills/Mage/firebolt.rsi
-      state: icon
-  - type: TargetAction
-    range: 20
-  - type: WorldTargetAction
-    event: !type:CEWorldTargetActionAnimationEvent
-      animation: BigSlimeFireShoot
-
-- type: entityEffectAnimation
-  id: BigSlimeFireShoot
-  movementSpeed: 0.3
-  duration: 0.7
-  lockRotation: true
-  events:
-    0.4:
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Effects/fire_whoosh.ogg
-        params:
-          variation: 0.1
-          pitch: 0.6
-    - !type:ShootProjectile
-      projectileSpeed: 6
-      projectileMaxSpeed: 10
-      prototype: CEProjectileBigSlimeFireShoot
-      projectileCount: 1
-      spread: 0.4
-
-- type: entity
-  id: CEProjectileBigSlimeFireShoot
-  parent: BaseBullet
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: _CE/Effects/firebolt.rsi
-    layers:
-    - state: effect
-      unshaded: true
-  - type: CEProjectile
-    hitEffects:
-    - !type:Damage
-      attackType: Ranged
-      damage:
-        types:
-          Fire: 8
-    - !type:IgniteArea
-      radius: 2
-      maxStacks: 5
-    - !type:AreaEffect
-      affectCaster: false
-      range: 2
-      effects:
-      - !type:ThrowFromUser
-        distance: 2
-      - !type:Damage
-        attackType: Ranged
-        damage:
-          types:
-            Fire: 4

@@ -18,7 +18,7 @@
     width: 1.0
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 2
   - type: Action
     useDelay: 3
     icon:
@@ -33,7 +33,7 @@
 - type: entityEffectAnimation
   id: AnimationFirebolt
   movementSpeed: 0.3
-  duration: 1.0
+  duration: 0.5
   lockRotation: true
   events:
     0:
@@ -47,12 +47,12 @@
         offset: 0, 0.5
       - time: 0.8
         offset: 0, -1
-    0.8:
+    0.4:
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/firebolt.ogg
     - !type:ShootProjectile
-      projectileSpeed: 8
+      projectileSpeed: 10
       prototype: CEProjectileFirebolt
       projectileCount: 1
       spread: 0
@@ -108,7 +108,7 @@
       attackType: Ranged
       damage:
         types:
-          Fire: 20
+          Fire: 25
     - !type:IgniteArea
       radius: 2
       maxStacks: 10

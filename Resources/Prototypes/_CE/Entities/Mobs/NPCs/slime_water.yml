@@ -15,7 +15,7 @@
       params:
         variation: 0.1
   - type: CEDestructible
-    destroyThreshold: 50
+    destroyThreshold: 25
     lootTable: !type:AllSelector
       children:
       - id: CEConsumableSlimeCoreWater
@@ -24,7 +24,7 @@
   - type: CEDestructionEffect
     effects:
     - !type:WetArea
-      radius: 3
+      radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
   - type: CEGOAP
@@ -132,7 +132,7 @@
 - type: entityEffectAnimation
   id: SlimeBite
   movementSpeed: 0.8
-  duration: 0.8
+  duration: 1.4
   events:
     0:
     - !type:UsedEntityAnimation
@@ -201,7 +201,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1
   - type: Action
-    useDelay: 2
+    useDelay: 6
   - type: TargetAction
     range: 8
     interactOnMiss: false
@@ -213,7 +213,7 @@
 - type: entityEffectAnimation
   id: WaterSlimeJump
   movementSpeed: 0
-  duration: 0.7
+  duration: 1
   events:
     0:
     - !type:PlaySound
@@ -222,11 +222,6 @@
         params:
           variation: 0.1
     0.4:
-    - !type:WetArea
-      effectTarget: User
-      radius: 1
-      maxStacks: 3
-      fallOffFactor: 1
     - !type:Dash
       distance: 4
       speed: 8
