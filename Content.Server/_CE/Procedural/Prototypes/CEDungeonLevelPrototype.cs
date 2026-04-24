@@ -1,8 +1,10 @@
+using System.Numerics;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.PostProcess;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CE.Procedural.Prototypes;
 
@@ -78,4 +80,16 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     /// </summary>
     [DataField]
     public int MainZLevel = 1;
+
+    /// <summary>
+    /// Position of this level's node on the admin dungeon overview graph (virtual pixels).
+    /// </summary>
+    [DataField("uiPosition")]
+    public Vector2i UIPosition;
+
+    /// <summary>
+    /// Icon used for this level on the admin dungeon overview graph.
+    /// </summary>
+    [DataField]
+    public SpriteSpecifier? Icon;
 }

@@ -208,6 +208,7 @@
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-1-name
+  uiPosition: 0,0
   exits:
     default: MossyTemple2
   config:
@@ -249,6 +250,7 @@
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-2-name
+  uiPosition: 2,0
   exits:
     default: MossyTemple3
   config:
@@ -293,6 +295,7 @@
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-3-name
+  uiPosition: 4,0
   exits:
     default: MossyTemple4
   config:
@@ -337,6 +340,7 @@
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-4-name
+  uiPosition: 6,0
   exits:
     default: MossyTempleSafe
   config:
@@ -381,6 +385,7 @@
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-safe-name
   desc: ce-dungeon-mossy-temple-safe-desc
+  uiPosition: 8,0
   exits:
     default: MossyTemple5
   config:
@@ -410,6 +415,7 @@
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-5-name
   desc: ce-dungeon-mossy-temple-5-desc
+  uiPosition: 10,0
   exits:
     default: MossyTempleSafe # Loops back for now
   config:

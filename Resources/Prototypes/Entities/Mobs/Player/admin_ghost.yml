@@ -115,6 +115,15 @@
   - type: CEShowMobMana
   - type: CEShowMobStamina
   - type: CEZLevelGhostMover
+  - type: CEAdminDungeonOverview
+  - type: UserInterface
+    interfaces:
+      enum.CEAdminDungeonOverviewUiKey.Key:
+        type: CEAdminDungeonOverviewBoundUserInterface
+  - type: IntrinsicUI
+    uis:
+      enum.CEAdminDungeonOverviewUiKey.Key:
+        toggleAction: CEActionAdminDungeonOverview
 
 - type: entity
   abstract: true
@@ -200,3 +209,4 @@
     priority: -7
   - type: InstantAction
     event: !type:ToggleIntrinsicUIEvent { key: enum.GeneralStationRecordConsoleKey.Key }
+
