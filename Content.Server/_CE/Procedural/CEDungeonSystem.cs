@@ -65,6 +65,13 @@ public sealed partial class CEDungeonSystem : EntitySystem
         _dungeonJobQueue.Process();
     }
 
+    /// <summary>
+    /// Drives the dungeon job queue forward by one slice. Used to synchronously
+    /// pump pending generations to completion (e.g. during round-start) without
+    /// waiting for the next frame's <see cref="Update"/>.
+    /// </summary>
+    public void ProcessJobs() => _dungeonJobQueue.Process();
+
     public override void Shutdown()
     {
         base.Shutdown();

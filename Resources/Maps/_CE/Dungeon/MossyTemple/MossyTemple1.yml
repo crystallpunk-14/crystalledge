@@ -4630,7 +4630,7 @@ entities:
     - type: Transform
       pos: -16.5,5.5
       parent: 1
-- proto: CEDungeonLevelExit
+- proto: CEDungeonLevelExit1
   entities:
   - uid: 1565
     components:

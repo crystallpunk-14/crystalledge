@@ -2190,7 +2190,7 @@ entities:
     - type: Transform
       pos: 14.5,8.5
       parent: 1
-- proto: CEDungeonLevelExitFirst
+- proto: CEDungeonLevelExit1
   entities:
   - uid: 83
     components:

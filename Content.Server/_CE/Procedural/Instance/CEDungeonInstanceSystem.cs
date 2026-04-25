@@ -56,6 +56,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
 
         InitializePassage();
         InitializeEntryAnnounce();
+        InitializeRoundstart();
     }
 
     public override void Update(float frameTime)

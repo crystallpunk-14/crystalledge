@@ -26,23 +26,6 @@ public sealed partial class CEDungeonInstanceSystem
 
         var mapIds = GetInstanceMapIds(anchorUid);
 
-        // Assign exit targets from the prototype's Exits dictionary.
-        if (proto.Exits.Count > 0)
-        {
-            var query = EntityQueryEnumerator<CEDungeonPassageComponent, TransformComponent>();
-            while (query.MoveNext(out _, out var exit, out var xform))
-            {
-                if (!mapIds.Contains(xform.MapID))
-                    continue;
-
-                if (exit.TargetLevel != null)
-                    continue;
-
-                if (proto.Exits.TryGetValue(exit.PassageSlot, out var targetLevel))
-                    exit.TargetLevel = targetLevel;
-            }
-        }
-
         // Initialize entry point deactivation timers (stable levels never expire).
         var dungeonQuery = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
         while (dungeonQuery.MoveNext(out _, out var entry, out var xform))

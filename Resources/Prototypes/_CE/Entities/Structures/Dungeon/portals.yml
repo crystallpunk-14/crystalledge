@@ -51,13 +51,16 @@
           - MidImpassable
 
 # Exit portal: players interact with this to travel to the next dungeon level.
+# The actual destination is resolved at lifecycle time from the owning dungeon prototype's
+# `exits` dictionary (keyed by the int slot in `targetLevel`). Maps that aren't registered
+# as dungeon levels can override the destination directly via `resolvedTarget`.
 - type: entity
-  id: CEDungeonLevelExit
+  id: CEDungeonLevelExitBase
   parent: CEDungeonPortalBase
+  abstract: true
   name: dungeon rift
   description: A rift leading deeper into the dungeon. Interact to enter.
   categories: [ ForkFiltered ]
-  suffix: For dungeon mapping
   components:
   - type: CEDungeonPassage
   - type: InteractionOutline
@@ -65,12 +68,28 @@
     delay: 2
 
 - type: entity
-  id: CEDungeonLevelExitFirst
-  parent: CEDungeonLevelExit
-  suffix: To test procedural level
+  id: CEDungeonLevelExit1
+  parent: CEDungeonLevelExitBase
+  suffix: Slot 1
   components:
   - type: CEDungeonPassage
-    targetLevel: MossyTemple1
+    targetLevel: 1
+
+- type: entity
+  id: CEDungeonLevelExit2
+  parent: CEDungeonLevelExitBase
+  suffix: Slot 2
+  components:
+  - type: CEDungeonPassage
+    targetLevel: 2
+
+- type: entity
+  id: CEDungeonLevelExit3
+  parent: CEDungeonLevelExitBase
+  suffix: Slot 3
+  components:
+  - type: CEDungeonPassage
+    targetLevel: 3
 
 
 - type: entity

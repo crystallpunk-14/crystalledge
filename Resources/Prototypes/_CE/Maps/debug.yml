@@ -12,6 +12,9 @@
         - type: StationJobs
           availableJobs:
             CEKnight: [ -1, -1 ]
+            CEMage: [ -1, -1 ]
+            CEPriest: [ -1, -1 ]
+            CEWanderer: [ -1, -1 ]
 
 - type: gameMap
   id: Dev

@@ -4,9 +4,9 @@
   - BaseMossyTemplePostProcessPeaceful
   - BaseMossyTempleLoot
   name: ce-dungeon-mossy-temple-2-name
-  uiPosition: 2,0
+  uiPosition: 4,0
   exits:
-    default: MossyTemple3
+    1: MossyTemple3
   config:
     !type:CEProceduralConfig
     generalCount:

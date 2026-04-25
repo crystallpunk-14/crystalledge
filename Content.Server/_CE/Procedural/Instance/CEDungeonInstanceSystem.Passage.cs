@@ -4,6 +4,7 @@ using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural.Components;
+using Content.Shared.Examine;
 using Content.Shared.Flash;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio;
@@ -33,6 +34,44 @@ public sealed partial class CEDungeonInstanceSystem
     private void InitializePassage()
     {
         SubscribeLocalEvent<CEDungeonPassageComponent, ActivateInWorldEvent>(OnPassageInWorldActivated);
+        SubscribeLocalEvent<CEDungeonPassageComponent, ExaminedEvent>(OnPassageExamined);
+    }
+
+    private void OnPassageExamined(Entity<CEDungeonPassageComponent> ent, ref ExaminedEvent args)
+    {
+        // Show the destination level name when the portal is examined. The destination is
+        // resolved on demand from the owning dungeon instance's Exits dictionary, keyed by
+        // the passage's TargetLevel slot.
+        if (TryResolveExitTarget(ent, out var proto) && proto.Name is { } nameKey)
+        {
+            args.PushMarkup(Loc.GetString("ce-dungeon-passage-examine-target", ("level", Loc.GetString(nameKey))));
+            return;
+        }
+
+        args.PushMarkup(Loc.GetString("ce-dungeon-passage-examine-target-unknown"));
+    }
+
+    /// <summary>
+    /// Resolves the target dungeon level prototype for a passage by looking up the owning
+    /// dungeon instance and reading <see cref="CEDungeonLevelPrototype.Exits"/> with the
+    /// passage's slot key. Returns false if the passage isn't on a registered dungeon
+    /// instance, the prototype is unknown, or the slot has no mapping.
+    /// </summary>
+    private bool TryResolveExitTarget(Entity<CEDungeonPassageComponent> ent, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out CEDungeonLevelPrototype? targetProto)
+    {
+        targetProto = null;
+
+        var xform = Transform(ent);
+        if (!TryResolveInstance(xform.MapUid, out var instance))
+            return false;
+
+        if (!_proto.TryIndex<CEDungeonLevelPrototype>(instance.PrototypeId, out var ownerProto))
+            return false;
+
+        if (!ownerProto.Exits.TryGetValue(ent.Comp.TargetLevel, out var targetId))
+            return false;
+
+        return _proto.TryIndex(targetId, out targetProto);
     }
 
     private void UpdatePassage()
@@ -130,9 +169,9 @@ public sealed partial class CEDungeonInstanceSystem
 
         args.Handled = true;
 
-        if (ent.Comp.TargetLevel == null || !_proto.TryIndex(ent.Comp.TargetLevel.Value, out var proto))
+        if (!TryResolveExitTarget(ent, out var proto))
         {
-            Log.Error($"exit has no target level or unknown prototype '{ent.Comp.TargetLevel}'.");
+            Log.Error($"exit on map {Transform(ent).MapID} cannot resolve target for slot {ent.Comp.TargetLevel}.");
             QueueDel(ent);
             return;
         }
@@ -142,7 +181,7 @@ public sealed partial class CEDungeonInstanceSystem
 
         var activeComp = EnsureComp<CEDungeonActivePassageComponent>(activePassage);
         activeComp.NextTransitionTime = _timing.CurTime + activeComp.TransitionInitialDelay;
-        activeComp.TargetLevel = ent.Comp.TargetLevel;
+        activeComp.TargetLevel = proto.ID;
 
         if (TryFindEnterPoint(proto, out var targetEntry))
         {

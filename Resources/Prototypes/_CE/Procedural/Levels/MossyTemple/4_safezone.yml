@@ -10,7 +10,7 @@
   desc: ce-dungeon-mossy-temple-safe-desc
   uiPosition: 8,0
   exits:
-    default: MossyTemple5
+    1: MossyTemple5
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: MossyTempleSafe

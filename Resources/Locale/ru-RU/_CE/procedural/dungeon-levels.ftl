@@ -1,3 +1,6 @@
+ce-dungeon-mossy-temple-start-name = Замшелый храм - Вход
+ce-dungeon-mossy-temple-start-desc = Порог Замшелого храма. Шагните в разлом, чтобы спуститься.
+
 ce-dungeon-mossy-temple-1-name = Замшелый храм - I
 ce-dungeon-mossy-temple-2-name = Замшелый храм - II
 ce-dungeon-mossy-temple-3-name = Замшелый храм - III

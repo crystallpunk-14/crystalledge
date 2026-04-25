@@ -10,7 +10,7 @@
   desc: ce-dungeon-mossy-temple-5-desc
   uiPosition: 10,0
   exits:
-    default: MossyTempleSafe # Loops back for now
+    1: MossyTempleSafe # Loops back for now
   config:
     !type:CEProceduralConfig
     generalCount:

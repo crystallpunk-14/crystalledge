@@ -1,4 +1,8 @@
+# The default game map is `Empty` (an inert placeholder); the actual entry level is loaded
+# by CEDungeonInstanceSystem when round starts, by way of any dungeonLevel prototype with
+# `roundstart: true` (see MossyTempleStart). Players spawn into that generated level via the
+# spawn points embedded in its underlying static maps.
 - type: gameMapPool
   id: DefaultMapPool
   maps:
-  - CELevel0Entry
+  - Empty
