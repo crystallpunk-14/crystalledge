@@ -1,0 +1,43 @@
+- type: dungeonLevel
+  id: MossyTemple2
+  parent:
+  - BaseMossyTemplePostProcessPeaceful
+  - BaseMossyTempleLoot
+  name: ce-dungeon-mossy-temple-2-name
+  uiPosition: 2,0
+  exits:
+    default: MossyTemple3
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 7
+      max: 10
+    entranceCount:
+      min: 2
+      max: 2
+    blessingCount:
+      min: 1
+      max: 1
+    treasureCount:
+      min: 0
+      max: 2
+    cycleCount:
+      min: 2
+      max: 3
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 15
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobRat
+      cost: 1
+      weight: 2
+    - proto: CEMobSlimeWater
+      cost: 2
+    - proto: CEMobFireConstruct
+      cost: 10
+    - proto: CEMobPredatoryVine
+      cost: 3

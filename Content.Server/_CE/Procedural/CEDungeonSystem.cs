@@ -247,11 +247,18 @@ public sealed partial class CEDungeonSystem : EntitySystem
         if (result.ZNetworkUid is { } networkUid
             && TryComp<CEZLevelsNetworkComponent>(networkUid, out var networkComp))
         {
-            _zLevels.SetZNetworkName((networkUid, networkComp), $"Dungeon z-Network: {dungeonName}", dungeonName);
+            // Unstable levels can have multiple concurrent instances — disambiguate with the
+            // network entity id so admins can tell them apart in dev tools / overview UIs.
+            var mapNameBase = proto.Stable ? dungeonName : $"{dungeonName} #{networkUid.Id}";
+
+            _zLevels.SetZNetworkName(
+                (networkUid, networkComp),
+                $"Dungeon z-Network: {mapNameBase}",
+                mapNameBase);
         }
         else
         {
-            _meta.SetEntityName(mapUid, dungeonName);
+            _meta.SetEntityName(mapUid, proto.Stable ? dungeonName : $"{dungeonName} #{mapUid.Id}");
         }
     }
 }

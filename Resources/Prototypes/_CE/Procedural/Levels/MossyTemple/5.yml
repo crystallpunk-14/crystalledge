@@ -1,0 +1,54 @@
+- type: dungeonLevel
+  id: MossyTemple5
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi
+    state: leaf_maze
+  parent:
+  - BaseMossyTemplePostProcessDangerous
+  - BaseMossyTempleLoot
+  name: ce-dungeon-mossy-temple-5-name
+  desc: ce-dungeon-mossy-temple-5-desc
+  uiPosition: 10,0
+  exits:
+    default: MossyTempleSafe # Loops back for now
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 15
+      max: 20
+    blessingCount:
+      min: 0
+      max: 0
+    treasureCount:
+      min: 0
+      max: 2
+    cycleCount:
+      min: 10
+      max: 10
+    entranceCount:
+      min: 2
+      max: 3
+  postProcess:
+  # Mobs
+  - !type:CEBudgetSpawnPostProcess
+    budget: 150
+    wakeOnSpawn: true
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobSlimeFire
+      cost: 3
+    - proto: CEMobFlem
+      cost: 3
+    - proto: CEMobFlem2
+      cost: 3
+    - proto: CEMobFlem3
+      cost: 5
+    - proto: CEMobFireConstruct
+      cost: 10
+    - proto: CEMobPredatoryVine
+      cost: 3
+    - proto: CEMobSlimeFireBig
+      cost: 8
+    - proto: CEMobSlimeWaterBig
+      cost: 2

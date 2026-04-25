@@ -1,0 +1,31 @@
+- type: dungeonLevel
+  id: MossyTempleSafe
+  stable: true
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+    state: center
+  parent:
+  - BaseMossyTemplePostProcess
+  name: ce-dungeon-mossy-temple-safe-name
+  desc: ce-dungeon-mossy-temple-safe-desc
+  uiPosition: 8,0
+  exits:
+    default: MossyTemple5
+  config:
+    !type:CEStaticZNetworkConfig
+    zMapProto: MossyTempleSafe
+
+- type: zMap
+  id: MossyTempleSafe
+  maps:
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe0.yml
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true
+  - type: CEMapStatusEffects
+    effects:
+    - CEStatusEffectPacifism
