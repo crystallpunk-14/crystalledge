@@ -1,0 +1,39 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
+              xmlns:nodeTree="clr-namespace:Content.Client._CE.UserInterface.Systems.NodeTree"
+              xmlns:parallax="clr-namespace:Content.Client.Parallax"
+              Orientation="Horizontal"
+              HorizontalExpand="True"
+              VerticalExpand="True">
+
+    <!-- Side panel: selected level info -->
+    <BoxContainer Orientation="Vertical" SetWidth="320" MinWidth="280" Margin="10 10 10 10" VerticalExpand="True">
+        <RichTextLabel Name="LevelName" HorizontalExpand="True" />
+        <customControls:HSeparator StyleClasses="HighDivider" Margin="0 5 0 5" />
+        <RichTextLabel Name="LevelDesc" HorizontalExpand="True" />
+        <customControls:HSeparator StyleClasses="LowDivider" Margin="0 10 0 10" />
+        <Label Name="DetailsHeader" Text="" StyleClasses="LabelHeading" />
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="DetailsContainer" Orientation="Vertical" HorizontalExpand="True" />
+        </ScrollContainer>
+    </BoxContainer>
+
+    <customControls:VSeparator StyleClasses="LowDivider" />
+
+    <!-- Graph -->
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+        <Label Name="GraphHeader" Text="" StyleClasses="LabelHeading"
+               Margin="5 5 5 5" HorizontalExpand="True" />
+        <PanelContainer Margin="5 5 5 5" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True">
+            <parallax:ParallaxControl Name="ParallaxBackground"
+                                      ParallaxPrototype="AspidParallax"
+                                      ScaleX="4" ScaleY="4"
+                                      SpeedX="10" SpeedY="5"
+                                      Access="Public" />
+            <nodeTree:CENodeTreeGraphControl Name="GraphControl"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch"
+                                             Access="Public" />
+        </PanelContainer>
+    </BoxContainer>
+</BoxContainer>

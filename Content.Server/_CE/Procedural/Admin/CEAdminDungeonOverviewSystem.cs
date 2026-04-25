@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server._CE.Procedural.Instance.Components;
+using Content.Server._CE.Procedural.Overview;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural.Admin;
@@ -38,6 +39,17 @@ public sealed class CEAdminDungeonOverviewSystem : EntitySystem
 
         SubscribeLocalEvent<CEAdminDungeonOverviewComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<CEAdminDungeonOverviewComponent, CEAdminDungeonOverviewTeleportMsg>(OnTeleport);
+        SubscribeLocalEvent<CEDungeonPlayerLevelChangedEvent>(OnPlayerLevelChanged);
+    }
+
+    private void OnPlayerLevelChanged(ref CEDungeonPlayerLevelChangedEvent ev)
+    {
+        var query = EntityQueryEnumerator<CEAdminDungeonOverviewComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            if (_ui.IsUiOpen(uid, CEAdminDungeonOverviewUiKey.Key))
+                RefreshState(uid);
+        }
     }
 
     private void OnUiOpened(Entity<CEAdminDungeonOverviewComponent> ent, ref BoundUIOpenedEvent args)

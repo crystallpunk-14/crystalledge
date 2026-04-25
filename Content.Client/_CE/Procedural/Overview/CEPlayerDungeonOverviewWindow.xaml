@@ -1,6 +1,6 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:overview="clr-namespace:Content.Client._CE.Procedural.Overview"
-               Title="{Loc 'ce-admin-dungeon-overview-title'}"
+               Title="{Loc 'ce-player-dungeon-overview-title'}"
                MinSize="500 300"
                SetSize="900 300">
 

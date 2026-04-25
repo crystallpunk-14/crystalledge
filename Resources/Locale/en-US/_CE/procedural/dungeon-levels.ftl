@@ -6,5 +6,5 @@ ce-dungeon-mossy-temple-4-name = Mossy Temple - IV
 ce-dungeon-mossy-temple-safe-name = Mossy Shelter
 ce-dungeon-mossy-temple-safe-desc = Take a break before stepping into the abyss
 
-ce-dungeon-mossy-temple-5-name = Infinity Abyss
-ce-dungeon-mossy-temple-5-desc = [color=red]There is no going back.[/color]
+ce-dungeon-mossy-temple-5-name = Endless, Pointless Ending
+ce-dungeon-mossy-temple-5-desc = [color=red]The content has ended.[/color]

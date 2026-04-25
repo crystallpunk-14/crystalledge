@@ -183,6 +183,9 @@
   id: BaseMossyTempleProcedural
   abstract: true
   stable: false
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi
+    state: swamp_caves
   config:
     !type:CEProceduralConfig
     corridorTile: CEStonebricks
@@ -389,6 +392,9 @@
 - type: dungeonLevel
   id: MossyTempleSafe
   stable: true
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+    state: center
   parent:
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-safe-name
@@ -418,6 +424,9 @@
 
 - type: dungeonLevel
   id: MossyTemple5
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi
+    state: leaf_maze
   parent:
   - BaseMossyTempleProcedural
   - BaseMossyTemplePostProcess

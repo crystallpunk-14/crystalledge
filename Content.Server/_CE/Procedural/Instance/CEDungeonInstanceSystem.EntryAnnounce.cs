@@ -1,7 +1,10 @@
 using Content.Server._CE.Procedural.Instance.Components;
+using Content.Server._CE.Procedural.Overview;
+using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.ScreenPopup;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Procedural.Instance;
 
@@ -45,6 +48,18 @@ public sealed partial class CEDungeonInstanceSystem
         // Resolve the owning dungeon instance directly via z-network or map entity.
         if (!TryResolveInstance(newMapUid.Value, out var instance))
             return;
+
+        // Broadcast a level-change event so any open dungeon overview UIs can refresh.
+        // Done before popup gating because the broadcast has to fire on every transition.
+        ProtoId<CEDungeonLevelPrototype>? fromLevelId = null;
+        if (oldMapUid is { } oldUid && TryResolveInstance(oldUid, out var oldInst))
+            fromLevelId = oldInst.PrototypeId;
+
+        if (fromLevelId != instance.PrototypeId)
+        {
+            var changedEv = new CEDungeonPlayerLevelChangedEvent(ent.Owner, fromLevelId, instance.PrototypeId);
+            RaiseLocalEvent(ref changedEv);
+        }
 
         // Look up the prototype.
         if (!_proto.TryIndex(instance.PrototypeId, out var proto))

@@ -125,9 +125,14 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// Resolves the dungeon instance that owns a given map entity.
     /// Checks the z-network anchor first, then falls back to the map entity itself.
     /// </summary>
-    private bool TryResolveInstance(EntityUid mapUid, [NotNullWhen(true)] out CEDungeonInstanceComponent? instance)
+    private bool TryResolveInstance(EntityUid? mapUid, [NotNullWhen(true)] out CEDungeonInstanceComponent? instance)
     {
-        if (_zLevels.TryGetZNetwork(mapUid, out var zNet) && _instanceQuery.TryComp(zNet.Value.Owner, out instance))
+        instance = null;
+
+        if (mapUid is null)
+            return false;
+
+        if (_zLevels.TryGetZNetwork(mapUid.Value, out var zNet) && _instanceQuery.TryComp(zNet.Value.Owner, out instance))
             return true;
 
         return _instanceQuery.TryComp(mapUid, out instance);
