@@ -15,7 +15,7 @@
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectTempShield
-      stack: 30
+      amount: 30
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -26,7 +26,7 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShield
-        stack: 15
+        amount: 15
     - !type:SpawnEntity
       effectTarget: User
       spawns:
@@ -50,7 +50,7 @@
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectTempShieldFire
-      stack: 30
+      amount: 30
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -61,7 +61,7 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShieldFire
-        stack: 15
+        amount: 15
     - !type:SpawnEntity
       effectTarget: User
       spawns:
@@ -85,7 +85,7 @@
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectTempShieldCold
-      stack: 30
+      amount: 30
   - type: CEDestructionEffect
     effects:
     - !type:AreaEffect
@@ -96,7 +96,7 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShieldCold
-        stack: 15
+        amount: 15
     - !type:SpawnEntity
       effectTarget: User
       spawns:

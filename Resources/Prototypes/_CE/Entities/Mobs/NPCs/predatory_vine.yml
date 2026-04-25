@@ -151,5 +151,5 @@
           Physical: 4
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectPoison
-      stack: 1
-      maxStacks: 5
+      amount: 1
+      max: 5

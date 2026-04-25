@@ -16,13 +16,13 @@ public sealed partial class ApplyStatusEffectStack : CEEntityEffectBase<ApplySta
     public TimeSpan? Duration;
 
     [DataField]
-    public int Stack = 1;
+    public int Amount = 1;
 
     /// <summary>
     /// Maximum number of stacks that can be applied. 0 means no limit.
     /// </summary>
     [DataField]
-    public int MaxStacks;
+    public int Max;
 }
 
 public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffectSystem<ApplyStatusEffectStack>
@@ -34,11 +34,11 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        var stacks = args.Effect.Stack;
-        if (args.Effect.MaxStacks > 0)
+        var stacks = args.Effect.Amount;
+        if (args.Effect.Max > 0)
         {
             var current = _effectStack.GetStack(entity, args.Effect.StatusEffect);
-            stacks = Math.Min(stacks, args.Effect.MaxStacks - current);
+            stacks = Math.Min(stacks, args.Effect.Max - current);
 
             if (stacks <= 0)
                 return;

@@ -15,7 +15,7 @@
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectRegeneration
-      stack: 6
+      amount: 6
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
@@ -29,7 +29,7 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectRegeneration
-        stack: 3
+        amount: 3
       - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric

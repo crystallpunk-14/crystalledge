@@ -48,7 +48,7 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShield
-        stack: 25
+        amount: 25
 
 - type: entity
   id: CEEffectRaiseShieldsTelegraphy

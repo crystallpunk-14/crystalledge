@@ -43,7 +43,7 @@
     - !type:ApplyStatusEffectStack
       effectTarget: User
       statusEffect: CEStatusEffectStrength
-      stack: 10
+      amount: 10
 
 - type: entity
   id: CEEffectAmplification

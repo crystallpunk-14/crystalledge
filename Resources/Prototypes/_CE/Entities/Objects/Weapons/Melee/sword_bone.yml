@@ -21,8 +21,8 @@
               Physical: 5
         - !type:ApplyStatusEffectStack
           statusEffect: CEStatusEffectBruise
-          stack: 1
-          maxStacks: 10
+          amount: 1
+          max: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 1.1
@@ -35,8 +35,8 @@
               Physical: 8
         - !type:ApplyStatusEffectStack
           statusEffect: CEStatusEffectBruise
-          stack: 2
-          maxStacks: 10
+          amount: 2
+          max: 10
     animations:
       Primary:
       - anim: SwordAttackLight1

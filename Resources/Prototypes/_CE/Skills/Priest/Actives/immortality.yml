@@ -41,4 +41,4 @@
     - !type:ApplyStatusEffectStack
       effectTarget: User
       statusEffect: CEStatusEffectRegeneration
-      stack: 5
+      amount: 5

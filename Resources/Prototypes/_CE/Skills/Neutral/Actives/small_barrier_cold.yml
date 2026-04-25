@@ -40,4 +40,4 @@
     - !type:ApplyStatusEffectStack
       effectTarget: User
       statusEffect: CEStatusEffectTempShieldCold
-      stack: 20
+      amount: 20

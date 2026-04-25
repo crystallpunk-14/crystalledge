@@ -42,4 +42,4 @@
     - !type:ApplyStatusEffectStack
       effectTarget: Target
       statusEffect: CEStatusEffectPoison
-      stack: 2
+      amount: 2
