@@ -47,9 +47,10 @@
   - type: CEPreventIgniteTile
   - type: CEEntityEffectOnCollide
     effects:
-    - !type:WetEntity
-      stacks: 1
-      maxStacks: 10
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectWet
+      amount: 1
+      max: 5
   - type: CEFreezeTransform
     freezesInto: CEIce
   - type: RandomSpawner

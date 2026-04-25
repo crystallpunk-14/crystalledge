@@ -108,12 +108,15 @@ public sealed class CEConsumableSystem : EntitySystem
 
         _audio.PlayPredicted(ent.Comp.UseSound, Transform(ent).Coordinates, args.User);
 
-        // Apply all effects to the target.
-        // Source is the consumable item itself, not the player,
-        // so heal modifiers on the player (like Apostasy) won't intercept.
+        // When the user is consuming the item on themselves, the source is the item itself so
+        // heal modifiers on the user (like Apostasy) don't intercept their own potions.
+        // When the user applies the consumable to another entity, the user is the source so
+        // source-side gating (pacifism etc.) sees the real attacker and can block hostile use.
+        var source = target == args.User ? ent.Owner : args.User;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
-            ent.Owner,
+            source,
             ent.Owner,
             Angle.Zero,
             0f,

@@ -122,9 +122,10 @@
           damage:
             types:
               Fire: 5
-        - !type:IgniteEntity
-          stacks: 1
-          maxStacks: 2
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectFire
+          amount: 1
+          max: 2
     animations:
       Primary:
       - anim: SlimeBite

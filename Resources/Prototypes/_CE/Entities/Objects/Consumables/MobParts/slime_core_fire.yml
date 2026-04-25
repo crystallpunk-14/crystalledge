@@ -25,8 +25,9 @@
     useSound:
       path: /Audio/Effects/Fluids/watersplash.ogg
     effects:
-    - !type:IgniteEntity
-      stacks: 2
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectFire
+      amount: 2
   - type: CEDestructionEffect
     effects:
     - !type:IgniteArea

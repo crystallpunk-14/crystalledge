@@ -2,6 +2,7 @@
   id: CEStatusEffectColdSlowdown
   name: Cold Slowdown
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:

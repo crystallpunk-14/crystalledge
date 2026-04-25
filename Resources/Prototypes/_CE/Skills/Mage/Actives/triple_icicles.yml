@@ -10,7 +10,6 @@
   name: Triple Icicles
   description: You unleash three icicles that deal [color=#30caf5]cold[/color] damage and [color=#30caf5]freeze[/color] the area on hit.
   components:
-  - type: CEActionDangerous
   - type: Sprite
     sprite: _CE/Skills/Mage/triple_icicle.rsi
     state: icon
@@ -139,5 +138,6 @@
         damage:
           types:
             Cold: 10
-      - !type:FreezeEntity
-        stacks: 3
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectColdSlowdown
+        amount: 3

@@ -10,7 +10,6 @@
   name: Purification
   description: You cleanse the target of all negative status effects.
   components:
-  - type: CEActionDangerous
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5

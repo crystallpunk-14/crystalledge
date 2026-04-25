@@ -2,15 +2,11 @@ using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
-using Content.Shared._CE.StatusEffects.Pacifism;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
-using Content.Shared.CombatMode.Pacification;
 using Content.Shared.Damage.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.SSDIndicator;
-using Content.Shared.StatusEffectNew;
-using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._CE.Actions;
 
@@ -23,7 +19,6 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
-        SubscribeLocalEvent<CEActionDangerousComponent, ActionAttemptEvent>(OnDangerousActionAttempt);
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ActionAttemptEvent>(OnWeaponRequiredActionAttempt);
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
@@ -109,43 +104,6 @@ public abstract partial class CESharedActionSystem
 
         Popup.PopupClient(Loc.GetString("ce-magic-spell-need-somatic-component"), args.User, args.User);
         args.Cancelled = true;
-    }
-
-    private void OnDangerousActionAttempt(Entity<CEActionDangerousComponent> ent, ref ActionAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        if (!IsPacified(args.User))
-            return;
-
-        Popup.PopupClient(Loc.GetString("ce-magic-spell-pacified"), args.User, args.User);
-        args.Cancelled = true;
-    }
-
-    /// <summary>
-    /// Returns true if the entity is pacified by any source (upstream PacifiedComponent
-    /// or any CE status effect containing <see cref="CEPacifismEffectComponent"/>).
-    /// </summary>
-    private bool IsPacified(EntityUid uid)
-    {
-        if (HasComp<PacifiedComponent>(uid))
-            return true;
-
-        if (!TryComp<StatusEffectContainerComponent>(uid, out var container))
-            return false;
-
-        var effects = container.ActiveStatusEffects?.ContainedEntities;
-        if (effects == null)
-            return false;
-
-        foreach (var effect in effects)
-        {
-            if (HasComp<CEPacifismEffectComponent>(effect))
-                return true;
-        }
-
-        return false;
     }
 
     private void OnWeaponRequiredActionAttempt(Entity<CEActionWeaponRequiredComponent> ent, ref ActionAttemptEvent args)

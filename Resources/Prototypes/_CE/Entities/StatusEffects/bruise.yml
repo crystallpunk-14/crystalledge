@@ -3,6 +3,7 @@
   name: Bruise
   description: Increases incoming physical damage.
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:

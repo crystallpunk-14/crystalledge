@@ -10,7 +10,6 @@
   name: Regeneration Burst
   description: You release a burst of healing projectiles that applies [color=#1defa9]Regeneration[/color] to targets.
   components:
-  - type: CEActionDangerous
   - type: CEVisualizeConeAction
     width: 10
   - type: CEActionManaCost

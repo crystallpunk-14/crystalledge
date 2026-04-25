@@ -120,9 +120,10 @@
           damage:
             types:
               Physical: 5
-        - !type:WetEntity
-          stacks: 1
-          maxStacks: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectWet
+          amount: 1
+          max: 5
     animations:
       Primary:
       - anim: SlimeBite

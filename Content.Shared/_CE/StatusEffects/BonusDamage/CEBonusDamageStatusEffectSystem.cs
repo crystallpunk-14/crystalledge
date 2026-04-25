@@ -1,4 +1,4 @@
-using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 

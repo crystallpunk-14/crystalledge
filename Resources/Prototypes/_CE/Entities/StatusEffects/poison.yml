@@ -3,6 +3,7 @@
   name: Poison
   description: TODO
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:

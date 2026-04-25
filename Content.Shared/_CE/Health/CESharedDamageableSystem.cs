@@ -5,6 +5,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
@@ -175,18 +176,39 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
     /// Applies damage specified by <see cref="CEDamageSpecifier"/>.
     /// The total damage (sum of all types) is added to the entity's accumulated damage.
     /// </summary>
-    public bool TakeDamage(Entity<CEDamageableComponent?> ent, CEDamageSpecifier damage, EntityUid? source = null, EntityUid? weapon = null, bool ignoreArmor = false, bool interruptDoAfters = true)
+    public bool TakeDamage(
+        Entity<CEDamageableComponent?> ent,
+        CEDamageSpecifier damage,
+        EntityUid? source = null,
+        EntityUid? weapon = null,
+        bool ignoreArmor = false,
+        bool interruptDoAfters = true,
+        CEAttackType attackType = CEAttackType.Other)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        // CrystallEdge: use per-type armor-modified specifier instead of a ratio applied to original damage,
-        // so mixed-type attacks apply flat/multiplier armor correctly to each type independently.
-        var effectiveDamage = damage;
+        var effectiveDamage = new CEDamageSpecifier(damage);
 
+        // Outgoing-damage hook on the source. Lives in TakeDamage (not in entity effects) so that
+        // every code path that deals damage — entity effects, status-effect ticks, fall damage,
+        // apostasy-style heal-to-damage conversions — runs the same source-side gating.
+        if (source is { } sourceUid)
+        {
+            var outgoingEv = new CEOutgoingDamageCalculateEvent(effectiveDamage, ent, weapon, attackType);
+            RaiseLocalEvent(sourceUid, outgoingEv);
+
+            if (outgoingEv.Cancelled)
+                return false;
+
+            effectiveDamage = outgoingEv.Damage;
+        }
+
+        // use per-type armor-modified specifier instead of a ratio applied to original damage,
+        // so mixed-type attacks apply flat/multiplier armor correctly to each type independently.
         if (!ignoreArmor)
         {
-            var modifiedDamage = new CEDamageSpecifier(damage);
+            var modifiedDamage = new CEDamageSpecifier(effectiveDamage);
 
             var beforeEv = new CEDamageCalculateEvent(modifiedDamage, source);
             RaiseLocalEvent(ent, beforeEv);
@@ -464,4 +486,39 @@ public struct CEHealthInfo
     public CEMobState MobState;
     public int? DestroyThreshold;
     public int? RemainingUntilDeath;
+}
+
+/// <summary>
+/// Determines the type of attack that deals damage. Lives next to the damage system because the
+/// outgoing-damage hook is now raised inside <see cref="CESharedDamageableSystem.TakeDamage"/>.
+/// </summary>
+[Serializable, NetSerializable]
+public enum CEAttackType : byte
+{
+    Melee,
+    Ranged,
+    /// <summary>
+    /// Damage that doesn't fit the melee/ranged categories (status ticks, falling, apostasy
+    /// heal-to-damage conversion, etc.). Status-effect bonuses keyed to specific attack types
+    /// won't apply, but source-side gating (e.g. pacifism) still runs.
+    /// </summary>
+    Other,
+}
+
+/// <summary>
+/// Raised on the source (attacker) entity inside <see cref="CESharedDamageableSystem.TakeDamage"/>
+/// before damage is applied to the target. Status effects on the attacker can modify damage or
+/// cancel the hit via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEOutgoingDamageCalculateEvent(
+    CEDamageSpecifier damage,
+    EntityUid target,
+    EntityUid? weapon,
+    CEAttackType attackType) : EntityEventArgs
+{
+    public CEDamageSpecifier Damage = damage;
+    public EntityUid Target = target;
+    public EntityUid? Weapon = weapon;
+    public CEAttackType AttackType = attackType;
+    public bool Cancelled;
 }

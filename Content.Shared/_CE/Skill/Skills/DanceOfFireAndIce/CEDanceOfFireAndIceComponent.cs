@@ -1,8 +1,7 @@
-using Content.Shared._CE.Health;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.Skills.DanceOfFireAndIce;
+namespace Content.Shared._CE.Skill.Skills.DanceOfFireAndIce;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CEDanceOfFireAndIceComponent : Component

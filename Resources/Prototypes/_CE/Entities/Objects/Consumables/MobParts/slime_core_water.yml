@@ -24,8 +24,9 @@
     useSound:
       path: /Audio/Effects/Fluids/watersplash.ogg
     effects:
-    - !type:WetEntity
-      stacks: 6
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectWet
+      amount: 6
   - type: CEDestructionEffect
     effects:
     - !type:WetArea

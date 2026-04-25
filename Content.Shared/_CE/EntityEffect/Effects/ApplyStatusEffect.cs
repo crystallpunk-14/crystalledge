@@ -26,6 +26,15 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
+        // Raise on the source so that status effects on the attacker (e.g. pacifism) get a chance
+        // to cancel the application via StatusEffectRelayedEvent.
+        var attempt = new CEAttemptApplyStatusEffectEvent(entity, args.Effect.StatusEffect, args.Effect.Duration);
+        if (Exists(args.Args.Source))
+            RaiseLocalEvent(args.Args.Source, attempt);
+
+        if (attempt.Cancelled)
+            return;
+
         if (!_statusEffect.TrySetStatusEffectDuration(entity, args.Effect.StatusEffect, out var statusEnt, args.Effect.Duration))
             return;
 
@@ -36,4 +45,17 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
             Dirty(statusEnt.Value, sourceComp);
         }
     }
+}
+
+/// <summary>
+/// Raised on the source (attacker) before <see cref="ApplyStatusEffect"/> applies a status to a
+/// target. Cancelling prevents the effect from being applied. Relayed to the source's active
+/// status effects via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEAttemptApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly EntProtoId StatusEffect = statusEffect;
+    public readonly TimeSpan Duration = duration;
+    public bool Cancelled;
 }

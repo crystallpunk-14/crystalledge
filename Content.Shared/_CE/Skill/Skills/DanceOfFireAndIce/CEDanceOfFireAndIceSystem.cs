@@ -1,7 +1,7 @@
-using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared._CE.Health;
 using Content.Shared.StatusEffectNew;
 
-namespace Content.Shared._CE.Skills.DanceOfFireAndIce;
+namespace Content.Shared._CE.Skill.Skills.DanceOfFireAndIce;
 
 public sealed class CEDanceOfFireAndIceSystem : EntitySystem
 {

@@ -1,5 +1,4 @@
 using Content.Shared._CE.Health;
-using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -34,40 +33,14 @@ public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
 
         var damage = new CEDamageSpecifier(args.Effect.DamageSpec);
 
-        var outgoingEv = new CEOutgoingDamageCalculateEvent(damage, entity, args.Args.Used, args.Effect.AttackType);
-        RaiseLocalEvent(args.Args.Source, outgoingEv);
-
-        if (outgoingEv.Cancelled)
-            return;
-
-        _health.TakeDamage(entity, outgoingEv.Damage, args.Args.Source, args.Args.Used, args.Effect.IgnoreArmor, args.Effect.InterruptDoAfters);
+        _health.TakeDamage(
+            entity,
+            damage,
+            args.Args.Source,
+            args.Args.Used,
+            args.Effect.IgnoreArmor,
+            args.Effect.InterruptDoAfters,
+            args.Effect.AttackType);
     }
 }
 
-
-/// <summary>
-/// Determines the type of attack that deals damage.
-/// </summary>
-[Serializable, NetSerializable]
-public enum CEAttackType : byte
-{
-    Melee,
-    Ranged,
-}
-
-/// <summary>
-/// Raised on the source (attacker) entity before damage is applied to the target.
-/// Status effects on the attacker can modify damage via StatusEffectRelayedEvent.
-/// </summary>
-public sealed class CEOutgoingDamageCalculateEvent(
-    CEDamageSpecifier damage,
-    EntityUid target,
-    EntityUid? weapon,
-    CEAttackType attackType) : EntityEventArgs
-{
-    public CEDamageSpecifier Damage = damage;
-    public EntityUid Target = target;
-    public EntityUid? Weapon = weapon;
-    public CEAttackType AttackType = attackType;
-    public bool Cancelled;
-}

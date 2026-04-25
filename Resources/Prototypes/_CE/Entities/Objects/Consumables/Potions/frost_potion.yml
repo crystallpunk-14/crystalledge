@@ -17,8 +17,9 @@
       shader: unshaded
   - type: CEConsumable
     effects:
-    - !type:FreezeEntity
-      stacks: 6
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectColdSlowdown
+      amount: 6
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric

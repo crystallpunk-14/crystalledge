@@ -10,9 +10,10 @@
     state: static
   - type: CEEntityEffectOnCollide
     effects:
-    - !type:WetEntity
-      stacks: 1
-      maxStacks: 10
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectWet
+      amount: 1
+      max: 10
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectPoison
       amount: 1

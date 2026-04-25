@@ -10,7 +10,6 @@
   name: Frost blade
   description: You create a powerful temporary weapon made of ice that deals high damage and [color=#30caf5]freezes[/color] targets.
   components:
-  - type: CEActionDangerous
   - type: CEActionManaCost
     manaCost: 3
   - type: Action
@@ -94,9 +93,10 @@
             types:
               Physical: 3
               Cold: 6
-        - !type:FreezeEntity
-          stacks: 1
-          maxStacks: 10
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectColdSlowdown
+          amount: 1
+          max: 10
         - !type:SpawnEntity
           spawns:
           - CEFreezeEffect
@@ -113,9 +113,10 @@
             types:
               Physical: 3
               Cold: 6
-        - !type:FreezeEntity
-          stacks: 1
-          maxStacks: 10
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectColdSlowdown
+          amount: 1
+          max: 10
         - !type:SpawnEntity
           spawns:
           - CEFreezeEffect

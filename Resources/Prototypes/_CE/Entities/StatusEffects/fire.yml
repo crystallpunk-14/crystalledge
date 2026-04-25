@@ -3,6 +3,7 @@
   name: "Fire!"
   description: "On fire!"
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:

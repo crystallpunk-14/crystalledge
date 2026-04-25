@@ -17,8 +17,9 @@
       shader: unshaded
   - type: CEConsumable
     effects:
-    - !type:IgniteEntity
-      stacks: 6
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectFire
+      amount: 6
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric

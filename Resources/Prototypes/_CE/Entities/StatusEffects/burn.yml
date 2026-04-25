@@ -3,6 +3,7 @@
   name: Burn
   description: Increases incoming fire damage.
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:
