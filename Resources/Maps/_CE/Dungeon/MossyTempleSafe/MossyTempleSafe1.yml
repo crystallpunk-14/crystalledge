@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/25/2026 15:33:02
-  entityCount: 1217
+  time: 04/25/2026 16:27:44
+  entityCount: 1219
 maps:
 - 1
 grids:
@@ -2600,6 +2600,20 @@ entities:
     components:
     - type: Transform
       pos: 26.5,1.5
+      parent: 1
+- proto: CEMapTextDanger
+  entities:
+  - uid: 630
+    components:
+    - type: Transform
+      pos: 28.5,4.5
+      parent: 1
+- proto: CEMapTextPeace
+  entities:
+  - uid: 631
+    components:
+    - type: Transform
+      pos: 22.5,9.5
       parent: 1
 - proto: CEOrganGoblinEyes
   entities:

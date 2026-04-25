@@ -43,11 +43,6 @@ public sealed partial class CEDungeonInstanceSystem
             _activeMapEffects[ent] = applied;
     }
 
-    private void HandleMapEffectsShutdown(EntityUid player)
-    {
-        RemoveActiveEffects(player);
-    }
-
     private void RemoveActiveEffects(EntityUid player)
     {
         if (!_activeMapEffects.TryGetValue(player, out var effects))

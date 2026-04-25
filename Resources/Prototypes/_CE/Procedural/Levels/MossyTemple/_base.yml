@@ -152,7 +152,7 @@
     maxRoomSize: 16
     components:
     - type: MapLight
-      ambientLightColor: "#7dacdf"
+      ambientLightColor: "#eae3a4"
     - type: Gravity
       enabled: true
       inherent: true
@@ -160,6 +160,9 @@
     - type: SunShadow
       alpha: 0.8
       direction: 2, -0.75
+    - type: CEMapStatusEffects
+      effects:
+      - CEStatusEffectPacifism
     generalRooms: MossyTempleGeneralRoom
     exitRoom: MossyTempleExitRoom
     entranceRooms: MossyTempleEntranceRoom
@@ -192,48 +195,3 @@
     blessingRooms: MossyTempleBlessingRoom
     treasureRooms: MossyTempleTreasureRoom
     deadEndRooms: MossyTempleDeadEndRoom
-
-- type: dungeonLevel
-  id: BaseMossyTempleLoot
-  abstract: true
-  postProcess:
-  - !type:CEBudgetSpawnPostProcess #Herbs
-    budget: 5
-    tileWhitelist:
-    - CEDirt
-    - CEGrass
-    - CEGrassLight
-    - CEGrassTall
-    entries:
-    - proto: CESpawnerRandomFlowers
-      cost: 1
-  - !type:CEBudgetSpawnPostProcess #1 Key
-    budget: 1
-    anchoredWhitelist:
-      components:
-      - PlaceableSurface
-    entries:
-    - proto: CEIronKey
-      cost: 1
-  - !type:CEBudgetSpawnPostProcess #Guaranteed Healing
-    budget: 75
-    anchoredWhitelist:
-      components:
-      - PlaceableSurface
-    entries:
-    - proto: CEConsumablePotionRegeneration
-      cost: 20
-    - proto: CEConsumablePotionHealingSmall
-      cost: 25
-    - proto: CEConsumablePotionHealingMedium
-      cost: 50
-  - !type:CEBudgetSpawnPostProcess #Guaranteed Mana
-    budget: 10
-    anchoredWhitelist:
-      components:
-      - PlaceableSurface
-    entries:
-    - proto: CEConsumablePotionManaSmall
-      cost: 5
-    - proto: CEConsumablePotionManaMedium
-      cost: 10

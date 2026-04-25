@@ -2,7 +2,6 @@
   id: MossyTemple2_Pvp
   parent:
   - BaseMossyTemplePostProcessDangerous
-  - BaseMossyTempleLoot
   name: ce-dungeon-mossy-dungeon-2-name
   uiPosition: 4,2
   exits:
@@ -25,7 +24,8 @@
       min: 2
       max: 3
   postProcess:
-  # Mobs
+
+  # MOBS
   - !type:CEBudgetSpawnPostProcess
     budget: 15
     wakeOnSpawn: true
@@ -34,10 +34,51 @@
     entries:
     - proto: CEMobRat
       cost: 1
-      weight: 2
     - proto: CEMobSlimeWater
-      cost: 2
-    - proto: CEMobFireConstruct
-      cost: 10
+      cost: 3
     - proto: CEMobPredatoryVine
       cost: 3
+    - proto: CEMobSlimeWaterBig
+      cost: 2
+
+  #LOOT X2 Loot compared to PvE version
+  - !type:CEBudgetSpawnPostProcess #Herbs
+    budget: 10
+    tileWhitelist:
+    - CEDirt
+    - CEGrass
+    - CEGrassLight
+    - CEGrassTall
+    entries:
+    - proto: CESpawnerRandomFlowers
+      cost: 1
+  - !type:CEBudgetSpawnPostProcess #2 Key
+    budget: 2
+    anchoredWhitelist:
+      components:
+      - PlaceableSurface
+    entries:
+    - proto: CEIronKey
+      cost: 1
+  - !type:CEBudgetSpawnPostProcess #Guaranteed Healing
+    budget: 50
+    anchoredWhitelist:
+      components:
+      - PlaceableSurface
+    entries:
+    - proto: CEConsumablePotionRegeneration
+      cost: 20
+    - proto: CEConsumablePotionHealingSmall
+      cost: 25
+    - proto: CEConsumablePotionHealingMedium
+      cost: 50
+  - !type:CEBudgetSpawnPostProcess #Guaranteed Mana
+    budget: 10
+    anchoredWhitelist:
+      components:
+      - PlaceableSurface
+    entries:
+    - proto: CEConsumablePotionManaSmall
+      cost: 5
+    - proto: CEConsumablePotionManaMedium
+      cost: 10

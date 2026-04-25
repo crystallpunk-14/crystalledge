@@ -31,7 +31,6 @@ public sealed partial class CEDungeonInstanceSystem
     private void OnPlayerShutdown(Entity<CEDungeonPlayerComponent> ent, ref ComponentShutdown args)
     {
         _visitedByPlayer.Remove(ent);
-        HandleMapEffectsShutdown(ent);
     }
 
     private void OnPlayerParentChanged(Entity<CEDungeonPlayerComponent> ent, ref EntParentChangedMessage args)

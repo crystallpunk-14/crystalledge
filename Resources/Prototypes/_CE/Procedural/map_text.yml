@@ -34,3 +34,21 @@
   components:
   - type: MapText
     text: "The playtest hasn't started yet. Please wait..."
+
+- type: entity
+  id: CEMapTextPeace
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map text - Peaceful
+  components:
+  - type: MapText
+    text: "PvP disabled\nMore enemies\nLess loot"
+
+- type: entity
+  id: CEMapTextDanger
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map text - Dangerous
+  components:
+  - type: MapText
+    text: "PvP enabled\nFewer enemies\nMore loot"

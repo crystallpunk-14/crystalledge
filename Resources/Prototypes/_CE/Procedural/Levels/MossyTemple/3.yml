@@ -2,13 +2,16 @@
   id: MossyTemple3
   parent:
   - BaseMossyTemplePostProcessPeaceful
-  - BaseMossyTempleLoot
   name: ce-dungeon-mossy-temple-3-name
   uiPosition: 8,0
   exits:
     1: MossyTemple4
   config:
     !type:CEProceduralConfig
+    components:
+    - type: CEMapStatusEffects
+      effects:
+      - CEStatusEffectPacifism
     generalCount:
       min: 10
       max: 15
@@ -22,25 +25,61 @@
       min: 2
       max: 4
   postProcess:
-  # Mobs
+
+  # MOBS #X2 enemies compared to PvP version
   - !type:CEBudgetSpawnPostProcess
-    budget: 20
+    budget: 40
     wakeOnSpawn: true
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CEMobRat
-      cost: 1
-      weight: 2
     - proto: CEMobSlimeWater
-      cost: 2
-    - proto: CEMobFireConstruct
-      cost: 10
-    - proto: CEMobSlimeFire
       cost: 3
     - proto: CEMobPredatoryVine
       cost: 3
-    - proto: CEMobSlimeFireBig
-      cost: 7
     - proto: CEMobSlimeWaterBig
-      cost: 4
+      cost: 2
+    - proto: CEMobFireConstruct
+      cost: 6
+
+  #LOOT
+  - !type:CEBudgetSpawnPostProcess # 5 Herbs
+    budget: 5
+    tileWhitelist:
+    - CEDirt
+    - CEGrass
+    - CEGrassLight
+    - CEGrassTall
+    entries:
+    - proto: CESpawnerRandomFlowers
+      cost: 1
+  - !type:CEBudgetSpawnPostProcess #1 Key
+    budget: 1
+    anchoredWhitelist:
+      components:
+      - PlaceableSurface
+    entries:
+    - proto: CEIronKey
+      cost: 1
+  - !type:CEBudgetSpawnPostProcess #Guaranteed Healing
+    budget: 25
+    anchoredWhitelist:
+      components:
+      - PlaceableSurface
+    entries:
+    - proto: CEConsumablePotionRegeneration
+      cost: 20
+    - proto: CEConsumablePotionHealingSmall
+      cost: 25
+    - proto: CEConsumablePotionHealingMedium
+      cost: 50
+  - !type:CEBudgetSpawnPostProcess #Guaranteed Mana
+    budget: 5
+    anchoredWhitelist:
+      components:
+      - PlaceableSurface
+    entries:
+    - proto: CEConsumablePotionManaSmall
+      cost: 5
+    - proto: CEConsumablePotionManaMedium
+      cost: 10
