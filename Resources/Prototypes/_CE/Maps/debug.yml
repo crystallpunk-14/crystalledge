@@ -1,7 +1,7 @@
 - type: gameMap
   id: Empty
   mapName: Empty
-  mapPath: /Maps/Test/empty.yml
+  mapPath: /Maps/_CE/Empty.yml
   minPlayers: 0
   stations:
     Empty:
