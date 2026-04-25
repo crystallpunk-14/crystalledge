@@ -21,20 +21,46 @@ public sealed partial class CEDungeonInstanceSystem
 
     private void HandleMapEffectsParentChanged(Entity<CEDungeonPlayerComponent> ent, EntParentChangedMessage args)
     {
-        // Remove previous map effects.
-        RemoveActiveEffects(ent);
-
         var newMapUid = args.Transform.MapUid;
-        if (newMapUid == null)
-            return;
 
-        if (!TryComp<CEMapStatusEffectsComponent>(newMapUid.Value, out var mapEffects))
-            return;
+        // Gather effects required on the new map (null when the map has none).
+        List<EntProtoId>? incoming = null;
+        if (newMapUid != null && TryComp<CEMapStatusEffectsComponent>(newMapUid.Value, out var mapEffects))
+            incoming = mapEffects.Effects;
 
-        // Apply new effects from the destination map.
-        var applied = new List<EntProtoId>();
-        foreach (var effect in mapEffects.Effects)
+        // Effects that were active on the previous map.
+        _activeMapEffects.TryGetValue(ent, out var outgoing);
+
+        // Remove only the effects that the new map does NOT have.
+        // Keeping shared effects alive avoids a remove→add cycle that would silently
+        // drop them: TryRemoveStatusEffect uses PredictedQueueDel (deferred), so the
+        // effect entity is still returned by TryGetStatusEffect immediately after and
+        // TryAddStack adds stacks to a dead entity — the effect then vanishes.
+        if (outgoing != null)
         {
+            foreach (var effect in outgoing)
+            {
+                if (incoming == null || !incoming.Contains(effect))
+                    _stacks.TryRemoveStack(ent, effect);
+            }
+            _activeMapEffects.Remove(ent);
+        }
+
+        if (incoming == null)
+            return;
+
+        // Apply effects from the new map, carrying over those already active.
+        var applied = new List<EntProtoId>();
+        foreach (var effect in incoming)
+        {
+            // Effect was already active from the previous map — skip the re-add so we
+            // don't touch the live entity at all (see deferred-deletion note above).
+            if (outgoing != null && outgoing.Contains(effect))
+            {
+                applied.Add(effect);
+                continue;
+            }
+
             if (_stacks.TryAddStack(ent, effect, out _))
                 applied.Add(effect);
         }
