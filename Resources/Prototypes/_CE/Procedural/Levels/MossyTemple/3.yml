@@ -8,13 +8,12 @@
     1: MossyTemple4
   config:
     !type:CEProceduralConfig
-    components:
-    - type: CEMapStatusEffects
-      effects:
-      - CEStatusEffectPacifism
     generalCount:
       min: 10
       max: 15
+    entranceCount:
+      min: 3
+      max: 3
     blessingCount:
       min: 1
       max: 1

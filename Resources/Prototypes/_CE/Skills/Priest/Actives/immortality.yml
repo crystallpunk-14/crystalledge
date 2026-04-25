@@ -11,7 +11,7 @@
   description: You channel divine energy into yourself, applying 5 stacks of [color=#1defa9]Regeneration[/color].
   components:
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 5
   - type: Action
     useDelay: 15
     icon:
@@ -42,3 +42,4 @@
       effectTarget: User
       statusEffect: CEStatusEffectRegeneration
       amount: 5
+      max: 10

@@ -144,3 +144,5 @@
       - random:
           shard1: ""
           shard2: ""
+  - type: TimedDespawn
+    lifetime: 120

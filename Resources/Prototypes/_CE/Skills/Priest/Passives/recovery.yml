@@ -1,8 +1,8 @@
-- type: skill
-  parent: BasePriestSkill
-  id: Recovery
-  effect: !type:AddStatusEffect
-    effect: CEStatusEffectRecovery
+#- type: skill
+#  parent: BasePriestSkill
+#  id: Recovery
+#  effect: !type:AddStatusEffect
+#    effect: CEStatusEffectRecovery #Disabled due to infinity health & mana exploit with regeneration healing (every regen tick = +1 mana, so its +5 mana from immortality ability)
 
 - type: entity
   id: CEStatusEffectRecovery

@@ -13,7 +13,7 @@
   - type: CEVisualizeConeAction
     width: 10
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 5
   - type: Action
     useDelay: 6
     icon:

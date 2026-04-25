@@ -12,8 +12,8 @@
       min: 7
       max: 10
     entranceCount:
-      min: 2
-      max: 2
+      min: 3
+      max: 3
     blessingCount:
       min: 1
       max: 1
