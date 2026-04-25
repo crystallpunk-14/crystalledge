@@ -1,12 +1,12 @@
 - type: dungeonLevel
-  id: MossyTemple3
+  id: MossyTemple3_Pvp
   parent:
-  - BaseMossyTemplePostProcessPeaceful
+  - BaseMossyTemplePostProcessDangerous
   - BaseMossyTempleLoot
   name: ce-dungeon-mossy-temple-3-name
-  uiPosition: 8,0
+  uiPosition: 8,2
   exits:
-    1: MossyTemple4
+    1: MossyTemple4_Pvp
   config:
     !type:CEProceduralConfig
     generalCount:

@@ -1,0 +1,26 @@
+- type: dungeonLevel
+  id: Arena
+  stable: true
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi
+    state: magma_caves
+  parent:
+  - BaseMossyTemplePostProcess
+  name: ce-dungeon-arena-name
+  desc: ce-dungeon-arena-desc
+  uiPosition: 12,1
+  config:
+    !type:CEStaticZNetworkConfig
+    zMapProto: Arena
+
+- type: zMap
+  id: Arena
+  maps:
+  - /Maps/_CE/Dungeon/Arena/Arena0.yml
+  - /Maps/_CE/Dungeon/Arena/Arena1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#5a3131"
+  - type: Gravity
+    enabled: true
+    inherent: true

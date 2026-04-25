@@ -1,16 +1,13 @@
 - type: dungeonLevel
-  id: MossyTemple5
-  icon:
-    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi
-    state: leaf_maze
+  id: MossyTemple4_Pvp
   parent:
   - BaseMossyTemplePostProcessDangerous
   - BaseMossyTempleLoot
-  name: ce-dungeon-mossy-temple-5-name
-  desc: ce-dungeon-mossy-temple-5-desc
-  uiPosition: 10,0
+  name: ce-dungeon-mossy-temple-4-name
+  desc: ce-dungeon-mossy-temple-4-desc
+  uiPosition: 10,2
   exits:
-    1: MossyTempleSafe # Loops back for now
+    1: Arena
   config:
     !type:CEProceduralConfig
     generalCount:

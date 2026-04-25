@@ -1,46 +1,51 @@
 - type: dungeonLevel
-  id: MossyTemple3
+  id: MossyTemple4
   parent:
   - BaseMossyTemplePostProcessPeaceful
   - BaseMossyTempleLoot
-  name: ce-dungeon-mossy-temple-3-name
-  uiPosition: 8,0
+  name: ce-dungeon-mossy-temple-4-name
+  desc: ce-dungeon-mossy-temple-4-desc
+  uiPosition: 10,0
   exits:
-    1: MossyTemple4
+    1: Arena
   config:
     !type:CEProceduralConfig
     generalCount:
-      min: 10
-      max: 15
+      min: 15
+      max: 20
     blessingCount:
-      min: 1
-      max: 1
+      min: 0
+      max: 0
     treasureCount:
       min: 0
       max: 2
     cycleCount:
+      min: 10
+      max: 10
+    entranceCount:
       min: 2
-      max: 4
+      max: 3
   postProcess:
   # Mobs
   - !type:CEBudgetSpawnPostProcess
-    budget: 20
+    budget: 150
     wakeOnSpawn: true
     excludedRoomTypes:
     - Entrance
     entries:
-    - proto: CEMobRat
-      cost: 1
-      weight: 2
-    - proto: CEMobSlimeWater
-      cost: 2
-    - proto: CEMobFireConstruct
-      cost: 10
     - proto: CEMobSlimeFire
       cost: 3
+    - proto: CEMobFlem
+      cost: 3
+    - proto: CEMobFlem2
+      cost: 3
+    - proto: CEMobFlem3
+      cost: 5
+    - proto: CEMobFireConstruct
+      cost: 10
     - proto: CEMobPredatoryVine
       cost: 3
     - proto: CEMobSlimeFireBig
-      cost: 7
+      cost: 8
     - proto: CEMobSlimeWaterBig
-      cost: 4
+      cost: 2

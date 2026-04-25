@@ -21,6 +21,9 @@
     noRot: true
     layers:
     - state: effect
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 8
 
 - type: alert
   id: CEWet

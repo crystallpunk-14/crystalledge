@@ -8,9 +8,10 @@
   - BaseMossyTemplePostProcess
   name: ce-dungeon-mossy-temple-safe-name
   desc: ce-dungeon-mossy-temple-safe-desc
-  uiPosition: 8,0
+  uiPosition: 6,1
   exits:
-    1: MossyTemple5
+    1: MossyTemple3
+    2: MossyTemple3_Pvp
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: MossyTempleSafe

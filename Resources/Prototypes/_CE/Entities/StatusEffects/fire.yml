@@ -49,6 +49,9 @@
     range: 5
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 2
 
 - type: alert
   id: CEFire

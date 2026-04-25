@@ -6,7 +6,7 @@
   name: ce-dungeon-mossy-temple-2-name
   uiPosition: 4,0
   exits:
-    1: MossyTemple3
+    1: MossyTempleSafe
   config:
     !type:CEProceduralConfig
     generalCount:

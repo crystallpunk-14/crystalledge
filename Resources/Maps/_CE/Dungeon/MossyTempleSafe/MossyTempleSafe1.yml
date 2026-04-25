@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/25/2026 10:56:14
-  entityCount: 1220
+  time: 04/25/2026 15:33:02
+  entityCount: 1217
 maps:
 - 1
 grids:
@@ -23,6 +23,7 @@ tilemap:
   6: CEStone
   2: CEStoneLongBricks
   4: CEStoneSquarePattern
+  11: CEStonebricksSmallCarved2
   1: CEStonebricksSquareCarved
 entities:
 - proto: ""
@@ -57,7 +58,7 @@ entities:
           version: 7
         1,0:
           ind: 1,0
-          tiles: AwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAYAAAAACwAGAAAAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAgAAAAAAAAIAAAAAAAAAwAAAAAAAAMAAAAAAAAGAAAAAAUABgAAAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAgAAAAAAAAJAAAAAAAACQAAAAAAAAkAAAAAAAADAAAAAAAABgAAAAAGAAYAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAMAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAJAAAAAAAACQAAAAAAAAoAAAAAAAAJAAAAAAAAAwAAAAAAAAYAAAAAAwAGAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAJAAAAAAAACAAAAAAAAAAAAAAAAAAGAAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAAIAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          tiles: AwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAYAAAAACwAGAAAAAA0ABgAAAAAAAAYAAAAABAAGAAAAAAIAAAAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAABgAAAAAHAAAAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAABAAAAAAAAAQAAAAAAAAIAAAAAAAACAAAAAAAAAgAAAAAAAAEAAAAAAAAAAAAAAAAAAwAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAMAAAAAAAADAAAAAAAAAQAAAAAAAAEAAAAAAAACAAAAAAAACwAAAAAAAAIAAAAAAAABAAAAAAAAAAAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAEAAAAAAAABAAAAAAAAAgAAAAAAAAIAAAAAAAACAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAYAAAAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAABgAAAAAFAAYAAAAAAQAGAAAAAAgABgAAAAAJAAYAAAAADAAGAAAAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAgAAAAAAAAIAAAAAAAACAAAAAAAAAQAAAAAAAAYAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAIAAAAAAAALAAAAAAAAAgAAAAAAAAEAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAACAAAAAAAAAgAAAAAAAAIAAAAAAAABAAAAAAAABgAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAACAAGAAAAAAkAAQAAAAAAAAEAAAAAAAABAAAAAAAABgAAAAAAAAYAAAAACwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
           version: 7
         1,-1:
           ind: 1,-1
@@ -1397,30 +1398,6 @@ entities:
       anchored: False
       pos: 0.5,12.5
       parent: 1
-  - uid: 546
-    components:
-    - type: Transform
-      anchored: False
-      pos: 19.5,9.5
-      parent: 1
-  - uid: 547
-    components:
-    - type: Transform
-      anchored: False
-      pos: 19.5,8.5
-      parent: 1
-  - uid: 548
-    components:
-    - type: Transform
-      anchored: False
-      pos: 19.5,7.5
-      parent: 1
-  - uid: 549
-    components:
-    - type: Transform
-      anchored: False
-      pos: 19.5,6.5
-      parent: 1
   - uid: 550
     components:
     - type: Transform
@@ -1451,18 +1428,6 @@ entities:
       anchored: False
       pos: 2.5,14.5
       parent: 1
-  - uid: 555
-    components:
-    - type: Transform
-      anchored: False
-      pos: 20.5,7.5
-      parent: 1
-  - uid: 556
-    components:
-    - type: Transform
-      anchored: False
-      pos: 20.5,6.5
-      parent: 1
   - uid: 557
     components:
     - type: Transform
@@ -1475,53 +1440,17 @@ entities:
       anchored: False
       pos: 2.5,20.5
       parent: 1
-  - uid: 559
-    components:
-    - type: Transform
-      anchored: False
-      pos: 20.5,9.5
-      parent: 1
   - uid: 560
     components:
     - type: Transform
       anchored: False
       pos: 2.5,17.5
       parent: 1
-  - uid: 561
-    components:
-    - type: Transform
-      anchored: False
-      pos: 20.5,8.5
-      parent: 1
   - uid: 562
     components:
     - type: Transform
       anchored: False
       pos: 1.5,18.5
-      parent: 1
-  - uid: 563
-    components:
-    - type: Transform
-      anchored: False
-      pos: 21.5,8.5
-      parent: 1
-  - uid: 564
-    components:
-    - type: Transform
-      anchored: False
-      pos: 21.5,7.5
-      parent: 1
-  - uid: 565
-    components:
-    - type: Transform
-      anchored: False
-      pos: 21.5,6.5
-      parent: 1
-  - uid: 566
-    components:
-    - type: Transform
-      anchored: False
-      pos: 21.5,9.5
       parent: 1
   - uid: 567
     components:
@@ -1559,30 +1488,6 @@ entities:
       anchored: False
       pos: -0.5,10.5
       parent: 1
-  - uid: 573
-    components:
-    - type: Transform
-      anchored: False
-      pos: 22.5,9.5
-      parent: 1
-  - uid: 574
-    components:
-    - type: Transform
-      anchored: False
-      pos: 22.5,8.5
-      parent: 1
-  - uid: 575
-    components:
-    - type: Transform
-      anchored: False
-      pos: 22.5,7.5
-      parent: 1
-  - uid: 576
-    components:
-    - type: Transform
-      anchored: False
-      pos: 22.5,6.5
-      parent: 1
   - uid: 577
     components:
     - type: Transform
@@ -1607,35 +1512,11 @@ entities:
       anchored: False
       pos: 3.5,16.5
       parent: 1
-  - uid: 581
-    components:
-    - type: Transform
-      anchored: False
-      pos: 23.5,9.5
-      parent: 1
   - uid: 582
     components:
     - type: Transform
       anchored: False
       pos: -0.5,9.5
-      parent: 1
-  - uid: 583
-    components:
-    - type: Transform
-      anchored: False
-      pos: 23.5,8.5
-      parent: 1
-  - uid: 584
-    components:
-    - type: Transform
-      anchored: False
-      pos: 23.5,7.5
-      parent: 1
-  - uid: 585
-    components:
-    - type: Transform
-      anchored: False
-      pos: 23.5,6.5
       parent: 1
   - uid: 586
     components:
@@ -1666,30 +1547,6 @@ entities:
     - type: Transform
       anchored: False
       pos: -0.5,13.5
-      parent: 1
-  - uid: 591
-    components:
-    - type: Transform
-      anchored: False
-      pos: 24.5,9.5
-      parent: 1
-  - uid: 592
-    components:
-    - type: Transform
-      anchored: False
-      pos: 24.5,8.5
-      parent: 1
-  - uid: 593
-    components:
-    - type: Transform
-      anchored: False
-      pos: 24.5,7.5
-      parent: 1
-  - uid: 594
-    components:
-    - type: Transform
-      anchored: False
-      pos: 24.5,6.5
       parent: 1
   - uid: 595
     components:
@@ -1781,60 +1638,6 @@ entities:
       anchored: False
       pos: 17.5,5.5
       parent: 1
-  - uid: 610
-    components:
-    - type: Transform
-      anchored: False
-      pos: 24.5,5.5
-      parent: 1
-  - uid: 611
-    components:
-    - type: Transform
-      anchored: False
-      pos: 25.5,4.5
-      parent: 1
-  - uid: 612
-    components:
-    - type: Transform
-      anchored: False
-      pos: 25.5,5.5
-      parent: 1
-  - uid: 613
-    components:
-    - type: Transform
-      anchored: False
-      pos: 25.5,6.5
-      parent: 1
-  - uid: 614
-    components:
-    - type: Transform
-      anchored: False
-      pos: 25.5,7.5
-      parent: 1
-  - uid: 615
-    components:
-    - type: Transform
-      anchored: False
-      pos: 25.5,8.5
-      parent: 1
-  - uid: 616
-    components:
-    - type: Transform
-      anchored: False
-      pos: 26.5,7.5
-      parent: 1
-  - uid: 617
-    components:
-    - type: Transform
-      anchored: False
-      pos: 26.5,8.5
-      parent: 1
-  - uid: 618
-    components:
-    - type: Transform
-      anchored: False
-      pos: 25.5,9.5
-      parent: 1
   - uid: 619
     components:
     - type: Transform
@@ -1888,12 +1691,6 @@ entities:
     - type: Transform
       anchored: False
       pos: -1.5,18.5
-      parent: 1
-  - uid: 631
-    components:
-    - type: Transform
-      anchored: False
-      pos: 26.5,9.5
       parent: 1
   - uid: 632
     components:
@@ -2119,6 +1916,26 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 22.5,-4.5
       parent: 1
+  - uid: 447
+    components:
+    - type: Transform
+      pos: 23.5,9.5
+      parent: 1
+  - uid: 462
+    components:
+    - type: Transform
+      pos: 24.5,8.5
+      parent: 1
+  - uid: 594
+    components:
+    - type: Transform
+      pos: 20.5,8.5
+      parent: 1
+  - uid: 613
+    components:
+    - type: Transform
+      pos: 21.5,9.5
+      parent: 1
   - uid: 763
     components:
     - type: Transform
@@ -2173,6 +1990,28 @@ entities:
     - type: Transform
       pos: 26.5,-14.5
       parent: 1
+- proto: CECrystalQuartzRed
+  entities:
+  - uid: 465
+    components:
+    - type: Transform
+      pos: 28.5,1.5
+      parent: 1
+  - uid: 490
+    components:
+    - type: Transform
+      pos: 28.5,5.5
+      parent: 1
+  - uid: 491
+    components:
+    - type: Transform
+      pos: 29.5,2.5
+      parent: 1
+  - uid: 593
+    components:
+    - type: Transform
+      pos: 29.5,4.5
+      parent: 1
 - proto: CEDungeonLevelEntry
   entities:
   - uid: 34
@@ -2182,11 +2021,17 @@ entities:
       parent: 1
 - proto: CEDungeonLevelExit1
   entities:
-  - uid: 5
+  - uid: 181
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 23.5,3.5
+      pos: 22.5,8.5
+      parent: 1
+- proto: CEDungeonLevelExit2
+  entities:
+  - uid: 618
+    components:
+    - type: Transform
+      pos: 28.5,3.5
       parent: 1
 - proto: CEFenceBigIron
   entities:
@@ -2194,6 +2039,11 @@ entities:
     components:
     - type: Transform
       pos: 8.5,-10.5
+      parent: 1
+  - uid: 231
+    components:
+    - type: Transform
+      pos: 21.5,10.5
       parent: 1
   - uid: 241
     components:
@@ -2206,6 +2056,92 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 2.5,-4.5
+      parent: 1
+  - uid: 265
+    components:
+    - type: Transform
+      pos: 26.5,1.5
+      parent: 1
+  - uid: 269
+    components:
+    - type: Transform
+      pos: 24.5,6.5
+      parent: 1
+  - uid: 549
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 23.5,10.5
+      parent: 1
+  - uid: 555
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 26.5,1.5
+      parent: 1
+  - uid: 556
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 30.5,4.5
+      parent: 1
+  - uid: 564
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 30.5,2.5
+      parent: 1
+  - uid: 565
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 30.5,2.5
+      parent: 1
+  - uid: 566
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 30.5,4.5
+      parent: 1
+  - uid: 576
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 21.5,10.5
+      parent: 1
+  - uid: 583
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 26.5,5.5
+      parent: 1
+  - uid: 610
+    components:
+    - type: Transform
+      pos: 23.5,10.5
+      parent: 1
+  - uid: 612
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 26.5,5.5
+      parent: 1
+  - uid: 614
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 24.5,6.5
+      parent: 1
+  - uid: 616
+    components:
+    - type: Transform
+      pos: 20.5,6.5
+      parent: 1
+  - uid: 617
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 20.5,6.5
       parent: 1
   - uid: 667
     components:
@@ -2527,48 +2463,6 @@ entities:
     - type: Transform
       pos: 18.5,5.5
       parent: 1
-  - uid: 228
-    components:
-    - type: Transform
-      pos: 19.5,5.5
-      parent: 1
-  - uid: 229
-    components:
-    - type: Transform
-      pos: 20.5,5.5
-      parent: 1
-  - uid: 230
-    components:
-    - type: Transform
-      pos: 21.5,5.5
-      parent: 1
-  - uid: 231
-    components:
-    - type: Transform
-      pos: 22.5,5.5
-      parent: 1
-  - uid: 232
-    components:
-    - type: Transform
-      pos: 23.5,5.5
-      parent: 1
-  - uid: 233
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 23.5,5.5
-      parent: 1
-  - uid: 234
-    components:
-    - type: Transform
-      pos: 24.5,4.5
-      parent: 1
-  - uid: 235
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 24.5,4.5
-      parent: 1
   - uid: 236
     components:
     - type: Transform
@@ -2695,13 +2589,17 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 10.5,-14.5
       parent: 1
-- proto: CEMapEndText
+- proto: CELava
   entities:
-  - uid: 252
+  - uid: 228
     components:
     - type: Transform
-      anchored: False
-      pos: 21.512707,7.5349636
+      pos: 26.5,5.5
+      parent: 1
+  - uid: 446
+    components:
+    - type: Transform
+      pos: 26.5,1.5
       parent: 1
 - proto: CEOrganGoblinEyes
   entities:
@@ -3221,14 +3119,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 181
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 24.5,1.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 183
     components:
     - type: Transform
@@ -3267,38 +3157,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 190
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 25.5,0.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 191
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 25.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 192
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 25.5,2.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 193
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 25.5,1.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 194
     components:
     - type: Transform
@@ -3321,6 +3179,8 @@ entities:
       rot: 3.141592653589793 rad
       pos: 16.5,4.5
       parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
   - uid: 197
     components:
     - type: Transform
@@ -3347,14 +3207,6 @@ entities:
       rot: 3.141592653589793 rad
       pos: 13.5,4.5
       parent: 1
-  - uid: 201
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 13.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 202
     components:
     - type: Transform
@@ -3468,73 +3320,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 262
-    components:
-    - type: Transform
-      pos: 27.5,1.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 263
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 26.5,1.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 265
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 26.5,2.5
-      parent: 1
-  - uid: 266
-    components:
-    - type: Transform
-      pos: 27.5,2.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 267
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 26.5,3.5
-      parent: 1
-  - uid: 269
-    components:
-    - type: Transform
-      pos: 26.5,4.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 270
-    components:
-    - type: Transform
-      pos: 27.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 271
-    components:
-    - type: Transform
-      pos: 26.5,5.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 273
-    components:
-    - type: Transform
-      pos: 26.5,6.5
-      parent: 1
-  - uid: 275
-    components:
-    - type: Transform
-      pos: 27.5,0.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 276
     components:
     - type: Transform
@@ -3551,13 +3336,6 @@ entities:
     components:
     - type: Transform
       pos: 26.5,-1.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 279
-    components:
-    - type: Transform
-      pos: 26.5,0.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -5982,21 +5760,6 @@ entities:
     - type: Transform
       pos: -2.5,22.5
       parent: 1
-  - uid: 446
-    components:
-    - type: Transform
-      pos: 27.5,7.5
-      parent: 1
-  - uid: 447
-    components:
-    - type: Transform
-      pos: 27.5,8.5
-      parent: 1
-  - uid: 448
-    components:
-    - type: Transform
-      pos: 27.5,9.5
-      parent: 1
   - uid: 451
     components:
     - type: Transform
@@ -6041,16 +5804,6 @@ entities:
     components:
     - type: Transform
       pos: -2.5,23.5
-      parent: 1
-  - uid: 462
-    components:
-    - type: Transform
-      pos: 20.5,10.5
-      parent: 1
-  - uid: 465
-    components:
-    - type: Transform
-      pos: 19.5,10.5
       parent: 1
   - uid: 466
     components:
@@ -6147,16 +5900,6 @@ entities:
     - type: Transform
       pos: 17.5,11.5
       parent: 1
-  - uid: 490
-    components:
-    - type: Transform
-      pos: 25.5,10.5
-      parent: 1
-  - uid: 491
-    components:
-    - type: Transform
-      pos: 27.5,10.5
-      parent: 1
   - uid: 492
     components:
     - type: Transform
@@ -6171,21 +5914,6 @@ entities:
     components:
     - type: Transform
       pos: -2.5,16.5
-      parent: 1
-  - uid: 497
-    components:
-    - type: Transform
-      pos: 26.5,10.5
-      parent: 1
-  - uid: 498
-    components:
-    - type: Transform
-      pos: 21.5,10.5
-      parent: 1
-  - uid: 499
-    components:
-    - type: Transform
-      pos: 24.5,10.5
       parent: 1
   - uid: 500
     components:
@@ -6217,11 +5945,6 @@ entities:
     - type: Transform
       pos: 11.5,23.5
       parent: 1
-  - uid: 630
-    components:
-    - type: Transform
-      pos: 23.5,10.5
-      parent: 1
   - uid: 635
     components:
     - type: Transform
@@ -6236,11 +5959,6 @@ entities:
     components:
     - type: Transform
       pos: 10.5,23.5
-      parent: 1
-  - uid: 644
-    components:
-    - type: Transform
-      pos: 22.5,10.5
       parent: 1
   - uid: 645
     components:
@@ -6366,6 +6084,21 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
+  - uid: 262
+    components:
+    - type: Transform
+      pos: 25.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 263
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 21.5,5.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
   - uid: 264
     components:
     - type: Transform
@@ -6410,6 +6143,22 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 9.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 584
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 23.5,5.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 592
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 25.5,2.5
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -6464,6 +6213,13 @@ entities:
     components:
     - type: Transform
       pos: -7.5,2.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 5
+    components:
+    - type: Transform
+      pos: 19.5,9.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -6788,11 +6544,232 @@ entities:
     - type: Transform
       pos: 20.5,0.5
       parent: 1
+  - uid: 190
+    components:
+    - type: Transform
+      pos: 19.5,5.5
+      parent: 1
+  - uid: 191
+    components:
+    - type: Transform
+      pos: 19.5,6.5
+      parent: 1
+  - uid: 192
+    components:
+    - type: Transform
+      pos: 29.5,0.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 193
+    components:
+    - type: Transform
+      pos: 30.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 201
+    components:
+    - type: Transform
+      pos: 29.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
   - uid: 223
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 7.5,-16.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 229
+    components:
+    - type: Transform
+      pos: 28.5,6.5
+      parent: 1
+  - uid: 230
+    components:
+    - type: Transform
+      pos: 29.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 232
+    components:
+    - type: Transform
+      pos: 30.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 233
+    components:
+    - type: Transform
+      pos: 29.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 234
+    components:
+    - type: Transform
+      pos: 30.5,5.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 235
+    components:
+    - type: Transform
+      pos: 25.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 252
+    components:
+    - type: Transform
+      pos: 30.5,0.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 266
+    components:
+    - type: Transform
+      pos: 22.5,10.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 267
+    components:
+    - type: Transform
+      pos: 20.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 270
+    components:
+    - type: Transform
+      pos: 24.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 271
+    components:
+    - type: Transform
+      pos: 20.5,10.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 275
+    components:
+    - type: Transform
+      pos: 25.5,9.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 279
+    components:
+    - type: Transform
+      pos: 25.5,10.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 448
+    components:
+    - type: Transform
+      pos: 19.5,10.5
+      parent: 1
+  - uid: 497
+    components:
+    - type: Transform
+      pos: 19.5,7.5
+      parent: 1
+  - uid: 498
+    components:
+    - type: Transform
+      pos: 26.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 499
+    components:
+    - type: Transform
+      pos: 27.5,6.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 546
+    components:
+    - type: Transform
+      pos: 28.5,0.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 547
+    components:
+    - type: Transform
+      pos: 25.5,7.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 559
+    components:
+    - type: Transform
+      pos: 25.5,0.5
+      parent: 1
+  - uid: 561
+    components:
+    - type: Transform
+      pos: 24.5,5.5
+      parent: 1
+  - uid: 563
+    components:
+    - type: Transform
+      pos: 24.5,10.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 573
+    components:
+    - type: Transform
+      pos: 25.5,8.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 574
+    components:
+    - type: Transform
+      pos: 20.5,5.5
+      parent: 1
+  - uid: 575
+    components:
+    - type: Transform
+      pos: 25.5,1.5
+      parent: 1
+    - type: CEZPhysics
+      currentGroundHeight: 1.05
+  - uid: 581
+    components:
+    - type: Transform
+      pos: 25.5,5.5
+      parent: 1
+  - uid: 585
+    components:
+    - type: Transform
+      pos: 27.5,0.5
+      parent: 1
+  - uid: 591
+    components:
+    - type: Transform
+      pos: 26.5,0.5
+      parent: 1
+  - uid: 611
+    components:
+    - type: Transform
+      pos: 19.5,8.5
+      parent: 1
+  - uid: 615
+    components:
+    - type: Transform
+      pos: 30.5,3.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -7125,6 +7102,16 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 17.5,-2.5
+      parent: 1
+  - uid: 273
+    components:
+    - type: Transform
+      pos: 24.5,6.5
+      parent: 1
+  - uid: 548
+    components:
+    - type: Transform
+      pos: 20.5,6.5
       parent: 1
   - uid: 663
     components:

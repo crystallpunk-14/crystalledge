@@ -10,9 +10,29 @@
     state: center
   name: ce-dungeon-mossy-temple-start-name
   desc: ce-dungeon-mossy-temple-start-desc
-  uiPosition: 0,0
+  uiPosition: 0,1
   exits:
     1: MossyTemple1
+    2: MossyTemple1_Pvp
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: CELevel0Entry
+
+- type: zMap
+  id: CELevel0Entry
+  maps:
+  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
+  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
+  components:
+    - type: SunShadowCycle
+      offset: 490
+    - type: LightCycle
+      offset: 490
+      originalColor: "#c8fdff"
+    - type: CEZLevelMapRoof
+    - type: SunShadow
+    - type: MapLight
+      ambientLightColor: "#c8fdff"
+    - type: CEMapStatusEffects
+      effects:
+      - CEStatusEffectPacifism

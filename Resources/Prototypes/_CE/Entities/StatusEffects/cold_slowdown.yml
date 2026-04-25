@@ -29,6 +29,9 @@
     radius: 1.2
     energy: 1
     color: "#30caf5"
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 5
 
 - type: alert
   id: CEColdSlowdown
