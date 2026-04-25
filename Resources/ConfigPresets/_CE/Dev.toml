@@ -18,14 +18,13 @@ max_connections = 100
 log_late_msg = false
 
 [game]
-hostname = "⚔️ CrystallEdge ⚔️ [MRP]"
-desc = "History of the Floating Island city of Sword and Magic. A social sandbox reinventing the Space Station 14 concept in fantasy style"
+hostname = "⚔️ CrystallEdge ⚔️ [Roguelike]"
+desc = "A multiplayer party-based roguelike. A roguelike in which dozens of teams of four players compete simultaneously. Choose a class and embark on a unique adventure through a labyrinth of dimensions, adapt to unique situations, and develop your character as you encounter new friends and foes along the way."
 lobbyenabled = true
 soft_max_players = 30
 maxplayers = 40
 lobbyduration = 300
 role_timers = true
-#closed_beta_test = true
 
 #[server]
 #rules_file = "CERules"

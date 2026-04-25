@@ -4,7 +4,6 @@
   - BaseMossyTemplePostProcessPeaceful
   - BaseMossyTempleLoot
   name: ce-dungeon-mossy-temple-4-name
-  desc: ce-dungeon-mossy-temple-4-desc
   uiPosition: 10,0
   exits:
     1: Arena

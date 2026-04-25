@@ -3,7 +3,7 @@
   parent:
   - BaseMossyTemplePostProcessDangerous
   - BaseMossyTempleLoot
-  name: ce-dungeon-mossy-temple-2-name
+  name: ce-dungeon-mossy-dungeon-2-name
   uiPosition: 4,2
   exits:
     1: MossyTempleSafe

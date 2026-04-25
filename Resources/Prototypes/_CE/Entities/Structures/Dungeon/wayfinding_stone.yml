@@ -33,3 +33,8 @@
       enum.CEPlayerDungeonOverviewUiKey.Key:
         type: CEPlayerDungeonOverviewBoundUserInterface
   - type: CEPlayerDungeonOverview
+  - type: PointLight
+    radius: 1.5
+    energy: 3
+    color: "#8f42ff"
+    netsync: false
