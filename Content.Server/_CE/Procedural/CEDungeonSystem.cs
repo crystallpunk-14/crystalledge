@@ -135,7 +135,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
                 _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
             }
 
-            _meta.SetEntityName(result.MapUid.Value, $"{proto.ID}");
+            NameDungeonResult(proto, result);
             Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
 
             // Run post-processing layers.
@@ -214,7 +214,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
                     _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
                 }
 
-                _meta.SetEntityName(result.MapUid.Value, $"{protoId}");
+                NameDungeonResult(proto, result);
                 Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
 
                 // Enqueue post-processing layers.
@@ -230,5 +230,28 @@ public sealed partial class CEDungeonSystem : EntitySystem
                 Log.Error($"CEDungeonSystem: generation failed for '{protoId}'.");
             }
         }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+
+    /// <summary>
+    /// Renames the freshly generated dungeon's z-network entity (if any) and all of its maps,
+    /// matching the convention used by the station / mapping z-network commands. Falls back to
+    /// renaming just the primary map when the level wasn't created inside a z-network.
+    /// </summary>
+    private void NameDungeonResult(CEDungeonLevelPrototype proto, CEDungeonGenerateResult result)
+    {
+        if (result.MapUid is not { } mapUid)
+            return;
+
+        var dungeonName = proto.Name.HasValue ? Loc.GetString(proto.Name.Value) : proto.ID;
+
+        if (result.ZNetworkUid is { } networkUid
+            && TryComp<CEZLevelsNetworkComponent>(networkUid, out var networkComp))
+        {
+            _zLevels.SetZNetworkName((networkUid, networkComp), $"Dungeon z-Network: {dungeonName}", dungeonName);
+        }
+        else
+        {
+            _meta.SetEntityName(mapUid, dungeonName);
+        }
     }
 }

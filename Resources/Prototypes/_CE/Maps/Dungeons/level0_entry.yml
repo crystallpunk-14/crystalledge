@@ -1,10 +1,8 @@
 - type: zMap
   id: CELevel0Entry
   maps:
-  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry-1.yml
   - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
   - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
-  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry2.yml
   components:
     - type: SunShadowCycle
       offset: 490
@@ -22,7 +20,7 @@
 - type: gameMap
   id: CELevel0Entry
   mapName: CELevel0Entry
-  mapPath: /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry-1.yml
+  mapPath: /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
   minPlayers: 0
   stations:
     Level:
@@ -38,9 +36,7 @@
             CEWanderer: [ -1, -1 ]
         - type: CEStationZLevels
           mapsAbove:
-          - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
           - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
-          - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry2.yml
           zLevelsComponentOverrides:
             - type: Parallax
               parallax: CESky

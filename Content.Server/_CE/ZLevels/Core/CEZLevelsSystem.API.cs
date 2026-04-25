@@ -109,6 +109,23 @@ public sealed partial class CEZLevelsSystem
     }
 
     /// <summary>
+    /// Renames the z-network entity and every map inside it in one go, matching the
+    /// convention used by station / mapping z-networks
+    /// (network = <paramref name="networkName"/>, each map = <c>"{mapNameBase} [{depth}]"</c>).
+    /// </summary>
+    [PublicAPI]
+    public void SetZNetworkName(Entity<CEZLevelsNetworkComponent> network, string networkName, string mapNameBase)
+    {
+        _meta.SetEntityName(network, networkName);
+
+        foreach (var (depth, mapUid) in network.Comp.ZLevels)
+        {
+            if (mapUid is { } mu)
+                _meta.SetEntityName(mu, $"{mapNameBase} [{depth}]");
+        }
+    }
+
+    /// <summary>
     /// Deletes a z-network: queues deletion of all maps in the network, then the network entity itself.
     /// </summary>
     [PublicAPI]
