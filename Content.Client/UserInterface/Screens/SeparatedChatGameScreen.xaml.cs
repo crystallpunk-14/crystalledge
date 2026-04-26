@@ -27,6 +27,10 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(Ghost, LayoutPreset.BottomWide, margin: 80);
         SetAnchorAndMarginPreset(Hotbar, LayoutPreset.BottomWide, margin: 5);
         SetAnchorAndMarginPreset(Alerts, LayoutPreset.CenterRight, margin: 10);
+        // Minimap: top-left, just below the system buttons (TopBar) row.
+        SetAnchorAndMarginPreset(Minimap, LayoutPreset.TopLeft, margin: 10);
+        UpdateMinimapPosition();
+        TopBar.OnResized += UpdateMinimapPosition;
 
         // CrystallEdge - mana and health spheres
         var gap = 310f;
@@ -75,11 +79,20 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         var staminaTop = 80f + StaminaBar.MinSize.Y;
         var hotbarTop = 5f + Hotbar.Size.Y;
         var actionHeight = MathF.Max(Actions.MinSize.Y, 64f);
-        // Sit just above whichever element is taller so we never overlap an opened
-        // "locked to hotbar" storage window.
-        var actionBottomOffset = MathF.Max(staminaTop, hotbarTop) + 8f;
+        var actionBottomOffset = MathF.Max(staminaTop, hotbarTop) + 8f - actionHeight / 2f;
         SetMarginBottom(Actions, -actionBottomOffset);
         SetMarginTop(Actions, -actionBottomOffset - actionHeight);
+    }
+
+    private void UpdateMinimapPosition()
+    {
+        // Position the minimap directly below the system buttons (TopBar) row.
+        var topBarHeight = MathF.Max(TopBar.Size.Y, TopBar.MinSize.Y);
+        var top = topBarHeight + 15f;
+        SetMarginTop(Minimap, top);
+        SetMarginBottom(Minimap, top + Minimap.MinSize.Y);
+        SetMarginLeft(Minimap, 10f);
+        SetMarginRight(Minimap, 10f + Minimap.MinSize.X);
     }
 
     public override ChatBox ChatBox => GetWidget<ChatBox>()!;

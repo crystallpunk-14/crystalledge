@@ -19,7 +19,7 @@
 - type: gameMap
   id: CEEmpty
   mapName: Empty
-  mapPath: /Maps/_CE/Empty.yml
+  mapPath: /Maps/_CE/empty_start.yml
   minPlayers: 0
   stations:
     Empty:

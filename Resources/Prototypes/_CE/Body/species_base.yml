@@ -91,6 +91,7 @@
   - type: CEStamina
   - type: CEMobState
   - type: CEDungeonPlayer
+  - type: CEMinimapData
   - type: CEDamageVisuals
     thresholds: [ 0.1, 0.2, 0.3, 0.5, 0.7, 1.0 ]
     targetLayers:

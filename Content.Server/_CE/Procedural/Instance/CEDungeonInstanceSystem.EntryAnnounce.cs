@@ -57,7 +57,9 @@ public sealed partial class CEDungeonInstanceSystem
         if (fromLevelId != instance.PrototypeId)
         {
             var changedEv = new CEDungeonPlayerLevelChangedEvent(ent.Owner, fromLevelId, instance.PrototypeId);
-            RaiseLocalEvent(ent.Owner, ref changedEv);
+            // Broadcast in addition to targeting the entity, so the dungeon-overview systems
+            // (which subscribe globally without a component filter) still receive the event.
+            RaiseLocalEvent(ent.Owner, ref changedEv, broadcast: true);
         }
 
         // Look up the prototype.

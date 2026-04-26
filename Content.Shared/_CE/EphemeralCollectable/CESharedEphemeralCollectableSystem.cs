@@ -98,7 +98,12 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
         Dirty(ent);
 
         if (ent.Comp.CollectSound != null)
-            _audio.PlayPredicted(ent.Comp.CollectSound, Transform(ent).Coordinates, player);
+        {
+            // Only the collecting player should hear the pickup sound.
+            // PlayLocal: client plays locally for the initiator only; server is a no-op,
+            // so the audio entity is never replicated to other clients.
+            _audio.PlayLocal(ent.Comp.CollectSound, ent, player);
+        }
 
         var ev = new CEEphemeralCollectedEvent(player);
         RaiseLocalEvent(ent.Owner, ref ev);
