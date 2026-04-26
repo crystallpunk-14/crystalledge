@@ -49,18 +49,37 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 80);
         SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);
         SetMarginRight(StaminaBar, StaminaBar.MinSize.X / 2f);
+
+        // Actions bar: always horizontal, placed above the stamina/hotbar area.
+        SetAnchorPreset(Actions, LayoutPreset.BottomWide);
+        SetMarginLeft(Actions, 0);
+        SetMarginRight(Actions, 0);
         // CrystallEdge end
 
         ScreenContainer.OnSplitResizeFinished += () =>
             OnChatResized?.Invoke(new Vector2(ScreenContainer.SplitFraction, 0));
 
         ViewportContainer.OnResized += ResizeActionContainer;
+        Hotbar.OnResized += ResizeActionContainer;
+
+        ResizeActionContainer();
     }
 
     private void ResizeActionContainer()
     {
         float indent = 20;
-        Actions.ActionsContainer.MaxGridWidth = ViewportContainer.Size.X - indent;
+        var maxWidth = ViewportContainer.Size.X - indent;
+        if (maxWidth > 0)
+            Actions.ActionsContainer.MaxGridWidth = maxWidth;
+
+        var staminaTop = 80f + StaminaBar.MinSize.Y;
+        var hotbarTop = 5f + Hotbar.Size.Y;
+        var actionHeight = MathF.Max(Actions.MinSize.Y, 64f);
+        // Sit just above whichever element is taller so we never overlap an opened
+        // "locked to hotbar" storage window.
+        var actionBottomOffset = MathF.Max(staminaTop, hotbarTop) + 8f;
+        SetMarginBottom(Actions, -actionBottomOffset);
+        SetMarginTop(Actions, -actionBottomOffset - actionHeight);
     }
 
     public override ChatBox ChatBox => GetWidget<ChatBox>()!;

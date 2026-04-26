@@ -24,7 +24,6 @@
             <Control/>
         </BoxContainer>
         <BoxContainer Name="VoteMenu" Access="Public" Margin="0 10 0 10" Orientation="Vertical"/>
-        <actions:ActionsBar Name="Actions" Access="Protected" />
     </BoxContainer>
     <widgets:GhostGui Name="Ghost" Access="Protected" />
     <inventory:InventoryGui Name="Inventory" Access="Protected" />
@@ -35,4 +34,5 @@
     <healthMana:CEManaUI Name="ManaBar" Access="Public" />
     <healthMana:CESoulUI Name="SoulBar" Access="Public" />
     <healthMana:CEStaminaUI Name="StaminaBar" Access="Public" />
+    <actions:ActionsBar Name="Actions" Access="Protected" />
 </screens:DefaultGameScreen>
