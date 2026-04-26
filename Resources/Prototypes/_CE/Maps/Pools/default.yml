@@ -5,4 +5,4 @@
 - type: gameMapPool
   id: DefaultMapPool
   maps:
-  - Empty
+  - CEEmpty
