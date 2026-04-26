@@ -81,7 +81,7 @@ public sealed class CESoulUiController : UIController
             _soulBar.Visible = false;
     }
 
-    private void UpdateSouls(EntityUid uid, CESoulContainerComponent? container = null)
+    private void UpdateSouls(EntityUid uid, Shared._CE.Soul.Components.CESoulContainerComponent? container = null)
     {
         if (_soulBar == null)
             return;

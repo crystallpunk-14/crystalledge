@@ -1,4 +1,5 @@
 using Content.Shared._CE.Procedural.Components;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Physics.Events;
 
 namespace Content.Shared._CE.EphemeralCollectable;
@@ -15,6 +16,8 @@ namespace Content.Shared._CE.EphemeralCollectable;
 /// </summary>
 public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 {
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -48,6 +51,9 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 
         ent.Comp.CollectedBy.Add(player);
         Dirty(ent);
+
+        if (ent.Comp.CollectSound != null)
+            _audio.PlayPredicted(ent.Comp.CollectSound, Transform(ent).Coordinates, player);
 
         var ev = new CEEphemeralCollectedEvent(player);
         RaiseLocalEvent(ent.Owner, ref ev);

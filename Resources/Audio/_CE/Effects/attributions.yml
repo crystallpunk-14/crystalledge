@@ -86,3 +86,8 @@
   license: "CC0-1.0"
   copyright: 'Kyanite_ of Freesound.org. Mixed from stereo to mono.'
   source: "https://freesound.org/people/Kyanite_/sounds/432913/"
+
+- files: ["soul_pickup.ogg"]
+  license: "CC0-1.0"
+  copyright: 'ToastHatter of Freesound.org. Mixed from stereo to mono.'
+  source: "https://freesound.org/people/ToastHatter/sounds/561188/"

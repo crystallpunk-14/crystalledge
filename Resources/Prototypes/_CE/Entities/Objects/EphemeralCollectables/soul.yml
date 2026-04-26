@@ -2,9 +2,9 @@
 # Floats in the world, restores 1 mana to any dungeon player that touches it
 # (once per player), and despawns after 60 seconds.
 - type: entity
-  id: CETestSoulManaShard
-  name: mana shard
-  description: A fragile shard of magical energy. Touch it to absorb its mana.
+  id: CESoulShard
+  name: soul shard
+  description: TODO
   categories: [ ForkFiltered ]
   components:
   - type: Clickable
@@ -36,6 +36,11 @@
         mask:
         - MobLayer
   - type: CEEphemeralCollectable
+    collectVfx: CEEffectSoulCollect
+    collectSound:
+      path: /Audio/_CE/Effects/soul_pickup.ogg
+      params:
+        variation: 0.03
     effects:
     - !type:AddSoul
       effectTarget: Target
@@ -46,3 +51,32 @@
     floatingOffset: "0.0,0.2"
   - type: TimedDespawn
     lifetime: 60
+
+
+- type: entity
+  id: CEEffectSoulCollect
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/soul_collect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

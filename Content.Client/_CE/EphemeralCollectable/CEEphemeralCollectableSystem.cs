@@ -2,6 +2,7 @@ using Content.Shared._CE.EphemeralCollectable;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Client._CE.EphemeralCollectable;
 
@@ -16,6 +17,7 @@ public sealed class CEEphemeralCollectableSystem : CESharedEphemeralCollectableS
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly PointLightSystem _light = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -32,6 +34,20 @@ public sealed class CEEphemeralCollectableSystem : CESharedEphemeralCollectableS
         // Predicted collection just happened locally — refresh visuals immediately
         // so the local player sees the entity hide without waiting for server state.
         UpdateVisuals(ent);
+
+        // Spawn the configured client-side VFX only if the local player is the collector.
+        // This is purely cosmetic — server-spawned VFX would be delayed, so we do it locally
+        // for instant feedback on collection.
+        if (ent.Comp.CollectVfx is not { } vfxProto)
+            return;
+
+        if (_player.LocalEntity != args.Player)
+            return;
+
+        if (!_timing.IsFirstTimePredicted)
+            return;
+
+        Spawn(vfxProto, Transform(ent).Coordinates);
     }
 
     private void OnLocalPlayerAttached(LocalPlayerAttachedEvent ev)

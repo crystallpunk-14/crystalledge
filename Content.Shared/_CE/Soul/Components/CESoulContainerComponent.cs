@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Soul;
+namespace Content.Shared._CE.Soul.Components;
 
 /// <summary>
 /// Holds the amount of souls collected by a player.
