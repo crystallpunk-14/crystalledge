@@ -15,6 +15,11 @@
   config:
     !type:CEStaticZNetworkConfig
     zMapProto: MossyTempleSafe
+  postProcess:
+  # LOOT
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHerbs
+    budget: 20
 
 - type: zMap
   id: MossyTempleSafe

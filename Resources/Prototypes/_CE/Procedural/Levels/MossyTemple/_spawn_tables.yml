@@ -1,0 +1,136 @@
+# Shared spawn tables for the Mossy Temple dungeon.
+# Tables define what can spawn and placement filters, but NOT the budget.
+# Budget is specified per-level in the dungeonLevel postProcess list via CETableBudgetSpawnPostProcess.
+
+# LOOT
+
+- type: dungeonSpawnTable
+  id: MossyTempleHealing
+  anchoredWhitelist:
+    components:
+    - PlaceableSurface
+  entries:
+  - proto: CEConsumablePotionHealingSmall
+    cost: 25
+  - proto: CEConsumablePotionHealingMedium
+    cost: 50
+
+- type: dungeonSpawnTable
+  id: MossyTempleMana
+  anchoredWhitelist:
+    components:
+    - PlaceableSurface
+  entries:
+  - proto: CEConsumablePotionManaSmall
+    cost: 5
+  - proto: CEConsumablePotionManaMedium
+    cost: 10
+
+- type: dungeonSpawnTable
+  id: MossyTempleHerbs
+  tileWhitelist:
+  - CEDirt
+  - CEGrass
+  - CEGrassLight
+  - CEGrassTall
+  entries:
+  - proto: CESpawnerRandomFlowers
+    cost: 1
+
+- type: dungeonSpawnTable
+  id: MossyTempleKeys
+  anchoredWhitelist:
+    components:
+    - PlaceableSurface
+  entries:
+  - proto: CEIronKey
+    cost: 1
+
+# MOBS
+
+# Level 1: Rats, water slimes, predatory vines (shared between PvE and PvP).
+- type: dungeonSpawnTable
+  id: MossyTempleLevel1Mobs
+  wakeOnSpawn: true
+  excludedRoomTypes:
+  - Entrance
+  entries:
+  - proto: CEMobRat
+    cost: 1
+    weight: 2
+  - proto: CEMobSlimeWater
+    cost: 3
+  - proto: CEMobPredatoryVine
+    cost: 3
+
+# Level 2 PvE: adds big water slimes (cost=3 for PvE pacing).
+- type: dungeonSpawnTable
+  id: MossyTempleLevel2MobsPve
+  wakeOnSpawn: true
+  excludedRoomTypes:
+  - Entrance
+  entries:
+  - proto: CEMobRat
+    cost: 1
+  - proto: CEMobSlimeWater
+    cost: 3
+  - proto: CEMobPredatoryVine
+    cost: 3
+  - proto: CEMobSlimeWaterBig
+    cost: 3
+
+# Level 2 PvP: same pool but big water slimes cost 2 (adjusted for PvP budget).
+- type: dungeonSpawnTable
+  id: MossyTempleLevel2MobsPvp
+  wakeOnSpawn: true
+  excludedRoomTypes:
+  - Entrance
+  entries:
+  - proto: CEMobRat
+    cost: 1
+  - proto: CEMobSlimeWater
+    cost: 3
+  - proto: CEMobPredatoryVine
+    cost: 3
+  - proto: CEMobSlimeWaterBig
+    cost: 2
+
+# Level 3: introduces fire constructs; no more rats (shared between PvE and PvP).
+- type: dungeonSpawnTable
+  id: MossyTempleLevel3Mobs
+  wakeOnSpawn: true
+  excludedRoomTypes:
+  - Entrance
+  entries:
+  - proto: CEMobSlimeWater
+    cost: 3
+  - proto: CEMobPredatoryVine
+    cost: 3
+  - proto: CEMobSlimeWaterBig
+    cost: 2
+  - proto: CEMobFireConstruct
+    cost: 6
+
+# Level 4: full late-game roster (shared between PvE and PvP).
+- type: dungeonSpawnTable
+  id: MossyTempleLevel4Mobs
+  wakeOnSpawn: true
+  excludedRoomTypes:
+  - Entrance
+  entries:
+  - proto: CEMobSlimeFire
+    cost: 3
+  - proto: CEMobFlem
+    cost: 3
+  - proto: CEMobFlem2
+    cost: 3
+  - proto: CEMobFlem3
+    cost: 5
+  - proto: CEMobFireConstruct
+    cost: 10
+  - proto: CEMobPredatoryVine
+    cost: 3
+  - proto: CEMobSlimeFireBig
+    cost: 8
+  - proto: CEMobSlimeWaterBig
+    cost: 2

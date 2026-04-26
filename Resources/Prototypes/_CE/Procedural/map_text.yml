@@ -42,7 +42,7 @@
   name: Map text - Peaceful
   components:
   - type: MapText
-    text: "PvP disabled\nMore enemies\nLess loot"
+    text: "PvP disabled\nMore enemies"
 
 - type: entity
   id: CEMapTextDanger
@@ -51,4 +51,4 @@
   name: Map text - Dangerous
   components:
   - type: MapText
-    text: "PvP enabled\nFewer enemies\nMore loot"
+    text: "PvP enabled\nFewer enemies"

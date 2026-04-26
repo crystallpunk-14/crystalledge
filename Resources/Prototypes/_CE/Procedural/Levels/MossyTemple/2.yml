@@ -1,4 +1,4 @@
-- type: dungeonLevel
+﻿- type: dungeonLevel
   id: MossyTemple2
   parent:
   - BaseMossyTemplePostProcessPeaceful
@@ -24,61 +24,18 @@
       min: 2
       max: 3
   postProcess:
-
-  # MOBS #X2 enemies compared to PvP version
-  - !type:CEBudgetSpawnPostProcess
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleLevel2MobsPve
     budget: 30
-    wakeOnSpawn: true
-    excludedRoomTypes:
-    - Entrance
-    entries:
-    - proto: CEMobRat
-      cost: 1
-    - proto: CEMobSlimeWater
-      cost: 3
-    - proto: CEMobPredatoryVine
-      cost: 3
-    - proto: CEMobSlimeWaterBig
-      cost: 3
-
-  #LOOT
-  - !type:CEBudgetSpawnPostProcess # 5 Herbs
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHerbs
     budget: 5
-    tileWhitelist:
-    - CEDirt
-    - CEGrass
-    - CEGrassLight
-    - CEGrassTall
-    entries:
-    - proto: CESpawnerRandomFlowers
-      cost: 1
-  - !type:CEBudgetSpawnPostProcess #1 Key
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleKeys
     budget: 1
-    anchoredWhitelist:
-      components:
-      - PlaceableSurface
-    entries:
-    - proto: CEIronKey
-      cost: 1
-  - !type:CEBudgetSpawnPostProcess #Guaranteed Healing
-    budget: 25
-    anchoredWhitelist:
-      components:
-      - PlaceableSurface
-    entries:
-    - proto: CEConsumablePotionRegeneration
-      cost: 20
-    - proto: CEConsumablePotionHealingSmall
-      cost: 25
-    - proto: CEConsumablePotionHealingMedium
-      cost: 50
-  - !type:CEBudgetSpawnPostProcess #Guaranteed Mana
-    budget: 5
-    anchoredWhitelist:
-      components:
-      - PlaceableSurface
-    entries:
-    - proto: CEConsumablePotionManaSmall
-      cost: 5
-    - proto: CEConsumablePotionManaMedium
-      cost: 10
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHealing
+    budget: 50
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleMana
+    budget: 10
