@@ -37,6 +37,7 @@
   - type: CEBlessingStatue
   - type: CESoulReceiver
     cost: 25
+    offset: 0,7
 
 - type: entity
   id: CEUpgradePostament

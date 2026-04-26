@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/25/2026 16:27:44
-  entityCount: 1219
+  time: 04/26/2026 19:22:12
+  entityCount: 1234
 maps:
 - 1
 grids:
@@ -2730,6 +2730,83 @@ entities:
     components:
     - type: Transform
       pos: 41.5,-13.5
+      parent: 1
+- proto: CESoulShardInfinite
+  entities:
+  - uid: 644
+    components:
+    - type: Transform
+      pos: 12.727444,2.9085536
+      parent: 1
+  - uid: 1221
+    components:
+    - type: Transform
+      pos: 12.558779,2.5712223
+      parent: 1
+  - uid: 1222
+    components:
+    - type: Transform
+      pos: 12.727444,2.1326911
+      parent: 1
+  - uid: 1223
+    components:
+    - type: Transform
+      pos: 14.279167,2.0989585
+      parent: 1
+  - uid: 1224
+    components:
+    - type: Transform
+      pos: 14.526545,2.470023
+      parent: 1
+  - uid: 1225
+    components:
+    - type: Transform
+      pos: 14.245434,2.807354
+      parent: 1
+  - uid: 1226
+    components:
+    - type: Transform
+      pos: 13.648001,-3.3421693
+      parent: 1
+  - uid: 1227
+    components:
+    - type: Transform
+      pos: 12.4111185,-5.984598
+      parent: 1
+  - uid: 1228
+    components:
+    - type: Transform
+      pos: 12.501073,-8.792993
+      parent: 1
+  - uid: 1229
+    components:
+    - type: Transform
+      pos: 9.350003,-11.967396
+      parent: 1
+  - uid: 1230
+    components:
+    - type: Transform
+      pos: 7.7645464,-13.552853
+      parent: 1
+  - uid: 1231
+    components:
+    - type: Transform
+      pos: 9.394981,-14.77849
+      parent: 1
+  - uid: 1232
+    components:
+    - type: Transform
+      pos: 9.555898,10.940608
+      parent: 1
+  - uid: 1233
+    components:
+    - type: Transform
+      pos: 12.355747,10.265945
+      parent: 1
+  - uid: 1234
+    components:
+    - type: Transform
+      pos: 11.456197,14.358899
       parent: 1
 - proto: CETableWooden
   entities:

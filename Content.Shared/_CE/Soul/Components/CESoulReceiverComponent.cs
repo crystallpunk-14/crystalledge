@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Soul.Components;
@@ -21,4 +22,11 @@ public sealed partial class CESoulReceiverComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int Cost = 25;
+
+    /// <summary>
+    /// Screen-space offset (in tile units) applied to the floating soul cost label so it can
+    /// be lifted above tall sprites such as statues. X is screen-right, Y is screen-up;
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Vector2 Offset = Vector2.Zero;
 }

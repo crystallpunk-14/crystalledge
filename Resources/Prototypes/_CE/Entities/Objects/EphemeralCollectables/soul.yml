@@ -1,10 +1,9 @@
-# Test entity for CEEphemeralCollectableComponent.
-# Floats in the world, restores 1 mana to any dungeon player that touches it
-# (once per player), and despawns after 60 seconds.
+
 - type: entity
-  id: CESoulShard
-  name: soul shard
-  description: TODO
+  id: CESoulShardInfinite
+  name: soul essence
+  description: A fragment of the soul that can be offered as a gift to sacred statues in exchange for powerful blessings
+  suffix: Infinite
   categories: [ ForkFiltered ]
   components:
   - type: Clickable
@@ -53,7 +52,6 @@
         layer: []
         mask:
         - MobLayer
-  - type: CESoulCollectable
   - type: CEEphemeralCollectable
     collectVfx: CEEffectSoulCollect
     collectSound:
@@ -68,6 +66,13 @@
     animationTime: 1
     floatingStartOffset: "0.0,0.0"
     floatingOffset: "0.0,0.2"
+
+- type: entity
+  id: CESoulShard
+  parent: CESoulShardInfinite
+  suffix: 2 minute lifetime
+  components:
+  - type: CESoulCollectable
   - type: TimedDespawn
     lifetime: 120
 
