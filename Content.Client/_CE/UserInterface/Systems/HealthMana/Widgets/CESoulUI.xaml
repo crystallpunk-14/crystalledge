@@ -6,7 +6,7 @@
                   VerticalAlignment="Center"
                   SeparationOverride="6">
         <AnimatedTextureRect Name="SoulIcon"
-                             SetSize="16 16"
+                             SetSize="26 26"
                              VerticalAlignment="Center" />
         <Label Name="SoulLabel"
                VerticalAlignment="Center"

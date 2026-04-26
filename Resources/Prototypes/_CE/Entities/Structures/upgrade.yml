@@ -35,6 +35,8 @@
         - MobLayer
   - type: InteractionOutline
   - type: CEBlessingStatue
+  - type: CESoulReceiver
+    cost: 25
 
 - type: entity
   id: CEUpgradePostament

@@ -12,9 +12,8 @@ public sealed partial class CESoulUI : UIWidget
 {
     [Dependency] private readonly IResourceCache _resCache = default!;
 
-    // Temporary placeholder icon. Will be replaced with a dedicated 16x16 souls icon later.
-    private const string SoulIconRsiPath = "/Textures/_CE/Interface/HealthMana/mana.rsi";
-    private const string SoulIconState = "mana10";
+    private const string SoulIconRsiPath = "/Textures/_CE/Effects/soul.rsi";
+    private const string SoulIconState = "effect";
 
     public CESoulUI()
     {
