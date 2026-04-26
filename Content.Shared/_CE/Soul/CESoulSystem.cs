@@ -1,5 +1,7 @@
 using Content.Shared._CE.Soul.Components;
 using Content.Shared.Popups;
+using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Soul;
 
@@ -12,6 +14,34 @@ namespace Content.Shared._CE.Soul;
 public sealed class CESoulSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly INetManager _net = default!;
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        // Only the server completes the transfer and raises the canonical event.
+        // Clients only run the visual animation via their dedicated client system.
+        if (!_net.IsServer)
+            return;
+
+        var query = EntityQueryEnumerator<CESoulTransferComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (_timing.CurTime - comp.StartTime < TimeSpan.FromSeconds(comp.Duration))
+                continue;
+
+            var receiverNet = comp.Receiver;
+            RemComp<CESoulTransferComponent>(uid);
+
+            if (TryGetEntity(receiverNet, out var receiverUid))
+            {
+                var ev = new CESoulReceivedEvent(uid);
+                RaiseLocalEvent(receiverUid.Value, ref ev);
+            }
+        }
+    }
 
     /// <summary>
     /// Returns the current soul count, or 0 if the entity has no container.
@@ -82,16 +112,22 @@ public sealed class CESoulSystem : EntitySystem
     }
 
     /// <summary>
-    /// Attempts to charge <paramref name="player"/> the receiver's soul cost.
-    /// On success the souls are removed and a <see cref="CESoulReceivedEvent"/> is
-    /// raised on the receiver entity. On failure (not enough souls) a predicted
-    /// popup is shown to the player and no souls are removed.
-    /// Concurrency/locking is the consumer's responsibility — this method does not
-    /// track which player is "active" on the receiver.
+    /// Attempts to charge <paramref name="player"/> the receiver's soul cost and
+    /// start a soul-transfer animation. On success the souls are deducted immediately
+    /// and a <see cref="CESoulTransferComponent"/> is added to the player; the
+    /// canonical <see cref="CESoulReceivedEvent"/> on the receiver is delayed until
+    /// the animation finishes (handled in <see cref="Update"/>).
+    /// Fails (and shows a predicted popup) if not enough souls. Fails silently if
+    /// a transfer is already in progress on the player.
+    /// Concurrency/locking on the receiver itself is the consumer's responsibility.
     /// </summary>
     public bool TrySpendSouls(Entity<CESoulReceiverComponent?> ent, EntityUid player)
     {
         if (!Resolve(ent.Owner, ref ent.Comp, false))
+            return false;
+
+        // Already transferring souls — block any concurrent attempt by the same player.
+        if (HasComp<CESoulTransferComponent>(player))
             return false;
 
         if (GetSouls(player) < ent.Comp.Cost)
@@ -106,8 +142,12 @@ public sealed class CESoulSystem : EntitySystem
         if (!TryRemoveSouls(player, ent.Comp.Cost))
             return false;
 
-        var ev = new CESoulReceivedEvent(player);
-        RaiseLocalEvent(ent.Owner, ref ev);
+        var transfer = AddComp<CESoulTransferComponent>(player);
+        transfer.Receiver = GetNetEntity(ent.Owner);
+        transfer.Cost = ent.Comp.Cost;
+        transfer.StartTime = _timing.CurTime;
+        Dirty(player, transfer);
+
         return true;
     }
 }

@@ -80,3 +80,28 @@
         property: Energy
         isLooped: false
         enabled: true
+
+# Pure visual particle used by the soul-transfer animation. Spawned client-side
+# by CEClientSoulTransferAnimationSystem, never exists on the server. No physics,
+# no networking, no interaction — just a sprite + light that gets moved by the
+# animation system each frame.
+- type: entity
+  id: CESoulTransferParticle
+  name: soul fragment
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Effects/soul.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 1
+    energy: 2
+    netsync: false

@@ -78,20 +78,34 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
             return;
         }
 
-        // Fresh interaction: charge souls. On success the soul system raises
-        // CESoulReceivedEvent → OnSoulReceived → SpawnBlessings.
+        // Fresh interaction: charge souls. The soul system starts a delayed transfer
+        // (animation) and raises CESoulReceivedEvent → OnSoulReceived → SpawnBlessings
+        // only after the animation finishes. We tentatively lock the statue to this
+        // player up-front so concurrent clicks from other players see "busy" while
+        // the animation plays; we revert the lock if TrySpendSouls fails.
         if (!HasComp<CESoulReceiverComponent>(ent))
             return;
 
+        var previousActive = ent.Comp.ActivePlayer;
+        ent.Comp.ActivePlayer = player;
+
         if (_souls.TrySpendSouls(ent.Owner, player))
+        {
             args.Handled = true;
+        }
+        else
+        {
+            ent.Comp.ActivePlayer = previousActive;
+        }
     }
 
     private void OnSoulReceived(
         Entity<CEBlessingStatueComponent> ent,
         ref CESoulReceivedEvent args)
     {
-        ent.Comp.ActivePlayer = args.Player;
+        // ActivePlayer was already set by OnActivate to keep the statue locked during
+        // the soul-transfer animation. By the time this event fires the lock should
+        // already match args.Player.
         SpawnBlessings(ent, args.Player);
     }
 
@@ -122,6 +136,13 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         var player = args.OtherEntity;
 
         if (ent.Comp.ActivePlayer != player)
+            return;
+
+        // Don't tear down state while the soul system's transfer animation is still
+        // running on the player — let it finish and SpawnBlessings on completion.
+        // The statue stays locked to this player throughout the animation so other
+        // players can't barge in.
+        if (HasComp<CESoulTransferComponent>(player))
             return;
 
         // Delete spawned entities but keep OfferedSkills cache for re-entry
