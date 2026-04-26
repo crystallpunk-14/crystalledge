@@ -42,5 +42,21 @@ public sealed partial class CEEphemeralCollectableComponent : Component
     /// </summary>
     [DataField]
     public SoundSpecifier? CollectSound;
+
+    /// <summary>
+    /// Grace period after spawn during which the collectable cannot be picked up. Gives the
+    /// client time to receive the entity state, run scatter animations, and lets the player
+    /// actually see the drop instead of auto-collecting it on contact a single tick later.
+    /// </summary>
+    [DataField]
+    public TimeSpan CollectionDelay = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// Server-authoritative timestamp at which this collectable becomes collectable. Set
+    /// during map init to <c>CurTime + CollectionDelay</c>. Networked so prediction agrees
+    /// with the server about the grace cutoff.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan CollectableAt;
 }
 

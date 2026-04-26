@@ -1,6 +1,9 @@
 using Content.Shared._CE.Procedural.Components;
+using Content.Shared.Interaction;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.EphemeralCollectable;
 
@@ -8,6 +11,8 @@ namespace Content.Shared._CE.EphemeralCollectable;
 /// Shared, predicted base for the ephemeral-collectable system.
 /// Subscribes to <see cref="StartCollideEvent"/> and applies the configured effects to dungeon
 /// players that touch the collectable, recording each player exactly once.
+/// Also exposes the same collection path via <see cref="InteractHandEvent"/> so a player
+/// can click the collectable directly to pick it up.
 ///
 /// Runs on both client and server: client predicts the collection locally so visuals react
 /// immediately; the server is authoritative and reconciles state via <c>AutoGenerateComponentState</c>.
@@ -17,23 +22,65 @@ namespace Content.Shared._CE.EphemeralCollectable;
 public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly INetManager _net = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CEEphemeralCollectableComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEEphemeralCollectableComponent, StartCollideEvent>(OnStartCollide);
+        SubscribeLocalEvent<CEEphemeralCollectableComponent, InteractHandEvent>(OnInteractHand);
+        SubscribeLocalEvent<CEEphemeralCollectableComponent, ActivateInWorldEvent>(OnActivate);
+    }
+
+    private void OnMapInit(Entity<CEEphemeralCollectableComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.CollectableAt = _timing.CurTime + ent.Comp.CollectionDelay;
+        Dirty(ent);
     }
 
     private void OnStartCollide(Entity<CEEphemeralCollectableComponent> ent, ref StartCollideEvent args)
     {
-        var player = args.OtherEntity;
+        TryCollect(ent, args.OtherEntity);
+    }
 
-        if (!HasComp<CEDungeonPlayerComponent>(player))
+    private void OnInteractHand(Entity<CEEphemeralCollectableComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled)
             return;
+
+        if (TryCollect(ent, args.User))
+            args.Handled = true;
+    }
+
+    private void OnActivate(Entity<CEEphemeralCollectableComponent> ent, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (TryCollect(ent, args.User))
+            args.Handled = true;
+    }
+
+    /// <summary>
+    /// Applies the collectable's effects to <paramref name="player"/> if they are a dungeon
+    /// player and have not already collected this entity. Returns <c>true</c> if collection
+    /// happened on this call.
+    /// </summary>
+    private bool TryCollect(Entity<CEEphemeralCollectableComponent> ent, EntityUid player)
+    {
+        if (!HasComp<CEDungeonPlayerComponent>(player))
+            return false;
 
         if (ent.Comp.CollectedBy.Contains(player))
-            return;
+            return false;
+
+        // Honour the post-spawn grace period so the player can actually see the drop
+        // and the client has time to receive the entity's networked state.
+        if (_timing.CurTime < ent.Comp.CollectableAt)
+            return false;
 
         foreach (var effect in ent.Comp.Effects)
         {
@@ -57,6 +104,7 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 
         var ev = new CEEphemeralCollectedEvent(player);
         RaiseLocalEvent(ent.Owner, ref ev);
+        return true;
     }
 }
 

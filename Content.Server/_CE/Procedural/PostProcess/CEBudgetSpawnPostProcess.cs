@@ -43,13 +43,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
     public EntityWhitelist? AnchoredWhitelist;
 
     /// <summary>
-    /// If true, spawned entities with <see cref="CEGOAPComponent"/> will have their
-    /// <see cref="CEGOAPSleepingComponent"/> removed so they are immediately active.
-    /// </summary>
-    [DataField]
-    public bool WakeOnSpawn;
-
-    /// <summary>
     /// Room types to exclude from spawning. Tiles inside rooms of these types
     /// will not be considered as candidates.
     /// </summary>
@@ -187,10 +180,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
 
             entMan.SpawnEntity(entry.Proto, coords);
 
-            // Wake mob if requested.
-            if (WakeOnSpawn)
-                WakeSpawnedEntity(entMan, coords);
-
             remaining -= entry.Cost;
         }
     }
@@ -232,20 +221,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
                 return entry;
         }
         return null;
-    }
-
-    private static void WakeSpawnedEntity(IEntityManager entMan, EntityCoordinates coords)
-    {
-        var sleepingSystem = entMan.System<GOAP.CEGOAPSleepingSystem>();
-        var lookup = entMan.System<EntityLookupSystem>();
-
-        var nearby = new HashSet<Entity<CEGOAPSleepingComponent>>();
-        lookup.GetEntitiesInRange(coords, 0.5f, nearby);
-
-        foreach (var ent in nearby)
-        {
-            sleepingSystem.WakeMob(ent);
-        }
     }
 
     /// <summary>

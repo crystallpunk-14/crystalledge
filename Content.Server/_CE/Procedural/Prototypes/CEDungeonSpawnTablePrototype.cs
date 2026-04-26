@@ -37,12 +37,6 @@ public sealed partial class CEDungeonSpawnTablePrototype : IPrototype
     public EntityWhitelist? AnchoredWhitelist;
 
     /// <summary>
-    /// If true, spawned GOAP mobs have their sleeping component removed so they are immediately active.
-    /// </summary>
-    [DataField]
-    public bool WakeOnSpawn;
-
-    /// <summary>
     /// Room types to exclude from spawning.
     /// </summary>
     [DataField]

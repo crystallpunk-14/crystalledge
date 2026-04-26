@@ -36,7 +36,6 @@ public sealed partial class CETableBudgetSpawnPostProcess : CEDungeonPostProcess
             Entries = table.Entries,
             TileWhitelist = table.TileWhitelist,
             AnchoredWhitelist = table.AnchoredWhitelist,
-            WakeOnSpawn = table.WakeOnSpawn,
             ExcludedRoomTypes = table.ExcludedRoomTypes,
             MainZLevelOnly = table.MainZLevelOnly,
         };

@@ -9,8 +9,8 @@
   config:
     !type:CEProceduralConfig
     generalCount:
-      min: 7
-      max: 10
+      min: 6
+      max: 8
     entranceCount:
       min: 3
       max: 3
@@ -24,9 +24,18 @@
       min: 2
       max: 3
   postProcess:
-  - !type:CETableBudgetSpawnPostProcess
-    table: MossyTempleLevel2MobsPve
+  - !type:CEMobBudgetSpawnPostProcess
     budget: 30
+    soulBudget: 30
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobRat
+      cost: 1
+    - proto: CEMobSlimeWater
+      cost: 2
+    - proto: CEMobSlimeWaterBig
+      cost: 4
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleHerbs
     budget: 5

@@ -1,6 +1,9 @@
+using Content.Shared._CE.Health;
 using Content.Shared._CE.Soul.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Soul;
@@ -16,6 +19,35 @@ public sealed class CESoulSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        // Soul drops happen only on the server: spawning shards from CEDestructedEvent
+        // is authoritative world state.
+        SubscribeLocalEvent<CESoulDropOnDeathComponent, CEDestructedEvent>(OnDestructed);
+    }
+
+    private void OnDestructed(Entity<CESoulDropOnDeathComponent> ent, ref CEDestructedEvent args)
+    {
+        if (!_net.IsServer)
+            return;
+
+        var count = ent.Comp.Souls;
+        var maxSpeed = ent.Comp.ScatterSpeed;
+
+        for (var i = 0; i < count; i++)
+        {
+            var soul = Spawn(ent.Comp.Prototype, args.Position);
+
+            // Mirror CEDestructible's scatter: spawn at the death point and impart
+            // a random horizontal impulse so souls fan out smoothly via physics.
+            _physics.SetLinearVelocity(soul, _random.NextAngle().ToVec() * _random.NextFloat(0.5f, maxSpeed));
+        }
+    }
 
     public override void Update(float frameTime)
     {
@@ -132,7 +164,7 @@ public sealed class CESoulSystem : EntitySystem
 
         if (GetSouls(player) < ent.Comp.Cost)
         {
-            _popup.PopupClient(
+            _popup.PopupPredicted(
                 Loc.GetString("ce-soul-receiver-not-enough", ("cost", ent.Comp.Cost)),
                 ent.Owner,
                 player);

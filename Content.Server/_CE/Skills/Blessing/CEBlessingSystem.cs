@@ -90,13 +90,9 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         ent.Comp.ActivePlayer = player;
 
         if (_souls.TrySpendSouls(ent.Owner, player))
-        {
             args.Handled = true;
-        }
         else
-        {
             ent.Comp.ActivePlayer = previousActive;
-        }
     }
 
     private void OnSoulReceived(

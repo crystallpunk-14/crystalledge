@@ -85,6 +85,7 @@
   - type: CEBlinker
   - type: CEBlessingReceiver
   - type: CESoulContainer
+    souls: 25
   - type: CESkillStorage
   - type: CEStamina
   - type: CEMobState
