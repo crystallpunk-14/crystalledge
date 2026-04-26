@@ -86,6 +86,7 @@
   - type: CEBlessingReceiver
   - type: CESoulContainer
     souls: 25
+  - type: CESoulCap
   - type: CESkillStorage
   - type: CEStamina
   - type: CEMobState

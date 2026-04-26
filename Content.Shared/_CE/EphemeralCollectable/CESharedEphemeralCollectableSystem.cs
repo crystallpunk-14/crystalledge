@@ -1,7 +1,6 @@
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 
@@ -23,7 +22,6 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -105,6 +103,18 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
         var ev = new CEEphemeralCollectedEvent(player);
         RaiseLocalEvent(ent.Owner, ref ev);
         return true;
+    }
+
+    public void MarkAsCollectedFor(Entity<CEEphemeralCollectableComponent?> ent, EntityUid player)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        if (ent.Comp.CollectedBy.Contains(player))
+            return;
+
+        ent.Comp.CollectedBy.Add(player);
+        Dirty(ent);
     }
 }
 

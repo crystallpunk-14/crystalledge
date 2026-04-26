@@ -53,6 +53,7 @@
         layer: []
         mask:
         - MobLayer
+  - type: CESoulCollectable
   - type: CEEphemeralCollectable
     collectVfx: CEEffectSoulCollect
     collectSound:

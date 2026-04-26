@@ -4,14 +4,14 @@ namespace Content.Shared._CE.Soul.Components;
 
 /// <summary>
 /// Marks a player as currently transferring souls into a receiver. Added by
-/// <see cref="CESoulSystem.TrySpendSouls"/>; removed once the animation duration
+/// <see cref="CESharedSoulSystem.TrySpendSouls"/>; removed once the animation duration
 /// elapses, at which point the soul system raises <c>CESoulReceivedEvent</c> on the
 /// receiver. While this component exists on a player, further <c>TrySpendSouls</c>
 /// calls for that player are blocked.
 /// Networked so the visual animation plays on every client that has the player in PVS.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(CESoulSystem))]
+[Access(typeof(CESharedSoulSystem))]
 public sealed partial class CESoulTransferComponent : Component
 {
     /// <summary>

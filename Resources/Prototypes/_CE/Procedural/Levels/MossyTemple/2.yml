@@ -26,7 +26,6 @@
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
     budget: 30
-    soulBudget: 30
     excludedRoomTypes:
     - Entrance
     entries:

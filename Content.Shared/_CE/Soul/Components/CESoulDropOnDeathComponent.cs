@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Soul.Components;
 /// <see cref="Content.Shared._CE.Health.CEDestructibleSystem"/>. Shards spawn at
 /// the death position and receive a random physics impulse, matching the smooth
 /// scatter used by CEDestructible loot drops.
-/// Drop logic lives in <see cref="CESoulSystem"/> on the server.
+/// Drop logic lives in <see cref="CESharedSoulSystem"/> on the server.
 /// </summary>
 [RegisterComponent]
 public sealed partial class CESoulDropOnDeathComponent : Component

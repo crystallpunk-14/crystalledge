@@ -13,7 +13,7 @@ public sealed partial class AddSoul : CEEntityEffectBase<AddSoul>
 
 public sealed partial class CEAddSoulEffectSystem : CEEntityEffectSystem<AddSoul>
 {
-    [Dependency] private readonly CESoulSystem _souls = default!;
+    [Dependency] private readonly CESharedSoulSystem _souls = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<AddSoul> args)
     {

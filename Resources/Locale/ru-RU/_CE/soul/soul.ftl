@@ -1,1 +1,1 @@
-ce-soul-receiver-not-enough = Недостаточно душ. Нужно: { $cost }.
+ce-soul-receiver-not-enough = Недостаточно душ.

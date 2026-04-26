@@ -1,3 +1,4 @@
+using Content.Shared._CE.EphemeralCollectable;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Soul.Components;
 using Content.Shared.Popups;
@@ -14,13 +15,14 @@ namespace Content.Shared._CE.Soul;
 /// with <see cref="CESoulReceiverComponent"/>.
 /// All write APIs clamp to <c>[0, MaxSouls]</c> and dirty the component when the value changes.
 /// </summary>
-public sealed class CESoulSystem : EntitySystem
+public abstract class CESharedSoulSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly CESharedEphemeralCollectableSystem _collectable = default!;
 
     public override void Initialize()
     {
@@ -29,6 +31,26 @@ public sealed class CESoulSystem : EntitySystem
         // Soul drops happen only on the server: spawning shards from CEDestructedEvent
         // is authoritative world state.
         SubscribeLocalEvent<CESoulDropOnDeathComponent, CEDestructedEvent>(OnDestructed);
+        SubscribeLocalEvent<CESoulCapComponent, CESoulReceivedEvent>(OnCapReceived);
+        SubscribeLocalEvent<CESoulCollectableComponent, MapInitEvent>(OnCollectableInit);
+    }
+
+    private void OnCollectableInit(Entity<CESoulCollectableComponent> ent, ref MapInitEvent args)
+    {
+        var query = EntityQueryEnumerator<CESoulCapComponent>();
+        while (query.MoveNext(out var uid, out var cap))
+        {
+            if (cap.Current < cap.Cap)
+                continue;
+
+            _collectable.MarkAsCollectedFor(ent.Owner, uid);
+        }
+    }
+
+    private void OnCapReceived(Entity<CESoulCapComponent> ent, ref CESoulReceivedEvent args)
+    {
+        ent.Comp.Current = Math.Min(ent.Comp.Current + args.Amount, ent.Comp.Cap);
+        Dirty(ent);
     }
 
     private void OnDestructed(Entity<CESoulDropOnDeathComponent> ent, ref CEDestructedEvent args)
@@ -69,7 +91,7 @@ public sealed class CESoulSystem : EntitySystem
 
             if (TryGetEntity(receiverNet, out var receiverUid))
             {
-                var ev = new CESoulReceivedEvent(uid);
+                var ev = new CESoulSpentEvent(uid);
                 RaiseLocalEvent(receiverUid.Value, ref ev);
             }
         }
@@ -122,6 +144,9 @@ public sealed class CESoulSystem : EntitySystem
         if (!Resolve(ent.Owner, ref ent.Comp, false))
             return false;
 
+        var ev = new CESoulReceivedEvent(ent.Owner, amount);
+        RaiseLocalEvent(ent.Owner, ref ev);
+
         return TrySetSouls((ent.Owner, ent.Comp), ent.Comp.Souls + amount);
     }
 
@@ -147,7 +172,7 @@ public sealed class CESoulSystem : EntitySystem
     /// Attempts to charge <paramref name="player"/> the receiver's soul cost and
     /// start a soul-transfer animation. On success the souls are deducted immediately
     /// and a <see cref="CESoulTransferComponent"/> is added to the player; the
-    /// canonical <see cref="CESoulReceivedEvent"/> on the receiver is delayed until
+    /// canonical <see cref="CESoulSpentEvent"/> on the receiver is delayed until
     /// the animation finishes (handled in <see cref="Update"/>).
     /// Fails (and shows a predicted popup) if not enough souls. Fails silently if
     /// a transfer is already in progress on the player.
@@ -164,8 +189,8 @@ public sealed class CESoulSystem : EntitySystem
 
         if (GetSouls(player) < ent.Comp.Cost)
         {
-            _popup.PopupPredicted(
-                Loc.GetString("ce-soul-receiver-not-enough", ("cost", ent.Comp.Cost)),
+            _popup.PopupEntity(
+                Loc.GetString("ce-soul-receiver-not-enough"),
                 ent.Owner,
                 player);
             return false;
@@ -186,8 +211,11 @@ public sealed class CESoulSystem : EntitySystem
 
 /// <summary>
 /// Raised on a <see cref="CESoulReceiverComponent"/> entity right after a player
-/// successfully spent the configured cost via <see cref="CESoulSystem.TrySpendSouls"/>.
+/// successfully spent the configured cost via <see cref="CESharedSoulSystem.TrySpendSouls"/>.
 /// </summary>
 [ByRefEvent]
-public readonly record struct CESoulReceivedEvent(EntityUid Player);
+public readonly record struct CESoulSpentEvent(EntityUid Player);
 
+
+[ByRefEvent]
+public readonly record struct CESoulReceivedEvent(EntityUid Player, int Amount);

@@ -7,12 +7,12 @@ namespace Content.Shared._CE.Soul.Components;
 /// Souls are spent on blessings (and similar interactions).
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(CESoulSystem))]
+[Access(typeof(CESharedSoulSystem))]
 public sealed partial class CESoulContainerComponent : Component
 {
     /// <summary>
     /// Current amount of souls in the container.
-    /// Always clamped to <c>[0, MaxSouls]</c> by <see cref="CESoulSystem"/>.
+    /// Always clamped to <c>[0, MaxSouls]</c> by <see cref="CESharedSoulSystem"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
     public int Souls;

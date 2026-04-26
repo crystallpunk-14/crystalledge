@@ -24,7 +24,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
     [Dependency] private readonly CESharedSkillSystem _skill = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly CESoulSystem _souls = default!;
+    [Dependency] private readonly CESharedSoulSystem _souls = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
@@ -32,7 +32,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         base.Initialize();
 
         SubscribeLocalEvent<CEBlessingStatueComponent, ActivateInWorldEvent>(OnActivate);
-        SubscribeLocalEvent<CEBlessingStatueComponent, CESoulReceivedEvent>(OnSoulReceived);
+        SubscribeLocalEvent<CEBlessingStatueComponent, CESoulSpentEvent>(OnSoulReceived);
         SubscribeLocalEvent<CEBlessingStatueComponent, StartCollideEvent>(OnTriggerEnter);
         SubscribeLocalEvent<CEBlessingStatueComponent, EndCollideEvent>(OnTriggerExit);
         SubscribeLocalEvent<CEBlessingComponent, CEBlessingClaimedEvent>(OnBlessingClaimed);
@@ -97,7 +97,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
 
     private void OnSoulReceived(
         Entity<CEBlessingStatueComponent> ent,
-        ref CESoulReceivedEvent args)
+        ref CESoulSpentEvent args)
     {
         // ActivePlayer was already set by OnActivate to keep the statue locked during
         // the soul-transfer animation. By the time this event fires the lock should
