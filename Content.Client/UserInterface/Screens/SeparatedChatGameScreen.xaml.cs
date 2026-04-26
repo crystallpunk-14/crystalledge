@@ -39,6 +39,12 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(ManaBar, LayoutPreset.CenterBottom);
         SetMarginLeft(ManaBar, manaOffset);
 
+        // Soul indicator: small horizontal block placed to the right of the mana sphere.
+        var soulGap = 20f;
+        var soulOffset = manaOffset + ManaBar.MinSize.X / 2f + soulGap + SoulBar.MinSize.X / 2f;
+        SetAnchorAndMarginPreset(SoulBar, LayoutPreset.CenterBottom);
+        SetMarginLeft(SoulBar, soulOffset);
+
         // Stamina bar at center bottom
         SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 80);
         SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);

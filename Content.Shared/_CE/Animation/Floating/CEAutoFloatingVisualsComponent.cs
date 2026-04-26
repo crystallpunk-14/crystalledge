@@ -4,8 +4,8 @@ namespace Content.Shared._CE.Animation.Floating;
 
 /// <summary>
 /// Makes an entity's sprite play a looped vertical floating animation client-side.
-/// Animation starts on component startup and loops forever via re-trigger on
-/// <c>AnimationCompletedEvent</c>.
+/// Driven per-frame by a sine wave with a random phase per entity so multiple
+/// instances bob out of sync.
 /// </summary>
 [RegisterComponent]
 public sealed partial class CEAutoFloatingVisualsComponent : Component
@@ -23,5 +23,11 @@ public sealed partial class CEAutoFloatingVisualsComponent : Component
     [DataField]
     public Vector2 FloatingOffset = new(0, 0.45f);
 
-    public readonly string AnimationKey = "ce_auto_float";
+    /// <summary>
+    /// Random phase offset in seconds, picked at component startup so that
+    /// independently spawned entities bob out of sync.
+    /// </summary>
+    [ViewVariables]
+    public float PhaseOffset;
 }
+

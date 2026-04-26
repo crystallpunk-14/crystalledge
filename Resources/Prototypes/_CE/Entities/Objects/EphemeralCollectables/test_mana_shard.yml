@@ -14,14 +14,14 @@
   - type: Sprite
     noRot: true
     drawdepth: Mobs
-    sprite: _CE/Mobs/rat.rsi
+    sprite: _CE/Effects/soul.rsi
     layers:
-    - state: rat
-      color: "#61a7e1"
+    - state: effect
+      shader: unshaded
   - type: PointLight
     color: "#61a7e1"
-    radius: 2
-    energy: 1.5
+    radius: 1.5
+    energy: 10
     netsync: false
   - type: Physics
     bodyType: Static
@@ -37,11 +37,12 @@
         - MobLayer
   - type: CEEphemeralCollectable
     effects:
-    - !type:RestoreMana
+    - !type:AddSoul
       effectTarget: Target
       amount: 1
   - type: CEAutoFloatingVisuals
+    animationTime: 1
     floatingStartOffset: "0.0,0.0"
-    floatingOffset: "0.0,0.1"
+    floatingOffset: "0.0,0.2"
   - type: TimedDespawn
     lifetime: 60

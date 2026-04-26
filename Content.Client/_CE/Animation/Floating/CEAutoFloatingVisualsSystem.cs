@@ -1,66 +1,57 @@
+using System.Numerics;
 using Content.Shared._CE.Animation.Floating;
-using Robust.Client.Animations;
 using Robust.Client.GameObjects;
-using Robust.Shared.Animations;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Animation.Floating;
 
 /// <summary>
-/// Client-side system that plays the looped floating animation defined by
+/// Client-side system that drives the floating animation defined by
 /// <see cref="CEAutoFloatingVisualsComponent"/>.
+/// Each entity gets a random phase offset on startup so groups of entities bob out of sync.
 /// </summary>
 public sealed class CEAutoFloatingVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly AnimationPlayerSystem _animation = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEAutoFloatingVisualsComponent, ComponentStartup>(OnStartup);
-        SubscribeLocalEvent<CEAutoFloatingVisualsComponent, AnimationCompletedEvent>(OnAnimationComplete);
     }
 
     private void OnStartup(Entity<CEAutoFloatingVisualsComponent> ent, ref ComponentStartup args)
     {
-        Play(ent);
+        // Pick a random phase within the full cycle so co-spawned entities desynchronize.
+        var cycle = ent.Comp.AnimationTime * 2f;
+        ent.Comp.PhaseOffset = _random.NextFloat() * cycle;
     }
 
-    private void OnAnimationComplete(Entity<CEAutoFloatingVisualsComponent> ent, ref AnimationCompletedEvent args)
+    public override void FrameUpdate(float frameTime)
     {
-        if (args.Key != ent.Comp.AnimationKey)
-            return;
-        Play(ent);
-    }
+        base.FrameUpdate(frameTime);
 
-    private void Play(Entity<CEAutoFloatingVisualsComponent> ent)
-    {
-        if (!HasComp<SpriteComponent>(ent))
-            return;
+        // Use real time so the wave continues smoothly regardless of pause/resume of game time.
+        var now = (float) _timing.RealTime.TotalSeconds;
 
-        if (_animation.HasRunningAnimation(ent, ent.Comp.AnimationKey))
-            return;
-
-        var animation = new Robust.Client.Animations.Animation
+        var query = EntityQueryEnumerator<CEAutoFloatingVisualsComponent, SpriteComponent>();
+        while (query.MoveNext(out var uid, out var comp, out var sprite))
         {
-            Length = TimeSpan.FromSeconds(ent.Comp.AnimationTime * 2),
-            AnimationTracks =
-            {
-                new AnimationTrackComponentProperty
-                {
-                    ComponentType = typeof(SpriteComponent),
-                    Property = nameof(SpriteComponent.Offset),
-                    InterpolationMode = AnimationInterpolationMode.Cubic,
-                    KeyFrames =
-                    {
-                        new AnimationTrackProperty.KeyFrame(ent.Comp.FloatingStartOffset, 0f),
-                        new AnimationTrackProperty.KeyFrame(ent.Comp.FloatingOffset, ent.Comp.AnimationTime),
-                        new AnimationTrackProperty.KeyFrame(ent.Comp.FloatingStartOffset, ent.Comp.AnimationTime),
-                    },
-                },
-            },
-        };
+            var period = comp.AnimationTime * 2f;
+            if (period <= 0f)
+                continue;
 
-        _animation.Play(ent, animation, ent.Comp.AnimationKey);
+            // Phase progresses 0 -> 2π over a full cycle.
+            var t = (now + comp.PhaseOffset) % period / period;
+            // Sine maps to [-1, 1]; remap to [0, 1] so 0 = StartOffset, 1 = FloatingOffset.
+            var k = (MathF.Sin(t * MathF.Tau) + 1f) * 0.5f;
+
+            var offset = Vector2.Lerp(comp.FloatingStartOffset, comp.FloatingOffset, k);
+            if (sprite.Offset != offset)
+                sprite.Offset = offset;
+        }
     }
 }

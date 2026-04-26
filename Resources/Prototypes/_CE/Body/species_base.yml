@@ -84,6 +84,7 @@
     follow: true
   - type: CEBlinker
   - type: CEBlessingReceiver
+  - type: CESoulContainer
   - type: CESkillStorage
   - type: CEStamina
   - type: CEMobState
