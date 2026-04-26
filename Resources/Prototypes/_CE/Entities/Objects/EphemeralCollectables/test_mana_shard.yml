@@ -1,0 +1,47 @@
+# Test entity for CEEphemeralCollectableComponent.
+# Floats in the world, restores 1 mana to any dungeon player that touches it
+# (once per player), and despawns after 60 seconds.
+- type: entity
+  id: CETestSoulManaShard
+  name: mana shard
+  description: A fragile shard of magical energy. Touch it to absorb its mana.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Mobs/rat.rsi
+    layers:
+    - state: rat
+      color: "#61a7e1"
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 2
+    energy: 1.5
+    netsync: false
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        hard: false
+        layer: []
+        mask:
+        - MobLayer
+  - type: CEEphemeralCollectable
+    effects:
+    - !type:RestoreMana
+      effectTarget: Target
+      amount: 1
+  - type: CEAutoFloatingVisuals
+    floatingStartOffset: "0.0,0.0"
+    floatingOffset: "0.0,0.1"
+  - type: TimedDespawn
+    lifetime: 60

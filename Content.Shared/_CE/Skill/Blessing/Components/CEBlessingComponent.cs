@@ -1,4 +1,3 @@
-using System.Numerics;
 using Content.Shared._CE.Skill.Core.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -35,20 +34,6 @@ public sealed partial class CEBlessingComponent : Component
     /// </summary>
     [DataField]
     public string MapVFXLayer = "vfx";
-
-    /// <summary>
-    /// How long it takes to go from the bottom of the animation to the top.
-    /// </summary>
-    [DataField]
-    public float AnimationTime = 2f;
-
-    [DataField]
-    public Vector2 FloatingStartOffset = new(0, 0.4f);
-
-    [DataField]
-    public Vector2 FloatingOffset = new(0, 0.45f);
-
-    public readonly string AnimationKey = "blessingfloat";
 
     /// <summary>
     /// Sibling blessing entities spawned alongside this one.

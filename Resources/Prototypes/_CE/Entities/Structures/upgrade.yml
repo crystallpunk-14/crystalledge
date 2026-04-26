@@ -70,6 +70,7 @@
     - map: ["blessing"]
       shader: unshaded
   - type: CEBlessing
+  - type: CEAutoFloatingVisuals
     floatingStartOffset: "0.0,0.4"
     floatingOffset: "0.0,0.45"
   - type: InteractionOutline
