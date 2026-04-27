@@ -11,6 +11,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Graphics;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Client._CE.UserInterface.Systems.Minimap.Widgets;
@@ -44,8 +45,6 @@ public sealed partial class CEMinimapUI : UIWidget
     /// </summary>
     private readonly HashSet<int> _previewRooms = new();
 
-    private const string IconRsiPath = "/Textures/_CE/Interface/minimap_icons.rsi";
-
     private static readonly Color BackgroundColor = new(0f, 0f, 0f, 0.35f);
     private static readonly Color FrameColor = Color.White.WithAlpha(0.4f);
     private static readonly Color RoomPreviewColor = Color.White.WithAlpha(0.10f);
@@ -60,11 +59,12 @@ public sealed partial class CEMinimapUI : UIWidget
     [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IResourceCache _resCache = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
-    private Texture? _iconBlessing;
-    private Texture? _iconEnter;
-    private Texture? _iconExit;
-    private Texture? _iconTreasure;
+    /// <summary>
+    /// Icon textures keyed by <see cref="CERoomTypePrototype"/> ID, built once at construction.
+    /// </summary>
+    private readonly Dictionary<string, Texture?> _iconCache = new();
 
     public CEMinimapUI()
     {
@@ -77,7 +77,7 @@ public sealed partial class CEMinimapUI : UIWidget
         // so the player can zoom in/out without scrolling something else underneath.
         MouseFilter = MouseFilterMode.Stop;
 
-        LoadIcons();
+        BuildIconCache();
     }
 
     protected override void MouseWheel(GUIMouseWheelEventArgs args)
@@ -93,31 +93,21 @@ public sealed partial class CEMinimapUI : UIWidget
         args.Handle();
     }
 
-    private void LoadIcons()
+    private void BuildIconCache()
     {
-        if (!_resCache.TryGetResource<RSIResource>(new ResPath(IconRsiPath), out var rsi))
-            return;
-
-        if (rsi.RSI.TryGetState("blessing", out var blessing))
-            _iconBlessing = blessing.Frame0;
-        if (rsi.RSI.TryGetState("enter", out var enter))
-            _iconEnter = enter.Frame0;
-        if (rsi.RSI.TryGetState("exit", out var exit))
-            _iconExit = exit.Frame0;
-        if (rsi.RSI.TryGetState("treasure", out var treasure))
-            _iconTreasure = treasure.Frame0;
+        foreach (var proto in _proto.EnumeratePrototypes<CERoomTypePrototype>())
+        {
+            _iconCache[proto.ID] = ResolveIcon(proto.MinimapIcon);
+        }
     }
 
-    private Texture? GetIconForType(CEProceduralRoomType type)
+    private Texture? ResolveIcon(SpriteSpecifier? spec)
     {
-        return type switch
-        {
-            CEProceduralRoomType.Blessing => _iconBlessing,
-            CEProceduralRoomType.Entrance => _iconEnter,
-            CEProceduralRoomType.Exit => _iconExit,
-            CEProceduralRoomType.Treasure => _iconTreasure,
-            _ => null,
-        };
+        if (spec is SpriteSpecifier.Rsi rsi &&
+            _resCache.TryGetResource<RSIResource>(rsi.RsiPath, out var rsiRes) &&
+            rsiRes.RSI.TryGetState(rsi.RsiState, out var state))
+            return state.Frame0;
+        return null;
     }
 
     protected override void Draw(DrawingHandleScreen handle)
@@ -230,11 +220,13 @@ public sealed partial class CEMinimapUI : UIWidget
                 handle.DrawRect(clipped.Value, color);
 
             // Type icon overlay (drawn on top of the room rect).
-            // Visible in visited rooms; in preview state shown only for treasure rooms,
-            // since they're the only type revealed from a neighbour.
-            var showIcon = isVisited
-                           || (_previewRooms.Contains(room.Index) && room.RoomType == CEProceduralRoomType.Treasure);
-            var icon = showIcon ? GetIconForType(room.RoomType) : null;
+            // Visible in visited rooms; in preview state shown only for room types that have
+            // RevealedFromNeighbour = true (e.g. treasure rooms).
+            var roomTypeProto = room.RoomTypeProto != null && _proto.TryIndex(room.RoomTypeProto.Value, out CERoomTypePrototype? rtp)
+                ? rtp
+                : null;
+            var showIcon = isVisited || (_previewRooms.Contains(room.Index) && roomTypeProto?.RevealedFromNeighbour == true);
+            var icon = showIcon && roomTypeProto != null ? _iconCache.GetValueOrDefault(roomTypeProto.ID) : null;
             if (icon != null && clipped.HasValue)
             {
                 var iconColor = isVisited ? IconVisitedColor : IconPreviewColor;

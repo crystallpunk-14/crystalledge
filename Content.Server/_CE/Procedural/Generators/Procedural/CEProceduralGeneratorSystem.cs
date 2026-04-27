@@ -1,5 +1,5 @@
 using System.Threading;
-using Content.Server._CE.Procedural.Prototypes;
+using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;

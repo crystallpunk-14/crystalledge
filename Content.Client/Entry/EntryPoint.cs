@@ -133,7 +133,6 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("codewordGenerator");
             _prototypeManager.RegisterIgnore("codewordFaction");
             _prototypeManager.RegisterIgnore("dungeonLevel"); // CrystallEdge — server-only prototype
-            _prototypeManager.RegisterIgnore("dungeonRoomType"); // CrystallEdge — server-only prototype
             _prototypeManager.RegisterIgnore("dungeonSpawnTable"); // CrystallEdge — server-only prototype
 
             _componentFactory.GenerateNetIds();

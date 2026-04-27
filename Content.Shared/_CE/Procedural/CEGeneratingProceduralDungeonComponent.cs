@@ -79,6 +79,14 @@ public sealed partial class CEProceduralAbstractRoom
     /// </summary>
     [DataField]
     public CEProceduralRoomType RoomType = CEProceduralRoomType.General;
+
+    /// <summary>
+    /// Prototype ID of the <see cref="CERoomTypePrototype"/> assigned to this room.
+    /// Populated by the server during room assignment and networked to clients so they
+    /// can look up display data (minimap icon, debug overlay colours, etc.) from the prototype.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public ProtoId<CERoomTypePrototype>? RoomTypeProto;
 }
 
 /// <summary>

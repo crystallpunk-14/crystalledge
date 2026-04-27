@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Random;
 
@@ -25,6 +24,11 @@ public sealed partial class CEProceduralGeneratorSystem
         var maxSizeVec = new Vector2i(maxSize, maxSize);
 
         // Ensure the passway cache is built before we start checking exits.
+        _dungeon.EnsureRoomPasswayCache();
+
+        // Populate RoomTypeProto on every room now that all RoomType enum values are final.
+        foreach (var r in comp.Rooms)
+            r.RoomTypeProto = GetRoomTypeProto(config, r.RoomType)?.ID;
         _dungeon.EnsureRoomPasswayCache();
 
         // Build a map of required exit directions per room index.
@@ -58,8 +62,8 @@ public sealed partial class CEProceduralGeneratorSystem
             {
                 var candidate = _dungeon.GetRoomPrototype(
                     random,
-                    roomTypeProto?.Whitelist,
-                    maxSize: maxSizeVec);
+                    maxSize: maxSizeVec,
+                    roomType: roomTypeProto?.ID);
 
                 if (candidate == null)
                     break;
@@ -68,7 +72,7 @@ public sealed partial class CEProceduralGeneratorSystem
                 if (required.Count == 0)
                 {
                     roomProto = candidate;
-                    chosenRotation = _dungeon.GetRoomRotation(candidate, random);
+                    chosenRotation = random.Next(4) * Math.PI / 2;
                     found = true;
                     break;
                 }

@@ -9,9 +9,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PillarsWideCrossroad
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 8
   height: 2
   zLevelMap: MossyTemple
@@ -19,9 +17,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PillarsSmallCrossroad
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 8, 8
   height: 2
   zLevelMap: MossyTemple
@@ -29,9 +25,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PillarsCorridor
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 13, 6
   height: 2
   zLevelMap: MossyTemple
@@ -39,9 +33,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_AbyssCorridorL
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 8
   height: 2
   zLevelMap: MossyTemple
@@ -49,9 +41,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_AbyssCorridorT
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 12
   height: 2
   zLevelMap: MossyTemple
@@ -59,9 +49,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_AbyssCorridorO
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 13, 13
   height: 2
   zLevelMap: MossyTemple
@@ -69,9 +57,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_SmolTCrossroad
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 8, 8
   height: 2
   zLevelMap: MossyTemple
@@ -79,9 +65,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_OneSideAbyss
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 8, 14
   height: 2
   zLevelMap: MossyTemple
@@ -89,9 +73,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_LoongO
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 13, 7
   height: 2
   zLevelMap: MossyTemple
@@ -99,9 +81,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_AlchemyRooms
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 12, 13
   height: 2
   zLevelMap: MossyTemple
@@ -109,9 +89,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_CaveCorridor
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 12, 8
   height: 2
   zLevelMap: MossyTemple
@@ -119,9 +97,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_CaveCorridorT
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 12, 7
   height: 2
   zLevelMap: MossyTemple
@@ -129,9 +105,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_GrassMaze
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 9, 13
   height: 2
   zLevelMap: MossyTemple
@@ -139,9 +113,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_GrassBox
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 9, 8
   height: 2
   zLevelMap: MossyTemple
@@ -149,9 +121,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_GrassAngle
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 9, 7
   height: 2
   zLevelMap: MossyTemple
@@ -159,9 +129,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_CorridorDoorMaze
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 6
   height: 2
   zLevelMap: MossyTemple
@@ -169,9 +137,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_WhenCavesAndTempleMeet
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 13, 8
   height: 2
   zLevelMap: MossyTemple
@@ -179,9 +145,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Garden
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 9, 9
   height: 2
   zLevelMap: MossyTemple
@@ -189,9 +153,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_CaveMaze
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 11, 9
   height: 2
   zLevelMap: MossyTemple
@@ -199,9 +161,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_CaveBigHole
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 12, 12
   height: 2
   zLevelMap: MossyTemple
@@ -209,9 +169,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_CorridorC
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 10, 13
   height: 2
   zLevelMap: MossyTemple
@@ -219,9 +177,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DunCaveDun
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 9
   height: 2
   zLevelMap: MossyTemple
@@ -229,9 +185,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_AbyssWalking
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 13, 12
   height: 2
   zLevelMap: MossyTemple
@@ -239,9 +193,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_SimmetricalBox
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 10, 8
   height: 2
   zLevelMap: MossyTemple
@@ -249,9 +201,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_FloodedCave
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 10, 7
   height: 2
   zLevelMap: MossyTemple
@@ -259,9 +209,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Sewers
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 10, 13
   height: 2
   zLevelMap: MossyTemple
@@ -269,9 +217,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_SewersDouble
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 10, 7
   height: 2
   zLevelMap: MossyTemple
@@ -279,9 +225,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_FloodedRuinsLake
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 10, 8
   height: 2
   zLevelMap: MossyTemple
@@ -289,9 +233,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_RuinedRiver
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 10
   height: 2
   zLevelMap: MossyTemple
@@ -299,9 +241,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_AbyssWalking2
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 12, 10
   height: 2
   zLevelMap: MossyTemple
@@ -309,9 +249,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_BushCircle
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 13, 9
   height: 2
   zLevelMap: MossyTemple
@@ -319,9 +257,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PoisonRiver
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 15, 10
   height: 2
   zLevelMap: MossyTemple
@@ -329,9 +265,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PoisonBoxes
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 14, 14
   height: 2
   zLevelMap: MossyTemple
@@ -339,9 +273,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PoisonRiverT
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 8, 10
   height: 2
   zLevelMap: MossyTemple
@@ -349,9 +281,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_PoisonRoom
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomGeneral
+  roomType: MossyTempleGeneralRoom
   size: 12, 7
   height: 2
   zLevelMap: MossyTemple
@@ -365,9 +295,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_SomeKindOfLibrary
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 11, 11
   height: 2
   zLevelMap: MossyTemple
@@ -375,9 +303,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_PotionsBehindFrames
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 6, 11
   height: 2
   zLevelMap: MossyTemple
@@ -385,9 +311,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_PotionsInCave
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 8, 8
   height: 2
   zLevelMap: MossyTemple
@@ -395,9 +319,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_SecretLeafWallStash
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 8, 8
   height: 2
   zLevelMap: MossyTemple
@@ -405,9 +327,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_PlanksBridge
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 8, 10
   height: 2
   zLevelMap: MossyTemple
@@ -415,9 +335,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_Armory
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 14, 6
   height: 2
   zLevelMap: MossyTemple
@@ -425,9 +343,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_WaterBridge
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 11, 8
   height: 2
   zLevelMap: MossyTemple
@@ -435,9 +351,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_LeafMaze
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 10, 8
   height: 2
   zLevelMap: MossyTemple
@@ -445,9 +359,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_WoodenRoom
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 8, 7
   height: 2
   zLevelMap: MossyTemple
@@ -455,9 +367,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_Alchemy1
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomDeadEnd
+  roomType: MossyTempleDeadEndRoom
   size: 9, 7
   height: 2
   zLevelMap: MossyTemple
@@ -471,9 +381,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Entrance_LockedBox
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomEntrance
+  roomType: MossyTempleEntranceRoom
   size: 9, 9
   height: 2
   zLevelMap: MossyTemple
@@ -481,9 +389,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Entrance_Arch
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomEntrance
+  roomType: MossyTempleEntranceRoom
   size: 11, 9
   height: 2
   zLevelMap: MossyTemple
@@ -491,9 +397,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Entrance_AbyssBridge
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomEntrance
+  roomType: MossyTempleEntranceRoom
   size: 12, 9
   height: 2
   zLevelMap: MossyTemple
@@ -501,9 +405,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Entrance_AbyssBridge2
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomEntrance
+  roomType: MossyTempleEntranceRoom
   size: 12, 9
   height: 2
   zLevelMap: MossyTemple
@@ -518,9 +420,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_First
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomExit
+  roomType: MossyTempleExitRoom
   size: 11, 11
   height: 2
   zLevelMap: MossyTemple
@@ -528,9 +428,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_DoubleRooms
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomExit
+  roomType: MossyTempleExitRoom
   size: 11, 10
   height: 2
   zLevelMap: MossyTemple
@@ -538,9 +436,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_Apartments
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomExit
+  roomType: MossyTempleExitRoom
   size: 12, 12
   height: 2
   zLevelMap: MossyTemple
@@ -548,9 +444,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_LargeCicleRiver
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomExit
+  roomType: MossyTempleExitRoom
   size: 15, 15
   height: 2
   zLevelMap: MossyTemple
@@ -558,9 +452,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_LargeCave
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomExit
+  roomType: MossyTempleExitRoom
   size: 15, 15
   height: 2
   zLevelMap: MossyTemple
@@ -568,9 +460,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_LargeMaze
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomExit
+  roomType: MossyTempleExitRoom
   size: 15, 15
   height: 2
   zLevelMap: MossyTemple
@@ -584,9 +474,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Blessing_Dirty2
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomBlessing
+  roomType: MossyTempleBlessingRoom
   size: 7, 7
   height: 2
   zLevelMap: MossyTemple
@@ -594,9 +482,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Blessing_TripleBaby
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomBlessing
+  roomType: MossyTempleBlessingRoom
   size: 7, 7
   height: 2
   zLevelMap: MossyTemple
@@ -604,9 +490,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Blessing_Cliff
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomBlessing
+  roomType: MossyTempleBlessingRoom
   size: 7, 11
   height: 2
   zLevelMap: MossyTemple
@@ -614,9 +498,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Blessing_SmallBoring
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomBlessing
+  roomType: MossyTempleBlessingRoom
   size: 7, 7
   height: 2
   zLevelMap: MossyTemple
@@ -624,9 +506,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Blessing_River
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomBlessing
+  roomType: MossyTempleBlessingRoom
   size: 7, 12
   height: 2
   zLevelMap: MossyTemple
@@ -641,9 +521,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Treasure1
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomTreasure
+  roomType: MossyTempleTreasureRoom
   size: 7, 9
   height: 2
   zLevelMap: MossyTemple
@@ -651,9 +529,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_Treasure2
-  tags:
-  - CEDunGenMossyTemple
-  - CEDunGenRoomTreasure
+  roomType: MossyTempleTreasureRoom
   size: 7, 9
   height: 2
   zLevelMap: MossyTemple

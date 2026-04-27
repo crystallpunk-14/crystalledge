@@ -1,6 +1,5 @@
 using System.Numerics;
 using System.Threading.Tasks;
-using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
