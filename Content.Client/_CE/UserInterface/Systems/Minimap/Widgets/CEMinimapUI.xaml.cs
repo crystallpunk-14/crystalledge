@@ -222,7 +222,7 @@ public sealed partial class CEMinimapUI : UIWidget
             // Type icon overlay (drawn on top of the room rect).
             // Visible in visited rooms; in preview state shown only for room types that have
             // RevealedFromNeighbour = true (e.g. treasure rooms).
-            var roomTypeProto = room.RoomTypeProto != null && _proto.TryIndex(room.RoomTypeProto.Value, out CERoomTypePrototype? rtp)
+            var roomTypeProto = room.RoomType != null && _proto.TryIndex(room.RoomType.Value, out CERoomTypePrototype? rtp)
                 ? rtp
                 : null;
             var showIcon = isVisited || (_previewRooms.Contains(room.Index) && roomTypeProto?.RevealedFromNeighbour == true);

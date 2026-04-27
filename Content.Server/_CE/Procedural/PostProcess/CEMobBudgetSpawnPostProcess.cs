@@ -51,7 +51,7 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
     public EntityWhitelist? AnchoredWhitelist;
 
     [DataField]
-    public List<CEProceduralRoomType> ExcludedRoomTypes = new();
+    public List<ProtoId<CERoomTypePrototype>> ExcludedRoomTypes = new();
 
     [DataField]
     public bool MainZLevelOnly = true;
@@ -301,7 +301,7 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
 
         foreach (var room in dungeon.Rooms)
         {
-            if (ExcludedRoomTypes.Contains(room.RoomType))
+            if (room.RoomType != null && ExcludedRoomTypes.Contains(room.RoomType.Value))
                 zones.Add((room.Position, room.Size));
         }
         return zones;

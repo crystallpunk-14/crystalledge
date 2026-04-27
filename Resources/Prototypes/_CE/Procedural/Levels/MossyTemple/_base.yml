@@ -163,12 +163,6 @@
     - type: CEMapStatusEffects
       effects:
       - CEStatusEffectPacifism
-    generalRooms: MossyTempleGeneralRoom
-    exitRoom: MossyTempleExitRoom
-    entranceRooms: MossyTempleEntranceRoom
-    blessingRooms: MossyTempleBlessingRoom
-    treasureRooms: MossyTempleTreasureRoom
-    deadEndRooms: MossyTempleDeadEndRoom
 
 
 - type: dungeonLevel
@@ -189,9 +183,3 @@
     - type: Gravity
       enabled: true
       inherent: true
-    generalRooms: MossyTempleGeneralRoom
-    exitRoom: MossyTempleExitRoom
-    entranceRooms: MossyTempleEntranceRoom
-    blessingRooms: MossyTempleBlessingRoom
-    treasureRooms: MossyTempleTreasureRoom
-    deadEndRooms: MossyTempleDeadEndRoom

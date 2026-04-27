@@ -53,44 +53,28 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
     {
         var config = _config;
 
-        // Determine how many rooms to generate.
-        var targetCount = _random.Next(config.GeneralCount.Min, config.GeneralCount.Max + 1);
-        if (targetCount <= 0)
+        if (config.GenerationPlan.Count == 0)
+        {
+            _sawmill.Error("CEProceduralDungeonJob: GenerationPlan is empty, cannot generate dungeon.");
             return new CEDungeonGenerateResult(false);
+        }
 
         // Create a new map for this dungeon.
         var mapUid = _maps.CreateMap(out var mapId);
 
-        // Build the abstract room graph.
+        // Build the abstract room graph by executing every step in the generation plan.
         var comp = _entManager.AddComponent<CEGeneratingProceduralDungeonComponent>(mapUid);
 
-        await _generator.BuildRoomGraph(comp, config.MaxRoomSize, targetCount, SuspendIfOutOfTime);
+        await _generator.ExecuteGenerationPlan(comp, config, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
-        // Mark the exit room before appending specials so it is excluded from candidates.
-        _generator.AssignExitRoom(comp);
-        await SuspendIfOutOfTime();
+        if (comp.Rooms.Count == 0)
+        {
+            _sawmill.Error("CEProceduralDungeonJob: GenerationPlan produced no rooms.");
+            return new CEDungeonGenerateResult(false);
+        }
 
-        // Attach special rooms to General corridor rooms while all corridors are still General.
-        // Dead-ends are calculated afterwards so that only truly unassigned leaf rooms become DeadEnd.
-        var entranceCount = _random.Next(config.EntranceCount.Min, config.EntranceCount.Max + 1);
-        _generator.AppendSpecialRooms(comp, entranceCount, CEProceduralRoomType.Entrance, config.MaxRoomSize);
-        var blessingCount = _random.Next(config.BlessingCount.Min, config.BlessingCount.Max + 1);
-        _generator.AppendSpecialRooms(comp, blessingCount, CEProceduralRoomType.Blessing, config.MaxRoomSize);
-        var treasureCount = _random.Next(config.TreasureCount.Min, config.TreasureCount.Max + 1);
-        _generator.AppendSpecialRooms(comp, treasureCount, CEProceduralRoomType.Treasure, config.MaxRoomSize);
-        await SuspendIfOutOfTime();
-
-        // Now mark remaining 1-connection General rooms as DeadEnd.
-        _generator.AssignDeadEnds(comp);
-        await SuspendIfOutOfTime();
-
-        // Add cyclic connections between adjacent General rooms (farthest from center first).
-        var cycleCount = _random.Next(config.CycleCount.Min, config.CycleCount.Max + 1);
-        _generator.AddCyclicConnections(comp, cycleCount, _random);
-        await SuspendIfOutOfTime();
-
-        // Assign real room prototypes, apply rotation, resize and randomize position.
+        // Assign real room prototypes, apply rotation, resize and randomise position.
         await _generator.AssignRealRooms(comp, config, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 

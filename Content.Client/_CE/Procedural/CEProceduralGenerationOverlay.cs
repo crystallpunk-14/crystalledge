@@ -62,7 +62,7 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         {
             var room = comp.Rooms[i];
 
-            var roomTypeProto = room.RoomTypeProto != null && _proto.TryIndex(room.RoomTypeProto.Value, out CERoomTypePrototype? rtp)
+            var roomTypeProto = room.RoomType != null && _proto.TryIndex(room.RoomType.Value, out CERoomTypePrototype? rtp)
                 ? rtp
                 : null;
             var fillColor = roomTypeProto?.DebugFillColor ?? DefaultFillColor;

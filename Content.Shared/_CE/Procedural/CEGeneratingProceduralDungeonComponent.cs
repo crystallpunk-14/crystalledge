@@ -1,6 +1,4 @@
-using Robust.Shared.GameObjects;
 using Robust.Shared.GameStates;
-using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
@@ -75,37 +73,12 @@ public sealed partial class CEProceduralAbstractRoom
     public Angle Rotation;
 
     /// <summary>
-    /// The type/role of this room in the dungeon.
-    /// </summary>
-    [DataField]
-    public CEProceduralRoomType RoomType = CEProceduralRoomType.General;
-
-    /// <summary>
     /// Prototype ID of the <see cref="CERoomTypePrototype"/> assigned to this room.
-    /// Populated by the server during room assignment and networked to clients so they
+    /// Populated during the generation plan and networked to clients so they
     /// can look up display data (minimap icon, debug overlay colours, etc.) from the prototype.
     /// </summary>
-    [DataField, AutoNetworkedField]
-    public ProtoId<CERoomTypePrototype>? RoomTypeProto;
-}
-
-/// <summary>
-/// The functional role of an abstract room in the procedural dungeon.
-/// </summary>
-public enum CEProceduralRoomType : byte
-{
-    /// <summary>Normal room.</summary>
-    General,
-    /// <summary>Dungeon exit (placed at 0,0).</summary>
-    Exit,
-    /// <summary>Dungeon entrance (dead-end, far from others).</summary>
-    Entrance,
-    /// <summary>Blessing room (dead-end, far from others).</summary>
-    Blessing,
-    /// <summary>Dead-end room (1 connection, not assigned a special role).</summary>
-    DeadEnd,
-    /// <summary>Treasure room (dead-end, generated after blessing rooms).</summary>
-    Treasure,
+    [DataField]
+    public ProtoId<CERoomTypePrototype>? RoomType;
 }
 
 /// <summary>

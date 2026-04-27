@@ -52,7 +52,7 @@ public sealed partial class CEProceduralGeneratorSystem
         var roomTypeProtos = new Dictionary<int, CERoomTypePrototype?>();
         foreach (var room in comp.Rooms)
         {
-            roomTypeProtos[room.Index] = GetRoomTypeProto(config, room.RoomType);
+            roomTypeProtos[room.Index] = _proto.Index(room.RoomType);
         }
 
         // --- Process connections ---
@@ -116,10 +116,17 @@ public sealed partial class CEProceduralGeneratorSystem
                 var doorProtoA = protoA?.DoorPrototype ?? config.DoorPrototype;
                 var doorProtoB = protoB?.DoorPrototype ?? config.DoorPrototype;
                 await BuildDoorCorridor(
-                    roomA, roomB, mainZLevel, random,
-                    config.CorridorWander, roomBuffer,
-                    corridorPositions, doorPlacements,
-                    doorProtoA, doorProtoB, suspend);
+                    roomA,
+                    roomB,
+                    mainZLevel,
+                    random,
+                    config.CorridorWander,
+                    roomBuffer,
+                    corridorPositions,
+                    doorPlacements,
+                    doorProtoA,
+                    doorProtoB,
+                    suspend);
             }
         }
 
@@ -215,11 +222,18 @@ public sealed partial class CEProceduralGeneratorSystem
         // The obstacles set includes a 1-tile buffer around rooms, so corridors
         // won't run along room walls. Start and end are exempt in the pathfinder.
         var path = await FindWanderingPath(
-            bestStart.Value, bestEnd.Value, obstacles, random, wanderWeight, suspend);
+            bestStart.Value,
+            bestEnd.Value,
+            obstacles,
+            random,
+            wanderWeight,
+            suspend);
 
         // Record corridor positions.
         foreach (var pos in path)
+        {
             corridorPositions.Add(pos);
+        }
 
         // Door at the start (faces toward room A, uses roomB's prototype — the player sees roomB's door when approaching from outside).
         if (path.Count > 0)
@@ -277,6 +291,7 @@ public sealed partial class CEProceduralGeneratorSystem
                     path.Add(c);
                     c = cameFrom[c];
                 }
+
                 path.Add(start);
                 path.Reverse();
                 return path;

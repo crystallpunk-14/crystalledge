@@ -8,26 +8,51 @@
     1: MossyTemple2
   config:
     !type:CEProceduralConfig
-    generalCount:
-      min: 4
-      max: 6
-    entranceCount:
-      min: 3
-      max: 3
-    blessingCount:
-      min: 1
-      max: 1
-    treasureCount:
-      min: 0
-      max: 2
-    cycleCount:
-      min: 1
-      max: 2
+    generationPlan:
+    - !type:GenerateRoomWeb
+      source: 0, 0
+      roomType: MossyTempleGeneralRoom
+      count:
+        min: 4
+        max: 6
+    - !type:AppendRoom
+      roomType: MossyTempleEntranceRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 3
+        max: 3
+    - !type:AppendRoom
+      roomType: MossyTempleBlessingRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 1
+        max: 1
+    - !type:AppendRoom
+      roomType: MossyTempleTreasureRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 0
+        max: 2
+    - !type:SetRoomType
+      position: 0, 0
+      roomType: MossyTempleExitRoom
+    - !type:MarkDeadEnds
+      ofType: MossyTempleGeneralRoom
+      roomType: MossyTempleDeadEndRoom
+    - !type:ConnectRandomRooms
+      roomTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 1
+        max: 2
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
     budget: 20
     excludedRoomTypes:
-    - Entrance
+    - MossyTempleEntranceRoom
     entries:
     - proto: CEMobRat
       cost: 1

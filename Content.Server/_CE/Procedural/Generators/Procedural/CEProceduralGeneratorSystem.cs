@@ -1,5 +1,6 @@
 using System.Threading;
 using Content.Server._CE.Procedural.Generators;
+using Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;
@@ -30,52 +31,11 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     public int MaxRoomSize = 20;
 
     /// <summary>
-    /// Room type prototype for general rooms.
+    /// The ordered list of abstract generation steps.
+    /// Executed sequentially to build the full room graph before any real rooms are placed.
     /// </summary>
     [DataField]
-    public ProtoId<CERoomTypePrototype>? GeneralRooms;
-
-    [DataField]
-    public MinMax GeneralCount = new(30, 50);
-
-    /// <summary>
-    /// Room type prototype for the exit room (placed at grid origin).
-    /// </summary>
-    [DataField]
-    public ProtoId<CERoomTypePrototype>? ExitRoom;
-
-    /// <summary>
-    /// Room type prototype for entrance rooms (dead-ends, maximally far apart).
-    /// </summary>
-    [DataField]
-    public ProtoId<CERoomTypePrototype>? EntranceRooms;
-
-    [DataField]
-    public MinMax EntranceCount = new(2, 2);
-
-    /// <summary>
-    /// Room type prototype for blessing rooms (dead-ends, maximally far apart).
-    /// </summary>
-    [DataField]
-    public ProtoId<CERoomTypePrototype>? BlessingRooms;
-
-    [DataField]
-    public MinMax BlessingCount = new(2, 2);
-
-    /// <summary>
-    /// Room type prototype for treasure rooms (dead-ends, generated after blessing rooms).
-    /// </summary>
-    [DataField]
-    public ProtoId<CERoomTypePrototype>? TreasureRooms;
-
-    [DataField]
-    public MinMax TreasureCount = new(0, 0);
-
-    /// <summary>
-    /// Room type prototype for dead-end rooms (remaining dead-ends after special types).
-    /// </summary>
-    [DataField]
-    public ProtoId<CERoomTypePrototype>? DeadEndRooms;
+    public List<CEDungeonGenerationStep> GenerationPlan = new();
 
     /// <summary>
     /// Shared components applied to every z-level map in the dungeon's z-network
@@ -83,14 +43,6 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
     /// </summary>
     [DataField]
     public ComponentRegistry Components = new();
-
-    /// <summary>
-    /// Number of extra cyclic connections to add between adjacent General rooms.
-    /// These connections create loops in the dungeon graph, providing alternative routes.
-    /// Pairs of rooms are sorted by distance from center (farthest first).
-    /// </summary>
-    [DataField]
-    public MinMax CycleCount = new(0, 0);
 
     /// <summary>
     /// How much the corridor A* path is allowed to wander (0 = straight, higher = more winding).
@@ -145,17 +97,6 @@ public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSyst
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly CEDungeonSystem _dungeon = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
-
-    /// <summary>
-    /// Cardinal directions on the logical grid: right, left, up, down.
-    /// </summary>
-    internal static readonly Vector2i[] Directions =
-    [
-        new(1, 0),
-        new(-1, 0),
-        new(0, 1),
-        new(0, -1),
-    ];
 
     protected override Job<CEDungeonGenerateResult> CreateJob(
         CEProceduralConfig config,
