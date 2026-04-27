@@ -17,7 +17,7 @@ public sealed class VocalSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ChatSystem _chat = default!;
-    [Dependency] private readonly ActionsSystem _actions = default!;
+    //[Dependency] private readonly ActionsSystem _actions = default!; //CrystallEdge disabled
 
     public override void Initialize()
     {
@@ -52,7 +52,7 @@ public sealed class VocalSystem : EntitySystem
     private void OnMapInit(EntityUid uid, VocalComponent component, MapInitEvent args)
     {
         // try to add scream action when vocal comp added
-        _actions.AddAction(uid, ref component.ScreamActionEntity, component.ScreamAction);
+        //_actions.AddAction(uid, ref component.ScreamActionEntity, component.ScreamAction); //CrystallEdge scream action disabled
         LoadSounds(uid, component);
     }
 
@@ -61,7 +61,7 @@ public sealed class VocalSystem : EntitySystem
         // remove scream action when component removed
         if (component.ScreamActionEntity != null)
         {
-            _actions.RemoveAction(uid, component.ScreamActionEntity);
+            //_actions.RemoveAction(uid, component.ScreamActionEntity); //CrystallEdge scream action disabled
         }
     }
 
