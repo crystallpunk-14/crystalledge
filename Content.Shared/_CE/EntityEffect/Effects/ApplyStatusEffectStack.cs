@@ -53,6 +53,12 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
         if (attempt.Cancelled)
             return;
 
+        // Raise on the TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
+        var receiveAttempt = new CEAttemptReceiveStatusEffectStackEvent(entity, args.Effect.StatusEffect, stacks, args.Effect.Duration);
+        RaiseLocalEvent(entity, receiveAttempt);
+        if (receiveAttempt.Cancelled)
+            return;
+
         if (!_effectStack.TryAddStack(entity, args.Effect.StatusEffect, out var statusEnt, stacks, args.Effect.Duration))
             return;
 
@@ -71,6 +77,24 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
 /// status effects via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
 public sealed class CEAttemptApplyStatusEffectStackEvent(
+    EntityUid target,
+    EntProtoId statusEffect,
+    int amount,
+    TimeSpan? duration) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly EntProtoId StatusEffect = statusEffect;
+    public readonly int Amount = amount;
+    public readonly TimeSpan? Duration = duration;
+    public bool Cancelled;
+}
+
+/// <summary>
+/// Raised on the TARGET entity before <see cref="ApplyStatusEffectStack"/> applies stacks.
+/// Cancelling prevents the effect from being applied.
+/// Relayed to the target's active status effects via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEAttemptReceiveStatusEffectStackEvent(
     EntityUid target,
     EntProtoId statusEffect,
     int amount,

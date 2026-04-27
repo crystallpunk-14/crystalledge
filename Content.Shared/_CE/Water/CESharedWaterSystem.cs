@@ -85,6 +85,7 @@ public abstract class CESharedWaterSystem : EntitySystem
     /// Raises a <see cref="CEWettedEvent"/> on the target entity.
     /// Entities with wet-related components handle the event to apply their effects.
     /// </summary>
+    [Obsolete("Need be converted to ApplyStatusEffect")]
     public void WetEntity(EntityUid target, int stack = 1, int? maxStack = null, TimeSpan? duration = null)
     {
         if (stack <= 0)
@@ -102,7 +103,7 @@ public abstract class CESharedWaterSystem : EntitySystem
         // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
         if (TryComp<CEWettableComponent>(target, out var wettable))
         {
-            var stackAttempt = new CEAttemptApplyStatusEffectStackEvent(target, wettable.StatusEffect, stack, duration);
+            var stackAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, wettable.StatusEffect, stack, duration);
             RaiseLocalEvent(target, stackAttempt);
             if (stackAttempt.Cancelled)
                 return;

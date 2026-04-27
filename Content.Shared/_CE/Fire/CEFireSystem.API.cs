@@ -29,7 +29,7 @@ public sealed partial class CEFireSystem
         // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
         if (TryComp<CEFlammableComponent>(target, out var flammable))
         {
-            var stackAttempt = new CEAttemptApplyStatusEffectStackEvent(target, flammable.StatusEffect, stack, null);
+            var stackAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, flammable.StatusEffect, stack, null);
             RaiseLocalEvent(target, stackAttempt);
             if (stackAttempt.Cancelled)
                 return;

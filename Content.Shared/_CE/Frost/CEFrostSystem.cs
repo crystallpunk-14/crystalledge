@@ -119,6 +119,7 @@ public sealed class CEFrostSystem : EntitySystem
     /// Raises a <see cref="CEFreezedEvent"/> on the target entity.
     /// Entities with freezing-related components handle the event to apply their effects.
     /// </summary>
+    [Obsolete("Need be converted to ApplyStatusEffect")]
     public void FreezeEntity(EntityUid target, int stack = 1, int? maxStack = null, TimeSpan? duration = null)
     {
         if (stack <= 0)
@@ -137,7 +138,7 @@ public sealed class CEFrostSystem : EntitySystem
         // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
         if (TryComp<CEFreezableComponent>(target, out var freezable))
         {
-            var stackAttempt = new CEAttemptApplyStatusEffectStackEvent(target, freezable.StatusEffect, stack, duration);
+            var stackAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, freezable.StatusEffect, stack, duration);
             RaiseLocalEvent(target, stackAttempt);
             if (stackAttempt.Cancelled)
                 return;
