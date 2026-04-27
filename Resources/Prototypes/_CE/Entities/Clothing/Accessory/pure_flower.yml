@@ -1,0 +1,23 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryPureFlower
+  name: pure flower
+  description: A healing flower that protects the wearer from poisoning.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/pure_flower.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectPureFlower
+
+- type: entity
+  id: CEStatusEffectPureFlower
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+  - type: CEStatusEffectImmunity
+    blockedEffects:
+    - CEStatusEffectPoison
+

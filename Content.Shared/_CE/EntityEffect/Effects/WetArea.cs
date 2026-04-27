@@ -2,6 +2,13 @@ using Content.Shared._CE.Water;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
+/// <summary>
+/// Applies wet stacks to all entities in an area via <see cref="CESharedWaterSystem.WetArea"/>.
+/// </summary>
+/// <remarks>OBSOLETE: bypasses the status effect attempt event pipeline (CEAttemptApplyStatusEffectEvent),
+/// so immunity components cannot intercept it without workarounds.
+/// TODO: migrate to modular AreaEffect + ApplyStatusEffectStack effects.</remarks>
+[Obsolete("Use modular AreaEffect with ApplyStatusEffectStack instead. WetArea bypasses the status effect attempt pipeline.")]
 public sealed partial class WetArea : CEEntityEffectBase<WetArea>
 {
     [DataField]

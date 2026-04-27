@@ -1,3 +1,4 @@
+using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Fire;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
@@ -97,6 +98,15 @@ public abstract class CESharedWaterSystem : EntitySystem
         if (attemptEv.Cancelled)
             return;
         stack = attemptEv.Stacks;
+
+        // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
+        if (TryComp<CEWettableComponent>(target, out var wettable))
+        {
+            var stackAttempt = new CEAttemptApplyStatusEffectStackEvent(target, wettable.StatusEffect, stack, duration);
+            RaiseLocalEvent(target, stackAttempt);
+            if (stackAttempt.Cancelled)
+                return;
+        }
 
         var wettedEv = new CEWettedEvent(stack, maxStack, duration);
         RaiseLocalEvent(target, ref wettedEv);
@@ -203,6 +213,7 @@ public abstract class CESharedWaterSystem : EntitySystem
 /// Handled by <c>CEFlammableComponent</c> for fire neutralization.
 /// </summary>
 [ByRefEvent]
+[Obsolete("We need to transition to a more modular system.")]
 public record struct CEWetEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
 
 /// <summary>

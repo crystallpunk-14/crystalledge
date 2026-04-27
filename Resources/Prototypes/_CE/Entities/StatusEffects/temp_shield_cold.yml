@@ -20,7 +20,9 @@
   - type: Sprite
     drawdepth: Effects
     noRot: true
-  - type: CEFreezeImmunityStatusEffect
+  - type: CEStatusEffectImmunity
+    blockedEffects:
+    - CEStatusEffectColdSlowdown
   - type: CEStatusEffectStack
     stackDelta: -1
     baseDuration: 1

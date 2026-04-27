@@ -1,3 +1,4 @@
+using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -9,6 +10,7 @@ public sealed partial class CEFireSystem
     /// Raises a <see cref="CEIgnitedEvent"/> on the target entity.
     /// Entities with fire-related components handle the event to apply their effects.
     /// </summary>
+    [Obsolete("Need be converted to ApplyStatusEffect")]
     public void IgniteEntity(EntityUid target, EntityUid? source = null, int stack = 1, int? maxStack = null)
     {
         if (stack <= 0)
@@ -23,6 +25,15 @@ public sealed partial class CEFireSystem
         if (attemptEv.Cancelled)
             return;
         stack = attemptEv.Stacks;
+
+        // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
+        if (TryComp<CEFlammableComponent>(target, out var flammable))
+        {
+            var stackAttempt = new CEAttemptApplyStatusEffectStackEvent(target, flammable.StatusEffect, stack, null);
+            RaiseLocalEvent(target, stackAttempt);
+            if (stackAttempt.Cancelled)
+                return;
+        }
 
         var ignitedEv = new CEIgnitedEvent(stack, maxStack);
         RaiseLocalEvent(target, ref ignitedEv);

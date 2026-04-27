@@ -147,6 +147,15 @@
       maxStacks: 8
     - !type:Dash
       distance: 3
+    - !type:AreaEffect
+      range: 3
+      affectCaster: false
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 10
 
 
 - type: entity
@@ -230,3 +239,13 @@
       effectTarget: Target
       spawns:
       - CEEffectPotionAlchemicalFire
+    - !type:AreaEffect
+      range: 2
+      affectCaster: false
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 5
+

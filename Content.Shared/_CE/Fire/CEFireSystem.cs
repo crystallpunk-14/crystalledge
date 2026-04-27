@@ -419,6 +419,7 @@ public enum CEFireTileVisualLevel
 /// Handled by <c>CEFrostSystem</c> for frost neutralization and <c>CESharedWaterSystem</c> for water blocking.
 /// </summary>
 [ByRefEvent]
+[Obsolete("We need to transition to a more modular system.")]
 public record struct CEIgniteEntityAttemptEvent(EntityUid Target, int Stacks, bool Cancelled);
 
 /// <summary>

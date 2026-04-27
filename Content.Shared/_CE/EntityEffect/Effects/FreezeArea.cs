@@ -2,6 +2,13 @@ using Content.Shared._CE.Frost;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
+/// <summary>
+/// Applies frost/cold slowdown to all entities in an area via <see cref="CEFrostSystem.FreezeArea"/>.
+/// </summary>
+/// <remarks>OBSOLETE: bypasses the status effect attempt event pipeline (CEAttemptApplyStatusEffectEvent),
+/// so immunity components cannot intercept it without workarounds.
+/// TODO: migrate to modular AreaEffect + ApplyStatusEffectStack effects.</remarks>
+[Obsolete("Use modular AreaEffect with ApplyStatusEffectStack instead. FreezeArea bypasses the status effect attempt pipeline.")]
 public sealed partial class FreezeArea : CEEntityEffectBase<FreezeArea>
 {
     [DataField]
