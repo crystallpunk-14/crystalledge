@@ -11,7 +11,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// Creates loops in the otherwise tree-shaped room graph.
 /// Pairs are sorted by combined Manhattan distance from the grid origin (farthest first).
 /// </summary>
-[DataDefinition, Serializable, NetSerializable]
+[DataDefinition]
 public sealed partial class CEConnectRandomRoomsStep : CEDungeonGenerationStep
 {
     /// <summary>

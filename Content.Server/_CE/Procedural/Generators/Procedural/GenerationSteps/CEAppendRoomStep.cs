@@ -11,7 +11,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// Attaches one or more new rooms of the given type to randomly chosen existing rooms.
 /// Each new room becomes a leaf node with a single connection to its parent.
 /// </summary>
-[DataDefinition, Serializable, NetSerializable]
+[DataDefinition]
 public sealed partial class CEAppendRoomStep : CEDungeonGenerationStep
 {
     /// <summary>
