@@ -88,8 +88,7 @@ public sealed class StorageUIController : UIController, IOnSystemChanged<Storage
 
     private void OnStaticStorageChanged(bool obj)
     {
-        // CrystallEdge: ignore the cvar; storage windows are always free-floating.
-        StaticStorageUIEnabled = false;
+        StaticStorageUIEnabled = obj;
     }
 
     public StorageWindow CreateStorageWindow(StorageBoundUserInterface sBui)
