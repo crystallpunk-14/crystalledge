@@ -23,7 +23,7 @@
             types:
               Cold: 5
         - !type:StealMana
-          amount: 1
+          amount: 2
         - !type:SpawnEntity
           effectTarget: Target
           spawns:
@@ -39,7 +39,7 @@
             types:
               Cold: 10
         - !type:StealMana
-          amount: 2
+          amount: 4
         - !type:SpawnEntity
           effectTarget: Target
           spawns:
@@ -47,9 +47,12 @@
     animations:
       Primary:
       - anim: SpearAttackLight
+        speed: 0.7
       Secondary:
       - anim: SpearAttackHeavy
+        speed: 0.7
       - anim: SpearAttackHeavy2
+        speed: 0.7
   #- type: CEWieldedWeapon #TODO: Custom wielded animations
   #  animations:
   #    Primary:

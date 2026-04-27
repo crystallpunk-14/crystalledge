@@ -4,8 +4,8 @@
   - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CEMobRat
-  name: rat
+  id: CEMobTest
+  name: test
   description: TODO
   categories: [ ForkFiltered ]
   components:
@@ -15,11 +15,7 @@
       params:
         variation: 0.1
   - type: CEDestructible
-    destroyThreshold: 10
-    lootTable: !type:AllSelector
-      children:
-      - id: CECoinCopper1
-        amount: 1
+    destroyThreshold: 30
   - type: CEGOAP
     goals:
     # Single stupid goal - kill enemies
@@ -33,15 +29,13 @@
       targetKey: enemy
       preconditions:
         EnemyVisible: true
-      effects:
-        EnemyInMeleeRange: true
       cost: 1
-      range: 1.5
+      range: 3.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
       targetKey: enemy
       preconditions:
-        EnemyInMeleeRange: true
+        EnemyVisible: true
       effects:
         EnemyDead: true
       cost: 1
@@ -70,7 +64,7 @@
     - !type:CEGOAPRangeToTargetSensor
       conditionKey: EnemyInMeleeRange
       targetKey: enemy
-      range: 1.5
+      range: 3.5
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
@@ -82,52 +76,32 @@
     - SimpleHostile
   - type: Sprite
     drawdepth: Mobs
-    sprite: _CE/Mobs/rat.rsi
+    sprite: _CE/Mobs/test.rsi
     layers:
-    - state: rat
+    - state: base
   - type: MovementSpeedModifier
-    baseSprintSpeed: 2.5
+    baseSprintSpeed: 3
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.5
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:ShootProjectile
+        projectileSpeed: 5
+        prototype: CEProjectileTestMob
+        projectileCount: 1
     animations:
       Primary:
-      - anim: RatBite
+      - anim: MobTestAttack
   - type: CEContactDamage
     damage:
       types:
         Physical: 5
 
-- type: entity
-  id: CERatBiteEffectTelegraphy
-  components:
-  - type: Sprite
-    sprite: Effects/arcs.rsi
-    state: disarm
-    drawdepth: Effects
-
-- type: entity
-  id: CERatBiteEffect
-  components:
-  - type: Sprite
-    sprite: Effects/arcs.rsi
-    state: bite
-    drawdepth: Effects
 
 - type: entityEffectAnimation
-  id: RatBite
-  movementSpeed: 0.8
-  duration: 0.8
+  id: MobTestAttack
+  movementSpeed: 0.7
+  duration: 2
   events:
     0:
     - !type:UsedEntityAnimation
@@ -171,13 +145,26 @@
       - time: 0.3
         color: "#ffffff00"  # Fade out
         easing: QuadOut
-    - !type:PlaySound
-      sound:
-        path: /Audio/Effects/bite.ogg
-        params:
-          variation: 0.1
     0.25:
     - !type:WeaponEffectSlot
       slot: OnHit
-    - !type:Dash
-      distance: 0.1
+
+
+- type: entity
+  id: CEProjectileTestMob
+  name: firebolt projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/firebolt.rsi
+    layers:
+    - state: effect
+      color: red
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 10

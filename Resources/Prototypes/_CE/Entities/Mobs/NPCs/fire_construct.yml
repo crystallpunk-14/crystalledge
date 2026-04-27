@@ -101,6 +101,10 @@
   - type: Tag
     tags:
       - FootstepSound
+  - type: CEContactDamage
+    damage:
+      types:
+        Fire: 5
 
 
 

@@ -178,7 +178,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
             List<EntityUid>? toRemove = null;
             foreach (var (uid, time) in _predictedPopups)
             {
-                if (now - time > TimeSpan.FromSeconds(2))
+                if (now - time > TimeSpan.FromSeconds(0.5))
                     (toRemove ??= new List<EntityUid>()).Add(uid);
             }
 

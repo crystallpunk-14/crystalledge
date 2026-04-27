@@ -111,6 +111,10 @@
       Primary:
       - anim: FlemAttack1
       - anim: FlemAttack2
+  - type: CEContactDamage
+    damage:
+      types:
+        Physical: 10
 
 - type: entityEffectAnimation
   id: FlemAttack1

@@ -1,4 +1,5 @@
 using Content.Server._CE.GOAP;
+using Content.Shared._CE.GOAP;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -30,6 +31,10 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
         if (args.NewTarget is null)
             return;
 
+        // Don't show alarm VFX while the mob is sleeping.
+        if (HasComp<CEGOAPSleepingComponent>(ent))
+            return;
+
         if (_timing.CurTime > ent.Comp.LastAlarm + ent.Comp.Cooldown)
         {
             var vfx = SpawnAttachedTo(ent.Comp.AlarmVFX, Transform(ent).Coordinates);
@@ -45,6 +50,42 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
     public void Alarm(EntityCoordinates source, EntityUid target, float radius)
     {
         RaiseLocalEvent(new CEGOAPAlarmEvent(source, target, radius));
+    }
+
+    /// <summary>
+    /// Called when a sleeping mob wakes up. Plays the alarm VFX/sound if the mob
+    /// already has a GOAP target, so the "!" moment shows on aggro.
+    /// </summary>
+    public void TryPlayAlarmOnWake(EntityUid uid)
+    {
+        if (!TryComp<CEGOAPAlarmComponent>(uid, out var alarm))
+            return;
+
+        if (!TryComp<CEGOAPComponent>(uid, out var goap))
+            return;
+
+        EntityUid? target = null;
+        foreach (var (_, t) in goap.Targets)
+        {
+            if (t != null)
+            {
+                target = t;
+                break;
+            }
+        }
+
+        if (target == null)
+            return;
+
+        if (_timing.CurTime > alarm.LastAlarm + alarm.Cooldown)
+        {
+            var vfx = SpawnAttachedTo(alarm.AlarmVFX, Transform(uid).Coordinates);
+            _transform.SetParent(vfx, uid);
+            _audio.PlayPvs(alarm.Sound, uid);
+        }
+
+        alarm.LastAlarm = _timing.CurTime;
+        Alarm(Transform(uid).Coordinates, target.Value, alarm.Radius);
     }
 }
 

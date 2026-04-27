@@ -29,28 +29,15 @@
     fixedRotation: true
   - type: Fixtures
     fixtures:
-      # Hard collider against walls only — stops souls from flying through impassable
-      # terrain when they get a scatter impulse on death.
-      # Layer = InteractImpassable: matched by walls' FullTileMask, but NOT by chasm's
-      # ItemMask or any mob mask. Result: souls bounce off walls but pass through chasms
-      # and mobs without blocking them.
-      wallStop:
+      fix1:
         shape:
           !type:PhysShapeCircle
-          radius: 0.15
-        density: 5
-        hard: true
-        layer:
-        - InteractImpassable
-        mask: []
-      # Sensor that triggers OnStartCollide for the player but doesn't block them.
-      pickup:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.2
+          radius: 0.35
+        density: 50
         hard: false
-        layer: []
         mask:
+        - MobMask
+        layer:
         - MobLayer
   - type: CEEphemeralCollectable
     collectVfx: CEEffectSoulCollect

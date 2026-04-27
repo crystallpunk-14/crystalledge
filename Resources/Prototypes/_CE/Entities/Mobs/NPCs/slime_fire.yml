@@ -132,6 +132,10 @@
   - type: CEArmor
     flat:
       Fire: 100
+  - type: CEContactDamage
+    damage:
+      types:
+        Fire: 5
 
 # -- Slime Jump (leap toward target) --
 

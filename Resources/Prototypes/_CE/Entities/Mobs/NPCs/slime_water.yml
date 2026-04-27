@@ -127,6 +127,10 @@
     animations:
       Primary:
       - anim: SlimeBite
+  - type: CEContactDamage
+    damage:
+      types:
+        Physical: 5
 
 
 
