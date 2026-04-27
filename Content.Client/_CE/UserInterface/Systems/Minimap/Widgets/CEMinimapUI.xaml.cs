@@ -31,13 +31,18 @@ public sealed partial class CEMinimapUI : UIWidget
     private const float MinTilePixelSize = 1.5f;
     private const float MaxTilePixelSize = 12f;
     private const float ZoomStep = 1.25f; // multiplicative per wheel notch
-    private const float Padding = 6f;
 
     /// <summary>
     /// Per-instance zoom: how many minimap pixels (at UI scale 1) one world tile occupies.
     /// Adjusted by the mouse wheel while the cursor is over the widget.
     /// </summary>
     private float _tilePixelSize = DefaultTilePixelSize;
+
+    /// <summary>
+    /// Reused each frame to track rooms that are adjacent to a visited room but not yet visited.
+    /// Cleared at the start of every Draw() call to avoid per-frame allocations.
+    /// </summary>
+    private readonly HashSet<int> _previewRooms = new();
 
     private const string IconRsiPath = "/Textures/_CE/Interface/minimap_icons.rsi";
 
@@ -150,16 +155,16 @@ public sealed partial class CEMinimapUI : UIWidget
         // (revealed only on actual entry) — with the exception of treasure rooms, whose icon
         // is intentionally peeked-through so the player can spot them from a neighbour.
         var visited = minimap.VisitedRooms;
-        var preview = new HashSet<int>();
+        _previewRooms.Clear();
         foreach (var conn in dungeon.Connections)
         {
             if (visited.Contains(conn.RoomA) && !visited.Contains(conn.RoomB))
-                preview.Add(conn.RoomB);
+                _previewRooms.Add(conn.RoomB);
             else if (visited.Contains(conn.RoomB) && !visited.Contains(conn.RoomA))
-                preview.Add(conn.RoomA);
+                _previewRooms.Add(conn.RoomA);
         }
 
-        bool IsRoomVisible(int idx) => visited.Contains(idx) || preview.Contains(idx);
+        bool IsRoomVisible(int idx) => visited.Contains(idx) || _previewRooms.Contains(idx);
 
         // Connections (lines between centers of connected rooms). Only draw between visible rooms.
         foreach (var conn in dungeon.Connections)
@@ -228,7 +233,7 @@ public sealed partial class CEMinimapUI : UIWidget
             // Visible in visited rooms; in preview state shown only for treasure rooms,
             // since they're the only type revealed from a neighbour.
             var showIcon = isVisited
-                           || (preview.Contains(room.Index) && room.RoomType == CEProceduralRoomType.Treasure);
+                           || (_previewRooms.Contains(room.Index) && room.RoomType == CEProceduralRoomType.Treasure);
             var icon = showIcon ? GetIconForType(room.RoomType) : null;
             if (icon != null && clipped.HasValue)
             {
