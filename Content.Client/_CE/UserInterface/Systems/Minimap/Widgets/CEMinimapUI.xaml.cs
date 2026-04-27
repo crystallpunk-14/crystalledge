@@ -103,14 +103,17 @@ public sealed partial class CEMinimapUI : UIWidget
             _iconTreasure = treasure.Frame0;
     }
 
-    private Texture? GetIconForType(CEProceduralRoomType type) => type switch
+    private Texture? GetIconForType(CEProceduralRoomType type)
     {
-        CEProceduralRoomType.Blessing => _iconBlessing,
-        CEProceduralRoomType.Entrance => _iconEnter,
-        CEProceduralRoomType.Exit => _iconExit,
-        CEProceduralRoomType.Treasure => _iconTreasure,
-        _ => null,
-    };
+        return type switch
+        {
+            CEProceduralRoomType.Blessing => _iconBlessing,
+            CEProceduralRoomType.Entrance => _iconEnter,
+            CEProceduralRoomType.Exit => _iconExit,
+            CEProceduralRoomType.Treasure => _iconTreasure,
+            _ => null,
+        };
+    }
 
     protected override void Draw(DrawingHandleScreen handle)
     {
@@ -162,7 +165,7 @@ public sealed partial class CEMinimapUI : UIWidget
         foreach (var conn in dungeon.Connections)
         {
             if (conn.RoomA < 0 || conn.RoomA >= dungeon.Rooms.Count
-                || conn.RoomB < 0 || conn.RoomB >= dungeon.Rooms.Count)
+                               || conn.RoomB < 0 || conn.RoomB >= dungeon.Rooms.Count)
                 continue;
 
             if (!IsRoomVisible(conn.RoomA) || !IsRoomVisible(conn.RoomB))
@@ -171,8 +174,8 @@ public sealed partial class CEMinimapUI : UIWidget
             var a = dungeon.Rooms[conn.RoomA];
             var b = dungeon.Rooms[conn.RoomB];
 
-            var aCenter = (Vector2) a.Position + (Vector2) a.Size / 2f;
-            var bCenter = (Vector2) b.Position + (Vector2) b.Size / 2f;
+            var aCenter = a.Position + (Vector2)a.Size / 2f;
+            var bCenter = b.Position + (Vector2)b.Size / 2f;
 
             var aPx = WorldTileToWidget(aCenter, playerWorld, center, pixelsPerTile);
             var bPx = WorldTileToWidget(bCenter, playerWorld, center, pixelsPerTile);
@@ -191,18 +194,20 @@ public sealed partial class CEMinimapUI : UIWidget
             if (!IsRoomVisible(room.Index))
                 continue;
 
-            var minTile = (Vector2) room.Position;
-            var maxTile = minTile + (Vector2) room.Size;
+            var minTile = (Vector2)room.Position;
+            var maxTile = minTile + room.Size;
 
             var minPx = WorldTileToWidget(minTile, playerWorld, center, pixelsPerTile);
             var maxPx = WorldTileToWidget(maxTile, playerWorld, center, pixelsPerTile);
 
-            var roomBox = new UIBox2(MathF.Min(minPx.X, maxPx.X), MathF.Min(minPx.Y, maxPx.Y),
-                MathF.Max(minPx.X, maxPx.X), MathF.Max(minPx.Y, maxPx.Y));
+            var roomBox = new UIBox2(MathF.Min(minPx.X, maxPx.X),
+                MathF.Min(minPx.Y, maxPx.Y),
+                MathF.Max(minPx.X, maxPx.X),
+                MathF.Max(minPx.Y, maxPx.Y));
 
             // Cull rooms entirely outside the widget area.
             if (roomBox.Right < widgetRect.Left || roomBox.Left > widgetRect.Right
-                || roomBox.Bottom < widgetRect.Top || roomBox.Top > widgetRect.Bottom)
+                                                || roomBox.Bottom < widgetRect.Top || roomBox.Top > widgetRect.Bottom)
                 continue;
 
             var isVisited = visited.Contains(room.Index);
@@ -223,7 +228,7 @@ public sealed partial class CEMinimapUI : UIWidget
             // Visible in visited rooms; in preview state shown only for treasure rooms,
             // since they're the only type revealed from a neighbour.
             var showIcon = isVisited
-                || (preview.Contains(room.Index) && room.RoomType == CEProceduralRoomType.Treasure);
+                           || (preview.Contains(room.Index) && room.RoomType == CEProceduralRoomType.Treasure);
             var icon = showIcon ? GetIconForType(room.RoomType) : null;
             if (icon != null && clipped.HasValue)
             {
@@ -234,7 +239,8 @@ public sealed partial class CEMinimapUI : UIWidget
                 // Only render the icon when its center lies inside the widget rect — otherwise
                 // a partially-visible room would still spill its icon outside the minimap.
                 if (iconCenter.X >= widgetRect.Left && iconCenter.X <= widgetRect.Right
-                    && iconCenter.Y >= widgetRect.Top && iconCenter.Y <= widgetRect.Bottom)
+                                                    && iconCenter.Y >= widgetRect.Top &&
+                                                    iconCenter.Y <= widgetRect.Bottom)
                 {
                     // Scale icon: roughly 2x the previous size — cap to room size and to ~32 px at scale=1.
                     var maxIconPx = MathF.Min(roomBox.Width, roomBox.Height) * 1.7f;
@@ -258,7 +264,7 @@ public sealed partial class CEMinimapUI : UIWidget
     /// </summary>
     private bool TryFindDungeon(TransformComponent xform, out CEGeneratingProceduralDungeonComponent dungeon)
     {
-        dungeon = default!;
+        dungeon = null!;
 
         if (xform.MapUid is not { } currentMap)
             return false;
@@ -286,25 +292,10 @@ public sealed partial class CEMinimapUI : UIWidget
         return false;
     }
 
-    private static Vector2 TransformWorldPosition(TransformComponent xform)
-    {
-        // For map-rooted entities LocalPosition == map position; otherwise we want the
-        // grid-relative transform composed with the parent. The dungeon room coordinates
-        // are stored in world tiles, so we need world-space here.
-        var pos = xform.LocalPosition;
-        var current = xform.ParentUid;
-        var entMan = IoCManager.Resolve<IEntityManager>();
-        while (current.IsValid() && entMan.TryGetComponent<TransformComponent>(current, out var parent))
-        {
-            // Apply parent rotation.
-            var rotated = parent.LocalRotation.RotateVec(pos);
-            pos = rotated + parent.LocalPosition;
-            current = parent.ParentUid;
-        }
-        return pos;
-    }
-
-    private static Vector2 WorldTileToWidget(Vector2 worldTile, Vector2 playerWorldTile, Vector2 widgetCenter, float pixelsPerTile)
+    private static Vector2 WorldTileToWidget(Vector2 worldTile,
+        Vector2 playerWorldTile,
+        Vector2 widgetCenter,
+        float pixelsPerTile)
     {
         var delta = worldTile - playerWorldTile;
         // Y is flipped: world +Y is up, screen +Y is down.
@@ -332,10 +323,14 @@ public sealed partial class CEMinimapUI : UIWidget
         var dy = b.Y - a.Y;
         float t0 = 0f, t1 = 1f;
 
-        if (!ClipT(-dx, a.X - rect.Left, ref t0, ref t1)) return false;
-        if (!ClipT(dx, rect.Right - a.X, ref t0, ref t1)) return false;
-        if (!ClipT(-dy, a.Y - rect.Top, ref t0, ref t1)) return false;
-        if (!ClipT(dy, rect.Bottom - a.Y, ref t0, ref t1)) return false;
+        if (!ClipT(-dx, a.X - rect.Left, ref t0, ref t1))
+            return false;
+        if (!ClipT(dx, rect.Right - a.X, ref t0, ref t1))
+            return false;
+        if (!ClipT(-dy, a.Y - rect.Top, ref t0, ref t1))
+            return false;
+        if (!ClipT(dy, rect.Bottom - a.Y, ref t0, ref t1))
+            return false;
 
         var newA = new Vector2(a.X + t0 * dx, a.Y + t0 * dy);
         var newB = new Vector2(a.X + t1 * dx, a.Y + t1 * dy);
@@ -352,14 +347,19 @@ public sealed partial class CEMinimapUI : UIWidget
         var t = q / p;
         if (p < 0f)
         {
-            if (t > t1) return false;
-            if (t > t0) t0 = t;
+            if (t > t1)
+                return false;
+            if (t > t0)
+                t0 = t;
         }
         else
         {
-            if (t < t0) return false;
-            if (t < t1) t1 = t;
+            if (t < t0)
+                return false;
+            if (t < t1)
+                t1 = t;
         }
+
         return true;
     }
 
@@ -385,7 +385,7 @@ public sealed partial class CEMinimapUI : UIWidget
         var right = new Vector2(size * 0.7f, size * 0.6f);
 
         // Negative rotation because screen Y is flipped vs world Y, plus 180° to invert direction.
-        var rot = -(float) rotationRadians + MathF.PI;
+        var rot = -(float)rotationRadians + MathF.PI;
         var cos = MathF.Cos(rot);
         var sin = MathF.Sin(rot);
 

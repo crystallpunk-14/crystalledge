@@ -20,10 +20,7 @@ public sealed class CEMinimapSystem : EntitySystem
 
     private EntityQuery<CEGeneratingProceduralDungeonComponent> _dungeonQuery;
 
-    /// <summary>
-    /// Throttle the (relatively cheap) per-player evaluation: 4 Hz is plenty for a minimap.
-    /// </summary>
-    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
 
     private TimeSpan _nextUpdate;
 
@@ -87,10 +84,7 @@ public sealed class CEMinimapSystem : EntitySystem
 
         var newRoom = FindRoomAt(dungeon, tileX, tileY);
 
-        var changed = false;
-
-        if (newRoom != null && ent.Comp.VisitedRooms.Add(newRoom.Value))
-            changed = true;
+        var changed = newRoom != null && ent.Comp.VisitedRooms.Add(newRoom.Value);
 
         if (ent.Comp.CurrentRoom != newRoom)
         {
@@ -119,7 +113,7 @@ public sealed class CEMinimapSystem : EntitySystem
 
     private bool TryFindDungeon(EntityUid? mapUid, out CEGeneratingProceduralDungeonComponent dungeon)
     {
-        dungeon = default!;
+        dungeon = null!;
 
         if (mapUid is not { } currentMap)
             return false;

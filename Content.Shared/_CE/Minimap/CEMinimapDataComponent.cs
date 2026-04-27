@@ -25,4 +25,6 @@ public sealed partial class CEMinimapDataComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public int? CurrentRoom;
+
+    public override bool SendOnlyToOwner => true;
 }
