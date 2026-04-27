@@ -51,8 +51,7 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.OpaqueStorageWindow, OpaqueStorageWindowCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatEnableFancyBubbles, FancySpeechBubblesCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
-        // CrystallEdge: option intentionally hidden; storage windows are always free-floating.
-        // Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
+        Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
 
         Control.Initialize();
     }
