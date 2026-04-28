@@ -39,6 +39,15 @@
         - MobMask
         layer:
         - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        mask:
+        - LowImpassable
+        #layer:
+        #- LowImpassable
   - type: CEEphemeralCollectable
     collectVfx: CEEffectSoulCollect
     collectSound:

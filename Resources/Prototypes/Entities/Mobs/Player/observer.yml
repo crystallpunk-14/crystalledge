@@ -30,6 +30,7 @@
   #CrystallEdge
   - type: CEZPhysics
     autoStep: false
+  - type: CEZLevelGhostMover
 
 # shared parent between aghosts, replay spectators and normal observers
 - type: entity

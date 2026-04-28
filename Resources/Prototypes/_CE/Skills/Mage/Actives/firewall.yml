@@ -152,7 +152,7 @@
       maxStacks: 10
   - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3
+    firstDelay: 0.5
     effects:
     - !type:AreaEffect
       range: 1.5

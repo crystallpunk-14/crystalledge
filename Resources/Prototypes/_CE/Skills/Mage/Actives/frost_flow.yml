@@ -140,7 +140,7 @@
         hard: false
   - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3 # Important to not affect caster, freeze and damage it immediately on spawn
+    firstDelay: 0.5 # Important to not affect caster, freeze and damage it immediately on spawn
     effects:
     - !type:AreaEffect
       affectCaster: true

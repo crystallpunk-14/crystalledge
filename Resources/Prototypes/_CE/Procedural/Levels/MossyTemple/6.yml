@@ -1,0 +1,57 @@
+﻿- type: dungeonLevel
+  id: MossyTemple6_Pvp
+  parent:
+  - BaseMossyTemplePostProcessDangerous
+  name: ce-dungeon-mossy-dungeon-6-name
+  uiPosition: 14,1
+  exits:
+    1: Arena
+  config:
+    !type:CEProceduralConfig
+    generalCount:
+      min: 15
+      max: 20
+    entranceCount:
+      min: 5
+      max: 5
+    blessingCount:
+      min: 0
+      max: 0
+    treasureCount:
+      min: 1
+      max: 1
+    cycleCount:
+      min: 10
+      max: 10
+  postProcess:
+  - !type:CEMobBudgetSpawnPostProcess
+    budget: 80
+    excludedRoomTypes:
+    - Entrance
+    entries:
+    - proto: CEMobSlimeFire
+      cost: 3
+    - proto: CEMobFlem
+      cost: 3
+    - proto: CEMobFlem2
+      cost: 3
+    - proto: CEMobFlem3
+      cost: 5
+    - proto: CEMobFireConstruct
+      cost: 10
+    - proto: CEMobSlimeFireBig
+      cost: 8
+    - proto: CEMobSlimeWaterBig
+      cost: 4
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHerbs
+    budget: 5
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleKeys
+    budget: 1
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHealing
+    budget: 30
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleMana
+    budget: 10

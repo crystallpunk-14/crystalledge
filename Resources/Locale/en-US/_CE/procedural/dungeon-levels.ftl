@@ -18,3 +18,5 @@ ce-dungeon-mossy-dungeon-4-name = Mossy Dungeons - IV
 
 ce-dungeon-arena-name = Arena of the Fallen
 ce-dungeon-arena-desc = You've reached the final stage. Prove your strength.
+
+ce-dungeon-mossy-dungeon-6-name = Infinity maze

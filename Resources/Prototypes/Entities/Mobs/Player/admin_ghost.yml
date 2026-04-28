@@ -114,7 +114,6 @@
   - type: CEShowMobHealth
   - type: CEShowMobMana
   - type: CEShowMobStamina
-  - type: CEZLevelGhostMover
   - type: CEAdminDungeonOverview
   - type: UserInterface
     interfaces:

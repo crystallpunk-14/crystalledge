@@ -18,3 +18,5 @@ ce-dungeon-mossy-dungeon-4-name = Заросшие подземелья - IV
 
 ce-dungeon-arena-name = Арена павших
 ce-dungeon-arena-desc = Вы достигли финала. Докажите свою силу.
+
+ce-dungeon-mossy-dungeon-6-name = Бесконечные коридоры
