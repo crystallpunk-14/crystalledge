@@ -129,10 +129,6 @@
     animations:
       Primary:
       - anim: BigSlimeWaterAttack
-  - type: CEContactDamage
-    damage:
-      types:
-        Physical: 10
 
 - type: entityEffectAnimation
   id: BigSlimeWaterAttack

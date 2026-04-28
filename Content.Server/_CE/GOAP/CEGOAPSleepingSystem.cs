@@ -22,7 +22,6 @@ public sealed class CEGOAPSleepingSystem : EntitySystem
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CEGOAPAlarmSystem _alarm = default!;
 
     /// <summary>
     /// How often proximity checks run.
@@ -36,9 +35,6 @@ public sealed class CEGOAPSleepingSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        // Set wake delay on component add
-        SubscribeLocalEvent<CEGOAPSleepingComponent, ComponentStartup>(OnSleepingStartup);
 
         // Wake on damage
         SubscribeLocalEvent<CEGOAPSleepingComponent, CEDamageChangedEvent>(OnDamageChanged);
@@ -77,11 +73,6 @@ public sealed class CEGOAPSleepingSystem : EntitySystem
         }
     }
 
-    private void OnSleepingStartup(Entity<CEGOAPSleepingComponent> ent, ref ComponentStartup args)
-    {
-        ent.Comp.WakeAt = _timing.CurTime + ent.Comp.WakeDelay;
-    }
-
     private void OnDamageChanged(Entity<CEGOAPSleepingComponent> ent, ref CEDamageChangedEvent args)
     {
         if (args.DamageDelta <= 0)
@@ -110,15 +101,9 @@ public sealed class CEGOAPSleepingSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        if (_timing.CurTime < ent.Comp.WakeAt)
-            return;
-
         // Must use RemComp (not Deferred) so HasComp check in OnCheckAwake
         // sees the component as absent when UpdateAwakeStatus runs immediately after.
         RemComp<CEGOAPSleepingComponent>(ent);
-
-        // Play the alert VFX/sound now that the mob is truly awake, if it already has a target.
-        _alarm.TryPlayAlarmOnWake(ent);
 
         // Re-evaluate GOAP awake status — with the sleeping component removed,
         // the normal wake check in CEGOAPSystem will now succeed.

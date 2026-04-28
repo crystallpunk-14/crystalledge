@@ -92,10 +92,6 @@
     animations:
       Primary:
       - anim: MobTestAttack
-  - type: CEContactDamage
-    damage:
-      types:
-        Physical: 5
 
 
 - type: entityEffectAnimation

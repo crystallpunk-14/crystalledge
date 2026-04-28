@@ -89,7 +89,3 @@
   - type: CEArmor
     flat:
       Cold: 25
-  - type: CEContactDamage
-    damage:
-      types:
-        Physical: 10

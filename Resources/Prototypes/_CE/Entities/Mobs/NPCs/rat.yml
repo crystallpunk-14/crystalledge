@@ -103,10 +103,6 @@
     animations:
       Primary:
       - anim: RatBite
-  - type: CEContactDamage
-    damage:
-      types:
-        Physical: 5
 
 - type: entity
   id: CERatBiteEffectTelegraphy
