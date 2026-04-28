@@ -47,7 +47,7 @@
       scaleAnimation:
       - time: 0.0
         scale: 1, -1
-    0.15:
+    0.13:
     - !type:WeaponEffectSlot
       slot: OnHit
 
@@ -162,6 +162,6 @@
         scale: 1, -1
     - !type:Dash
       distance: 1
-    0.05:
+    0.15:
     - !type:WeaponEffectSlot
       slot: OnHeavyHit

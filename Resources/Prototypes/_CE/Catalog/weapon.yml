@@ -21,6 +21,7 @@
     - id: CEWeaponSpearSoulCatcher
     - id: CEWeaponMagicStaffWater
     - id: CEWeaponDaggerPurification
+    - id: CEWeaponSkimitarMolten
 
 - type: entityTable
   id: CERandomWeapon

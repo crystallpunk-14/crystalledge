@@ -29,7 +29,7 @@
 - type: entityEffectAnimation
   id: AnimationFirewall
   movementSpeed: 0.3
-  duration: 1.8
+  duration: 0.7
   lockRotation: true
   events:
     0:
@@ -40,7 +40,7 @@
         offset: 0, 0.5
       - time: 1.7
         offset: 0, -1
-    1.7:
+    0.5:
     - !type:ShootProjectile
       projectileSpeed: 8
       prototype: CEProjectileFirewall
