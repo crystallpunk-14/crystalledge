@@ -4,11 +4,6 @@
   name: water splash
   description: A splash of water upon impact.
   components:
-  - type: Sprite
-    sprite: _CE/Effects/water_tile_impact.rsi
-    snapCardinals: true
-    layers:
-    - state: effect
   - type: CETileEffect
     maxStacks: 10
     minDecayInterval: 10
@@ -17,12 +12,29 @@
     contactEffects:
       CEStatusEffectWet: 1
   - type: CETileEffectVFX
+    onAppliedVfx: CEWaterImpactEffect
     onAppliedSound:
       path: /Audio/Effects/Fluids/splat.ogg
   - type: CETileEffectNeutralization
     neutralizes:
     - CETileEffectFire
     vfx: CESteamEffect
+  - type: TimedDespawn
+    lifetime: 1.0
+
+- type: entity
+  id: CEWaterImpactEffect
+  name: water impact
+  suffix: VFX
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/water_tile_impact.rsi
+    snapCardinals: true
+    layers:
+    - state: effect
+    drawdepth: Effects
   - type: TimedDespawn
     lifetime: 1.0
 

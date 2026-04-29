@@ -43,6 +43,7 @@
   - type: CETileEffectNeutralization
     neutralizes:
     - CETileEffectFreeze
+    - CETileEffectWater
     vfx: CESteamEffect
 
 

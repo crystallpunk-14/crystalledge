@@ -1,4 +1,5 @@
 using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.TileEffects.EffectTransform;
 using Content.Shared.Examine;
 using Content.Shared.Prototypes;
 using Robust.Shared.Audio.Systems;
@@ -391,10 +392,13 @@ public sealed partial class CETileEffectSystem : EntitySystem
     private void RaiseAffectedByTileEffect(Entity<CETileEffectComponent> tileEffect)
     {
         var coords = _transform.GetMapCoordinates(tileEffect);
-        var entities = _lookup.GetEntitiesInRange<CEDamageableComponent>(coords, 0.5f, LookupFlags.Uncontained);
+        var entities = _lookup.GetEntitiesInRange(coords, 0.5f, LookupFlags.Uncontained);
         foreach (var entity in entities)
         {
-            if (entity.Owner == tileEffect.Owner)
+            if (entity == tileEffect.Owner)
+                continue;
+
+            if (!HasComp<CEDamageableComponent>(entity) && !HasComp<CETileEffectComponent>(entity) && !HasComp<CETileEffectTransformComponent>(entity))
                 continue;
 
             var ev = new CEAffectedByTileEffectEvent(tileEffect, entity);
