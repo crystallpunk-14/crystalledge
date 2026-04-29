@@ -7,6 +7,7 @@ namespace Content.Shared._CE.Water;
 /// Placed on entities that can become wet from water contact.
 /// Subscribes to <see cref="CEWettedEvent"/> to apply wet stacks.
 /// </summary>
+[Obsolete]
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEWettableComponent : Component
 {

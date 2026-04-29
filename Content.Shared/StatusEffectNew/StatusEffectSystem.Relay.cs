@@ -1,9 +1,7 @@
 using System.Linq;
 using Content.Shared._CE.DebuffCleaning;
 using Content.Shared._CE.EntityEffect.Effects;
-using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared._CE.DivineShield;
-using Content.Shared._CE.Fire;
 using Content.Shared._CE.Frost;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
@@ -12,7 +10,6 @@ using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Body.Events;
 using Content.Shared.Damage.Events;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Events;
 using Content.Shared.Movement.Events;
@@ -52,14 +49,12 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptStealManaEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEHealEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEHealedEvent>(RelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, CEStackAddAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CECleanedDebuffsEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CESourceCleanedDebuffsEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, AttackAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, UseAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ThrowAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEFreezeEntityAttemptEvent>(RefRelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, CEIgniteEntityAttemptEvent>(RefRelayStatusEffectEvent);
         //CrystallEdge zone end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);

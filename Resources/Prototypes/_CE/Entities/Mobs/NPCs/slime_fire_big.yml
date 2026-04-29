@@ -30,7 +30,8 @@
         prob: 0.25
   - type: CEDestructionEffect
     effects:
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
@@ -115,7 +116,8 @@
     spriteRotation: -90
     effectSlots:
       OnHit:
-      - !type:IgniteArea
+      - !type:CETileAffectArea
+        tileEffect: CETileEffectFire
         effectTarget: User
         radius: 2
         maxStacks: 5

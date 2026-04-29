@@ -6,6 +6,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._CE.TileEffects;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[EntityCategory("StatusEffects")]
 public sealed partial class CETileEffectComponent : Component
 {
     /// <summary>
@@ -60,17 +61,11 @@ public sealed partial class CETileEffectComponent : Component
     /// Stack threshold for medium visual appearance.
     /// </summary>
     [DataField]
-    public int MediumThreshold = 5;
+    public int MediumThreshold = 3;
 
     /// <summary>
     /// Stack threshold for high visual appearance.
     /// </summary>
     [DataField]
-    public int HighThreshold = 10;
-
-    /// <summary>
-    /// Status effects applied to entities on contact. Values are base stack amounts multiplied by the current tile Stacks.
-    /// </summary>
-    [DataField]
-    public Dictionary<EntProtoId, int> ContactEffects = new();
+    public int HighThreshold = 6;
 }

@@ -2,14 +2,14 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.StatusEffects.Core.Components;
+namespace Content.Shared._CE.TileEffects;
 
 /// <summary>
 /// Attach to a status-effect entity prototype to spawn VFX / play audio
 /// on key lifecycle moments: first applied, removed, stacks gained, stacks lost.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-public sealed partial class CEStatusEffectVFXComponent : Component
+public sealed partial class CETileEffectVFXComponent : Component
 {
     [DataField]
     public EntProtoId? OnAppliedVfx;

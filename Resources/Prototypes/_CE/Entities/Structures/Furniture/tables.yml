@@ -50,8 +50,6 @@
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepWood
-  - type: CEFlammable
-    stackDelta: 1
 
 - type: entity
   parent: CEWoodenTableBase

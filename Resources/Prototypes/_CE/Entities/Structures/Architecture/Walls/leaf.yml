@@ -60,5 +60,3 @@
     destroyThreshold: 50
     destroySound:
       collection: CEGrassGathering
-  - type: CEFlammable
-    stackDelta: 3

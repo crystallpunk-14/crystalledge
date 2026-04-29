@@ -30,7 +30,8 @@
       amount: 2
   - type: CEDestructionEffect
     effects:
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 1
       maxStacks: 3
 

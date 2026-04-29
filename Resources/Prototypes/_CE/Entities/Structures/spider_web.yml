@@ -47,5 +47,3 @@
     destroySound:
       path:
         "/Audio/Weapons/slash.ogg"
-  - type: CEFlammable
-    stackDelta: 2

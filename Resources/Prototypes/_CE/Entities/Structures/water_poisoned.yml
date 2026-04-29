@@ -44,8 +44,9 @@
   id: CEIcePoisoned
   suffix: Poisoned
   components:
-  - type: CEMeltTransform
-    meltsInto: CEWaterPoisoned
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterPoisoned
 
 - type: entity
   parent: CEIcePoisoned
@@ -53,5 +54,6 @@
   suffix: Poisoned Frozen Stream
   description: A frozen stream, the current trapped under ice.
   components:
-  - type: CEMeltTransform
-    meltsInto: CEWaterPoisonedMoving
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterPoisonedMoving

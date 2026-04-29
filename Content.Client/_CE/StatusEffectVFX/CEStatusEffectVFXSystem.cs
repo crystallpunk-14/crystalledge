@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffectVFX;
+using Content.Shared._CE.StatusEffects.Core;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;

@@ -44,7 +44,9 @@
         volume: 8
   - type: CETileDistortion
     intensity: 0.4
-  - type: CEPreventIgniteTile
+  - type: CEPreventTileEffect
+    blocks:
+    - CETileEffectFire
   - type: CEEntityEffectOnCollide
     effects:
     - !type:ApplyStatusEffectStack
@@ -140,8 +142,9 @@
   - type: FrictionContacts
   - type: TileFrictionModifier
     modifier: 0.05
-  - type: CEMeltTransform
-    meltsInto: CEWater
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWater
 
 - type: entity
   parent: CEIce
@@ -149,6 +152,7 @@
   suffix: Frozen Stream
   description: A frozen stream, the current trapped under ice.
   components:
-  - type: CEMeltTransform
-    meltsInto: CEWaterMoving
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterMoving
 

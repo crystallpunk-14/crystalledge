@@ -1,5 +1,3 @@
-using Content.Shared._CE.EntityEffect.Effects;
-using Content.Shared._CE.Fire;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
@@ -15,7 +13,6 @@ namespace Content.Shared._CE.Water;
 
 public abstract class CESharedWaterSystem : EntitySystem
 {
-    [Dependency] protected readonly CEFireSystem Fire = default!;
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
@@ -30,13 +27,9 @@ public abstract class CESharedWaterSystem : EntitySystem
     private readonly EntProtoId _waterImpactEffect = "CEWaterTileImpactEffect";
     private readonly SoundSpecifier _waterSplashSound = new SoundPathSpecifier("/Audio/Effects/Fluids/splat.ogg");
 
-    private EntityQuery<CEFireComponent> _fireQuery;
-
     public override void Initialize()
     {
         base.Initialize();
-
-        _fireQuery = GetEntityQuery<CEFireComponent>();
 
         SubscribeLocalEvent<CEWettableComponent, CEWettedEvent>(OnWettableWetted);
     }
@@ -101,15 +94,6 @@ public abstract class CESharedWaterSystem : EntitySystem
             return;
         stack = attemptEv.Stacks;
 
-        // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
-        if (TryComp<CEWettableComponent>(target, out var wettable))
-        {
-            var stackAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, wettable.StatusEffect, stack, duration);
-            RaiseLocalEvent(target, stackAttempt);
-            if (stackAttempt.Cancelled)
-                return;
-        }
-
         var wettedEv = new CEWettedEvent(stack, maxStack, duration);
         RaiseLocalEvent(target, ref wettedEv);
     }
@@ -131,22 +115,10 @@ public abstract class CESharedWaterSystem : EntitySystem
         if (!_mapSystem.TryGetTileRef(grid.Owner, grid.Comp, coordinates.Position, out var tileRef) || tileRef.Tile.IsEmpty)
             return;
 
-        // Extinguish any fire tiles on this tile.
-        var anchored = _mapSystem.GetAnchoredEntities((grid, grid.Comp), coordinates);
-        foreach (var ent in anchored)
-        {
-            if (_fireQuery.TryComp(ent, out var fireComp))
-            {
-                Fire.SpawnSteamEffect(coordinates);
-                QueueDel(ent);
-            }
-        }
-
         // Wet all entities on the tile.
         var entities = _lookup.GetEntitiesInRange(coordinates, 0.5f, LookupFlags.Uncontained);
         foreach (var ent in entities)
         {
-            Fire.ExtinguishEntity(new Entity<CEFlammableComponent?>(ent, null));
             WetEntity(ent, stacks, maxStacks, duration);
         }
 
@@ -212,7 +184,6 @@ public abstract class CESharedWaterSystem : EntitySystem
 /// <summary>
 /// Raised as a directed event on the target entity before wet stacks are applied.
 /// Handlers can modify <see cref="Stacks"/> or set <see cref="Cancelled"/> to prevent wetting.
-/// Handled by <c>CEFlammableComponent</c> for fire neutralization.
 /// </summary>
 [ByRefEvent]
 [Obsolete("We need to transition to a more modular system.")]

@@ -147,7 +147,8 @@
       damage:
         types:
           Fire: 20
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 3
       maxStacks: 10
   - type: CEEntityEffectSpawner
@@ -164,7 +165,8 @@
           types:
             Fire: 10
 
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 1.5
       maxStacks: 6
       fallOffFactor: 1

@@ -1,5 +1,3 @@
-using Content.Shared._CE.EntityEffect.Effects;
-using Content.Shared._CE.Fire;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
@@ -16,7 +14,6 @@ namespace Content.Shared._CE.Frost;
 public sealed class CEFrostSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
-    [Dependency] private readonly CEFireSystem _fire = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
@@ -35,49 +32,6 @@ public sealed class CEFrostSystem : EntitySystem
 
         SubscribeLocalEvent<CEFreezeTransformComponent, CEFreezedEvent>(OnFreezingFreezed);
         SubscribeLocalEvent<CEFreezableComponent, CEFreezedEvent>(OnFreezableFreezed);
-        SubscribeLocalEvent<CEFreezableComponent, CEIgniteEntityAttemptEvent>(OnIgniteEntityAttempt);
-
-        // Tile attempt: fire entities block frost tile placement (fire is extinguished).
-        SubscribeLocalEvent<CEFireComponent, CEFreezeTileAttemptEvent>(OnFireFreezeTileAttempt);
-    }
-
-    /// <summary>
-    /// Frost neutralizes fire: when something tries to ignite a frosted entity,
-    /// cold stacks cancel out an equal number of incoming fire stacks.
-    /// </summary>
-    private void OnIgniteEntityAttempt(Entity<CEFreezableComponent> ent, ref CEIgniteEntityAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        var frostStacks = _stack.GetStack(ent, ent.Comp.StatusEffect);
-        if (frostStacks <= 0)
-            return;
-
-        var neutralized = Math.Min(frostStacks, args.Stacks);
-        _stack.TryRemoveStack(ent, ent.Comp.StatusEffect, neutralized);
-        args.Stacks -= neutralized;
-
-        _fire.SpawnSteamEffect(ent);
-
-        if (args.Stacks <= 0)
-            args.Cancelled = true;
-    }
-
-    /// <summary>
-    /// When frost tile is about to be placed on a tile with a fire entity,
-    /// the fire is extinguished and frost placement is cancelled.
-    /// </summary>
-    private void OnFireFreezeTileAttempt(Entity<CEFireComponent> ent, ref CEFreezeTileAttemptEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        if (!_net.IsClient)
-            Del(ent);
-
-        args.Cancelled = true;
-        _fire.SpawnSteamEffect(args.Coordinates);
     }
 
     private void OnFreezableFreezed(Entity<CEFreezableComponent> ent, ref CEFreezedEvent args)
@@ -135,15 +89,6 @@ public sealed class CEFrostSystem : EntitySystem
         if (attemptEv.Cancelled)
             return;
         stack = attemptEv.Stacks;
-
-        // Raise attempt event on TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
-        if (TryComp<CEFreezableComponent>(target, out var freezable))
-        {
-            var stackAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, freezable.StatusEffect, stack, duration);
-            RaiseLocalEvent(target, stackAttempt);
-            if (stackAttempt.Cancelled)
-                return;
-        }
 
         var freezedEv = new CEFreezedEvent(stack, maxStack, duration);
         RaiseLocalEvent(target, ref freezedEv);
@@ -252,7 +197,7 @@ public record struct CEFreezeEntityAttemptEvent(EntityUid Target, int Stacks, bo
 /// <summary>
 /// Raised as a directed event on each anchored entity on a tile before frost is placed.
 /// Handlers can set <see cref="Cancelled"/> to block frost tile placement.
-/// Handled by <c>CEFireComponent</c> (fire extinguishing).
+/// Handled by <c>CETileEffectComponent</c> (fire tile extinguishing).
 /// </summary>
 [ByRefEvent]
 public record struct CEFreezeTileAttemptEvent(MapCoordinates Coordinates, bool Cancelled);

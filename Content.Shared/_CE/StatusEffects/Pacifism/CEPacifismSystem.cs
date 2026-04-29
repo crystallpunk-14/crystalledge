@@ -2,6 +2,7 @@ using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Procedural.Components;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Mind.Components;
 using Content.Shared.Prototypes;
 using Content.Shared.StatusEffectNew;

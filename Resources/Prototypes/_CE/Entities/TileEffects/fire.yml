@@ -1,0 +1,58 @@
+- type: entity
+  id: CETileEffectFire
+  parent: CETileEffectBase
+  name: fire
+  description: A scorching hot flame. You definitely shouldn't touch it just like that.
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/fire_tile.rsi
+    layers:
+    - state: low_1
+      shader: unshaded
+      map: [ "fire" ]
+  - type: AmbientSound
+    enabled: true
+    volume: -15
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg #TODO more aggressive sound
+  - type: TileEmission
+    color: "#ff4800"
+  - type: CETileEffect
+    maxStacks: 10
+    minDecayInterval: 1
+    maxDecayInterval: 3
+  - type: CETileEffectContactEffects
+    contactEffects: 
+      CEStatusEffectFire: 1
+  - type: CETileEffectVFX
+    onAppliedVFX: CEFireImpactEffect
+    onAppliedSound:
+      path: /Audio/_CE/Effects/fire_whoosh.ogg
+    onStacksAddedVFX: CEFireImpactEffect
+    onStacksAddedSound:
+      path: /Audio/_CE/Effects/fire_whoosh.ogg
+
+
+- type: entity
+  id: CEFireImpactEffect
+  name: fire impact
+  description: A burst of fire upon impact.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/fire_tile_impact.rsi
+    snapCardinals: true
+    layers:
+    - state: effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 2.0
+  - type: PointLight
+    color: "#f1ff27"
+    radius: 2.5
+    energy: 2.5
+    enabled: true
+  - type: LightFade
+    duration: 1.0

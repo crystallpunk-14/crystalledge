@@ -1,0 +1,34 @@
+- type: entity
+  id: CETileEffectBase
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Clickable
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 1000
+        mask:
+          - ItemMask
+        layer:
+          - SlipLayer
+  - type: Transform
+    anchored: true
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CETileEffectVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }

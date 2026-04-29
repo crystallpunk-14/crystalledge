@@ -12,8 +12,6 @@
   - type: CEArmor
     flat:
       Physical: 5
-  - type: CEFlammable
-    stackDelta: 2
 
 - type: entity
   id: CEWallWooden

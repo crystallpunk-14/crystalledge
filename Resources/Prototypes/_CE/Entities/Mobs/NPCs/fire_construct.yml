@@ -137,7 +137,8 @@
     - !type:SpawnEntity
       spawns:
       - CEEffectPotionAlchemicalFire
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 8
@@ -228,7 +229,8 @@
       damage:
         types:
           Fire: 5
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 2
       maxStacks: 5
     - !type:SpawnEntity

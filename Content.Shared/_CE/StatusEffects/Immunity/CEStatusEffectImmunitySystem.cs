@@ -1,4 +1,5 @@
 using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._CE.StatusEffects.Immunity;

@@ -1,4 +1,3 @@
-using Content.Shared._CE.Fire;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared._CE.Water;
@@ -9,7 +8,6 @@ namespace Content.Shared._CE.Skill.Skills.HealingWaters;
 public sealed partial class CEHealingWatersStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly CESharedWaterSystem _water = default!;
-    [Dependency] private readonly CEFireSystem _fire = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
 
     public override void Initialize()
@@ -34,6 +32,5 @@ public sealed partial class CEHealingWatersStatusEffectSystem : EntitySystem
         args.Args.HealAmount += count;
 
         _status.TryRemoveStatusEffect(args.Args.Target, wettableComp.StatusEffect);
-        _fire.SpawnSteamEffect(args.Args.Target);
     }
 }

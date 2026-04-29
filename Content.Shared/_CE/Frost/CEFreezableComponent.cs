@@ -7,6 +7,7 @@ namespace Content.Shared._CE.Frost;
 /// Placed on entities that can be slowed by frost.
 /// Subscribes to <see cref="CEFreezedEvent"/> to apply cold slowdown stacks.
 /// </summary>
+[Obsolete]
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEFreezableComponent : Component
 {
