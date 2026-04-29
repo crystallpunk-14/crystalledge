@@ -1,3 +1,4 @@
+using Content.Shared._CE.StatusEffects.Core;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 

@@ -1,5 +1,6 @@
 using Content.Shared._CE.DamageStatusEffect.Components;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew.Components;
 

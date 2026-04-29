@@ -1,5 +1,6 @@
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.Procedural.MapEffects;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Robust.Shared.Prototypes;
 

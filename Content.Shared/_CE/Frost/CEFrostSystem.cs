@@ -1,5 +1,6 @@
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Fire;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Examine;
 using Content.Shared.StatusEffectNew;

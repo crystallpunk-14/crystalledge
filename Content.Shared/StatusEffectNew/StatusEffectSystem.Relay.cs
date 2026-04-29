@@ -9,6 +9,7 @@ using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.MeleeWeapon;
 using Content.Shared._CE.Stamina;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Body.Events;
 using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;

@@ -1,3 +1,4 @@
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;

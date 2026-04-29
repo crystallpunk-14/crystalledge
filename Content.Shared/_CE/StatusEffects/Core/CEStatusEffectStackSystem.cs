@@ -1,3 +1,4 @@
+using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Alert;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -6,7 +7,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CE.StatusEffectStacks;
+namespace Content.Shared._CE.StatusEffects.Core;
 
 public sealed class CEStatusEffectStackSystem : EntitySystem
 {

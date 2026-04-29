@@ -1,4 +1,5 @@
 using Content.Shared._CE.Frost;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared._CE.Water;
 using Content.Shared.Examine;
