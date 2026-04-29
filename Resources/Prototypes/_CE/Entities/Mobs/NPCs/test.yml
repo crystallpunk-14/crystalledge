@@ -15,7 +15,7 @@
       params:
         variation: 0.1
   - type: CEDestructible
-    destroyThreshold: 30
+    destroyThreshold: 40
   - type: CEGOAP
     goals:
     # Single stupid goal - kill enemies
@@ -80,15 +80,16 @@
     layers:
     - state: base
   - type: MovementSpeedModifier
-    baseSprintSpeed: 3
+    baseSprintSpeed: 5
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
       OnHit:
       - !type:ShootProjectile
-        projectileSpeed: 5
+        projectileSpeed: 10
         prototype: CEProjectileTestMob
-        projectileCount: 1
+        projectileCount: 6
+        spread: 10
     animations:
       Primary:
       - anim: MobTestAttack
@@ -96,8 +97,8 @@
 
 - type: entityEffectAnimation
   id: MobTestAttack
-  movementSpeed: 0.7
-  duration: 2
+  movementSpeed: 0.2
+  duration: 1
   events:
     0:
     - !type:UsedEntityAnimation
@@ -163,4 +164,4 @@
       attackType: Ranged
       damage:
         types:
-          Physical: 10
+          Physical: 5

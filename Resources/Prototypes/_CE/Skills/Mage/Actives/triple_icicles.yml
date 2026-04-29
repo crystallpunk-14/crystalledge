@@ -141,4 +141,5 @@
             Cold: 10
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectColdSlowdown
-        amount: 3
+        amount: 2
+        max: 5

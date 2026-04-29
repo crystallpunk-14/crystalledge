@@ -154,5 +154,5 @@
     - !type:CETileAffectArea
       tileEffect: CETileEffectFreeze
       radius: 1.5
-      maxStacks: 10
+      maxStacks: 5
       fallOffFactor: 1
