@@ -6,7 +6,7 @@ namespace Content.Shared._CE.TileEffects.Core;
 /// When added to an entity, spawns a tile effect at that entity's location on <see cref="MapInitEvent"/>.
 /// Useful for placing persistent tile effects via YAML map or entity prototypes.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, EntityCategory("Spawner")]
 public sealed partial class CETileEffectSpawnerComponent : Component
 {
     /// <summary>
