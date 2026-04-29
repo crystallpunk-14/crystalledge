@@ -1,3 +1,4 @@
+using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 
@@ -46,12 +47,12 @@ public sealed class CETileEffectVFXSystem : EntitySystem
 
         var pos = Transform(ent).Coordinates;
 
-        if (args.newStack > args.oldStack)
+        if (args.NewStack > args.OldStack)
         {
             Spawn(ent.Comp.OnStacksAddedVfx, pos);
             _audio.PlayPvs(ent.Comp.OnStacksAddedSound, pos);
         }
-        else if (args.newStack < args.oldStack)
+        else if (args.NewStack < args.OldStack)
         {
             Spawn(ent.Comp.OnStacksRemovedVfx, pos);
             _audio.PlayPvs(ent.Comp.OnStacksRemovedSound, pos);

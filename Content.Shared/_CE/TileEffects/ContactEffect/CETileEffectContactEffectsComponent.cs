@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.ContactEffect;
 
 /// <summary>
 /// Attach to a tile effect entity to apply status effects to entities that touch or are ticked by this tile effect.

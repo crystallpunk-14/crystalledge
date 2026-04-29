@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+using Content.Shared.Examine;
 using Content.Shared.Prototypes;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -8,11 +8,10 @@ using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.Core;
 
 public sealed partial class CETileEffectSystem : EntitySystem
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
@@ -23,6 +22,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
 
     private EntityQuery<CETileEffectComponent> _tileQuery;
 
@@ -37,9 +37,33 @@ public sealed partial class CETileEffectSystem : EntitySystem
         SubscribeLocalEvent<CETileEffectComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CETileEffectComponent, StartCollideEvent>(OnCollide);
 
-        InitializeContactEffects();
-        InitializeTransform();
-        InitializePreventTileEffect();
+        SubscribeLocalEvent<CEPreventTileEffectComponent, CEAttemptSpawnTileEffectEvent>(OnPreventTileEffect);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (_net.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<CETileEffectComponent>();
+        while (query.MoveNext(out var uid, out var effect))
+        {
+            if (_timing.CurTime < effect.NextUpdate)
+                continue;
+
+            effect.NextUpdate = _timing.CurTime + TimeSpan.FromSeconds(
+                _random.NextFloat(effect.MinDecayInterval, effect.MaxDecayInterval));
+
+            TryAddStack((uid, effect), effect.StackDelta);
+
+            if (TerminatingOrDeleted(uid))
+                continue;
+
+            // Affect entities on this tile each decay tick.
+            RaiseAffectedByTileEffect((uid, effect));
+        }
     }
 
     private void OnSpawnerInit(Entity<CETileEffectSpawnerComponent> ent, ref MapInitEvent args)
@@ -64,80 +88,14 @@ public sealed partial class CETileEffectSystem : EntitySystem
         RaiseAffectedByTileEffect(ent);
     }
 
-    /// <summary>
-    /// Attempts to spawn or add stacks to a tile effect entity at the given coordinates.
-    /// </summary>
-    /// <param name="tileEffect">Entity prototype to spawn. Must have <see cref="CETileEffectComponent"/>.</param>
-    /// <param name="source">Optional source entity. Can cancel via <see cref="CEAttemptApplyTileEffectEvent"/>.</param>
-    /// <param name="coords">Where to apply the tile effect.</param>
-    /// <param name="amount">How many stacks to apply. Must be positive.</param>
-    /// <param name="max">Per-call stack cap (0 = use the component's MaxStacks).</param>
-    public bool TryApplyTileEffect(EntProtoId tileEffect, EntityUid? source, EntityCoordinates coords, int amount, int max = 0)
+    private void OnCollide(Entity<CETileEffectComponent> ent, ref StartCollideEvent args)
     {
         if (_net.IsClient)
-            return false;
+            return;
 
-        if (amount <= 0)
-            return false;
-
-        // Validate that the prototype actually has CETileEffectComponent.
-        if (!_protoManager.TryIndex<EntityPrototype>(tileEffect, out var proto))
-            return false;
-
-        if (!proto.HasComponent<CETileEffectComponent>(_compFactory))
-            return false;
-
-        // Allow the source entity to cancel the attempt.
-        if (source is { } sourceUid)
-        {
-            var sourceAttempt = new CEAttemptApplyTileEffectEvent(tileEffect, amount);
-            RaiseLocalEvent(sourceUid, ref sourceAttempt);
-            if (sourceAttempt.Cancelled)
-                return false;
-        }
-
-        var mapCoords = _transform.ToMapCoordinates(coords);
-
-        if (!_mapManager.TryFindGridAt(mapCoords, out var gridUid, out var grid))
-            return false;
-
-        if (!_mapSystem.TryGetTileRef(gridUid, grid, mapCoords.Position, out var tileRef) || tileRef.Tile.IsEmpty)
-            return false;
-
-        // Raise CEAttemptSpawnTileEffectEvent on each anchored entity so they can block the effect.
-        var spawnAttempt = new CEAttemptSpawnTileEffectEvent(tileEffect, coords, amount);
-        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords))
-        {
-            RaiseLocalEvent(anchEnt, ref spawnAttempt);
-            if (spawnAttempt.Cancelled)
-                return false;
-        }
-
-        // Add stacks to an existing tile effect of the same prototype.
-        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords);
-        foreach (var ent in anchored)
-        {
-            if (!_tileQuery.TryComp(ent, out var existing))
-                continue;
-
-            if (MetaData(ent).EntityPrototype?.ID != tileEffect.Id)
-                continue;
-
-            TryAddStack((ent, existing), amount, max);
-            return true;
-        }
-
-        // Spawn a new tile effect entity.
-        var spawned = Spawn(tileEffect, mapCoords);
-        if (!_tileQuery.TryComp(spawned, out var comp))
-            return false;
-
-        if (source is { } applier)
-            comp.Applier = applier;
-
-        // Use SetStacks so the initial count equals `amount`, not the prototype default + amount.
-        SetStacks((spawned, comp), amount, max);
-        return true;
+        var other = args.OtherEntity;
+        var ev = new CEAffectedByTileEffectEvent(ent, other);
+        RaiseLocalEvent(other, ref ev);
     }
 
     /// <summary>
@@ -221,40 +179,166 @@ public sealed partial class CETileEffectSystem : EntitySystem
         RaiseLocalEvent(tile, ref ev);
     }
 
-    public override void Update(float frameTime)
+    /// <summary>
+    /// Applies a tile effect to all tiles within <paramref name="radius"/> of <paramref name="center"/>,
+    /// with LOS checking and distance-based stack falloff.
+    /// </summary>
+    /// <param name="tileEffect">Tile effect entity prototype to apply.</param>
+    /// <param name="source">Optional source entity (used for attempt events).</param>
+    /// <param name="center">World-space center of the effect.</param>
+    /// <param name="radius">Radius in world units.</param>
+    /// <param name="fallOffFactor">Falloff exponent; higher = steeper drop-off from center.</param>
+    /// <param name="maxStacks">Maximum stacks to apply at the center tile.</param>
+    /// <param name="checkLos">Whether to skip tiles not in line-of-sight of the center.</param>
+    public void ApplyTileEffectArea(
+        EntProtoId tileEffect,
+        EntityUid? source,
+        EntityCoordinates center,
+        float radius = 3f,
+        float fallOffFactor = 0.5f,
+        int maxStacks = 10,
+        bool checkLos = true)
     {
-        base.Update(frameTime);
-
         if (_net.IsClient)
             return;
 
-        var query = EntityQueryEnumerator<CETileEffectComponent>();
-        while (query.MoveNext(out var uid, out var effect))
+        if (radius <= 0f)
+            return;
+
+        var mapCenter = _transform.ToMapCoordinates(center);
+
+        if (!_mapManager.TryFindGridAt(mapCenter, out var gridUid, out var grid))
+            return;
+
+        var centerWorld = mapCenter.Position;
+        var tileSize = grid.TileSize;
+
+        var minX = (int) MathF.Floor((centerWorld.X - radius) / tileSize);
+        var maxX = (int) MathF.Ceiling((centerWorld.X + radius) / tileSize);
+        var minY = (int) MathF.Floor((centerWorld.Y - radius) / tileSize);
+        var maxY = (int) MathF.Ceiling((centerWorld.Y + radius) / tileSize);
+
+        for (var x = minX; x <= maxX; x++)
         {
-            if (_timing.CurTime < effect.NextUpdate)
-                continue;
+            for (var y = minY; y <= maxY; y++)
+            {
+                var tileIndices = new Vector2i(x, y);
+                var tileWorldPos = _mapSystem.GridTileToWorldPos(gridUid, grid, tileIndices);
+                var tileCoords = new MapCoordinates(tileWorldPos, mapCenter.MapId);
 
-            effect.NextUpdate = _timing.CurTime + TimeSpan.FromSeconds(
-                _random.NextFloat(effect.MinDecayInterval, effect.MaxDecayInterval));
+                var distance = (tileWorldPos - centerWorld).Length();
 
-            TryAddStack((uid, effect), effect.StackDelta);
+                if (distance > radius)
+                    continue;
 
-            if (TerminatingOrDeleted(uid))
-                continue;
+                if (checkLos && !_examine.InRangeUnOccluded(mapCenter, tileCoords, radius, null))
+                    continue;
 
-            // Affect entities on this tile each decay tick.
-            RaiseAffectedByTileEffect((uid, effect));
+                var normalizedDistance = radius > 0f ? distance / radius : 0f;
+                var adjustedDistance = MathF.Pow(normalizedDistance, fallOffFactor);
+                var stacks = Math.Max(1, (int) MathF.Ceiling((1f - adjustedDistance) * maxStacks));
+
+                TryApplyTileEffect(tileEffect, source, new EntityCoordinates(gridUid, tileWorldPos), stacks, maxStacks);
+            }
         }
     }
 
-    private void OnCollide(Entity<CETileEffectComponent> ent, ref StartCollideEvent args)
+    /// <summary>
+    /// Attempts to spawn or add stacks to a tile effect entity at the given coordinates.
+    /// </summary>
+    /// <param name="tileEffect">Entity prototype to spawn. Must have <see cref="CETileEffectComponent"/>.</param>
+    /// <param name="source">Optional source entity. Can cancel via <see cref="CEAttemptApplyTileEffectEvent"/>.</param>
+    /// <param name="coords">Where to apply the tile effect.</param>
+    /// <param name="amount">How many stacks to apply. Must be positive.</param>
+    /// <param name="max">Per-call stack cap (0 = use the component's MaxStacks).</param>
+    public bool TryApplyTileEffect(EntProtoId tileEffect, EntityUid? source, EntityCoordinates coords, int amount, int max = 0)
     {
         if (_net.IsClient)
+            return false;
+
+        if (amount <= 0)
+            return false;
+
+        // Validate that the prototype actually has CETileEffectComponent.
+        if (!_protoManager.TryIndex<EntityPrototype>(tileEffect, out var proto))
+            return false;
+
+        if (!proto.HasComponent<CETileEffectComponent>(_compFactory))
+            return false;
+
+        // Allow the source entity to cancel the attempt.
+        if (source is { } sourceUid)
+        {
+            var sourceAttempt = new CEAttemptApplyTileEffectEvent(tileEffect, amount);
+            RaiseLocalEvent(sourceUid, ref sourceAttempt);
+            if (sourceAttempt.Cancelled)
+                return false;
+        }
+
+        var mapCoords = _transform.ToMapCoordinates(coords);
+
+        if (!_mapManager.TryFindGridAt(mapCoords, out var gridUid, out var grid))
+            return false;
+
+        if (!_mapSystem.TryGetTileRef(gridUid, grid, mapCoords.Position, out var tileRef) || tileRef.Tile.IsEmpty)
+            return false;
+
+        // Raise CEAttemptSpawnTileEffectEvent on each anchored entity so they can block the effect.
+        var spawnAttempt = new CEAttemptSpawnTileEffectEvent(tileEffect, coords, amount);
+        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords))
+        {
+            RaiseLocalEvent(anchEnt, ref spawnAttempt);
+            if (spawnAttempt.Cancelled)
+                return false;
+        }
+
+        // Add stacks to an existing tile effect of the same prototype.
+        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords);
+        foreach (var ent in anchored)
+        {
+            if (!_tileQuery.TryComp(ent, out var existing))
+                continue;
+
+            if (MetaData(ent).EntityPrototype?.ID != tileEffect.Id)
+                continue;
+
+            TryAddStack((ent, existing), amount, max);
+            return true;
+        }
+
+        // Spawn a new tile effect entity.
+        var spawned = Spawn(tileEffect, mapCoords);
+        if (!_tileQuery.TryComp(spawned, out var comp))
+            return false;
+
+        if (source is { } applier)
+            comp.Applier = applier;
+
+        // Use SetStacks so the initial count equals `amount`, not the prototype default + amount.
+        SetStacks((spawned, comp), amount, max);
+        return true;
+    }
+
+    private void OnPreventTileEffect(Entity<CEPreventTileEffectComponent> ent, ref CEAttemptSpawnTileEffectEvent args)
+    {
+        if (args.Cancelled)
             return;
 
-        var other = args.OtherEntity;
-        var ev = new CEAffectedByTileEffectEvent(ent, other);
-        RaiseLocalEvent(other, ref ev);
+        // Empty list = block all tile effects.
+        if (ent.Comp.Blocks.Count == 0)
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        foreach (var blocked in ent.Comp.Blocks)
+        {
+            if (blocked.Id == args.TileEffect.Id)
+            {
+                args.Cancelled = true;
+                return;
+            }
+        }
     }
 
     /// <summary>
@@ -310,8 +394,6 @@ public enum CETileEffectVisualLevel
 
 /// <summary>
 /// Raised when an entity is touched or ticked by a tile effect.
-/// Raised on the <b>tile effect entity</b> (for tile-effect-side components like <see cref="CETileEffectContactEffectsComponent"/>)
-/// AND on the <b>affected entity</b> (for entity-side components like <c>CETileEffectTransformComponent</c>).
 /// </summary>
 [ByRefEvent]
 public record struct CEAffectedByTileEffectEvent(Entity<CETileEffectComponent> TileEffect, EntityUid AffectedEntity);
@@ -320,7 +402,7 @@ public record struct CEAffectedByTileEffectEvent(Entity<CETileEffectComponent> T
 /// Calls on effect entity, when a status effect stack is edited
 /// </summary>
 [ByRefEvent]
-public readonly record struct CETileEffectStackEditedEvent(Entity<CETileEffectComponent> Target, int oldStack, int newStack);
+public readonly record struct CETileEffectStackEditedEvent(Entity<CETileEffectComponent> Target, int OldStack, int NewStack);
 
 /// <summary>
 /// Raised as a directed event on the source entity before a tile effect is applied.

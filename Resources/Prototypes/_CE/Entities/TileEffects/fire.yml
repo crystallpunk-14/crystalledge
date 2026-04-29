@@ -23,13 +23,13 @@
     minDecayInterval: 1
     maxDecayInterval: 3
   - type: CETileEffectContactEffects
-    contactEffects: 
+    contactEffects:
       CEStatusEffectFire: 1
   - type: CETileEffectVFX
-    onAppliedVFX: CEFireImpactEffect
+    onAppliedVfx: CEFireImpactEffect
     onAppliedSound:
       path: /Audio/_CE/Effects/fire_whoosh.ogg
-    onStacksAddedVFX: CEFireImpactEffect
+    onStacksAddedVfx: CEFireImpactEffect
     onStacksAddedSound:
       path: /Audio/_CE/Effects/fire_whoosh.ogg
 

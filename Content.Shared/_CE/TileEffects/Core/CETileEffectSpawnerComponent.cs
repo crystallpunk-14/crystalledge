@@ -1,6 +1,6 @@
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.Core;
 
 /// <summary>
 /// When added to an entity, spawns a tile effect at that entity's location on <see cref="MapInitEvent"/>.

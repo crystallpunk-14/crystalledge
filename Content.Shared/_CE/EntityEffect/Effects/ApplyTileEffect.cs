@@ -1,4 +1,5 @@
 using Content.Shared._CE.TileEffects;
+using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Effects;

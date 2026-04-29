@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.Core;
 
 /// <summary>
 /// Blocks specific tile effects from being applied to the tile this entity is anchored on.

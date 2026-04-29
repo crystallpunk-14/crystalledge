@@ -1,6 +1,7 @@
+using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.EffectTransform;
 
 /// <summary>
 /// When an entity with this component is touched or ticked by a tile effect

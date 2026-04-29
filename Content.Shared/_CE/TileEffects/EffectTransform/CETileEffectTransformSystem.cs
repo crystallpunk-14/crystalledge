@@ -1,11 +1,18 @@
+using Content.Shared._CE.TileEffects.Core;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.EffectTransform;
 
-public sealed partial class CETileEffectSystem
+public sealed partial class CETileEffectTransformSystem : EntitySystem
 {
-    private void InitializeTransform()
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly INetManager _net = default!;
+
+    public override void Initialize()
     {
+        base.Initialize();
+
         SubscribeLocalEvent<CETileEffectTransformComponent, CEAffectedByTileEffectEvent>(OnTransformAffected);
     }
 

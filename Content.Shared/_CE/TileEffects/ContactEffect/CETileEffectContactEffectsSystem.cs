@@ -1,14 +1,20 @@
 using Content.Shared._CE.StatusEffects.Core;
+using Content.Shared._CE.TileEffects.Core;
 using Content.Shared.Whitelist;
+using Robust.Shared.Network;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.ContactEffect;
 
-public sealed partial class CETileEffectSystem
+public sealed partial class CETileEffectContactEffectsSystem : EntitySystem
 {
+    [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private readonly INetManager _net = default!;
 
-    private void InitializeContactEffects()
+    public override void Initialize()
     {
+        base.Initialize();
+
         SubscribeLocalEvent<TransformComponent, CEAffectedByTileEffectEvent>(OnContactEffect);
     }
 
@@ -17,7 +23,7 @@ public sealed partial class CETileEffectSystem
         if (_net.IsClient)
             return;
 
-        if (!TryComp<CETileEffectContactEffectsComponent>(args.TileEffect.Owner, out var contactComp))
+        if (!TryComp<ContactEffect.CETileEffectContactEffectsComponent>(args.TileEffect.Owner, out var contactComp))
             return;
 
         var tileComp = args.TileEffect.Comp;

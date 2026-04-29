@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.Core;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [EntityCategory("StatusEffects")]
