@@ -151,7 +151,8 @@
         damage:
           types:
             Cold: 10
-    - !type:FreezeArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
       radius: 1.5
       maxStacks: 10
       fallOffFactor: 1

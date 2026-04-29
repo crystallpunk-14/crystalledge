@@ -1,0 +1,67 @@
+- type: entity
+  id: CETileEffectFreeze
+  parent: CETileEffectBase
+  name: freeze
+  description: A cold burst of frost.
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/freeze_effect.rsi
+    layers:
+    - state: effect
+  - type: PointLight
+    color: "#6ec6ff"
+    radius: 1.2
+    energy: 1.5
+    enabled: true
+  - type: LightFade
+    duration: 1.0
+  - type: CETileEffect
+    maxStacks: 10
+    minDecayInterval: 10
+    maxDecayInterval: 10
+  - type: CETileEffectContactEffects
+    contactEffects:
+      CEStatusEffectColdSlowdown: 1
+  - type: CETileEffectVFX
+    onAppliedSound:
+      path: /Audio/_CE/Effects/ice_burst.ogg
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectFire
+    vfx: CESteamEffect
+  - type: TimedDespawn
+    lifetime: 1.0
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CEFreezeSpawner1
+  name: tile effect - freeze
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Effects/freeze_effect.rsi
+      state: effect
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectFreeze
+    amount: 1
+
+- type: entity
+  parent: CEFreezeSpawner1
+  id: CEFreezeSpawner5
+  suffix: 5
+  components:
+  - type: CETileEffectSpawner
+    amount: 5
+
+- type: entity
+  parent: CEFreezeSpawner1
+  id: CEFreezeSpawner10
+  suffix: 10
+  components:
+  - type: CETileEffectSpawner
+    amount: 10

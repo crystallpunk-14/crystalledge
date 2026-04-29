@@ -81,8 +81,9 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// <param name="duration">Optional: status effect duration. If specified, the new status effect will have the specified duration, and the duration of the existing status effect will be edited.</param>
     /// <param name="resetTimer">If true and the effect already exists, resets the cycle timer to the full duration instead of letting it continue from the current point.</param>
     /// <param name="source">Optional source entity (attacker/caster). When provided, raises <see cref="CEAttemptApplyStatusEffectStackEvent"/> on the source and sets <see cref="CEStatusEffectSourceComponent"/> on the resulting effect entity.</param>
+    /// <param name="max">Optional maximum total stacks allowed on the target. 0 means no limit. If the target already has this many stacks or more, the call returns false.</param>
     /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
-    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null, bool resetTimer = false, EntityUid? source = null)
+    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null, bool resetTimer = false, EntityUid? source = null, int max = 0)
     {
         effectEntity = null;
 
@@ -105,6 +106,15 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             return false;
 
         stack = receiveAttempt.RemainingStacks;
+
+        if (max > 0)
+        {
+            var current = GetStack(target, statusEffect);
+            var allowed = max - current;
+            if (allowed <= 0)
+                return false;
+            stack = Math.Min(stack, allowed);
+        }
 
         if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
         {

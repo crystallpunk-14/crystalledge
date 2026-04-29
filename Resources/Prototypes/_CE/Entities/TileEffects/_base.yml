@@ -24,11 +24,3 @@
           - SlipLayer
   - type: Transform
     anchored: true
-  - type: Appearance
-  - type: GenericVisualizer
-    visuals:
-      enum.CETileEffectVisuals.Level:
-        fire:
-          Low: { state: low_1 }
-          Medium: { state: medium_1 }
-          High: { state: high_1 }

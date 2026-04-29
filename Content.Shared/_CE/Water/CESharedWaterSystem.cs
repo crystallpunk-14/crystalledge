@@ -41,20 +41,8 @@ public abstract class CESharedWaterSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var stacks = args.Stacks;
         var cycleDuration = args.Duration ?? ent.Comp.DefaultDuration;
-
-        if (args.MaxStacks != null)
-        {
-            var current = _stack.GetStack(ent, ent.Comp.StatusEffect);
-            var allowed = Math.Max(0, args.MaxStacks.Value - current);
-            if (allowed <= 0)
-                return;
-
-            stacks = Math.Min(stacks, allowed);
-        }
-
-        _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, stacks, cycleDuration);
+        _stack.TryAddStack(ent, ent.Comp.StatusEffect, out _, args.Stacks, cycleDuration, max: args.MaxStacks ?? 0);
     }
 
     public int GetWettableStacks(Entity<CEWettableComponent?> ent)

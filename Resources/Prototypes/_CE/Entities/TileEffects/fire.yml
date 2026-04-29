@@ -10,6 +10,14 @@
     - state: low_1
       shader: unshaded
       map: [ "fire" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CETileEffectVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }
   - type: AmbientSound
     enabled: true
     volume: -15
@@ -17,7 +25,7 @@
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg #TODO more aggressive sound
   - type: TileEmission
-    color: "#ff4800"
+    color: "#ffd051"
   - type: CETileEffect
     maxStacks: 10
     minDecayInterval: 1
@@ -32,12 +40,17 @@
     onStacksAddedVfx: CEFireImpactEffect
     onStacksAddedSound:
       path: /Audio/_CE/Effects/fire_whoosh.ogg
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectFreeze
+    vfx: CESteamEffect
 
 
 - type: entity
   id: CEFireImpactEffect
   name: fire impact
   description: A burst of fire upon impact.
+  suffix: VFX
   categories: [ ForkFiltered ]
   components:
   - type: Transform
@@ -56,3 +69,37 @@
     enabled: true
   - type: LightFade
     duration: 1.0
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CEFireSpawner1
+  name: tile effect - fire
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Effects/fire_tile.rsi
+      state: low_1
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectFire
+    amount: 1
+
+- type: entity
+  parent: CEFireSpawner1
+  id: CEFireSpawner5
+  suffix: 5
+  components:
+  - type: CETileEffectSpawner
+    amount: 5
+
+- type: entity
+  parent: CEFireSpawner1
+  id: CEFireSpawner10
+  suffix: 10
+  components:
+  - type: CETileEffectSpawner
+    amount: 10

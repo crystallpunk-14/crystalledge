@@ -126,7 +126,8 @@
     energy: 4.0
   - type: CEProjectile
     hitEffects:
-    - !type:FreezeArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
       radius: 1.5
       maxStacks: 6
     - !type:AreaEffect

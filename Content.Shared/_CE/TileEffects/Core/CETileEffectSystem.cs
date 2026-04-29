@@ -1,5 +1,7 @@
+using Content.Shared._CE.Health.Components;
 using Content.Shared.Examine;
 using Content.Shared.Prototypes;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
@@ -15,6 +17,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly IComponentFactory _compFactory = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
@@ -38,6 +41,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
         SubscribeLocalEvent<CETileEffectComponent, StartCollideEvent>(OnCollide);
 
         SubscribeLocalEvent<CEPreventTileEffectComponent, CEAttemptSpawnTileEffectEvent>(OnPreventTileEffect);
+        SubscribeLocalEvent<CETileEffectNeutralizationComponent, CEAttemptReceiveTileEffectEvent>(OnTileNeutralize);
     }
 
     public override void Update(float frameTime)
@@ -69,8 +73,8 @@ public sealed partial class CETileEffectSystem : EntitySystem
     private void OnSpawnerInit(Entity<CETileEffectSpawnerComponent> ent, ref MapInitEvent args)
     {
         var coords = Transform(ent).Coordinates;
-        TryApplyTileEffect(ent.Comp.TileEffect, ent, coords, ent.Comp.Amount, ent.Comp.Max);
-        QueueDel(ent);
+        if (TryApplyTileEffect(ent.Comp.TileEffect, ent, coords, ent.Comp.Amount, ent.Comp.Max))
+            QueueDel(ent);
     }
 
     private void OnMapInit(Entity<CETileEffectComponent> ent, ref MapInitEvent args)
@@ -292,6 +296,21 @@ public sealed partial class CETileEffectSystem : EntitySystem
                 return false;
         }
 
+        // Allow existing tile effects to neutralize the incoming effect (e.g. freeze cancels fire).
+        var receiveAttempt = new CEAttemptReceiveTileEffectEvent(tileEffect, amount);
+        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords))
+        {
+            if (!_tileQuery.HasComp(anchEnt))
+                continue;
+
+            RaiseLocalEvent(anchEnt, ref receiveAttempt);
+
+            if (receiveAttempt.Cancelled || receiveAttempt.RemainingAmount <= 0)
+                return false;
+        }
+
+        amount = receiveAttempt.RemainingAmount;
+
         // Add stacks to an existing tile effect of the same prototype.
         var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords);
         foreach (var ent in anchored)
@@ -317,6 +336,30 @@ public sealed partial class CETileEffectSystem : EntitySystem
         // Use SetStacks so the initial count equals `amount`, not the prototype default + amount.
         SetStacks((spawned, comp), amount, max);
         return true;
+    }
+
+    private void OnTileNeutralize(Entity<CETileEffectNeutralizationComponent> ent, ref CEAttemptReceiveTileEffectEvent args)
+    {
+        if (!ent.Comp.Neutralizes.Contains(args.TileEffect))
+            return;
+
+        if (!_tileQuery.TryComp(ent, out var tileComp))
+            return;
+
+        var neutralized = Math.Min(tileComp.Stacks, args.RemainingAmount);
+        TryRemoveStack((ent.Owner, tileComp), neutralized);
+        args.RemainingAmount -= neutralized;
+
+        var coords = Transform(ent).Coordinates;
+
+        if (ent.Comp.Vfx is { } vfx)
+            Spawn(vfx, coords);
+
+        if (ent.Comp.Sound is { } sound)
+            _audio.PlayPvs(sound, coords);
+
+        if (args.RemainingAmount <= 0)
+            args.Cancelled = true;
     }
 
     private void OnPreventTileEffect(Entity<CEPreventTileEffectComponent> ent, ref CEAttemptSpawnTileEffectEvent args)
@@ -348,10 +391,10 @@ public sealed partial class CETileEffectSystem : EntitySystem
     private void RaiseAffectedByTileEffect(Entity<CETileEffectComponent> tileEffect)
     {
         var coords = _transform.GetMapCoordinates(tileEffect);
-        var entities = _lookup.GetEntitiesInRange(coords, 0.5f, LookupFlags.Uncontained);
+        var entities = _lookup.GetEntitiesInRange<CEDamageableComponent>(coords, 0.5f, LookupFlags.Uncontained);
         foreach (var entity in entities)
         {
-            if (entity == tileEffect.Owner)
+            if (entity.Owner == tileEffect.Owner)
                 continue;
 
             var ev = new CEAffectedByTileEffectEvent(tileEffect, entity);
@@ -417,3 +460,22 @@ public record struct CEAttemptApplyTileEffectEvent(EntProtoId TileEffect, int Am
 /// </summary>
 [ByRefEvent]
 public record struct CEAttemptSpawnTileEffectEvent(EntProtoId TileEffect, EntityCoordinates Coordinates, int Amount, bool Cancelled = false);
+
+/// <summary>
+/// Raised as a directed event on each tile effect entity on the target tile before stacks are applied.
+/// Handlers can reduce <see cref="RemainingAmount"/> (e.g. <see cref="CETileEffectNeutralizationComponent"/> on freeze absorbing fire stacks).
+/// Setting <see cref="Cancelled"/> or reducing <see cref="RemainingAmount"/> to zero cancels the application entirely.
+/// </summary>
+[ByRefEvent]
+public struct CEAttemptReceiveTileEffectEvent
+{
+    public readonly EntProtoId TileEffect;
+    public int RemainingAmount;
+    public bool Cancelled;
+
+    public CEAttemptReceiveTileEffectEvent(EntProtoId tileEffect, int amount)
+    {
+        TileEffect = tileEffect;
+        RemainingAmount = amount;
+    }
+}

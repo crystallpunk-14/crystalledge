@@ -53,8 +53,9 @@
       statusEffect: CEStatusEffectWet
       amount: 1
       max: 5
-  - type: CEFreezeTransform
-    freezesInto: CEIce
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIce
   - type: RandomSpawner
     prototypes:
     - CEWaterReeds
@@ -74,8 +75,9 @@
   - type: CETileDistortion
     intensity: 0.6
   - type: CEAutoConveyor
-  - type: CEFreezeTransform
-    freezesInto: CEIceFrozenStream
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIceFrozenStream
   - type: Conveyor
     speed: 0.25
 

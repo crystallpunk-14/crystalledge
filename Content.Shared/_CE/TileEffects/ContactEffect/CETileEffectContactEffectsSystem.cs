@@ -23,7 +23,7 @@ public sealed partial class CETileEffectContactEffectsSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!TryComp<ContactEffect.CETileEffectContactEffectsComponent>(args.TileEffect.Owner, out var contactComp))
+        if (!TryComp<CETileEffectContactEffectsComponent>(args.TileEffect.Owner, out var contactComp))
             return;
 
         var tileComp = args.TileEffect.Comp;
@@ -38,10 +38,7 @@ public sealed partial class CETileEffectContactEffectsSystem : EntitySystem
             if (stacks <= 0)
                 continue;
 
-            var current = _stack.GetStack(ent, effectId);
-            stacks = Math.Min(stacks, stacks * 2 - current); //TODO: dehardcode max stacks
-
-            _stack.TryAddStack(other, effectId, out _, stacks, source: tileComp.Applier);
+            _stack.TryAddStack(other, effectId, out _, stacks, source: tileComp.Applier, max: stacks);
         }
     }
 }
