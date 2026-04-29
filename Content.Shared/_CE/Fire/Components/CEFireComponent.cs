@@ -6,6 +6,7 @@ namespace Content.Shared._CE.Fire;
 /// <summary>
 /// For tile fire entity
 /// </summary>
+[Obsolete("Use CETileEffectComponent with a fire tile effect prototype instead.")]
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEFireComponent : Component
 {
