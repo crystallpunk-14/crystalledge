@@ -14,7 +14,8 @@
     alert: CEWaterShield
   - type: CEDivineShieldBreakEffect
     effects:
-    - !type:WetArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 10

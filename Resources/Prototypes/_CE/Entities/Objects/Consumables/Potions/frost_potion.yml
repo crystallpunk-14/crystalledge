@@ -25,7 +25,8 @@
       - CEEffectHealingGeneric
   - type: CEDestructionEffect
     effects:
-    - !type:FreezeArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
       radius: 2
       maxStacks: 6
     - !type:AreaEffect

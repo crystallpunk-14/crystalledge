@@ -44,7 +44,8 @@
       - CEEffectWaterBurstEffect
     - !type:SayChat
       sentence: "flumine!"
-    - !type:WetArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 10

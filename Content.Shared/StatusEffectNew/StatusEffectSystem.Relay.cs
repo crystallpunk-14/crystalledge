@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Shared._CE.DebuffCleaning;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.DivineShield;
-using Content.Shared._CE.Frost;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.MeleeWeapon;
@@ -54,7 +53,6 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, AttackAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, UseAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ThrowAttemptEvent>(RelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, CEFreezeEntityAttemptEvent>(RefRelayStatusEffectEvent);
         //CrystallEdge zone end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);

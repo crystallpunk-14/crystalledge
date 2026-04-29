@@ -65,7 +65,8 @@
     energy: 3.0
   - type: CEProjectile
     hitEffects:
-    - !type:WetArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
       radius: 2
       fallOffFactor: 0.5
       maxStacks: 10

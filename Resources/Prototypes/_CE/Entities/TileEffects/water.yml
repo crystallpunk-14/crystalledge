@@ -1,0 +1,61 @@
+- type: entity
+  id: CETileEffectWater
+  parent: CETileEffectBase
+  name: water splash
+  description: A splash of water upon impact.
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/water_tile_impact.rsi
+    snapCardinals: true
+    layers:
+    - state: effect
+  - type: CETileEffect
+    maxStacks: 10
+    minDecayInterval: 10
+    maxDecayInterval: 10
+  - type: CETileEffectContactEffects
+    contactEffects:
+      CEStatusEffectWet: 1
+  - type: CETileEffectVFX
+    onAppliedSound:
+      path: /Audio/Effects/Fluids/splat.ogg
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectFire
+    vfx: CESteamEffect
+  - type: TimedDespawn
+    lifetime: 1.0
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CEWaterSpawner1
+  name: tile effect - water
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Effects/water_tile_impact.rsi
+      state: effect
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectWater
+    amount: 1
+
+- type: entity
+  parent: CEWaterSpawner1
+  id: CEWaterSpawner5
+  suffix: 5
+  components:
+  - type: CETileEffectSpawner
+    amount: 5
+
+- type: entity
+  parent: CEWaterSpawner1
+  id: CEWaterSpawner10
+  suffix: 10
+  components:
+  - type: CETileEffectSpawner
+    amount: 10

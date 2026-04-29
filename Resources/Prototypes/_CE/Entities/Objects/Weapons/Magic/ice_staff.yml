@@ -26,7 +26,8 @@
           damage:
             types:
               Physical: 5
-        - !type:FreezeArea
+        - !type:CETileAffectArea
+          tileEffect: CETileEffectFreeze
           radius: 1
           maxStacks: 3
     animations:

@@ -1,4 +1,5 @@
 using Content.Shared._CE.Health;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared._CE.Water;
 using Content.Shared.StatusEffectNew;
@@ -7,8 +8,8 @@ namespace Content.Shared._CE.Skill.Skills.HealingWaters;
 
 public sealed partial class CEHealingWatersStatusEffectSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedWaterSystem _water = default!;
     [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
 
     public override void Initialize()
     {
@@ -19,10 +20,9 @@ public sealed partial class CEHealingWatersStatusEffectSystem : EntitySystem
 
     private void OnGetHealAmount(Entity<CEHealingWatersStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEGetHealAmountEvent> args)
     {
-        if (!TryComp<CEWettableComponent>(args.Args.Target, out var wettableComp))
-            return;
+        var wetStack = _stack.GetStack(args.Args.Target, ent.Comp.StatusProto);
 
-        if (_water.GetWettableStacks((args.Args.Target, wettableComp)) <= 0)
+        if (wetStack <= 0)
             return;
 
         var count = ent.Comp.AdditionalHeal;
@@ -31,6 +31,6 @@ public sealed partial class CEHealingWatersStatusEffectSystem : EntitySystem
 
         args.Args.HealAmount += count;
 
-        _status.TryRemoveStatusEffect(args.Args.Target, wettableComp.StatusEffect);
+        _status.TryRemoveStatusEffect(args.Args.Target, ent.Comp.StatusProto);
     }
 }
