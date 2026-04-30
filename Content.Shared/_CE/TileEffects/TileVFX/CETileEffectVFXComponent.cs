@@ -9,6 +9,7 @@ namespace Content.Shared._CE.TileEffects.TileVFX;
 /// on key lifecycle moments: first applied, removed, stacks gained, stacks lost.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
+[EntityCategory("Spawner")]
 public sealed partial class CETileEffectVFXComponent : Component
 {
     [DataField]
