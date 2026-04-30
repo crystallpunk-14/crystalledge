@@ -1,4 +1,3 @@
-using System.Numerics;
 using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -11,7 +10,6 @@ namespace Content.Shared._CE.TileEffects.TileVFX;
 public sealed class CETileEffectVFXSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
