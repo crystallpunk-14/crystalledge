@@ -31,7 +31,7 @@ public sealed partial class CEEphemeralCollectableComponent : Component
 
     /// <summary>
     /// Optional client-side VFX entity spawned at the collectable's position the moment
-    /// the local player collects it. Client-only spawn → instant feedback, no server lag.
+    /// the local player collects it. Client-only spawn -> instant feedback, no server lag.
     /// </summary>
     [DataField]
     public EntProtoId? CollectVfx;

@@ -39,7 +39,7 @@ public sealed partial class CETileEffectComponent : Component
     /// <summary>
     /// Who created this tile effect?
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Applier;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]

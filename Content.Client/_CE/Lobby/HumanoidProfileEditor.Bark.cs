@@ -40,7 +40,7 @@ public sealed partial class HumanoidProfileEditor
             }
         }
 
-        // CrystallEdge: map stored pitch [MinPitchScale, MaxPitchScale] → slider [0, 100]
+        // CrystallEdge: map stored pitch [MinPitchScale, MaxPitchScale] -> slider [0, 100]
         var normalized = (Profile.BarkPitch - CESharedBarkSpeechSystem.MinPitchScale)
             / (CESharedBarkSpeechSystem.MaxPitchScale - CESharedBarkSpeechSystem.MinPitchScale);
         BarkPitchSlider.Value = Math.Clamp(normalized * 100f, 0f, 100f);

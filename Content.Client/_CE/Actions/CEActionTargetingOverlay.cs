@@ -346,7 +346,7 @@ public sealed class CEActionTargetingOverlay : Overlay
         // Middle fills exactly the space between the inner edges of the two caps:
         //   start cap spans [-halfCap, +halfCap] around 'start+offset'
         //   end   cap spans [-halfCap, +halfCap] around 'end+offset'
-        // → middle span: [+halfCap, length-halfCap]  length = length-capSize
+        // -> middle span: [+halfCap, length-halfCap]  length = length-capSize
         var midLength = MathF.Max(0f, length - capSize);
         var dir = end - start;
         if (dir.Length() < 0.01f)

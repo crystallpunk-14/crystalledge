@@ -63,9 +63,6 @@ public sealed class CEScreenPopupControl : Control
 
         vbox.Margin = new Thickness(0, 120, 0, 0);
 
-        // Register custom font proto aliases for markup tags:
-        //   [font="_ce_popup_title"] → VollkornSC-Bold
-        //   [font="_ce_popup_reason"] → VollkornSC-Regular
         var previousHijack = _fontHijack.Hijack;
         _fontHijack.Hijack = (protoId, size) =>
         {

@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.TileEffects.EffectTransform;
 using Content.Shared.Examine;
@@ -43,6 +44,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
 
         SubscribeLocalEvent<CEPreventTileEffectComponent, CEAttemptSpawnTileEffectEvent>(OnPreventTileEffect);
         SubscribeLocalEvent<CETileEffectNeutralizationComponent, CEAttemptReceiveTileEffectEvent>(OnTileNeutralize);
+        SubscribeLocalEvent<CETileEffectConsumeComponent, CEAttemptReceiveTileEffectEvent>(OnConsumeTileEffect);
     }
 
     public override void Update(float frameTime)
@@ -290,7 +292,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
 
         // Raise CEAttemptSpawnTileEffectEvent on each anchored entity so they can block the effect.
         var spawnAttempt = new CEAttemptSpawnTileEffectEvent(tileEffect, coords, amount);
-        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords))
+        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords).ToList())
         {
             RaiseLocalEvent(anchEnt, ref spawnAttempt);
             if (spawnAttempt.Cancelled)
@@ -299,7 +301,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
 
         // Allow existing tile effects to neutralize the incoming effect (e.g. freeze cancels fire).
         var receiveAttempt = new CEAttemptReceiveTileEffectEvent(tileEffect, amount);
-        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords))
+        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords).ToList())
         {
             if (!_tileQuery.HasComp(anchEnt))
                 continue;
@@ -312,8 +314,35 @@ public sealed partial class CETileEffectSystem : EntitySystem
 
         amount = receiveAttempt.RemainingAmount;
 
+        // Check if any existing tile effect combines with the incoming effect via CETileEffectTransformComponent.
+        // Unlike non-tile transforms (water -> ice), this merges stacks: result gets selfStacks + incoming amount.
+        foreach (var anchEnt in _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords).ToList())
+        {
+            if (!_tileQuery.TryComp(anchEnt, out var tileComp))
+                continue;
+
+            if (!TryComp<CETileEffectTransformComponent>(anchEnt, out var transformComp))
+                continue;
+
+            if (!transformComp.Transforms.TryGetValue(tileEffect, out var combinedProto))
+                continue;
+
+            var selfStacks = tileComp.Stacks;
+            var rotation = Transform(anchEnt).LocalRotation;
+
+            Del(anchEnt);
+
+            var combined = Spawn(combinedProto, mapCoords);
+            _transform.SetLocalRotation(combined, rotation);
+
+            if (_tileQuery.TryComp(combined, out var combinedTileComp))
+                SetStacks((combined, combinedTileComp), selfStacks + amount, max);
+
+            return true;
+        }
+
         // Add stacks to an existing tile effect of the same prototype.
-        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords);
+        var anchored = _mapSystem.GetAnchoredEntities((gridUid, grid), mapCoords).ToList();
         foreach (var ent in anchored)
         {
             if (!_tileQuery.TryComp(ent, out var existing))
@@ -337,6 +366,19 @@ public sealed partial class CETileEffectSystem : EntitySystem
         // Use SetStacks so the initial count equals `amount`, not the prototype default + amount.
         SetStacks((spawned, comp), amount, max);
         return true;
+    }
+
+    private void OnConsumeTileEffect(Entity<CETileEffectConsumeComponent> ent, ref CEAttemptReceiveTileEffectEvent args)
+    {
+        if (!ent.Comp.Consumes.Contains(args.TileEffect))
+            return;
+
+        if (!_tileQuery.TryComp(ent, out var tileComp))
+            return;
+
+        TryAddStack((ent.Owner, tileComp), args.RemainingAmount);
+        args.RemainingAmount = 0;
+        args.Cancelled = true;
     }
 
     private void OnTileNeutralize(Entity<CETileEffectNeutralizationComponent> ent, ref CEAttemptReceiveTileEffectEvent args)

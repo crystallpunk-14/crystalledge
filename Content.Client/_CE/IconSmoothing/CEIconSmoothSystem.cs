@@ -404,11 +404,11 @@ public sealed class CEIconSmoothSystem : EntitySystem
             var rsiCcw = GetTileRsi(gridUid, grid, pos, ccw);
             var rsiCw = GetTileRsi(gridUid, grid, pos, cw);
 
-            // Both null → nothing to draw.
+            // Both null -> nothing to draw.
             if (rsiCcw == null && rsiCw == null)
                 return default;
 
-            // Same RSI (or one is null) → single tile_0 layer.
+            // Same RSI (or one is null) -> single tile_0 layer.
             if (rsiCcw == rsiCw || rsiCcw == null || rsiCw == null)
             {
                 return new CornerData
@@ -418,7 +418,7 @@ public sealed class CEIconSmoothSystem : EntitySystem
                 };
             }
 
-            // Different RSIs → overlay: state 4 from CCW tile + state 1 from CW tile.
+            // Different RSIs -> overlay: state 4 from CCW tile + state 1 from CW tile.
             return new CornerData
             {
                 PrimaryRsi = rsiCcw,
@@ -446,7 +446,7 @@ public sealed class CEIconSmoothSystem : EntitySystem
                 };
             }
 
-            // Different RSIs → overlay: state 6 from CCW tile + state 3 from CW tile.
+            // Different RSIs -> overlay: state 6 from CCW tile + state 3 from CW tile.
             return new CornerData
             {
                 PrimaryRsi = rsiCcw,
@@ -470,8 +470,8 @@ public sealed class CEIconSmoothSystem : EntitySystem
             };
         }
 
-        // States 1, 3 (CCW filled) → border faces CW → CW tile.
-        // States 4, 6 (CW filled) → border faces CCW → CCW tile.
+        // States 1, 3 (CCW filled) -> border faces CW -> CW tile.
+        // States 4, 6 (CW filled) -> border faces CCW -> CCW tile.
         Direction? lookDir = fill switch
         {
             CornerFill.CounterClockwise => cw,

@@ -1,8 +1,8 @@
 - type: entity
-  id: CETileEffectFire
+  id: CETileEffectCursedFire
   parent: CETileEffectBase
-  name: fire
-  description: A scorching hot flame. You definitely shouldn't touch it just like that.
+  name: cursed fire
+  description: a searing, unquenchable flame, eternally fueled by a curse
   components:
   - type: Sprite
     sprite: _CE/Effects/fire_tile.rsi
@@ -10,6 +10,7 @@
     - state: low_1
       shader: unshaded
       map: [ "fire" ]
+      color: "#e935ec"
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -25,11 +26,11 @@
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg #TODO more aggressive sound
   - type: TileEmission
-    color: "#ffd051"
+    color: "#e935ec"
   - type: CETileEffect
     maxStacks: 10
-    minDecayInterval: 1
-    maxDecayInterval: 3
+    minDecayInterval: 6666
+    maxDecayInterval: 6666
   - type: CETileEffectContactEffects
     contactEffects:
       CEStatusEffectFire: 1
@@ -45,41 +46,20 @@
     - CETileEffectFreeze
     - CETileEffectWater
     vfx: CESteamEffect
+  - type: CETileEffectConsume
+    consumes:
+    - CETileEffectFire
+    - CETileEffectCurse
   - type: CETileEffectTransform
     transforms:
-      CETileEffectCurse: CETileEffectCursedFire
-
-
-- type: entity
-  id: CEFireImpactEffect
-  name: fire impact
-  description: A burst of fire upon impact.
-  suffix: VFX
-  categories: [ ForkFiltered ]
-  components:
-  - type: Transform
-  - type: Sprite
-    sprite: _CE/Effects/fire_tile_impact.rsi
-    snapCardinals: true
-    layers:
-    - state: effect
-    drawdepth: Effects
-  - type: TimedDespawn
-    lifetime: 2.0
-  - type: PointLight
-    color: "#f1ff27"
-    radius: 2.5
-    energy: 2.5
-    enabled: true
-  - type: LightFade
-    duration: 1.0
+      CETileEffectBlessing: CETileEffectFire
 
 # Spawners
 
 - type: entity
   parent: MarkerBase
-  id: CEFireSpawner1
-  name: tile effect - fire
+  id: CECursedFireSpawner1
+  name: tile effect - cursed fire
   suffix: 1
   categories: [ ForkFiltered ]
   components:
@@ -88,21 +68,22 @@
     - state: red
     - sprite: _CE/Effects/fire_tile.rsi
       state: low_1
+      color: "#e935ec"
   - type: CETileEffectSpawner
-    tileEffect: CETileEffectFire
+    tileEffect: CETileEffectCursedFire
     amount: 1
 
 - type: entity
-  parent: CEFireSpawner1
-  id: CEFireSpawner5
+  parent: CECursedFireSpawner1
+  id: CECursedFireSpawner5
   suffix: 5
   components:
   - type: CETileEffectSpawner
     amount: 5
 
 - type: entity
-  parent: CEFireSpawner1
-  id: CEFireSpawner10
+  parent: CECursedFireSpawner1
+  id: CECursedFireSpawner10
   suffix: 10
   components:
   - type: CETileEffectSpawner

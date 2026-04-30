@@ -1,7 +1,7 @@
 - type: entity
-  id: CEStatusEffectBruise
-  name: Bruise
-  description: Increases incoming physical damage.
+  id: CEStatusEffectCurse
+  name: Curse
+  description: Increases all incoming damage.
   components:
   - type: CENegativeStatusEffect
   - type: StatusEffect
@@ -10,27 +10,30 @@
       - CEDamageable
   - type: RejuvenateRemovedStatusEffect
   - type: StatusEffectAlert
-    alert: CEBruise
+    alert: CECurse
   - type: CEDamageVulnerabilityStatusEffect
     extraDamagePerStack: 1
     affectedTypes:
     - Physical
+    - Poison
+    - Fire
+    - Cold
   - type: CEStatusEffectStack
     stackDelta: -1
     baseDuration: 20
     resetTimerOnStack: true
 
 - type: alert
-  id: CEBruise
-  alertViewEntity: CEBruiseAlertSpriteView
-  name: ce-alert-bruise-name
-  description: ce-alert-bruise-desc
+  id: CECurse
+  alertViewEntity: CECurseAlertSpriteView
+  name: ce-alert-curse-name
+  description: ce-alert-curse-desc
   icons:
-  - sprite: _CE/Interface/vulnerability.rsi
+  - sprite: _CE/Interface/vulnerability.rsi #TODO
     state: physical
 
 - type: entity
-  id: CEBruiseAlertSpriteView
+  id: CECurseAlertSpriteView
   categories: [ HideSpawnMenu ]
   components:
   - type: GenericCounterAlert
@@ -39,7 +42,7 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Interface/vulnerability.rsi
+    - sprite: _CE/Interface/vulnerability.rsi  #TODO
       state: physical
     - map: [ "1" ]
       offset: 0.65, 0
