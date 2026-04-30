@@ -2,7 +2,7 @@ using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.TileEffects.TileVFX;
 
 public sealed class CETileEffectVFXSystem : EntitySystem
 {
