@@ -35,4 +35,11 @@ public sealed partial class CETileEffectVFXComponent : Component
 
     [DataField]
     public SoundSpecifier? OnStacksRemovedSound;
+
+    /// <summary>
+    /// World-space radius used to group tiles into a sound sector.
+    /// Only one sound of the same type will play per sector per second.
+    /// </summary>
+    [DataField]
+    public float MergeSoundRange = 5f;
 }
