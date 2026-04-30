@@ -41,7 +41,7 @@ public sealed partial class CETileAffectArea : CEEntityEffectBase<CETileAffectAr
     public bool CheckLos = true;
 }
 
-public sealed partial class CECETileAffectAreaSystem : CEEntityEffectSystem<CETileAffectArea>
+public sealed partial class CETileAffectAreaSystem : CEEntityEffectSystem<CETileAffectArea>
 {
     [Dependency] private readonly CETileEffectSystem _tileEffect = default!;
 

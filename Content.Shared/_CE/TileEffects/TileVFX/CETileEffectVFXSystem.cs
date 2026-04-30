@@ -14,7 +14,6 @@ public sealed class CETileEffectVFXSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CETileEffectVFXComponent, MapInitEvent>(OnStart);
-        SubscribeLocalEvent<CETileEffectVFXComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CETileEffectVFXComponent, CETileEffectStackEditedEvent>(OnEdited);
     }
 
@@ -24,20 +23,11 @@ public sealed class CETileEffectVFXSystem : EntitySystem
             return;
 
         var pos = Transform(ent).Coordinates;
-        Spawn(ent.Comp.OnAppliedVfx, pos);
+        if (ent.Comp.OnAppliedVfx is not null)
+            Spawn(ent.Comp.OnAppliedVfx, pos);
 
-        _audio.PlayPvs(ent.Comp.OnAppliedSound, pos);
-    }
-
-    private void OnShutdown(Entity<CETileEffectVFXComponent> ent, ref ComponentShutdown args)
-    {
-        //if (_net.IsClient) //TODO: fix spawning on terminating entity
-        //    return;
-//
-        //var mapPos = Transform(ent).Coordinates;
-        //Spawn(ent.Comp.OnRemovedVfx, mapPos);
-//
-        //_audio.PlayPvs(ent.Comp.OnRemovedSound, mapPos);
+        if (ent.Comp.OnAppliedSound is not null)
+            _audio.PlayPvs(ent.Comp.OnAppliedSound, pos);
     }
 
     private void OnEdited(Entity<CETileEffectVFXComponent> ent, ref CETileEffectStackEditedEvent args)
@@ -49,13 +39,17 @@ public sealed class CETileEffectVFXSystem : EntitySystem
 
         if (args.NewStack > args.OldStack)
         {
-            Spawn(ent.Comp.OnStacksAddedVfx, pos);
-            _audio.PlayPvs(ent.Comp.OnStacksAddedSound, pos);
+            if (ent.Comp.OnStacksAddedVfx is not null)
+                Spawn(ent.Comp.OnStacksAddedVfx, pos);
+            if (ent.Comp.OnStacksAddedSound is not null)
+                _audio.PlayPvs(ent.Comp.OnStacksAddedSound, pos);
         }
         else if (args.NewStack < args.OldStack)
         {
-            Spawn(ent.Comp.OnStacksRemovedVfx, pos);
-            _audio.PlayPvs(ent.Comp.OnStacksRemovedSound, pos);
+            if (ent.Comp.OnStacksRemovedVfx is not null)
+                Spawn(ent.Comp.OnStacksRemovedVfx, pos);
+            if (ent.Comp.OnStacksRemovedSound is not null)
+                _audio.PlayPvs(ent.Comp.OnStacksRemovedSound, pos);
         }
     }
 }
