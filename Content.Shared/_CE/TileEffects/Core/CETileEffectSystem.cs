@@ -347,11 +347,11 @@ public sealed partial class CETileEffectSystem : EntitySystem
         if (!_tileQuery.TryComp(ent, out var tileComp))
             return;
 
+        var coords = Transform(ent).Coordinates;
+
         var neutralized = Math.Min(tileComp.Stacks, args.RemainingAmount);
         TryRemoveStack((ent.Owner, tileComp), neutralized);
         args.RemainingAmount -= neutralized;
-
-        var coords = Transform(ent).Coordinates;
 
         if (ent.Comp.Vfx is { } vfx)
             Spawn(vfx, coords);
