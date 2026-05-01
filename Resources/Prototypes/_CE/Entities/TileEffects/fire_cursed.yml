@@ -33,6 +33,7 @@
   - type: CETileEffectContactEffects
     contactEffects:
       CEStatusEffectFire: 1
+      CEStatusEffectCurse: 1
   - type: CETileEffectVFX
     onAppliedVfx: CEFireImpactEffect
     onAppliedSound:
