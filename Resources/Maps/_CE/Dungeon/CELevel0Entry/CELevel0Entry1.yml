@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/28/2026 12:39:36
-  entityCount: 1485
+  time: 05/01/2026 10:17:05
+  entityCount: 1465
 maps:
 - 1
 grids:
@@ -4192,127 +4192,27 @@ entities:
   - uid: 1356
     components:
     - type: Transform
-      pos: 18.34417,-0.54841864
+      pos: 10.249607,-0.4479167
       parent: 1
   - uid: 1358
     components:
     - type: Transform
-      pos: 17.21917,0.17033136
+      pos: 5.3984656,-2.5092394
       parent: 1
   - uid: 1359
     components:
     - type: Transform
-      pos: 16.00042,0.48283136
+      pos: 2.5391202,2.4681573
       parent: 1
   - uid: 1360
     components:
     - type: Transform
-      pos: 14.812919,0.09220636
+      pos: -0.50934875,9.272408
       parent: 1
   - uid: 1361
     components:
     - type: Transform
-      pos: 13.781669,-0.31404364
-      parent: 1
-  - uid: 1366
-    components:
-    - type: Transform
-      pos: 12.562919,-1.0327936
-      parent: 1
-  - uid: 1368
-    components:
-    - type: Transform
-      pos: 11.172294,-1.4077936
-      parent: 1
-  - uid: 1369
-    components:
-    - type: Transform
-      pos: 9.812919,-1.0171686
-      parent: 1
-  - uid: 1397
-    components:
-    - type: Transform
-      pos: 8.120551,-1.4077936
-      parent: 1
-  - uid: 1398
-    components:
-    - type: Transform
-      pos: 6.0423546,-1.8609186
-      parent: 1
-  - uid: 1399
-    components:
-    - type: Transform
-      pos: 4.8392296,-1.4859186
-      parent: 1
-  - uid: 1412
-    components:
-    - type: Transform
-      pos: 3.4954796,-0.68904364
-      parent: 1
-  - uid: 1413
-    components:
-    - type: Transform
-      pos: 2.830009,0.7728605
-      parent: 1
-  - uid: 1415
-    components:
-    - type: Transform
-      pos: 2.3606014,1.5391359
-      parent: 1
-  - uid: 1416
-    components:
-    - type: Transform
-      pos: 1.2828584,2.1481333
-      parent: 1
-  - uid: 1476
-    components:
-    - type: Transform
-      pos: -0.22551298,3.4209785
-      parent: 1
-  - uid: 1477
-    components:
-    - type: Transform
-      pos: -0.93514395,4.472642
-      parent: 1
-  - uid: 1478
-    components:
-    - type: Transform
-      pos: -1.169519,5.660142
-      parent: 1
-  - uid: 1479
-    components:
-    - type: Transform
-      pos: -0.8289261,6.815747
-      parent: 1
-  - uid: 1480
-    components:
-    - type: Transform
-      pos: -0.37597752,8.128481
-      parent: 1
-  - uid: 1481
-    components:
-    - type: Transform
-      pos: 11.353299,-0.6017147
-      parent: 1
-  - uid: 1482
-    components:
-    - type: Transform
-      pos: 6.3611383,-1.3360896
-      parent: 1
-  - uid: 1483
-    components:
-    - type: Transform
-      pos: 0.6173866,2.4785032
-      parent: 1
-  - uid: 1484
-    components:
-    - type: Transform
-      pos: -0.8656529,9.073763
-      parent: 1
-  - uid: 1485
-    components:
-    - type: Transform
-      pos: -0.06877792,9.042513
+      pos: -1.4780988,4.3349066
       parent: 1
 - proto: CESpawnPointJob
   entities:
