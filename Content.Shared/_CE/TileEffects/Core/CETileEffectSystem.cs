@@ -276,7 +276,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
         // Allow the source entity to cancel the attempt.
         if (source is { } sourceUid)
         {
-            var sourceAttempt = new CEAttemptApplyTileEffectEvent(tileEffect, amount);
+            var sourceAttempt = new CEAttemptApplyTileEffectEvent(tileEffect, amount, coords);
             RaiseLocalEvent(sourceUid, ref sourceAttempt);
             if (sourceAttempt.Cancelled)
                 return false;
@@ -336,7 +336,11 @@ public sealed partial class CETileEffectSystem : EntitySystem
             _transform.SetLocalRotation(combined, rotation);
 
             if (_tileQuery.TryComp(combined, out var combinedTileComp))
+            {
                 SetStacks((combined, combinedTileComp), selfStacks + amount, max);
+                if (source is not null)
+                    combinedTileComp.Applier = source;
+            }
 
             return true;
         }
@@ -352,6 +356,9 @@ public sealed partial class CETileEffectSystem : EntitySystem
                 continue;
 
             TryAddStack((ent, existing), amount, max);
+            if (source is not null)
+                existing.Applier = source;
+            
             return true;
         }
 
@@ -360,8 +367,8 @@ public sealed partial class CETileEffectSystem : EntitySystem
         if (!_tileQuery.TryComp(spawned, out var comp))
             return false;
 
-        if (source is { } applier)
-            comp.Applier = applier;
+        if (source is not null)
+            comp.Applier = source;
 
         // Use SetStacks so the initial count equals `amount`, not the prototype default + amount.
         SetStacks((spawned, comp), amount, max);
@@ -498,7 +505,7 @@ public readonly record struct CETileEffectStackEditedEvent(Entity<CETileEffectCo
 /// Handlers can set <see cref="Cancelled"/> to prevent the tile effect from spawning/stacking.
 /// </summary>
 [ByRefEvent]
-public record struct CEAttemptApplyTileEffectEvent(EntProtoId TileEffect, int Amount, bool Cancelled = false);
+public record struct CEAttemptApplyTileEffectEvent(EntProtoId TileEffect, int Amount, EntityCoordinates Coordinates, bool Cancelled = false);
 
 /// <summary>
 /// Raised as a directed event on each anchored entity on the target tile before a tile effect is spawned.
@@ -513,15 +520,9 @@ public record struct CEAttemptSpawnTileEffectEvent(EntProtoId TileEffect, Entity
 /// Setting <see cref="Cancelled"/> or reducing <see cref="RemainingAmount"/> to zero cancels the application entirely.
 /// </summary>
 [ByRefEvent]
-public struct CEAttemptReceiveTileEffectEvent
+public struct CEAttemptReceiveTileEffectEvent(EntProtoId tileEffect, int amount)
 {
-    public readonly EntProtoId TileEffect;
-    public int RemainingAmount;
+    public readonly EntProtoId TileEffect = tileEffect;
+    public int RemainingAmount = amount;
     public bool Cancelled;
-
-    public CEAttemptReceiveTileEffectEvent(EntProtoId tileEffect, int amount)
-    {
-        TileEffect = tileEffect;
-        RemainingAmount = amount;
-    }
 }
