@@ -23,8 +23,8 @@
     color: "#665e72"
   - type: CETileEffect
     maxStacks: 10
-    minDecayInterval: 5
-    maxDecayInterval: 10
+    minDecayInterval: 10
+    maxDecayInterval: 20
   - type: CETileEffectContactEffects
     contactEffects:
       CEStatusEffectCurse: 1

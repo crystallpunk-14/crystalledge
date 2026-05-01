@@ -358,7 +358,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
             TryAddStack((ent, existing), amount, max);
             if (source is not null)
                 existing.Applier = source;
-            
+
             return true;
         }
 
