@@ -5,11 +5,10 @@
   description: A benevolent blessing that increases all incoming healing.
   components:
   - type: Sprite
-    sprite: _CE/Effects/fire_tile.rsi
+    sprite: _CE/Effects/TileEffects/bless_tile.rsi
     layers:
     - state: low_1
       shader: unshaded
-      color: "#15ff00"
       map: [ "fire" ]
   - type: Appearance
   - type: GenericVisualizer
@@ -18,9 +17,9 @@
         fire:
           Low: { state: low_1 }
           Medium: { state: medium_1 }
-          High: { state: high_1 }  
+          High: { state: high_1 }
   - type: TileEmission
-    color: "#74ff51"
+    color: "#b4fbff"
   - type: CETileEffect
     maxStacks: 10
     minDecayInterval: 2
@@ -44,7 +43,7 @@
   - type: Sprite
     layers:
     - state: red
-    - sprite: _CE/Effects/fire_tile.rsi
+    - sprite: _CE/Effects/TileEffects/bless_tile.rsi
       state: low_1
       color: "#1cf41f"
   - type: CETileEffectSpawner

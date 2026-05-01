@@ -31,7 +31,7 @@
   components:
   - type: Transform
   - type: Sprite
-    sprite: _CE/Effects/freeze_effect.rsi
+    sprite: _CE/Effects/TileEffects/freeze_effect.rsi
     layers:
     - state: effect
     drawdepth: Effects
@@ -57,7 +57,7 @@
   - type: Sprite
     layers:
     - state: red
-    - sprite: _CE/Effects/freeze_effect.rsi
+    - sprite: _CE/Effects/TileEffects/freeze_effect.rsi
       state: effect
   - type: CETileEffectSpawner
     tileEffect: CETileEffectFreeze

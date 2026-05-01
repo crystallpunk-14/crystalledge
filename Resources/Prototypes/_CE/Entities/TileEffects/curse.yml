@@ -5,7 +5,7 @@
   description: A malevolent curse that increases all incoming damage.
   components:
   - type: Sprite
-    sprite: _CE/Effects/fire_tile.rsi
+    sprite: _CE/Effects/TileEffects/curse_tile.rsi
     layers:
     - state: low_1
       shader: unshaded
@@ -19,6 +19,8 @@
           Low: { state: low_1 }
           Medium: { state: medium_1 }
           High: { state: high_1 }
+  - type: TileEmission
+    color: "#665e72"
   - type: CETileEffect
     maxStacks: 10
     minDecayInterval: 5
@@ -45,7 +47,7 @@
   - type: Sprite
     layers:
     - state: red
-    - sprite: _CE/Effects/fire_tile.rsi
+    - sprite: _CE/Effects/TileEffects/curse_tile.rsi
       state: low_1
       color: "#17264f"
   - type: CETileEffectSpawner
