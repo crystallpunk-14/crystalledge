@@ -15,13 +15,13 @@
   id: CEUncommonWeapon
   table: !type:GroupSelector
     children:
-    #- id: CEWeaponDaggerSacrificial
     - id: CEWeaponMagicStaffHealing
     - id: CEWeaponSwordBone
     - id: CEWeaponSpearSoulCatcher
     - id: CEWeaponMagicStaffWater
     - id: CEWeaponDaggerPurification
     - id: CEWeaponSkimitarMolten
+    - id: CEWeaponStaffHolyStick
 
 - type: entityTable
   id: CERandomWeapon
