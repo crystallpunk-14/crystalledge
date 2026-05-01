@@ -102,9 +102,6 @@
         EnemyVisible: false
         EnemyInMeleeRange: false
       cost: 1
-      fleeDistance: 15
-      visionRadius: 10
-      occlusionBonus: 2
     # Explore
     - !type:CEGOAPExploreAction
       effects:
