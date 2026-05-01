@@ -130,7 +130,7 @@
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
     - !type:CEGOAPCheckHealthLevelSensor
-      positionTargetKey: self
+      targetKey: self
       conditionKey: LowHealth
       threshold: 0.6
     - !type:CEGOAPAlarmSensor
