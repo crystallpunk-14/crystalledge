@@ -7,9 +7,12 @@
   - type: Sprite
     sprite: _CE/Effects/TileEffects/curse_tile.rsi
     layers:
+    - sprite: Effects/spookysmoke.rsi
+      state: spookysmoke
+      color: "#17264f6e"
     - state: low_1
-      shader: unshaded
       color: "#17264f"
+      unshaded: true
       map: [ "fire" ]
   - type: Appearance
   - type: GenericVisualizer
@@ -20,7 +23,7 @@
           Medium: { state: medium_1 }
           High: { state: high_1 }
   - type: TileEmission
-    color: "#665e72"
+    color: "#18151d"
   - type: CETileEffect
     maxStacks: 10
     minDecayInterval: 10

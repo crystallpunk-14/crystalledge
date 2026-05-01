@@ -10,6 +10,7 @@
     - id: CEWeaponSpearIron
     - id: CEWeaponSwordIron
     - id: CEWeaponStaffWooden
+    - id: CEWeaponStaffHolyStick
 
 - type: entityTable
   id: CEUncommonWeapon
@@ -21,7 +22,7 @@
     - id: CEWeaponMagicStaffWater
     - id: CEWeaponDaggerPurification
     - id: CEWeaponSkimitarMolten
-    - id: CEWeaponStaffHolyStick
+    - id: CEWeaponMagicStaffCurse
 
 - type: entityTable
   id: CERandomWeapon

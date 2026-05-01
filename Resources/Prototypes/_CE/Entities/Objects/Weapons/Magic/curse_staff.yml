@@ -1,29 +1,27 @@
 - type: entity
   parent: CEBaseWeapon
-  id: CEWeaponMagicStaffWater
-  name: water staff
-  description: A staff imbued with water magic. Launches slow water orbs that drench and repel their target.
+  id: CEWeaponMagicStaffCurse
+  name: curse staff
+  description: TODO
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/Staff/water_staff.rsi
+    sprite: _CE/Objects/Weapons/Staff/curse_staff.rsi
     layers:
     - state: icon
   - type: CEWeapon
     effectSlots:
       OnHit:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicWater
-        projectileSpeed: 7
+        prototype: CEProjectileMagicCurse
+        projectileSpeed: 4
+        projectileMaxSpeed: 6
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.78
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicCurse
+        projectileSpeed: 4
+        projectileMaxSpeed: 6
+        projectileCount: 5
+        spread: 150
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -39,6 +37,7 @@
   - type: CEWeaponChargesCost
     costs:
       Primary: 1
+      Secondary: 3
   - type: CECharges
     maxCharges: 30
     currentCharges: 30
@@ -47,8 +46,8 @@
     - neck
 
 - type: entity
-  id: CEProjectileMagicWater
-  name: water bolt
+  id: CEProjectileMagicCurse
+  name: curse bolt
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
@@ -57,30 +56,31 @@
     layers:
     - state: effect
       shader: unshaded
+      color: "#781884"
   - type: PointLight
-    color: "#1e90ff"
+    color: "#781884"
     radius: 1.5
     energy: 3.0
   - type: CEProjectile
     hitEffects:
     - !type:CETileAffectArea
       effectTarget: Used
-      tileEffect: CETileEffectWater
+      tileEffect: CETileEffectCurse
       radius: 2
       fallOffFactor: 0.5
-      maxStacks: 10
-    - !type:ThrowFromUser
-      throwPower: 7
-      distance: 2
+      maxStacks: 8
     - !type:Damage
       attackType: Ranged
       damage:
         types:
-          Physical: 15
-    - !type:AreaEffect
-      affectCaster: true
-      range: 2
-      effects:
-      - !type:ThrowFromPosition
-        throwPower: 7
-        distance: 0.25
+          Poison: 5
+  - type: CEEntityEffectSpawner
+    frequency: 0.2
+    firstDelay: 0.5
+    effects:
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectCurse
+      radius: 0.8
+      fallOffFactor: 0.5
+      maxStacks: 3
