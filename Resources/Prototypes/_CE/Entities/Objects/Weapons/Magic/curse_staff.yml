@@ -1,0 +1,86 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponMagicStaffCurse
+  name: curse staff
+  description: TODO
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/curse_staff.rsi
+    layers:
+    - state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicCurse
+        projectileSpeed: 4
+        projectileMaxSpeed: 6
+      OnHeavyHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicCurse
+        projectileSpeed: 4
+        projectileMaxSpeed: 6
+        projectileCount: 5
+        spread: 150
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+        speed: 0.6
+      - anim: StaffAttackLight2
+        speed: 0.6
+      Secondary:
+      - anim: StaffAttackHeavy
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 1
+  - type: CEWeaponChargesCost
+    costs:
+      Primary: 1
+      Secondary: 3
+  - type: CECharges
+    maxCharges: 30
+    currentCharges: 30
+  - type: Clothing
+    slots:
+    - neck
+
+- type: entity
+  id: CEProjectileMagicCurse
+  name: curse bolt
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/water_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+      color: "#781884"
+  - type: PointLight
+    color: "#781884"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectCurse
+      radius: 2
+      fallOffFactor: 0.5
+      maxStacks: 8
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Poison: 5
+  - type: CEEntityEffectSpawner
+    frequency: 0.2
+    firstDelay: 0.5
+    effects:
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectCurse
+      radius: 0.8
+      fallOffFactor: 0.5
+      maxStacks: 3

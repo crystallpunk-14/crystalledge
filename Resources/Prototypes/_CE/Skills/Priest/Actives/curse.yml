@@ -1,0 +1,44 @@
+- type: skill
+  parent: BasePriestSkill
+  id: Curse
+  effect: !type:AddAction
+    action: CEActionSpellCurse
+
+- type: entity
+  id: CEActionSpellCurse
+  parent: CEActionSpellBase
+  name: Curse
+  description: You curse the selected area and all creatures within it.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 2.5
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Neutral/todo.rsi
+      state: icon
+  - type: TargetAction
+    range: 3
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationCurse
+
+- type: entityEffectAnimation
+  id: AnimationCurse
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectAreaHealingTelegraphy
+    - !type:SayChat
+      sentence: "maledictio"
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectCurse
+      radius: 2
+      maxStacks: 10

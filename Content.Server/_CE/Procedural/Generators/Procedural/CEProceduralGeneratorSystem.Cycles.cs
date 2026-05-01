@@ -37,7 +37,7 @@ public sealed partial class CEProceduralGeneratorSystem
             existingConnections.Add((conn.RoomB, conn.RoomA));
         }
 
-        // Build a grid-coord → room-index lookup for O(1) neighbour checks.
+        // Build a grid-coord -> room-index lookup for O(1) neighbour checks.
         var gridLookup = new Dictionary<Vector2i, int>(comp.Rooms.Count);
         for (var i = 0; i < comp.Rooms.Count; i++)
         {

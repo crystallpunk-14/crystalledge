@@ -99,7 +99,7 @@ public sealed partial class CEStaminaComponent : Component
     public float FrequencyMin = 0.25f;
 
     /// <summary>
-    /// Additional frequency added as fatigue increases (0 → max fatigue).
+    /// Additional frequency added as fatigue increases (0 -> max fatigue).
     /// </summary>
     [DataField]
     public float FrequencyMod = 1.75f;

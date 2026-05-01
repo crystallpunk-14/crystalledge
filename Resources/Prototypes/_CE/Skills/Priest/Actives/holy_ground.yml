@@ -1,0 +1,44 @@
+- type: skill
+  parent: BasePriestSkill
+  id: HolyGround
+  effect: !type:AddAction
+    action: CEActionSpellHolyGround
+
+- type: entity
+  id: CEActionSpellHolyGround
+  parent: CEActionSpellBase
+  name: Holy ground
+  description: You bless the chosen territory and all the beings within it.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 2.5
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Neutral/todo.rsi
+      state: icon
+  - type: TargetAction
+    range: 3
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationHolyGround
+
+- type: entityEffectAnimation
+  id: AnimationHolyGround
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectAreaHealingTelegraphy
+    - !type:SayChat
+      sentence: "terra sancta"
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectBlessing
+      radius: 2
+      maxStacks: 6

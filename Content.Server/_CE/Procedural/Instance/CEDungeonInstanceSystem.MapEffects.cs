@@ -33,7 +33,7 @@ public sealed partial class CEDungeonInstanceSystem
         _activeMapEffects.TryGetValue(ent, out var outgoing);
 
         // Remove only the effects that the new map does NOT have.
-        // Keeping shared effects alive avoids a remove→add cycle that would silently
+        // Keeping shared effects alive avoids a remove->add cycle that would silently
         // drop them: TryRemoveStatusEffect uses PredictedQueueDel (deferred), so the
         // effect entity is still returned by TryGetStatusEffect immediately after and
         // TryAddStack adds stacks to a dead entity — the effect then vanishes.

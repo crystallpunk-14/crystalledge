@@ -89,7 +89,7 @@
   save: false
   components:
   - type: Sprite
-    sprite: _CE/Effects/water_tile_impact.rsi
+    sprite: _CE/Effects/TileEffects/water_tile_impact.rsi
     layers:
     - state: effect
       shader: unshaded

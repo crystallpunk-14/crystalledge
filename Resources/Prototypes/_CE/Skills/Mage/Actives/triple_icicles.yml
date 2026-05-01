@@ -24,6 +24,7 @@
       sprite: _CE/Skills/Mage/triple_icicle.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent

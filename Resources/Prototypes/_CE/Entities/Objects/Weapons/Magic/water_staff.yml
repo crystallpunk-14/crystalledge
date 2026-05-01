@@ -8,8 +8,6 @@
     sprite: _CE/Objects/Weapons/Staff/water_staff.rsi
     layers:
     - state: icon
-  - type: CEDestructible
-    destroyThreshold: 50
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -66,6 +64,7 @@
   - type: CEProjectile
     hitEffects:
     - !type:CETileAffectArea
+      effectTarget: Used
       tileEffect: CETileEffectWater
       radius: 2
       fallOffFactor: 0.5

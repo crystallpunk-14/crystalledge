@@ -30,7 +30,7 @@
   components:
   - type: Transform
   - type: Sprite
-    sprite: _CE/Effects/water_tile_impact.rsi
+    sprite: _CE/Effects/TileEffects/water_tile_impact.rsi
     snapCardinals: true
     layers:
     - state: effect
@@ -50,7 +50,7 @@
   - type: Sprite
     layers:
     - state: red
-    - sprite: _CE/Effects/water_tile_impact.rsi
+    - sprite: _CE/Effects/TileEffects/water_tile_impact.rsi
       state: effect
   - type: CETileEffectSpawner
     tileEffect: CETileEffectWater

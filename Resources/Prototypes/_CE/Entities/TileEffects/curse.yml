@@ -1,0 +1,74 @@
+- type: entity
+  id: CETileEffectCurse
+  parent: CETileEffectBase
+  name: curse
+  description: A malevolent curse that increases all incoming damage.
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/TileEffects/curse_tile.rsi
+    layers:
+    - sprite: Effects/spookysmoke.rsi
+      state: spookysmoke
+      color: "#17264f6e"
+    - state: low_1
+      color: "#17264f"
+      unshaded: true
+      map: [ "fire" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CETileEffectVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }
+  - type: TileEmission
+    color: "#18151d"
+  - type: CETileEffect
+    maxStacks: 10
+    minDecayInterval: 10
+    maxDecayInterval: 20
+  - type: CETileEffectContactEffects
+    contactEffects:
+      CEStatusEffectCurse: 1
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectBlessing
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CETileEffectCursedFire
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CECurseSpawner1
+  name: tile effect - curse
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Effects/TileEffects/curse_tile.rsi
+      state: low_1
+      color: "#17264f"
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectCurse
+    amount: 1
+
+- type: entity
+  parent: CECurseSpawner1
+  id: CECurseSpawner5
+  suffix: 5
+  components:
+  - type: CETileEffectSpawner
+    amount: 5
+
+- type: entity
+  parent: CECurseSpawner1
+  id: CECurseSpawner10
+  suffix: 10
+  components:
+  - type: CETileEffectSpawner
+    amount: 10

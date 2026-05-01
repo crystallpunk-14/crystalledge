@@ -1,0 +1,21 @@
+- type: skill
+  parent: BaseMageSkill
+  id: CursedFlame
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectCursedFlame
+
+- type: entity
+  id: CEStatusEffectCursedFlame
+  name: Cursed Flame
+  description: Every flame you create is cursed.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CECursedFlame
+  - type: CECursedFlameStatusEffect
+
+- type: alert
+  id: CECursedFlame
+  icons:
+  - sprite: _CE/Skills/Mage/cursed_fire.rsi
+    state: icon

@@ -5,7 +5,7 @@
   description: A scorching hot flame. You definitely shouldn't touch it just like that.
   components:
   - type: Sprite
-    sprite: _CE/Effects/fire_tile.rsi
+    sprite: _CE/Effects/TileEffects/fire_tile.rsi
     layers:
     - state: low_1
       shader: unshaded
@@ -45,6 +45,9 @@
     - CETileEffectFreeze
     - CETileEffectWater
     vfx: CESteamEffect
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectCurse: CETileEffectCursedFire
 
 
 - type: entity
@@ -56,7 +59,7 @@
   components:
   - type: Transform
   - type: Sprite
-    sprite: _CE/Effects/fire_tile_impact.rsi
+    sprite: _CE/Effects/TileEffects/fire_tile_impact.rsi
     snapCardinals: true
     layers:
     - state: effect
@@ -83,7 +86,7 @@
   - type: Sprite
     layers:
     - state: red
-    - sprite: _CE/Effects/fire_tile.rsi
+    - sprite: _CE/Effects/TileEffects/fire_tile.rsi
       state: low_1
   - type: CETileEffectSpawner
     tileEffect: CETileEffectFire

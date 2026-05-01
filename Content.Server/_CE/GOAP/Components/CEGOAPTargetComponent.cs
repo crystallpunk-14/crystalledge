@@ -10,7 +10,7 @@ namespace Content.Server._CE.GOAP.Components;
 public sealed partial class CEGOAPTargetComponent : Component
 {
     /// <summary>
-    /// Maps GOAP entity UID → set of target keys that reference this entity.
+    /// Maps GOAP entity UID -> set of target keys that reference this entity.
     /// </summary>
     public Dictionary<EntityUid, HashSet<string>> Trackers = new();
 }

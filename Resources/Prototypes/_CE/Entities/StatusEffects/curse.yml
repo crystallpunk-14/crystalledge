@@ -1,0 +1,55 @@
+- type: entity
+  id: CEStatusEffectCurse
+  name: Curse
+  description: Increases all incoming damage.
+  components:
+  - type: CENegativeStatusEffect
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: RejuvenateRemovedStatusEffect
+  - type: StatusEffectAlert
+    alert: CECurse
+  - type: CEDamageVulnerabilityStatusEffect
+    extraDamagePerStack: 1
+    affectedTypes:
+    - Physical
+    - Poison
+    - Fire
+    - Cold
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 20
+    resetTimerOnStack: true
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectBlessing
+
+- type: alert
+  id: CECurse
+  alertViewEntity: CECurseAlertSpriteView
+  name: ce-alert-curse-name
+  description: ce-alert-curse-desc
+  icons:
+  - sprite: _CE/Interface/curse.rsi
+    state: icon
+
+- type: entity
+  id: CECurseAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/curse.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

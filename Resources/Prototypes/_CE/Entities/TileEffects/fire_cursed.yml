@@ -1,0 +1,89 @@
+- type: entity
+  id: CETileEffectCursedFire
+  parent: CETileEffectBase
+  name: cursed fire
+  description: a searing, unquenchable flame, eternally fueled by a curse
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/TileEffects/cursed_fire_tile.rsi
+    layers:
+    - state: low_1
+      shader: unshaded
+      map: [ "fire" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CETileEffectVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }
+  - type: AmbientSound
+    enabled: true
+    volume: -15
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg #TODO more aggressive sound
+  - type: TileEmission
+    color: "#ec3594"
+  - type: CETileEffect
+    maxStacks: 10
+    minDecayInterval: 6666
+    maxDecayInterval: 6666
+  - type: CETileEffectContactEffects
+    contactEffects:
+      CEStatusEffectFire: 1
+      CEStatusEffectCurse: 1
+  - type: CETileEffectVFX
+    onAppliedVfx: CEFireImpactEffect
+    onAppliedSound:
+      path: /Audio/_CE/Effects/fire_whoosh.ogg
+    onStacksAddedVfx: CEFireImpactEffect
+    onStacksAddedSound:
+      path: /Audio/_CE/Effects/fire_whoosh.ogg
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectFreeze
+    - CETileEffectWater
+    vfx: CESteamEffect
+  - type: CETileEffectConsume
+    consumes:
+    - CETileEffectFire
+    - CETileEffectCurse
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectBlessing: CETileEffectFire
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CECursedFireSpawner1
+  name: tile effect - cursed fire
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Effects/TileEffects/cursed_fire_tile.rsi
+      state: low_1
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectCursedFire
+    amount: 1
+
+- type: entity
+  parent: CECursedFireSpawner1
+  id: CECursedFireSpawner5
+  suffix: 5
+  components:
+  - type: CETileEffectSpawner
+    amount: 5
+
+- type: entity
+  parent: CECursedFireSpawner1
+  id: CECursedFireSpawner10
+  suffix: 10
+  components:
+  - type: CETileEffectSpawner
+    amount: 10

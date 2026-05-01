@@ -79,7 +79,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         }
 
         // Fresh interaction: charge souls. The soul system starts a delayed transfer
-        // (animation) and raises CESoulReceivedEvent → OnSoulReceived → SpawnBlessings
+        // (animation) and raises CESoulReceivedEvent -> OnSoulReceived -> SpawnBlessings
         // only after the animation finishes. We tentatively lock the statue to this
         // player up-front so concurrent clicks from other players see "busy" while
         // the animation plays; we revert the lock if TrySpendSouls fails.

@@ -1,0 +1,67 @@
+- type: entity
+  id: CETileEffectBlessing
+  parent: CETileEffectBase
+  name: blessing
+  description: A benevolent blessing that increases all incoming healing.
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/TileEffects/bless_tile.rsi
+    layers:
+    - state: low_1
+      shader: unshaded
+      map: [ "fire" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CETileEffectVisuals.Level:
+        fire:
+          Low: { state: low_1 }
+          Medium: { state: medium_1 }
+          High: { state: high_1 }
+  - type: TileEmission
+    color: "#b4fbff"
+  - type: CETileEffect
+    maxStacks: 10
+    minDecayInterval: 10
+    maxDecayInterval: 20
+  - type: CETileEffectContactEffects
+    contactEffects:
+      CEStatusEffectBlessing: 1
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectCurse
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CEBlessingSpawner1
+  name: tile effect - blessing
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Effects/TileEffects/bless_tile.rsi
+      state: low_1
+      color: "#1cf41f"
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectBlessing
+    amount: 1
+
+- type: entity
+  parent: CEBlessingSpawner1
+  id: CEBlessingSpawner5
+  suffix: 5
+  components:
+  - type: CETileEffectSpawner
+    amount: 5
+
+- type: entity
+  parent: CEBlessingSpawner1
+  id: CEBlessingSpawner10
+  suffix: 10
+  components:
+  - type: CETileEffectSpawner
+    amount: 10

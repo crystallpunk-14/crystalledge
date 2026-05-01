@@ -21,6 +21,7 @@
       sprite: _CE/Skills/Mage/frost_flow.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -85,7 +86,7 @@
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/freeze_effect.rsi
+    sprite: _CE/Effects/TileEffects/freeze_effect.rsi
     layers:
     - state: effect
       shader: unshaded
