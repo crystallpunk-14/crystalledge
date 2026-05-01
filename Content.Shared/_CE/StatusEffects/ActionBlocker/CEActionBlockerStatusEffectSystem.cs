@@ -45,8 +45,8 @@ public sealed class CEActionBlockerStatusEffectSystem : EntitySystem
         if (ent.Comp.BlockMove)
             _actionBlocker.UpdateCanMove(status.AppliedTo.Value);
 
-        if (ent.Comp.BlockAttack)
-            _combat.SetInCombatMode(status.AppliedTo.Value, false);
+        if (ent.Comp.BlockAttack && TryComp<CombatModeComponent>(status.AppliedTo.Value, out var combatComp))
+            _combat.SetInCombatMode(status.AppliedTo.Value, false, combatComp);
     }
 
     private void OnRemoved(Entity<CEActionBlockerStatusEffectComponent> ent, ref StatusEffectRemovedEvent args)
