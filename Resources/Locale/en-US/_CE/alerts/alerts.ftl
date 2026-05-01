@@ -42,3 +42,9 @@ ce-alert-poisoned-desc = You take damage over time. Any source of healing remove
 
 ce-alert-pacifism-name = Safe Zone
 ce-alert-pacifism-desc = You are in a safe zone. All combat is disabled.
+
+ce-alert-blessing-name = blessing
+ce-alert-blessing-desc = Increases all incoming healing.
+
+ce-alert-curse-name = Curse
+ce-alert-curse-desc = Increases all incoming damage.

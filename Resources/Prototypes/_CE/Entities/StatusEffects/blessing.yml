@@ -15,6 +15,9 @@
     stackDelta: -1
     baseDuration: 10
     resetTimerOnStack: true
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectCurse
 
 - type: alert
   id: CEBlessing
@@ -22,8 +25,8 @@
   name: ce-alert-blessing-name
   description: ce-alert-blessing-desc
   icons:
-  - sprite: _CE/Interface/vulnerability.rsi #TODO
-    state: physical
+  - sprite: _CE/Interface/blessing.rsi
+    state: icon
 
 - type: entity
   id: CEBlessingAlertSpriteView
@@ -35,8 +38,8 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Interface/vulnerability.rsi #TODO
-      state: physical
+    - sprite: _CE/Interface/blessing.rsi
+      state: icon
     - map: [ "1" ]
       offset: 0.65, 0
     - map: [ "10" ]

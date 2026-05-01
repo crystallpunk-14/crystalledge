@@ -42,3 +42,9 @@ ce-alert-poisoned-desc = Вы медленно получаете урон. Лю
 
 ce-alert-pacifism-name = Безопасная зона
 ce-alert-pacifism-desc = Успокаивающий эффект безопасного убежища не позволяет вам причинять вред окружающим.
+
+ce-alert-blessing-name = Благословение
+ce-alert-blessing-desc = Увеличивает все входящее лечение.
+
+ce-alert-curse-name = Проклятье
+ce-alert-curse-desc = Увеличивает весь входящий урон.
