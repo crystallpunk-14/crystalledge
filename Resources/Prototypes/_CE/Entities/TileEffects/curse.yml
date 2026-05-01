@@ -10,8 +10,8 @@
     - sprite: Effects/spookysmoke.rsi
       state: spookysmoke
       color: "#17264f6e"
+      map: [ "smoke" ]
     - state: low_1
-      color: "#17264f"
       unshaded: true
       map: [ "fire" ]
   - type: Appearance
@@ -22,6 +22,10 @@
           Low: { state: low_1 }
           Medium: { state: medium_1 }
           High: { state: high_1 }
+        smoke:
+          Low: { color: "#17264f1f" }
+          Medium: { color: "#17264f47" }
+          High: { color: "#17264f6e" }
   - type: TileEmission
     color: "#18151d"
   - type: CETileEffect

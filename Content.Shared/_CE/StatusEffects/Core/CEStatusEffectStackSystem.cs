@@ -1,4 +1,5 @@
 using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Alert;
 using Content.Shared.StatusEffectNew;
@@ -24,6 +25,8 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
         SubscribeLocalEvent<CEStatusEffectStackComponent, CEStatusEffectEndingAttemptEvent>(OnBeforeEnded);
         SubscribeLocalEvent<CEStatusEffectNeutralizationComponent, StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent>>(OnNeutralize);
+        SubscribeLocalEvent<CEStatusEffectTransformComponent, StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent>>(OnTransform);
+        SubscribeLocalEvent<CEStatusEffectConsumeComponent, StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent>>(OnConsume);
     }
 
     /// <summary>
@@ -83,7 +86,14 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// <param name="source">Optional source entity (attacker/caster). When provided, raises <see cref="CEAttemptApplyStatusEffectStackEvent"/> on the source and sets <see cref="CEStatusEffectSourceComponent"/> on the resulting effect entity.</param>
     /// <param name="max">Optional maximum total stacks allowed on the target. 0 means no limit. If the target already has this many stacks or more, the call returns false.</param>
     /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
-    public bool TryAddStack(EntityUid target, EntProtoId statusEffect, out EntityUid? effectEntity, int stack = 1, TimeSpan? duration = null, bool resetTimer = false, EntityUid? source = null, int max = 0)
+    public bool TryAddStack(EntityUid target,
+        EntProtoId statusEffect,
+        out EntityUid? effectEntity,
+        int stack = 1,
+        TimeSpan? duration = null,
+        bool resetTimer = false,
+        EntityUid? source = null,
+        int max = 0)
     {
         effectEntity = null;
 
@@ -100,7 +110,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         }
 
         // Allow target-side status effects (e.g. immunity, neutralization) to cancel or reduce the application.
-        var receiveAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, statusEffect, stack, duration);
+        var receiveAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, statusEffect, stack, duration, source);
         RaiseLocalEvent(target, receiveAttempt);
         if (receiveAttempt.Cancelled || receiveAttempt.RemainingStacks <= 0)
             return false;
@@ -261,7 +271,65 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         return stackComp.Stacks;
     }
 
-    private void OnNeutralize(EntityUid uid, CEStatusEffectNeutralizationComponent comp,
+    private void OnConsume(EntityUid uid,
+        CEStatusEffectConsumeComponent comp,
+        ref StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent> args)
+    {
+        if (args.Args.Cancelled)
+            return;
+
+        if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
+            return;
+
+        if (!comp.Consumes.Contains(args.Args.StatusEffect))
+            return;
+
+        if (!TryComp<StatusEffectComponent>(uid, out var statusEffect) || statusEffect.AppliedTo is not { } target)
+            return;
+
+        if (!TryComp<CEStatusEffectStackComponent>(uid, out var stackComp))
+            return;
+
+        // Absorb incoming stacks into this effect and update the applier.
+        SetStack(target, (uid, stackComp), stackComp.Stacks + args.Args.RemainingStacks);
+        SetEffectSource(uid, args.Args.Source);
+
+        args.Args.RemainingStacks = 0;
+        args.Args.Cancelled = true;
+    }
+
+    private void OnTransform(EntityUid uid, CEStatusEffectTransformComponent comp, ref StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent> args)
+    {
+        if (args.Args.Cancelled)
+            return;
+
+        if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
+            return;
+
+        if (!comp.Transforms.TryGetValue(args.Args.StatusEffect, out var resultProto))
+            return;
+
+        if (!TryComp<StatusEffectComponent>(uid, out var statusEffect) || statusEffect.AppliedTo is not { } target)
+            return;
+
+        var myStacks = GetStack(uid);
+        var incomingStacks = args.Args.RemainingStacks;
+        var combinedStacks = myStacks + incomingStacks;
+
+        // Remove the existing (triggering) status effect before applying the combined one.
+        var proto = MetaData(uid).EntityPrototype;
+        if (proto != null)
+            _statusEffect.TryRemoveStatusEffect(target, proto);
+
+        // Apply the combined result effect, preserving the incoming applier.
+        TryAddStack(target, resultProto, out _, combinedStacks, args.Args.Duration, source: args.Args.Source);
+
+        // Cancel the original incoming application — it has been consumed by the transform.
+        args.Args.Cancelled = true;
+    }
+
+    private void OnNeutralize(EntityUid uid,
+        CEStatusEffectNeutralizationComponent comp,
         ref StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent> args)
     {
         if (args.Args.Cancelled || args.Args.RemainingStacks <= 0)
@@ -278,7 +346,8 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         TryRemoveStack(uid, neutralized);
         args.Args.RemainingStacks -= neutralized;
 
-        if (comp.Vfx != null && TryComp<StatusEffectComponent>(uid, out var statusComp) && statusComp.AppliedTo is { } target)
+        if (comp.Vfx != null && TryComp<StatusEffectComponent>(uid, out var statusComp) &&
+            statusComp.AppliedTo is { } target)
         {
             var coords = Transform(target).Coordinates;
             Spawn(comp.Vfx, coords);
@@ -390,16 +459,25 @@ public sealed class CEAttemptReceiveStatusEffectStackEvent(
     EntityUid target,
     EntProtoId statusEffect,
     int amount,
-    TimeSpan? duration) : EntityEventArgs
+    TimeSpan? duration,
+    EntityUid? source = null) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
     public readonly int Amount = amount;
     public readonly TimeSpan? Duration = duration;
+
+    /// <summary>
+    /// The entity applying the incoming stacks (attacker/caster). Used by transform handlers
+    /// to preserve the applier on the resulting combined status effect.
+    /// </summary>
+    public readonly EntityUid? Source = source;
+
     /// <summary>
     /// Mutable stack count. Handlers can reduce this to partially neutralize incoming stacks.
     /// If set to zero or below and <see cref="Cancelled"/> is set, no stacks are applied.
     /// </summary>
     public int RemainingStacks = amount;
+
     public bool Cancelled;
 }

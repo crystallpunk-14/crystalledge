@@ -15,6 +15,7 @@
     neutralizes:
     - CEStatusEffectColdSlowdown
     - CEStatusEffectWet
+    - CEStatusEffectFrozen
     vfx: CESteamEffect
     sound:
       path: /Audio/_CE/Effects/steam_burst.ogg

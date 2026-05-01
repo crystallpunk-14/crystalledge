@@ -20,8 +20,14 @@ public sealed partial class CETempShieldStatusEffectComponent : Component
 
     /// <summary>
     /// Which damage types this shield absorbs.
-    /// If empty, absorbs all damage types.
+    /// Ignored when <see cref="All"/> is true.
     /// </summary>
     [DataField]
     public HashSet<ProtoId<CEDamageTypePrototype>> AbsorbedTypes = new() { "Physical" };
+
+    /// <summary>
+    /// If true, absorbs a stack for any damage type, ignoring <see cref="AbsorbedTypes"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool All = false;
 }

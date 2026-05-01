@@ -21,7 +21,7 @@
       sprite: _CE/Skills/Neutral/todo.rsi
       state: icon
   - type: TargetAction
-    range: 3
+    range: 6
     interactOnMiss: false
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -35,10 +35,41 @@
     0:
     - !type:SpawnEntity
       spawns:
-      - CEEffectAreaHealingTelegraphy
+      - CEEffectAreaCurseTelegraphy
     - !type:SayChat
       sentence: "maledictio"
     - !type:CETileAffectArea
       tileEffect: CETileEffectCurse
       radius: 2
       maxStacks: 10
+
+- type: entity
+  id: CEEffectAreaCurseTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: area curse telegraphy
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/area_healing_telegraphy.rsi
+    layers:
+    - state: area
+      shader: unshaded
+      color: "#781884"
+  - type: PointLight
+    color: "#781884"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

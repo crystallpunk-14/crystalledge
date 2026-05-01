@@ -15,6 +15,9 @@
     vfx: CESteamEffect
     sound:
       path: /Audio/_CE/Effects/steam_burst.ogg
+  - type: CEStatusEffectTransform
+    transforms:
+      CEStatusEffectColdSlowdown: CEStatusEffectFrozen
   - type: Sprite
     drawdepth: Effects
     sprite: _CE/Effects/water_status.rsi

@@ -310,7 +310,7 @@
   duration: 1.5
   lockRotation: true
   events:
-    0:
+    0.3:
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Mobs/gnome2.ogg
@@ -318,8 +318,8 @@
           variation: 0.1
           volume: 20
     - !type:ShootProjectile
-      projectileSpeed: 4
-      projectileMaxSpeed: 4
+      projectileSpeed: 7
+      projectileMaxSpeed: 7
       prototype: CEProjectileGnomeStone
       projectileCount: 1
 
@@ -437,7 +437,7 @@
           volume: 20
     - !type:ShootProjectile
       projectileSpeed: 4
-      projectileMaxSpeed: 4
+      projectileMaxSpeed: 6
       prototype: CEProjectileGnomeRat
       projectileCount: 1
 

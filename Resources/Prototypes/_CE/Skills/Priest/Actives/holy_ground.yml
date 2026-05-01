@@ -21,7 +21,7 @@
       sprite: _CE/Skills/Neutral/todo.rsi
       state: icon
   - type: TargetAction
-    range: 3
+    range: 6
     interactOnMiss: false
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent

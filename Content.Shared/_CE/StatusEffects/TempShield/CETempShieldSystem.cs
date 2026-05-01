@@ -42,7 +42,7 @@ public sealed class CETempShieldSystem : EntitySystem
                 continue;
             }
 
-            if (shield.AbsorbedTypes.Count > 0 && !shield.AbsorbedTypes.Contains(damageType))
+            if (!shield.All && shield.AbsorbedTypes.Count > 0 && !shield.AbsorbedTypes.Contains(damageType))
             {
                 newDamage.Types[damageType] = damageAmount;
                 continue;
