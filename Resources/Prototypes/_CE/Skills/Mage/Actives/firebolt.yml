@@ -109,10 +109,11 @@
         types:
           Fire: 25
     - !type:CETileAffectArea
+      effectTarget: Used
       tileEffect: CETileEffectFire
       radius: 2
       maxStacks: 10
     - !type:SpawnEntity
-      effectTarget: Target
+      effectTarget: Used
       spawns:
       - CEEffectPotionAlchemicalFire

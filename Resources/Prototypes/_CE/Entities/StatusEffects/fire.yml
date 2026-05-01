@@ -5,6 +5,9 @@
   components:
   - type: CENegativeStatusEffect
   - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEFire
   - type: RejuvenateRemovedStatusEffect

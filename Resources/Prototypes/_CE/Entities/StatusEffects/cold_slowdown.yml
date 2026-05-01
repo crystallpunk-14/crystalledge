@@ -4,6 +4,9 @@
   components:
   - type: CENegativeStatusEffect
   - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEColdSlowdown
   - type: RejuvenateRemovedStatusEffect

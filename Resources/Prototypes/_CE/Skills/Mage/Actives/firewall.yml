@@ -148,6 +148,7 @@
         types:
           Fire: 20
     - !type:CETileAffectArea
+      effectTarget: Used
       tileEffect: CETileEffectFire
       radius: 3
       maxStacks: 10

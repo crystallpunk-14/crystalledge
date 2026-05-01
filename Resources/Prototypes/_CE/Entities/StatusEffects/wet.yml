@@ -4,6 +4,9 @@
   description: Soaked with water. Fire has no power here.
   components:
   - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEWet
   - type: CEStatusEffectNeutralization

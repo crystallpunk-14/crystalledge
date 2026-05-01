@@ -30,8 +30,9 @@
       cost: 2
     - proto: CEMobSlimeWaterBig
       cost: 4
-    - proto: CEMobFireConstruct
-      cost: 6
+    - proto: CEMobGnome
+      cost: 4
+      weight: 2
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleHerbs
     budget: 5
