@@ -21,13 +21,20 @@
     - CEStatusEffectWet
     - CEStatusEffectColdSlowdown
   - type: CETempShieldStatusEffect
-    absorbPerStack: 1
+    absorbPerStack: 2
     all: true
   - type: CEActionBlockerStatusEffect
     blockActions: true
     blockUse: true
     blockAttack: true
     blockMove: true
+    blockThrow: true
+    blockDrop: true
+    blockPickup: true
+    blockPull: true
+    blockStand: true
+    blockEquip: true
+    blockUnequip: true
   - type: Sprite
     drawdepth: Effects
     sprite: _CE/Structures/Nature/ice_rock.rsi

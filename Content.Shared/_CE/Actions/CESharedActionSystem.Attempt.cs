@@ -2,11 +2,13 @@ using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
+using Content.Shared._CE.StatusEffects.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.Damage.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.SSDIndicator;
+using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._CE.Actions;
 
@@ -15,7 +17,7 @@ public abstract partial class CESharedActionSystem
     private void InitializeAttempts()
     {
 
-        SubscribeLocalEvent<ActionComponent, ActionAttemptEvent>(OnMobStateAttempt);
+        SubscribeLocalEvent<ActionComponent, ActionAttemptEvent>(OnActionAttempt);
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
@@ -25,19 +27,32 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ActionValidateEvent>(OnTargetMobStatusRequiredValidate);
     }
 
-
-    private void OnMobStateAttempt(Entity<ActionComponent> ent, ref ActionAttemptEvent args)
+    //TODO: THIS IS HORRIBLE. REWRITE THAT COMPLETELY
+    private void OnActionAttempt(Entity<ActionComponent> ent, ref ActionAttemptEvent args)
     {
-        if (!TryComp<CEMobStateComponent>(args.User, out var mobState))
+        if (TryComp<CEMobStateComponent>(args.User, out var mobState)
+            && mobState.CurrentState != CEMobState.Alive
+            && !HasComp<CEActionCastableFromCriticalComponent>(ent))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        if (!TryComp<StatusEffectContainerComponent>(args.User, out var container))
             return;
 
-        if (mobState.CurrentState == CEMobState.Alive)
+        var effects = container.ActiveStatusEffects?.ContainedEntities;
+        if (effects is null)
             return;
 
-        if (HasComp<CEActionCastableFromCriticalComponent>(ent))
-            return;
-
-        args.Cancelled = true;
+        foreach (var effect in effects)
+        {
+            if (TryComp<CEActionBlockerStatusEffectComponent>(effect, out var blocker) && blocker.BlockActions)
+            {
+                args.Cancelled = true;
+                return;
+            }
+        }
     }
 
     /// <summary>

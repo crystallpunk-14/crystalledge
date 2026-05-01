@@ -17,4 +17,25 @@ public sealed partial class CEActionBlockerStatusEffectComponent : Component
 
     [DataField]
     public bool BlockMove;
+
+    [DataField]
+    public bool BlockThrow;
+
+    [DataField]
+    public bool BlockDrop;
+
+    [DataField]
+    public bool BlockPickup;
+
+    [DataField]
+    public bool BlockPull;
+
+    [DataField]
+    public bool BlockStand;
+
+    [DataField]
+    public bool BlockEquip;
+
+    [DataField]
+    public bool BlockUnequip;
 }
