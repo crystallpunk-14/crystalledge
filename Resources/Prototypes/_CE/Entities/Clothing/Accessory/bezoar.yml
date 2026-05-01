@@ -1,18 +1,18 @@
 - type: entity
   parent: CEClothingAccessoryBase
-  id: CEClothingAccessoryPureFlower
-  name: pure flower
-  description: A healing flower that protects the wearer from poisoning.
+  id: CEClothingAccessoryBezoar
+  name: bezoar
+  description: Protects the wearer from poisoning.
   components:
   - type: Item
     size: Tiny
   - type: Sprite
-    sprite: _CE/Clothing/Accessory/pure_flower.rsi
+    sprite: _CE/Clothing/Accessory/bezoar.rsi
   - type: CEEquipStatusEffect
-    statusEffect: CEStatusEffectPureFlower
+    statusEffect: CEStatusEffectBezoar
 
 - type: entity
-  id: CEStatusEffectPureFlower
+  id: CEStatusEffectBezoar
   categories: [ HideSpawnMenu ]
   components:
   - type: StatusEffect
