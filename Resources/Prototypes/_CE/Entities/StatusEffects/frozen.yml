@@ -63,7 +63,7 @@
   description: ce-alert-frozen-desc
   icons:
   - sprite: _CE/Structures/Nature/ice_rock.rsi
-    state: 1
+    state: med
 
 - type: entity
   id: CEFrozenAlertSpriteView
