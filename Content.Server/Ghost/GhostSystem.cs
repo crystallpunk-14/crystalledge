@@ -266,16 +266,20 @@ namespace Content.Server.Ghost
 
         private void OnGhostReturnToBodyRequest(GhostReturnToBodyRequest msg, EntitySessionEventArgs args)
         {
-            if (args.SenderSession.AttachedEntity is not {Valid: true} attached
-                || !_ghostQuery.TryComp(attached, out var ghost)
-                || !ghost.CanReturnToBody
-                || !TryComp(attached, out ActorComponent? actor))
-            {
-                Log.Warning($"User {args.SenderSession.Name} sent an invalid {nameof(GhostReturnToBodyRequest)}");
-                return;
-            }
+            // CrystallEdge: returning to body is disabled for this fork.
+            // Ignore client requests so return remains impossible regardless of race/body state.
+            return;
 
-            _mind.UnVisit(actor.PlayerSession);
+            //if (args.SenderSession.AttachedEntity is not {Valid: true} attached
+            //    || !_ghostQuery.TryComp(attached, out var ghost)
+            //    || !ghost.CanReturnToBody
+            //    || !TryComp(attached, out ActorComponent? actor))
+            //{
+            //    Log.Warning($"User {args.SenderSession.Name} sent an invalid {nameof(GhostReturnToBodyRequest)}");
+            //    return;
+            //}
+
+            //_mind.UnVisit(actor.PlayerSession);
         }
 
         #region Warp

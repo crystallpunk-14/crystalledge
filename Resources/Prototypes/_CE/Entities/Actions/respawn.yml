@@ -7,7 +7,7 @@
   - type: Action
     priority: 20
     startDelay: true
-    useDelay: 60
+    useDelay: 5
     checkCanInteract: false
     icon:
       sprite: _CE/Actions/respawn.rsi

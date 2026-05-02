@@ -15,7 +15,7 @@
     width: 1.0
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 2
   - type: Action
     useDelay: 2
     icon:
@@ -80,3 +80,5 @@
   - type: NpcFactionMember
     factions:
     - NanoTrasen #TODO
+  - type: TimedDespawn
+    lifetime: 180
