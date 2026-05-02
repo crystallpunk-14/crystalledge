@@ -33,6 +33,9 @@ public sealed partial class CEConsumableComponent : Component
     [DataField]
     public SoundSpecifier? UseSound;
 
+    [DataField]
+    public bool BreakOnMove = false;
+
     /// <summary>
     /// If set, spawns this entity at the item's position when the item is consumed or depleted.
     /// For example, an empty vial after drinking a potion.

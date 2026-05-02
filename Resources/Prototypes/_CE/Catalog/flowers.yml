@@ -4,6 +4,7 @@
     children:
     - id: CEConsumableBlueAelyta
     - id: CEConsumableBloodRose
+    - id: CEConsumableYellowDayflin
 
 
 - type: entityTable
@@ -12,6 +13,7 @@
     children:
     - id: CEGatherableBlueAelyta
     - id: CEGatherableBloodRose
+    - id: CEGatherableYellowDayflin
 
 - type: entity
   id: CESpawnerRandomFlowers

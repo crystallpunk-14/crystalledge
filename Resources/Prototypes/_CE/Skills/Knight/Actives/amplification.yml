@@ -10,9 +10,6 @@
   name: Amplification
   description: Gives you [color=#b2e3eb]10 stacks of Strength[/color], increasing melee damage.
   components:
-  - type: Sprite
-    sprite: _CE/Interface/strength.rsi
-    state: icon
   - type: CEActionManaCost
     manaCost: 3
   - type: Action

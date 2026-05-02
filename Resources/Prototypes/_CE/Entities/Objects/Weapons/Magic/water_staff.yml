@@ -53,7 +53,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/water_status.rsi
+    sprite: _CE/Effects/StatusEffects/water_status.rsi
     layers:
     - state: effect
       shader: unshaded

@@ -1,0 +1,48 @@
+- type: entity
+  id: CEConsumableYellowDayflin
+  parent: BaseItem
+  categories: [ ForkFiltered ]
+  name: yellow dayflin
+  description: A yellow flower that is remarkable for its ability to grow quickly almost anywhere.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/Flowers/yellow_dayflin.rsi
+    layers:
+    - state: base1
+      map: ["random"]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+    - random:
+        base1: ""
+        base2: ""
+  - type: Clothing
+    sprite: _CE/Objects/Consumable/Flowers/yellow_dayflin.rsi
+    slots:
+    - head
+  - type: Foldable
+    canFoldInsideContainer: true
+    unfoldVerbText: fold-flip-verb
+    foldVerbText: fold-flip-verb
+  - type: FoldableClothing
+    foldedEquippedPrefix: flipped
+    foldedHeldPrefix: flipped
+  - type: CEConsumable
+    whitelist:
+      components:
+      - CEGOAP
+      - CEMobState
+    useSound:
+      collection: eating
+    effects:
+    - !type:ApplyStatusEffectStack
+      effectTarget: Target
+      statusEffect: CEStatusEffectPoison
+      amount: 1
+    - !type:ApplyStatusEffectStack
+      effectTarget: Target
+      statusEffect: CEStatusEffectAcceleration
+      amount: 2
+      max: 10

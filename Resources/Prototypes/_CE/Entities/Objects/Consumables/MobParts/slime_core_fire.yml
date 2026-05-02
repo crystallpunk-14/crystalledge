@@ -35,4 +35,9 @@
       radius: 1
       maxStacks: 3
 
+  - type: CEArmor
+    flat:
+      Fire: 100
+
+
 

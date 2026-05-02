@@ -1,29 +1,19 @@
 - type: entity
-  id: CEStatusEffectColdSlowdown
-  name: Cold Slowdown
+  id: CEStatusEffectAcceleration
+  name: Acceleration
   components:
-  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:
-      - CEDamageable
+      - MovementSpeedModifier
   - type: StatusEffectAlert
-    alert: CEColdSlowdown
+    alert: CEAcceleration
   - type: RejuvenateRemovedStatusEffect
-  - type: CEStatusEffectNeutralization
-    neutralizes:
-    - CEStatusEffectFire
-    vfx: CESteamEffect
-    sound:
-      path: /Audio/_CE/Effects/steam_burst.ogg
-  - type: CEStatusEffectTransform
-    transforms:
-      CEStatusEffectWet: CEStatusEffectFrozen
   - type: CESpeedModifierStatusEffect
-    speed: 0.8
+    speed: 1.05
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/acceleration_status.rsi
     noRot: true
     layers:
     - state: effect
@@ -31,22 +21,22 @@
   - type: PointLight
     radius: 1.2
     energy: 1
-    color: "#30caf5"
+    color: "#d4f530"
   - type: CEStatusEffectStack
     stackDelta: -1
-    baseDuration: 5
+    baseDuration: 2
 
 - type: alert
-  id: CEColdSlowdown
-  alertViewEntity: CEColdSlowdownAlertSpriteView
-  name: ce-alert-cold-slowdown-name
-  description: ce-alert-cold-slowdown-desc
+  id: CEAcceleration
+  alertViewEntity: CEAccelerationAlertSpriteView
+  name: ce-alert-acceleration-name
+  description: ce-alert-acceleration-desc
   icons:
-  - sprite: _CE/Interface/cold.rsi
+  - sprite: _CE/Interface/cold.rsi #TODO
     state: cold_slowdown
 
 - type: entity
-  id: CEColdSlowdownAlertSpriteView
+  id: CEAccelerationAlertSpriteView
   categories: [ HideSpawnMenu ]
   components:
   - type: GenericCounterAlert
@@ -55,7 +45,7 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Interface/cold.rsi
+    - sprite: _CE/Interface/cold.rsi #TODO
       state: cold_slowdown
     - map: [ "1" ]
       offset: 0.65, 0

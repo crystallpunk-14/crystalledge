@@ -14,7 +14,7 @@
     amount: 1
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/regeneration_status.rsi
+    sprite: _CE/Effects/StatusEffects/regeneration_status.rsi
     noRot: true
     layers:
     - state: effect

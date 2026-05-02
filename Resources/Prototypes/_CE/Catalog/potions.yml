@@ -28,6 +28,14 @@
       weight: 0.5
 
 - type: entityTable
+  id: CESpecialPotion
+  table: !type:GroupSelector
+    children:
+    - id: CEConsumablePotionFrost
+    - id: CEConsumablePotionAlchemicalFire
+    - id: CEConsumablePotionAcceleration
+
+- type: entityTable
   id: CEEmptyVials
   table: !type:GroupSelector
     children:
@@ -35,8 +43,6 @@
     - id: CEPotionEmptySmall
     - id: CEPotionEmptyCube
     - id: CEPotionEmptyStar
-    - id: CEGlassShard
-      weight: 0.5
 
 - type: entityTable
   id: CERandomPotion
@@ -52,10 +58,9 @@
     - !type:NestedSelector
       tableId: CEShieldPotion
       weight: 0.5
-    - id: CEConsumablePotionFrost
-      weight: 0.5
-    - id: CEConsumablePotionAlchemicalFire
-      weight: 0.5
+    - !type:NestedSelector
+      tableId: CESpecialPotion
+      weight: 0.3
 
 - type: entity
   id: CESpawnerRandomPotion

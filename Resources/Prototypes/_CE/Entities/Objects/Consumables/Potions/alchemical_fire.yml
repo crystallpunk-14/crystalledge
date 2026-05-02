@@ -12,7 +12,7 @@
     - state: icon
     - state: fill
       color: "#ffae00"
-    - sprite: _CE/Effects/fire_status.rsi
+    - sprite: _CE/Effects/StatusEffects/fire_status.rsi
       state: effect
       shader: unshaded
   - type: CEConsumable

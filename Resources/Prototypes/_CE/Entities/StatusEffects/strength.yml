@@ -6,7 +6,7 @@
   - type: Sprite
     noRot: true
     drawdepth: Effects
-    sprite: _CE/Effects/focus_status.rsi
+    sprite: _CE/Effects/StatusEffects/focus_status.rsi
     layers:
     - state: effect
       shader: unshaded

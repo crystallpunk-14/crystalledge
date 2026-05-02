@@ -26,7 +26,7 @@
         Fire: 1
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/fire_status.rsi
+    sprite: _CE/Effects/StatusEffects/fire_status.rsi
     noRot: true
     layers:
     - state: effect

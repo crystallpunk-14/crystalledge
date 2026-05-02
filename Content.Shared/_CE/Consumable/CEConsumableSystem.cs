@@ -88,7 +88,7 @@ public sealed class CEConsumableSystem : EntitySystem
             target: target,
             used: ent.Owner)
         {
-            BreakOnMove = !needHand,
+            BreakOnMove = ent.Comp.BreakOnMove,
             BreakOnDamage = true,
             NeedHand = needHand,
         };

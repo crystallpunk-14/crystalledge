@@ -20,7 +20,7 @@
       CEStatusEffectColdSlowdown: CEStatusEffectFrozen
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/water_status.rsi
+    sprite: _CE/Effects/StatusEffects/water_status.rsi
     noRot: true
     layers:
     - state: effect

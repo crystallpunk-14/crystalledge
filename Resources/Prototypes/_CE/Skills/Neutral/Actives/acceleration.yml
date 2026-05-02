@@ -1,0 +1,39 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: Acceleration
+  effect: !type:AddAction
+    action: CEActionSpellAcceleration
+
+- type: entity
+  id: CEActionSpellAcceleration
+  parent: CEActionSpellBase
+  name: Acceleration
+  description: Increases your movement speed for a short duration.
+  components:
+  - type: CEActionManaCost
+    manaCost: 2
+  - type: Action
+    useDelay: 3
+    icon:
+      sprite: _CE/Skills/Neutral/todo.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationAcceleration
+
+- type: entityEffectAnimation
+  id: AnimationAcceleration
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/egloves.ogg
+        params:
+          pitch: 0.5
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectAcceleration
+      amount: 5
+      max: 10

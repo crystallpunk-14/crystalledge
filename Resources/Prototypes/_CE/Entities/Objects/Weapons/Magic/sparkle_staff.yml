@@ -44,7 +44,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/fire_status.rsi
+    sprite: _CE/Effects/StatusEffects/fire_status.rsi
     layers:
     - state: effect
       shader: unshaded

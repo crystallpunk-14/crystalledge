@@ -1,0 +1,17 @@
+- type: CERecipe
+  id: CEConsumablePotionAcceleration
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEConsumableYellowDayflin
+    count: 1
+  - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreFire
+    count: 1
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionAcceleration
+  resultCount: 1

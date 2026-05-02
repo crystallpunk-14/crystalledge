@@ -58,7 +58,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
     layers:
     - state: effect
       shader: unshaded

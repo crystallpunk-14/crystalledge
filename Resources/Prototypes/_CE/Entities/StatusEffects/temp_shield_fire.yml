@@ -59,7 +59,7 @@
   save: false
   components:
   - type: Sprite
-    sprite: _CE/Effects/temp_shield.rsi
+    sprite: _CE/Effects/StatusEffects/temp_shield.rsi
     layers:
     - state: fire
       shader: unshaded
@@ -79,7 +79,7 @@
   save: false
   components:
   - type: Sprite
-    sprite: _CE/Effects/temp_shield.rsi
+    sprite: _CE/Effects/StatusEffects/temp_shield.rsi
     layers:
     - state: fire_take
       shader: unshaded
@@ -99,7 +99,7 @@
   save: false
   components:
   - type: Sprite
-    sprite: _CE/Effects/temp_shield.rsi
+    sprite: _CE/Effects/StatusEffects/temp_shield.rsi
     layers:
     - state: fire_break
       shader: unshaded
