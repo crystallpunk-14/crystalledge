@@ -32,8 +32,8 @@
   name: ce-alert-acceleration-name
   description: ce-alert-acceleration-desc
   icons:
-  - sprite: _CE/Interface/cold.rsi #TODO
-    state: cold_slowdown
+  - sprite: _CE/Interface/acceleration.rsi
+    state: icon
 
 - type: entity
   id: CEAccelerationAlertSpriteView
@@ -45,8 +45,8 @@
   - type: Sprite
     sprite: /Textures/Interface/Alerts/essence_counter.rsi
     layers:
-    - sprite: _CE/Interface/cold.rsi #TODO
-      state: cold_slowdown
+    - sprite: _CE/Interface/acceleration.rsi
+      state: icon
     - map: [ "1" ]
       offset: 0.65, 0
     - map: [ "10" ]

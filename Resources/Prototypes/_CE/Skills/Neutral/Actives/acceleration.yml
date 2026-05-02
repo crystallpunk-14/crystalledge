@@ -15,7 +15,7 @@
   - type: Action
     useDelay: 3
     icon:
-      sprite: _CE/Skills/Neutral/todo.rsi
+      sprite: _CE/Interface/acceleration.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent

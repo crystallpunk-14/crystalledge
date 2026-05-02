@@ -51,3 +51,6 @@ ce-alert-curse-desc = Увеличивает весь входящий урон.
 
 ce-alert-frozen-name = Заморожен
 ce-alert-frozen-desc = Вы полностью заморожены! Вы не можете ничего делать, но ледяная корка защищает вас от урона!
+
+ce-alert-acceleration-name = Ускорен
+ce-alert-acceleration-desc = Вы двигаетесь быстрее!

@@ -51,3 +51,6 @@ ce-alert-curse-desc = Increases all incoming damage.
 
 ce-alert-frozen-name = Frozen
 ce-alert-frozen-desc = You are completely frozen! You can't do anything, but the icy shell protects you from damage!
+
+ce-alert-acceleration-name = Acceleration
+ce-alert-acceleration-desc = You move faster!
