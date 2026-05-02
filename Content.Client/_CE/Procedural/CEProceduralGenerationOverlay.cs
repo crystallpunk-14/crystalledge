@@ -58,12 +58,10 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         var handle = args.WorldHandle;
 
         // Draw room rectangles.
-        for (var i = 0; i < comp.Rooms.Count; i++)
+        foreach (var room in comp.Rooms)
         {
-            var room = comp.Rooms[i];
-
-            var roomTypeProto = room.RoomType != null && _proto.TryIndex(room.RoomType.Value, out CERoomTypePrototype? rtp)
-                ? rtp
+            var roomTypeProto = room.RoomType != null && _proto.Resolve(room.RoomType.Value, out var roomType)
+                ? roomType
                 : null;
             var fillColor = roomTypeProto?.DebugFillColor ?? DefaultFillColor;
             var borderColor = roomTypeProto?.DebugBorderColor ?? DefaultBorderColor;

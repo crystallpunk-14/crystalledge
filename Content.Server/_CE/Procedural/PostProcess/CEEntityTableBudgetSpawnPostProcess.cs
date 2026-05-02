@@ -1,6 +1,4 @@
-using System.Numerics;
 using System.Threading.Tasks;
-using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Procedural;
 using Content.Shared.EntityTable;
 using Content.Shared.EntityTable.EntitySelectors;
@@ -73,7 +71,9 @@ public sealed partial class CEEntityTableBudgetSpawnPostProcess : CEDungeonPostP
 
         var totalWeight = 0f;
         foreach (var entry in Entries)
+        {
             totalWeight += entry.Weight;
+        }
 
         if (totalWeight <= 0 || Entries.Count == 0)
             return;

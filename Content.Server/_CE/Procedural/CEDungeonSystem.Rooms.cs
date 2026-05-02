@@ -196,11 +196,7 @@ public sealed partial class CEDungeonSystem
                     }
                     else if (angle.Equals(Math.PI * 1.5f))
                     {
-                        if (decal.Id != "DiagonalCheckerAOverlay" &&
-                            decal.Id != "DiagonalCheckerBOverlay")
-                        {
-                            position += new Vector2(-1f / 32f, 0f);
-                        }
+                        position += new Vector2(-1f / 32f, 0f);
                     }
 
                     var tilePos = position.Floored();

@@ -1,6 +1,4 @@
-using System.Numerics;
 using System.Threading.Tasks;
-using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;

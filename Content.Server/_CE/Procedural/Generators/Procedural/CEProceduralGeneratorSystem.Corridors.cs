@@ -52,7 +52,10 @@ public sealed partial class CEProceduralGeneratorSystem
         var roomTypeProtos = new Dictionary<int, CERoomTypePrototype?>();
         foreach (var room in comp.Rooms)
         {
-            roomTypeProtos[room.Index] = _proto.Index(room.RoomType);
+            if (!_proto.Resolve(room.RoomType, out var roomType))
+                continue;
+
+            roomTypeProtos[room.Index] = roomType;
         }
 
         // --- Process connections ---

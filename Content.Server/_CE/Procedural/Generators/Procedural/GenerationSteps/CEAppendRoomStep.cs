@@ -1,9 +1,8 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Destructible.Thresholds;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.Manager.Attributes;
+using Robust.Shared.Random;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 
@@ -34,21 +33,23 @@ public sealed partial class CEAppendRoomStep : CEDungeonGenerationStep
     public MinMax Count = new(1, 1);
 
     /// <inheritdoc/>
-    public override Task Execute(CEGenerationStepContext ctx)
+    public override Task Execute(CEGenerationStepContext context)
     {
-        var comp = ctx.Comp;
-        var count = ctx.Random.Next(Count.Min, Count.Max + 1);
+        var comp = context.Comp;
+        var count = context.Random.Next(Count.Min, Count.Max + 1);
 
         if (count <= 0)
             return Task.CompletedTask;
 
-        var gridStep = ctx.MaxRoomSize + 1;
-        var roomSize = new Vector2i(ctx.MaxRoomSize, ctx.MaxRoomSize);
+        var gridStep = context.MaxRoomSize + 1;
+        var roomSize = new Vector2i(context.MaxRoomSize, context.MaxRoomSize);
 
         // Build occupied set.
         var occupied = new HashSet<Vector2i>(comp.Rooms.Count);
         foreach (var room in comp.Rooms)
+        {
             occupied.Add(room.GridCoord);
+        }
 
         // Candidate parents: rooms matching AttachToTypes (or any room if null/empty) with free neighbours.
         var candidates = new List<CEProceduralAbstractRoom>();
@@ -64,7 +65,7 @@ public sealed partial class CEAppendRoomStep : CEDungeonGenerationStep
         // Shuffle to distribute attachments across the dungeon.
         for (var i = candidates.Count - 1; i > 0; i--)
         {
-            var j = ctx.Random.Next(i + 1);
+            var j = context.Random.Next(i + 1);
             (candidates[i], candidates[j]) = (candidates[j], candidates[i]);
         }
 
@@ -85,7 +86,7 @@ public sealed partial class CEAppendRoomStep : CEDungeonGenerationStep
             if (freeNeighbors.Count == 0)
                 continue;
 
-            var chosenCoord = ctx.Random.Pick(freeNeighbors);
+            var chosenCoord = context.Random.Pick(freeNeighbors);
 
             var newRoom = new CEProceduralAbstractRoom
             {
@@ -108,7 +109,7 @@ public sealed partial class CEAppendRoomStep : CEDungeonGenerationStep
         }
 
         if (added < count)
-            ctx.Log.Warning($"AppendRoomStep could only attach {added}/{count} rooms of type {RoomType} — dungeon grid is too crowded.");
+            context.Log.Warning($"AppendRoomStep could only attach {added}/{count} rooms of type {RoomType} — dungeon grid is too crowded.");
 
         return Task.CompletedTask;
     }

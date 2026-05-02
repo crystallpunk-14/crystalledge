@@ -1,9 +1,8 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Destructible.Thresholds;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.Manager.Attributes;
+using Robust.Shared.Random;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 
@@ -33,12 +32,12 @@ public sealed partial class CEGenerateRoomWebStep : CEDungeonGenerationStep
     public MinMax Count = new(8, 10);
 
     /// <inheritdoc/>
-    public override async Task Execute(CEGenerationStepContext ctx)
+    public override async Task Execute(CEGenerationStepContext context)
     {
-        var comp = ctx.Comp;
-        var gridStep = ctx.MaxRoomSize + 1;
-        var roomSize = new Vector2i(ctx.MaxRoomSize, ctx.MaxRoomSize);
-        var targetCount = ctx.Random.Next(Count.Min, Count.Max + 1);
+        var comp = context.Comp;
+        var gridStep = context.MaxRoomSize + 1;
+        var roomSize = new Vector2i(context.MaxRoomSize, context.MaxRoomSize);
+        var targetCount = context.Random.Next(Count.Min, Count.Max + 1);
 
         if (targetCount <= 0)
             return;
@@ -46,7 +45,9 @@ public sealed partial class CEGenerateRoomWebStep : CEDungeonGenerationStep
         // Build occupied set from rooms already placed by previous steps.
         var occupied = new HashSet<Vector2i>(comp.Rooms.Count + targetCount);
         foreach (var existing in comp.Rooms)
+        {
             occupied.Add(existing.GridCoord);
+        }
 
         // Frontier: room indices (into comp.Rooms) that have at least one free cardinal neighbour.
         var frontier = new List<int>();
@@ -85,9 +86,9 @@ public sealed partial class CEGenerateRoomWebStep : CEDungeonGenerationStep
         while (targetCount > 0 && frontier.Count > 0)
         {
             if (++yieldCounter % 50 == 0)
-                await ctx.Suspend();
+                await context.Suspend();
 
-            var frontierIdx = ctx.Random.Next(frontier.Count);
+            var frontierIdx = context.Random.Next(frontier.Count);
             var parentRoomIdx = frontier[frontierIdx];
             var parent = comp.Rooms[parentRoomIdx];
 
@@ -107,7 +108,7 @@ public sealed partial class CEGenerateRoomWebStep : CEDungeonGenerationStep
                 continue;
             }
 
-            var chosenDir = ctx.Random.Pick(freeDirections);
+            var chosenDir = context.Random.Pick(freeDirections);
             var newGridCoord = parent.GridCoord + chosenDir;
 
             var newRoom = new CEProceduralAbstractRoom

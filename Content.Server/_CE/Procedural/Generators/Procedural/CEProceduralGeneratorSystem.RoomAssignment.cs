@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural;
 
@@ -130,18 +129,6 @@ public sealed partial class CEProceduralGeneratorSystem
     }
 
     /// <summary>
-    /// Returns the <see cref="CERoomTypePrototype"/> for the given room type ID, or <c>null</c> if
-    /// the ID is null or not found.
-    /// </summary>
-    private CERoomTypePrototype? GetRoomTypeProto(CEProceduralConfig _, ProtoId<CERoomTypePrototype>? roomType)
-    {
-        if (roomType == null)
-            return null;
-
-        return proto;
-    }
-
-    /// <summary>
     /// Builds a map from room index to the set of cardinal directions where the room
     /// must have exits (toward its graph neighbours).
     /// </summary>
@@ -151,7 +138,9 @@ public sealed partial class CEProceduralGeneratorSystem
         // Index rooms by their index for GridCoord lookup.
         var roomByIndex = new Dictionary<int, CEProceduralAbstractRoom>();
         foreach (var room in comp.Rooms)
+        {
             roomByIndex[room.Index] = room;
+        }
 
         var result = new Dictionary<int, HashSet<Direction>>();
 

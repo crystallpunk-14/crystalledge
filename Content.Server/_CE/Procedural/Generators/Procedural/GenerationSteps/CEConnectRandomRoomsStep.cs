@@ -1,8 +1,7 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Destructible.Thresholds;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 
@@ -28,10 +27,10 @@ public sealed partial class CEConnectRandomRoomsStep : CEDungeonGenerationStep
     public MinMax Count = new(0, 0);
 
     /// <inheritdoc/>
-    public override Task Execute(CEGenerationStepContext ctx)
+    public override Task Execute(CEGenerationStepContext context)
     {
-        var comp = ctx.Comp;
-        var count = ctx.Random.Next(Count.Min, Count.Max + 1);
+        var comp = context.Comp;
+        var count = context.Random.Next(Count.Min, Count.Max + 1);
 
         if (count <= 0)
             return Task.CompletedTask;
@@ -45,9 +44,11 @@ public sealed partial class CEConnectRandomRoomsStep : CEDungeonGenerationStep
         }
 
         // Build grid-coord → room-index lookup.
-        var gridLookup = new Dictionary<Robust.Shared.Map.Vector2i, int>(comp.Rooms.Count);
+        var gridLookup = new Dictionary<Vector2i, int>(comp.Rooms.Count);
         for (var i = 0; i < comp.Rooms.Count; i++)
+        {
             gridLookup[comp.Rooms[i].GridCoord] = i;
+        }
 
         // Find candidate pairs: grid-adjacent rooms matching the type filter that are not yet connected.
         var candidates = new List<(int RoomA, int RoomB, int CombinedDistance)>();
@@ -99,7 +100,7 @@ public sealed partial class CEConnectRandomRoomsStep : CEDungeonGenerationStep
             });
         }
 
-        ctx.Log.Debug($"ConnectRandomRoomsStep: added {added} cyclic connections ({candidates.Count} candidates).");
+        context.Log.Debug($"ConnectRandomRoomsStep: added {added} cyclic connections ({candidates.Count} candidates).");
         return Task.CompletedTask;
     }
 }

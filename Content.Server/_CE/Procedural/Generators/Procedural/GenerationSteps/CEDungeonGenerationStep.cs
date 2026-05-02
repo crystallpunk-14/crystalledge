@@ -1,5 +1,4 @@
-using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.Manager.Attributes;
+using System.Threading.Tasks;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 
@@ -8,7 +7,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// Each subtype defines its own data fields and implements <see cref="Execute"/>.
 /// </summary>
 [ImplicitDataDefinitionForInheritors]
-public abstract class CEDungeonGenerationStep
+public abstract partial class CEDungeonGenerationStep
 {
     /// <summary>
     /// Runs this step, mutating <see cref="CEGenerationStepContext.Comp"/> in place.

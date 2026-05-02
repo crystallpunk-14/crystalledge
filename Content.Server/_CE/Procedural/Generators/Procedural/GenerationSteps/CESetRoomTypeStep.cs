@@ -1,8 +1,6 @@
+using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
-using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization;
-using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 
@@ -30,11 +28,11 @@ public sealed partial class CESetRoomTypeStep : CEDungeonGenerationStep
     {
         foreach (var room in ctx.Comp.Rooms)
         {
-            if (room.GridCoord == Position)
-            {
-                room.RoomType = RoomType;
-                return Task.CompletedTask;
-            }
+            if (room.GridCoord != Position)
+                continue;
+
+            room.RoomType = RoomType;
+            return Task.CompletedTask;
         }
 
         ctx.Log.Warning($"SetRoomTypeStep found no room at grid coord {Position}.");

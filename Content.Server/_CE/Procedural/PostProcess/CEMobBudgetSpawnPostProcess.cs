@@ -1,4 +1,3 @@
-using System.Numerics;
 using System.Threading.Tasks;
 using Content.Server._CE.GOAP;
 using Content.Shared._CE.Soul.Components;
