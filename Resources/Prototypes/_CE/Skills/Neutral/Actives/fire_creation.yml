@@ -1,34 +1,34 @@
 - type: skill
   parent: BaseNeutralSkill
-  id: WaterCreation
+  id: FireCreation
   weight: 0.5
   effect: !type:AddAction
-    action: CEActionWaterCreation
+    action: CEActionFireCreation
   restrictions:
    - !type:JobWhitelist
      inverted: true
      jobs:
-     - CEPriest # Priest have more powerful analogue of this skill (waterblast)
+     - CEMage # Mage have more powerful analogue of this skill (fireball)
 
 - type: entity
-  id: CEActionWaterCreation
+  id: CEActionFireCreation
   parent: CEActionSpellBase
-  name: Water creation
-  description: You create a temporary [color=#30caf5]water sphere[/color], which you can throw.
+  name: Fire creation
+  description: You create a temporary [color=#ff4500]fire[/color], which you can throw.
   components:
   - type: CEActionManaCost
     manaCost: 1
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/Neutral/water_creation.rsi
+      sprite: _CE/Skills/Neutral/fire_creation.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
-      animation: AnimationWaterCreation
+      animation: AnimationFireCreation
 
 - type: entityEffectAnimation
-  id: AnimationWaterCreation
+  id: AnimationFireCreation
   movementSpeed: 0.3
   duration: 1.5
   lockRotation: true
@@ -38,29 +38,29 @@
       reparent: true
       effectTarget: User
       spawns:
-      - CEEffectWaterCreation
+      - CEEffectFireCreation
     - !type:PlaySound
       sound:
-        path: /Audio/Effects/Fluids/watersplash.ogg
+        path: /Audio/_CE/Effects/firebolt.ogg
     0.6:
     - !type:SpawnInHandEntity
       spawns:
-      - CEConsumableWaterDrop
+      - CEHandheldFire
 
 - type: entity
-  id: CEEffectWaterCreation
+  id: CEEffectFireCreation
   parent: CEBaseMagicImpact
   categories: [ HideSpawnMenu ]
   save: false
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/water_consume.rsi
+    sprite: _CE/Effects/fire_absorbtion.rsi
     layers:
     - state: effect
       shader: unshaded
   - type: PointLight
-    color: "#155aee"
+    color: "#fa9c29"
     radius: 1.5
   - type: TimedDespawn
     lifetime: 2
@@ -76,21 +76,21 @@
         enabled: true
 
 - type: entity
-  id: CEConsumableWaterDrop
+  id: CEHandheldFire
   parent: BaseItem
   categories: [ ForkFiltered ]
-  name: water droplet
-  description: Magic water, condensed into a droplet. It can be thrown to get something wet.
+  name: handheld fire
+  description: A small flame, burning in your hand. It can be thrown to burn something.
   components:
   - type: Item
     size: Tiny
     inhandVisuals:
       left:
-      - state: inhand-left-fill1
-        color: "#4ca8f3"
+      - state: inhand-left
+        shader: unshaded
       right:
-      - state: inhand-right-fill1
-        color: "#4ca8f3"
+      - state: inhand-right
+        shader: unshaded
   - type: CEDamageable
   - type: CEDamageOnLand
     damage:
@@ -99,23 +99,36 @@
   - type: CEDestructible
     destroyThreshold: 1
   - type: Sprite
-    sprite: _CE/Objects/Consumable/liquid_drop.rsi
+    sprite: _CE/Objects/Consumable/artificial_flame.rsi
     layers:
-    - state: liq-1
-      color: "#4ca8f3"
+    - state: icon
+      shader: unshaded
+  - type: PointLight
+    color: "#fa9c29"
+    radius: 2
   - type: CEConsumable
     useDelay: 1.5
     useSound:
-      path: /Audio/Effects/Fluids/watersplash.ogg
+      path: /Audio/_CE/Effects/firebolt.ogg
     effects:
     - !type:ApplyStatusEffectStack
-      statusEffect: CEStatusEffectWet
+      statusEffect: CEStatusEffectFire
       amount: 6
   - type: CEDestructionEffect
     effects:
     - !type:CETileAffectArea
-      tileEffect: CETileEffectWater
+      tileEffect: CETileEffectFire
       radius: 1
       maxStacks: 3
+    - !type:AreaEffect
+      affectCaster: true
+      effectTarget: Used
+      range: 1
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 5
   - type: TimedDespawn
     lifetime: 120
