@@ -34,22 +34,27 @@ public sealed partial class CERoomTypePrototype : IPrototype
 
     /// <summary>
     /// Icon displayed on the minimap for rooms of this type.
-    /// Rendered when the room is visited or (if <see cref="RevealedFromNeighbour"/> is true) previewed.
+    /// Rendered when the room is visited or (if <see cref="ShowIconFromNeighbour"/> is true) previewed.
     /// </summary>
     [DataField]
     public SpriteSpecifier? MinimapIcon;
 
     /// <summary>
-    /// Fill colour used for this room type in the procedural generation debug overlay.
+    /// Base colour for this room type used in the procedural generation debug overlay and on the minimap.
+    /// The fill colour is derived as this colour at 30% opacity; the border colour is the fully opaque version.
     /// </summary>
     [DataField]
-    public Color DebugFillColor = Color.Gray.WithAlpha(0.08f);
+    public Color Color = Color.Gray;
 
     /// <summary>
-    /// Border colour used for this room type in the procedural generation debug overlay.
+    /// Fill colour for the debug overlay — base <see cref="Color"/> at 30% opacity.
     /// </summary>
-    [DataField]
-    public Color DebugBorderColor = Color.Gray.WithAlpha(0.8f);
+    public Color DebugFillColor => Color.WithAlpha(0.3f);
+
+    /// <summary>
+    /// Border colour for the debug overlay — base <see cref="Color"/> fully opaque.
+    /// </summary>
+    public Color DebugBorderColor => Color.WithAlpha(1f);
 
     /// <summary>
     /// When <c>true</c>, the minimap icon for this room type is revealed even when the room is
@@ -57,5 +62,12 @@ public sealed partial class CERoomTypePrototype : IPrototype
     /// When <c>false</c>, the icon is hidden until the room itself is visited.
     /// </summary>
     [DataField]
-    public bool RevealedFromNeighbour;
+    public bool ShowIconFromNeighbour;
+
+    /// <summary>
+    /// When <c>true</c>, this room is completely hidden on the minimap — no rectangle, no
+    /// connection lines, and no icon — until the player physically enters it.
+    /// </summary>
+    [DataField]
+    public bool SecretRoom;
 }

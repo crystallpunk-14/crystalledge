@@ -70,10 +70,10 @@ public sealed partial class AppendRoom : CEDungeonGenerationStep
         }
 
         var added = 0;
-        foreach (var parent in candidates)
+        var candidateIdx = 0;
+        while (added < count && candidateIdx < candidates.Count)
         {
-            if (added >= count)
-                break;
+            var parent = candidates[candidateIdx++];
 
             var freeNeighbors = new List<Vector2i>();
             foreach (var dir in CEGenerationStepContext.Directions)
@@ -106,6 +106,17 @@ public sealed partial class AppendRoom : CEDungeonGenerationStep
 
             occupied.Add(chosenCoord);
             added++;
+
+            // Allow the newly placed room to serve as a parent for subsequent rooms in this step.
+            if (AttachToTypes == null || AttachToTypes.Count == 0 || AttachToTypes.Contains(RoomType))
+                candidates.Add(newRoom);
+
+            if (AttachToTypes == null || AttachToTypes.Count == 0 ||
+                (parent.RoomType != null && AttachToTypes.Contains(parent.RoomType.Value)))
+            {
+                if (CEGenerationStepContext.HasEmptyNeighbor(parent.GridCoord, occupied))
+                    candidates.Add(parent);
+            }
         }
 
         if (added < count)

@@ -9,15 +9,17 @@
   config:
     !type:CEProceduralConfig
     generationPlan:
-    - !type:GenerateRoomWeb
-      source: 0, 0
-      roomType: MossyTempleGeneralRoom
-      count:
-        min: 6
-        max: 8
     - !type:SetRoomType
       position: 0, 0
       roomType: MossyTempleExitRoom
+    - !type:AppendRoom
+      roomType: MossyTempleGeneralRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      - MossyTempleExitRoom
+      count:
+        min: 6
+        max: 8
     - !type:AppendRoom
       roomType: MossyTempleEntranceRoom
       attachToTypes:

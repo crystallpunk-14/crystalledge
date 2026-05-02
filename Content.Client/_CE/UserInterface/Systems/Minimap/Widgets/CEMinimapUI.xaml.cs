@@ -141,9 +141,23 @@ public sealed partial class CEMinimapUI : UIWidget
         foreach (var conn in dungeon.Connections)
         {
             if (visited.Contains(conn.RoomA) && !visited.Contains(conn.RoomB))
-                _previewRooms.Add(conn.RoomB);
+            {
+                if (conn.RoomB >= 0 && conn.RoomB < dungeon.Rooms.Count)
+                {
+                    var candidate = dungeon.Rooms[conn.RoomB];
+                    if (candidate.RoomType == null || !_proto.TryIndex(candidate.RoomType.Value, out CERoomTypePrototype? rtB) || !rtB.SecretRoom)
+                        _previewRooms.Add(conn.RoomB);
+                }
+            }
             else if (visited.Contains(conn.RoomB) && !visited.Contains(conn.RoomA))
-                _previewRooms.Add(conn.RoomA);
+            {
+                if (conn.RoomA >= 0 && conn.RoomA < dungeon.Rooms.Count)
+                {
+                    var candidate = dungeon.Rooms[conn.RoomA];
+                    if (candidate.RoomType == null || !_proto.TryIndex(candidate.RoomType.Value, out CERoomTypePrototype? rtA) || !rtA.SecretRoom)
+                        _previewRooms.Add(conn.RoomA);
+                }
+            }
         }
 
         bool IsRoomVisible(int idx) => visited.Contains(idx) || _previewRooms.Contains(idx);
@@ -213,11 +227,11 @@ public sealed partial class CEMinimapUI : UIWidget
 
             // Type icon overlay (drawn on top of the room rect).
             // Visible in visited rooms; in preview state shown only for room types that have
-            // RevealedFromNeighbour = true (e.g. treasure rooms).
+            // ShowIconFromNeighbour = true (e.g. treasure rooms).
             var roomTypeProto = room.RoomType != null && _proto.Resolve(room.RoomType.Value, out var roomType)
                 ? roomType
                 : null;
-            var showIcon = isVisited || (_previewRooms.Contains(room.Index) && roomTypeProto?.RevealedFromNeighbour == true);
+            var showIcon = isVisited || (_previewRooms.Contains(room.Index) && roomTypeProto?.ShowIconFromNeighbour == true);
             var icon = showIcon && roomTypeProto != null ? _iconCache.GetValueOrDefault(roomTypeProto.ID) : null;
 
             if (icon == null || !clipped.HasValue)

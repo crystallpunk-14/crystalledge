@@ -21,8 +21,8 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 
     private readonly Font _font;
 
-    private static readonly Color DefaultFillColor = Color.Gray.WithAlpha(0.08f);
-    private static readonly Color DefaultBorderColor = Color.Gray.WithAlpha(0.8f);
+    private static readonly Color DefaultFillColor = Color.Gray.WithAlpha(0.3f);
+    private static readonly Color DefaultBorderColor = Color.Gray;
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);
 
     /// <summary>

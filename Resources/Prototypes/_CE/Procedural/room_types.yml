@@ -1,28 +1,29 @@
 - type: dungeonRoomType
   id: MossyTempleGeneralRoom
-  debugFillColor: "#14141414"
-  debugBorderColor: "#CCCCCCCC"
+  supportsWideConnection: true
+  color: "#CCCCCC"
 
 - type: dungeonRoomType
   id: MossyTempleExitRoom
-  debugFillColor: "#FF000020"
-  debugBorderColor: "#FF0000CC"
+  supportsWideConnection: true
+  color: "#5f2f89"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
     state: exit
 
 - type: dungeonRoomType
   id: MossyTempleEntranceRoom
-  debugFillColor: "#00FF0020"
-  debugBorderColor: "#00FF00CC"
+  supportsWideConnection: true
+  secretRoom: true #Intended
+  color: "#4b944b"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
     state: enter
 
 - type: dungeonRoomType
   id: MossyTempleBlessingRoom
-  debugFillColor: "#6495ED20"
-  debugBorderColor: "#6495EDCC"
+  supportsWideConnection: true
+  color: "#6495ED"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
     state: blessing
@@ -31,14 +32,13 @@
   id: MossyTempleTreasureRoom
   doorPrototype: CEGoldenLockedDoor
   supportsWideConnection: false
-  revealedFromNeighbour: true
-  debugFillColor: "#FFD70026"
-  debugBorderColor: "#FFD700CC"
+  showIconFromNeighbour: true
+  color: "#FFD700"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
     state: treasure
 
 - type: dungeonRoomType
   id: MossyTempleDeadEndRoom
-  debugFillColor: "#FFA50019"
-  debugBorderColor: "#FFA500CC"
+  supportsWideConnection: true
+  color: "#c0a87b"

@@ -26,28 +26,9 @@ public sealed class CEDungeonAtlasOverlay : Overlay
 
     private readonly Font _font;
 
-    // Colors for cycling through rooms.
-    private static readonly Color[] RoomColors =
-    [
-        Color.Red.    WithAlpha(0.05f),
-        Color.Blue.   WithAlpha(0.05f),
-        Color.Green.  WithAlpha(0.05f),
-        Color.Yellow. WithAlpha(0.05f),
-        Color.Cyan.   WithAlpha(0.05f),
-        Color.Magenta.WithAlpha(0.05f),
-        Color.Orange. WithAlpha(0.05f),
-    ];
-
-    private static readonly Color[] RoomBorderColors =
-    [
-        Color.Red.    WithAlpha(0.8f),
-        Color.Blue.   WithAlpha(0.8f),
-        Color.Green.  WithAlpha(0.8f),
-        Color.Yellow. WithAlpha(0.8f),
-        Color.Cyan.   WithAlpha(0.8f),
-        Color.Magenta.WithAlpha(0.8f),
-        Color.Orange. WithAlpha(0.8f),
-    ];
+    // Fallback colors when a room has no RoomType prototype.
+    private static readonly Color FallbackFill   = Color.Gray.WithAlpha(0.3f);
+    private static readonly Color FallbackBorder = Color.Gray;
 
     public CEDungeonAtlasOverlay()
     {
@@ -74,12 +55,9 @@ public sealed class CEDungeonAtlasOverlay : Overlay
     {
         var handle = args.WorldHandle;
 
-        for (var i = 0; i < rooms.Count; i++)
+        foreach (var room in rooms)
         {
-            var room = rooms[i];
-            var colorIndex = i % RoomColors.Length;
-            var fillColor = RoomColors[colorIndex];
-            var borderColor = RoomBorderColors[colorIndex];
+            GetRoomTypeColors(room, out var fillColor, out var borderColor);
 
             // Room bounds in tile coordinates (offset is bottom-left corner).
             var box = new Box2(
@@ -139,4 +117,19 @@ public sealed class CEDungeonAtlasOverlay : Overlay
 
         return result;
     }
+
+    private void GetRoomTypeColors(CEDungeonRoom3DPrototype room, out Color fill, out Color border)
+    {
+        if (room.RoomType != null && _proto.TryIndex(room.RoomType.Value, out CERoomTypePrototype? roomType))
+        {
+            fill   = roomType.DebugFillColor;
+            border = roomType.DebugBorderColor;
+        }
+        else
+        {
+            fill   = FallbackFill;
+            border = FallbackBorder;
+        }
+    }
 }
+
