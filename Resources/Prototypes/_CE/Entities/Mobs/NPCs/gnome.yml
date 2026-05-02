@@ -1,0 +1,464 @@
+- type: entity
+  parent:
+  - BaseMob
+  - MobFlammable
+  - CEMobDamageable
+  - CEMobCombat
+  id: CEMobGnome
+  name: gnome
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/gnome5.ogg
+      params:
+        variation: 0.1
+        volume: 20
+  - type: CEDestructible
+    destroyThreshold: 50
+    lootTable: !type:AllSelector
+      children:
+      - !type:NestedSelector
+        tableId: CERandomFlowers
+        prob: 1
+      - !type:NestedSelector
+        tableId: CERandomFlowers
+        prob: 0.5
+      - !type:NestedSelector
+        tableId: CERandomFlowers
+        prob: 0.1
+  - type: CEGOAP
+    goals:
+    # Most important - stay alive
+    - desiredState:
+        LowHealth: false
+      priority: 4
+    # Second - kill enemies
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+
+    actions:
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        LowHealth: false
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 1.5
+    # Attack target
+    - !type:CEGOAPMeleeAttackAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+        LowHealth: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyInMeleeRange: true
+      cost: 0.5
+      actionPrototype: CEActionGnomeJump
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionGnomeThrowStone
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionGnomeThrowRat
+    - !type:CEGOAPUseAction
+      targetKey: self
+      preconditions:
+        EnemyVisible: false
+      effects:
+        LowHealth: false
+      cost: 1
+      actionPrototype: CEActionGnomeHeal
+    - !type:CEGOAPFleeAction
+      targetKey: enemy
+      effects:
+        EnemyVisible: false
+        EnemyInMeleeRange: false
+      cost: 1
+    # Explore
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+
+    sensors:
+    - !type:CEGOAPNearestHostileSensor
+      conditionKey: EnemyVisible
+      outputTargetKey: enemy
+      visionRadius: 8
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
+      targetKey: enemy
+      range: 1.5
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
+    - !type:CEGOAPCheckHealthLevelSensor
+      targetKey: self
+      conditionKey: LowHealth
+      threshold: 0.6
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
+
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/gnome.rsi
+    layers:
+    - state: boots
+    - state: base
+    - state: red_rose
+      map: ["random"]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          agaric: ""
+          red_rose: ""
+          blue_amanita: ""
+          lumishroom: ""
+          wild_sage: ""
+          yellow_dayflin: ""
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 4.5
+  - type: CEWeapon
+    spriteRotation: -90
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.8
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 5
+    animations:
+      Primary:
+      - anim: GnomeKick
+
+# Skills
+
+- type: entity
+  id: CEActionGnomeJump
+  name: fire slime jump
+  description: The slime leaps toward a target.
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: Action
+    useDelay: 6
+  - type: TargetAction
+    range: 8
+    interactOnMiss: false
+  - type: EntityTargetAction
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: GnomeJump
+      cancelAnimation: true
+
+- type: entityEffectAnimation
+  id: GnomeJump
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/gnome2.ogg
+        params:
+          variation: 0.1
+          volume: 20
+    0.1:
+    - !type:Dash
+      distance: 4
+      speed: 15
+
+- type: entity
+  id: CEGnomeKickEffect
+  components:
+  - type: Sprite
+    sprite: _CE/Mobs/gnome.rsi
+    state: boots
+    drawdepth: Effects
+
+
+- type: entityEffectAnimation
+  id: GnomeKick
+  movementSpeed: 0.8
+  duration: 0.8
+  events:
+    0:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEGnomeKickEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.3
+        easing: QuadIn
+      - time: 0.2
+        offset: 0, -0.2
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 0
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    0.3:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEGnomeKickEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.2
+        easing: QuadIn
+      - time: 0.3
+        offset: 0, -0.7
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 0
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/hit_kick.ogg
+        params:
+          variation: 0.1
+          pitch: 1.8
+    0.35:
+    - !type:WeaponEffectSlot
+      slot: OnHit
+    - !type:Dash
+      distance: -2
+      speed: 10
+
+
+
+
+
+- type: entity
+  id: CEActionGnomeThrowStone
+  parent: CEActionSpellBase
+  name: Throw stone
+  description: You throw a stone at your enemy, dealing minor damage.
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 1
+  - type: Action
+    useDelay: 3
+    icon:
+      sprite: _CE/Skills/Mage/firebolt.rsi
+      state: icon
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: GnomeThrow
+
+- type: entityEffectAnimation
+  id: GnomeThrow
+  movementSpeed: 0
+  duration: 1.5
+  lockRotation: true
+  events:
+    0.3:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/gnome2.ogg
+        params:
+          variation: 0.1
+          volume: 20
+    - !type:ShootProjectile
+      projectileSpeed: 7
+      projectileMaxSpeed: 7
+      prototype: CEProjectileGnomeStone
+      projectileCount: 1
+
+- type: entity
+  id: CEProjectileGnomeStone
+  name: gnome projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Projectile/gnome_stone.rsi
+    layers:
+    - state: 1
+      map: ["random"]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          1: ""
+          2: ""
+          3: ""
+          4: ""
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 5
+
+# Healing
+
+
+- type: entity
+  id: CEActionGnomeHeal
+  parent: CEActionSpellBase
+  name: Cure wounds
+  description: You restore [color=#1defa9]5 health[/color] to the creature you touch.
+  components:
+  - type: Sprite
+    sprite: _CE/Skills/Priest/cure_wounds.rsi
+    state: icon
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/Priest/cure_wounds.rsi
+      state: icon
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CEMobState
+      - CEGOAP
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationGnomeHeal
+
+- type: entityEffectAnimation
+  id: AnimationGnomeHeal
+  movementSpeed: 0.5
+  duration: 2
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    1.5:
+    - !type:Heal
+      amount: 5
+
+# Rat throw
+
+
+- type: entity
+  id: CEActionGnomeThrowRat
+  parent: CEActionSpellBase
+  name: Rat throw
+  description: You throw a rat at your enemy.
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 1
+  - type: Action
+    useDelay: 15
+    icon:
+      sprite: _CE/Objects/Weapons/Projectile/rat_flying.rsi
+      state: aaa
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: GnomeThrowRat
+
+- type: entityEffectAnimation
+  id: GnomeThrowRat
+  movementSpeed: 0
+  duration: 1.5
+  lockRotation: true
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/gnome2.ogg
+        params:
+          variation: 0.1
+          volume: 20
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/rat2.ogg
+        params:
+          variation: 0.1
+          volume: 20
+    - !type:ShootProjectile
+      projectileSpeed: 4
+      projectileMaxSpeed: 6
+      prototype: CEProjectileGnomeRat
+      projectileCount: 1
+
+- type: entity
+  id: CEProjectileGnomeRat
+  name: gnome rat projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Projectile/rat_flying.rsi
+    layers:
+    - state: aaa
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 5
+    - !type:SpawnEntity
+      effectTarget: Used #We spawn rat inside projectile coords, not target (not inside walls)
+      spawns:
+      - CEMobRat

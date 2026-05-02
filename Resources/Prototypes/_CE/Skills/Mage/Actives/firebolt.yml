@@ -24,6 +24,7 @@
       sprite: _CE/Skills/Mage/firebolt.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -108,10 +109,12 @@
       damage:
         types:
           Fire: 25
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectFire
       radius: 2
       maxStacks: 10
     - !type:SpawnEntity
-      effectTarget: Target
+      effectTarget: Used
       spawns:
       - CEEffectPotionAlchemicalFire

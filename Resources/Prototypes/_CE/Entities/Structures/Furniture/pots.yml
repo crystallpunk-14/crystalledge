@@ -31,14 +31,13 @@
     lootTable: !type:AllSelector
       children:
       - !type:GroupSelector
+        prob: 0.3
         rolls: !type:RangeNumberSelector
-          range: 0, 2
+          range: 0, 1
         children:
         - !type:NestedSelector
           tableId: CERandomPotion
-          weight: 0.1
         - id: CEMobRat
-          weight: 0.1
   - type: Fixtures
     fixtures:
       fix1:

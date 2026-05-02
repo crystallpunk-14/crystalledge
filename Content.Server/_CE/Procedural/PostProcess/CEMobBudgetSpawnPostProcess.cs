@@ -35,7 +35,7 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
     /// of 20 and a soul budget of 50, four cost-5 mobs each drop ~12 souls.
     /// </summary>
     [DataField]
-    public int SoulBudget = 50;
+    public int SoulBudget = 30;
 
     /// <summary>
     /// Inline list of mob prototypes that may be picked. No external spawn-table

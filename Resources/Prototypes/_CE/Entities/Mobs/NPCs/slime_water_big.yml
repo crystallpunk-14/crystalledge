@@ -30,7 +30,8 @@
         prob: 0.25
   - type: CEDestructionEffect
     effects:
-    - !type:WetArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
       radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
@@ -111,7 +112,8 @@
     spriteRotation: -90
     effectSlots:
       OnHit:
-      - !type:WetArea
+      - !type:CETileAffectArea
+        tileEffect: CETileEffectWater
         effectTarget: User
         radius: 2
         maxStacks: 5

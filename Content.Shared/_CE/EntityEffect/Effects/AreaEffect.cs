@@ -1,3 +1,4 @@
+using Content.Shared.Examine;
 using Content.Shared.Whitelist;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
@@ -24,18 +25,27 @@ public sealed partial class AreaEffect : CEEntityEffectBase<AreaEffect>
 
     [DataField]
     public bool AffectCaster;
+
+    /// <summary>
+    /// When true, entities behind walls (occluded from the area center) will not receive the effect.
+    /// </summary>
+    [DataField]
+    public bool CheckLOS = true;
 }
 
 public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<AreaEffect>
 {
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private readonly SharedTransformSystem _transformSys = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<AreaEffect> args)
     {
         if (!TryResolveEffectCoordinates(args.Args, args.Effect.EffectTarget, out var targetPoint))
             return;
 
+        var mapCenter = _transformSys.ToMapCoordinates(targetPoint);
         var entitiesAround = _lookup.GetEntitiesInRange(targetPoint, args.Effect.Range, LookupFlags.Uncontained);
 
         var count = 0;
@@ -46,6 +56,13 @@ public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<Area
 
             if (!_whitelist.CheckBoth(entity, args.Effect.Blacklist, args.Effect.Whitelist))
                 continue;
+
+            if (args.Effect.CheckLOS)
+            {
+                var entityMapPos = _transformSys.GetMapCoordinates(entity);
+                if (!_examine.InRangeUnOccluded(mapCenter, entityMapPos, args.Effect.Range, null))
+                    continue;
+            }
 
             var nestedArgs = args.Args with { Target = entity, Position = targetPoint };
             foreach (var effect in args.Effect.Effects)

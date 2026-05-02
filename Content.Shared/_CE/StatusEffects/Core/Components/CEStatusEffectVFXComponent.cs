@@ -2,7 +2,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.StatusEffectVFX;
+namespace Content.Shared._CE.StatusEffects.Core.Components;
 
 /// <summary>
 /// Attach to a status-effect entity prototype to spawn VFX / play audio

@@ -1,0 +1,85 @@
+- type: entity
+  id: CEStatusEffectFrozen
+  name: Frozen
+  components:
+  - type: CENegativeStatusEffect
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CEFrozen
+  - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectFire
+    vfx: CESteamEffect
+    sound:
+      path: /Audio/_CE/Effects/steam_burst.ogg
+  - type: CEStatusEffectConsume
+    consumes:
+    - CEStatusEffectWet
+    - CEStatusEffectColdSlowdown
+  - type: CETempShieldStatusEffect
+    absorbPerStack: 2
+    all: true
+  - type: CEActionBlockerStatusEffect
+    blockActions: true
+    blockUse: true
+    blockAttack: true
+    blockMove: true
+    blockThrow: true
+    blockDrop: true
+    blockPickup: true
+    blockPull: true
+    blockStand: true
+    blockEquip: true
+    blockUnequip: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Structures/Nature/ice_rock.rsi
+    noRot: true
+    layers:
+    - state: big
+      map: [ "status" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CEStatusEffectStackVisuals.Level:
+        status:
+          Low: { state: smol }
+          Medium: { state: med }
+          High: { state: big }
+  - type: Appearance
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 1
+    mediumAppearance: 5
+    highAppearance: 10
+
+- type: alert
+  id: CEFrozen
+  alertViewEntity: CEFrozenAlertSpriteView
+  name: ce-alert-frozen-name
+  description: ce-alert-frozen-desc
+  icons:
+  - sprite: _CE/Structures/Nature/ice_rock.rsi
+    state: med
+
+- type: entity
+  id: CEFrozenAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Structures/Nature/ice_rock.rsi
+      state: med
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

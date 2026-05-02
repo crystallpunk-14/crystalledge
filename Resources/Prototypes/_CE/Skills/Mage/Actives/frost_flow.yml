@@ -21,6 +21,7 @@
       sprite: _CE/Skills/Mage/frost_flow.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -29,7 +30,7 @@
 - type: entityEffectAnimation
   id: AnimationFrostFlow
   movementSpeed: 0.3
-  duration: 1.0
+  duration: 0.7
   lockRotation: true
   events:
     0:
@@ -40,7 +41,7 @@
         offset: 0, 0.5
       - time: 0.8
         offset: 0, -1
-    0.8:
+    0.5:
     - !type:ShootProjectile
       projectileSpeed: 8
       prototype: CEProjectileFrostFlow
@@ -85,7 +86,7 @@
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/freeze_effect.rsi
+    sprite: _CE/Effects/TileEffects/freeze_effect.rsi
     layers:
     - state: effect
       shader: unshaded
@@ -140,7 +141,7 @@
         hard: false
   - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3 # Important to not affect caster, freeze and damage it immediately on spawn
+    firstDelay: 0.5 # Important to not affect caster, freeze and damage it immediately on spawn
     effects:
     - !type:AreaEffect
       affectCaster: true
@@ -151,7 +152,8 @@
         damage:
           types:
             Cold: 10
-    - !type:FreezeArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
       radius: 1.5
-      maxStacks: 10
+      maxStacks: 5
       fallOffFactor: 1

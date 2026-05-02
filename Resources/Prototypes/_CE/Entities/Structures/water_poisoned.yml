@@ -18,8 +18,9 @@
       statusEffect: CEStatusEffectPoison
       amount: 1
       max: 5
-  - type: CEFreezeTransform
-    freezesInto: CEIcePoisoned
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIcePoisoned
   - type: RandomSpawner
     prototypes: []
 
@@ -34,8 +35,9 @@
   - type: CETileDistortion
     intensity: 0.6
   - type: CEAutoConveyor
-  - type: CEFreezeTransform
-    freezesInto: CEIceFrozenPoisonedStream
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIceFrozenPoisonedStream
   - type: Conveyor
     speed: 0.25
 
@@ -44,8 +46,9 @@
   id: CEIcePoisoned
   suffix: Poisoned
   components:
-  - type: CEMeltTransform
-    meltsInto: CEWaterPoisoned
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterPoisoned
 
 - type: entity
   parent: CEIcePoisoned
@@ -53,5 +56,6 @@
   suffix: Poisoned Frozen Stream
   description: A frozen stream, the current trapped under ice.
   components:
-  - type: CEMeltTransform
-    meltsInto: CEWaterPoisonedMoving
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterPoisonedMoving

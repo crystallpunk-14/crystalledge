@@ -1,9 +1,10 @@
 using Content.Shared._CE.DamageStatusEffect.Components;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew.Components;
 
-namespace Content.Shared._CE.DamageStatusEffect;
+namespace Content.Shared._CE.StatusEffects.Damage;
 
 public sealed partial class CEDamageStatusEffectSystem : EntitySystem
 {
@@ -21,6 +22,9 @@ public sealed partial class CEDamageStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var effect) || effect.AppliedTo is null)
             return;
 
-        _damageable.TakeDamage(effect.AppliedTo.Value, ent.Comp.Damage * args.Stack, ignoreArmor: ent.Comp.IgnoreArmor, interruptDoAfters: ent.Comp.InterruptDoAfters);
+        TryComp<CEStatusEffectSourceComponent>(ent, out var sourceComp);
+        var source = sourceComp?.Source is { } s && Exists(s) ? s : (EntityUid?) null;
+
+        _damageable.TakeDamage(effect.AppliedTo.Value, ent.Comp.Damage * args.Stack, source, ignoreArmor: ent.Comp.IgnoreArmor, interruptDoAfters: ent.Comp.InterruptDoAfters);
     }
 }

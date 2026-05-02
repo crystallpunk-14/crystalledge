@@ -56,8 +56,6 @@
   - type: CEArmor
     flat:
       Physical: 5
-  - type: CEFlammable
-    stackDelta: 1
 
 - type: entity
   parent:

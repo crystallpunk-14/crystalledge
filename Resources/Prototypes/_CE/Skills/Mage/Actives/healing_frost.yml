@@ -49,7 +49,8 @@
       - CEEffectHealingGeneric
     - !type:Heal
       amount: 15
-    - !type:FreezeArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
       radius: 1
       maxStacks: 5
 

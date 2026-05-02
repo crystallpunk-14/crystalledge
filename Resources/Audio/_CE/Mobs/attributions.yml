@@ -7,3 +7,8 @@
   license: "CC0-1.0"
   copyright: 'Created by qubodup on Freesound.org'
   source: "https://freesound.org/people/qubodup/sounds/751342/"
+
+- files: ["gnome1.ogg", "gnome2.ogg", "gnome3.ogg", "gnome4.ogg", "gnome5.ogg", "gnome6.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Created by remarknl on Freesound.org, converted to mono and cutted'
+  source: "https://freesound.org/people/remarknl/sounds/197411/"

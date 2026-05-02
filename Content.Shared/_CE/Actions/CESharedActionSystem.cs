@@ -87,7 +87,7 @@ public sealed partial class CEInstantActionAnimationEvent : InstantActionEvent
     public float Speed = 1f;
 
     [DataField]
-    public bool CancelAnimation;
+    public bool CancelAnimation = true;
 }
 
 public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActionEvent
@@ -99,7 +99,7 @@ public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActio
     public float Speed = 1f;
 
     [DataField]
-    public bool CancelAnimation;
+    public bool CancelAnimation = true;
 }
 
 public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
@@ -111,7 +111,7 @@ public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
     public float Speed = 1f;
 
     [DataField]
-    public bool CancelAnimation;
+    public bool CancelAnimation = true;
 }
 
 

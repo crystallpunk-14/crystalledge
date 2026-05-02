@@ -111,7 +111,7 @@ public sealed class CEDamageOverlaySystem : EntitySystem
             _overlay.InCrit = false;
             _overlay.CritLevel = 0f;
 
-            // Pain starts at 50% health. At 50% ratio → level 0, at 0% ratio → level 1.
+            // Pain starts at 50% health. At 50% ratio -> level 0, at 0% ratio -> level 1.
             // ratio goes from 1 (full health) to 0 (no health).
             if (info.Ratio < 0.5f)
             {

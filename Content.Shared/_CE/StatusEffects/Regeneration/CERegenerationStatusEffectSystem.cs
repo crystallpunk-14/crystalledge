@@ -1,8 +1,10 @@
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Regeneration;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew.Components;
 
-namespace Content.Shared._CE.Regeneration;
+namespace Content.Shared._CE.StatusEffects.Regeneration;
 
 public sealed class CERegenerationStatusEffectSystem : EntitySystem
 {
@@ -21,7 +23,6 @@ public sealed class CERegenerationStatusEffectSystem : EntitySystem
             return;
 
         TryComp<CEStatusEffectSourceComponent>(ent, out var sourceComp);
-        var source = sourceComp?.Source is { } s && Exists(s) ? s : (EntityUid?) null;
-        _damageable.Heal(effect.AppliedTo.Value, ent.Comp.Amount * args.Stack, source);
+        _damageable.Heal(effect.AppliedTo.Value, ent.Comp.Amount * args.Stack, sourceComp?.Source);
     }
 }

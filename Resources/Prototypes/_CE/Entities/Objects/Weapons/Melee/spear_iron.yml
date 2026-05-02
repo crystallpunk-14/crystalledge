@@ -32,9 +32,12 @@
     animations:
       Primary:
       - anim: SpearAttackLight
+        speed: 0.7
       Secondary:
       - anim: SpearAttackHeavy
+        speed: 0.7
       - anim: SpearAttackHeavy2
+        speed: 0.7
   - type: CEWeaponStaminaCost
     costs:
       Primary: 2

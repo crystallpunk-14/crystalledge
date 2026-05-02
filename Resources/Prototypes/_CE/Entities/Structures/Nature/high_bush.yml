@@ -52,8 +52,6 @@
     destroyThreshold: 5
     destroySound:
       collection: CEGrassGathering
-  - type: CEFlammable
-    stackDelta: 2
 
 - type: entity
   id: CERandomBushOffsetSpawner

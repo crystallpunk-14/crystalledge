@@ -21,6 +21,7 @@
       sprite: _CE/Skills/Mage/firewall.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -29,7 +30,7 @@
 - type: entityEffectAnimation
   id: AnimationFirewall
   movementSpeed: 0.3
-  duration: 1.8
+  duration: 0.7
   lockRotation: true
   events:
     0:
@@ -40,7 +41,7 @@
         offset: 0, 0.5
       - time: 1.7
         offset: 0, -1
-    1.7:
+    0.5:
     - !type:ShootProjectile
       projectileSpeed: 8
       prototype: CEProjectileFirewall
@@ -147,12 +148,14 @@
       damage:
         types:
           Fire: 20
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectFire
       radius: 3
       maxStacks: 10
   - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3
+    firstDelay: 0.5
     effects:
     - !type:AreaEffect
       range: 1.5
@@ -164,7 +167,8 @@
           types:
             Fire: 10
 
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 1.5
       maxStacks: 6
       fallOffFactor: 1

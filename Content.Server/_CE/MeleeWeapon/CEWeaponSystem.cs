@@ -43,7 +43,7 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
         if (HasComp<ActorComponent>(user))
         {
             // Clear targets so the nested effects loop in Effect() does nothing.
-            // Damage will be applied via OnArcHitEvent → ApplyArcEffects instead.
+            // Damage will be applied via OnArcHitEvent -> ApplyArcEffects instead.
             targets.Clear();
             return;
         }

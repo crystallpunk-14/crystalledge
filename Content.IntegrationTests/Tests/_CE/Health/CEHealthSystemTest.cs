@@ -146,7 +146,7 @@ public sealed class CEHealthSystemTest : GameTest
     #region State Transitions
 
     /// <summary>
-    /// Verify mob state transitions: Alive → Critical on threshold, heal back to Alive,
+    /// Verify mob state transitions: Alive -> Critical on threshold, heal back to Alive,
     /// massive damage stays Critical, and TakeDamage returns true.
     /// </summary>
     [Test]

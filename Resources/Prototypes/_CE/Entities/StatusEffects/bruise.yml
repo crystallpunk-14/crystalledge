@@ -15,9 +15,6 @@
     extraDamagePerStack: 1
     affectedTypes:
     - Physical
-  - type: Sprite
-    drawdepth: Effects
-    noRot: true
   - type: CEStatusEffectStack
     stackDelta: -1
     baseDuration: 20

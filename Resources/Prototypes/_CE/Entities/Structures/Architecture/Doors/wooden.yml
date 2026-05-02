@@ -14,8 +14,6 @@
   - type: CEArmor
     flat:
       Physical: 5
-  - type: CEFlammable
-    stackDelta: 2
   - type: CEDamageable
   - type: CEDestructible
     destroyThreshold: 65

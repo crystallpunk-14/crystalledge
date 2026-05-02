@@ -1,4 +1,5 @@
 using Content.Shared._CE.DamageStatusEffect.Components;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;

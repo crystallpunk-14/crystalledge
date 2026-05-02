@@ -1,4 +1,5 @@
 using Content.Shared._CE.Health;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -41,7 +42,7 @@ public sealed class CETempShieldSystem : EntitySystem
                 continue;
             }
 
-            if (shield.AbsorbedTypes.Count > 0 && !shield.AbsorbedTypes.Contains(damageType))
+            if (!shield.All && shield.AbsorbedTypes.Count > 0 && !shield.AbsorbedTypes.Contains(damageType))
             {
                 newDamage.Types[damageType] = damageAmount;
                 continue;

@@ -44,15 +44,19 @@
         volume: 8
   - type: CETileDistortion
     intensity: 0.4
-  - type: CEPreventIgniteTile
+  - type: CEPreventTileEffect
+    blocks:
+    - CETileEffectFire
+    - CETileEffectCursedFire
   - type: CEEntityEffectOnCollide
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectWet
       amount: 1
       max: 5
-  - type: CEFreezeTransform
-    freezesInto: CEIce
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIce
   - type: RandomSpawner
     prototypes:
     - CEWaterReeds
@@ -72,26 +76,11 @@
   - type: CETileDistortion
     intensity: 0.6
   - type: CEAutoConveyor
-  - type: CEFreezeTransform
-    freezesInto: CEIceFrozenStream
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIceFrozenStream
   - type: Conveyor
     speed: 0.25
-
-- type: entity
-  id: CEWaterTileImpactEffect
-  name: water splash
-  description: A splash of water upon impact.
-  categories: [ ForkFiltered ]
-  components:
-  - type: Transform
-  - type: Sprite
-    sprite: _CE/Effects/water_tile_impact.rsi
-    snapCardinals: true
-    layers:
-    - state: effect
-    drawdepth: Effects
-  - type: TimedDespawn
-    lifetime: 2.0
 
 - type: entity
   id: CEIce
@@ -140,8 +129,9 @@
   - type: FrictionContacts
   - type: TileFrictionModifier
     modifier: 0.05
-  - type: CEMeltTransform
-    meltsInto: CEWater
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWater
 
 - type: entity
   parent: CEIce
@@ -149,6 +139,7 @@
   suffix: Frozen Stream
   description: A frozen stream, the current trapped under ice.
   components:
-  - type: CEMeltTransform
-    meltsInto: CEWaterMoving
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterMoving
 

@@ -98,5 +98,3 @@
         - !type:NestedSelector
           tableId: CEEmptyVials
           weight: 2
-  - type: CEFlammable
-    stackDelta: 1

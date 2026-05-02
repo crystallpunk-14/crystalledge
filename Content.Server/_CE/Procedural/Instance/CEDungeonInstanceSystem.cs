@@ -36,7 +36,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// <summary>
     /// How long an empty unstable instance persists before cleanup.
     /// </summary>
-    private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(3);
 
     /// <summary>
     /// How often the cleanup check runs (avoid per-frame iteration).

@@ -8,16 +8,16 @@
 - type: entity
   id: CEStatusEffectThickSkin
   name:  Thick Skin
-  description: You take 2 less damage from all sources.
+  description: You take 1 less damage from all sources (except poison).
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEThickSkin
   - type: CEArmor
     flat:
-      Cold: 2
-      Fire: 2
-      Physical: 2
+      Cold: 1
+      Fire: 1
+      Physical: 1
 
 - type: alert
   id: CEThickSkin

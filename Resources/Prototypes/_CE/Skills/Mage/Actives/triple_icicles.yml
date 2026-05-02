@@ -24,6 +24,7 @@
       sprite: _CE/Skills/Mage/triple_icicle.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -126,7 +127,9 @@
     energy: 4.0
   - type: CEProjectile
     hitEffects:
-    - !type:FreezeArea
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectFreeze
       radius: 1.5
       maxStacks: 6
     - !type:AreaEffect
@@ -140,4 +143,5 @@
             Cold: 10
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectColdSlowdown
-        amount: 3
+        amount: 2
+        max: 5

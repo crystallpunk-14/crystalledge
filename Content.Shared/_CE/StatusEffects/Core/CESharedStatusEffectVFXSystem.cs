@@ -1,3 +1,4 @@
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
@@ -5,7 +6,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._CE.StatusEffectVFX;
+namespace Content.Shared._CE.StatusEffects.Core;
 
 public abstract class CESharedStatusEffectVFXSystem : EntitySystem
 {

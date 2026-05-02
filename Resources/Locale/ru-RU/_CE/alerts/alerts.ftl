@@ -42,3 +42,12 @@ ce-alert-poisoned-desc = Вы медленно получаете урон. Лю
 
 ce-alert-pacifism-name = Безопасная зона
 ce-alert-pacifism-desc = Успокаивающий эффект безопасного убежища не позволяет вам причинять вред окружающим.
+
+ce-alert-blessing-name = Благословение
+ce-alert-blessing-desc = Увеличивает все входящее лечение.
+
+ce-alert-curse-name = Проклятье
+ce-alert-curse-desc = Увеличивает весь входящий урон.
+
+ce-alert-frozen-name = Заморожен
+ce-alert-frozen-desc = Вы полностью заморожены! Вы не можете ничего делать, но ледяная корка защищает вас от урона!

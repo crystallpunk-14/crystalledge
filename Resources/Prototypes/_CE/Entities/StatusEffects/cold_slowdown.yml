@@ -6,7 +6,7 @@
   - type: StatusEffect
     whitelist:
       components:
-      - CEFreezable
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEColdSlowdown
   - type: RejuvenateRemovedStatusEffect
@@ -16,6 +16,9 @@
     vfx: CESteamEffect
     sound:
       path: /Audio/_CE/Effects/steam_burst.ogg
+  - type: CEStatusEffectTransform
+    transforms:
+      CEStatusEffectWet: CEStatusEffectFrozen
   - type: CESpeedModifierStatusEffect
     speed: 0.8
   - type: Sprite

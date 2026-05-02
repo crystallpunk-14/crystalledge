@@ -16,10 +16,6 @@
         variation: 0.1
   - type: CEDestructible
     destroyThreshold: 10
-    lootTable: !type:AllSelector
-      children:
-      - id: CECoinCopper1
-        amount: 1
   - type: CEGOAP
     goals:
     # Single stupid goal - kill enemies

@@ -25,7 +25,8 @@
       - CEEffectHealingGeneric
   - type: CEDestructionEffect
     effects:
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 2
       maxStacks: 9
     - !type:SpawnEntity

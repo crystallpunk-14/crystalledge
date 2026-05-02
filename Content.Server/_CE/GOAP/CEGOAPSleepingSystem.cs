@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server._CE.GOAPAlarm;
+using Content.Server._CE.GOAP;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Procedural.Components;

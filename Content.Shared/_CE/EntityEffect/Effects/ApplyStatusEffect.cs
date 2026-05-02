@@ -35,6 +35,12 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
         if (attempt.Cancelled)
             return;
 
+        // Raise on the TARGET so that target-side status effects (e.g. CEStatusEffectImmunity) can cancel.
+        var receiveAttempt = new CEAttemptReceiveStatusEffectEvent(entity, args.Effect.StatusEffect, args.Effect.Duration);
+        RaiseLocalEvent(entity, receiveAttempt);
+        if (receiveAttempt.Cancelled)
+            return;
+
         if (!_statusEffect.TrySetStatusEffectDuration(entity, args.Effect.StatusEffect, out var statusEnt, args.Effect.Duration))
             return;
 
@@ -53,6 +59,19 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
 /// status effects via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
 public sealed class CEAttemptApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly EntProtoId StatusEffect = statusEffect;
+    public readonly TimeSpan Duration = duration;
+    public bool Cancelled;
+}
+
+/// <summary>
+/// Raised on the TARGET entity before <see cref="ApplyStatusEffect"/> applies a status effect.
+/// Cancelling prevents the effect from being applied.
+/// Relayed to the target's active status effects via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEAttemptReceiveStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
