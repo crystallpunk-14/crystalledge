@@ -22,7 +22,6 @@ public abstract class CESharedSoulSystem : EntitySystem
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly CESharedEphemeralCollectableSystem _collectable = default!;
 
     public override void Initialize()
     {
@@ -31,26 +30,6 @@ public abstract class CESharedSoulSystem : EntitySystem
         // Soul drops happen only on the server: spawning shards from CEDestructedEvent
         // is authoritative world state.
         SubscribeLocalEvent<CESoulDropOnDeathComponent, CEDestructedEvent>(OnDestructed);
-        SubscribeLocalEvent<CESoulCapComponent, CESoulReceivedEvent>(OnCapReceived);
-        SubscribeLocalEvent<CESoulCollectableComponent, MapInitEvent>(OnCollectableInit);
-    }
-
-    private void OnCollectableInit(Entity<CESoulCollectableComponent> ent, ref MapInitEvent args)
-    {
-        var query = EntityQueryEnumerator<CESoulCapComponent>();
-        while (query.MoveNext(out var uid, out var cap))
-        {
-            if (cap.Current < cap.Cap)
-                continue;
-
-            _collectable.MarkAsCollectedFor(ent.Owner, uid);
-        }
-    }
-
-    private void OnCapReceived(Entity<CESoulCapComponent> ent, ref CESoulReceivedEvent args)
-    {
-        ent.Comp.Current = Math.Min(ent.Comp.Current + args.Amount, ent.Comp.Cap);
-        Dirty(ent);
     }
 
     private void OnDestructed(Entity<CESoulDropOnDeathComponent> ent, ref CEDestructedEvent args)

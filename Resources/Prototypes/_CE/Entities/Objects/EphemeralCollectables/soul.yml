@@ -1,9 +1,8 @@
 
 - type: entity
-  id: CESoulShardInfinite
+  id: CESoulShard
   name: soul essence
   description: A fragment of the soul that can be offered as a gift to sacred statues in exchange for powerful blessings
-  suffix: Infinite
   categories: [ ForkFiltered ]
   components:
   - type: Clickable
@@ -64,16 +63,6 @@
     floatingOffset: "0.0,0.2"
 
 - type: entity
-  id: CESoulShard
-  parent: CESoulShardInfinite
-  suffix: 2 minute lifetime
-  components:
-  - type: CESoulCollectable
-  - type: TimedDespawn
-    lifetime: 120
-
-
-- type: entity
   id: CEEffectSoulCollect
   parent: CEBaseMagicImpact
   categories: [ HideSpawnMenu ]
@@ -101,10 +90,6 @@
         isLooped: false
         enabled: true
 
-# Pure visual particle used by the soul-transfer animation. Spawned client-side
-# by CEClientSoulTransferAnimationSystem, never exists on the server. No physics,
-# no networking, no interaction — just a sprite + light that gets moved by the
-# animation system each frame.
 - type: entity
   id: CESoulTransferParticle
   name: soul fragment
