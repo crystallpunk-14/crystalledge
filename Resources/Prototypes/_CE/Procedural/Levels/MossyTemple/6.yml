@@ -45,7 +45,7 @@
   - !type:CEMobBudgetSpawnPostProcess
     budget: 80
     excludedRoomTypes:
-    - Entrance
+    - MossyTempleEntranceRoom
     entries:
     - proto: CEMobSlimeFire
       cost: 3
