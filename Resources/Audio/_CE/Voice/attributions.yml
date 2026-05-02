@@ -164,3 +164,18 @@
   license: "All rights reserved"
   copyright: "Voice recorded by Tudibidab"
   source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["lomovari.ogg", "lomovari_e.ogg", "lomovari_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Lomovari"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["notti.ogg", "notti_e.ogg", "notti_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Notti"
+  source: "https://github.com/crystallpunk-14/crystalledge"
+
+- files: ["flegmant.ogg", "flegmant_e.ogg", "flegmant_a.ogg"]
+  license: "All rights reserved"
+  copyright: "Voice recorded by Flegmant"
+  source: "https://github.com/crystallpunk-14/crystalledge"

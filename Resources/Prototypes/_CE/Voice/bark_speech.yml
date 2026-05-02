@@ -449,3 +449,43 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Lomovari
+  saySound:
+    path: /Audio/_CE/Voice/lomovari.ogg
+  askSound:
+    path: /Audio/_CE/Voice/lomovari_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/lomovari_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Notti
+  saySound:
+    path: /Audio/_CE/Voice/notti.ogg
+  askSound:
+    path: /Audio/_CE/Voice/notti_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/notti_e.ogg
+  syllableInterval: 0.1
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Flegmant
+  saySound:
+    path: /Audio/_CE/Voice/flegmant.ogg
+  askSound:
+    path: /Audio/_CE/Voice/flegmant_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/flegmant_e.ogg
+  syllableInterval: 0.1
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+
