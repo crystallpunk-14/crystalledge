@@ -1,0 +1,82 @@
+- type: skill
+  parent: BaseNeutralSkill
+  weight: 0.1 #Very rare, very meme
+  id: RatThrow
+  effect: !type:AddAction
+    action: CEActionRatThrow
+
+- type: entity
+  id: CEActionRatThrow
+  parent: CEActionSpellBase
+  name: Rat Throw
+  description: You throw a rat.
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 1.0
+    projectileMode: true
+  - type: CEActionManaCost
+    manaCost: 3
+  - type: Action
+    useDelay: 2
+    icon:
+      sprite: _CE/Objects/Weapons/Projectile/rat_flying.rsi
+      state: aaa
+  - type: TargetAction
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationRatThrow
+
+- type: entityEffectAnimation
+  id: AnimationRatThrow
+  movementSpeed: 0.8
+  duration: 0.5
+  lockRotation: true
+  events:
+    0:
+    - !type:ShootProjectile
+      projectileSpeed: 5
+      prototype: CEProjectileRat
+      projectileCount: 1
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/rat2.ogg
+        params:
+          variation: 0.1
+          volume: 20
+
+
+- type: entity
+  id: CEProjectileRat
+  name: gnome rat projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Projectile/rat_flying.rsi
+    layers:
+    - state: aaa
+      color: "#9dff9d"
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 10
+    - !type:SpawnEntity
+      effectTarget: Used #We spawn rat inside projectile coords, not target (not inside walls)
+      spawns:
+      - CEMobRatFrendly
+
+- type: entity
+  parent: CEMobRat
+  id: CEMobRatFrendly
+  suffix: Frendly
+  components:
+  - type: Sprite
+    color: "#9dff9d"
+  - type: NpcFactionMember
+    factions:
+    - NanoTrasen #TODO

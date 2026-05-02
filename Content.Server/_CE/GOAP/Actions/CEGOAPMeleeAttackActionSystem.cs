@@ -5,6 +5,7 @@ using Content.Server.NPC.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 using Content.Shared.CombatMode;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
@@ -85,7 +86,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         }
 
         // Check if target is neutralized
-        if (!_mobState.IsAlive(target.Value))
+        if (TryComp<CEMobStateComponent>(target.Value, out var targetMobState) && !_mobState.IsAlive(target.Value, targetMobState))
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;

@@ -16,7 +16,7 @@ public sealed partial class CEGOAPComponent : Component
     /// and must be explicitly woken by a trigger (damage, proximity, etc.).
     /// </summary>
     [DataField]
-    public bool StartSleeping = true;
+    public bool StartSleeping = false;
 
     /// <summary>
     /// List of goals this entity can pursue.

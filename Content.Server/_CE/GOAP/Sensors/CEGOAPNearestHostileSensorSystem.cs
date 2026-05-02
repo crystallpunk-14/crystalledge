@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 using Content.Shared.Examine;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
@@ -80,7 +81,10 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
                     args.Sensor.VisionRadius + 0.5f))
                 continue;
 
-            if (!_mobState.IsAlive(targetUid))
+            // Only skip entities that explicitly have CEMobStateComponent and are NOT alive.
+            // Vanilla mobs (MobState only, no CEMobStateComponent) are treated as alive.
+            if (TryComp<CEMobStateComponent>(targetUid, out var targetMobState)
+                && !_mobState.IsAlive(targetUid, targetMobState))
                 continue;
 
             closestDistance = distance;
