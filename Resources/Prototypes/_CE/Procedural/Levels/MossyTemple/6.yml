@@ -8,21 +8,39 @@
     1: Arena
   config:
     !type:CEProceduralConfig
-    generalCount:
-      min: 15
-      max: 20
-    entranceCount:
-      min: 5
-      max: 5
-    blessingCount:
-      min: 0
-      max: 0
-    treasureCount:
-      min: 1
-      max: 1
-    cycleCount:
-      min: 10
-      max: 10
+    generationPlan:
+    - !type:GenerateRoomWeb
+      source: 0, 0
+      roomType: MossyTempleGeneralRoom
+      count:
+        min: 15
+        max: 20
+    - !type:SetRoomType
+      position: 0, 0
+      roomType: MossyTempleExitRoom
+    - !type:AppendRoom
+      roomType: MossyTempleEntranceRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 3
+        max: 3
+    - !type:AppendRoom
+      roomType: MossyTempleTreasureRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 1
+        max: 1
+    - !type:MarkDeadEnds
+      ofType: MossyTempleGeneralRoom
+      roomType: MossyTempleDeadEndRoom
+    - !type:ConnectRandomRooms
+      roomTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 10
+        max: 10
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
     budget: 80

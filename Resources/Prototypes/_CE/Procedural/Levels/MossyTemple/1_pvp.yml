@@ -15,6 +15,9 @@
       count:
         min: 4
         max: 6
+    - !type:SetRoomType
+      position: 0, 0
+      roomType: MossyTempleExitRoom
     - !type:AppendRoom
       roomType: MossyTempleEntranceRoom
       attachToTypes:
@@ -36,9 +39,6 @@
       count:
         min: 0
         max: 2
-    - !type:SetRoomType
-      position: 0, 0
-      roomType: MossyTempleExitRoom
     - !type:MarkDeadEnds
       ofType: MossyTempleGeneralRoom
       roomType: MossyTempleDeadEndRoom
