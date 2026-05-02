@@ -55,6 +55,7 @@
     budget: 20
     excludedRoomTypes:
     - MossyTempleEntranceRoom
+    - MossyTempleSecretRoom
     entries:
     - proto: CEMobSlimeWater
       cost: 2

@@ -41,6 +41,27 @@
       count:
         min: 0
         max: 2
+    - !type:AppendRoom
+      roomType: MossyTempleSecretRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 0
+        max: 1
+    - !type:AppendRoom
+      roomType: MossyTempleAlchemyRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 0
+        max: 1
+    - !type:AppendRoom
+      roomType: MossyTempleLibraryRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 0
+        max: 1
     - !type:MarkDeadEnds
       ofType: MossyTempleGeneralRoom
       roomType: MossyTempleDeadEndRoom
@@ -55,6 +76,7 @@
     budget: 40
     excludedRoomTypes:
     - MossyTempleEntranceRoom
+    - MossyTempleSecretRoom
     entries:
     - proto: CEMobSlimeFire
       cost: 3

@@ -91,3 +91,14 @@
       storagebase: !type:NestedSelector
         prob: 0.1
         tableId: CECommonBooks
+
+- type: entity
+  id: CEBookshelfStoneFilledGuaranteed
+  parent: CEBookshelfStone
+  suffix: Guaranteed 1 book
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        prob: 1
+        tableId: CECommonBooks

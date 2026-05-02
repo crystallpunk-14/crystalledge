@@ -49,4 +49,4 @@
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomWeapon
-      prob: 0.5
+      prob: 1

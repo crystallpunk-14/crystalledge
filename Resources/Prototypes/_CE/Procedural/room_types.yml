@@ -42,3 +42,33 @@
   id: MossyTempleDeadEndRoom
   supportsWideConnection: true
   color: "#c0a87b"
+
+- type: dungeonRoomType
+  id: MossyTempleAlchemyRoom
+  doorPrototype: CEGoldenLockedDoor
+  supportsWideConnection: false
+  showIconFromNeighbour: true
+  color: "#00f2ff"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: alchemy
+
+- type: dungeonRoomType
+  id: MossyTempleLibraryRoom
+  doorPrototype: CEGoldenLockedDoor
+  supportsWideConnection: false
+  showIconFromNeighbour: true
+  color: "#b587dd"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: library
+
+- type: dungeonRoomType
+  id: MossyTempleSecretRoom
+  doorPrototype: CEWallWoodenDark
+  supportsWideConnection: false
+  secretRoom: true
+  color: "#3e3e3e"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: secret

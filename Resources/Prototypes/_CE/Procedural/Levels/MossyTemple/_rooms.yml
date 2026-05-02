@@ -295,7 +295,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_SomeKindOfLibrary
-  roomType: MossyTempleDeadEndRoom
+  roomType: MossyTempleLibraryRoom
   size: 11, 11
   height: 2
   zLevelMap: MossyTemple
@@ -303,7 +303,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_PotionsBehindFrames
-  roomType: MossyTempleDeadEndRoom
+  roomType: MossyTempleLibraryRoom
   size: 6, 11
   height: 2
   zLevelMap: MossyTemple
@@ -343,7 +343,7 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_WaterBridge
-  roomType: MossyTempleDeadEndRoom
+  roomType: MossyTempleAlchemyRoom
   size: 11, 8
   height: 2
   zLevelMap: MossyTemple
@@ -367,11 +367,19 @@
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_Alchemy1
-  roomType: MossyTempleDeadEndRoom
+  roomType: MossyTempleAlchemyRoom
   size: 9, 7
   height: 2
   zLevelMap: MossyTemple
   offset: 46, -27
+
+- type: dungeonRoom3d
+  id: MossyTemple_DeadEnd_CursedFire
+  roomType: MossyTempleDeadEndRoom
+  size: 4, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 32, -29
 
 
 
@@ -410,6 +418,22 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -27, 0
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_4Towers
+  roomType: MossyTempleEntranceRoom
+  size: 9, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -37, 0
+
+- type: dungeonRoom3d
+  id: MossyTemple_Entrance_WoodenRoom
+  roomType: MossyTempleEntranceRoom
+  size: 8, 9
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -46, -10
 
 
 
@@ -465,6 +489,14 @@
   height: 2
   zLevelMap: MossyTemple
   offset: -18, 39
+
+- type: dungeonRoom3d
+  id: MossyTemple_Exit_6Islands
+  roomType: MossyTempleExitRoom
+  size: 9, 11
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -37, 10
 
 
 
@@ -534,3 +566,44 @@
   height: 2
   zLevelMap: MossyTemple
   offset: 8, -71
+
+
+
+
+
+
+# SECRETS
+
+
+
+- type: dungeonRoom3d
+  id: MossyTemple_DoorsDoorsDoors
+  roomType: MossyTempleSecretRoom
+  size: 7, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -41
+
+- type: dungeonRoom3d
+  id: MossyTemple_AlchemyOrChest
+  roomType: MossyTempleSecretRoom
+  size: 7, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 8, -41
+
+- type: dungeonRoom3d
+  id: MossyTemple_WaterPool
+  roomType: MossyTempleSecretRoom
+  size: 6, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 16, -41
+
+- type: dungeonRoom3d
+  id: MossyTemple_LooongCorridor
+  roomType: MossyTempleSecretRoom
+  size: 15, 3
+  height: 2
+  zLevelMap: MossyTemple
+  offset: 0, -45
