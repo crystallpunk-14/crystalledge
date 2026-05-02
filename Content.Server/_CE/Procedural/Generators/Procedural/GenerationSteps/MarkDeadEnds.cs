@@ -9,7 +9,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// <see cref="RoomType"/> (dead-ends). Rooms of other types are left unchanged.
 /// </summary>
 [DataDefinition]
-public sealed partial class CEMarkDeadEndsStep : CEDungeonGenerationStep
+public sealed partial class MarkDeadEnds : CEDungeonGenerationStep
 {
     /// <summary>
     /// Only rooms currently of this type are considered as dead-end candidates.

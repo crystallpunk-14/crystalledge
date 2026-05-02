@@ -9,7 +9,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// Has no effect if no room exists at that position.
 /// </summary>
 [DataDefinition]
-public sealed partial class CESetRoomTypeStep : CEDungeonGenerationStep
+public sealed partial class SetRoomType : CEDungeonGenerationStep
 {
     /// <summary>
     /// Logical grid coordinate of the room to retype.

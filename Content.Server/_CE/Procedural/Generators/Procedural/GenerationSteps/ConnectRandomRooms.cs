@@ -11,7 +11,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// Pairs are sorted by combined Manhattan distance from the grid origin (farthest first).
 /// </summary>
 [DataDefinition]
-public sealed partial class CEConnectRandomRoomsStep : CEDungeonGenerationStep
+public sealed partial class ConnectRandomRooms : CEDungeonGenerationStep
 {
     /// <summary>
     /// Only rooms whose current type is in this list are considered.

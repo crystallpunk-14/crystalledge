@@ -11,7 +11,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// New rooms are appended to randomly selected rooms from the growing frontier.
 /// </summary>
 [DataDefinition]
-public sealed partial class CEGenerateRoomWebStep : CEDungeonGenerationStep
+public sealed partial class GenerateRoomWeb : CEDungeonGenerationStep
 {
     /// <summary>
     /// Grid coordinate where the first room will be placed.

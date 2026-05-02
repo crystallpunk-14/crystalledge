@@ -11,7 +11,7 @@ namespace Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 /// Each new room becomes a leaf node with a single connection to its parent.
 /// </summary>
 [DataDefinition]
-public sealed partial class CEAppendRoomStep : CEDungeonGenerationStep
+public sealed partial class AppendRoom : CEDungeonGenerationStep
 {
     /// <summary>
     /// Room type to assign to every appended room.
