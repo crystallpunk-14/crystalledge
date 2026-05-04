@@ -1,0 +1,45 @@
+name: Edge Publish (Changelog Discord Only)
+
+concurrency:
+  group: publish
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  # schedule:
+   # - cron: '0 10 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install dependencies
+      run: sudo apt-get install -y python3-paramiko python3-lxml
+
+    - uses: actions/checkout@v4.2.2
+      with:
+        submodules: 'recursive'
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4.1.0
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Get Engine Tag
+      run: |
+        cd RobustToolbox
+        git fetch --depth=1
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build Packaging
+      run: dotnet build Content.Packaging --configuration Release --no-restore /m
+
+    - name: Publish changelog (Discord)
+      continue-on-error: true
+      run: Tools/actions_changelogs_since_last_run.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
