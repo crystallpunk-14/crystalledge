@@ -91,3 +91,16 @@
   id: 15
   time: '2026-05-04T09:55:55.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/205
+- author: TheShuEd
+  changes:
+  - message: Added fun!
+    type: Add
+  - message: Removed fun!
+    type: Remove
+  - message: Changed fun!
+    type: Tweak
+  - message: Fixed fun!
+    type: Fix
+  id: 16
+  time: '2026-05-04T18:13:42.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/206
