@@ -153,7 +153,7 @@ public sealed partial class CEDungeonInstanceSystem
 
                 _transform.SetMapCoordinates(player, _transform.ToMapCoordinates(passage.TargetPosition.Value));
                 _flash.Flash(player, null, null, FlashDuration, 0.8f);
-                _audio.PlayEntity(TransitionSound, player, player);
+                _audio.PlayGlobal(TransitionSound, player, AudioParams.Default.WithVolume(-4));
             }
             QueueDel(uid);
         }

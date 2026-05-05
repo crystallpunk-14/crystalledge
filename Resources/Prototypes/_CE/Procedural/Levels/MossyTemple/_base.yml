@@ -163,6 +163,8 @@
     - type: CEMapStatusEffects
       effects:
       - CEStatusEffectPacifism
+    - type: CEMapAmbientMusicTheme
+      theme: MossyTemple
 
 
 - type: dungeonLevel
@@ -183,3 +185,5 @@
     - type: Gravity
       enabled: true
       inherent: true
+    - type: CEMapAmbientMusicTheme
+      theme: MossyTemple
