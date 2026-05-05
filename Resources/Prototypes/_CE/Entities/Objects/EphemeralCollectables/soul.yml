@@ -69,7 +69,7 @@
   save: false
   components:
   - type: Sprite
-    drawdepth: BelowMobs
+    drawdepth: Effects
     sprite: _CE/Effects/soul_collect.rsi
     layers:
     - state: effect

@@ -2,6 +2,7 @@ using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
+using Content.Shared._CE.Soul.Components;
 using Content.Shared._CE.StatusEffects.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
@@ -20,7 +21,7 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<ActionComponent, ActionAttemptEvent>(OnActionAttempt);
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
-        SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
+        SubscribeLocalEvent<CEActionSoulCostComponent, ActionAttemptEvent>(OnSoulcostActionAttempt);
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ActionAttemptEvent>(OnWeaponRequiredActionAttempt);
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
@@ -96,16 +97,27 @@ public abstract partial class CESharedActionSystem
         }
     }
 
-    private void OnStaminaCostActionAttempt(Entity<CEActionStaminaCostComponent> ent, ref ActionAttemptEvent args)
+    private void OnSoulcostActionAttempt(Entity<CEActionSoulCostComponent> ent, ref ActionAttemptEvent args)
     {
-        if (!TryComp<StaminaComponent>(args.User, out var staminaComp))
+        if (args.Cancelled)
             return;
 
-        if (!staminaComp.Critical)
+        if (!TryComp<ActionComponent>(ent, out var action))
             return;
 
-        Popup.PopupClient(Loc.GetString("ce-magic-spell-stamina-not-enough"), args.User, args.User);
-        args.Cancelled = true;
+        if (!TryComp<CESoulContainerComponent>(args.User, out var container))
+        {
+            Popup.PopupClient(Loc.GetString("ce-magic-spell-not-enough-soul"), args.User, args.User);
+            args.Cancelled = true;
+            return;
+        }
+
+        if (container.Souls < ent.Comp.Cost)
+        {
+            Popup.PopupClient(Loc.GetString("ce-magic-spell-not-enough-soul"), args.User, args.User);
+            args.Cancelled = true;
+            return;
+        }
     }
 
     private void OnSomaticActionAttempt(Entity<CEActionFreeHandsRequiredComponent> ent, ref ActionAttemptEvent args)

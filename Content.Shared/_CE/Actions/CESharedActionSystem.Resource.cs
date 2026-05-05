@@ -1,5 +1,6 @@
 using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Mana.Core.Components;
+using Content.Shared._CE.Soul.Components;
 using Content.Shared.Actions.Events;
 
 namespace Content.Shared._CE.Actions;
@@ -9,6 +10,7 @@ public abstract partial class CESharedActionSystem
     private void InitializePerformed()
     {
         SubscribeLocalEvent<CEActionManaCostComponent, ActionPerformedEvent>(OnManaCostActionPerformed);
+        SubscribeLocalEvent<CEActionSoulCostComponent, ActionPerformedEvent>(OnSoulCostActionPerformed);
     }
 
     private void OnManaCostActionPerformed(Entity<CEActionManaCostComponent> ent, ref ActionPerformedEvent args)
@@ -37,5 +39,19 @@ public abstract partial class CESharedActionSystem
 
         if (manaCost > 0 && TryComp<CEMagicEnergyContainerComponent>(args.Performer, out var playerMana))
             _magicEnergy.Take((args.Performer, playerMana), manaCost);
+    }
+
+    private void OnSoulCostActionPerformed(Entity<CEActionSoulCostComponent> ent, ref ActionPerformedEvent args)
+    {
+        if (!_actionQuery.TryComp(ent, out var action))
+            return;
+
+        if (action.Container is null)
+            return;
+
+        if (!TryComp<CESoulContainerComponent>(args.Performer, out var playerSoul))
+            return;
+
+        _soul.TryRemoveSouls((args.Performer, playerSoul), ent.Comp.Cost);
     }
 }

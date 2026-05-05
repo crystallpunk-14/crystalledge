@@ -1,6 +1,7 @@
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Mana.Core;
+using Content.Shared._CE.Soul;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -17,6 +18,7 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedHandsSystem _hand = default!;
     [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
+    [Dependency] private readonly CESharedSoulSystem _soul = default!;
 
     private EntityQuery<ActionComponent> _actionQuery;
 

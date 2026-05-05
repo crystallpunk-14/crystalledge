@@ -1,0 +1,86 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: SoulEater
+  weight: 0.5
+  effect: !type:AddAction
+    action: CEActionSpellSoulEater
+
+- type: entity
+  id: CEActionSpellSoulEater
+  parent: CEActionSpellBase
+  name: Soul Eater
+  description: You restore [color=#1776eb]1 mana[/color].
+  components:
+  - type: CEActionSoulCost
+    cost: 1
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Neutral/soul_eater.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationSoulEater
+
+- type: entityEffectAnimation
+  id: AnimationSoulEater
+  movementSpeed: 0.5
+  duration: 0.6
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Items/eating_1.ogg
+        params:
+          pitch: 0.4
+    - !type:SpawnEntity
+      reparent: true
+      spawns:
+      - CEEffectSoulCollect
+    - !type:UsedEntityAnimation
+      dummyEntity: CESoulShardDummy
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.5
+        easing: QuadIn 
+      - time: 0.2
+        offset: 0, -0.2
+        easing: QuadIn
+      - time: 0.5
+        offset: 0, -0
+      
+      rotationAnimation:
+      - time: 0.0
+        rotation: 180
+
+      colorAnimation:
+      - time: 0.3
+        color: "#ffffff"
+      - time: 0.5
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    0.5:
+    - !type:SpawnEntity
+      reparent: true
+      spawns:
+      - CEEffectManaRestore
+    - !type:RestoreMana
+      amount: 1
+
+- type: entity
+  id: CESoulShardDummy
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Effects/soul.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 1.5
+    energy: 10
+    netsync: false

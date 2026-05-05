@@ -11,11 +11,16 @@ public abstract partial class CESharedActionSystem
     {
         SubscribeLocalEvent<ActionComponent, ExaminedEvent>(OnActionExamined);
         SubscribeLocalEvent<CEActionManaCostComponent, ExaminedEvent>(OnManacostExamined);
-        SubscribeLocalEvent<CEActionStaminaCostComponent, ExaminedEvent>(OnStaminaCostExamined);
+        SubscribeLocalEvent<CEActionSoulCostComponent, ExaminedEvent>(OnSoulCostExamined);
 
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ExaminedEvent>(OnSomaticExamined);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ExaminedEvent>(OnMobStateExamined);
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ExaminedEvent>(OnWeaponRequiredExamined);
+    }
+
+    private void OnSoulCostExamined(Entity<CEActionSoulCostComponent> ent, ref ExaminedEvent args)
+    {
+        args.PushMarkup($"{Loc.GetString("ce-magic-soulcost")}: [color=#bc53e6]{ent.Comp.Cost}[/color]", priority: 9);
     }
 
     private void OnActionExamined(Entity<ActionComponent> ent, ref ExaminedEvent args)
@@ -28,11 +33,6 @@ public abstract partial class CESharedActionSystem
     private void OnManacostExamined(Entity<CEActionManaCostComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup($"{Loc.GetString("ce-magic-manacost")}: [color=#5da9e8]{ent.Comp.ManaCost}[/color]", priority: 9);
-    }
-
-    private void OnStaminaCostExamined(Entity<CEActionStaminaCostComponent> ent, ref ExaminedEvent args)
-    {
-        args.PushMarkup($"{Loc.GetString("ce-magic-staminacost")}: [color=#3fba54]{ent.Comp.Stamina}[/color]", priority: 9);
     }
 
     private void OnSomaticExamined(Entity<CEActionFreeHandsRequiredComponent> ent, ref ExaminedEvent args)
