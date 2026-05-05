@@ -243,6 +243,19 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
                 Dirty(player, receiver);
         }
 
+        // The soul-transfer animation may have finished while the player was running away.
+        // If they are now outside the trigger radius, cache the offering (so re-entry still
+        // works) but do NOT spawn blessing entities — they would be unreachable and stick
+        // around forever. Free the statue so other players can use it.
+        var statuePos = Transform(statue.Owner).MapPosition;
+        var playerPos = Transform(player).MapPosition;
+        if (statuePos.MapId != playerPos.MapId ||
+            (statuePos.Position - playerPos.Position).Length() > statue.Comp.TriggerRadius)
+        {
+            statue.Comp.ActivePlayer = null;
+            return;
+        }
+
         var blessingEntities = new List<EntityUid>();
         var tableIndex = 0;
 

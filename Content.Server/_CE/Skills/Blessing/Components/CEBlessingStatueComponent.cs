@@ -55,4 +55,10 @@ public sealed partial class CEBlessingStatueComponent : Component
 
     [DataField]
     public string TriggerFixtureId = "trigger";
+
+    /// <summary>
+    /// TODO: delete this and use the fixture's actual shape
+    /// </summary>
+    [DataField]
+    public float TriggerRadius = 3f;
 }
