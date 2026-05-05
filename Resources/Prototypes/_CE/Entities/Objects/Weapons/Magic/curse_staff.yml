@@ -76,7 +76,7 @@
           Poison: 5
   - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.5
+    firstDelay: 0.8
     effects:
     - !type:CETileAffectArea
       effectTarget: Used
