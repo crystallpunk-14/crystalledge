@@ -16,7 +16,7 @@
   - type: CEActionManaCost
     manaCost: 2
   - type: Action
-    useDelay: 3
+    useDelay: 6
     icon:
       sprite: _CE/Skills/Mage/firebolt.rsi
       state: icon
@@ -105,12 +105,12 @@
       attackType: Ranged
       damage:
         types:
-          Fire: 25
+          Fire: 20
     - !type:CETileAffectArea
       effectTarget: Used
       tileEffect: CETileEffectFire
       radius: 2
-      maxStacks: 10
+      maxStacks: 6
     - !type:SpawnEntity
       effectTarget: Used
       spawns:
