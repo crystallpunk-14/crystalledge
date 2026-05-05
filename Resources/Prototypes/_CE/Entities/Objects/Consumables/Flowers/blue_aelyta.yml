@@ -38,7 +38,7 @@
       collection: eating
     effects:
     - !type:RestoreMana
-      amount: 1
+      amount: 5
     - !type:ApplyStatusEffectStack
       effectTarget: Target
       statusEffect: CEStatusEffectPoison

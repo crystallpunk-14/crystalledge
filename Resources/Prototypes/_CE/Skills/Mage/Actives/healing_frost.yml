@@ -14,7 +14,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
-    manaCost: 4
+    manaCost: 20
   - type: Action
     useDelay: 8
     icon:

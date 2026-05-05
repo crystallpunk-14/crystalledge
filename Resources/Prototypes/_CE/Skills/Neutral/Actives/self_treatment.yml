@@ -21,7 +21,7 @@
   description: You restore [color=#1defa9]10 health[/color] to yourself.
   components:
   - type: CEActionManaCost
-    manaCost: 4
+    manaCost: 20
   - type: Action
     useDelay: 5
     icon:

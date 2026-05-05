@@ -8,14 +8,14 @@
   id: CEActionManaGift
   parent: CEActionSpellBase
   name: Mana Gift
-  description: Restore [color=#3082f5]5 mana[/color] to the selected target
+  description: Restore [color=#3082f5]25 mana[/color] to the selected target
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
     canModifyManacost: false
-    manaCost: 5
+    manaCost: 25
   - type: Action
     useDelay: 2
     icon:
@@ -49,7 +49,7 @@
       spawns:
       - CEEffectManaRestore
     - !type:RestoreMana
-      amount: 5
+      amount: 25
       applyModifiers: false
 
 - type: entity

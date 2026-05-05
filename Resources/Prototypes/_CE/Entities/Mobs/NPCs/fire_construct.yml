@@ -12,8 +12,8 @@
   - type: CEDestructible
     destroyThreshold: 150
   - type: CEMagicEnergyContainer
-    energy: 100
-    baseMaxEnergy: 100
+    energy: 500
+    baseMaxEnergy: 500
   - type: CEGOAP
     goals:
     - desiredState:
@@ -110,8 +110,6 @@
   name: Fire construct explosion
   description: TODO
   components:
-  - type: CEActionManaCost
-    manaCost: 1
   - type: Action
     useDelay: 15
   - type: InstantAction
@@ -165,7 +163,7 @@
     width: 35
     range: 5
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 15
   - type: Action
     useDelay: 8
     icon:

@@ -11,8 +11,8 @@
   components:
   - type: CEGOAPAlarm
   - type: CEMagicEnergyContainer
-    energy: 100
-    baseMaxEnergy: 100
+    energy: 500
+    baseMaxEnergy: 500
   - type: CEGOAP
     goals:
     # Most important - stay alive

@@ -11,7 +11,7 @@
   description: Increases your movement speed for a short duration.
   components:
   - type: CEActionManaCost
-    manaCost: 2
+    manaCost: 10
   - type: Action
     useDelay: 3
     icon:

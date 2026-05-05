@@ -9,7 +9,7 @@
   id: CEActionSpellSoulEater
   parent: CEActionSpellBase
   name: Soul Eater
-  description: You restore [color=#1776eb]1 mana[/color].
+  description: You restore [color=#1776eb]5 mana[/color].
   components:
   - type: CEActionSoulCost
     cost: 1
@@ -65,7 +65,7 @@
       spawns:
       - CEEffectManaRestore
     - !type:RestoreMana
-      amount: 1
+      amount: 5
 
 - type: entity
   id: CESoulShardDummy

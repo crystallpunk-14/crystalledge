@@ -15,7 +15,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 3 #Light radius
   - type: CEActionManaCost
-    manaCost: 1
+    manaCost: 3
   - type: CEActionFreeHandsRequired
   - type: Action
     useDelay: 10

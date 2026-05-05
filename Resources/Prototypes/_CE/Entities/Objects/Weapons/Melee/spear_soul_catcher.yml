@@ -23,7 +23,7 @@
             types:
               Cold: 5
         - !type:StealMana
-          amount: 2
+          amount: 10
         - !type:SpawnEntity
           effectTarget: Target
           spawns:
@@ -39,7 +39,7 @@
             types:
               Cold: 10
         - !type:StealMana
-          amount: 4
+          amount: 20
         - !type:SpawnEntity
           effectTarget: Target
           spawns:

@@ -14,7 +14,7 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 25
   - type: Action
     useDelay: 8
     icon:

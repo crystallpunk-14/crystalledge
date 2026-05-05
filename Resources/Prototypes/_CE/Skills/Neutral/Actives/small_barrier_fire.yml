@@ -15,7 +15,7 @@
   description: Grants [color=#b2e3eb]20 temporary fire shields[/color] that absorb damage. Shields decay over time.
   components:
   - type: CEActionManaCost
-    manaCost: 1
+    manaCost: 7
   - type: Action
     useDelay: 10
     icon:

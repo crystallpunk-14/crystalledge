@@ -5,7 +5,7 @@
   craftTime: 1
   requirements:
   - !type:MagicEnergyResource
-    amount: 5
+    amount: 25
   - !type:TagResource
     tag: Vials
     count: 1
@@ -19,7 +19,7 @@
   craftTime: 1
   requirements:
   - !type:MagicEnergyResource
-    amount: 10
+    amount: 50
   - !type:TagResource
     tag: Vials
     count: 1

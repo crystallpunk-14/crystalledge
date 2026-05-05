@@ -17,7 +17,7 @@
   description: You create a temporary [color=#30caf5]water sphere[/color], which you can throw.
   components:
   - type: CEActionManaCost
-    manaCost: 1
+    manaCost: 5
   - type: Action
     useDelay: 5
     icon:

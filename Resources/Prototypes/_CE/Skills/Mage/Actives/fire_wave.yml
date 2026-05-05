@@ -14,7 +14,7 @@
     width: 90
     range: 3
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 15
   - type: Action
     useDelay: 3
     icon:

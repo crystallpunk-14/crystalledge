@@ -27,7 +27,7 @@
         - CEMobState
       effects:
       - !type:RestoreMana
-        amount: 2
+        amount: 10
       - !type:SpawnEntity
         spawns:
         - CEEffectManaRestore
@@ -52,7 +52,7 @@
   - type: CEConsumable
     effects:
     - !type:RestoreMana
-      amount: 10
+      amount: 50
     - !type:SpawnEntity
       spawns:
       - CEEffectManaRestore
@@ -65,7 +65,7 @@
         - CEMobState
       effects:
       - !type:RestoreMana
-        amount: 5
+        amount: 25
       - !type:SpawnEntity
         spawns:
         - CEEffectManaRestore
@@ -91,7 +91,7 @@
   - type: CEConsumable
     effects:
     - !type:RestoreMana
-      amount: 5
+      amount: 25
       applyModifiers: false
     - !type:SpawnEntity
       spawns:
@@ -105,7 +105,7 @@
         - CEMobState
       effects:
       - !type:RestoreMana
-        amount: 2
+        amount: 10
         applyModifiers: false
       - !type:SpawnEntity
         spawns:
@@ -132,7 +132,7 @@
   - type: CEConsumable
     effects:
     - !type:RestoreMana
-      amount: 10
+      amount: 50
       applyModifiers: false
     - !type:SpawnEntity
       spawns:
@@ -146,7 +146,7 @@
         - CEMobState
       effects:
       - !type:RestoreMana
-        amount: 5
+        amount: 25
         applyModifiers: false
       - !type:SpawnEntity
         spawns:

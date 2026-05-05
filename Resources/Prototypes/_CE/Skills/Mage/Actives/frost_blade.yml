@@ -11,7 +11,7 @@
   description: You create a powerful temporary weapon made of ice that deals high damage and [color=#30caf5]freezes[/color] targets.
   components:
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 17
   - type: Action
     useDelay: 10
     icon:

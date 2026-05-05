@@ -8,7 +8,7 @@
   id: CEActionManaSteal
   parent: CEActionSpellBase
   name: Mana Steal
-  description: Steal [color=#3082f5]4 mana[/color] from the selected target and transfer it to yourself.
+  description: Steal [color=#3082f5]20 mana[/color] from the selected target and transfer it to yourself.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
@@ -46,7 +46,7 @@
       spawns:
       - CEEffectManaRestore
     - !type:StealMana
-      amount: 4
+      amount: 20
 
 - type: entity
   id: CEEffectManaDrain

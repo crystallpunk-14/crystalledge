@@ -13,13 +13,13 @@
 - type: entity
   id: CEStatusEffectOpenHearted
   name: Open-Hearted
-  description: When you [color=#1776eb]restore mana[/color], you restore [color=#1776eb]1[/color] more mana
+  description: When you [color=#1776eb]restore mana[/color], you restore [color=#1776eb]5[/color] more mana
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEOpenHearted
   - type: CEBonusIncomingManaStatusEffect
-    amount: 1
+    amount: 5
 
 - type: alert
   id: CEOpenHearted

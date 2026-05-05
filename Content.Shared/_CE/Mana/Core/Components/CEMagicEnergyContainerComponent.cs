@@ -13,19 +13,19 @@ public sealed partial class CEMagicEnergyContainerComponent : Component
     /// Current available energy.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int Energy = 20;
+    public int Energy = 100;
 
     /// <summary>
     /// Base maximum energy before modifiers.
     /// Used as the starting value for <see cref="CECalculateMaxManaEvent"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int BaseMaxEnergy = 20;
+    public int BaseMaxEnergy = 100;
 
     /// <summary>
     /// Effective maximum energy after modifiers (flat + multipliers).
     /// Set by <see cref="CESharedMagicEnergySystem.RefreshMaxMana"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int MaxEnergy = 20;
+    public int MaxEnergy = 100;
 }

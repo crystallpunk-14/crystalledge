@@ -11,7 +11,7 @@
   description: Gives you [color=#b2e3eb]10 stacks of Strength[/color], increasing melee damage.
   components:
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 15
   - type: Action
     useDelay: 10
     icon:
