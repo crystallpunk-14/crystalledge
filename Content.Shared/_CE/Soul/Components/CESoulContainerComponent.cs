@@ -21,5 +21,5 @@ public sealed partial class CESoulContainerComponent : Component
     /// Maximum number of souls that can be stored.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int MaxSouls = 99;
+    public int MaxSouls = 100;
 }
