@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/Neutral/todo.rsi
+      sprite: _CE/Skills/todo.rsi
       state: icon
   - type: TargetAction
     range: 6
