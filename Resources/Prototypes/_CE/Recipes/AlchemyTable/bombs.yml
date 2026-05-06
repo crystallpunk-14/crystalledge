@@ -1,0 +1,35 @@
+- type: CERecipe
+  id: CEConsumablePotionAlchemicalFire
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEHandheldFire
+    count: 1
+  - !type:ProtoIdResource
+    protoId: CEConsumableSlimeCoreFire
+    count: 1
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionAlchemicalFire
+  resultCount: 1
+
+- type: CERecipe
+  id: CEConsumablePotionFrost
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:ProtoIdResource
+    protoId: CEConsumableWaterDrop
+    count: 1
+  - !type:ProtoIdResource #TODO some frost mob loot
+    protoId: CEConsumableSlimeCoreWater
+    count: 1
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionFrost
+  resultCount: 1

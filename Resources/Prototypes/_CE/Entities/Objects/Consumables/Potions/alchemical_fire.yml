@@ -5,7 +5,7 @@
   - CEConsumablePotionBase
   - CEPotionMedium
   name: alchemical fire
-  description: TODO
+  description: A liquid flame, just waiting to burst forth and reduce everything around it to ashes. A large red label reads “DO NOT DRINK.”
   components:
   - type: Sprite
     layers:
