@@ -70,4 +70,18 @@ public sealed partial class CERoomTypePrototype : IPrototype
     /// </summary>
     [DataField]
     public bool SecretRoom;
+
+    /// <summary>
+    /// When <c>true</c> (default), mob-spawn post-process layers are allowed to place mobs in this room.
+    /// Set to <c>false</c> on room types that should never contain hostile mobs (e.g. entrance or secret rooms).
+    /// </summary>
+    [DataField]
+    public bool AllowMobsSpawn = true;
+
+    /// <summary>
+    /// When <c>true</c> (default), loot-spawn post-process layers are allowed to place items in this room.
+    /// Set to <c>false</c> on room types that should never receive randomly spawned loot.
+    /// </summary>
+    [DataField]
+    public bool AllowLootSpawn = true;
 }

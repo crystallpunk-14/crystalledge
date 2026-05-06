@@ -120,7 +120,7 @@ public sealed class CEDungeonAtlasOverlay : Overlay
 
     private void GetRoomTypeColors(CEDungeonRoom3DPrototype room, out Color fill, out Color border)
     {
-        if (room.RoomType != null && _proto.TryIndex(room.RoomType.Value, out CERoomTypePrototype? roomType))
+        if (room.RoomType != null && _proto.Resolve(room.RoomType.Value, out var roomType))
         {
             fill   = roomType.DebugFillColor;
             border = roomType.DebugBorderColor;

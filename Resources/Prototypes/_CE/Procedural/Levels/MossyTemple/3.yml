@@ -60,9 +60,6 @@
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
     budget: 40
-    excludedRoomTypes:
-    - MossyTempleEntranceRoom
-    - MossyTempleSecretRoom
     entries:
     - proto: CEMobSlimeWater
       cost: 2

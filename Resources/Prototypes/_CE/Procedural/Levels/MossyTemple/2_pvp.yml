@@ -67,9 +67,6 @@
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
     budget: 15
-    excludedRoomTypes:
-    - MossyTempleEntranceRoom
-    - MossyTempleSecretRoom
     entries:
     - proto: CEMobRat
       cost: 1

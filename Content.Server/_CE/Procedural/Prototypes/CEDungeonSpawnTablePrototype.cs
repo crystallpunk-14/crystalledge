@@ -1,5 +1,4 @@
 using Content.Server._CE.Procedural.PostProcess;
-using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
 using Robust.Shared.Prototypes;
@@ -35,12 +34,6 @@ public sealed partial class CEDungeonSpawnTablePrototype : IPrototype
     /// </summary>
     [DataField]
     public EntityWhitelist? AnchoredWhitelist;
-
-    /// <summary>
-    /// Room types to exclude from spawning.
-    /// </summary>
-    [DataField]
-    public List<ProtoId<CERoomTypePrototype>> ExcludedRoomTypes = new();
 
     /// <summary>
     /// If true, only spawn on the main z-level. When false, spawns across all z-levels.

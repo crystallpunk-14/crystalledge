@@ -5,6 +5,7 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -48,9 +49,6 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
 
     [DataField]
     public EntityWhitelist? AnchoredWhitelist;
-
-    [DataField]
-    public List<ProtoId<CERoomTypePrototype>> ExcludedRoomTypes = new();
 
     [DataField]
     public bool MainZLevelOnly = true;
@@ -292,15 +290,13 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
     private List<(Vector2i Pos, Vector2i Size)> BuildExcludedZones(IEntityManager entMan, EntityUid mapUid)
     {
         var zones = new List<(Vector2i Pos, Vector2i Size)>();
-        if (ExcludedRoomTypes.Count == 0)
-            return zones;
-
         if (!entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(mapUid, out var dungeon))
             return zones;
 
+        var proto = IoCManager.Resolve<IPrototypeManager>();
         foreach (var room in dungeon.Rooms)
         {
-            if (room.RoomType != null && ExcludedRoomTypes.Contains(room.RoomType.Value))
+            if (room.RoomType != null && proto.Resolve(room.RoomType.Value, out var roomTypeProto) && !roomTypeProto.AllowMobsSpawn)
                 zones.Add((room.Position, room.Size));
         }
         return zones;
