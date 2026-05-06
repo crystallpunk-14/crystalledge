@@ -18,6 +18,8 @@
     radius: 0.5
   - type: CEActionManaCost
     manaCost: 15
+  - type: CEActionStaminaCost
+    cost: 3
   - type: Action
     useDelay: 5
     icon:

@@ -16,12 +16,15 @@
     projectileMode: true
   - type: CEActionManaCost
     manaCost: 8
+  - type: CEActionStaminaCost
+    cost: 6
   - type: Action
-    useDelay: 2
+    useDelay: 0.5
     icon:
       sprite: _CE/Objects/Weapons/Projectile/rat_flying.rsi
       state: aaa
   - type: TargetAction
+    repeat: true
     checkCanAccess: false
     range: 20
   - type: WorldTargetAction

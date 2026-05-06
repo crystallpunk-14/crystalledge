@@ -15,8 +15,10 @@
     projectileMode: true
   - type: CEActionManaCost
     manaCost: 10
+  - type: CEActionStaminaCost
+    cost: 6
   - type: Action
-    useDelay: 6
+    useDelay: 1
     icon:
       sprite: _CE/Skills/Mage/firebolt.rsi
       state: icon

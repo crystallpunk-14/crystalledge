@@ -13,6 +13,8 @@
   components:
   - type: CEActionSoulCost
     cost: 1
+  - type: CEActionStaminaCost
+    cost: 3
   - type: Action
     useDelay: 5
     icon:

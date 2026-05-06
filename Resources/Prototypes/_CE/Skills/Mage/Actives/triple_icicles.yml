@@ -18,6 +18,8 @@
     width: 0.5
   - type: CEActionManaCost
     manaCost: 15
+  - type: CEActionStaminaCost
+    cost: 4
   - type: Action
     useDelay: 3
     icon:
