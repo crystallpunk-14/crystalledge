@@ -49,10 +49,6 @@
   table: !type:GroupSelector
     children:
     - !type:NestedSelector
-      tableId: CEHealingPotion
-    - !type:NestedSelector
-      tableId: CEManaPotion
-    - !type:NestedSelector
       tableId: CEEmptyVials
       weight: 0.8
     - !type:NestedSelector
