@@ -6,6 +6,7 @@ using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared.Interaction;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 
@@ -17,6 +18,7 @@ public abstract class CESharedBonfireSystem : EntitySystem
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
     [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -57,6 +59,14 @@ public abstract class CESharedBonfireSystem : EntitySystem
 
         args.Handled = true;
         RaiseLocalEvent(player, new CEBonfireRestoredEvent());
+
+        var coords = Transform(player).Coordinates;
+
+        if (ent.Comp.HealVfx is { } vfx)
+            SpawnAtPosition(vfx, coords);
+
+        if (ent.Comp.HealSound is { } sound)
+            _audio.PlayPvs(sound, coords);
     }
 
     private void OnRestoreHealth(Entity<CEDamageableComponent> ent, ref CEBonfireRestoredEvent args)

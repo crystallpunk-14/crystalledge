@@ -1,4 +1,6 @@
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Bonfire;
 
@@ -22,4 +24,16 @@ public sealed partial class CEBonfireComponent : Component
     /// </summary>
     [DataField]
     public string UsedOverlayLayer = "used";
+
+    /// <summary>
+    /// Entity prototype spawned at the player's position when the bonfire heals them.
+    /// </summary>
+    [DataField]
+    public EntProtoId? HealVfx = "CEEffectHealingGeneric";
+
+    /// <summary>
+    /// Sound played at the player's position when the bonfire heals them.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? HealSound = new SoundCollectionSpecifier("CECrystalDings");
 }

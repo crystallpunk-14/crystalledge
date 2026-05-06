@@ -44,7 +44,7 @@
     netsync: false
   - type: AmbientSound
     enabled: true
-    volume: -15
+    volume: 5
     range: 5
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg
