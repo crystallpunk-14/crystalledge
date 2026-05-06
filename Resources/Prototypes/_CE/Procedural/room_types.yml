@@ -45,9 +45,7 @@
 
 - type: dungeonRoomType
   id: MossyTempleAlchemyRoom
-  doorPrototype: CEGoldenLockedDoor
-  supportsWideConnection: false
-  showIconFromNeighbour: true
+  supportsWideConnection: true
   color: "#00f2ff"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
