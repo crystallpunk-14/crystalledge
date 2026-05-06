@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 04/28/2026 12:51:25
-  entityCount: 385
+  time: 05/06/2026 19:44:37
+  entityCount: 386
 maps:
 - 1
 grids:
@@ -106,6 +106,14 @@ entities:
       data: {}
     - type: TileHistory
       chunkHistory: {}
+- proto: CEBonfire
+  entities:
+  - uid: 386
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 7.5,8.5
+      parent: 1
 - proto: CEBookshelfStone
   entities:
   - uid: 284
@@ -849,7 +857,7 @@ entities:
     - type: Transform
       pos: 2.9419823,-15.978184
       parent: 1
-- proto: CESoulShardInfinite
+- proto: CESoulShard
   entities:
   - uid: 27
     components:
@@ -941,6 +949,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 2.9586887,-2.8981848
       parent: 1
+    - type: Conveyed
   - uid: 369
     components:
     - type: Transform
