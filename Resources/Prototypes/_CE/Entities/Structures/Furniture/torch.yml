@@ -25,8 +25,8 @@
         - MidImpassable
   - type: PointLight
     color: "#e67c34"
-    energy: 2
-    radius: 8
+    energy: 1
+    radius: 6
   - type: AmbientSound
     enabled: true
     volume: -15
@@ -42,6 +42,17 @@
     flat:
       Physical: 5
       Fire: 10
+  - type: LightBehaviour
+    behaviours:
+      - !type:RandomizeBehaviour # immediately make it bright and flickery
+        interpolate: Nearest
+        minDuration: 0.02
+        maxDuration: 0.06
+        startValue: 2.0
+        endValue: 2.3
+        property: Energy
+        isLooped: true
+        enabled: true
 
 - type: entity
   id: CEWallmountTorchAlwaysPowered
@@ -57,8 +68,8 @@
         shader: unshaded
   - type: PointLight
     color: "#e67c34"
-    energy: 2
-    radius: 8
+    energy: 1
+    radius: 6
   - type: AmbientSound
     enabled: true
     volume: -15
@@ -73,3 +84,14 @@
   - type: CEArmor
     flat:
       Fire: 1
+  - type: LightBehaviour
+    behaviours:
+      - !type:RandomizeBehaviour # immediately make it bright and flickery
+        interpolate: Nearest
+        minDuration: 0.02
+        maxDuration: 0.06
+        startValue: 2.0
+        endValue: 2.3
+        property: Energy
+        isLooped: true
+        enabled: true
