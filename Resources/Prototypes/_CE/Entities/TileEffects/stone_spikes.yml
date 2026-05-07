@@ -22,12 +22,6 @@
         damage:
           types:
             Physical: 5
-      - !type:Damage
-        effectTarget: User
-        attackType: Melee
-        damage:
-          types:
-            Physical: 1
   - type: Appearance
   - type: RandomSprite
     available:
