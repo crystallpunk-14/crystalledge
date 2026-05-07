@@ -5,6 +5,8 @@
   description: TODO
   components:
   - type: Sprite
+    snapCardinals: true
+    noRot: false
     drawdepth: Puddles
     sprite: _CE/Structures/Nature/ice_spikes.rsi
     layers:
@@ -21,7 +23,7 @@
         attackType: Melee
         damage:
           types:
-            Cold: 5
+            Cold: 6
   - type: Appearance
   - type: RandomSprite
     available:
@@ -35,6 +37,35 @@
   - type: CETileEffectNeutralization
     neutralizes:
     - CETileEffectFire
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 5
+    destroySound:
+      collection: GlassSmash
+  - type: CEArmor
+    flat:
+      Cold: 10
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 1000
+        mask:
+        - ItemMask
+        layer:
+        - SlipLayer
+      fix2:
+        hard: true
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 0
+        mask: []
+        layer:
+        - Opaque
 
 # Spawners
 

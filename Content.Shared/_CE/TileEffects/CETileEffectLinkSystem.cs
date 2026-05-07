@@ -2,9 +2,9 @@ using Content.Shared._CE.TileEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 
-namespace Content.Shared._CE.Skill.Skills.CursedFlame;
+namespace Content.Shared._CE.TileEffects;
 
-public sealed partial class CECursedFlameStatusEffectSystem : EntitySystem
+public sealed partial class CETileEffectLinkSystem : EntitySystem
 {
     [Dependency] private readonly CETileEffectSystem _tileEffect = default!;
 
@@ -12,11 +12,11 @@ public sealed partial class CECursedFlameStatusEffectSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CECursedFlameStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent>>(OnApplyTileEffect);
+        SubscribeLocalEvent<CETileEffectLinkComponent, StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent>>(OnApplyTileEffect);
     }
 
     private void OnApplyTileEffect(
-        Entity<CECursedFlameStatusEffectComponent> ent,
+        Entity<CETileEffectLinkComponent> ent,
         ref StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent> args)
     {
         if (args.Args.Cancelled || args.Args.TileEffect != ent.Comp.SourceTileEffect)

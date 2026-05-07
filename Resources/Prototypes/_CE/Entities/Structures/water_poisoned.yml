@@ -9,7 +9,6 @@
     sprite: _CE/Structures/Nature/water_poisoned.rsi
     state: static
   - type: CEEntityEffectOnCollide
-    triggerFixtureId: conveyor
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectWet

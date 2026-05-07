@@ -27,7 +27,7 @@
     bodyType: Static
   - type: Fixtures
     fixtures:
-      conveyor:
+      fix1:
         shape: !type:PolygonShape
           vertices:
           - -0.40,-0.40
@@ -49,7 +49,6 @@
   - type: CETileDistortion
     intensity: 0.4
   - type: CEEntityEffectOnCollide
-    triggerFixtureId: conveyor
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectFire

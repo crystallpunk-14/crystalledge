@@ -12,7 +12,10 @@
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CECursedFlame
-  - type: CECursedFlameStatusEffect
+  - type: CETileEffectLink
+    sourceTileEffect: CETileEffectFire
+    additionalTileEffect: CETileEffectCurse
+    additionalTileEffectAmount: 1
 
 - type: alert
   id: CECursedFlame
