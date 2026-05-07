@@ -9,6 +9,9 @@ namespace Content.Shared._CE.EntityEffect;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CEEntityEffectOnCollideComponent : Component
 {
+    [DataField]
+    public string TriggerFixtureId = "fix1";
+
     [DataField(required: true)]
     public List<CEEntityEffect> Effects = new();
 }

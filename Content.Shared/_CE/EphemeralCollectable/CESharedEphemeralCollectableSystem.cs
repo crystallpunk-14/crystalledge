@@ -1,6 +1,7 @@
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 
@@ -22,6 +23,7 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly INetManager _net = default!;
 
     public override void Initialize()
     {
@@ -35,7 +37,16 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
 
     private void OnMapInit(Entity<CEEphemeralCollectableComponent> ent, ref MapInitEvent args)
     {
-        ent.Comp.CollectableAt = _timing.CurTime + ent.Comp.CollectionDelay;
+        if (_net.IsClient)
+        {
+            //Do not allow collect souls ion client until server has set the correct collectable time,
+            //to prevent desync issues where the client thinks the soul is collectible before the server does.
+            ent.Comp.CollectableAt = _timing.CurTime + ent.Comp.CollectionDelay * 10;
+        }
+        else
+        {
+            ent.Comp.CollectableAt = _timing.CurTime + ent.Comp.CollectionDelay;
+        }
         Dirty(ent);
     }
 

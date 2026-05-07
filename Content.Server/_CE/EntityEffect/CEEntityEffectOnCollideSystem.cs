@@ -13,6 +13,9 @@ public sealed class CEEntityEffectOnCollideSystem : EntitySystem
 
     private void OnCollide(Entity<CEEntityEffectOnCollideComponent> ent, ref StartCollideEvent args)
     {
+        if (args.OurFixtureId != ent.Comp.TriggerFixtureId)
+            return;
+
         foreach (var effect in ent.Comp.Effects)
         {
             var effectArgs = new CEEntityEffectArgs(
