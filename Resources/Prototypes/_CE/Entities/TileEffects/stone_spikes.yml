@@ -1,0 +1,52 @@
+- type: entity
+  id: CETileEffectStoneSpikes
+  parent: CETileEffectBase
+  name: stone spikes
+  description: TODO
+  components:
+  - type: Sprite
+    drawdepth: Puddles
+    sprite: _CE/Structures/Nature/stone_spikes.rsi
+    layers:
+    - state: base1
+      map: [ "random" ]
+  - type: CETileEffect
+    maxStacks: 1
+    minDecayInterval: 5
+    maxDecayInterval: 5
+    stackDelta: 0
+  - type: CEEntityEffectOnCollide
+    effects:
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          base1: ""
+          base2: ""
+          base3: ""
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.6
+    sprintSpeedModifier: 0.6
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CEStoneSpikesSpawner1
+  name: tile effect - stone spikes
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Structures/Nature/stone_spikes.rsi
+      state: base1
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectStoneSpikes
+    amount: 1
