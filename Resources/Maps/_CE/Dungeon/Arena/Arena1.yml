@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 05/06/2026 19:44:37
-  entityCount: 386
+  time: 05/07/2026 16:15:07
+  entityCount: 387
 maps:
 - 1
 grids:
@@ -842,6 +842,14 @@ entities:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 0.5,9.5
+      parent: 1
+- proto: CEMapEndText
+  entities:
+  - uid: 387
+    components:
+    - type: Transform
+      anchored: False
+      pos: 22.112728,-5.7845836
       parent: 1
 - proto: CEPortalArena1
   entities:
@@ -2568,23 +2576,171 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 2.5,-3.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 372
     components:
     - type: Transform
       pos: 2.5,-2.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 373
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 3.5,-2.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 374
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 3.5,-3.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
 - proto: CEWayfindingStone
   entities:
   - uid: 262

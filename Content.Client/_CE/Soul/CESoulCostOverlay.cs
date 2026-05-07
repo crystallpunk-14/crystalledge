@@ -71,6 +71,8 @@ public sealed class CESoulCostOverlay : Overlay
 
         var handle = args.ScreenHandle;
         var matrix = args.ViewportControl.GetWorldToScreenMatrix();
+        // Pixel-per-meter at the current zoom level (accounts for zoom but not rotation).
+        var scale = new Vector2(matrix.M11, matrix.M12).Length();
         handle.SetTransform(Matrix3x2.Identity);
 
         var query = _entManager.AllEntityQueryEnumerator<CESoulReceiverComponent, TransformComponent>();
@@ -92,13 +94,12 @@ public sealed class CESoulCostOverlay : Overlay
             if (alpha <= 0f)
                 continue;
 
+            // Project entity position to screen, then apply offset in screen space
+            // (scaled by current zoom) so the label stays above the entity regardless
+            // of camera rotation or zoom level.
             var screenPos = Vector2.Transform(receiverPos, matrix);
-
-            // Apply the receiver's screen-space offset (in tile units, Y up positive)
-            // independently of camera rotation, mirroring how CEDamagePopupOverlay handles
-            // its rise direction.
-            screenPos.X += receiver.Offset.X * EyeManager.PixelsPerMeter;
-            screenPos.Y -= receiver.Offset.Y * EyeManager.PixelsPerMeter;
+            screenPos.X += receiver.Offset.X * scale;
+            screenPos.Y -= receiver.Offset.Y * scale;
 
             var text = $"{playerSouls}/{receiver.Cost}";
             var hasEnough = playerSouls >= receiver.Cost;

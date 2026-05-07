@@ -4,7 +4,7 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 05/06/2026 19:44:37
+  time: 05/07/2026 16:15:07
   entityCount: 354
 maps:
 - 1
@@ -396,367 +396,2735 @@ entities:
   - uid: 19
     components:
     - type: Transform
-      pos: -4.5,3.5
+      rot: 3.141592653589793 rad
+      pos: 16.5,4.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 20
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -3.5,4.5
-      parent: 1
-  - uid: 21
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -2.5,1.5
-      parent: 1
-  - uid: 22
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -4.5,1.5
-      parent: 1
-  - uid: 23
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 7.5,-10.5
-      parent: 1
-  - uid: 24
-    components:
-    - type: Transform
-      pos: 10.5,-9.5
-      parent: 1
-  - uid: 25
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 9.5,1.5
-      parent: 1
-  - uid: 31
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 7.5,-8.5
-      parent: 1
-  - uid: 43
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -1.5,-10.5
-      parent: 1
-  - uid: 44
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -4.5,-9.5
-      parent: 1
-  - uid: 45
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -2.5,-7.5
-      parent: 1
-  - uid: 46
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -4.5,-7.5
-      parent: 1
-  - uid: 48
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -3.5,-7.5
-      parent: 1
-  - uid: 50
-    components:
-    - type: Transform
-      pos: -1.5,-7.5
-      parent: 1
-  - uid: 61
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -4.5,-8.5
-      parent: 1
-  - uid: 66
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -2.5,-10.5
-      parent: 1
-  - uid: 68
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -3.5,-10.5
-      parent: 1
-  - uid: 70
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -4.5,-10.5
-      parent: 1
-  - uid: 72
-    components:
-    - type: Transform
-      pos: -1.5,-8.5
-      parent: 1
-  - uid: 74
-    components:
-    - type: Transform
-      pos: -1.5,-9.5
-      parent: 1
-  - uid: 81
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 8.5,1.5
-      parent: 1
-  - uid: 89
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 8.5,-10.5
-      parent: 1
-  - uid: 97
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 7.5,-7.5
-      parent: 1
-  - uid: 121
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 7.5,-9.5
-      parent: 1
-  - uid: 123
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 10.5,4.5
-      parent: 1
-  - uid: 125
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -3.5,1.5
-      parent: 1
-  - uid: 127
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -2.5,4.5
-      parent: 1
-  - uid: 129
-    components:
-    - type: Transform
-      pos: -4.5,2.5
-      parent: 1
-  - uid: 145
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 7.5,1.5
-      parent: 1
-  - uid: 146
-    components:
-    - type: Transform
-      pos: 7.5,2.5
-      parent: 1
-  - uid: 147
-    components:
-    - type: Transform
-      pos: 7.5,3.5
-      parent: 1
-  - uid: 148
-    components:
-    - type: Transform
-      pos: 7.5,4.5
-      parent: 1
-  - uid: 149
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 10.5,-10.5
-      parent: 1
-  - uid: 150
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 9.5,-10.5
-      parent: 1
-  - uid: 151
-    components:
-    - type: Transform
-      pos: 10.5,-8.5
-      parent: 1
-  - uid: 152
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 8.5,-7.5
-      parent: 1
-  - uid: 153
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 9.5,-7.5
-      parent: 1
-  - uid: 154
-    components:
-    - type: Transform
-      pos: 10.5,-7.5
-      parent: 1
-  - uid: 155
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 10.5,3.5
-      parent: 1
-  - uid: 156
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 10.5,2.5
-      parent: 1
-  - uid: 157
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 10.5,1.5
-      parent: 1
-  - uid: 158
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 9.5,4.5
-      parent: 1
-  - uid: 159
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 8.5,4.5
-      parent: 1
-  - uid: 160
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.5,1.5
-      parent: 1
-  - uid: 161
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -1.5,4.5
-      parent: 1
-  - uid: 162
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.5,3.5
-      parent: 1
-  - uid: 163
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.5,2.5
-      parent: 1
-  - uid: 164
-    components:
-    - type: Transform
-      pos: -4.5,4.5
-      parent: 1
-  - uid: 321
-    components:
-    - type: Transform
-      pos: -10.5,-7.5
-      parent: 1
-  - uid: 322
-    components:
-    - type: Transform
-      pos: -10.5,-8.5
-      parent: 1
-  - uid: 323
-    components:
-    - type: Transform
-      pos: -10.5,-9.5
-      parent: 1
-  - uid: 324
-    components:
-    - type: Transform
-      pos: -10.5,-10.5
-      parent: 1
-  - uid: 325
-    components:
-    - type: Transform
-      pos: -10.5,4.5
-      parent: 1
-  - uid: 326
-    components:
-    - type: Transform
-      pos: -10.5,3.5
-      parent: 1
-  - uid: 327
-    components:
-    - type: Transform
-      pos: -10.5,2.5
-      parent: 1
-  - uid: 328
-    components:
-    - type: Transform
-      pos: -10.5,1.5
-      parent: 1
-  - uid: 329
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,-10.5
-      parent: 1
-  - uid: 330
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,-9.5
-      parent: 1
-  - uid: 331
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,-8.5
-      parent: 1
-  - uid: 332
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,-7.5
-      parent: 1
-  - uid: 333
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,1.5
-      parent: 1
-  - uid: 334
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 16.5,2.5
-      parent: 1
-  - uid: 335
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 16.5,3.5
       parent: 1
-  - uid: 336
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 21
     components:
     - type: Transform
       rot: 3.141592653589793 rad
-      pos: 16.5,4.5
+      pos: 16.5,2.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 22
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 16.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 23
+    components:
+    - type: Transform
+      pos: -10.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 24
+    components:
+    - type: Transform
+      pos: -10.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 25
+    components:
+    - type: Transform
+      pos: -10.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 31
+    components:
+    - type: Transform
+      pos: -10.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 43
+    components:
+    - type: Transform
+      pos: -10.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 44
+    components:
+    - type: Transform
+      pos: -10.5,-9.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 45
+    components:
+    - type: Transform
+      pos: -10.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 46
+    components:
+    - type: Transform
+      pos: -10.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 48
+    components:
+    - type: Transform
+      pos: -4.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 50
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -1.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 61
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -1.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 66
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -1.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 68
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -1.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 70
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 8.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 72
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 9.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 74
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 10.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 81
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 10.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 89
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 10.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 97
+    components:
+    - type: Transform
+      pos: 10.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 121
+    components:
+    - type: Transform
+      pos: 10.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 123
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 9.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 125
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 10.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 127
+    components:
+    - type: Transform
+      pos: 7.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 129
+    components:
+    - type: Transform
+      pos: 7.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 145
+    components:
+    - type: Transform
+      pos: 7.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 146
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 7.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 147
+    components:
+    - type: Transform
+      pos: -4.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 148
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -2.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 149
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -3.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 150
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 10.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 151
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 7.5,-9.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 152
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -3.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 153
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -2.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 154
+    components:
+    - type: Transform
+      pos: -1.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 155
+    components:
+    - type: Transform
+      pos: -1.5,-9.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 156
+    components:
+    - type: Transform
+      pos: 10.5,-9.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 157
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -4.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 158
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 8.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 159
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -2.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 160
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 8.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 161
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -4.5,-9.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 162
+    components:
+    - type: Transform
+      pos: -1.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 163
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 7.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 164
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -4.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 321
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -3.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 322
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 7.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 323
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -1.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 324
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -4.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 325
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -2.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 326
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -3.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 327
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -4.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 328
+    components:
+    - type: Transform
+      pos: -4.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 329
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 7.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 330
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 8.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 331
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 9.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 332
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 16.5,-10.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 333
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 16.5,-9.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 334
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 16.5,-8.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 335
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 16.5,-7.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+  - uid: 336
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 9.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.4,-0.4
+            - 0.4,-0.4
+            - 0.4,0.4
+            - -0.4,0.4
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
 - proto: CEPortalArena1
   entities:
   - uid: 231
@@ -2215,214 +4583,1546 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -6.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 234
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -5.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 235
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -4.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 236
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -3.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 237
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -2.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 238
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -1.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 239
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 1.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 240
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 2.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 241
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 3.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 242
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 5.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 243
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 6.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 244
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 7.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 245
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 4.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 246
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 9.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 247
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 10.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 248
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 11.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 249
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 12.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 250
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 8.5,-5.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 251
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 12.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 252
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 11.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 253
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 10.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 254
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 9.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 255
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 8.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 256
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 7.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 257
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 4.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 258
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 3.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 259
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 2.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 260
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 1.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 261
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 0.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 262
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -1.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 263
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -2.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 264
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -0.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 265
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -3.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 266
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -4.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 267
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -5.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 268
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -6.5,-0.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
 ...
