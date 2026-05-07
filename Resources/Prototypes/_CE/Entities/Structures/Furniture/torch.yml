@@ -26,7 +26,7 @@
   - type: PointLight
     color: "#e67c34"
     energy: 1
-    radius: 6
+    radius: 8
   - type: AmbientSound
     enabled: true
     volume: -15
@@ -48,8 +48,8 @@
         interpolate: Nearest
         minDuration: 0.02
         maxDuration: 0.06
-        startValue: 2.0
-        endValue: 2.3
+        startValue: 2.3
+        endValue: 2.6
         property: Energy
         isLooped: true
         enabled: true
@@ -69,7 +69,7 @@
   - type: PointLight
     color: "#e67c34"
     energy: 1
-    radius: 6
+    radius: 8
   - type: AmbientSound
     enabled: true
     volume: -15
@@ -90,8 +90,8 @@
         interpolate: Nearest
         minDuration: 0.02
         maxDuration: 0.06
-        startValue: 2.0
-        endValue: 2.3
+        startValue: 2.3
+        endValue: 2.6
         property: Energy
         isLooped: true
         enabled: true
