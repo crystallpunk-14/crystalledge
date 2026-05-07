@@ -3,6 +3,7 @@ using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared._CE.Soul.Components;
+using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
@@ -22,6 +23,7 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ActionAttemptEvent>(OnSomaticActionAttempt);
         SubscribeLocalEvent<CEActionManaCostComponent, ActionAttemptEvent>(OnManacostActionAttempt);
         SubscribeLocalEvent<CEActionSoulCostComponent, ActionAttemptEvent>(OnSoulcostActionAttempt);
+        SubscribeLocalEvent<CEActionStaminaCostComponent, ActionAttemptEvent>(OnStaminaCostActionAttempt);
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ActionAttemptEvent>(OnWeaponRequiredActionAttempt);
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
@@ -195,5 +197,14 @@ public abstract partial class CESharedActionSystem
             Popup.PopupClient(Loc.GetString("ce-magic-spell-ssd"), args.User, args.User);
             args.Invalid = true;
         }
+    }
+
+    private void OnStaminaCostActionAttempt(Entity<CEActionStaminaCostComponent> ent, ref ActionAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (!_stamina.CanAfford(args.User))
+            args.Cancelled = true;
     }
 }

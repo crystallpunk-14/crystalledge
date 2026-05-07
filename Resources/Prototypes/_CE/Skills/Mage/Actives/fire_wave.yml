@@ -15,12 +15,15 @@
     range: 3
   - type: CEActionManaCost
     manaCost: 15
+  - type: CEActionStaminaCost
+    cost: 4
   - type: Action
-    useDelay: 3
+    useDelay: 1
     icon:
       sprite: _CE/Skills/Mage/fire_wave.rsi
       state: icon
   - type: TargetAction
+    repeat: true
     checkCanAccess: false
     range: 20
   - type: WorldTargetAction
@@ -38,7 +41,7 @@
       projectileSpeed: 3
       projectileMaxSpeed: 4
       prototype: CEProjectileFireWave
-      projectileCount: 10
+      projectileCount: 7
       spread: 0.2
 
 - type: entity
@@ -73,8 +76,8 @@
       attackType: Ranged
       damage:
         types:
-          Fire: 1
+          Fire: 2
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectFire
       amount: 1
-      max: 5
+      max: 8

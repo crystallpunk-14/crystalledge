@@ -5,7 +5,7 @@
   - CEConsumablePotionBase
   - CEPotionMedium
   name: frost potion
-  description: TODO
+  description: A liquid crystal so cold that it's uncomfortable to even hold the vial in your hands. If it were to break, everything around it would instantly.
   components:
   - type: Sprite
     layers:

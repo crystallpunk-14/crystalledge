@@ -1,0 +1,44 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-4.0",
+    "copyright": "Taken from /tg/station at commit 28b476ab6d17014e6f9e18a748d7c96be28de9a1, and fully resprited by TheShuEd",
+    "size": {
+        "x": 48,
+        "y": 48
+    },
+    "states": [
+        {
+            "name": "bonfire"
+        },
+        {
+            "name": "fire",
+            "delays": [
+                [
+                    0.22,
+                    0.22,
+                    0.22,
+                    0.22,
+                    0.22,
+                    0.22,
+                    0.22,
+                    0.22
+                ]
+            ]
+        },
+        {
+            "name": "heal",
+            "delays": [
+                [
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2,
+                    0.2
+                ]
+            ]
+        }
+    ]
+}

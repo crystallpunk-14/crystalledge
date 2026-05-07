@@ -15,6 +15,7 @@
   id: MossyTempleEntranceRoom
   supportsWideConnection: true
   secretRoom: true #Intended
+  allowMobsSpawn: false
   color: "#4b944b"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
@@ -33,6 +34,8 @@
   doorPrototype: CEGoldenLockedDoor
   supportsWideConnection: false
   showIconFromNeighbour: true
+  allowMobsSpawn: false
+  allowLootSpawn: false
   color: "#FFD700"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
@@ -45,9 +48,7 @@
 
 - type: dungeonRoomType
   id: MossyTempleAlchemyRoom
-  doorPrototype: CEGoldenLockedDoor
-  supportsWideConnection: false
-  showIconFromNeighbour: true
+  supportsWideConnection: true
   color: "#00f2ff"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
@@ -58,6 +59,8 @@
   doorPrototype: CEGoldenLockedDoor
   supportsWideConnection: false
   showIconFromNeighbour: true
+  allowMobsSpawn: false
+  allowLootSpawn: false
   color: "#b587dd"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
@@ -68,6 +71,8 @@
   doorPrototype: CEWallWoodenDark
   supportsWideConnection: false
   secretRoom: true
+  allowMobsSpawn: false
+  allowLootSpawn: false
   color: "#3e3e3e"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi

@@ -210,7 +210,6 @@
   - type: EntityTargetAction
     event: !type:CEEntityTargetActionAnimationEvent
       animation: WaterSlimeJump
-      cancelAnimation: true
 
 - type: entityEffectAnimation
   id: WaterSlimeJump

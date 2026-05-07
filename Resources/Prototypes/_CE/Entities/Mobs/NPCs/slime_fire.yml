@@ -153,7 +153,6 @@
   - type: EntityTargetAction
     event: !type:CEEntityTargetActionAnimationEvent
       animation: FireSlimeJump
-      cancelAnimation: true
 
 - type: entityEffectAnimation
   id: FireSlimeJump

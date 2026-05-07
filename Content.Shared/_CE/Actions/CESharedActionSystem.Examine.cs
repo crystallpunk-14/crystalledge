@@ -12,10 +12,16 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<ActionComponent, ExaminedEvent>(OnActionExamined);
         SubscribeLocalEvent<CEActionManaCostComponent, ExaminedEvent>(OnManacostExamined);
         SubscribeLocalEvent<CEActionSoulCostComponent, ExaminedEvent>(OnSoulCostExamined);
+        SubscribeLocalEvent<CEActionStaminaCostComponent, ExaminedEvent>(OnStaminaCostExamined);
 
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ExaminedEvent>(OnSomaticExamined);
         SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ExaminedEvent>(OnMobStateExamined);
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ExaminedEvent>(OnWeaponRequiredExamined);
+    }
+
+    private void OnStaminaCostExamined(Entity<CEActionStaminaCostComponent> ent, ref ExaminedEvent args)
+    {
+        args.PushMarkup($"{Loc.GetString("ce-magic-staminacost")}: [color=#90ee90]{ent.Comp.Cost}[/color]", priority: 9);
     }
 
     private void OnSoulCostExamined(Entity<CEActionSoulCostComponent> ent, ref ExaminedEvent args)

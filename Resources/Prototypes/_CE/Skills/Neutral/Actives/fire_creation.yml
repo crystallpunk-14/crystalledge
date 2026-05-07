@@ -18,6 +18,8 @@
   components:
   - type: CEActionManaCost
     manaCost: 5
+  - type: CEActionStaminaCost
+    cost: 2
   - type: Action
     useDelay: 5
     icon:

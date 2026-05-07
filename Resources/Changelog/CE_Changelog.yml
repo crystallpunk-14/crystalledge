@@ -44,3 +44,64 @@
   id: 10007
   time: '2026-05-05T14:41:34.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/214
+- author: TheShuEd
+  changes:
+  - message: Most combat spells now consume stamina to cast. Some spells now have
+      very short cooldowns but high stamina costs, allowing you to cast them repeatedly
+      as long as you have enough stamina.
+    type: Add
+  - message: Libraries now spawn 100% of the time on the first floor, and alchemy
+      rooms on the second floor
+    type: Tweak
+  - message: The alchemy rooms no longer require keys to enter
+    type: Tweak
+  - message: Keys, mobs, and other random loot will no longer spawn in locked rooms
+      (secrets, treasures, libraries)
+    type: Tweak
+  - message: Fixed a bug where casting multiple spells in quick succession could cancel
+      the effects of some of them, resulting in wasted resources
+    type: Fix
+  id: 10008
+  time: '2026-05-06T10:42:58.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/219
+- author: TheShuEd
+  changes:
+  - message: A new recipe book has been added, allowing you to create alchemical fire
+      and frost potions
+    type: Add
+  - message: Health and mana potions can no longer be found in chests or pots.
+    type: Tweak
+  - message: The weapons no longer fit in the backpacks.
+    type: Tweak
+  id: 10009
+  time: '2026-05-06T13:58:05.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/220
+- author: TheShuEd
+  changes:
+  - message: Bonfires have been added to safe zones. Each player can interact with
+      a bonfire once to fully restore their mana, health, and the charges of all their
+      items.
+    type: Add
+  id: 10010
+  time: '2026-05-06T19:53:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/221
+- author: TheShuEd
+  changes:
+  - message: 'Added interaction between Curse and Frost: Applying Frost effects to
+      Curse clouds will create dangerous ice spikes that deal damage on contact. They
+      can be melted with fire.'
+    type: Add
+  - message: Added 7 new room layout into dungeon. (3 corridors, 1 dead end, 1 blessing
+      room, 2 secrets room)
+    type: Add
+  - message: Added stone spike tiles that deal damage when stepped on. You can find
+      it in some of the new rooms in the dungeon.
+    type: Add
+  - message: Fixed displacement maps for female human backs that caused strange graphical
+      artifacts when wearing items on the back
+    type: Fix
+  - message: The torches are shining brightly again
+    type: Fix
+  id: 10011
+  time: '2026-05-07T10:27:09.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/222

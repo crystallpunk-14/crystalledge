@@ -1,0 +1,12 @@
+﻿- type: entity
+  parent: CEBaseKnowledgeBook
+  id: CEKnowledgeBook_AlchemicalBombs
+  name: alchemical bombs
+  description: Do you want to unleash scorching fire or freezing cold on your enemies? But you don’t want to waste your mana? This treatise will be the greatest discovery of your life.
+  components:
+  - type: Sprite
+    state: bombs
+  - type: CEKnowledgeBook
+    recipes:
+    - CEConsumablePotionAlchemicalFire
+    - CEConsumablePotionFrost

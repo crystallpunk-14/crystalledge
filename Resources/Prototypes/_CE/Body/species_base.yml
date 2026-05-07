@@ -2,7 +2,6 @@
   abstract: true
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobCombat
   - CEMobDamageable
   - CEMobMagical
@@ -19,7 +18,7 @@
   - type: HumanoidProfile
   - type: TypingIndicator
   - type: Fixtures
-    fixtures: # TODO: This needs a second fixture just for mob collisions.
+    fixtures:
       fix1:
         shape:
           !type:PhysShapeCircle

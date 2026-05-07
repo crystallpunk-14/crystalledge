@@ -2,6 +2,7 @@ using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Soul;
+using Content.Shared._CE.Stamina;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
@@ -19,6 +20,7 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hand = default!;
     [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
     [Dependency] private readonly CESharedSoulSystem _soul = default!;
+    [Dependency] private readonly CEStaminaSystem _stamina = default!;
 
     private EntityQuery<ActionComponent> _actionQuery;
 
@@ -43,7 +45,10 @@ public abstract partial class CESharedActionSystem : EntitySystem
         if (args.Handled)
             return;
 
-        _animation.TryPlayAnimationToAngle(ent, args.Animation, null, args.Action.Comp.Container, args.Speed, args.CancelAnimation);
+        if (_animation.IsPlayingAnimation(ent))
+            return;
+
+        _animation.TryPlayAnimationToAngle(ent, args.Animation, null, args.Action.Comp.Container, args.Speed);
         args.Handled = true;
     }
 
@@ -52,7 +57,10 @@ public abstract partial class CESharedActionSystem : EntitySystem
         if (args.Handled)
             return;
 
-        _animation.TryPlayAnimationToCoordinates(ent, args.Animation, args.Target, args.Action.Comp.Container, args.Speed, args.CancelAnimation);
+        if (_animation.IsPlayingAnimation(ent))
+            return;
+
+        _animation.TryPlayAnimationToCoordinates(ent, args.Animation, args.Target, args.Action.Comp.Container, args.Speed);
         args.Handled = true;
     }
 
@@ -61,12 +69,16 @@ public abstract partial class CESharedActionSystem : EntitySystem
         if (args.Handled)
             return;
 
+        if (_animation.IsPlayingAnimation(ent))
+            return;
+
         var playerPos = _transform.GetMapCoordinates(ent).Position;
         var targetPos = _transform.ToMapCoordinates(args.Target).Position;
         var direction = targetPos - playerPos;
         var angle = Angle.FromWorldVec(direction);
 
-        _animation.TryPlayAnimationToAngle(ent, args.Animation, angle, args.Action.Comp.Container, args.Speed, args.CancelAnimation);
+        _animation.TryPlayAnimationToAngle(ent, args.Animation, angle, args.Action.Comp.Container, args.Speed);
+        args.Handled = true;
     }
 
     private void OnEntityTargetAction(Entity<TransformComponent> ent, ref CEEntityTargetActionAnimationEvent args)
@@ -74,7 +86,10 @@ public abstract partial class CESharedActionSystem : EntitySystem
         if (args.Handled)
             return;
 
-        _animation.TryPlayAnimationToEntity(ent, args.Animation, args.Target, args.Action.Comp.Container, args.Speed, args.CancelAnimation);
+        if (_animation.IsPlayingAnimation(ent))
+            return;
+
+        _animation.TryPlayAnimationToEntity(ent, args.Animation, args.Target, args.Action.Comp.Container, args.Speed);
         args.Handled = true;
     }
 }
@@ -87,9 +102,6 @@ public sealed partial class CEInstantActionAnimationEvent : InstantActionEvent
 
     [DataField]
     public float Speed = 1f;
-
-    [DataField]
-    public bool CancelAnimation = true;
 }
 
 public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActionEvent
@@ -99,9 +111,6 @@ public sealed partial class CEWorldTargetActionAnimationEvent : WorldTargetActio
 
     [DataField]
     public float Speed = 1f;
-
-    [DataField]
-    public bool CancelAnimation = true;
 }
 
 public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
@@ -111,9 +120,6 @@ public sealed partial class CEAngleActionAnimationEvent : WorldTargetActionEvent
 
     [DataField]
     public float Speed = 1f;
-
-    [DataField]
-    public bool CancelAnimation = true;
 }
 
 
@@ -124,9 +130,6 @@ public sealed partial class CEEntityTargetActionAnimationEvent : EntityTargetAct
 
     [DataField]
     public float Speed = 1f;
-
-    [DataField]
-    public bool CancelAnimation;
 }
 
 /// <summary>

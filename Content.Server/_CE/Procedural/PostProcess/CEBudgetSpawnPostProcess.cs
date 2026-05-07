@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -39,13 +40,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
     /// </summary>
     [DataField]
     public EntityWhitelist? AnchoredWhitelist;
-
-    /// <summary>
-    /// Room types to exclude from spawning. Tiles inside rooms of these types
-    /// will not be considered as candidates.
-    /// </summary>
-    [DataField]
-    public List<ProtoId<CERoomTypePrototype>> ExcludedRoomTypes = new();
 
     /// <summary>
     /// If true, only spawn on the main z-level (as defined by the dungeon level prototype).
@@ -221,23 +215,17 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         return null;
     }
 
-    /// <summary>
-    /// Reads room data from the dungeon component on the map and builds
-    /// a list of bounding boxes for rooms whose type is in <see cref="ExcludedRoomTypes"/>.
-    /// </summary>
     private List<(Vector2i Pos, Vector2i Size)> BuildExcludedZones(IEntityManager entMan, EntityUid mapUid)
     {
         var zones = new List<(Vector2i Pos, Vector2i Size)>();
 
-        if (ExcludedRoomTypes.Count == 0)
-            return zones;
-
         if (!entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(mapUid, out var dungeon))
             return zones;
 
+        var proto = IoCManager.Resolve<IPrototypeManager>();
         foreach (var room in dungeon.Rooms)
         {
-            if (room.RoomType != null && ExcludedRoomTypes.Contains(room.RoomType.Value))
+            if (room.RoomType != null && proto.Resolve(room.RoomType.Value, out var roomTypeProto) && !roomTypeProto.AllowLootSpawn)
                 zones.Add((room.Position, room.Size));
         }
 

@@ -1,6 +1,7 @@
 using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared._CE.Soul.Components;
+using Content.Shared._CE.Stamina;
 using Content.Shared.Actions.Events;
 
 namespace Content.Shared._CE.Actions;
@@ -11,6 +12,7 @@ public abstract partial class CESharedActionSystem
     {
         SubscribeLocalEvent<CEActionManaCostComponent, ActionPerformedEvent>(OnManaCostActionPerformed);
         SubscribeLocalEvent<CEActionSoulCostComponent, ActionPerformedEvent>(OnSoulCostActionPerformed);
+        SubscribeLocalEvent<CEActionStaminaCostComponent, ActionPerformedEvent>(OnStaminaCostActionPerformed);
     }
 
     private void OnManaCostActionPerformed(Entity<CEActionManaCostComponent> ent, ref ActionPerformedEvent args)
@@ -53,5 +55,10 @@ public abstract partial class CESharedActionSystem
             return;
 
         _soul.TryRemoveSouls((args.Performer, playerSoul), ent.Comp.Cost);
+    }
+
+    private void OnStaminaCostActionPerformed(Entity<CEActionStaminaCostComponent> ent, ref ActionPerformedEvent args)
+    {
+        _stamina.TryTakeDamage(args.Performer, ent.Comp.Cost);
     }
 }

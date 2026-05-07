@@ -196,7 +196,6 @@
   - type: EntityTargetAction
     event: !type:CEEntityTargetActionAnimationEvent
       animation: GnomeJump
-      cancelAnimation: true
 
 - type: entityEffectAnimation
   id: GnomeJump

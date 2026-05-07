@@ -44,6 +44,7 @@
     neutralizes:
     - CETileEffectFreeze
     - CETileEffectWater
+    - CETileEffectIceSpikes
     vfx: CESteamEffect
   - type: CETileEffectTransform
     transforms:

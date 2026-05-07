@@ -35,18 +35,16 @@
         density: 50
         hard: false
         mask:
-        - MobMask
+        - MobLayer
         layer:
         - MobLayer
-      fix2:
+      fix2: # Hard collision to prevent flying throught walls
         shape:
           !type:PhysShapeCircle
           radius: 0.35
         density: 50
         mask:
         - LowImpassable
-        #layer:
-        #- LowImpassable
   - type: CEEphemeralCollectable
     collectVfx: CEEffectSoulCollect
     collectSound:
