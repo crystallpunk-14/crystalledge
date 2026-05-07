@@ -49,6 +49,7 @@
   - type: CETileDistortion
     intensity: 0.4
   - type: CEEntityEffectOnCollide
+    triggerFixtureId: conveyor
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectFire

@@ -49,6 +49,7 @@
     - CETileEffectFire
     - CETileEffectCursedFire
   - type: CEEntityEffectOnCollide
+    triggerFixtureId: conveyor
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectWet
