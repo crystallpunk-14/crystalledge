@@ -1,6 +1,4 @@
-using Content.Server._CE.GOAP.Components;
 using Content.Shared._CE.GOAP;
-using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP;
 

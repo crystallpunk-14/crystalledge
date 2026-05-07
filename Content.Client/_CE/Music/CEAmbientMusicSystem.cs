@@ -1,4 +1,5 @@
-﻿using Content.Shared._CE.Music;
+﻿using Content.Shared._CE.GOAP;
+using Content.Shared._CE.Music;
 using Content.Shared.CCVar;
 using Robust.Client.Player;
 using Robust.Shared.Audio;
@@ -52,6 +53,12 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
     private int _currentIntensity;
     private float _volumeSlider;
 
+    // Threat intensity: set to 2 when local player has CEGOAPTargetComponent.
+    // Stays at 2 for ThreatLingerSeconds after the component is removed.
+    private const float ThreatLingerSeconds = 6f;
+    private TimeSpan _threatExpireTime = TimeSpan.Zero;
+    private bool _isThreatActive;
+
     // When true, the next Update tick will reset all stream positions to 0 so they stay phase-locked.
     // Deferred because OpenAL buffers may not be initialized in the same frame as PlayGlobal.
     private bool _needsSync;
@@ -74,6 +81,32 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
         Subs.CVar(_cfg, CCVars.AmbientMusicVolume, OnVolumeChanged, true);
 
         SubscribeLocalEvent<ActorComponent, EntParentChangedMessage>(OnParentChanged); //Prohibited dark magic used here! TODO: remove that cursed subscription
+    }
+
+    private void UpdateThreatIntensity()
+    {
+        var localPlayer = _player.LocalEntity;
+        var isTargeted = localPlayer.HasValue && HasComp<CEGOAPTargetComponent>(localPlayer.Value);
+
+        if (isTargeted)
+        {
+            _threatExpireTime = _timing.CurTime + TimeSpan.FromSeconds(ThreatLingerSeconds);
+            if (!_isThreatActive)
+            {
+                _isThreatActive = true;
+                if (_currentProtoId != null)
+                    SetIntense(2);
+            }
+        }
+        else if (_isThreatActive)
+        {
+            if (_timing.CurTime >= _threatExpireTime)
+            {
+                _isThreatActive = false;
+                if (_currentProtoId != null)
+                    SetIntense(0);
+            }
+        }
     }
 
     private void OnParentChanged(Entity<ActorComponent> ent, ref EntParentChangedMessage args)
@@ -114,6 +147,8 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
 
         if (!_timing.IsFirstTimePredicted)
             return;
+
+        UpdateThreatIntensity();
 
         // On the first Update after SetMusic, all audio buffers are guaranteed initialized
         // reset all streams to position 0 so they stay phase-locked.
@@ -314,24 +349,5 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
         }
 
         ApplyIntensityTargets();
-    }
-}
-
-public sealed class CEAmbientIntensityCommand : LocalizedCommands
-{
-    [Dependency] private readonly IEntitySystemManager _systems = default!;
-
-    public override string Command => "ambient_intensity";
-
-    public override void Execute(IConsoleShell shell, string argStr, string[] args)
-    {
-        if (args.Length != 1 || !int.TryParse(args[0], out var intensity) || intensity < 0 || intensity > 2)
-        {
-            shell.WriteError("Usage: ambient_intensity <0|1|2>");
-            return;
-        }
-
-        _systems.GetEntitySystem<CEAmbientMusicSystem>().SetIntense(intensity);
-        shell.WriteLine($"ambient music intensity set to {intensity}.");
     }
 }
