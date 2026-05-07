@@ -21,8 +21,7 @@
         attackType: Melee
         damage:
           types:
-            Physical: 2
-            Cold: 3
+            Cold: 5
   - type: Appearance
   - type: RandomSprite
     available:
