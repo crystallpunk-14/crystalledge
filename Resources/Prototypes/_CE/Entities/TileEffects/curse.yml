@@ -41,6 +41,7 @@
   - type: CETileEffectTransform
     transforms:
       CETileEffectFire: CETileEffectCursedFire
+      CETileEffectFreeze: CETileEffectIceSpikes
 
 # Spawners
 

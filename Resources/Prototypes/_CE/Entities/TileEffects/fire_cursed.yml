@@ -46,6 +46,7 @@
     neutralizes:
     - CETileEffectFreeze
     - CETileEffectWater
+    - CETileEffectIceSpikes
     vfx: CESteamEffect
   - type: CETileEffectConsume
     consumes:

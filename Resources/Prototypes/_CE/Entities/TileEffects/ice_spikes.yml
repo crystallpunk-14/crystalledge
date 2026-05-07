@@ -1,12 +1,12 @@
 - type: entity
-  id: CETileEffectStoneSpikes
+  id: CETileEffectIceSpikes
   parent: CETileEffectBase
-  name: stone spikes
+  name: ice spikes
   description: TODO
   components:
   - type: Sprite
     drawdepth: Puddles
-    sprite: _CE/Structures/Nature/stone_spikes.rsi
+    sprite: _CE/Structures/Nature/ice_spikes.rsi
     layers:
     - state: base1
       map: [ "random" ]
@@ -21,13 +21,8 @@
         attackType: Melee
         damage:
           types:
-            Physical: 5
-      - !type:Damage
-        effectTarget: User
-        attackType: Melee
-        damage:
-          types:
-            Physical: 1
+            Physical: 2
+            Cold: 3
   - type: Appearance
   - type: RandomSprite
     available:
@@ -38,21 +33,24 @@
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.6
     sprintSpeedModifier: 0.6
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectFire
 
 # Spawners
 
 - type: entity
   parent: MarkerBase
-  id: CEStoneSpikesSpawner1
-  name: tile effect - stone spikes
+  id: CEIceSpikesSpawner1
+  name: tile effect - ice spikes
   suffix: 1
   categories: [ ForkFiltered ]
   components:
   - type: Sprite
     layers:
     - state: red
-    - sprite: _CE/Structures/Nature/stone_spikes.rsi
+    - sprite: _CE/Structures/Nature/ice_spikes.rsi
       state: base1
   - type: CETileEffectSpawner
-    tileEffect: CETileEffectStoneSpikes
+    tileEffect: CETileEffectIceSpikes
     amount: 1
