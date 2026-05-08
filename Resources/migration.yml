@@ -26,11 +26,14 @@ CEZLevelLadderStone: null
 CEZLevelLadderStoneCorner: null
 CEZLevelLadderStoneCornerInner: null
 
-CEConsumablePotionStaminaMedium: CEConsumablePotionFireShield
-CEConsumablePotionStaminaSmall: CEConsumablePotionFireShield
+CEConsumablePotionStaminaMedium: CEConsumablePotionShield
+CEConsumablePotionStaminaSmall: CEConsumablePotionShield
 CEWeaponMagicStaffFire: CEWeaponMagicStaffMagicMissile
 
 CESoulShardInfinite: CESoulShard
+
+CEConsumablePotionFireShield: CEConsumablePotionShield
+CEConsumablePotionColdShield: CEConsumablePotionShield
 
 # CrystallEdge zone end
 
