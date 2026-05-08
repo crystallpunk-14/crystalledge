@@ -3,11 +3,20 @@
   name: Curse
   description: Increases all incoming damage.
   components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/StatusEffects/curse.rsi
+    noRot: true
+    layers:
+    - state: effect
+      offset: -0.1, 0
   - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:
       - CEDamageable
+  - type: CEStatusEffectVFX
+    onStacksAddedVfx: CEEffectAddCurse
   - type: RejuvenateRemovedStatusEffect
   - type: StatusEffectAlert
     alert: CECurse
@@ -53,3 +62,17 @@
       offset: 0.45, 0
     - map: [ "100" ]
       offset: 0.25, 0
+
+
+- type: entity
+  id: CEEffectAddCurse
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/StatusEffects/curse_apply.rsi
+    layers:
+    - state: effect
+  - type: TimedDespawn
+    lifetime: 2
