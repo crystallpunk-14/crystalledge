@@ -26,10 +26,6 @@
           damage:
             types:
               Physical: 5
-        - !type:CETileAffectArea
-          tileEffect: CETileEffectFreeze
-          radius: 1
-          maxStacks: 3
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -40,6 +36,12 @@
     costs:
       Primary: 1
       Secondary: 1
+  - type: CEWeaponChargesCost
+    costs:
+      Primary: 1
+  - type: CECharges
+    maxCharges: 40
+    currentCharges: 40
   - type: Clothing
     slots:
     - neck

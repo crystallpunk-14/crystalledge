@@ -17,12 +17,15 @@
         prototype: CEProjectileMagicMissile
         projectileSpeed: 10
       OnHeavyHit:
-      - !type:ShootProjectile
-        prototype: CEProjectileMagicMissile
-        projectileSpeed: 10
-        projectileMaxSpeed: 5
-        projectileCount: 5
-        spread: 150
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 5
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -32,7 +35,13 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-      Secondary: 4
+      Secondary: 1
+  - type: CEWeaponChargesCost
+    costs:
+      Primary: 1
+  - type: CECharges
+    maxCharges: 40
+    currentCharges: 40
   - type: Clothing
     slots:
     - neck
