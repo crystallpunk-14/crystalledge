@@ -8,13 +8,13 @@
   id: CEActionRecharge
   parent: CEActionSpellBase
   name: Recharge
-  description: You fully restore all [color=#fff01e]charges[/color] of the selected item
+  description: You restore [color=#fff01e]30% charges[/color] of the selected item
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
-    manaCost: 50
+    manaCost: 10
   - type: Action
     useDelay: 2
     icon:
@@ -44,6 +44,7 @@
       - CEEffectManaRestore
     0.45:
     - !type:Recharge
+      percentage: 0.3
     - !type:SpawnEntity
       spawns:
       - CEEffectManaRestore

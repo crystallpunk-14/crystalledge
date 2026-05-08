@@ -5,6 +5,7 @@ using Content.Shared._CE.DivineShield;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.MeleeWeapon;
+using Content.Shared._CE.Soul;
 using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.TileEffects.Core;
@@ -67,6 +68,7 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, StandAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, IsEquippingAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, IsUnequippingAttemptEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CESoulReceivedEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptApplyTileEffectEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ActionAttemptEvent>(RefRelayStatusEffectEvent);
         //CrystallEdge zone end
