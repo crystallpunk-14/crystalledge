@@ -50,6 +50,9 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
             sourceComp.Source = args.Args.Source;
             Dirty(statusEnt.Value, sourceComp);
         }
+
+        if (Exists(args.Args.Source))
+            RaiseLocalEvent(args.Args.Source, new CEAfterApplyStatusEffectEvent(entity, args.Effect.StatusEffect, used: args.Args.Used));
     }
 }
 
@@ -77,4 +80,17 @@ public sealed class CEAttemptReceiveStatusEffectEvent(EntityUid target, EntProto
     public readonly EntProtoId StatusEffect = statusEffect;
     public readonly TimeSpan Duration = duration;
     public bool Cancelled;
+}
+
+/// <summary>
+/// Raised on the source (attacker/caster) after <see cref="ApplyStatusEffect"/> or
+/// <see cref="ApplyStatusEffectStack"/> successfully applies a status effect to a target.
+/// Relayed to the source's active status effects via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEAfterApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, int amount = 1, EntityUid? used = null) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly EntProtoId StatusEffect = statusEffect;
+    public readonly int Amount = amount;
+    public readonly EntityUid? Used = used;
 }

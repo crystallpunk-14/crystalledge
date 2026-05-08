@@ -34,7 +34,7 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, out _, args.Effect.Amount, args.Effect.Duration, source: args.Args.Source, max: args.Effect.Max);
+        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, out _, args.Effect.Amount, args.Effect.Duration, source: args.Args.Source, max: args.Effect.Max, used: args.Args.Used);
     }
 }
 

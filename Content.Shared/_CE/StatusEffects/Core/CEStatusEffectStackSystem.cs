@@ -93,7 +93,8 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         TimeSpan? duration = null,
         bool resetTimer = false,
         EntityUid? source = null,
-        int max = 0)
+        int max = 0,
+        EntityUid? used = null)
     {
         effectEntity = null;
 
@@ -147,6 +148,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
             SetStack(target, (statusEnt.Value, stackComp), stack);
             SetEffectSource(statusEnt.Value, source);
+
+            if (source is { } afterSrc1 && Exists(afterSrc1))
+                RaiseLocalEvent(afterSrc1, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
+
             return true;
         }
         else
@@ -170,6 +175,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             }
 
             SetEffectSource(statusEnt.Value, source);
+
+            if (source is { } afterSrc2 && Exists(afterSrc2))
+                RaiseLocalEvent(afterSrc2, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
+
             return true;
         }
     }
