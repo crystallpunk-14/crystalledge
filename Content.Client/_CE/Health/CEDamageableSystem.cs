@@ -66,7 +66,7 @@ public sealed class CEClientMobStateSystem : EntitySystem
 
     private void OnMobStateAfterState(EntityUid uid, CEMobStateComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        var stateEv = new CEMobStateChangedEvent(uid, comp.CurrentState, comp.CurrentState);
+        var stateEv = new CEMobStateChangedEvent(uid, comp.Critical);
         RaiseLocalEvent(uid, stateEv, true);
     }
 }

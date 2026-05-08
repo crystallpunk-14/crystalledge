@@ -49,15 +49,8 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
-    private EntityQuery<TransformComponent> _xformQuery;
-    private EntityQuery<NPCSteeringComponent> _steeringQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-        _steeringQuery = GetEntityQuery<NPCSteeringComponent>();
-    }
+    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private readonly EntityQuery<NPCSteeringComponent> _steeringQuery = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,

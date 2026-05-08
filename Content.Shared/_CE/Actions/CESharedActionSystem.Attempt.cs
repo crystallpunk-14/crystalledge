@@ -27,14 +27,13 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ActionAttemptEvent>(OnWeaponRequiredActionAttempt);
 
         SubscribeLocalEvent<CEActionSSDBlockComponent, ActionValidateEvent>(OnActionSSDAttempt);
-        SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ActionValidateEvent>(OnTargetMobStatusRequiredValidate);
     }
 
     //TODO: THIS IS HORRIBLE. REWRITE THAT COMPLETELY
     private void OnActionAttempt(Entity<ActionComponent> ent, ref ActionAttemptEvent args)
     {
         if (TryComp<CEMobStateComponent>(args.User, out var mobState)
-            && mobState.CurrentState != CEMobState.Alive
+            && mobState.Critical
             && !HasComp<CEActionCastableFromCriticalComponent>(ent))
         {
             args.Cancelled = true;
@@ -146,42 +145,6 @@ public abstract partial class CESharedActionSystem
 
         Popup.PopupClient(Loc.GetString("ce-magic-weapon-required"), args.User, args.User);
         args.Cancelled = true;
-    }
-
-    private void OnTargetMobStatusRequiredValidate(Entity<CEActionTargetMobStatusRequiredComponent> ent,
-        ref ActionValidateEvent args)
-    {
-        if (args.Invalid)
-            return;
-
-        var target = GetEntity(args.Input.EntityTarget);
-
-        if (!TryComp<CEMobStateComponent>(target, out var mobStateComp))
-        {
-            Popup.PopupClient(Loc.GetString("ce-magic-spell-target-not-mob"), args.User, args.User);
-            args.Invalid = true;
-            return;
-        }
-
-        if (!ent.Comp.AllowedStates.Contains(mobStateComp.CurrentState))
-        {
-            var states = "";
-            foreach (var state in ent.Comp.AllowedStates)
-            {
-                if (states.Length > 0)
-                    states += ", ";
-
-                if (state == CEMobState.Alive)
-                    states += Loc.GetString("ce-magic-spell-target-mob-state-live");
-                else if (state == CEMobState.Critical)
-                    states += Loc.GetString("ce-magic-spell-target-mob-state-critical");
-            }
-
-            Popup.PopupClient(Loc.GetString("ce-magic-spell-target-mob-state", ("state", states)),
-                args.User,
-                args.User);
-            args.Invalid = true;
-        }
     }
 
     private void OnActionSSDAttempt(Entity<CEActionSSDBlockComponent> ent, ref ActionValidateEvent args)

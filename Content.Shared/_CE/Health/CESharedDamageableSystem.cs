@@ -304,7 +304,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
                 CurrentHp = currentHp,
                 MaxHp = maxHp,
                 Ratio = maxHp > 0 ? Math.Clamp((float) currentHp / maxHp, 0f, 1f) : 0f,
-                MobState = mobState.CurrentState,
+                Critical = mobState.Critical,
                 HasMobState = true,
                 DestroyThreshold = destroyThreshold,
                 RemainingUntilDeath = remainingUntilDeath,
@@ -481,7 +481,7 @@ public struct CEHealthInfo
     public int MaxHp;
     public float Ratio;
     public bool HasMobState;
-    public CEMobState MobState;
+    public bool Critical;
     public int? DestroyThreshold;
     public int? RemainingUntilDeath;
 }

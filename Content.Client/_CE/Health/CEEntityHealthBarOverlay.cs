@@ -84,7 +84,7 @@ public sealed class CEEntityHealthBarOverlay : Overlay
             const float startX = 8f;
             var endX = widthOfMob - 8f;
 
-            var isCrit = info.HasMobState && info.MobState == CEMobState.Critical;
+            var isCrit = info.HasMobState && info.Critical;
 
             float ratio;
             Color mainColor;

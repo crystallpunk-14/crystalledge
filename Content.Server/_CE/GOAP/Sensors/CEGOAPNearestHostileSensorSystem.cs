@@ -37,13 +37,7 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
+    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
     protected override bool? OnSensorUpdate(
         Entity<CEGOAPComponent> ent,

@@ -1,5 +1,4 @@
 using Content.Shared._CE.Actions.Components;
-using Content.Shared._CE.Health.Components;
 using Content.Shared.Actions.Components;
 using Content.Shared.Examine;
 
@@ -15,7 +14,6 @@ public abstract partial class CESharedActionSystem
         SubscribeLocalEvent<CEActionStaminaCostComponent, ExaminedEvent>(OnStaminaCostExamined);
 
         SubscribeLocalEvent<CEActionFreeHandsRequiredComponent, ExaminedEvent>(OnSomaticExamined);
-        SubscribeLocalEvent<CEActionTargetMobStatusRequiredComponent, ExaminedEvent>(OnMobStateExamined);
         SubscribeLocalEvent<CEActionWeaponRequiredComponent, ExaminedEvent>(OnWeaponRequiredExamined);
     }
 
@@ -44,28 +42,6 @@ public abstract partial class CESharedActionSystem
     private void OnSomaticExamined(Entity<CEActionFreeHandsRequiredComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup(Loc.GetString("ce-magic-somatic-aspect") + " " + ent.Comp.FreeHandRequired, 8);
-    }
-
-    private void OnMobStateExamined(Entity<CEActionTargetMobStatusRequiredComponent> ent, ref ExaminedEvent args)
-    {
-        var states = "";
-        foreach (var state in ent.Comp.AllowedStates)
-        {
-            if (states.Length > 0)
-                states += ", ";
-
-            switch (state)
-            {
-                case CEMobState.Alive:
-                    states += Loc.GetString("ce-magic-spell-target-mob-state-live");
-                    break;
-                case CEMobState.Critical:
-                    states += Loc.GetString("ce-magic-spell-target-mob-state-critical");
-                    break;
-            }
-        }
-
-        args.PushMarkup(Loc.GetString("ce-magic-spell-target-mob-state", ("state", states)));
     }
 
     private void OnWeaponRequiredExamined(Entity<CEActionWeaponRequiredComponent> ent, ref ExaminedEvent args)

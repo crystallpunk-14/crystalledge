@@ -1,4 +1,3 @@
-
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
@@ -97,7 +96,7 @@ public sealed partial class CEGOAPSystem
 
 public sealed class CECheckGOAPAwakeEvent : HandledEntityEventArgs
 {
-    private bool _awake = false;
+    private bool _awake;
     public bool Awake => _awake;
 
     public void WakeUp()

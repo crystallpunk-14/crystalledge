@@ -85,7 +85,7 @@ public sealed class CEDamageOverlaySystem : EntitySystem
             return;
         }
 
-        if (info.HasMobState && info.MobState == CEMobState.Critical)
+        if (info.HasMobState && info.Critical)
         {
             // In critical state: red overlay stays at max, black overlay narrows vision.
             _overlay.InCrit = true;
