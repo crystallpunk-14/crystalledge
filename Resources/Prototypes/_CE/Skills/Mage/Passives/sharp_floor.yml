@@ -12,10 +12,13 @@
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CESharpFloor
-  - type: CEAdditionalTileEffectStatusEffect
-    sourceTileEffect: CETileEffectFreeze
-    additionalTileEffect: CETileEffectIceSpikes
-    additionalTileEffectAmount: 1
+  - type: CEEffectOnTileApplyStatusEffect
+    sourceTileEffects:
+    - CETileEffectFreeze
+    effects:
+    - !type:ApplyTileEffect
+      tileEffect: CETileEffectIceSpikes
+      amount: 1
 
 - type: alert
   id: CESharpFloor
