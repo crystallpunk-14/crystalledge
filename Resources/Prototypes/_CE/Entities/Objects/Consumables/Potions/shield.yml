@@ -1,16 +1,16 @@
 - type: entity
-  id: CEConsumablePotionPhysicalShield
+  id: CEConsumablePotionShield
   parent:
   - CEConsumablePotionBase
   - CEPotionCube
-  name: potion of physical protection
-  description: A thick, metallic brew that coats the body in a shimmering barrier. Grants temporary shields against physical damage.
+  name: potion of stone skin
+  description: A thick, metallic brew that coats the body in a shimmering barrier. Grants temporary shields against damage.
   components:
   - type: Sprite
     layers:
     - state: icon
     - state: fill
-      color: "#b2e3eb"
+      color: "#43cde2"
   - type: CEConsumable
     effects:
     - !type:ApplyStatusEffectStack
@@ -23,79 +23,10 @@
       whitelist:
         components:
         - CEMobState
+        - CEGOAP
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShield
-        amount: 15
-    - !type:SpawnEntity
-      effectTarget: User
-      spawns:
-      - CEEffectAreaHealingEffect
-  - type: CEDestructible
-
-- type: entity
-  id: CEConsumablePotionFireShield
-  parent:
-  - CEConsumablePotionBase
-  - CEPotionCube
-  name: potion of fire protection
-  description: A cool, shimmering liquid that surrounds the drinker with a flame-dampening aura. Grants temporary shields against fire damage.
-  components:
-  - type: Sprite
-    layers:
-    - state: icon
-    - state: fill
-      color: "#dfad57"
-  - type: CEConsumable
-    effects:
-    - !type:ApplyStatusEffectStack
-      statusEffect: CEStatusEffectTempShieldFire
-      amount: 30
-  - type: CEDestructionEffect
-    effects:
-    - !type:AreaEffect
-      range: 1
-      whitelist:
-        components:
-        - CEMobState
-      effects:
-      - !type:ApplyStatusEffectStack
-        statusEffect: CEStatusEffectTempShieldFire
-        amount: 15
-    - !type:SpawnEntity
-      effectTarget: User
-      spawns:
-      - CEEffectAreaHealingEffect
-  - type: CEDestructible
-
-- type: entity
-  id: CEConsumablePotionColdShield
-  parent:
-  - CEConsumablePotionBase
-  - CEPotionCube
-  name: potion of cold protection
-  description: A warm, glowing elixir that insulates against freezing temperatures. Grants temporary shields against cold damage.
-  components:
-  - type: Sprite
-    layers:
-    - state: icon
-    - state: fill
-      color: "#5d9ee2"
-  - type: CEConsumable
-    effects:
-    - !type:ApplyStatusEffectStack
-      statusEffect: CEStatusEffectTempShieldCold
-      amount: 30
-  - type: CEDestructionEffect
-    effects:
-    - !type:AreaEffect
-      range: 1
-      whitelist:
-        components:
-        - CEMobState
-      effects:
-      - !type:ApplyStatusEffectStack
-        statusEffect: CEStatusEffectTempShieldCold
         amount: 15
     - !type:SpawnEntity
       effectTarget: User

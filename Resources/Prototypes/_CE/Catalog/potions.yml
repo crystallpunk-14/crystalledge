@@ -17,23 +17,13 @@
     - id: CEConsumablePotionManaSmall
 
 - type: entityTable
-  id: CEShieldPotion
-  table: !type:GroupSelector
-    children:
-    - id: CEConsumablePotionPhysicalShield
-      weight: 0.5
-    - id: CEConsumablePotionFireShield
-      weight: 0.5
-    - id: CEConsumablePotionColdShield
-      weight: 0.5
-
-- type: entityTable
   id: CESpecialPotion
   table: !type:GroupSelector
     children:
     - id: CEConsumablePotionFrost
     - id: CEConsumablePotionAlchemicalFire
     - id: CEConsumablePotionAcceleration
+    - id: CEConsumablePotionShield
 
 - type: entityTable
   id: CEEmptyVials
@@ -51,9 +41,6 @@
     - !type:NestedSelector
       tableId: CEEmptyVials
       weight: 0.8
-    - !type:NestedSelector
-      tableId: CEShieldPotion
-      weight: 0.5
     - !type:NestedSelector
       tableId: CESpecialPotion
       weight: 0.3
