@@ -1,14 +1,14 @@
 - type: skill
   parent: BasePriestSkill
-  id: CureWounds
+  id: CaringForOthers
   effect: !type:AddAction
-    action: CEActionSpellCureWounds
+    action: CEActionSpellCaringForOthers
 
 - type: entity
-  id: CEActionSpellCureWounds
+  id: CEActionSpellCaringForOthers
   parent: CEActionSpellBase
-  name: Cure wounds
-  description: You restore [color=#1defa9]25 health[/color] to the creature you touch.
+  name: Caring for others
+  description: You restore [color=#1defa9]40 health[/color] to the creature you touch. But you can't treat yourself.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
@@ -20,21 +20,22 @@
   - type: Action
     useDelay: 5
     icon:
-      sprite: _CE/Skills/Priest/cure_wounds.rsi
+      sprite: _CE/Skills/Priest/caring_for_others.rsi
       state: icon
   - type: TargetAction
-    range: 1.5
+    range: 3.5
     interactOnMiss: false
   - type: EntityTargetAction
+    canTargetSelf: false
     whitelist:
       components:
       - CEMobState
       - CEGOAP
     event: !type:CEEntityTargetActionAnimationEvent
-      animation: AnimationCureWounds
+      animation: AnimationCaringForOthers
 
 - type: entityEffectAnimation
-  id: AnimationCureWounds
+  id: AnimationCaringForOthers
   movementSpeed: 0.5
   duration: 2
   events:
@@ -43,7 +44,7 @@
       spawns:
       - CEEffectHealingGeneric
     - !type:SayChat
-      sentence: "Et curabuntur"
+      sentence: "Ad alios curare"
     0.5:
     - !type:SpawnEntity
       spawns:
@@ -57,6 +58,4 @@
       spawns:
       - CEEffectHealingGeneric
     - !type:Heal
-      amount: 25
-    - !type:SayChat
-      sentence: "vulnera tua"
+      amount: 40
