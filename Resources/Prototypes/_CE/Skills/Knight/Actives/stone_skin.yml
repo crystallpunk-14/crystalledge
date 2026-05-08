@@ -1,17 +1,17 @@
 - type: skill
   parent: BaseKnightSkill
-  id: IronBulwark
+  id: StoneSkin
   effect: !type:AddAction
-    action: CEActionSpellIronBulwark
+    action: CEActionSpellStoneSkin
 
 - type: entity
-  id: CEActionSpellIronBulwark
+  id: CEActionSpellStoneSkin
   parent: CEActionSpellBase
-  name: Iron Bulwark
-  description: Grants [color=#b2e3eb]50 temporary physical shields[/color] that absorb damage. Shields decay over time.
+  name: Stone Skin
+  description: Grants [color=#b2e3eb]50 temporary shields[/color] that absorb damage. Shields decay over time.
   components:
   - type: Sprite
-    sprite: _CE/Skills/Knight/iron_bulwark.rsi
+    sprite: _CE/Skills/Knight/stone_skin.rsi
     state: icon
   - type: CEActionManaCost
     manaCost: 10
@@ -20,14 +20,14 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _CE/Skills/Knight/iron_bulwark.rsi
+      sprite: _CE/Skills/Knight/stone_skin.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
-      animation: IronBulwark
+      animation: StoneSkin
 
 - type: entityEffectAnimation
-  id: IronBulwark
+  id: StoneSkin
   movementSpeed: 0.5
   duration: 1
   events:

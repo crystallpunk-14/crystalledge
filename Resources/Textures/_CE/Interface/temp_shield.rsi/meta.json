@@ -8,13 +8,7 @@
   "copyright": "Created by TheShuEd (Github)",
   "states": [
     {
-      "name": "physical"
-    },
-    {
-      "name": "fire"
-    },
-    {
-      "name": "frost"
+      "name": "icon"
     }
   ]
 }

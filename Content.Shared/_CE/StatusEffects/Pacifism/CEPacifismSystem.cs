@@ -54,7 +54,7 @@ public sealed class CEPacifismSystem : EntitySystem
 
         if (args.Args.Target == statusEffect.AppliedTo) //We are not block self-harm
             return;
-        
+
         if (!_playerQuery.HasComp(args.Args.Target))
             return;
 

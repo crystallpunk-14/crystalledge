@@ -1,18 +1,23 @@
 - type: skill
   parent: BaseNeutralSkill
-  id: SmallBarrierFrost
-  weight: 0.15 # 3 small barrier skills pretty similar to each other so we merge it probabilities (0.15 + 0.15 + 0.15 = 0.45 and that ~ 0.5 default for neutral skill)
+  id: SmallBarrier
+  weight: 0.5
   icon:
     sprite: _CE/Interface/temp_shield.rsi
-    state: frost
+    state: icon
   effect: !type:AddAction
-    action: CEActionSpellSmallBarrierFrost
+    action: CEActionSpellSmallBarrier
+  restrictions:
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEKnight #This skill is useless for knight
 
 - type: entity
-  id: CEActionSpellSmallBarrierFrost
+  id: CEActionSpellSmallBarrier
   parent: CEActionSpellBase
-  name: Small frost barrier
-  description: Grants [color=#b2e3eb]20 temporary Frost shields[/color] that absorb damage. Shields decay over time.
+  name: Barrier
+  description: Grants [color=#b2e3eb]20 temporary shields[/color] that absorb damage. Shields decay over time.
   components:
   - type: CEActionManaCost
     manaCost: 7
@@ -22,13 +27,13 @@
     useDelay: 10
     icon:
       sprite: _CE/Interface/temp_shield.rsi
-      state: frost
+      state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
-      animation: SmallBarrierFrost
+      animation: SmallBarrier
 
 - type: entityEffectAnimation
-  id: SmallBarrierFrost
+  id: SmallBarrier
   movementSpeed: 0.5
   duration: 1
   events:
@@ -41,5 +46,5 @@
     0.6:
     - !type:ApplyStatusEffectStack
       effectTarget: User
-      statusEffect: CEStatusEffectTempShieldCold
+      statusEffect: CEStatusEffectTempShield
       amount: 20
