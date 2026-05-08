@@ -2,9 +2,9 @@ using Content.Shared._CE.TileEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 
-namespace Content.Shared._CE.TileEffects;
+namespace Content.Shared._CE.StatusEffects.AdditionalTileEffect;
 
-public sealed partial class CETileEffectLinkSystem : EntitySystem
+public sealed partial class CEAdditionalTileEffectStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly CETileEffectSystem _tileEffect = default!;
 
@@ -12,11 +12,11 @@ public sealed partial class CETileEffectLinkSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CETileEffectLinkComponent, StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent>>(OnApplyTileEffect);
+        SubscribeLocalEvent<CEAdditionalTileEffectStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent>>(OnApplyTileEffect);
     }
 
     private void OnApplyTileEffect(
-        Entity<CETileEffectLinkComponent> ent,
+        Entity<CEAdditionalTileEffectStatusEffectComponent> ent,
         ref StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent> args)
     {
         if (args.Args.Cancelled || args.Args.TileEffect != ent.Comp.SourceTileEffect)

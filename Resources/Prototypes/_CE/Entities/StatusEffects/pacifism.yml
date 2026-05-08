@@ -9,7 +9,7 @@
     alert: CEPacifism
     showDuration: false
   - type: CEStatusEffectStack
-  - type: CEPacifismEffect
+  - type: CEPacifismStatusEffect
 
 - type: alert
   id: CEPacifism

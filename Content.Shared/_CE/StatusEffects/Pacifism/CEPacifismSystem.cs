@@ -6,6 +6,7 @@ using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Mind.Components;
 using Content.Shared.Prototypes;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.StatusEffects.Pacifism;
@@ -25,31 +26,43 @@ public sealed class CEPacifismSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IComponentFactory _compFactory = default!;
 
+    [Dependency] private readonly EntityQuery<CEDungeonPlayerComponent> _playerQuery = default!;
+    [Dependency] private readonly EntityQuery<StatusEffectComponent> _statusEffectQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEPacifismEffectComponent, StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent>>(OnOutgoingDamage);
-        SubscribeLocalEvent<CEPacifismEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyStatusEffectEvent>>(OnAttemptApplyStatusEffect);
-        SubscribeLocalEvent<CEPacifismEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyStatusEffectStackEvent>>(OnAttemptApplyStatusEffectStack);
-        SubscribeLocalEvent<CEPacifismEffectComponent, StatusEffectRelayedEvent<CEAttemptStealManaEvent>>(OnAttemptStealMana);
+        SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent>>(OnOutgoingDamage);
+        SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyStatusEffectEvent>>(OnAttemptApplyStatusEffect);
+        SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyStatusEffectStackEvent>>(OnAttemptApplyStatusEffectStack);
+        SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptStealManaEvent>>(OnAttemptStealMana);
     }
 
     private void OnOutgoingDamage(
-        Entity<CEPacifismEffectComponent> ent,
+        Entity<CEPacifismStatusEffectComponent> ent,
         ref StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent> args)
     {
         if (args.Args.Cancelled)
             return;
 
-        if (!HasComp<CEDungeonPlayerComponent>(args.Args.Target))
+        if (!_statusEffectQuery.TryComp(ent, out var statusEffect))
+            return;
+
+        if (statusEffect.AppliedTo is null)
+            return;
+
+        if (args.Args.Target == statusEffect.AppliedTo) //We are not block self-harm
+            return;
+        
+        if (!_playerQuery.HasComp(args.Args.Target))
             return;
 
         args.Args.Cancelled = true;
     }
 
     private void OnAttemptApplyStatusEffect(
-        Entity<CEPacifismEffectComponent> ent,
+        Entity<CEPacifismStatusEffectComponent> ent,
         ref StatusEffectRelayedEvent<CEAttemptApplyStatusEffectEvent> args)
     {
         if (args.Args.Cancelled)
@@ -60,7 +73,7 @@ public sealed class CEPacifismSystem : EntitySystem
     }
 
     private void OnAttemptApplyStatusEffectStack(
-        Entity<CEPacifismEffectComponent> ent,
+        Entity<CEPacifismStatusEffectComponent> ent,
         ref StatusEffectRelayedEvent<CEAttemptApplyStatusEffectStackEvent> args)
     {
         if (args.Args.Cancelled)
@@ -82,7 +95,7 @@ public sealed class CEPacifismSystem : EntitySystem
     }
 
     private void OnAttemptStealMana(
-        Entity<CEPacifismEffectComponent> ent,
+        Entity<CEPacifismStatusEffectComponent> ent,
         ref StatusEffectRelayedEvent<CEAttemptStealManaEvent> args)
     {
         if (args.Args.Cancelled)

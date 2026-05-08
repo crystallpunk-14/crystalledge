@@ -12,7 +12,7 @@
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CESharpFloor
-  - type: CETileEffectLink
+  - type: CEAdditionalTileEffectStatusEffect
     sourceTileEffect: CETileEffectFreeze
     additionalTileEffect: CETileEffectIceSpikes
     additionalTileEffectAmount: 1

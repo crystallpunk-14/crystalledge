@@ -224,9 +224,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (totalDamage <= 0)
             return false;
 
-        // Build the final specifier using the armor-modified per-type values directly.
-        CEDamageSpecifier? finalSpecifier = effectiveDamage.Types.Count > 0 ? effectiveDamage : null;
-        // CrystallEdge end
+        var finalSpecifier = effectiveDamage.Types.Count > 0 ? effectiveDamage : null;
 
         var changed = ChangeDamage(ent, totalDamage, source, interruptDoAfters, finalSpecifier);
 

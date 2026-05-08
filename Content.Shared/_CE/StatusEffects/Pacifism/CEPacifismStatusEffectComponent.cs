@@ -6,4 +6,4 @@ namespace Content.Shared._CE.StatusEffects.Pacifism;
 /// via relayed attempt events.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CEPacifismEffectComponent : Component;
+public sealed partial class CEPacifismStatusEffectComponent : Component;
