@@ -1,43 +1,80 @@
+using Content.Shared._CE.Preferences;
 using Robust.Client.UserInterface.Controls;
 
 namespace Content.Client.Lobby.UI;
 
 public sealed partial class HumanoidProfileEditor
 {
-    private LineEdit[] _quickPhraseEdits = Array.Empty<LineEdit>();
+    private (LineEdit edit, CheckBox emotion)[] _quickPhraseControls = Array.Empty<(LineEdit, CheckBox)>();
+    private bool _updatingQuickPhrases;
 
     private void InitializeQuickPhrases()
     {
-        _quickPhraseEdits = new[]
+        _quickPhraseControls = new[]
         {
-            QuickPhrase1, QuickPhrase2, QuickPhrase3, QuickPhrase4,
-            QuickPhrase5, QuickPhrase6, QuickPhrase7, QuickPhrase8,
+            (QuickPhrase1, QuickPhraseEmotion1),
+            (QuickPhrase2, QuickPhraseEmotion2),
+            (QuickPhrase3, QuickPhraseEmotion3),
+            (QuickPhrase4, QuickPhraseEmotion4),
+            (QuickPhrase5, QuickPhraseEmotion5),
+            (QuickPhrase6, QuickPhraseEmotion6),
+            (QuickPhrase7, QuickPhraseEmotion7),
+            (QuickPhrase8, QuickPhraseEmotion8),
         };
 
-        foreach (var edit in _quickPhraseEdits)
+        foreach (var (edit, emotion) in _quickPhraseControls)
         {
             edit.OnTextChanged += _ => OnQuickPhraseChanged();
+            emotion.OnToggled += _ => OnQuickPhraseChanged();
         }
     }
 
     public void RefreshQuickPhrases()
     {
-        var phrases = Profile?.QuickPhrases ?? new List<string>();
-        for (var i = 0; i < _quickPhraseEdits.Length; i++)
+        var phrases = Profile?.QuickPhrases ?? new List<CEQuickPhrase>();
+        for (var i = 0; i < _quickPhraseControls.Length; i++)
         {
-            _quickPhraseEdits[i].Text = i < phrases.Count ? phrases[i] : string.Empty;
+            var (edit, emotion) = _quickPhraseControls[i];
+            if (i < phrases.Count)
+            {
+                edit.Text = phrases[i].Text;
+                emotion.Pressed = phrases[i].IsEmotion;
+            }
+            else
+            {
+                edit.Text = string.Empty;
+                emotion.Pressed = false;
+            }
         }
     }
 
     private void OnQuickPhraseChanged()
     {
-        var phrases = new List<string>();
-        foreach (var edit in _quickPhraseEdits)
-        {
-            phrases.Add(edit.Text);
-        }
+        if (_updatingQuickPhrases)
+            return;
 
-        Profile = Profile?.WithQuickPhrases(phrases);
-        SetDirty();
+        _updatingQuickPhrases = true;
+        try
+        {
+            var phrases = new List<CEQuickPhrase>();
+            foreach (var (edit, emotion) in _quickPhraseControls)
+            {
+                var text = edit.Text;
+                // Enforce MaxLength on the client — truncate and update the control if needed
+                if (text.Length > CEQuickPhrase.MaxLength)
+                {
+                    text = text[..CEQuickPhrase.MaxLength];
+                    edit.Text = text;
+                }
+                phrases.Add(new CEQuickPhrase(text, emotion.Pressed));
+            }
+
+            Profile = Profile?.WithQuickPhrases(phrases);
+            SetDirty();
+        }
+        finally
+        {
+            _updatingQuickPhrases = false;
+        }
     }
 }

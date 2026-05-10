@@ -1073,10 +1073,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("pref_unavailable");
 
-                    b.PrimitiveCollection<string>("QuickPhrases")
+                    b.Property<string>("QuickPhrasesJson")
                         .IsRequired()
                         .HasColumnType("TEXT")
-                        .HasColumnName("quick_phrases");
+                        .HasColumnName("quick_phrases_json");
 
                     b.Property<string>("Sex")
                         .IsRequired()

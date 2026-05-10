@@ -1138,10 +1138,10 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("integer")
                         .HasColumnName("pref_unavailable");
 
-                    b.PrimitiveCollection<List<string>>("QuickPhrases")
+                    b.Property<string>("QuickPhrasesJson")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("quick_phrases");
+                        .HasColumnType("text")
+                        .HasColumnName("quick_phrases_json");
 
                     b.Property<string>("Sex")
                         .IsRequired()

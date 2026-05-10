@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Content.Shared._CE.Achievements.Prototypes;
+using Content.Shared._CE.Preferences;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Utility;
 
@@ -221,7 +222,7 @@ namespace Content.Server.Database
             profile.SpawnPriority = (int) humanoid.SpawnPriority;
             profile.BarkVoice = humanoid.BarkVoice; //CrystallEdge
             profile.BarkPitch = humanoid.BarkPitch; //CrystallEdge
-            profile.QuickPhrases = humanoid.QuickPhrases.ToList(); //CrystallEdge
+            profile.QuickPhrasesJson = JsonSerializer.Serialize(humanoid.QuickPhrases); //CrystallEdge
             profile.OrganMarkings = JsonSerializer.SerializeToDocument(dataNode.ToJsonNode());
 
             // support for downgrades - at some point this should be removed

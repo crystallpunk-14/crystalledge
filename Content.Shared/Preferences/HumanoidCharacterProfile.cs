@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared._CE.Preferences;
 using Content.Shared._CE.Speech;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
@@ -105,7 +106,7 @@ namespace Content.Shared.Preferences
 
         // CrystallEdge: quick phrases the player can send in-game
         [DataField]
-        public List<string> QuickPhrases { get; set; } = new();
+        public List<CEQuickPhrase> QuickPhrases { get; set; } = new();
         // CrystallEdge end
 
         /// <summary>
@@ -200,7 +201,7 @@ namespace Content.Shared.Preferences
             BarkVoice = other.BarkVoice;
             BarkPitch = other.BarkPitch;
             // CrystallEdge: quick phrases
-            QuickPhrases = new List<string>(other.QuickPhrases);
+            QuickPhrases = other.QuickPhrases.Select(p => p.Clone()).ToList();
         }
 
         /// <summary>
@@ -333,9 +334,9 @@ namespace Content.Shared.Preferences
             return new(this) { BarkPitch = barkPitch };
         }
 
-        public HumanoidCharacterProfile WithQuickPhrases(List<string> quickPhrases)
+        public HumanoidCharacterProfile WithQuickPhrases(List<CEQuickPhrase> quickPhrases)
         {
-            return new(this) { QuickPhrases = new List<string>(quickPhrases) };
+            return new(this) { QuickPhrases = quickPhrases.Select(p => p.Clone()).ToList() };
         }
         //CrystallEdge end
 

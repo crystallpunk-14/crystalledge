@@ -1,5 +1,7 @@
 using Content.Client.Gameplay;
+using Content.Client.Lobby;
 using Content.Client.UserInterface.Controls;
+using Content.Shared._CE.Chat;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Input;
@@ -20,6 +22,7 @@ public sealed class EmotesUIController : UIController, IOnStateChanged<GameplayS
 {
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private readonly IClientPreferencesManager _preferencesManager = default!; // CrystallEdge: quick phrases
 
     private MenuButton? EmotesButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.EmotesButton;
     private SimpleRadialMenu? _menu;
@@ -183,11 +186,68 @@ public sealed class EmotesUIController : UIController, IOnStateChanged<GameplayS
             i++;
         }
 
+        // CrystallEdge: add quick phrases category
+        var quickPhrasesLayer = BuildQuickPhrasesLayer();
+        if (quickPhrasesLayer != null)
+        {
+            var allModels = new RadialMenuOptionBase[models.Length + 1];
+            models.CopyTo(allModels, 0);
+            allModels[models.Length] = quickPhrasesLayer;
+            return allModels;
+        }
+        // CrystallEdge end
+
         return models;
     }
+
+    // CrystallEdge: build quick phrases radial layer
+    private RadialMenuNestedLayerOption? BuildQuickPhrasesLayer()
+    {
+        var profile = _preferencesManager.Preferences?.SelectedCharacter;
+        if (profile == null)
+            return null;
+
+        var phraseButtons = new List<RadialMenuOptionBase>();
+        for (var idx = 0; idx < profile.QuickPhrases.Count; idx++)
+        {
+            var phrase = profile.QuickPhrases[idx];
+            if (string.IsNullOrWhiteSpace(phrase.Text))
+                continue;
+
+            var capturedIdx = idx;
+            var icon = phrase.IsEmotion
+                ? new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Emotes/snap.png"))
+                : new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Emotes/vocal.png"));
+
+            var btn = new RadialMenuActionOption<int>(HandleQuickPhraseClick, capturedIdx)
+            {
+                IconSpecifier = RadialMenuIconSpecifier.With(icon),
+                ToolTip = phrase.Text,
+            };
+            phraseButtons.Add(btn);
+        }
+
+        if (phraseButtons.Count == 0)
+            return null;
+
+        return new RadialMenuNestedLayerOption(phraseButtons)
+        {
+            IconSpecifier = RadialMenuIconSpecifier.With(
+                new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/Emotes/chime.png"))),
+            ToolTip = Loc.GetString("emote-menu-category-quick-phrases"),
+        };
+    }
+    // CrystallEdge end
 
     private void HandleRadialButtonClick(EmotePrototype prototype)
     {
         EntityManager.RaisePredictiveEvent(new PlayEmoteMessage(prototype.ID));
     }
+
+    // CrystallEdge: quick phrase click handler
+    private void HandleQuickPhraseClick(int index)
+    {
+        EntityManager.RaisePredictiveEvent(new PlayQuickPhraseMessage(index));
+    }
+    // CrystallEdge end
 }

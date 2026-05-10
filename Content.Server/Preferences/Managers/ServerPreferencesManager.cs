@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
+using Content.Shared._CE.Preferences;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
@@ -191,10 +192,45 @@ namespace Content.Server.Preferences.Managers
                 // CrystallEdge: bark speech settings
                 BarkVoice = profile.BarkVoice,
                 BarkPitch = profile.BarkPitch,
-                // CrystallEdge: quick phrases
-                QuickPhrases = new List<string>(profile.QuickPhrases),
+                // CrystallEdge: quick phrases — parse defensively; malformed JSON resets to empty list
+                QuickPhrases = ParseQuickPhrasesSafe(profile.QuickPhrasesJson),
             };
         }
+
+        private static List<CEQuickPhrase> ParseQuickPhrasesSafe(string json)
+        {
+            try
+            {
+                var list = JsonSerializer.Deserialize<List<CEQuickPhrase>>(json);
+                if (list == null)
+                    return new List<CEQuickPhrase>();
+
+                // Sanitize each entry — truncate oversized text, clamp list size
+                for (var i = 0; i < list.Count; i++)
+                {
+                    var p = list[i];
+                    if (p == null)
+                    {
+                        list[i] = new CEQuickPhrase();
+                        continue;
+                    }
+                    if (p.Text != null && p.Text.Length > CEQuickPhrase.MaxLength)
+                        p.Text = p.Text[..CEQuickPhrase.MaxLength];
+                    else
+                        p.Text ??= string.Empty;
+                }
+
+                if (list.Count > CEQuickPhrase.MaxQuickPhrases)
+                    list.RemoveRange(CEQuickPhrase.MaxQuickPhrases, list.Count - CEQuickPhrase.MaxQuickPhrases);
+
+                return list;
+            }
+            catch
+            {
+                return new List<CEQuickPhrase>();
+            }
+        }
+        // CrystallEdge end
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)
         {

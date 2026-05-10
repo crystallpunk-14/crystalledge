@@ -359,8 +359,8 @@ namespace Content.Server.Database
         public string BarkVoice { get; set; } = "Ed";
         public float BarkPitch { get; set; } = 1.0f;
 
-        // CrystallEdge: quick phrases
-        public List<string> QuickPhrases { get; set; } = new();
+        // CrystallEdge: quick phrases stored as JSON (text + isEmotion per entry)
+        public string QuickPhrasesJson { get; set; } = "[]";
         // CrystallEdge end
 
         public List<Job> Jobs { get; } = new();

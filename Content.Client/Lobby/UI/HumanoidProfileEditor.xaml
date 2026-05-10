@@ -137,14 +137,38 @@
                     <ScrollContainer VerticalExpand="True">
                         <BoxContainer Orientation="Vertical" Margin="5">
                             <Label Text="{Loc 'humanoid-profile-editor-quick-phrases-label'}" Margin="0 0 0 5" />
-                            <LineEdit Name="QuickPhrase1" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase2" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase3" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase4" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase5" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase6" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase7" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
-                            <LineEdit Name="QuickPhrase8" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <BoxContainer Name="QuickPhraseRow1" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase1" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion1" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow2" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase2" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion2" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow3" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase3" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion3" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow4" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase4" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion4" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow5" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase5" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion5" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow6" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase6" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion6" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow7" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase7" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion7" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
+                            <BoxContainer Name="QuickPhraseRow8" Orientation="Horizontal" HorizontalExpand="True" Margin="0 2">
+                                <LineEdit Name="QuickPhrase8" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 0 4 0" />
+                                <CheckBox Name="QuickPhraseEmotion8" Text="{Loc 'humanoid-profile-editor-quick-phrase-emotion'}" />
+                            </BoxContainer>
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>

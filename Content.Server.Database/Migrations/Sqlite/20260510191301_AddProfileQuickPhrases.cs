@@ -11,18 +11,18 @@ namespace Content.Server.Database.Migrations.Sqlite
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "quick_phrases",
+                name: "quick_phrases_json",
                 table: "profile",
                 type: "TEXT",
                 nullable: false,
-                defaultValue: "[]");
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "quick_phrases",
+                name: "quick_phrases_json",
                 table: "profile");
         }
     }
