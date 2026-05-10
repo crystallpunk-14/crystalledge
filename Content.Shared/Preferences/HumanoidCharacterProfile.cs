@@ -102,6 +102,10 @@ namespace Content.Shared.Preferences
 
         [DataField]
         public float BarkPitch { get; set; } = 1.0f;
+
+        // CrystallEdge: quick phrases the player can send in-game
+        [DataField]
+        public List<string> QuickPhrases { get; set; } = new();
         // CrystallEdge end
 
         /// <summary>
@@ -195,6 +199,8 @@ namespace Content.Shared.Preferences
             //CrystallEdge barks
             BarkVoice = other.BarkVoice;
             BarkPitch = other.BarkPitch;
+            // CrystallEdge: quick phrases
+            QuickPhrases = new List<string>(other.QuickPhrases);
         }
 
         /// <summary>
@@ -325,6 +331,11 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithBarkPitch(float barkPitch)
         {
             return new(this) { BarkPitch = barkPitch };
+        }
+
+        public HumanoidCharacterProfile WithQuickPhrases(List<string> quickPhrases)
+        {
+            return new(this) { QuickPhrases = new List<string>(quickPhrases) };
         }
         //CrystallEdge end
 
@@ -501,6 +512,8 @@ namespace Content.Shared.Preferences
             // CrystallEdge: bark voice comparison
             if (BarkVoice != other.BarkVoice) return false;
             if (!BarkPitch.Equals(other.BarkPitch)) return false;
+            // CrystallEdge: quick phrases comparison
+            if (!QuickPhrases.SequenceEqual(other.QuickPhrases)) return false;
             // CrystallEdge end
             return Appearance.Equals(other.Appearance);
         }

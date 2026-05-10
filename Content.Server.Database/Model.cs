@@ -358,6 +358,9 @@ namespace Content.Server.Database
         // CrystallEdge: bark speech voice profile and pitch
         public string BarkVoice { get; set; } = "Ed";
         public float BarkPitch { get; set; } = 1.0f;
+
+        // CrystallEdge: quick phrases
+        public List<string> QuickPhrases { get; set; } = new();
         // CrystallEdge end
 
         public List<Job> Jobs { get; } = new();

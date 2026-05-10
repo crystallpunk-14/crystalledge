@@ -191,6 +191,8 @@ namespace Content.Server.Preferences.Managers
                 // CrystallEdge: bark speech settings
                 BarkVoice = profile.BarkVoice,
                 BarkPitch = profile.BarkPitch,
+                // CrystallEdge: quick phrases
+                QuickPhrases = new List<string>(profile.QuickPhrases),
             };
         }
 

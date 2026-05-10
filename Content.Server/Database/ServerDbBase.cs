@@ -221,6 +221,7 @@ namespace Content.Server.Database
             profile.SpawnPriority = (int) humanoid.SpawnPriority;
             profile.BarkVoice = humanoid.BarkVoice; //CrystallEdge
             profile.BarkPitch = humanoid.BarkPitch; //CrystallEdge
+            profile.QuickPhrases = humanoid.QuickPhrases.ToList(); //CrystallEdge
             profile.OrganMarkings = JsonSerializer.SerializeToDocument(dataNode.ToJsonNode());
 
             // support for downgrades - at some point this should be removed

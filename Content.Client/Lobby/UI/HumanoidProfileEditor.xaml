@@ -127,12 +127,28 @@
                         <BoxContainer Name="JobList" Orientation="Vertical" />
                     </ScrollContainer>
                 </BoxContainer>
+                <!-- CrystallEdge: antag tab replaced by Quick Phrases panel; antag controls kept hidden -->
                 <BoxContainer Orientation="Vertical" Margin="10">
-                    <!-- Antags -->
-                    <ScrollContainer VerticalExpand="True">
+                    <!-- Antags (hidden, not deleted) -->
+                    <ScrollContainer VerticalExpand="True" Visible="False">
                         <BoxContainer Name="AntagList" Orientation="Vertical" />
                     </ScrollContainer>
+                    <!-- Quick Phrases -->
+                    <ScrollContainer VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="5">
+                            <Label Text="{Loc 'humanoid-profile-editor-quick-phrases-label'}" Margin="0 0 0 5" />
+                            <LineEdit Name="QuickPhrase1" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase2" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase3" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase4" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase5" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase6" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase7" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                            <LineEdit Name="QuickPhrase8" PlaceHolder="{Loc 'humanoid-profile-editor-quick-phrase-placeholder'}" HorizontalExpand="True" Margin="0 2" />
+                        </BoxContainer>
+                    </ScrollContainer>
                 </BoxContainer>
+                <!-- CrystallEdge end -->
                 <BoxContainer Orientation="Vertical" Margin="10">
                     <!-- Traits -->
                     <ScrollContainer VerticalExpand="True">

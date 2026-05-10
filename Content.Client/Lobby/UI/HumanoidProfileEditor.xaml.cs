@@ -292,7 +292,9 @@ namespace Content.Client.Lobby.UI
 
             #endregion Jobs
 
-            TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+            // CrystallEdge: tab 2 replaced by Quick Phrases
+            TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-quick-phrases-tab"));
+            InitializeQuickPhrases(); // CrystallEdge
 
             RefreshTraits();
 
@@ -404,6 +406,7 @@ namespace Content.Client.Lobby.UI
             RefreshTraits();
             RefreshFlavorText();
             UpdateBarkControls(); // CrystallEdge
+            RefreshQuickPhrases(); // CrystallEdge
             ReloadPreview();
 
             if (Profile != null)
