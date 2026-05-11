@@ -8,7 +8,7 @@
   id: CEActionSpellRaiseShields
   parent: CEActionSpellBase
   name: Raise Shields
-  description: You grant [color=#b2e3eb]25 physical shields[/color] to all creatures in a small area.
+  description: You grant [color=#b2e3eb]35 physical shields[/color] to all creatures in a small area.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
@@ -50,7 +50,7 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShield
-        amount: 25
+        amount: 35
 
 - type: entity
   id: CEEffectRaiseShieldsTelegraphy
