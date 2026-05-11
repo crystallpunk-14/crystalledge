@@ -28,4 +28,6 @@
   - type: Door
     openSpriteState: open_mirrored
     closedSpriteState: closed_mirrored
+    openingSpriteState: open_mirrored
+    closingSpriteState: closed_mirrored
 

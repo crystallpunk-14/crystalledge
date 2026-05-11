@@ -13,7 +13,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
     protected override void RaiseDamageEffect(EntityUid target, EntityUid? source)
     {
         // Exclude the source's session — they already see the effect from client prediction.
-        var filter = source != null
+        var filter = (source != null && Exists(source))
             ? CEFilter.ZPvsExcept(source.Value, EntityManager)
             : CEFilter.ZPvs(target, EntityManager);
 
