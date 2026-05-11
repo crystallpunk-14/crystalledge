@@ -1,7 +1,6 @@
 - type: entity
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobDamageable
   id: CEMobFireConstruct
   name: fire construct

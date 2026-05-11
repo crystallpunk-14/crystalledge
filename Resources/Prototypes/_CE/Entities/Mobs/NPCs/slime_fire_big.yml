@@ -1,7 +1,6 @@
 - type: entity
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobDamageable
   - CEMobCombat
   id: CEMobSlimeFireBig
