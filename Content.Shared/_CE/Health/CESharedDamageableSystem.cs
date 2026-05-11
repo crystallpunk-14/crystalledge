@@ -495,6 +495,7 @@ public enum CEAttackType : byte
 {
     Melee,
     Ranged,
+    TileEffect,
     Other,
 }
 

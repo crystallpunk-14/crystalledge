@@ -20,7 +20,7 @@
   - type: CEEntityEffectOnCollide
     effects:
       - !type:Damage
-        attackType: Melee
+        attackType: TileEffect
         damage:
           types:
             Cold: 6
