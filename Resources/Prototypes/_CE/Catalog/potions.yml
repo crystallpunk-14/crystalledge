@@ -24,6 +24,7 @@
     - id: CEConsumablePotionAlchemicalFire
     - id: CEConsumablePotionAcceleration
     - id: CEConsumablePotionShield
+    - id: CEConsumablePotionStrength
 
 - type: entityTable
   id: CEEmptyVials
