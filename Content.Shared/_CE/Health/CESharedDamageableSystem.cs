@@ -495,11 +495,6 @@ public enum CEAttackType : byte
 {
     Melee,
     Ranged,
-    /// <summary>
-    /// Damage that doesn't fit the melee/ranged categories (status ticks, falling, apostasy
-    /// heal-to-damage conversion, etc.). Status-effect bonuses keyed to specific attack types
-    /// won't apply, but source-side gating (e.g. pacifism) still runs.
-    /// </summary>
     Other,
 }
 
