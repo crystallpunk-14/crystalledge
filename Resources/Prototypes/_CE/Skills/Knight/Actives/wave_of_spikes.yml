@@ -23,7 +23,6 @@
       sprite: _CE/Skills/Knight/wave_of_spikes.rsi
       state: icon
   - type: TargetAction
-    repeat: true
     checkCanAccess: false
     range: 20
   - type: WorldTargetAction

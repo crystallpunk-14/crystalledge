@@ -26,7 +26,8 @@
   - type: EntityTargetAction
     whitelist:
       components:
-      - CEDamageable
+      - CEMobState
+      - CEGOAP
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationDivineShield
 

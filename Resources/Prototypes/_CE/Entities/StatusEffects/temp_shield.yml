@@ -6,7 +6,8 @@
   - type: StatusEffect
     whitelist:
       components:
-      - CEDamageable
+      - CEMobState
+      - CEGOAP
   - type: StatusEffectAlert
     alert: CETempShield
   - type: CETempShieldStatusEffect
