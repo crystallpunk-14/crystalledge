@@ -1,9 +1,7 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server.Examine;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
-using Content.Shared.Climbing;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Components;
 using Content.Shared.NPC;
@@ -12,7 +10,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using ClimbingComponent = Content.Shared.Climbing.Components.ClimbingComponent;
-using Robust.Shared.Random;
+using Content.Shared._CE.NPC.Components;
 
 namespace Content.Server.NPC.Systems;
 
@@ -492,6 +490,8 @@ public sealed partial class NPCSteeringSystem
 
     #region Static Avoidance
 
+    [Dependency] private readonly EntityQuery<CENavIgnoreComponent> _navQuery = default!; //CrystallEdge
+
     /// <summary>
     /// Tries to avoid static blockers such as walls.
     /// </summary>
@@ -517,6 +517,7 @@ public sealed partial class NPCSteeringSystem
                 !otherBody.Hard ||
                 !otherBody.CanCollide ||
                 otherBody.BodyType == BodyType.KinematicController ||
+                _navQuery.HasComp(ent) || // CrystallEdge: skip entities explicitly marked as nav-transparent (e.g. tile spikes, bushes)
                 (mask & otherBody.CollisionLayer) == 0x0 &&
                 (layer & otherBody.CollisionMask) == 0x0)
             {

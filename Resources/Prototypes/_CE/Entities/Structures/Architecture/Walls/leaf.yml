@@ -41,6 +41,7 @@
         - FullTileMask
         layer:
         - Opaque
+  - type: CENavIgnore
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.4
     sprintSpeedModifier: 0.4

@@ -23,6 +23,7 @@
         bush-1: ""
         bush-2: ""
         bush-3: ""
+  - type: CENavIgnore
   - type: Physics
     bodyType: Static
   - type: Fixtures

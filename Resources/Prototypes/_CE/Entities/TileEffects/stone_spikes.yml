@@ -43,6 +43,7 @@
     onAppliedVfx: CEDustTileEffect
     onAppliedSound:
       path: /Audio/Effects/break_stone.ogg
+  - type: CENavIgnore
   - type: Fixtures
     fixtures:
       fix1:
