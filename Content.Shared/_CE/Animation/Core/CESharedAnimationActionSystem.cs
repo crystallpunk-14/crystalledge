@@ -145,7 +145,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
         if (!_proto.Resolve(animationProto, out var indexedAnimation))
             return false;
 
-        1StartAnimation(entity, indexedAnimation, used, angle ?? _transform.GetWorldRotation(entity), speed: speed, targetEntity: entity);
+        StartAnimation(entity, indexedAnimation, used, angle ?? _transform.GetWorldRotation(entity), speed: speed, targetEntity: entity);
         return true;
     }
 
