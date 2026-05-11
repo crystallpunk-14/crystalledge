@@ -23,6 +23,13 @@ public sealed partial class ApplyStatusEffectStack : CEEntityEffectBase<ApplySta
     /// </summary>
     [DataField]
     public int Max;
+
+    /// <summary>
+    /// When true, suppresses <see cref="CEAfterApplyStatusEffectEvent"/> after this application.
+    /// Use to prevent skill proc loops where a skill applies the same status effect it listens for.
+    /// </summary>
+    [DataField]
+    public bool SuppressEvents;
 }
 
 public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffectSystem<ApplyStatusEffectStack>
@@ -34,7 +41,7 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, out _, args.Effect.Amount, args.Effect.Duration, source: args.Args.Source, max: args.Effect.Max, used: args.Args.Used);
+        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, out _, args.Effect.Amount, args.Effect.Duration, source: args.Args.Source, max: args.Effect.Max, used: args.Args.Used, suppressEvents: args.Effect.SuppressEvents);
     }
 }
 

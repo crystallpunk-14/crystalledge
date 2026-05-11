@@ -1,0 +1,32 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: Fortress
+  icon:
+    sprite: _CE/Skills/todo.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectFortress
+
+- type: entity
+  id: CEStatusEffectFortress
+  name: Fortress
+  description: When you apply [color=#b2e3eb]temporary shields[/color] on someone, you gain [color=#b2e3eb]10 temporary shields[/color].
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEFortress
+  - type: CEEffectOnStatusEffectApplyStatusEffect
+    sourceStatusEffects:
+    - CEStatusEffectTempShield
+    effects:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectTempShield
+      amount: 10
+      suppressEvents: true #Resursive block
+
+- type: alert
+  id: CEFortress
+  icons:
+  - sprite: _CE/Skills/todo.rsi
+    state: icon

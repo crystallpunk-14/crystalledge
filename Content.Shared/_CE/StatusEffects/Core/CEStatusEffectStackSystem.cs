@@ -85,6 +85,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// <param name="resetTimer">If true and the effect already exists, resets the cycle timer to the full duration instead of letting it continue from the current point.</param>
     /// <param name="source">Optional source entity (attacker/caster). When provided, raises <see cref="CEAttemptApplyStatusEffectStackEvent"/> on the source and sets <see cref="CEStatusEffectSourceComponent"/> on the resulting effect entity.</param>
     /// <param name="max">Optional maximum total stacks allowed on the target. 0 means no limit. If the target already has this many stacks or more, the call returns false.</param>
+    /// <param name="suppressEvents">When true, <see cref="CEAfterApplyStatusEffectEvent"/> is not raised after the application. Use to prevent proc loops.</param>
     /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
     public bool TryAddStack(EntityUid target,
         EntProtoId statusEffect,
@@ -94,7 +95,8 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         bool resetTimer = false,
         EntityUid? source = null,
         int max = 0,
-        EntityUid? used = null)
+        EntityUid? used = null,
+        bool suppressEvents = false)
     {
         effectEntity = null;
 
@@ -150,7 +152,8 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             SetEffectSource(statusEnt.Value, source);
 
             if (source is { } afterSrc1 && Exists(afterSrc1))
-                RaiseLocalEvent(afterSrc1, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
+                if (!suppressEvents)
+                    RaiseLocalEvent(afterSrc1, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
 
             return true;
         }
@@ -177,7 +180,8 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             SetEffectSource(statusEnt.Value, source);
 
             if (source is { } afterSrc2 && Exists(afterSrc2))
-                RaiseLocalEvent(afterSrc2, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
+                if (!suppressEvents)
+                    RaiseLocalEvent(afterSrc2, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
 
             return true;
         }
