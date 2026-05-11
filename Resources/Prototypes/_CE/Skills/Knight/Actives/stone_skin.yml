@@ -10,9 +10,6 @@
   name: Stone Skin
   description: Grants [color=#b2e3eb]50 temporary shields[/color] that absorb damage. Shields decay over time.
   components:
-  - type: Sprite
-    sprite: _CE/Skills/Knight/stone_skin.rsi
-    state: icon
   - type: CEActionManaCost
     manaCost: 10
   - type: CEActionStaminaCost

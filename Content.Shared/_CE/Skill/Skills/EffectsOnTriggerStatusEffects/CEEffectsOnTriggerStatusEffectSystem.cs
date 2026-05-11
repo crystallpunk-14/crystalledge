@@ -23,6 +23,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         SubscribeLocalEvent<CEEffectOnAttackStatusEffectComponent, StatusEffectRelayedEvent<CEAfterAttackEvent>>(OnAfterAttack);
         SubscribeLocalEvent<CEEffectOnHealStatusEffectComponent, StatusEffectRelayedEvent<CEHealEvent>>(OnHeal);
         SubscribeLocalEvent<CEEffectOnDamagedStatusEffectComponent, StatusEffectRelayedEvent<CEDamageChangedEvent>>(OnDamaged);
+        SubscribeLocalEvent<CEEffectOnDamageStatusEffectComponent, StatusEffectRelayedEvent<CEAfterDealDamageEvent>>(OnDealDamage);
         SubscribeLocalEvent<CEEffectOnSoulReceivedStatusEffectComponent, StatusEffectRelayedEvent<CESoulReceivedEvent>>(OnSoulReceived);
         SubscribeLocalEvent<CEEffectOnTileApplyStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent>>(OnTileApply);
         SubscribeLocalEvent<CEEffectOnStatusEffectApplyStatusEffectComponent, StatusEffectRelayedEvent<CEAfterApplyStatusEffectEvent>>(OnStatusEffectApply);
@@ -97,6 +98,34 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             1f,
             args.Args.Source,
             Transform(status.AppliedTo.Value).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            effect.Effect(effectArgs);
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnDealDamage(Entity<CEEffectOnDamageStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterDealDamageEvent> args)
+    {
+        if (args.Args.Damage <= 0)
+            return;
+
+        if (ent.Comp.AttackTypes.Count > 0 && !ent.Comp.AttackTypes.Contains(args.Args.AttackType))
+            return;
+
+        if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            args.Args.Weapon,
+            Angle.Zero,
+            1f,
+            args.Args.Target,
+            Transform(args.Args.Target).Coordinates);
 
         foreach (var effect in ent.Comp.Effects)
         {

@@ -1,0 +1,39 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: StoneWall
+  effect: !type:AddAction
+    action: CEActionStoneWall
+
+- type: entity
+  id: CEActionStoneWall
+  parent: CEActionSpellBase
+  name: Stone Wall
+  description: You raise a [color=#aaaaaa]stone barrier[/color] beneath your cursor.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeTileAction
+  - type: CEActionManaCost
+    manaCost: 5
+  - type: CEActionStaminaCost
+    cost: 3
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/Knight/stone_wall.rsi
+      state: icon
+  - type: TargetAction
+    repeat: true
+    range: 3
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationStoneWall
+
+- type: entityEffectAnimation
+  id: AnimationStoneWall
+  movementSpeed: 0.6
+  duration: 0.3
+  events:
+    0:
+    - !type:ApplyTileEffect
+      tileEffect: CETileEffectStoneBarrier
+      amount: 1

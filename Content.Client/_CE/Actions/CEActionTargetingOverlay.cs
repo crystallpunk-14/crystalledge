@@ -119,6 +119,12 @@ public sealed class CEActionTargetingOverlay : Overlay
                 hasWorldTarget,
                 aoeVis);
         }
+
+        // 5) Tile highlight.
+        if (_entManager.TryGetComponent<CEVisualizeTileActionComponent>(actionUid, out var tileVis))
+        {
+            DrawTile(handle, playerPos, mousePos, range, tileVis);
+        }
     }
 
     #region Ring drawing
@@ -654,6 +660,52 @@ public sealed class CEActionTargetingOverlay : Overlay
                 Color.Red,
                 vis.FillAlpha);
         }
+    }
+
+    #endregion
+
+    #region Tile highlight
+
+    private static void DrawTile(
+        DrawingHandleWorld handle,
+        Vector2 playerPos,
+        Vector2 mousePos,
+        float range,
+        CEVisualizeTileActionComponent vis)
+    {
+        var offset = mousePos - playerPos;
+        var dist = offset.Length();
+
+        Vector2 samplePos;
+        bool inRange;
+
+        if (range <= 0f || dist <= range)
+        {
+            // Cursor is within range — highlight tile under cursor.
+            samplePos = mousePos;
+            inRange = true;
+        }
+        else
+        {
+            // Cursor is outside range — clamp to the range boundary (same pattern as AoE zone),
+            // so the highlight slides along the cast-radius edge instead of jumping to red at cursor.
+            samplePos = playerPos + (offset / dist) * range;
+            inRange = false;
+        }
+
+        // Snap sample point to the centre of its tile (tiles are 1×1 world units).
+        var tileCenter = new Vector2(
+            MathF.Floor(samplePos.X) + 0.5f,
+            MathF.Floor(samplePos.Y) + 0.5f);
+
+        var fillColor = (inRange ? Color.White : Color.Red).WithAlpha(vis.FillAlpha);
+        var borderColor = (inRange ? Color.White : Color.Red).WithAlpha(vis.BorderAlpha);
+
+        const float half = 0.5f;
+        var box = new Box2(tileCenter.X - half, tileCenter.Y - half, tileCenter.X + half, tileCenter.Y + half);
+
+        handle.DrawRect(box, fillColor);
+        handle.DrawRect(box, borderColor, filled: false);
     }
 
     #endregion

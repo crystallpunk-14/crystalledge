@@ -43,6 +43,11 @@
     onAppliedVfx: CEDustTileEffect
     onAppliedSound:
       path: /Audio/Effects/break_stone.ogg
+  - type: CEDestructionEffect
+    effects:
+    - !type:SpawnEntity
+      spawns:
+      - CEDustTileEffect
   - type: CENavIgnore
   - type: Fixtures
     fixtures:

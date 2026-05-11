@@ -231,6 +231,9 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
         if (changed)
             RaiseDamageEffect(ent, source);
 
+        if (changed && source is { } dealSrc && Exists(dealSrc))
+            RaiseLocalEvent(dealSrc, new CEAfterDealDamageEvent(ent, totalDamage, attackType, weapon));
+
         return changed;
     }
 
@@ -515,4 +518,20 @@ public sealed class CEOutgoingDamageCalculateEvent(
     public EntityUid? Weapon = weapon;
     public CEAttackType AttackType = attackType;
     public bool Cancelled;
+}
+
+/// <summary>
+/// Raised on the source (attacker) entity after damage is successfully applied to the target.
+/// Relayed to active status effects on the attacker via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEAfterDealDamageEvent(
+    EntityUid target,
+    int damage,
+    CEAttackType attackType,
+    EntityUid? weapon = null) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly int Damage = damage;
+    public readonly CEAttackType AttackType = attackType;
+    public readonly EntityUid? Weapon = weapon;
 }
