@@ -11,7 +11,7 @@
   description: Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.
   components:
   - type: CEActionManaCost
-    manaCost: 20
+    manaCost: 10
   - type: CEActionStaminaCost
     cost: 2
   - type: CEActionWeaponRequired
