@@ -17,15 +17,12 @@
         prototype: CEProjectileMagicSparkle
         projectileSpeed: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.78
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicSparkle
+        projectileSpeed: 10
+        projectileMaxSpeed: 5
+        projectileCount: 5
+        spread: 150
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -35,13 +32,7 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-      Secondary: 1
-  - type: CEWeaponChargesCost
-    costs:
-      Primary: 1
-  - type: CECharges
-    maxCharges: 40
-    currentCharges: 40
+      Secondary: 3
   - type: Clothing
     slots:
     - neck
