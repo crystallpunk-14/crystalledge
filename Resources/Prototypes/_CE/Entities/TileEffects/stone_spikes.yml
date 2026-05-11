@@ -36,8 +36,12 @@
     sprintSpeedModifier: 0.6
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 25
+    destroyThreshold: 15
     destroySound:
+      path: /Audio/Effects/break_stone.ogg
+  - type: CETileEffectVFX
+    onAppliedVfx: CEDustTileEffect
+    onAppliedSound:
       path: /Audio/Effects/break_stone.ogg
   - type: Fixtures
     fixtures:
@@ -76,3 +80,21 @@
   - type: CETileEffectSpawner
     tileEffect: CETileEffectStoneSpikes
     amount: 1
+
+
+- type: entity
+  id: CEDustTileEffect
+  name: dust effect
+  description: A burst of dust upon impact.
+  suffix: VFX
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+  - type: Sprite
+    sprite: _CE/Effects/TileEffects/dust.rsi
+    snapCardinals: true
+    layers:
+    - state: effect
+    drawdepth: Effects
+  - type: TimedDespawn
+    lifetime: 2.2

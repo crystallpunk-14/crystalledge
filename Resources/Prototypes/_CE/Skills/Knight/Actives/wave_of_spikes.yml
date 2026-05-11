@@ -1,0 +1,159 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: WaveOfSpikes
+  effect: !type:AddAction
+    action: CEActionWaveOfSpikes
+
+- type: entity
+  id: CEActionWaveOfSpikes
+  parent: CEActionSpellBase
+  name: Wave of spikes
+  description: You unleash a wave of [color=#ff4500]sharp spikes[/color].
+  components:
+  - type: CEVisualizeConeAction
+    width: 40
+    range: 6
+  - type: CEActionManaCost
+    manaCost: 15
+  - type: CEActionStaminaCost
+    cost: 4
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/Knight/wave_of_spikes.rsi
+      state: icon
+  - type: TargetAction
+    repeat: true
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationWaveOfSpikes
+
+- type: entityEffectAnimation
+  id: AnimationWaveOfSpikes
+  movementSpeed: 0.3
+  duration: 0.7
+  lockRotation: true
+  events:
+    0:
+    - !type:ShootProjectile
+      projectileSpeed: 2
+      projectileMaxSpeed: 5
+      prototype: CEProjectileWaveOfSpikes
+      projectileCount: 6
+      spread: 0.15
+    - !type:UsedEntityAnimation
+      dummyEntity: CEPunchEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.3, -0.5
+        easing: QuadIn
+      - time: 0.5
+        offset: -0.3, -0.2
+        easing: QuadOut
+      - time: 0.65
+        offset: -0.1, -0.7
+        easing: QuadOut
+
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.5
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.65
+        color: "#ffffff00"  # Fade out
+
+      scaleAnimation:
+      - time: 0.0
+        scale: -1, 1
+    - !type:UsedEntityAnimation
+      dummyEntity: CEPunchEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.3, -0.5
+        easing: QuadIn
+      - time: 0.45
+        offset: 0.3, -0.2
+        easing: QuadOut
+      - time: 0.6
+        offset: 0.1, -0.7
+        easing: QuadOut
+
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.5
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.65
+        color: "#ffffff00"  # Fade out
+
+      scaleAnimation:
+      - time: 0.0
+        scale: 1, 1
+    - !type:UsedEntityAnimation
+      dummyEntity: CEDustTileEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.3, 0
+        easing: QuadIn
+      - time: 0.45
+        offset: 0.3, -0.2
+        easing: QuadOut
+      - time: 0.6
+        offset: 0.1, -0.9
+        easing: QuadOut
+
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.5
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.65
+        color: "#ffffff00"  # Fade out
+
+- type: entity
+  id: CEProjectileWaveOfSpikes
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/StatusEffects/fire_status.rsi
+    layers:
+    - state: effect
+      color: "#ffffff00"
+  - type: TimedDespawn
+    lifetime: 1.3
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.10,0.1,0.30"
+        hard: false
+        mask:
+        - Impassable
+      fly-by:
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: false
+  - type: CEEntityEffectSpawner
+    frequency: 0.2
+    firstDelay: 0.4
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectStoneSpikes
+      radius: 0.5
+      maxStacks: 6
+      fallOffFactor: 1
