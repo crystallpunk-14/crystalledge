@@ -6,3 +6,8 @@
     path: /Audio/_CE/Ambience/Music/intensity_1.ogg
   intenseLayer:
     path: /Audio/_CE/Ambience/Music/intensity_2.ogg
+
+- type: CEAmbientMusic
+  id: MossySafe
+  calmLayer:
+    path: /Audio/_CE/Ambience/Music/safe.ogg
