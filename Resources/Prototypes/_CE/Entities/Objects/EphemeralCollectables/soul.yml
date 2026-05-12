@@ -57,7 +57,7 @@
       amount: 1
     - !type:RestoreMana
       effectTarget: Target
-      amount: 5
+      amount: 3
   - type: CEAutoFloatingVisuals
     animationTime: 1
     floatingStartOffset: "0.0,0.0"
