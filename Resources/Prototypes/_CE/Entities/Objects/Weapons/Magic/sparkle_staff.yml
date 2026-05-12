@@ -21,8 +21,8 @@
         prototype: CEProjectileMagicSparkle
         projectileSpeed: 10
         projectileMaxSpeed: 5
-        projectileCount: 5
-        spread: 150
+        projectileCount: 3
+        spread: 0.2
     animations:
       Primary:
       - anim: StaffAttackLight1
