@@ -1,0 +1,54 @@
+- type: entity
+  id: CEFogGate
+  name: fog gate
+  description: A mysterious wall of dense fog. Those who approach from the front pass through freely; those who approach from behind find it impassable.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Clickable
+  - type: PlacementReplacement
+    key: wall
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    noRot: false
+    drawdepth: Mobs
+    sprite: _CE/Effects/fog_gate.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#6080c0"
+    radius: 2.0
+    energy: 3
+    netsync: false
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        hard: true
+        mask:
+        - MobMask
+        layer:
+        - WallLayer
+      fix2:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.50,-0.50,0.50,0.50"
+        hard: false
+        mask:
+        - MobMask
+        layer:
+        - WallLayer
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.2
+    sprintSpeedModifier: 0.2
+  - type: CEOneSidePassage
