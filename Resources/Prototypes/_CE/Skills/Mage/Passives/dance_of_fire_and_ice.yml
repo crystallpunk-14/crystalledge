@@ -7,12 +7,14 @@
 - type: entity
   id: CEStatusEffectDanceOfFireAndIce
   name: Dance of Fire and Ice
-  description: You deal [color=#ff8a05]10 bonus fire damage[/color] to [color=#05eeff]frozen[/color] targets and [color=#05eeff]10 bonus cold damage[/color] to [color=#ff8a05]burning[/color] targets.
+  description: You deal [color=#ff8a05]5 bonus fire damage[/color] to [color=#05eeff]frozen[/color] targets and [color=#05eeff]5 bonus cold damage[/color] to [color=#ff8a05]burning[/color] targets.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEDanceOfFireAndIce
   - type: CEDanceOfFireAndIce
+    fireBonusVsFrozen: 5
+    coldBonusVsBurning: 5
 
 - type: alert
   id: CEDanceOfFireAndIce
