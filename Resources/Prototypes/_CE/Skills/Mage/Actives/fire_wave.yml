@@ -8,7 +8,7 @@
   id: CEActionFireWave
   parent: CEActionSpellBase
   name: Fire wave
-  description: You unleash a wave of [color=#ff4500]fire[/color], dealing massive [color=#ff4500]fire[/color] damage in close distance.
+  description: You unleash a wave of fire, dealing massive [color=#ff4500]fire damage[/color] in close distance.
   components:
   - type: CEVisualizeConeAction
     width: 90

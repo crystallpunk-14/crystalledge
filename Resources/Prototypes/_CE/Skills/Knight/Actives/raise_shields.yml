@@ -14,7 +14,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1.5
   - type: CEActionManaCost
-    manaCost: 10
+    manaCost: 20
   - type: CEActionStaminaCost
     cost: 3
   - type: Action

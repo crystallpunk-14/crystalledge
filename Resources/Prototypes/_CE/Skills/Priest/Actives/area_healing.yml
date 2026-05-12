@@ -14,7 +14,7 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1.2 # Healing radius
   - type: CEActionManaCost
-    manaCost: 12
+    manaCost: 25
   - type: CEActionStaminaCost
     cost: 3
   - type: Action

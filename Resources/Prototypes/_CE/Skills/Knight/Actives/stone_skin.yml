@@ -11,11 +11,11 @@
   description: Grants [color=#b2e3eb]50 temporary shields[/color] that absorb damage. Shields decay over time.
   components:
   - type: CEActionManaCost
-    manaCost: 10
+    manaCost: 25
   - type: CEActionStaminaCost
     cost: 3
   - type: Action
-    useDelay: 10
+    useDelay: 15
     icon:
       sprite: _CE/Skills/Knight/stone_skin.rsi
       state: icon

@@ -20,7 +20,7 @@
   description: Grants [color=#b2e3eb]20 temporary shields[/color] that absorb damage. Shields decay over time.
   components:
   - type: CEActionManaCost
-    manaCost: 7
+    manaCost: 15
   - type: CEActionStaminaCost
     cost: 2
   - type: Action
