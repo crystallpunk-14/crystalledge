@@ -119,8 +119,6 @@ public sealed class CEHealthSystemTest : GameTest
     {
         var server = Server;
         var damageableSystem = SEntMan.System<CESharedDamageableSystem>();
-        var mobStateSystem = SEntMan.System<CEMobStateSystem>();
-
 
         await server.WaitAssertion(() =>
         {
@@ -259,7 +257,7 @@ public sealed class CEHealthSystemTest : GameTest
 
         await server.WaitAssertion(() =>
         {
-            var ent = SSpawn("CEHealthTestDummy");
+            ent = SSpawn("CEHealthTestDummy");
             var mobState = SComp<CEMobStateComponent>(ent);
 
             damageableSystem.TakeDamage(ent, new CEDamageSpecifier(TestDamageType, 100));
