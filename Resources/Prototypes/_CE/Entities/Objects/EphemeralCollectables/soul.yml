@@ -55,6 +55,9 @@
     - !type:AddSoul
       effectTarget: Target
       amount: 1
+    - !type:RestoreMana
+      effectTarget: Target
+      amount: 5
   - type: CEAutoFloatingVisuals
     animationTime: 1
     floatingStartOffset: "0.0,0.0"
