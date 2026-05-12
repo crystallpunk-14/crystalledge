@@ -64,6 +64,11 @@
     chance: 0.4
     offset: 0.1
     deleteSpawnerAfterSpawn: false
+  - type: AmbientSound
+    volume: 5
+    range: 4
+    sound:
+      path: /Audio/_CE/Ambience/water.ogg
 
 - type: entity
   parent: CEWater
