@@ -13,9 +13,11 @@
 
 - type: dungeonRoomType
   id: MossyTempleEntranceRoom
-  supportsWideConnection: true
-  secretRoom: true #Intended
+  supportsWideConnection: false
   allowMobsSpawn: false
+  allowLootSpawn: false
+  doorPrototype: CEFogGate
+  secretRoom: true #Intended
   color: "#4b944b"
   minimapIcon:
     sprite: /Textures/_CE/Interface/minimap_icons.rsi
