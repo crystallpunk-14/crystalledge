@@ -14,7 +14,7 @@
     alert: CEChangeHealType
   - type: CEChangeHealTypeStatusEffect
     target: Fire
-    damageMultiplier: 1
+    damageMultiplier: 2
 
 - type: alert
   id: CEChangeHealType

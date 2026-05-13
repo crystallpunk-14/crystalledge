@@ -2,7 +2,7 @@
   parent: CEClothingAccessoryBase
   id: CEClothingAccessoryNinjaBandana
   name: ninja bandana
-  description: Increases [color=#32cd32]stamina[/color] by 3
+  description: Increases max [color=#32cd32]stamina[/color] by 3
   components:
   - type: Item
     size: Tiny
