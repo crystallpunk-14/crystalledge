@@ -39,3 +39,4 @@
       effectTarget: User
       statusEffect: CEStatusEffectTempShield
       amount: 50
+      max: 50

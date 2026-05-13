@@ -51,6 +51,7 @@
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectTempShield
         amount: 35
+        max: 35
 
 - type: entity
   id: CEEffectRaiseShieldsTelegraphy
