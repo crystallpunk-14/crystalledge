@@ -78,7 +78,7 @@
     budget: 5
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleKeys
-    budget: 1
+    budget: 2
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleHealing
     budget: 50
