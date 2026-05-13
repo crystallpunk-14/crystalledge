@@ -35,7 +35,7 @@
       Secondary: 3
   - type: CEWeaponManaCost
     costs:
-      Primary: 5
+      Secondary: 5
   - type: CEMagicEnergyContainer
     maxEnergy: 50
   - type: CEMagicEnergyExaminable
