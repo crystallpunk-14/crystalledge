@@ -47,12 +47,9 @@
     animations:
       Primary:
       - anim: SpearAttackLight
-        speed: 0.7
       Secondary:
       - anim: SpearAttackHeavy
-        speed: 0.7
       - anim: SpearAttackHeavy2
-        speed: 0.7
   #- type: CEWieldedWeapon #TODO: Custom wielded animations
   #  animations:
   #    Primary:

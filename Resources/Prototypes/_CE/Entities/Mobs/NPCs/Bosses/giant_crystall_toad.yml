@@ -1,0 +1,138 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  id: CEMobBoss
+  name: giant crystall toad
+  description: TODO
+  suffix: Boss
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/slime_alert.ogg
+      params:
+        variation: 0.1
+        pitch: 0.6
+  - type: CEDestructible
+    destroyThreshold: 500
+  - type: CEGOAP
+
+    goals:
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+
+    actions:
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 1.5
+    - !type:CEGOAPMeleeAttackAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+
+    sensors:
+    - !type:CEGOAPNearestHostileSensor
+      conditionKey: EnemyVisible
+      outputTargetKey: enemy
+      visionRadius: 8
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
+      targetKey: enemy
+      range: 1.5
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
+
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Sprite
+    drawdepth: Mobs
+    scale: 4, 4
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base" ]
+      state: base
+      color: "#23f510"
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CETimedAppearanceVisuals.ActiveKey:
+        base:
+          default: { state: base }
+          attack1: { state: jump }
+
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 0.75
+  - type: CEWeapon
+    spriteRotation: -90
+    effectSlots:
+      OnHit:
+      - !type:CETileAffectArea
+        tileEffect: CETileEffectWater
+        effectTarget: User
+        radius: 2
+        maxStacks: 5
+      - !type:WeaponArcAttack
+        range: 0.9
+        arcWidth: 360
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 15
+        - !type:ThrowFromUser
+          distance: 1
+    animations:
+      Primary:
+      - anim: GiantToadAttackTest
+
+- type: entityEffectAnimation
+  id: GiantToadAttackTest
+  movementSpeed: 0
+  duration: 1.5
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/Fluids/watersplash.ogg
+        params:
+          variation: 0.1
+          pitch: 0.6
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectWaterBurstTelegraphy
+    - !type:SetTimedAppearance
+      key: attack1
+      duration: 1.2
+    1.1:
+    - !type:WeaponEffectSlot
+      slot: OnHit
