@@ -35,10 +35,9 @@
       Secondary: 3
   - type: CEWeaponManaCost
     costs:
-      Secondary: 1
+      Secondary: 5
   - type: CEMagicEnergyContainer
-    energy: 30
-    baseMaxEnergy: 30
+    maxEnergy: 50
   - type: CEMagicEnergyExaminable
   - type: Clothing
     slots:

@@ -9,8 +9,7 @@
   categories: [ ForkFiltered ]
   components:
   - type: CEMagicEnergyContainer
-    energy: 50
-    baseMaxEnergy: 50
+    maxEnergy: 50
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/gnome5.ogg

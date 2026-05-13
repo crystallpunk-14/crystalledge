@@ -22,6 +22,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
     private void OnMapInit(Entity<CEMagicEnergyContainerComponent> ent, ref MapInitEvent args)
     {
         RefreshMaxMana(ent, ent.Comp);
+        ChangeEnergy((ent, ent.Comp), ent.Comp.MaxEnergy, out _, out _);
     }
 
     private void OnRejuvenate(Entity<CEMagicEnergyContainerComponent> ent, ref RejuvenateEvent args)

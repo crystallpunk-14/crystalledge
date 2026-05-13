@@ -32,6 +32,7 @@
     whitelist:
       components:
       - CEMobState
+      - CEGOAP
     useDelay: 1.5
     useSound:
       path: /Audio/Items/drink.ogg

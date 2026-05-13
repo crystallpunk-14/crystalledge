@@ -11,8 +11,7 @@
   - type: CEDestructible
     destroyThreshold: 150
   - type: CEMagicEnergyContainer
-    energy: 500
-    baseMaxEnergy: 500
+    maxEnergy: 500
   - type: CEGOAP
     goals:
     - desiredState:

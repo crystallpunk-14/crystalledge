@@ -25,6 +25,7 @@
       whitelist:
         components:
         - CEMobState
+        - CEGOAP
       effects:
       - !type:RestoreMana
         amount: 12
@@ -63,6 +64,7 @@
       whitelist:
         components:
         - CEMobState
+        - CEGOAP
       effects:
       - !type:RestoreMana
         amount: 25
