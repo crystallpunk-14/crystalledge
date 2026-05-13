@@ -1,3 +1,4 @@
+using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -12,4 +13,7 @@ public sealed partial class CEEquipStatusEffectComponent : Component
 {
     [DataField(required: true), AutoNetworkedField]
     public EntProtoId StatusEffect = default!;
+
+    [DataField]
+    public SlotFlags TargetSlots = SlotFlags.WITHOUT_POCKET;
 }

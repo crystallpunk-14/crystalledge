@@ -22,11 +22,17 @@ public sealed partial class CEEquipStatusEffectSystem : EntitySystem
 
     private void OnEquipped(Entity<CEEquipStatusEffectComponent> ent, ref GotEquippedEvent args)
     {
+        if ((args.SlotFlags & ent.Comp.TargetSlots) == 0)
+            return;
+
         _stacks.TryAddStack(args.EquipTarget, ent.Comp.StatusEffect, out _);
     }
 
     private void OnUnequipped(Entity<CEEquipStatusEffectComponent> ent, ref GotUnequippedEvent args)
     {
+        if ((args.SlotFlags & ent.Comp.TargetSlots) == 0)
+            return;
+
         _stacks.TryRemoveStack(args.EquipTarget, ent.Comp.StatusEffect);
     }
 }
