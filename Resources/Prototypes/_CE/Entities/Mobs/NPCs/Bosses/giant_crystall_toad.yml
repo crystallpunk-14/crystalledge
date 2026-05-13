@@ -3,12 +3,13 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
-  id: CEMobBoss
+  id: CEMobBossToad
   name: giant crystall toad
   description: TODO
   suffix: Boss
   categories: [ ForkFiltered ]
   components:
+  - type: CEBossHealthBar
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg

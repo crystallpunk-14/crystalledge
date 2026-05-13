@@ -1,0 +1,12 @@
+<widgets:CEBossHealthBarUI xmlns="https://spacestation14.io"
+                          xmlns:widgets="clr-namespace:Content.Client._CE.UserInterface.Systems.HealthMana.Widgets"
+                          Orientation="Vertical"
+                          HorizontalExpand="False"
+                          VerticalExpand="False">
+    <Label Name="BossNameLabel"
+           HorizontalAlignment="Center"
+           HorizontalExpand="True"
+           Margin="0 2 0 4"
+           FontColorOverride="#FFFFFF" />
+    <Control Name="BarArea" HorizontalExpand="True" />
+</widgets:CEBossHealthBarUI>

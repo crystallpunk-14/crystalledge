@@ -55,6 +55,11 @@ public sealed partial class DefaultGameScreen : InGameScreen
         SetAnchorPreset(Actions, LayoutPreset.BottomWide);
         SetMarginLeft(Actions, 0);
         SetMarginRight(Actions, 0);
+
+        // Boss health bar: top center, below the menu bar row.
+        SetAnchorAndMarginPreset(BossHealthBar, LayoutPreset.CenterTop, margin: 80);
+        SetMarginLeft(BossHealthBar, -BossHealthBar.MinSize.X / 2f);
+        SetMarginRight(BossHealthBar, BossHealthBar.MinSize.X / 2f);
         // CrystallEdge end
 
         Chat.OnResized += ChatOnResized;

@@ -30,6 +30,7 @@
             <healthMana:CEManaUI Name="ManaBar" Access="Public" />
             <healthMana:CESoulUI Name="SoulBar" Access="Public" />
             <healthMana:CEStaminaUI Name="StaminaBar" Access="Public" />
+            <healthMana:CEBossHealthBarUI Name="BossHealthBar" Access="Public" />
             <minimap:CEMinimapUI Name="Minimap" Access="Public" />
             <actions:ActionsBar Name="Actions" Access="Protected" />
         </LayoutContainer>
