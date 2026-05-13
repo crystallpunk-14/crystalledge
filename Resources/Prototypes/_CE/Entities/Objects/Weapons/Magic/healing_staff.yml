@@ -40,13 +40,14 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-  - type: CEWeaponChargesCost
+  - type: CEWeaponManaCost
     costs:
       Primary: 1
       Secondary: 1
-  - type: CECharges
-    maxCharges: 10
-    currentCharges: 10
+  - type: CEMagicEnergyContainer
+    energy: 10
+    baseMaxEnergy: 10
+  - type: CEMagicEnergyExaminable
   - type: Clothing
     slots:
     - neck

@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._CE.Charges;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core;
@@ -29,13 +28,6 @@ public abstract class CESharedBonfireSystem : EntitySystem
         SubscribeLocalEvent<CEDamageableComponent, CEBonfireRestoredEvent>(OnRestoreHealth);
         SubscribeLocalEvent<CEMagicEnergyContainerComponent, CEBonfireRestoredEvent>(OnRestoreMana);
         SubscribeLocalEvent<ContainerManagerComponent, CEBonfireRestoredEvent>(OnRelayToContents);
-        SubscribeLocalEvent<CEChargesComponent, CEBonfireRestoredEvent>(OnRestoreCharges);
-    }
-
-    private void OnRestoreCharges(Entity<CEChargesComponent> ent, ref CEBonfireRestoredEvent args)
-    {
-        ent.Comp.CurrentCharges = ent.Comp.MaxCharges;
-        Dirty(ent);
     }
 
     private void OnActivate(Entity<CEBonfireComponent> ent, ref ActivateInWorldEvent args)

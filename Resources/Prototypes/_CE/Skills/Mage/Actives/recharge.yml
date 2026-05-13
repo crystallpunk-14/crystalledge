@@ -8,7 +8,7 @@
   id: CEActionRecharge
   parent: CEActionSpellBase
   name: Recharge
-  description: You restore [color=#fff01e]30% charges[/color] of the selected item
+  description: You restore [color=#3082f5]30% mana[/color] of the selected item
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
@@ -27,7 +27,7 @@
     canTargetSelf: false
     whitelist:
       components:
-      - CECharges
+      - CEMagicEnergyContainer
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationRecharge
 
@@ -43,7 +43,7 @@
       spawns:
       - CEEffectManaRestore
     0.45:
-    - !type:Recharge
+    - !type:RestoreManaPercentage
       percentage: 0.3
     - !type:SpawnEntity
       spawns:

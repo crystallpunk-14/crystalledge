@@ -1,4 +1,4 @@
-using Content.Shared._CE.Charges;
+using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.MeleeWeapon.Components;
 using Content.Shared._CE.Stamina;
 
@@ -6,7 +6,7 @@ namespace Content.Shared._CE.MeleeWeapon;
 
 public abstract partial class CESharedWeaponSystem
 {
-    [Dependency] private readonly CEChargesSystem _charges = default!;
+    [Dependency] private readonly CESharedMagicEnergySystem _mana = default!;
     [Dependency] private readonly CEStaminaSystem _stamina = default!;
 
     private void InitializeCosts()
@@ -14,8 +14,8 @@ public abstract partial class CESharedWeaponSystem
         SubscribeLocalEvent<CEWeaponStaminaCostComponent, CEWeaponUseAttemptEvent>(OnStaminaCostAttempt);
         SubscribeLocalEvent<CEWeaponStaminaCostComponent, CEWeaponUsedEvent>(OnStaminaCostUsed);
 
-        SubscribeLocalEvent<CEWeaponChargesCostComponent, CEWeaponUseAttemptEvent>(OnChargesCostAttempt);
-        SubscribeLocalEvent<CEWeaponChargesCostComponent, CEWeaponUsedEvent>(OnChargesCostUsed);
+        SubscribeLocalEvent<CEWeaponManaCostComponent, CEWeaponUseAttemptEvent>(OnManaCostAttempt);
+        SubscribeLocalEvent<CEWeaponManaCostComponent, CEWeaponUsedEvent>(OnManaCostUsed);
     }
 
     // ── Stamina ──
@@ -40,9 +40,9 @@ public abstract partial class CESharedWeaponSystem
         _stamina.TryTakeDamage(args.User, cost);
     }
 
-    // ── Charges ──
+    // ── Mana ──
 
-    private void OnChargesCostAttempt(Entity<CEWeaponChargesCostComponent> ent, ref CEWeaponUseAttemptEvent args)
+    private void OnManaCostAttempt(Entity<CEWeaponManaCostComponent> ent, ref CEWeaponUseAttemptEvent args)
     {
         if (args.Cancelled)
             return;
@@ -50,15 +50,15 @@ public abstract partial class CESharedWeaponSystem
         if (!ent.Comp.Costs.TryGetValue(args.UseType, out var cost) || cost <= 0)
             return;
 
-        if (!_charges.HasCharges(ent.Owner, cost))
+        if (!_mana.HasEnergy(ent.Owner, cost))
             args.Cancel();
     }
 
-    private void OnChargesCostUsed(Entity<CEWeaponChargesCostComponent> ent, ref CEWeaponUsedEvent args)
+    private void OnManaCostUsed(Entity<CEWeaponManaCostComponent> ent, ref CEWeaponUsedEvent args)
     {
         if (!ent.Comp.Costs.TryGetValue(args.UseType, out var cost) || cost <= 0)
             return;
 
-        _charges.TrySpend(ent.Owner, cost);
+        _mana.Take(ent.Owner, cost);
     }
 }
