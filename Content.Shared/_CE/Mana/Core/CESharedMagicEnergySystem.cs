@@ -224,14 +224,14 @@ public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue
 }
 
 /// <summary>
-/// Raised on the receiver (thief) inside <see cref="CESharedMagicEnergySystem.TransferEnergy"/>
+/// Raised on the receiver User (thief) inside <see cref="CESharedMagicEnergySystem.TransferEnergy"/>
 /// before mana is drained from the sender. Status effects on the receiver can cancel via
 /// <c>StatusEffectRelayedEvent</c>; pacifism uses this to block PvP mana theft.
 /// </summary>
-public sealed class CEAttemptStealManaEvent(EntityUid sender, EntityUid receiver, int amount) : EntityEventArgs
+public sealed class CEAttemptStealManaEvent(EntityUid target, EntityUid user, int amount) : EntityEventArgs
 {
-    public readonly EntityUid Sender = sender;
-    public readonly EntityUid Receiver = receiver;
+    public readonly EntityUid Target = target;
+    public readonly EntityUid User = user;
     public readonly int Amount = amount;
     public bool Cancelled;
 }

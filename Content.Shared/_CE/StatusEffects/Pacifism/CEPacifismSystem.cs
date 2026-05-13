@@ -68,6 +68,15 @@ public sealed class CEPacifismSystem : EntitySystem
         if (args.Args.Cancelled)
             return;
 
+        if (!_statusEffectQuery.TryComp(ent, out var statusEffect))
+            return;
+
+        if (statusEffect.AppliedTo is null)
+            return;
+
+        if (args.Args.Target == statusEffect.AppliedTo) //We are not block self-harm
+            return;
+
         if (ShouldBlock(args.Args.Target, args.Args.StatusEffect))
             args.Args.Cancelled = true;
     }
@@ -77,6 +86,15 @@ public sealed class CEPacifismSystem : EntitySystem
         ref StatusEffectRelayedEvent<CEAttemptApplyStatusEffectStackEvent> args)
     {
         if (args.Args.Cancelled)
+            return;
+
+        if (!_statusEffectQuery.TryComp(ent, out var statusEffect))
+            return;
+
+        if (statusEffect.AppliedTo is null)
+            return;
+
+        if (args.Args.Target == statusEffect.AppliedTo) //We are not block self-harm
             return;
 
         if (ShouldBlock(args.Args.Target, args.Args.StatusEffect))
@@ -102,7 +120,7 @@ public sealed class CEPacifismSystem : EntitySystem
             return;
 
         // Sender is the entity being drained (victim). Block when the victim is a player.
-        if (!HasComp<CEDungeonPlayerComponent>(args.Args.Sender))
+        if (!HasComp<CEDungeonPlayerComponent>(args.Args.Target))
             return;
 
         args.Args.Cancelled = true;
