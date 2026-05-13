@@ -5,6 +5,7 @@ using Content.Shared._CE.MeleeWeapon;
 using Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects.Components;
 using Content.Shared._CE.Soul;
 using Content.Shared._CE.StatusEffects.Core;
+using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared._CE.TileEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -16,11 +17,15 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
+
+    [Dependency] private EntityQuery<CEStatusEffectStackComponent> _stackQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEEffectOnAttackStatusEffectComponent, StatusEffectRelayedEvent<CEAfterAttackEvent>>(OnAfterAttack);
+        SubscribeLocalEvent<CEEffectOnAttackedStatusEffectComponent, StatusEffectRelayedEvent<CEAttackedEvent>>(OnAfterAttacked);
         SubscribeLocalEvent<CEEffectOnHealStatusEffectComponent, StatusEffectRelayedEvent<CEHealEvent>>(OnHeal);
         SubscribeLocalEvent<CEEffectOnDamagedStatusEffectComponent, StatusEffectRelayedEvent<CEDamageChangedEvent>>(OnDamaged);
         SubscribeLocalEvent<CEEffectOnDamageStatusEffectComponent, StatusEffectRelayedEvent<CEAfterDealDamageEvent>>(OnDealDamage);
@@ -36,6 +41,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         if (args.Args.Targets.Count <= 0)
             return;
+
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
 
         foreach (var target in args.Args.Targets)
         {
@@ -53,6 +62,38 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
             foreach (var effect in ent.Comp.Effects)
             {
+                for (var i = 0; i < stack; i++)
+                {
+                    effect.Effect(effectArgs);
+                }
+            }
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnAfterAttacked(Entity<CEEffectOnAttackedStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAttackedEvent> args)
+    {
+        if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            null,
+            Angle.Zero,
+            1f,
+            args.Args.Attacker,
+            Transform(args.Args.Attacker).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            for (var i = 0; i < stack; i++)
+            {
                 effect.Effect(effectArgs);
             }
         }
@@ -65,6 +106,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
             return;
 
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
             status.AppliedTo.Value,
@@ -76,7 +121,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         foreach (var effect in ent.Comp.Effects)
         {
-            effect.Effect(effectArgs);
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
@@ -90,6 +138,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
             return;
 
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
             status.AppliedTo.Value,
@@ -101,7 +153,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         foreach (var effect in ent.Comp.Effects)
         {
-            effect.Effect(effectArgs);
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
@@ -118,6 +173,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
             return;
 
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
             status.AppliedTo.Value,
@@ -129,7 +188,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         foreach (var effect in ent.Comp.Effects)
         {
-            effect.Effect(effectArgs);
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
@@ -143,6 +205,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
             return;
 
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
             status.AppliedTo.Value,
@@ -154,7 +220,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         foreach (var effect in ent.Comp.Effects)
         {
-            effect.Effect(effectArgs);
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
@@ -171,6 +240,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
             return;
 
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
             status.AppliedTo.Value,
@@ -182,7 +255,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         foreach (var effect in ent.Comp.Effects)
         {
-            effect.Effect(effectArgs);
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
@@ -196,6 +272,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
             return;
 
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
         var effectArgs = new CEEntityEffectArgs(
             EntityManager,
             status.AppliedTo.Value,
@@ -207,7 +287,10 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 
         foreach (var effect in ent.Comp.Effects)
         {
-            effect.Effect(effectArgs);
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
         }
 
         _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);

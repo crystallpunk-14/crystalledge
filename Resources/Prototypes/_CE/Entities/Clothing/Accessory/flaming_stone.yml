@@ -16,6 +16,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: StatusEffect
+  - type: CEStatusEffectStack
   - type: CEEffectOnAttackStatusEffect
     effects:
     - !type:ApplyStatusEffectStack
