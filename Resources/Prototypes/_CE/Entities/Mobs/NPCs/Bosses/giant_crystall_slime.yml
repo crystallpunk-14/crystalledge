@@ -390,6 +390,17 @@
       - time: 1.4
         offset: 0, 0
         easing: QuadIn
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+      - time: 0.6
+        color: "#ffffff"
+      - time: 0.7
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff01"
+      - time: 1
+        color: "#ffffff"
     0.8:
     - !type:Teleport
       effectTarget: Target
