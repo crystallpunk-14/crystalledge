@@ -135,4 +135,3 @@
         offset: 0, 0.02
       - time: 0.3
         offset: 0, 0
-  - type: FloorOcclusion
