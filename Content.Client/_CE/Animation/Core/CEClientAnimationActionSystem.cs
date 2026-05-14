@@ -1,14 +1,17 @@
 using Content.Shared._CE.Animation.Core;
+using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Animation.Core;
 
 public sealed partial class CEClientAnimationActionSystem : CESharedAnimationActionSystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IGameTiming _clientTiming = default!;
 
     public override void Initialize()
     {
@@ -40,6 +43,19 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
             ? GetCoordinates(ev.TargetCoordinates.Value)
             : (EntityCoordinates?)null;
 
+        // Calculate how late this animation event arrived.
+        // CEActiveAnimationActionComponent.StartAnimationTime is synced from server via component state
+        // (arrives faster via PVS than this reliable event), so we use it to compute seek offset.
+        var seekOffset = 0f;
+        if (TryComp<CEActiveAnimationActionComponent>(entity, out var controller)
+            && controller.StartAnimationTime.HasValue)
+        {
+            var expectedFireTime = controller.StartAnimationTime.Value + realKeyFrame;
+            seekOffset = (float)(_clientTiming.CurTime - expectedFireTime).TotalSeconds;
+            if (seekOffset < 0f)
+                seekOffset = 0f;
+        }
+
         foreach (var action in actions)
         {
             if (action is not EntityAnimation && action is not UserAnimation)
@@ -53,7 +69,9 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
                 ev.Speed,
                 targetEntity,
                 targetCoordinates)
-            );
+            {
+                AnimationSeekOffset = seekOffset,
+            });
         }
     }
 }

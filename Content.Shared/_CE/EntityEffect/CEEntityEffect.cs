@@ -60,7 +60,16 @@ public record struct CEEntityEffectArgs(
     Angle Angle,
     float Speed,
     EntityUid? Target,
-    EntityCoordinates? Position);
+    EntityCoordinates? Position)
+{
+    /// <summary>
+    /// How many seconds this visual effect is late relative to when it was supposed to fire.
+    /// Used by client-side visual effects (e.g. <see cref="Effects.UserAnimation"/>) to seek the
+    /// animation to the correct position when a <c>CEEntityAnimationEvent</c> arrives late due
+    /// to network delay. Defaults to 0 (no seek / event arrived on time).
+    /// </summary>
+    public float AnimationSeekOffset { get; init; } = 0f;
+}
 
 /// <summary>
 /// Broadcast event raised when a CE entity effect is dispatched.

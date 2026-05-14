@@ -69,6 +69,7 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
         }
 
         var speedMult = 1f / args.Args.Speed;
+        var seek = args.Args.AnimationSeekOffset;
         var comp = EnsureComp<CEUserSpriteAnimationComponent>(entity);
 
         if (effect.OffsetAnimation.Count > 0)
@@ -76,28 +77,28 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
             // Preserve the original value only on the first call (not on re-interruptions).
             comp.OriginalOffset ??= sprite.Offset;
             _animPlayer.Stop(entity, OffsetKey);
-            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildOffsetAnimation(effect.OffsetAnimation, speedMult), OffsetKey);
+            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildOffsetAnimation(effect.OffsetAnimation, speedMult, seekOffset: seek), OffsetKey);
         }
 
         if (effect.RotationAnimation.Count > 0)
         {
             comp.OriginalRotation ??= sprite.Rotation;
             _animPlayer.Stop(entity, RotationKey);
-            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildRotationAnimation(effect.RotationAnimation, speedMult), RotationKey);
+            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildRotationAnimation(effect.RotationAnimation, speedMult, seekOffset: seek), RotationKey);
         }
 
         if (effect.ScaleAnimation.Count > 0)
         {
             comp.OriginalScale ??= sprite.Scale;
             _animPlayer.Stop(entity, ScaleKey);
-            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildScaleAnimation(effect.ScaleAnimation, speedMult), ScaleKey);
+            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildScaleAnimation(effect.ScaleAnimation, speedMult, seekOffset: seek), ScaleKey);
         }
 
         if (effect.ColorAnimation.Count > 0)
         {
             comp.OriginalColor ??= sprite.Color;
             _animPlayer.Stop(entity, ColorKey);
-            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildColorAnimation(effect.ColorAnimation, speedMult), ColorKey);
+            _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildColorAnimation(effect.ColorAnimation, speedMult, seekOffset: seek), ColorKey);
         }
     }
 
