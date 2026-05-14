@@ -356,10 +356,6 @@
           variation: 0.1
           pitch: 0.6
     - !type:SpawnEntity
-      effectTarget: User
-      spawns:
-      - CEEffectWaterBurstTelegraphy
-    - !type:SpawnEntity
       effectTarget: Target
       spawns:
       - CEEffectWaterBurstTelegraphy
