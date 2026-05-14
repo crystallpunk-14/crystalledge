@@ -393,9 +393,9 @@
       colorAnimation:
       - time: 0.0
         color: "#ffffff"
-      - time: 0.6
+      - time: 0.5
         color: "#ffffff"
-      - time: 0.7
+      - time: 0.6
         color: "#ffffff01"
       - time: 0.9
         color: "#ffffff01"
