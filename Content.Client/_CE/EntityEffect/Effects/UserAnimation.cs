@@ -96,7 +96,7 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
 
         if (effect.ColorAnimation.Count > 0)
         {
-            comp.OriginalColor ??= sprite.Color;
+            comp.OriginalColor ??= effect.RestoreColor;
             _animPlayer.Stop(entity, ColorKey);
             _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildColorAnimation(effect.ColorAnimation, speedMult, seekOffset: seek), ColorKey);
         }

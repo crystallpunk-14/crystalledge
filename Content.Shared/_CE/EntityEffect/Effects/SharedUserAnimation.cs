@@ -40,6 +40,14 @@ public sealed partial class UserAnimation : CEEntityEffectBase<UserAnimation>
     public List<CEColorKeyframe> ColorAnimation = new();
 
     /// <summary>
+    /// The color to restore the sprite to after the color animation finishes.
+    /// Defaults to opaque white, which is the standard sprite base color.
+    /// Set this explicitly if the entity uses a non-white base color.
+    /// </summary>
+    [DataField]
+    public Color RestoreColor = Color.White;
+
+    /// <summary>
     /// Keyframes for animating the sprite's scale over time.
     /// If empty, the scale is not animated.
     /// </summary>
