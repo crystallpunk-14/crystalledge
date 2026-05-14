@@ -18,8 +18,8 @@ public sealed partial class CEAnimationActionSystem : CESharedAnimationActionSys
     /// </summary>
     protected override void OnKeyframeActions(EntityUid uid, CEActiveAnimationActionComponent controller, TimeSpan keyFrame, List<CEEntityEffect> actions)
     {
-        // Only send visual events if there is an EntityAnimation effect in this keyframe.
-        if (!actions.Any(a => a is EntityAnimation))
+        // Only send visual events if there is an EntityAnimation or UserAnimation effect in this keyframe.
+        if (!actions.Any(a => a is EntityAnimation || a is UserAnimation))
             return;
 
         if (controller.ActiveAnimation is not { } animId)

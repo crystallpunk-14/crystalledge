@@ -42,7 +42,7 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
 
         foreach (var action in actions)
         {
-            if (action is not EntityAnimation)
+            if (action is not EntityAnimation && action is not UserAnimation)
                 continue;
 
             action.Effect(new CEEntityEffectArgs(

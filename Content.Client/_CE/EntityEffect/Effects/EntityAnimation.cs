@@ -1,13 +1,10 @@
-using System.Linq;
 using System.Numerics;
 using Content.Client.Animations;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared.Hands.EntitySystems;
-using Robust.Client.Animations;
 using Robust.Client.GameObjects;
-using Robust.Shared.Animations;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Spawners;
@@ -114,200 +111,34 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
 
         // Set up timed despawn
         var despawn = EnsureComp<TimedDespawnComponent>(effectEntity);
-        despawn.Lifetime = CalculateDuration(effect, speedMultiplier) + 0.1f;
+        despawn.Lifetime = CEAnimationTrackBuilders.CalculateDuration(effect, speedMultiplier) + 0.1f;
 
         // Build and play offset animation if keyframes exist
         if (effect.OffsetAnimation.Count > 0)
         {
-            var offsetAnim = BuildOffsetAnimation(effect, angle, speedMultiplier);
+            var offsetAnim = CEAnimationTrackBuilders.BuildOffsetAnimation(effect.OffsetAnimation, speedMultiplier, angle);
             _animationPlayer.Play(effectEntity, offsetAnim, OffsetAnimationKey);
         }
 
         // Build and play rotation animation if keyframes exist
         if (effect.RotationAnimation.Count > 0)
         {
-            var rotationAnim = BuildRotationAnimation(effect, initialRotation, speedMultiplier);
+            var rotationAnim = CEAnimationTrackBuilders.BuildRotationAnimation(effect.RotationAnimation, speedMultiplier, initialRotation);
             _animationPlayer.Play(effectEntity, rotationAnim, RotationAnimationKey);
         }
 
         // Build and play color animation if keyframes exist
         if (effect.ColorAnimation.Count > 0)
         {
-            var colorAnim = BuildColorAnimation(effect, speedMultiplier);
+            var colorAnim = CEAnimationTrackBuilders.BuildColorAnimation(effect.ColorAnimation, speedMultiplier);
             _animationPlayer.Play(effectEntity, colorAnim, ColorAnimationKey);
         }
 
         // Build and play scale animation if keyframes exist
         if (effect.ScaleAnimation.Count > 0)
         {
-            var scaleAnim = BuildScaleAnimation(effect, speedMultiplier);
+            var scaleAnim = CEAnimationTrackBuilders.BuildScaleAnimation(effect.ScaleAnimation, speedMultiplier);
             _animationPlayer.Play(effectEntity, scaleAnim, ScaleAnimationKey);
         }
-    }
-
-    private static Robust.Client.Animations.Animation BuildOffsetAnimation(
-        EntityAnimation effect, Angle angle, float speedMultiplier)
-    {
-        var duration = CalculateDuration(effect, speedMultiplier);
-        var animation = new Robust.Client.Animations.Animation
-        {
-            Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks =
-            {
-                new AnimationTrackComponentProperty
-                {
-                    ComponentType = typeof(SpriteComponent),
-                    Property = nameof(SpriteComponent.Offset),
-                    InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { },
-                }
-            }
-        };
-
-        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
-
-        var prevTime = 0f;
-        foreach (var keyframe in effect.OffsetAnimation)
-        {
-            var rotatedOffset = angle.RotateVec(keyframe.Offset);
-            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
-            prevTime = keyframe.Time;
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotatedOffset, deltaTime, GetEasingFunction(keyframe.Easing)));
-        }
-
-        return animation;
-    }
-
-    private static Robust.Client.Animations.Animation BuildRotationAnimation(
-        EntityAnimation effect, Angle angle, float speedMultiplier)
-    {
-        var duration = CalculateDuration(effect, speedMultiplier);
-        var animation = new Robust.Client.Animations.Animation
-        {
-            Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks =
-            {
-                new AnimationTrackComponentProperty
-                {
-                    ComponentType = typeof(SpriteComponent),
-                    Property = nameof(SpriteComponent.Rotation),
-                    InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { },
-                }
-            }
-        };
-
-        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
-
-        var prevTime = 0f;
-        foreach (var keyframe in effect.RotationAnimation)
-        {
-            var totalRotation = angle + Angle.FromDegrees(keyframe.Rotation);
-            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
-            prevTime = keyframe.Time;
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(totalRotation, deltaTime, GetEasingFunction(keyframe.Easing)));
-        }
-
-        return animation;
-    }
-
-    private static Robust.Client.Animations.Animation BuildColorAnimation(
-        EntityAnimation effect, float speedMultiplier)
-    {
-        var duration = CalculateDuration(effect, speedMultiplier);
-        var animation = new Robust.Client.Animations.Animation
-        {
-            Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks =
-            {
-                new AnimationTrackComponentProperty
-                {
-                    ComponentType = typeof(SpriteComponent),
-                    Property = nameof(SpriteComponent.Color),
-                    InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { },
-                }
-            }
-        };
-
-        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
-
-        var prevTime = 0f;
-        foreach (var keyframe in effect.ColorAnimation)
-        {
-            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
-            prevTime = keyframe.Time;
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Color, deltaTime, GetEasingFunction(keyframe.Easing)));
-        }
-
-        return animation;
-    }
-
-    private static Robust.Client.Animations.Animation BuildScaleAnimation(
-        EntityAnimation effect, float speedMultiplier)
-    {
-        var duration = CalculateDuration(effect, speedMultiplier);
-        var animation = new Robust.Client.Animations.Animation
-        {
-            Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks =
-            {
-                new AnimationTrackComponentProperty
-                {
-                    ComponentType = typeof(SpriteComponent),
-                    Property = nameof(SpriteComponent.Scale),
-                    InterpolationMode = AnimationInterpolationMode.Linear,
-                    KeyFrames = { },
-                }
-            }
-        };
-
-        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
-
-        var prevTime = 0f;
-        foreach (var keyframe in effect.ScaleAnimation)
-        {
-            var deltaTime = (keyframe.Time - prevTime) * speedMultiplier;
-            prevTime = keyframe.Time;
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(keyframe.Scale, deltaTime, GetEasingFunction(keyframe.Easing)));
-        }
-
-        return animation;
-    }
-
-    private static float CalculateDuration(EntityAnimation effect, float speedMultiplier)
-    {
-        var maxTime = 0f;
-
-        if (effect.OffsetAnimation.Count > 0)
-            maxTime = Math.Max(maxTime, effect.OffsetAnimation.Max(k => k.Time));
-
-        if (effect.RotationAnimation.Count > 0)
-            maxTime = Math.Max(maxTime, effect.RotationAnimation.Max(k => k.Time));
-
-        if (effect.ColorAnimation.Count > 0)
-            maxTime = Math.Max(maxTime, effect.ColorAnimation.Max(k => k.Time));
-
-        maxTime *= speedMultiplier;
-
-        return maxTime > 0f ? maxTime + 0.5f : 0.5f;
-    }
-
-    private static Func<float, float> GetEasingFunction(CEAnimationEasing easing)
-    {
-        return easing switch
-        {
-            CEAnimationEasing.Linear => (p) => p,
-            CEAnimationEasing.QuadIn => Easings.InQuad,
-            CEAnimationEasing.QuadOut => Easings.OutQuad,
-            CEAnimationEasing.QuadInOut => Easings.InOutQuad,
-            CEAnimationEasing.CubicIn => Easings.InCubic,
-            CEAnimationEasing.CubicOut => Easings.OutCubic,
-            CEAnimationEasing.CubicInOut => Easings.InOutCubic,
-            CEAnimationEasing.QuartIn => Easings.InQuart,
-            CEAnimationEasing.QuartOut => Easings.OutQuart,
-            CEAnimationEasing.QuartInOut => Easings.InOutQuart,
-            _ => (p) => p
-        };
     }
 }
