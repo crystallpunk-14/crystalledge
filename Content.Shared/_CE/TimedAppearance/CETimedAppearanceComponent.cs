@@ -18,10 +18,7 @@ public sealed partial class CETimedAppearanceComponent : Component
 }
 
 [Serializable, NetSerializable]
-public enum CETimedAppearanceVisuals : byte
+public enum CEAnimationAppearanceVisuals : byte
 {
-    /// <summary>
-    /// The currently active named visual state. Empty string = no override (idle).
-    /// </summary>
-    ActiveKey,
+    Key,
 }

@@ -28,7 +28,7 @@ public sealed partial class SetTimedAppearance : CEEntityEffectBase<SetTimedAppe
     /// <summary>
     /// The named visual state to activate.
     /// This must match a key used by the entity's <c>GenericVisualizer</c> mapping for
-    /// <see cref="CETimedAppearanceVisuals.ActiveKey"/>.
+    /// <see cref="CEAnCEAnimationAppearanceVisuals.Key
     /// </summary>
     [DataField(required: true)]
     public string Key = string.Empty;

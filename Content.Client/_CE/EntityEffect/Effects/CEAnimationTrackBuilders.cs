@@ -1,3 +1,4 @@
+using Content.Shared._CE.AnimationController;
 using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.Animations;
 using Robust.Client.GameObjects;
@@ -208,6 +209,28 @@ internal static class CEAnimationTrackBuilders
         return (max > 0f ? max + 0.1f : 0.1f) * speedMult;
     }
 
+    /// <summary>
+    /// Returns the total scaled duration for a <see cref="CELoopAnimationData"/> set.
+    /// </summary>
+    public static float CalculateDuration(CELoopAnimationData data, float speedMult)
+    {
+        var max = 0f;
+
+        if (data.OffsetAnimation.Count > 0)
+            max = Math.Max(max, data.OffsetAnimation[^1].Time);
+
+        if (data.RotationAnimation.Count > 0)
+            max = Math.Max(max, data.RotationAnimation[^1].Time);
+
+        if (data.ColorAnimation.Count > 0)
+            max = Math.Max(max, data.ColorAnimation[^1].Time);
+
+        if (data.ScaleAnimation.Count > 0)
+            max = Math.Max(max, data.ScaleAnimation[^1].Time);
+
+        return (max > 0f ? max + 0.1f : 0.1f) * speedMult;
+    }
+
     // ── Per-channel duration overloads ────────────────────────────────────────
 
     public static float CalculateDuration(List<CEOffsetKeyframe> kfs, float speedMult) =>
@@ -223,6 +246,46 @@ internal static class CEAnimationTrackBuilders
         (kfs.Count > 0 ? kfs[^1].Time + 0.1f : 0.1f) * speedMult;
 
     // ── Easing ───────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Builds a single <see cref="Robust.Client.Animations.Animation"/> that combines all
+    /// channels of <paramref name="effect"/> into one animation, suitable for looping playback.
+    /// The loop controller restarts the animation on completion.
+    /// </summary>
+    public static Robust.Client.Animations.Animation BuildLoopAnimation(CELoopAnimationData data, float speedMult = 1f)
+    {
+        var max = CalculateDuration(data, speedMult);
+        var animation = new Robust.Client.Animations.Animation
+        {
+            Length = TimeSpan.FromSeconds(max),
+        };
+
+        if (data.OffsetAnimation.Count > 0)
+        {
+            var sub = BuildOffsetAnimation(data.OffsetAnimation, speedMult);
+            animation.AnimationTracks.Add(sub.AnimationTracks[0]);
+        }
+
+        if (data.RotationAnimation.Count > 0)
+        {
+            var sub = BuildRotationAnimation(data.RotationAnimation, speedMult);
+            animation.AnimationTracks.Add(sub.AnimationTracks[0]);
+        }
+
+        if (data.ScaleAnimation.Count > 0)
+        {
+            var sub = BuildScaleAnimation(data.ScaleAnimation, speedMult);
+            animation.AnimationTracks.Add(sub.AnimationTracks[0]);
+        }
+
+        if (data.ColorAnimation.Count > 0)
+        {
+            var sub = BuildColorAnimation(data.ColorAnimation, speedMult);
+            animation.AnimationTracks.Add(sub.AnimationTracks[0]);
+        }
+
+        return animation;
+    }
 
     public static Func<float, float> GetEasing(CEAnimationEasing easing)
     {

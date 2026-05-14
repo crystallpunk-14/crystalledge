@@ -26,7 +26,7 @@ public sealed partial class CETimedAppearanceSystem : EntitySystem
             if (_timing.CurTime < comp.EndTime)
                 continue;
 
-            _appearance.SetData(uid, CETimedAppearanceVisuals.ActiveKey, "default");
+            _appearance.SetData(uid, CEAnimationAppearanceVisuals.Key, "default");
             RemComp<CETimedAppearanceComponent>(uid);
         }
     }
@@ -42,7 +42,7 @@ public sealed partial class CETimedAppearanceSystem : EntitySystem
     [PublicAPI]
     public void SetTimedAppearance(EntityUid entity, string key, float duration)
     {
-        _appearance.SetData(entity, CETimedAppearanceVisuals.ActiveKey, key);
+        _appearance.SetData(entity, CEAnimationAppearanceVisuals.Key, key);
 
         var comp = EnsureComp<CETimedAppearanceComponent>(entity);
         comp.EndTime = _timing.CurTime + TimeSpan.FromSeconds(duration);
@@ -55,7 +55,7 @@ public sealed partial class CETimedAppearanceSystem : EntitySystem
     [PublicAPI]
     public void CancelTimedAppearance(EntityUid entity)
     {
-        _appearance.SetData(entity, CETimedAppearanceVisuals.ActiveKey, "default");
+        _appearance.SetData(entity, CEAnimationAppearanceVisuals.Key, "default");
         RemComp<CETimedAppearanceComponent>(entity);
     }
 }

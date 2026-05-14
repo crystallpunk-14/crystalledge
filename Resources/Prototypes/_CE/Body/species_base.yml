@@ -102,3 +102,36 @@
     sprite: _CE/Mobs/Effects/brute_damage.rsi
     color: "#FF0000"
     statePrefix: Brute
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.01, 0.99
+      - time: 2
+        scale: 0.99, 1.01
+      - time: 4
+        scale: 1.01, 0.99
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 2
+        offset: 0, 0.01
+      - time: 4
+        offset: 0, 0
+  - type: CEWalkingAnimation
+    animation:
+      offsetAnimation:
+      - time: 0
+        scale: 1.01, 0.99
+      - time: 0.5
+        scale: 0.99, 1.01
+      - time: 1
+        scale: 1.01, 0.99
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 0.5
+        offset: 0, 0.01
+      - time: 1
+        offset: 0, 0

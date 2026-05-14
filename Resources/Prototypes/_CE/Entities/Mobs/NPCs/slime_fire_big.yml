@@ -8,12 +8,30 @@
   description: TODO
   categories: [ ForkFiltered ]
   components:
+  - type: Sprite
+    drawdepth: Mobs
+    scale: 2, 2
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#ff4a08"
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
         pitch: 0.6
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.1, 1.9
+      - time: 0.5
+        scale: 1.9, 2.1
+      - time: 1.0
+        scale: 2.1, 1.9
   - type: CEDestructible
     destroyThreshold: 75
     lootTable: !type:AllSelector
@@ -90,25 +108,10 @@
   - type: NpcFactionMember
     factions:
     - SimpleHostile
-  - type: Sprite
-    drawdepth: Mobs
-    scale: 2, 2
-    sprite: _CE/Mobs/slime.rsi
-    layers:
-    - map: [ "base", "movement" ]
-      state: base
-      color: "#ff4a08"
   - type: PointLight
     color: "#ff4a08"
     radius: 4
     energy: 4.0
-  - type: SpriteMovement
-    movementLayers:
-      movement:
-        state: jump
-    noMovementLayers:
-      movement:
-        state: base
   - type: MovementSpeedModifier
     baseSprintSpeed: 0.75
   - type: CEWeapon
@@ -153,6 +156,33 @@
     - !type:SpawnEntity
       spawns:
       - CEEffectPotionAlchemicalFire
-    1.4:
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.4, 1.6
+        easing: QuadOut
+      - time: 0.25
+        scale: 1.6, 2.4
+        easing: QuadOut
+      - time: 0.65
+        scale: 1.6, 2.4
+      - time: 0.9
+        scale: 2.4, 1.6
+        easing: QuadIn
+      - time: 1.1
+        scale: 2, 2
+        easing: QuadOut
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0
+      - time: 0.25
+        offset: 0, 0.4
+        easing: QuadOut
+      - time: 0.65
+        offset: 0, 0.4
+      - time: 0.9
+        offset: 0, 0
+        easing: QuadIn
+    1.0:
     - !type:WeaponEffectSlot
       slot: OnHit

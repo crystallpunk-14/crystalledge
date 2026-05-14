@@ -8,11 +8,29 @@
   description: A wobbly blob of animated fire. Pops into a burst of flames when destroyed.
   categories: [ ForkFiltered ]
   components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#ff4a08"
+      shader: unshaded
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 1.1, 0.9
+      - time: 0.5
+        scale: 0.9, 1.1
+      - time: 1.0
+        scale: 1.1, 0.9
   - type: CEDestructible
     destroyThreshold: 25
     lootTable: !type:AllSelector
@@ -88,25 +106,10 @@
   - type: NpcFactionMember
     factions:
     - SimpleHostile
-  - type: Sprite
-    drawdepth: Mobs
-    sprite: _CE/Mobs/slime.rsi
-    layers:
-    - map: [ "base", "movement" ]
-      state: base
-      color: "#ff4a08"
-      shader: unshaded
   - type: PointLight
     color: "#ff4a08"
     radius: 2
     energy: 2.0
-  - type: SpriteMovement
-    movementLayers:
-      movement:
-        state: jump
-    noMovementLayers:
-      movement:
-        state: base
   - type: MovementSpeedModifier
     baseSprintSpeed: 1.5
   - type: CEWeapon

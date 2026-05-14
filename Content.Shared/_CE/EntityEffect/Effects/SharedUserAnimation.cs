@@ -1,5 +1,3 @@
-using System.Numerics;
-using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.EntityEffect.Effects;

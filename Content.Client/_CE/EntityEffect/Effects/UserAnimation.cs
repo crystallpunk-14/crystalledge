@@ -2,7 +2,6 @@ using System.Numerics;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.GameObjects;
-using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
 namespace Content.Client._CE.EntityEffect.Effects;
