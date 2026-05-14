@@ -79,6 +79,7 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         }
 
         _sprite.SetVisible((effectEntity, effectSprite), true);
+        _sprite.SetDrawDepth((effectEntity, effectSprite), (int)Shared.DrawDepth.DrawDepth.Effects);
 
         // Set initial rotation
         var initialRotation = angle;

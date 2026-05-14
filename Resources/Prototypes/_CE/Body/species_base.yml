@@ -121,17 +121,18 @@
         offset: 0, 0
   - type: CEWalkingAnimation
     animation:
-      offsetAnimation:
+      scaleAnimation:
       - time: 0
-        scale: 1.01, 0.99
-      - time: 0.5
-        scale: 0.99, 1.01
-      - time: 1
-        scale: 1.01, 0.99
+        scale: 1.02, 0.98
+      - time: 0.2
+        scale: 0.98, 1.02
+      - time: 0.3
+        scale: 1.02, 0.98
       offsetAnimation:
       - time: 0
         offset: 0, 0
-      - time: 0.5
-        offset: 0, 0.01
-      - time: 1
+      - time: 0.2
+        offset: 0, 0.02
+      - time: 0.3
         offset: 0, 0
+  - type: FloorOcclusion

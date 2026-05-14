@@ -1,0 +1,416 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  id: CEMobBossSlime
+  name: giant crystall slime
+  description: TODO
+  suffix: Boss
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    scale: 2, 2
+    sprite: _CE/Mobs/Bosses/giant_slime.rsi
+    layers:
+    - map: [ "base" ]
+      state: idle
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CEAnimationAppearanceVisuals.Key:
+        base:
+          default: { state: idle }
+          attack: { state: attack }
+          jump: { state: jump }
+  - type: CEBossHealthBar
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.1, 1.9
+      - time: 0.5
+        scale: 1.9, 2.1
+      - time: 1.0
+        scale: 2.1, 1.9
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/slime_alert.ogg
+      params:
+        variation: 0.1
+        pitch: 0.6
+  - type: CEDestructible
+    destroyThreshold: 500
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 1.3
+        density: 50
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: CEGOAP
+
+    goals:
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+
+    actions:
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 2.5
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionGiantSlimeSplashAttack
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionGiantSlimeSpreadShot
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionGiantSlimeHighTeleport
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    - !type:CEGOAPMoveToLastKnownPositionAction
+      positionTargetKey: enemy
+      effects:
+        EnemyVisible: true
+      preconditions:
+        HasEnemyLastPos: true
+      cost: 0.5
+
+    sensors:
+    - !type:CEGOAPNearestHostileSensor
+      conditionKey: EnemyVisible
+      outputTargetKey: enemy
+      visionRadius: 8
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
+      targetKey: enemy
+      range: 2.5
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
+
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 2
+
+
+
+
+
+
+
+# Attack 1 -spread shot
+
+
+- type: entity
+  id: CEActionGiantSlimeSpreadShot
+  parent: CEActionSpellBase
+  name: Shoot
+  components:
+  - type: CEVisualizeConeAction
+    width: 45
+    range: 10
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: _CE/Skills/Mage/firebolt.rsi
+      state: icon
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: GiantSlimeSpreadShot
+
+- type: entityEffectAnimation
+  id: GiantSlimeSpreadShot
+  movementSpeed: 0.3
+  duration: 1.0
+  lockRotation: true
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2, 2
+        easing: QuadOut
+      - time: 0.3
+        scale: 2.5, 1.5
+        easing: QuadOut
+      - time: 0.7
+        scale: 2.7, 1.3
+        easing: QuadOut
+      - time: 1
+        scale: 1.2, 2.7
+        easing: QuadOut
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0
+        easing: QuadOut
+      - time: 0.3
+        offset: 0, -0.5
+        easing: QuadOut
+      - time: 0.7
+        offset: 0, -0.3
+      - time: 1
+        offset: 0, 0.7
+        easing: QuadIn
+    0.2:
+    - !type:SetTimedAppearance
+      key: attack
+      duration: 1.2
+    0.8:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:ShootProjectile
+      projectileSpeed: 4
+      projectileMaxSpeed: 8
+      prototype: CEProjectileGiantSlimeSpreadShot
+      projectileCount: 8
+      spread: 0.1
+
+- type: entity
+  id: CEProjectileGiantSlimeSpreadShot
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/firebolt.rsi
+    layers:
+    - state: effect
+      color: "#3b83c9"
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 10
+  - type: TimedDespawn
+    lifetime: 2
+
+
+
+
+
+
+
+# Simple melee splash jump attack
+
+
+- type: entity
+  id: CEActionGiantSlimeSplashAttack
+  parent: CEActionSpellBase
+  name: Melee attack
+  components:
+  - type: CEVisualizeConeAction
+    width: 360
+    range: 2
+  - type: Action
+    useDelay: 10
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: GiantSlimeSplashAttack
+
+- type: entityEffectAnimation
+  id: GiantSlimeSplashAttack
+  movementSpeed: 0.3
+  duration: 1.1
+  lockRotation: true
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/Fluids/watersplash.ogg
+        params:
+          variation: 0.1
+          pitch: 0.6
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectWaterBurstTelegraphy
+    - !type:SetTimedAppearance
+      key: jump
+      duration: 1.2
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.4, 1.6
+        easing: QuadOut
+      - time: 0.25
+        scale: 1.6, 2.4
+        easing: QuadOut
+      - time: 0.65
+        scale: 1.6, 2.4
+      - time: 0.9
+        scale: 2.4, 1.6
+        easing: QuadIn
+      - time: 1.1
+        scale: 2, 2
+        easing: QuadOut
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0
+        easing: QuadOut
+      - time: 0.2
+        offset: 0, 0
+        easing: QuadOut
+      - time: 0.55
+        offset: 0, 3
+      - time: 0.9
+        offset: 0, 0
+        easing: QuadIn
+    1.0:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
+      effectTarget: User
+      radius: 3
+      maxStacks: 5
+    - !type:WeaponArcAttack
+      range: 1.3
+      arcWidth: 360
+      effects:
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 15
+      - !type:ThrowFromUser
+        distance: 1
+
+
+
+
+
+# High teleport jump
+
+
+- type: entity
+  id: CEActionGiantSlimeHighTeleport
+  parent: CEActionSpellBase
+  name: High Teleport Jump
+  components:
+  - type: Action
+    useDelay: 10
+  - type: TargetAction
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: GiantSlimeHighTeleport
+
+
+- type: entityEffectAnimation
+  id: GiantSlimeHighTeleport
+  movementSpeed: 0.3
+  duration: 2.1
+  lockRotation: true
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/Fluids/watersplash.ogg
+        params:
+          variation: 0.1
+          pitch: 0.6
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectWaterBurstTelegraphy
+    - !type:SpawnEntity
+      effectTarget: Target
+      spawns:
+      - CEEffectWaterBurstTelegraphy
+    - !type:SetTimedAppearance
+      key: jump
+      duration: 2
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.4, 1.6
+        easing: QuadOut
+      - time: 0.4
+        scale: 1.6, 2.4
+        easing: QuadOut
+      - time: 1.2
+        scale: 1.6, 2.4
+      - time: 2
+        scale: 2.4, 1.6
+        easing: QuadIn
+      - time: 2.2
+        scale: 2, 2
+        easing: QuadOut
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0
+        easing: QuadOut
+      - time: 0.2
+        offset: 0, 0
+        easing: QuadOut
+      - time: 0.7
+        offset: 0, 10
+      - time: 1.4
+        offset: 0, 0
+        easing: QuadIn
+    0.8:
+    - !type:Teleport
+      effectTarget: Target
+    1.5:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
+      effectTarget: User
+      radius: 3
+      maxStacks: 5
+    - !type:WeaponArcAttack
+      range: 1.3
+      arcWidth: 360
+      effects:
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 15
+      - !type:ThrowFromUser
+        distance: 1

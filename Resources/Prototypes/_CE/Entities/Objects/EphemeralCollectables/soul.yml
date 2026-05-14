@@ -62,6 +62,7 @@
     animationTime: 1
     floatingStartOffset: "0.0,0.0"
     floatingOffset: "0.0,0.2"
+  - type: CENavIgnore
 
 - type: entity
   id: CEEffectSoulCollect
