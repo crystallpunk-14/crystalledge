@@ -322,3 +322,20 @@
   id: 10023
   time: '2026-05-13T18:18:54.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/236
+- author: TheShuEd
+  changes:
+  - message: Pacifism no longer prevents you from inflicting negative status effects
+      on yourself.
+    type: Tweak
+  - message: All spear animations are sped up
+    type: Tweak
+  id: 10024
+  time: '2026-05-14T08:45:23.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/237
+- author: TheShuEd
+  changes:
+  - message: Player characters now have a brief breathing and walking animation
+    type: Add
+  id: 10025
+  time: '2026-05-14T15:37:18.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/240
