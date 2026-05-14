@@ -4,7 +4,7 @@
   - CEMobDamageable
   - CEMobCombat
   id: CEMobBossSlime
-  name: giant crystall slime
+  name: giant crystal slime
   description: TODO
   suffix: Boss
   categories: [ ForkFiltered ]
@@ -244,15 +244,10 @@
   parent: CEActionSpellBase
   name: Melee attack
   components:
-  - type: CEVisualizeConeAction
-    width: 360
-    range: 2
   - type: Action
     useDelay: 10
-  - type: TargetAction
-    range: 20
-  - type: WorldTargetAction
-    event: !type:CEWorldTargetActionAnimationEvent
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
       animation: GiantSlimeSplashAttack
 
 - type: entityEffectAnimation
@@ -333,6 +328,9 @@
   parent: CEActionSpellBase
   name: High Teleport Jump
   components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 3
   - type: Action
     useDelay: 10
   - type: TargetAction

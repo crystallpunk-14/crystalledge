@@ -59,6 +59,15 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
             return;
 
         var effect = args.Effect;
+        
+        if (effect.OffsetAnimation.Count == 0 &&
+            effect.RotationAnimation.Count == 0 &&
+            effect.ScaleAnimation.Count == 0 &&
+            effect.ColorAnimation.Count == 0)
+        {
+            return;
+        }
+
         var speedMult = 1f / args.Args.Speed;
         var comp = EnsureComp<CEUserSpriteAnimationComponent>(entity);
 

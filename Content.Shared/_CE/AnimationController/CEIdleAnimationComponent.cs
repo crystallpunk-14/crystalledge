@@ -15,7 +15,7 @@ public sealed partial class CEIdleAnimationComponent : Component
     /// <summary>
     /// Appearance key to activate while idle (e.g. "idle").
     /// Must match an entry in the entity's <c>GenericVisualizer</c> for
-    /// <c>CETimedAppearanceVisuals.ActiveKey</c>.
+    /// <c>CEAnCEAnimationAppearanceVisuals.Key</c>.
     /// If <c>null</c>, no appearance change is proposed.
     /// </summary>
     [DataField, AutoNetworkedField]

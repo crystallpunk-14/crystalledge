@@ -16,7 +16,7 @@ public sealed partial class CEWalkingAnimationComponent : Component
     /// <summary>
     /// Appearance key to activate while moving (e.g. "walk").
     /// Must match an entry in the entity's <c>GenericVisualizer</c> for
-    /// <c>CETimedAppearanceVisuals.ActiveKey</c>.
+    /// <c>CEAnCEAnimationAppearanceVisuals.Key</c>.
     /// If <c>null</c>, no appearance change is proposed.
     /// </summary>
     [DataField, AutoNetworkedField]

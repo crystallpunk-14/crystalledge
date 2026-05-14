@@ -54,6 +54,12 @@ public abstract partial class CEGOAPAction
     public string? TargetKey;
 
     /// <summary>
+    /// Called once during entity map initialization.
+    /// Use it to perform one-time setup (e.g. granting action entities).
+    /// </summary>
+    public abstract void RaiseInit(EntityUid uid, IEntityManager entMan);
+
+    /// <summary>
     /// Checks whether this action can currently be executed (e.g. not on cooldown).
     /// Called by the planner to filter unavailable actions before planning.
     /// </summary>
@@ -80,6 +86,15 @@ public abstract partial class CEGOAPAction
 /// </summary>
 public abstract partial class CEGOAPActionBase<T> : CEGOAPAction where T : CEGOAPActionBase<T>
 {
+    public override void RaiseInit(EntityUid uid, IEntityManager entMan)
+    {
+        if (this is not T self)
+            return;
+
+        var ev = new CEGOAPActionInitEvent<T>(self);
+        entMan.EventBus.RaiseLocalEvent(uid, ref ev);
+    }
+
     public override bool RaiseCanExecute(EntityUid uid, IEntityManager entMan)
     {
         if (this is not T self)
@@ -118,6 +133,12 @@ public abstract partial class CEGOAPActionBase<T> : CEGOAPAction where T : CEGOA
         entMan.EventBus.RaiseLocalEvent(uid, ref ev);
     }
 }
+
+/// <summary>
+/// Raised once when the entity is initialized (MapInit). Used for one-time action setup.
+/// </summary>
+[ByRefEvent]
+public record struct CEGOAPActionInitEvent<T>(T Action) where T : CEGOAPActionBase<T>;
 
 /// <summary>
 /// Raised when a GOAP action begins execution.

@@ -79,6 +79,8 @@ public sealed partial class CEGOAPSystem : EntitySystem
             {
                 ent.Comp.WorldState[effect.Key] = false;
             }
+
+            action.RaiseInit(ent, EntityManager);
         }
 
         foreach (var goal in ent.Comp.Goals)

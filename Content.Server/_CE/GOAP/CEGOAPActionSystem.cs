@@ -14,10 +14,18 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionInitEvent<T>>(OnActionInit);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionCanExecuteEvent<T>>(OnCanExecute);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionStartupEvent<T>>(OnActionStartup);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionUpdateEvent<T>>(OnActionUpdate);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionShutdownEvent<T>>(OnActionShutdown);
+    }
+
+    /// <summary>
+    /// Called once during entity map initialization. Override to perform one-time setup.
+    /// </summary>
+    protected virtual void OnActionInit(Entity<CEGOAPComponent> ent, ref CEGOAPActionInitEvent<T> args)
+    {
     }
 
     /// <summary>

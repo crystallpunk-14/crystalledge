@@ -33,9 +33,15 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
         _worldTargetQuery = GetEntityQuery<WorldTargetActionComponent>();
     }
 
+    protected override void OnActionInit(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionInitEvent<CEGOAPUseAction> args)
+    {
+        FindOrGrantAction(ent, args.Action.ActionPrototype);
+    }
+
     /// <summary>
     /// During planning: check if the action is on cooldown.
-    /// If the action hasn't been granted yet, assume it's usable.
     /// </summary>
     protected override void OnCanExecute(
         Entity<CEGOAPComponent> ent,
@@ -43,7 +49,6 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
     {
         var actionEntity = FindActionEntity(ent, args.Action.ActionPrototype);
 
-        // Not yet granted — assume available
         if (actionEntity == null)
             return;
 
