@@ -119,7 +119,7 @@ public sealed class CEPacifismSystem : EntitySystem
         if (args.Args.Cancelled)
             return;
 
-        // Sender is the entity being drained (victim). Block when the victim is a player.
+        // Target is the entity being drained (victim), while User is the drainer. Block when the victim is a player.
         if (!HasComp<CEDungeonPlayerComponent>(args.Args.Target))
             return;
 

@@ -32,13 +32,12 @@ public sealed partial class CETimedAppearanceSystem : EntitySystem
     }
 
     /// <summary>
-    /// Activates a named visual state on <paramref name="entity"/> for <paramref name="duration"/> seconds,
-    /// then automatically restores the previous state.
+    /// Activates a named visual state on <paramref name="entity"/> for <paramref name="duration"/> seconds
     /// Only one timed appearance may be active at a time; calling again replaces the current override
     /// and restores the appearance to the state it had before the previous call.
     /// </summary>
     /// <param name="entity">The entity whose appearance to override.</param>
-    /// <param name="key">Named visual state to activate (e.g. "attack_open").</param>
+    /// <param name="key">Named visual state to activate</param>
     /// <param name="duration">How long the override lasts, in seconds.</param>
     [PublicAPI]
     public void SetTimedAppearance(EntityUid entity, string key, float duration)

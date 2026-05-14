@@ -8,15 +8,10 @@ namespace Content.Shared._CE.TimedAppearance;
 /// Tracks an in-progress timed appearance override on an entity.
 /// Added by <see cref="CETimedAppearanceSystem.SetTimedAppearance"/> and removed automatically
 /// when the timer expires or a new override is started.
-/// This component is server-side only and is never networked —
-/// visual propagation happens through <see cref="Robust.Shared.GameObjects.AppearanceComponent"/>.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class CETimedAppearanceComponent : Component
 {
-    /// <summary>
-    /// Server game time at which the override expires and appearance is restored.
-    /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     [AutoNetworkedField]
     public TimeSpan EndTime;
