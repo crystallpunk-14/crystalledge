@@ -33,8 +33,3 @@
   id: CEShockWave
   kind: source
   path: "/Textures/_CE/Shaders/shock_wave.swsl"
-
-- type: shader
-  id: CEScreechShockWave
-  kind: source
-  path: "/Textures/_CE/Shaders/screech_shock_wave.swsl"

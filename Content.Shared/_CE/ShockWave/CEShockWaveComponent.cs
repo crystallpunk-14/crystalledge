@@ -4,7 +4,7 @@ namespace Content.Shared._CE.ShockWave;
 
 [RegisterComponent, NetworkedComponent]
 [AutoGenerateComponentState]
-public sealed partial class CEShockWaveComponent  : Component
+public sealed partial class CEShockWaveComponent : Component
 {
     /// <summary>
     ///     The rate at which the wave fades, lower values means it's active for longer.
@@ -24,4 +24,3 @@ public sealed partial class CEShockWaveComponent  : Component
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public float Width = 0.8f;
 }
-

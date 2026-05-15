@@ -19,7 +19,7 @@ public sealed partial class ShockWaveVFX : CEEntityEffectBase<ShockWaveVFX>
     /// Seconds
     /// </summary>
     [DataField]
-    public float Time = 5;
+    public float Time = 1;
 }
 
 public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<ShockWaveVFX>
