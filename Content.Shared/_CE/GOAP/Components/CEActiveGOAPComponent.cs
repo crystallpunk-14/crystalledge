@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Shared._CE.GOAP.Components;
 
 /// <summary>
 /// Marker component for active GOAP-controlled NPCs.

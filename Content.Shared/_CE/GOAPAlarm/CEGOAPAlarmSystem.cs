@@ -1,16 +1,15 @@
-using Content.Server._CE.GOAP;
-using Robust.Server.GameObjects;
+using Content.Shared._CE.GOAP;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CE.GOAPAlarm;
+namespace Content.Shared._CE.GOAPAlarm;
 
 public sealed partial class CEGOAPAlarmSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

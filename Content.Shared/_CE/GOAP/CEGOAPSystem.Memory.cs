@@ -1,7 +1,7 @@
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Robust.Shared.Map;
 
-namespace Content.Server._CE.GOAP;
+namespace Content.Shared._CE.GOAP;
 
 /// <summary>
 /// Partial class for last-known-position management.
@@ -29,7 +29,7 @@ public sealed partial class CEGOAPSystem
         if (!ent.Comp.LastKnownPositions.Remove(key))
             return;
 
-        var current = ent.Comp.Targets.TryGetValue(key, out var t) ? t : null;
+        var current = ent.Comp.Targets.GetValueOrDefault(key);
         var ev = new CETargetChangedEvent(key, current);
         RaiseLocalEvent(ent, ref ev);
     }

@@ -1,10 +1,9 @@
 using System.Numerics;
-using Content.Server._CE.GOAPAlarm;
-using Content.Server._CE.ZLevels.Core;
-using Content.Shared._CE.GOAP;
-using Robust.Shared.Map;
+using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAPAlarm;
+using Content.Shared._CE.ZLevels.Core.EntitySystems;
 
-namespace Content.Server._CE.GOAP.Sensors;
+namespace Content.Shared._CE.GOAP.Sensors;
 
 public sealed partial class CEGOAPAlarmSensor : CEGOAPSensorBase<CEGOAPAlarmSensor>
 {
@@ -18,7 +17,7 @@ public sealed partial class CEGOAPAlarmSensor : CEGOAPSensorBase<CEGOAPAlarmSens
 public sealed partial class CEGOAPAlarmSensorSystem : CEGOAPSensorSystem<CEGOAPAlarmSensor>
 {
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CEZLevelsSystem _zLevel = default!;
+    [Dependency] private readonly CESharedZLevelsSystem _zLevel = default!;
 
     public override void Initialize()
     {

@@ -1,10 +1,10 @@
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.NPC;
 using Robust.Shared.Player;
 
-namespace Content.Server._CE.GOAP;
+namespace Content.Shared._CE.GOAP;
 
 public sealed partial class CEGOAPSystem
 {

@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Shared._CE.GOAP.Components;
 
 /// <summary>
 /// Added to entities that are currently selected as a GOAP target.

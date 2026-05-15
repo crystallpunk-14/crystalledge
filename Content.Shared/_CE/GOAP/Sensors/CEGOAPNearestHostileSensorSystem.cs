@@ -1,12 +1,12 @@
 using System.Numerics;
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Examine;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 
-namespace Content.Server._CE.GOAP.Sensors;
+namespace Content.Shared._CE.GOAP.Sensors;
 
 /// <summary>
 /// Finds the nearest hostile entity within vision range with line-of-sight check.

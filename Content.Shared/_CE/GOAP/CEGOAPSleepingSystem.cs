@@ -1,13 +1,12 @@
 using System.Numerics;
-using Content.Server._CE.GOAPAlarm;
-using Content.Server._CE.GOAP;
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAPAlarm;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Procedural.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server._CE.GOAP;
+namespace Content.Shared._CE.GOAP;
 
 /// <summary>
 /// Manages sleeping GOAP entities. Wakes them on:

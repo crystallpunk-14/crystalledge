@@ -2,7 +2,7 @@
 using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Shared._CE.GOAP.Components;
 
 /// <summary>
 /// CrystallEdge GOAP NPC Component. Contains goals, available actions, and sensors
@@ -21,21 +21,21 @@ public sealed partial class CEGOAPComponent : Component
     /// <summary>
     /// List of goals this entity can pursue.
     /// </summary>
-    [DataField(serverOnly: true)]
+    [DataField]
     [AlwaysPushInheritance]
     public List<CEGOAPGoal> Goals = new();
 
     /// <summary>
     /// Available actions this entity can perform.
     /// </summary>
-    [DataField(serverOnly: true)]
+    [DataField]
     [AlwaysPushInheritance]
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
     /// Sensors that update the world state each frame.
     /// </summary>
-    [DataField(serverOnly: true)]
+    [DataField]
     [AlwaysPushInheritance]
     public List<CEGOAPSensor> Sensors = new();
 

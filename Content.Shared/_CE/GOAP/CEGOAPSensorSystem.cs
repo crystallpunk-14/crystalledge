@@ -1,6 +1,6 @@
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 
-namespace Content.Server._CE.GOAP;
+namespace Content.Shared._CE.GOAP;
 
 /// <summary>
 /// Base EntitySystem for handling GOAP sensor events.

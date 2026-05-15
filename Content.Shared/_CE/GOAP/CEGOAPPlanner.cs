@@ -1,7 +1,6 @@
 using System.Numerics;
-using Content.Shared._CE.GOAP;
 
-namespace Content.Server._CE.GOAP;
+namespace Content.Shared._CE.GOAP;
 
 /// <summary>
 /// GOAP planner using forward A* search with bitmask-packed state.
@@ -34,7 +33,64 @@ public sealed class CEGOAPPlanner
     private readonly Dictionary<string, int> _keyMap = new();
     private readonly List<CompiledAction> _compiledActions = new();
     private readonly List<PlanNode> _nodes = new();
-    private readonly PriorityQueue<int, float> _openList = new();
+    private readonly MinHeap _openList = new();
+
+    private sealed class MinHeap
+    {
+        private readonly List<(float Priority, int Element)> _data = new();
+
+        public int Count => _data.Count;
+
+        public void Clear() => _data.Clear();
+
+        public void Enqueue(int element, float priority)
+        {
+            _data.Add((priority, element));
+            SiftUp(_data.Count - 1);
+        }
+
+        public int Dequeue()
+        {
+            var result = _data[0].Element;
+            var last = _data.Count - 1;
+            _data[0] = _data[last];
+            _data.RemoveAt(last);
+            if (_data.Count > 0)
+                SiftDown(0);
+            return result;
+        }
+
+        private void SiftUp(int i)
+        {
+            while (i > 0)
+            {
+                var parent = (i - 1) / 2;
+                if (_data[parent].Priority <= _data[i].Priority)
+                    break;
+                (_data[parent], _data[i]) = (_data[i], _data[parent]);
+                i = parent;
+            }
+        }
+
+        private void SiftDown(int i)
+        {
+            var count = _data.Count;
+            while (true)
+            {
+                var smallest = i;
+                var left = 2 * i + 1;
+                var right = 2 * i + 2;
+                if (left < count && _data[left].Priority < _data[smallest].Priority)
+                    smallest = left;
+                if (right < count && _data[right].Priority < _data[smallest].Priority)
+                    smallest = right;
+                if (smallest == i)
+                    break;
+                (_data[smallest], _data[i]) = (_data[i], _data[smallest]);
+                i = smallest;
+            }
+        }
+    }
     private readonly HashSet<int> _closedStates = new();
 
     /// <summary>
@@ -59,9 +115,8 @@ public sealed class CEGOAPPlanner
         var startBits = ToBitmask(currentState);
         ToBitmaskCondition(goalState, out var goalMask, out var goalRequired);
 
-        for (var i = 0; i < availableActions.Count; i++)
+        foreach (var action in availableActions)
         {
-            var action = availableActions[i];
             ToBitmaskCondition(action.Preconditions, out var precMask, out var precReq);
             ToBitmaskCondition(action.Effects, out var effMask, out var effReq);
             _compiledActions.Add(new CompiledAction
@@ -136,18 +191,26 @@ public sealed class CEGOAPPlanner
         List<CEGOAPAction> actions)
     {
         foreach (var key in currentState.Keys)
+        {
             TryAddKey(key);
+        }
 
         foreach (var key in goalState.Keys)
+        {
             TryAddKey(key);
+        }
 
         foreach (var action in actions)
         {
             foreach (var key in action.Preconditions.Keys)
+            {
                 TryAddKey(key);
+            }
 
             foreach (var key in action.Effects.Keys)
+            {
                 TryAddKey(key);
+            }
         }
     }
 

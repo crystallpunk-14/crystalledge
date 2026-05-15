@@ -1,6 +1,6 @@
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 
-namespace Content.Server._CE.GOAP.Sensors;
+namespace Content.Shared._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks if the current target is within a specified range.

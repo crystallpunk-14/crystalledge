@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Content.Server._CE.GOAP;
 using Content.Shared._CE.Soul.Components;
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;

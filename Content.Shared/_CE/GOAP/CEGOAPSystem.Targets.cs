@@ -1,6 +1,6 @@
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 
-namespace Content.Server._CE.GOAP;
+namespace Content.Shared._CE.GOAP;
 
 /// <summary>
 /// Partial class for target resolution, tracking.
@@ -23,7 +23,7 @@ public sealed partial class CEGOAPSystem
         if (targetKey == SelfTargetKey)
             return ent.Owner;
 
-        return ent.Comp.Targets.TryGetValue(targetKey, out var target) ? target : null;
+        return ent.Comp.Targets.GetValueOrDefault(targetKey);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public sealed partial class CEGOAPSystem
     /// </summary>
     public void SetTarget(Entity<CEGOAPComponent> ent, string key, EntityUid? target)
     {
-        var old = ent.Comp.Targets.TryGetValue(key, out var prev) ? prev : null;
+        var old = ent.Comp.Targets.GetValueOrDefault(key);
         ent.Comp.Targets[key] = target;
 
         if (target == old)

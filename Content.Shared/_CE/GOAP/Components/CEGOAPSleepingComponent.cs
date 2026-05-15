@@ -1,7 +1,6 @@
 using Robust.Shared.GameStates;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Shared._CE.GOAP.Components;
 
 /// <summary>
 /// Marker component for sleeping GOAP NPCs. While present, prevents the entity from

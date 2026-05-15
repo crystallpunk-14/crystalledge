@@ -1,4 +1,4 @@
-﻿using Content.Shared._CE.GOAP;
+﻿using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Music;
 using Content.Shared.CCVar;
 using Robust.Client.Player;
@@ -6,7 +6,6 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Console;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
