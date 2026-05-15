@@ -65,3 +65,7 @@
       damage:
         types:
           Physical: 5
+    - !type:ShockWaveVFX
+      width: 0.8
+      sharpness: 10
+      falloffPower: 40
