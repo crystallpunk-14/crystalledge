@@ -5,6 +5,8 @@ uniform highp vec2[10] position;
 uniform highp float[10] sharpness;
 uniform highp float[10] width;
 uniform highp float[10] falloffPower;
+// Seconds elapsed since each wave spawned, computed on the CPU to avoid GPU/CPU clock skew.
+uniform highp float[10] localTime;
 
 void fragment() {
     highp vec2 coord = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
@@ -21,8 +23,8 @@ void fragment() {
         // removes the first few frames of the "animation"
         Dist = max(Dist, 0.13);
 
-        highp float offset = (TIME - floor(TIME)) / TIME;
-        highp float CurrentTime = TIME * offset;
+        // Per-wave local time: seconds since this wave spawned, clamped to avoid division by zero.
+        highp float CurrentTime = max(localTime[i], 0.001);
 
         if (Dist <= (CurrentTime + 0.1) && Dist >= (CurrentTime - 0.1)) {
             highp float Diff = Dist - CurrentTime;

@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._CE.ShockWave;
 
 [RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState]
+[AutoGenerateComponentState(true)]
 public sealed partial class CEShockWaveComponent : Component
 {
     /// <summary>
@@ -23,4 +23,11 @@ public sealed partial class CEShockWaveComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public float Width = 0.8f;
+
+    /// <summary>
+    ///     How long (in seconds) the visual wave animation should last in the overlay.
+    ///     Should match the entity's TimedDespawnComponent lifetime.
+    /// </summary>
+    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
+    public float Duration = 1.0f;
 }

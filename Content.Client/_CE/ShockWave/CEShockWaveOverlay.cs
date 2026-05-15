@@ -1,17 +1,17 @@
+using System.Collections.Generic;
 using System.Numerics;
-using Content.Shared._CE.ShockWave;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Client._CE.ShockWave;
 
-public sealed class CEShockWaveOverlay : Overlay, IEntityEventSubscriber
+public sealed class CEShockWaveOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-
-    private SharedTransformSystem? _xformSystem;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -21,9 +21,29 @@ public sealed class CEShockWaveOverlay : Overlay, IEntityEventSubscriber
     private readonly EntProtoId _shaderProto = "CEShockWave";
 
     /// <summary>
-    ///     Maximum number of distortions that can be shown on screen at a time.
+    ///     Maximum number of waves that can be shown on screen at a time.
     /// </summary>
     public const int MaxCount = 10;
+
+    private readonly List<WaveEntry> _activeWaves = new();
+
+    private readonly Vector2[] _positions = new Vector2[MaxCount];
+    private readonly float[] _falloffPower = new float[MaxCount];
+    private readonly float[] _sharpness = new float[MaxCount];
+    private readonly float[] _width = new float[MaxCount];
+    private readonly float[] _localTime = new float[MaxCount];
+    private int _count;
+
+    private struct WaveEntry
+    {
+        public Vector2 WorldPosition;
+        public MapId MapId;
+        public float FalloffPower;
+        public float Sharpness;
+        public float Width;
+        public float SpawnTime;
+        public float Duration;
+    }
 
     public CEShockWaveOverlay()
     {
@@ -31,38 +51,54 @@ public sealed class CEShockWaveOverlay : Overlay, IEntityEventSubscriber
         _shader = _prototypeManager.Index<ShaderPrototype>(_shaderProto).Instance().Duplicate();
     }
 
-    private readonly Vector2[] _positions = new Vector2[MaxCount];
-    private readonly float[] _falloffPower = new float[MaxCount];
-    private readonly float[] _sharpness = new float[MaxCount];
-    private readonly float[] _width = new float[MaxCount];
-    private int _count;
+    /// <summary>
+    ///     Registers a new shockwave at the given world position. The wave animation
+    ///     plays independently from its spawn time and continues even after the source
+    ///     entity is removed.
+    /// </summary>
+    public void AddWave(Vector2 worldPosition, MapId mapId, float falloffPower, float sharpness, float width, float duration)
+    {
+        _activeWaves.Add(new WaveEntry
+        {
+            WorldPosition = worldPosition,
+            MapId = mapId,
+            FalloffPower = falloffPower,
+            Sharpness = sharpness,
+            Width = width,
+            SpawnTime = (float) _timing.RealTime.TotalSeconds,
+            Duration = duration,
+        });
+    }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        if (args.Viewport.Eye == null || _xformSystem is null && !_entMan.TrySystem(out _xformSystem))
+        if (args.Viewport.Eye == null)
             return false;
 
-        var query = _entMan.EntityQueryEnumerator<CEShockWaveComponent, TransformComponent>();
+        var now = (float) _timing.RealTime.TotalSeconds;
+
+        // Remove entries whose animation has fully elapsed.
+        _activeWaves.RemoveAll(w => now - w.SpawnTime >= w.Duration);
 
         _count = 0;
 
-        while (query.MoveNext(out var uid, out var distortion, out var xform))
+        foreach (var wave in _activeWaves)
         {
-            if (xform.MapID != args.MapId)
+            if (wave.MapId != args.MapId)
                 continue;
 
-            var mapPos = _xformSystem.GetWorldPosition(uid);
+            var tempCoords = args.Viewport.WorldToLocal(wave.WorldPosition);
 
-            var tempCoords = args.Viewport.WorldToLocal(mapPos);
-
-            // normalized coords, 0 - 1 plane. This is pure hell, we subtract 1 because fragment calculates from the bottom and local goes from the top of the viewport
+            // Normalized coords on the 0–1 plane. Y is flipped because the fragment shader
+            // calculates from the bottom while viewport local space goes from the top.
             tempCoords.Y = 1 - (tempCoords.Y / args.Viewport.Size.Y);
             tempCoords.X /= args.Viewport.Size.X;
 
             _positions[_count] = tempCoords;
-            _falloffPower[_count] = distortion.FalloffPower;
-            _sharpness[_count] = distortion.Sharpness;
-            _width[_count] = distortion.Width;
+            _falloffPower[_count] = wave.FalloffPower;
+            _sharpness[_count] = wave.Sharpness;
+            _width[_count] = wave.Width;
+            _localTime[_count] = now - wave.SpawnTime;
             _count++;
 
             if (_count == MaxCount)
@@ -83,6 +119,7 @@ public sealed class CEShockWaveOverlay : Overlay, IEntityEventSubscriber
         _shader?.SetParameter("falloffPower", _falloffPower);
         _shader?.SetParameter("sharpness", _sharpness);
         _shader?.SetParameter("width", _width);
+        _shader?.SetParameter("localTime", _localTime);
         _shader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
         var worldHandle = args.WorldHandle;

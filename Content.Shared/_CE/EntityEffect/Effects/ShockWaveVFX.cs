@@ -40,6 +40,7 @@ public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<Sh
         shockWave.Sharpness = args.Effect.Sharpness;
         shockWave.Width = args.Effect.Width;
         shockWave.FalloffPower = args.Effect.FalloffPower;
+        shockWave.Duration = args.Effect.Time;
         Dirty(vfx, shockWave);
 
         var lifetime = EnsureComp<TimedDespawnComponent>(vfx);
