@@ -57,4 +57,4 @@
       attackType: Ranged
       damage:
         types:
-          Physical: 50
+          Physical: 150

@@ -74,12 +74,28 @@ public sealed class CEDestructibleSystem : EntitySystem
         _pendingDestruction.Enqueue((ent.Owner, args.Source));
     }
 
+    /// <summary>
+    /// Bypasses damage checks and enqueues the entity for destruction directly.
+    /// </summary>
+    public void ForceDestruct(EntityUid uid, EntityUid? source)
+    {
+        if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
+            return;
+
+        _pendingDestruction.Enqueue((uid, source));
+    }
+
     private void ProcessDestruction(EntityUid uid, EntityUid? source)
     {
         if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
             return;
 
         if (!TryComp<CEDestructibleComponent>(uid, out var comp))
+            return;
+
+        var attemptEv = new CEDestructAttemptEvent(source);
+        RaiseLocalEvent(uid, ref attemptEv);
+        if (attemptEv.Cancelled)
             return;
 
         var xform = Transform(uid);
@@ -216,6 +232,16 @@ public sealed class CEDestructibleSystem : EntitySystem
             ScatterDroppedItem(stored, position);
         }
     }
+}
+
+/// <summary>
+/// Raised on an entity just before it is destroyed by <see cref="CEDestructibleSystem"/>.
+/// Can be cancelled to prevent destruction — e.g. to play a death animation first.
+/// </summary>
+[ByRefEvent]
+public record struct CEDestructAttemptEvent(EntityUid? Source)
+{
+    public bool Cancelled;
 }
 
 /// <summary>

@@ -41,6 +41,7 @@
           default: { state: idle }
           attack: { state: attack }
           jump: { state: jump }
+          death: { state: sad }
   - type: CEAnimationController
   - type: CEIdleAnimation
     animation:
@@ -53,6 +54,8 @@
         scale: 2.1, 1.9
   - type: CEGOAPAlarmAnimation
     animation: GiantSlimeAlarm
+  - type: CEDestructibleAnimation
+    animation: GiantSlimeDeath
   - type: CEDestructible
     destroyThreshold: 500
   - type: Fixtures
@@ -212,6 +215,45 @@
     - !type:ShockWaveVFX
       effectTarget: User
       width: 0.5
+
+
+- type: entityEffectAnimation
+  id: GiantSlimeDeath
+  movementSpeed: 0
+  duration: 1
+  lockRotation: true
+  events:
+    0:
+    - !type:SetTimedAppearance
+      key: death
+      duration: 10
+    - !type:UserAnimation
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.1, 0
+      - time: 0.1
+        offset: -0.1, 0
+      - time: 0.2
+        offset: 0.1, 0
+      - time: 0.3
+        offset: -0.1, 0
+      - time: 0.4
+        offset: 0.1, 0
+      - time: 0.5
+        offset: -0.1, 0
+      - time: 0.6
+        offset: 0.1, 0
+      - time: 0.7
+        offset: -0.1, 0
+      - time: 0.8
+        offset: 0.1, 0
+      - time: 0.9
+        offset: -0.1, 0
+      scaleAnimation:
+      - time: 0.0
+        scale: 2, 2
+      - time: 0.9
+        scale: 2.3, 1.7
 
 
 # Attack 1 -spread shot

@@ -18,6 +18,9 @@
       "directions": 4
     },
     {
+      "name": "sad"
+    },
+    {
       "name": "jump",
       "directions": 4
     }
