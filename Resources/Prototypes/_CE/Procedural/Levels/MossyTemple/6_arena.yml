@@ -8,9 +8,9 @@
   - BaseMossyTemplePostProcess
   name: ce-dungeon-arena-name
   desc: ce-dungeon-arena-desc
-  uiPosition: 12,1
+  uiPosition: 14,1
   exits:
-    1: MossyTemple6_Pvp
+    1: MossyTemple7_Pvp
   config:
     !type:CERandomZNetworkConfig
     variants:

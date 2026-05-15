@@ -1,4 +1,22 @@
 - type: entity
+  parent: MarkerBase
+  id: CEMobBossSlimeSpawner
+  name: Giant crystal slime Spawner
+  suffix: Boss
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: idle
+      sprite: _CE/Mobs/Bosses/giant_slime.rsi
+      color: "#ffffff42"
+      scale: 2, 2
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobBossSlime
+
+- type: entity
   parent:
   - BaseMob
   - CEMobDamageable

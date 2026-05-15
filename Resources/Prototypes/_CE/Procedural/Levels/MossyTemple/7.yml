@@ -1,9 +1,9 @@
 ﻿- type: dungeonLevel
-  id: MossyTemple6_Pvp
+  id: MossyTemple7_Pvp
   parent:
   - BaseMossyTemplePostProcessDangerous
-  name: ce-dungeon-mossy-dungeon-6-name
-  uiPosition: 14,1
+  name: ce-dungeon-mossy-dungeon-maze
+  uiPosition: 16,1
   maxEntryTime: 300
   exits:
     1: Arena
@@ -72,6 +72,9 @@
     - proto: CEMobGnome
       cost: 4
       weight: 0.2
+    - proto: CEMobBossSlime
+      cost: 10
+      weight: 0.3
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleHerbs
     budget: 5

@@ -16,7 +16,9 @@ ce-dungeon-mossy-dungeon-2-name = Mossy Dungeons - II
 ce-dungeon-mossy-dungeon-3-name = Mossy Dungeons - III
 ce-dungeon-mossy-dungeon-4-name = Mossy Dungeons - IV
 
+ce-dungeon-mossy-dungeon-boss = Boss
+
 ce-dungeon-arena-name = Arena of the Fallen
 ce-dungeon-arena-desc = You've reached the final stage. Prove your strength.
 
-ce-dungeon-mossy-dungeon-6-name = Infinity maze
+ce-dungeon-mossy-dungeon-maze = Infinity maze

@@ -1,9 +1,0 @@
-- type: entity
-  parent: CEWallStoneBrick
-  id: CEWallStoneBrickBossDelete
-  components:
-  - type: Sprite
-    color: "#ff0000"
-  - type: CEEffectOnBossFightEnd
-    effects:
-    - !type:Delete

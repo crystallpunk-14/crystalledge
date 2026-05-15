@@ -16,7 +16,9 @@ ce-dungeon-mossy-dungeon-2-name = Заросшие подземелья - II
 ce-dungeon-mossy-dungeon-3-name = Заросшие подземелья - III
 ce-dungeon-mossy-dungeon-4-name = Заросшие подземелья - IV
 
+ce-dungeon-mossy-dungeon-boss = Босс
+
 ce-dungeon-arena-name = Арена павших
 ce-dungeon-arena-desc = Вы достигли финала. Докажите свою силу.
 
-ce-dungeon-mossy-dungeon-6-name = Бесконечные коридоры
+ce-dungeon-mossy-dungeon-maze = Бесконечные коридоры

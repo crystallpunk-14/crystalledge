@@ -1,0 +1,27 @@
+- type: dungeonLevel
+  id: MossyTempleBoss
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi #TODO
+    state: boss
+  parent:
+  - BaseMossyTemplePostProcess
+  name: ce-dungeon-mossy-dungeon-boss
+  uiPosition: 12,1
+  exits:
+    1: Arena
+  config:
+    !type:CERandomZNetworkConfig
+    variants:
+      MossyTempleBoss: 1
+
+- type: zMap
+  id: MossyTempleBoss
+  maps:
+  - /Maps/_CE/Dungeon/Boss1GiantSlimeBasic/Boss1GiantSlimeBasic0.yml
+  - /Maps/_CE/Dungeon/Boss1GiantSlimeBasic/Boss1GiantSlimeBasic1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true

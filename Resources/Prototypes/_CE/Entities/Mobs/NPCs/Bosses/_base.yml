@@ -9,3 +9,6 @@
   - type: NpcFactionMember
     factions:
     - SimpleHostile
+  - type: CESoulDropOnDeath
+    souls: 25
+    scatterSpeed: 50

@@ -6,7 +6,7 @@
   uiPosition: 10,0
   maxEntryTime: 180
   exits:
-    1: Arena
+    1: MossyTempleBoss
   config:
     !type:CEProceduralConfig
     generationPlan:

@@ -15,7 +15,33 @@ public sealed class CEBossSystem : EntitySystem
         SubscribeLocalEvent<CEBossComponent, CETargetChangedEvent>(OnTargetChanged);
         SubscribeLocalEvent<CEBossComponent, CEDestructedEvent>(OnDestructed);
 
+        SubscribeLocalEvent<CEBossBattleStartedEvent>(OnStartFight);
         SubscribeLocalEvent<CEBossBattleEndedEvent>(OnEndFight);
+    }
+
+    private void OnStartFight(CEBossBattleStartedEvent ev)
+    {
+        // Start fights effects on that map
+        var query = EntityQueryEnumerator<CEEffectOnBossFightStartComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var startEffect, out var xform))
+        {
+            if (xform.MapID != ev.MapId)
+                continue;
+
+            var effectArgs = new CEEntityEffectArgs(
+                EntityManager,
+                uid,
+                null,
+                Angle.Zero,
+                1f,
+                uid,
+                Transform(uid).Coordinates);
+
+            foreach (var effect in startEffect.Effects)
+            {
+                effect.Effect(effectArgs);
+            }
+        }
     }
 
     private void OnEndFight(CEBossBattleEndedEvent ev)

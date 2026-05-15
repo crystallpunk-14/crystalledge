@@ -1,0 +1,50 @@
+- type: entity
+  parent: CEWallStoneBrick
+  id: CEWallBossEndDelete
+  suffix: Deleted on END boss fight
+  components:
+  - type: Sprite
+    color: "#ff7f7f"
+  - type: CEEffectOnBossFightEnd
+    effects:
+    - !type:Delete
+
+- type: entity
+  parent: CEWallStoneBrick
+  id: CEWallBossStartDelete
+  suffix: Deleted on START boss fight
+  components:
+  - type: Sprite
+    color: "#ff7f7f"
+  - type: CEEffectOnBossFightStart
+    effects:
+    - !type:Delete
+
+- type: entity
+  parent: CEIronDoor
+  id: CEBossDoorStartDelete
+  name: boss door
+  description: This door looks like it leads to a boss fight. Are you sure you want to open it?
+  suffix: Deleted on START boss fight
+  components:
+  - type: Sprite
+    color: "#ff7f7f"
+  - type: CEEffectOnBossFightStart
+    effects:
+    - !type:Delete
+
+- type: entity
+  parent: CEBossDoorStartDelete
+  id: CEBossDoorMirroredStartDelete
+  suffix: Deleted on START boss fight, Mirrored
+  components:
+  - type: Door
+    openSpriteState: open_mirrored
+    closedSpriteState: closed_mirrored
+    openingSpriteState: open_mirrored
+    closingSpriteState: closed_mirrored
+  - type: Sprite
+    color: "#ff7f7f"
+  - type: CEEffectOnBossFightStart
+    effects:
+    - !type:Delete
