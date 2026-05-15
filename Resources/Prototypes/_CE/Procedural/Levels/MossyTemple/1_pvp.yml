@@ -4,6 +4,7 @@
   - BaseMossyTemplePostProcessDangerous
   name: ce-dungeon-mossy-dungeon-1-name
   uiPosition: 2,2
+  maxEntryTime: 96 # 40% from 4 minutes (Average time to complete level)
   exits:
     1: MossyTemple2_Pvp
   config:

@@ -26,7 +26,6 @@ public sealed partial class CEDungeonInstanceSystem
 
         var mapIds = GetInstanceMapIds(anchorUid);
 
-        // Initialize entry point deactivation timers (stable levels never expire).
         var dungeonQuery = EntityQueryEnumerator<CEDungeonEntryPointComponent, TransformComponent>();
         while (dungeonQuery.MoveNext(out _, out var entry, out var xform))
         {
@@ -34,13 +33,9 @@ public sealed partial class CEDungeonInstanceSystem
                 continue;
 
             if (proto.Stable)
-            {
-                entry.Stable = true;
-            }
-            else
-            {
-                entry.DeactivateAt = _timing.CurTime + entry.ActiveDuration;
-            }
+                entry.OneTimeUse = false;
+
+            entry.DeactivateAt = proto.MaxEntryTime is not null ? _timing.CurTime + proto.MaxEntryTime.Value : TimeSpan.MaxValue;
         }
 
         Log.Info($"registered instance '{proto.ID}' on entity {anchorUid} (stable={proto.Stable}).");
@@ -86,7 +81,7 @@ public sealed partial class CEDungeonInstanceSystem
             if (!entry.Active)
                 continue;
 
-            if (!entry.Stable && curTime >= entry.DeactivateAt)
+            if (entry.OneTimeUse && curTime >= entry.DeactivateAt)
             {
                 entry.Active = false;
                 continue;

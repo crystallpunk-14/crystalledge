@@ -19,7 +19,7 @@ public sealed partial class CEDungeonEntryPointComponent : Component
     /// If stable - never deactivates. Used for stable safezones.
     /// </summary>
     [DataField]
-    public bool Stable = false;
+    public bool OneTimeUse = true;
 
     /// <summary>
     /// Game time after which this entry automatically deactivates.
@@ -27,11 +27,4 @@ public sealed partial class CEDungeonEntryPointComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan DeactivateAt = TimeSpan.MaxValue;
-
-    /// <summary>
-    /// How long after instance creation the entry stays active.
-    /// Used by the instance system to compute <see cref="DeactivateAt"/>.
-    /// </summary>
-    [DataField]
-    public TimeSpan ActiveDuration = TimeSpan.FromMinutes(2);
 }

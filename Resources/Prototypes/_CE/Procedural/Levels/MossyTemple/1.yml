@@ -4,6 +4,7 @@
   - BaseMossyTemplePostProcessPeaceful
   name: ce-dungeon-mossy-temple-1-name
   uiPosition: 2,0
+  maxEntryTime: 120 # 40% from 5 minutes (Average time to complete level)
   exits:
     1: MossyTemple2
   config:

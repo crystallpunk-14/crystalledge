@@ -63,6 +63,12 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     public bool Stable;
 
     /// <summary>
+    /// How long must elapse before the level starts for all entry points to be deactivated? Leave null to infinite
+    /// </summary>
+    [DataField]
+    public TimeSpan? MaxEntryTime;
+
+    /// <summary>
     /// When true, the level is auto-generated at round start and registered as an instance.
     /// Used for entry levels: the default game map can be a placeholder (e.g. <c>Empty</c>),
     /// and players spawn into the round-start dungeon level via its embedded spawn points.

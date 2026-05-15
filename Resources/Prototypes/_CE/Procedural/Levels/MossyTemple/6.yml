@@ -4,6 +4,7 @@
   - BaseMossyTemplePostProcessDangerous
   name: ce-dungeon-mossy-dungeon-6-name
   uiPosition: 14,1
+  maxEntryTime: 300
   exits:
     1: Arena
   config:

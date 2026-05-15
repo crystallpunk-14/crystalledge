@@ -65,7 +65,7 @@ public sealed partial class CEDungeonInstanceSystem
         if (!TryResolveInstance(xform.MapUid, out var instance))
             return false;
 
-        if (!_proto.TryIndex<CEDungeonLevelPrototype>(instance.PrototypeId, out var ownerProto))
+        if (!_proto.TryIndex(instance.PrototypeId, out var ownerProto))
             return false;
 
         if (!ownerProto.Exits.TryGetValue(ent.Comp.TargetLevel, out var targetId))
@@ -124,7 +124,7 @@ public sealed partial class CEDungeonInstanceSystem
         while (query.MoveNext(out var uid, out var passage))
         {
             if (passage.NextTransitionTime > _timing.CurTime)
-                continue; //Not ready for transition yet
+                continue;
 
             passage.NextTransitionTime = _timing.CurTime + passage.TransitionDelay;
 
@@ -186,8 +186,8 @@ public sealed partial class CEDungeonInstanceSystem
         if (TryFindEnterPoint(proto, out var targetEntry))
         {
             if (!proto.Stable)
-                targetEntry.Value.Comp.Active = false; //Disable that entry point
-            activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates; //Set target coordinates
+                targetEntry.Value.Comp.Active = false;
+            activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates;
         }
         else
         {
@@ -197,10 +197,6 @@ public sealed partial class CEDungeonInstanceSystem
         }
     }
 
-    /// <summary>
-    /// Gathers player entities near the exit, limited by throughput.
-    /// Uses the generic <see cref="EntityLookupSystem.GetEntitiesInRange{T}"/> overload.
-    /// </summary>
     private List<EntityUid> GatherNearbyPlayers(EntityUid origin, float radius, int maxCount)
     {
         var nearby = _lookup.GetEntitiesInRange<CEDungeonPlayerComponent>(_transform.GetMapCoordinates(origin), radius);
