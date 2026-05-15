@@ -47,6 +47,9 @@ public sealed partial class CEIdleWalkAnimationSystem : EntitySystem
         var query = EntityQueryEnumerator<CEAnimationControllerComponent, PhysicsComponent>();
         while (query.MoveNext(out var uid, out var controller, out var physics))
         {
+            if (TerminatingOrDeleted(uid))
+                continue;
+
             // Skip player-controlled entities — they update via SpriteMoveEvent.
             if (HasComp<InputMoverComponent>(uid))
                 continue;
@@ -63,6 +66,9 @@ public sealed partial class CEIdleWalkAnimationSystem : EntitySystem
 
     private void OnSpriteMoveEvent(Entity<CEAnimationControllerComponent> ent, ref SpriteMoveEvent args)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         var state = EnsureComp<CEMovementStateComponent>(ent);
         if (state.IsMoving == args.IsMoving)
             return;
