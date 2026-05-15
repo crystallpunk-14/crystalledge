@@ -3,11 +3,10 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobBossBase
   id: CEMobBossSlime
   name: giant crystal slime
   description: TODO
-  suffix: Boss
-  categories: [ ForkFiltered ]
   components:
   - type: Sprite
     drawdepth: Mobs
@@ -24,7 +23,6 @@
           default: { state: idle }
           attack: { state: attack }
           jump: { state: jump }
-  - type: CEBossHealthBar
   - type: CEAnimationController
   - type: CEIdleAnimation
     animation:
@@ -124,9 +122,6 @@
     - !type:CEGOAPAlarmSensor
       outputTargetKey: enemy
 
-  - type: NpcFactionMember
-    factions:
-    - SimpleHostile
   - type: MovementSpeedModifier
     baseSprintSpeed: 2
   - type: CEPermanentStatusEffects

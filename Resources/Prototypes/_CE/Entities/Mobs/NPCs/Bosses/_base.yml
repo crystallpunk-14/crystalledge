@@ -1,0 +1,11 @@
+- type: entity
+  id: CEMobBossBase
+  suffix: Boss
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEBossHealthBar
+  - type: CEBoss
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
