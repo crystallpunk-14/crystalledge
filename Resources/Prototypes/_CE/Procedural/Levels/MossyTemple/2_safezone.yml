@@ -13,8 +13,9 @@
     1: MossyTemple3
     2: MossyTemple3_Pvp
   config:
-    !type:CEStaticZNetworkConfig
-    zMapProto: MossyTempleSafe
+    !type:CERandomZNetworkConfig
+    variants:
+      MossyTempleSafe: 1
   postProcess:
   # LOOT
   - !type:CETableBudgetSpawnPostProcess

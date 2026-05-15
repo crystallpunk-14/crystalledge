@@ -12,8 +12,9 @@
   exits:
     1: MossyTemple6_Pvp
   config:
-    !type:CEStaticZNetworkConfig
-    zMapProto: Arena
+    !type:CERandomZNetworkConfig
+    variants:
+      Arena: 1
 
 - type: zMap
   id: Arena

@@ -15,8 +15,9 @@
     1: MossyTemple1
     2: MossyTemple1_Pvp
   config:
-    !type:CEStaticZNetworkConfig
-    zMapProto: CELevel0Entry
+    !type:CERandomZNetworkConfig
+    variants:
+      CELevel0Entry: 1
 
 - type: zMap
   id: CELevel0Entry
