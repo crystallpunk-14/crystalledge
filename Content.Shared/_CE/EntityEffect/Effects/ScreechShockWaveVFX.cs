@@ -4,16 +4,16 @@ using Robust.Shared.Spawners;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
-public sealed partial class ShockWaveVFX : CEEntityEffectBase<ShockWaveVFX>
+public sealed partial class ScreechShockWaveVFX : CEEntityEffectBase<ScreechShockWaveVFX>
 {
     [DataField]
-    public float Sharpness = 10;
+    public float WaveSpeed = 15.3f;
 
     [DataField]
-    public float Width = 0.8f;
+    public float WaveStrength = 1.08f;
 
     [DataField]
-    public float FalloffPower = 40f;
+    public float DownScale  = 1.5f;
 
     /// <summary>
     /// Seconds
@@ -22,11 +22,11 @@ public sealed partial class ShockWaveVFX : CEEntityEffectBase<ShockWaveVFX>
     public float Time = 5;
 }
 
-public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<ShockWaveVFX>
+public sealed partial class CEScreechShockWaveVFXEffectSystem : CEEntityEffectSystem<ScreechShockWaveVFX>
 {
     [Dependency] private readonly INetManager _net = default!;
 
-    protected override void Effect(ref CEEntityEffectEvent<ShockWaveVFX> args)
+    protected override void Effect(ref CEEntityEffectEvent<ScreechShockWaveVFX> args)
     {
         if (!TryResolveEffectCoordinates(args.Args, args.Effect.EffectTarget, out var coords))
             return;
@@ -35,11 +35,11 @@ public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<Sh
             return;
 
         var vfx = Spawn(null, coords);
-        var shockWave = EnsureComp<CEShockWaveComponent>(vfx);
+        var shockWave = EnsureComp<CEScreechShockWaveComponent>(vfx);
 
-        shockWave.Sharpness = args.Effect.Sharpness;
-        shockWave.Width = args.Effect.Width;
-        shockWave.FalloffPower = args.Effect.FalloffPower;
+        shockWave.WaveSpeed = args.Effect.WaveSpeed;
+        shockWave.WaveStrength = args.Effect.WaveStrength;
+        shockWave.DownScale = args.Effect.DownScale;
         Dirty(vfx, shockWave);
 
         var lifetime = EnsureComp<TimedDespawnComponent>(vfx);

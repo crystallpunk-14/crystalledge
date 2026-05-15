@@ -4,24 +4,23 @@ namespace Content.Shared._CE.ShockWave;
 
 [RegisterComponent, NetworkedComponent]
 [AutoGenerateComponentState]
-public sealed partial class CEShockWaveComponent  : Component
+public sealed partial class CEScreechShockWaveComponent : Component
 {
     /// <summary>
-    ///     The rate at which the wave fades, lower values means it's active for longer.
+    /// The speed of each individual wave from the center axis.
     /// </summary>
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
-    public float FalloffPower = 40.0f;
+    public float WaveSpeed = 15.3f;
 
     /// <summary>
-    ///     How sharp the wave distortion is. Higher values make the wave more pronounced.
+    /// The size of each wave in its width and distortion effect
     /// </summary>
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
-    public float Sharpness = 10.0f;
+    public float WaveStrength = 1.0f;
 
     /// <summary>
-    ///     Width of the wave.
+    /// The scale of the effect, lower number means a larger total area while smaller numbers downscale it and reduce the effected area.
     /// </summary>
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
-    public float Width = 0.8f;
+    public float DownScale = 1.5f;
 }
-

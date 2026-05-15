@@ -11,6 +11,7 @@ public sealed partial class CEShockWaveSystem : EntitySystem
         base.Initialize();
 
         _overlay.AddOverlay(new CEShockWaveOverlay());
+        _overlay.AddOverlay(new CEScreechShockWaveOverlay());
     }
 
     public override void Shutdown()
@@ -18,5 +19,6 @@ public sealed partial class CEShockWaveSystem : EntitySystem
         base.Shutdown();
 
         _overlay.RemoveOverlay<CEShockWaveOverlay>();
+        _overlay.RemoveOverlay<CEScreechShockWaveOverlay>();
     }
 }
