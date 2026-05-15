@@ -1,4 +1,3 @@
-using System.Numerics;
 using Content.Shared._CE.AnimationController;
 using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.Animations;
@@ -19,62 +18,39 @@ internal static class CEAnimationTrackBuilders
     /// <param name="keyframes">Keyframe list from the effect data.</param>
     /// <param name="speedMult">Inverse of playback speed (1 / speed).</param>
     /// <param name="rotateBy">Optional world angle to rotate each offset vector by (used for weapon swing effects).</param>
-    /// <param name="seekOffset">Seconds (real time) to seek forward into the animation. Used for lag catchup.</param>
     public static Robust.Client.Animations.Animation BuildOffsetAnimation(
         List<CEOffsetKeyframe> keyframes,
         float speedMult,
-        Angle rotateBy = default,
-        float seekOffset = 0f)
+        Angle rotateBy = default)
     {
-        var track = new AnimationTrackComponentProperty
-        {
-            ComponentType = typeof(SpriteComponent),
-            Property = nameof(SpriteComponent.Offset),
-            InterpolationMode = AnimationInterpolationMode.Linear,
-            KeyFrames = { },
-        };
-
-        float duration;
-        if (seekOffset > 0f && keyframes.Count > 0)
-        {
-            var localSeek = Math.Min(seekOffset / speedMult, keyframes[^1].Time);
-            var snapVal = SeekInterpolateOffset(keyframes, localSeek, rotateBy);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(snapVal, 0f, p => p));
-
-            var startIdx = 0;
-            while (startIdx < keyframes.Count && keyframes[startIdx].Time <= localSeek)
-                startIdx++;
-
-            var prevTime = localSeek;
-            for (var i = startIdx; i < keyframes.Count; i++)
-            {
-                var kf = keyframes[i];
-                var offset = rotateBy != default ? rotateBy.RotateVec(kf.Offset) : kf.Offset;
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(offset, delta, GetEasing(kf.Easing)));
-            }
-
-            duration = Math.Max((keyframes[^1].Time - localSeek + 0.1f) * speedMult, 0.05f);
-        }
-        else
-        {
-            duration = CalculateDuration(keyframes, speedMult);
-            var prevTime = 0f;
-            foreach (var kf in keyframes)
-            {
-                var offset = rotateBy != default ? rotateBy.RotateVec(kf.Offset) : kf.Offset;
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(offset, delta, GetEasing(kf.Easing)));
-            }
-        }
-
-        return new Robust.Client.Animations.Animation
+        var duration = CalculateDuration(keyframes, speedMult);
+        var animation = new Robust.Client.Animations.Animation
         {
             Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks = { track },
+            AnimationTracks =
+            {
+                new AnimationTrackComponentProperty
+                {
+                    ComponentType = typeof(SpriteComponent),
+                    Property = nameof(SpriteComponent.Offset),
+                    InterpolationMode = AnimationInterpolationMode.Linear,
+                    KeyFrames = { },
+                },
+            },
         };
+
+        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
+        var prevTime = 0f;
+
+        foreach (var kf in keyframes)
+        {
+            var offset = rotateBy != default ? rotateBy.RotateVec(kf.Offset) : kf.Offset;
+            var delta = (kf.Time - prevTime) * speedMult;
+            prevTime = kf.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(offset, delta, GetEasing(kf.Easing)));
+        }
+
+        return animation;
     }
 
     /// <summary>
@@ -83,172 +59,107 @@ internal static class CEAnimationTrackBuilders
     /// <param name="keyframes">Keyframe list from the effect data.</param>
     /// <param name="speedMult">Inverse of playback speed.</param>
     /// <param name="baseAngle">Base angle added to every keyframe rotation (world orientation).</param>
-    /// <param name="seekOffset">Seconds (real time) to seek forward into the animation. Used for lag catchup.</param>
     public static Robust.Client.Animations.Animation BuildRotationAnimation(
         List<CERotationKeyframe> keyframes,
         float speedMult,
-        Angle baseAngle = default,
-        float seekOffset = 0f)
+        Angle baseAngle = default)
     {
-        var track = new AnimationTrackComponentProperty
-        {
-            ComponentType = typeof(SpriteComponent),
-            Property = nameof(SpriteComponent.Rotation),
-            InterpolationMode = AnimationInterpolationMode.Linear,
-            KeyFrames = { },
-        };
-
-        float duration;
-        if (seekOffset > 0f && keyframes.Count > 0)
-        {
-            var localSeek = Math.Min(seekOffset / speedMult, keyframes[^1].Time);
-            var snapVal = baseAngle + SeekInterpolateRotation(keyframes, localSeek);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(snapVal, 0f, p => p));
-
-            var startIdx = 0;
-            while (startIdx < keyframes.Count && keyframes[startIdx].Time <= localSeek)
-                startIdx++;
-
-            var prevTime = localSeek;
-            for (var i = startIdx; i < keyframes.Count; i++)
-            {
-                var kf = keyframes[i];
-                var rotation = baseAngle + Angle.FromDegrees(kf.Rotation);
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotation, delta, GetEasing(kf.Easing)));
-            }
-
-            duration = Math.Max((keyframes[^1].Time - localSeek + 0.1f) * speedMult, 0.05f);
-        }
-        else
-        {
-            duration = CalculateDuration(keyframes, speedMult);
-            var prevTime = 0f;
-            foreach (var kf in keyframes)
-            {
-                var rotation = baseAngle + Angle.FromDegrees(kf.Rotation);
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotation, delta, GetEasing(kf.Easing)));
-            }
-        }
-
-        return new Robust.Client.Animations.Animation
+        var duration = CalculateDuration(keyframes, speedMult);
+        var animation = new Robust.Client.Animations.Animation
         {
             Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks = { track },
+            AnimationTracks =
+            {
+                new AnimationTrackComponentProperty
+                {
+                    ComponentType = typeof(SpriteComponent),
+                    Property = nameof(SpriteComponent.Rotation),
+                    InterpolationMode = AnimationInterpolationMode.Linear,
+                    KeyFrames = { },
+                },
+            },
         };
+
+        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
+        var prevTime = 0f;
+
+        foreach (var kf in keyframes)
+        {
+            var rotation = baseAngle + Angle.FromDegrees(kf.Rotation);
+            var delta = (kf.Time - prevTime) * speedMult;
+            prevTime = kf.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(rotation, delta, GetEasing(kf.Easing)));
+        }
+
+        return animation;
     }
 
     /// <summary>
     /// Builds a color / alpha animation track.
     /// </summary>
-    /// <param name="seekOffset">Seconds (real time) to seek forward into the animation. Used for lag catchup.</param>
-    public static Robust.Client.Animations.Animation BuildColorAnimation(List<CEColorKeyframe> keyframes, float speedMult, float seekOffset = 0f)
+    public static Robust.Client.Animations.Animation BuildColorAnimation(List<CEColorKeyframe> keyframes, float speedMult)
     {
-        var track = new AnimationTrackComponentProperty
-        {
-            ComponentType = typeof(SpriteComponent),
-            Property = nameof(SpriteComponent.Color),
-            InterpolationMode = AnimationInterpolationMode.Linear,
-            KeyFrames = { },
-        };
-
-        float duration;
-        if (seekOffset > 0f && keyframes.Count > 0)
-        {
-            var localSeek = Math.Min(seekOffset / speedMult, keyframes[^1].Time);
-            var snapVal = SeekInterpolateColor(keyframes, localSeek);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(snapVal, 0f, p => p));
-
-            var startIdx = 0;
-            while (startIdx < keyframes.Count && keyframes[startIdx].Time <= localSeek)
-                startIdx++;
-
-            var prevTime = localSeek;
-            for (var i = startIdx; i < keyframes.Count; i++)
-            {
-                var kf = keyframes[i];
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(kf.Color, delta, GetEasing(kf.Easing)));
-            }
-
-            duration = Math.Max((keyframes[^1].Time - localSeek + 0.1f) * speedMult, 0.05f);
-        }
-        else
-        {
-            duration = CalculateDuration(keyframes, speedMult);
-            var prevTime = 0f;
-            foreach (var kf in keyframes)
-            {
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(kf.Color, delta, GetEasing(kf.Easing)));
-            }
-        }
-
-        return new Robust.Client.Animations.Animation
+        var duration = CalculateDuration(keyframes, speedMult);
+        var animation = new Robust.Client.Animations.Animation
         {
             Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks = { track },
+            AnimationTracks =
+            {
+                new AnimationTrackComponentProperty
+                {
+                    ComponentType = typeof(SpriteComponent),
+                    Property = nameof(SpriteComponent.Color),
+                    InterpolationMode = AnimationInterpolationMode.Linear,
+                    KeyFrames = { },
+                },
+            },
         };
+
+        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
+        var prevTime = 0f;
+
+        foreach (var kf in keyframes)
+        {
+            var delta = (kf.Time - prevTime) * speedMult;
+            prevTime = kf.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(kf.Color, delta, GetEasing(kf.Easing)));
+        }
+
+        return animation;
     }
 
     /// <summary>
     /// Builds a scale animation track.
     /// </summary>
-    /// <param name="seekOffset">Seconds (real time) to seek forward into the animation. Used for lag catchup.</param>
-    public static Robust.Client.Animations.Animation BuildScaleAnimation(List<CEScaleKeyFrame> keyframes, float speedMult, float seekOffset = 0f)
+    public static Robust.Client.Animations.Animation BuildScaleAnimation(List<CEScaleKeyFrame> keyframes, float speedMult)
     {
-        var track = new AnimationTrackComponentProperty
-        {
-            ComponentType = typeof(SpriteComponent),
-            Property = nameof(SpriteComponent.Scale),
-            InterpolationMode = AnimationInterpolationMode.Linear,
-            KeyFrames = { },
-        };
-
-        float duration;
-        if (seekOffset > 0f && keyframes.Count > 0)
-        {
-            var localSeek = Math.Min(seekOffset / speedMult, keyframes[^1].Time);
-            var snapVal = SeekInterpolateScale(keyframes, localSeek);
-            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(snapVal, 0f, p => p));
-
-            var startIdx = 0;
-            while (startIdx < keyframes.Count && keyframes[startIdx].Time <= localSeek)
-                startIdx++;
-
-            var prevTime = localSeek;
-            for (var i = startIdx; i < keyframes.Count; i++)
-            {
-                var kf = keyframes[i];
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(kf.Scale, delta, GetEasing(kf.Easing)));
-            }
-
-            duration = Math.Max((keyframes[^1].Time - localSeek + 0.1f) * speedMult, 0.05f);
-        }
-        else
-        {
-            duration = CalculateDuration(keyframes, speedMult);
-            var prevTime = 0f;
-            foreach (var kf in keyframes)
-            {
-                var delta = (kf.Time - prevTime) * speedMult;
-                prevTime = kf.Time;
-                track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(kf.Scale, delta, GetEasing(kf.Easing)));
-            }
-        }
-
-        return new Robust.Client.Animations.Animation
+        var duration = CalculateDuration(keyframes, speedMult);
+        var animation = new Robust.Client.Animations.Animation
         {
             Length = TimeSpan.FromSeconds(duration),
-            AnimationTracks = { track },
+            AnimationTracks =
+            {
+                new AnimationTrackComponentProperty
+                {
+                    ComponentType = typeof(SpriteComponent),
+                    Property = nameof(SpriteComponent.Scale),
+                    InterpolationMode = AnimationInterpolationMode.Linear,
+                    KeyFrames = { },
+                },
+            },
         };
+
+        var track = (AnimationTrackComponentProperty)animation.AnimationTracks[0];
+        var prevTime = 0f;
+
+        foreach (var kf in keyframes)
+        {
+            var delta = (kf.Time - prevTime) * speedMult;
+            prevTime = kf.Time;
+            track.KeyFrames.Add(new AnimationTrackProperty.KeyFrame(kf.Scale, delta, GetEasing(kf.Easing)));
+        }
+
+        return animation;
     }
 
     // ── Duration ─────────────────────────────────────────────────────────────
@@ -391,76 +302,5 @@ internal static class CEAnimationTrackBuilders
             CEAnimationEasing.QuartInOut => Easings.InOutQuart,
             _ => p => p,
         };
-    }
-
-    // ── Seek interpolation helpers ─────────────────────────────────────────────
-    // All helpers take animation-local time (not scaled) and linearly interpolate
-    // the channel value at that time point (exact easing is not needed for seek).
-
-    private static Vector2 SeekInterpolateOffset(List<CEOffsetKeyframe> kfs, float t, Angle rotateBy)
-    {
-        if (kfs.Count == 0) return Vector2.Zero;
-        if (t <= kfs[0].Time)
-        {
-            var v = kfs[0].Offset;
-            return rotateBy != default ? rotateBy.RotateVec(v) : v;
-        }
-        for (var i = 0; i < kfs.Count - 1; i++)
-        {
-            if (t < kfs[i + 1].Time)
-            {
-                var frac = (t - kfs[i].Time) / (kfs[i + 1].Time - kfs[i].Time);
-                var interp = Vector2.Lerp(kfs[i].Offset, kfs[i + 1].Offset, frac);
-                return rotateBy != default ? rotateBy.RotateVec(interp) : interp;
-            }
-        }
-        var last = kfs[^1].Offset;
-        return rotateBy != default ? rotateBy.RotateVec(last) : last;
-    }
-
-    private static Angle SeekInterpolateRotation(List<CERotationKeyframe> kfs, float t)
-    {
-        if (kfs.Count == 0) return Angle.Zero;
-        if (t <= kfs[0].Time) return Angle.FromDegrees(kfs[0].Rotation);
-        for (var i = 0; i < kfs.Count - 1; i++)
-        {
-            if (t < kfs[i + 1].Time)
-            {
-                var frac = (t - kfs[i].Time) / (kfs[i + 1].Time - kfs[i].Time);
-                var deg = kfs[i].Rotation + (kfs[i + 1].Rotation - kfs[i].Rotation) * frac;
-                return Angle.FromDegrees(deg);
-            }
-        }
-        return Angle.FromDegrees(kfs[^1].Rotation);
-    }
-
-    private static Color SeekInterpolateColor(List<CEColorKeyframe> kfs, float t)
-    {
-        if (kfs.Count == 0) return Color.White;
-        if (t <= kfs[0].Time) return kfs[0].Color;
-        for (var i = 0; i < kfs.Count - 1; i++)
-        {
-            if (t < kfs[i + 1].Time)
-            {
-                var frac = (t - kfs[i].Time) / (kfs[i + 1].Time - kfs[i].Time);
-                return Color.InterpolateBetween(kfs[i].Color, kfs[i + 1].Color, frac);
-            }
-        }
-        return kfs[^1].Color;
-    }
-
-    private static Vector2 SeekInterpolateScale(List<CEScaleKeyFrame> kfs, float t)
-    {
-        if (kfs.Count == 0) return Vector2.One;
-        if (t <= kfs[0].Time) return kfs[0].Scale;
-        for (var i = 0; i < kfs.Count - 1; i++)
-        {
-            if (t < kfs[i + 1].Time)
-            {
-                var frac = (t - kfs[i].Time) / (kfs[i + 1].Time - kfs[i].Time);
-                return Vector2.Lerp(kfs[i].Scale, kfs[i + 1].Scale, frac);
-            }
-        }
-        return kfs[^1].Scale;
     }
 }

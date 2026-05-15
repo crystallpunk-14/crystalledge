@@ -77,6 +77,15 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
             //Processing animation events
             if (animation.Events.Any() && controller.StartAnimationTime.HasValue)
             {
+                var effectArgs = new CEEntityEffectArgs(
+                    EntityManager,
+                    uid,
+                    controller.Used,
+                    _transform.GetWorldRotation(uid),
+                    controller.AnimationSpeed,
+                    controller.TargetEntity,
+                    controller.TargetCoordinates);
+
                 var startTime = controller.StartAnimationTime.Value;
                 var anyEventFired = false;
                 foreach (var (keyFrame, actions) in animation.Events)
@@ -90,20 +99,6 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
                     // Only trigger if event time is within this frame
                     if (eventTime > _timing.CurTime)
                         continue;
-
-                    // How many seconds late this keyframe is being processed (0 on-time, >0 catch-up).
-                    var seekOffset = (float)(_timing.CurTime - eventTime).TotalSeconds;
-                    var effectArgs = new CEEntityEffectArgs(
-                        EntityManager,
-                        uid,
-                        controller.Used,
-                        _transform.GetWorldRotation(uid),
-                        controller.AnimationSpeed,
-                        controller.TargetEntity,
-                        controller.TargetCoordinates)
-                    {
-                        AnimationSeekOffset = seekOffset,
-                    };
 
                     foreach (var action in actions)
                     {
