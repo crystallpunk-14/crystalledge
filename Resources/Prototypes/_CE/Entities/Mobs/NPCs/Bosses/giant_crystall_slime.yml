@@ -51,12 +51,8 @@
         scale: 1.9, 2.1
       - time: 1.0
         scale: 2.1, 1.9
-  - type: CEGOAPAlarm
-    sound:
-      path: /Audio/_CE/Mobs/slime_alert.ogg
-      params:
-        variation: 0.1
-        pitch: 0.6
+  - type: CEGOAPAlarmAnimation
+    animation: GiantSlimeAlarm
   - type: CEDestructible
     destroyThreshold: 500
   - type: Fixtures
@@ -146,8 +142,6 @@
     effects:
     - CEStatusEffectGiantCrystalSlime
 
-
-
 - type: entity
   id: CEStatusEffectGiantCrystalSlime
   components:
@@ -164,7 +158,60 @@
     - CEStatusEffectFrozen
 
 
-
+- type: entityEffectAnimation
+  id: GiantSlimeAlarm
+  movementSpeed: 0
+  duration: 1.0
+  lockRotation: true
+  events:
+    0:
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2, 2
+        easing: QuadOut
+      - time: 0.3
+        scale: 2.5, 1.5
+        easing: QuadOut
+      - time: 0.7
+        scale: 1.8, 2.2
+        easing: QuadOut
+      - time: 1
+        scale: 1.2, 2.7
+        easing: QuadOut
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0
+        easing: QuadOut
+      - time: 0.3
+        offset: 0, -0.5
+        easing: QuadOut
+      - time: 0.7
+        offset: 0, -0.3
+      - time: 1
+        offset: 0, 0.7
+        easing: QuadIn
+    0.3:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/roar.ogg
+    - !type:SetTimedAppearance
+      key: attack
+      duration: 1.2
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.5
+    0.5:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.5
+    0.7:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.5
 
 
 # Attack 1 -spread shot
@@ -196,9 +243,6 @@
   lockRotation: true
   events:
     0:
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:UserAnimation
       scaleAnimation:
       - time: 0.0
@@ -232,7 +276,10 @@
     0.8:
     - !type:PlaySound
       sound:
-        path: /Audio/_CE/Effects/firebolt.ogg
+        path: /Audio/Effects/gib3.ogg
+        params:
+          variation: 0.1
+          pitch: 0.6
     - !type:ShootProjectile
       projectileSpeed: 4
       projectileMaxSpeed: 8

@@ -1,3 +1,4 @@
+using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.GOAP;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -10,13 +11,29 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<CEGOAPAlarmComponent, CETargetChangedEvent>(OnChangeTarget);
+        SubscribeLocalEvent<CEGOAPAlarmAnimationComponent, CETargetChangedEvent>(OnAnimationChangeTarget);
+
         SubscribeLocalEvent<CEAlarmOnSpawnComponent, MapInitEvent>(OnAlarmOnSpawn);
+    }
+
+    private void OnAnimationChangeTarget(Entity<CEGOAPAlarmAnimationComponent> ent, ref CETargetChangedEvent args)
+    {
+        if (args.NewTarget is null)
+            return;
+
+        if (_timing.CurTime > ent.Comp.LastAlarm + ent.Comp.Cooldown)
+            _animation.TryPlayAnimationToEntity(ent, ent.Comp.Animation, args.NewTarget.Value, forceCancel: true);
+
+        ent.Comp.LastAlarm = _timing.CurTime;
+
+        Alarm(Transform(ent).Coordinates, args.NewTarget.Value, ent.Comp.Radius);
     }
 
     private void OnAlarmOnSpawn(Entity<CEAlarmOnSpawnComponent> ent, ref MapInitEvent args)
@@ -41,7 +58,7 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
         Alarm(Transform(ent).Coordinates, args.NewTarget.Value, ent.Comp.Radius);
     }
 
-    public void Alarm(EntityCoordinates source, EntityUid target, float radius)
+    private void Alarm(EntityCoordinates source, EntityUid target, float radius)
     {
         RaiseLocalEvent(new CEGOAPAlarmEvent(source, target, radius));
     }
