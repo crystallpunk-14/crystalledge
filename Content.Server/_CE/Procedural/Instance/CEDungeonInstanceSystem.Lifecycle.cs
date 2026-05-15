@@ -33,7 +33,7 @@ public sealed partial class CEDungeonInstanceSystem
                 continue;
 
             if (proto.Stable)
-                entry.OneTimeUse = false;
+                entry.OneTimeUse = false; //Stable zones cant have one-time entries
 
             entry.DeactivateAt = proto.MaxEntryTime is not null ? _timing.CurTime + proto.MaxEntryTime.Value : TimeSpan.MaxValue;
         }
@@ -81,7 +81,7 @@ public sealed partial class CEDungeonInstanceSystem
             if (!entry.Active)
                 continue;
 
-            if (entry.OneTimeUse && curTime >= entry.DeactivateAt)
+            if (curTime >= entry.DeactivateAt)
             {
                 entry.Active = false;
                 continue;
@@ -100,6 +100,10 @@ public sealed partial class CEDungeonInstanceSystem
                 continue;
 
             enterPortal = (entUid, entry);
+
+            if (entry.OneTimeUse)
+                entry.Active = false;
+
             return true;
         }
 

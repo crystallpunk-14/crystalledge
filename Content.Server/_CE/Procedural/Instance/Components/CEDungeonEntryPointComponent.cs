@@ -16,7 +16,7 @@ public sealed partial class CEDungeonEntryPointComponent : Component
     public bool Active = true;
 
     /// <summary>
-    /// If stable - never deactivates. Used for stable safezones.
+    /// If OneTimeUse - automatically deactivates after players use that entry point
     /// </summary>
     [DataField]
     public bool OneTimeUse = true;

@@ -119,7 +119,6 @@
   components:
   - type: CEDungeonEntryPoint
     active: true
-    activeDuration: 180
   - type: Sprite
     layers:
       - state: green

@@ -112,8 +112,6 @@ public sealed partial class CEDungeonInstanceSystem
 
                 if (TryFindEnterPoint(proto, out var entry))
                 {
-                    if (!proto.Stable)
-                        entry.Value.Comp.Active = false;
                     var activeComp2 = EnsureComp<CEDungeonActivePassageComponent>(passageUid);
                     activeComp2.TargetPosition = Transform(entry.Value).Coordinates;
                 }
@@ -134,8 +132,6 @@ public sealed partial class CEDungeonInstanceSystem
                 if (!TryFindEnterPoint(resolvedTarget, out var targetEntry))
                     continue;
 
-                if (!resolvedTarget.Stable)
-                    targetEntry.Value.Comp.Active = false;
                 passage.TargetPosition = Transform(targetEntry.Value).Coordinates;
             }
 
@@ -184,11 +180,7 @@ public sealed partial class CEDungeonInstanceSystem
         activeComp.TargetLevel = proto.ID;
 
         if (TryFindEnterPoint(proto, out var targetEntry))
-        {
-            if (!proto.Stable)
-                targetEntry.Value.Comp.Active = false;
             activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates;
-        }
         else
         {
             // Trigger dungeon generation and store the task; result will be processed on the main thread in UpdatePassage.

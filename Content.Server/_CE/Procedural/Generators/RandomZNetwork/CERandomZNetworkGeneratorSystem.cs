@@ -47,17 +47,17 @@ public sealed partial class CERandomZNetworkGeneratorSystem : CEDungeonGenerator
             return new CEDungeonGenerateResult(false);
         }
 
-        // Weighted-random pick.
+        // Validate and sum weights.
         var totalWeight = 0f;
-        foreach (var weight in config.Variants.Values)
+        foreach (var (protoId, weight) in config.Variants)
         {
-            totalWeight += weight;
-        }
+            if (!float.IsFinite(weight) || weight <= 0f)
+            {
+                Log.Error($"CERandomZNetworkGeneratorSystem: variant '{protoId}' has invalid weight {weight}. All weights must be finite and strictly positive.");
+                return new CEDungeonGenerateResult(false);
+            }
 
-        if (totalWeight <= 0f)
-        {
-            Log.Error("CERandomZNetworkGeneratorSystem: total weight is zero or negative.");
-            return new CEDungeonGenerateResult(false);
+            totalWeight += weight;
         }
 
         var roll = _random.NextFloat() * totalWeight;
