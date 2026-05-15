@@ -1,0 +1,60 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponDebugMagicStaff
+  name: admin missile staff
+  description: INFINITY ENERGY
+  suffix: DEBUG
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/magic_missile_staff.rsi
+    color: "#ee00ff"
+    layers:
+    - state: icon
+    - state: orb
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicMissileDebug
+        projectileSpeed: 10
+      OnHeavyHit:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicMissileDebug
+        projectileSpeed: 10
+        projectileMaxSpeed: 5
+        projectileCount: 3
+        spread: 0.2
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+      - anim: StaffAttackLight2
+      Secondary:
+      - anim: StaffAttackHeavy
+  - type: Clothing
+    slots:
+    - neck
+
+- type: entity
+  id: CEProjectileMagicMissileDebug
+  name: magic missile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/magic_missile.rsi
+    color: "#ee00ff"
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#ee00ff"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 50
