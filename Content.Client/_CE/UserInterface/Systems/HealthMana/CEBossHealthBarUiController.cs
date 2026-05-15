@@ -2,7 +2,7 @@ using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared._CE.BossHealthBar;
+using Content.Shared._CE.Boss;
 using Content.Shared._CE.Health;
 using JetBrains.Annotations;
 using Robust.Client.Player;
@@ -83,15 +83,18 @@ public sealed class CEBossHealthBarUiController : UIController, IOnStateEntered<
 
         var playerMapId = playerXform.MapID;
 
-        float totalCurrentHp = 0f;
-        float totalMaxHp = 0f;
+        var totalCurrentHp = 0f;
+        var totalMaxHp = 0f;
         var count = 0;
         EntityUid? singleBoss = null;
 
         var query = EntityManager.EntityQueryEnumerator<CEBossHealthBarComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out var bossXform))
+        while (query.MoveNext(out var uid, out var bar, out var bossXform))
         {
             if (bossXform.MapID != playerMapId)
+                continue;
+
+            if (!bar.Active)
                 continue;
 
             var info = _damageableSystem?.GetHealthInfo(uid) ?? default;
