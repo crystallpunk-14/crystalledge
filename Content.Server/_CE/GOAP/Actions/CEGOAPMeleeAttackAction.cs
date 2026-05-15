@@ -108,7 +108,11 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
             angle += Angle.FromDegrees(
                 _random.NextFloat(-args.Action.AngleVariation, args.Action.AngleVariation));
 
-            _weapon.TryUse(ent, weapon.Value, args.Action.UseType, angle);
+            if (!_weapon.TryUse(ent, weapon.Value, args.Action.UseType, angle))
+            {
+                args.Status = CEGOAPActionStatus.Failed;
+                return;
+            }
         }
 
         args.Status = CEGOAPActionStatus.Running;

@@ -9,6 +9,7 @@ namespace Content.Shared._CE.GOAP.Components;
 /// for goal-oriented action planning AI.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
+[AutoGenerateComponentState]
 public sealed partial class CEGOAPComponent : Component
 {
     /// <summary>
@@ -68,18 +69,21 @@ public sealed partial class CEGOAPComponent : Component
     /// <summary>
     /// Index of the currently executing action in the plan.
     /// </summary>
+    [AutoNetworkedField]
     [ViewVariables]
     public int CurrentActionIndex;
 
     /// <summary>
     /// Whether the current action has had its startup event raised.
     /// </summary>
+    [AutoNetworkedField]
     [ViewVariables]
     public bool CurrentActionStarted;
 
     /// <summary>
     /// The currently active goal being pursued (index into Goals list, -1 if none).
     /// </summary>
+    [AutoNetworkedField]
     [ViewVariables]
     public int ActiveGoalIndex = -1;
 
@@ -92,6 +96,7 @@ public sealed partial class CEGOAPComponent : Component
     /// <summary>
     /// The next game time at which re-planning is allowed.
     /// </summary>
+    [AutoNetworkedField]
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextPlanTime;
 }

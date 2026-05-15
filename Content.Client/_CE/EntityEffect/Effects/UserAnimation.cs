@@ -53,6 +53,9 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
         if (!_timing.IsFirstTimePredicted)
             return;
 
+        if (_timing.ApplyingState)
+            return;
+
         var entity = args.Args.Source;
 
         if (!TryComp<SpriteComponent>(entity, out var sprite))
