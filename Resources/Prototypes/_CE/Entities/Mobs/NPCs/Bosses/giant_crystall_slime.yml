@@ -209,9 +209,6 @@
       effectTarget: User
       width: 0.5
     0.7:
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Effects/firebolt.ogg
     - !type:ShockWaveVFX
       effectTarget: User
       width: 0.5

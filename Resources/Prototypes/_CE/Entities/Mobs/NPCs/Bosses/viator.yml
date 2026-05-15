@@ -1,0 +1,160 @@
+- type: entity
+  parent: MarkerBase
+  id: CEMobBossViatorSpawner
+  name: Viator Spawner
+  suffix: Boss
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: idle
+      sprite: _CE/Mobs/Bosses/viator.rsi
+      color: "#ffffff42"
+      scale: 2, 2
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobBossViator
+
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  - CEMobBossBase
+  id: CEMobBossViator
+  name: Viator
+  description: TODO
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    scale: 2, 2
+    sprite: _CE/Mobs/Bosses/viator.rsi
+    layers:
+    - map: [ "base" ]
+      state: idle
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CEAnimationAppearanceVisuals.Key:
+        base:
+          default: { state: idle }
+          attack: { state: attack }
+          death: { state: death }
+          prepare1: { state: prepare }
+          prepare2: { state: prepare2 }
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.05, 1.95
+      - time: 0.5
+        scale: 1.95, 2.05
+      - time: 1.0
+        scale: 2.05, 1.95
+  - type: CEGOAPAlarmAnimation
+    animation: ViatorAlarm
+  - type: CEDestructibleAnimation
+    animation: GiantSlimeDeath
+  - type: CEDestructible
+    destroyThreshold: 250
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 1.3
+        density: 50
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: CEGOAP
+
+    goals:
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+
+
+    sensors:
+    - !type:CEGOAPNearestHostileSensor
+      conditionKey: EnemyVisible
+      outputTargetKey: enemy
+      visionRadius: 8
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyInMeleeRange
+      targetKey: enemy
+      range: 2.5
+    - !type:CEGOAPHasLastKnownPositionSensor
+      conditionKey: HasEnemyLastPos
+      positionTargetKey: enemy
+    - !type:CEGOAPAlarmSensor
+      outputTargetKey: enemy
+
+  - type: CEPermanentStatusEffects
+    effects:
+    - CEStatusEffectViator
+
+- type: entity
+  id: CEStatusEffectViator
+  components:
+  - type: StatusEffect
+  - type: CEArmor
+    flat:
+      Cold: 5
+  - type: CEStatusEffectImmunity
+    blockedEffects:
+    - CEStatusEffectColdSlowdown
+    - CEStatusEffectWet
+    - CEStatusEffectFrozen
+
+
+
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 2
+
+
+- type: entityEffectAnimation
+  id: ViatorAlarm
+  movementSpeed: 0
+  duration: 1.4
+  lockRotation: true
+  events:
+    0.3:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Mobs/roar.ogg
+    - !type:SetTimedAppearance
+      key: prepare1
+      duration: 0.2
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.5
+    0.5:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.5
+    - !type:SetTimedAppearance
+      key: prepare2
+      duration: 0.2
+    0.7:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.5
+    - !type:SetTimedAppearance
+      key: prepare1
+      duration: 0.2
+    0.9:
+    - !type:SetTimedAppearance
+      key: prepare2
+      duration: 0.2
+    1.1:
+    - !type:SetTimedAppearance
+      key: prepare1
+      duration: 0.2
+    1.3:
+    - !type:SetTimedAppearance
+      key: prepare2
+      duration: 0.2

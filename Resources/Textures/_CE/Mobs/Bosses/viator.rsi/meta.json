@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Created by TheShuEd",
+  "size":
+  {
+    "x": 64,
+    "y": 64
+  },
+  "states":
+  [
+    {
+      "name": "idle",
+      "directions": 4
+    },
+    {
+      "name": "attack",
+      "directions": 4
+    },
+    {
+      "name": "death"
+    },
+    {
+      "name": "prepare"
+    },
+    {
+      "name": "prepare2"
+    }
+  ]
+}
