@@ -65,4 +65,3 @@
       damage:
         types:
           Physical: 5
-    - !type:ShockWaveVFX

@@ -345,6 +345,8 @@
             Physical: 15
       - !type:ThrowFromUser
         distance: 1
+    - !type:ShockWaveVFX
+      width: 0.05
 
 
 
@@ -451,6 +453,8 @@
             Physical: 35
       - !type:ThrowFromUser
         distance: 1
+    - !type:ShockWaveVFX
+      width: 0.5
 
 
 

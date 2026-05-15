@@ -14,12 +14,6 @@ public sealed partial class ShockWaveVFX : CEEntityEffectBase<ShockWaveVFX>
 
     [DataField]
     public float FalloffPower = 40f;
-
-    /// <summary>
-    /// Seconds
-    /// </summary>
-    [DataField]
-    public float Time = 1;
 }
 
 public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<ShockWaveVFX>
@@ -40,11 +34,9 @@ public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<Sh
         shockWave.Sharpness = args.Effect.Sharpness;
         shockWave.Width = args.Effect.Width;
         shockWave.FalloffPower = args.Effect.FalloffPower;
-        shockWave.Duration = args.Effect.Time;
+        shockWave.Duration = 1;
         Dirty(vfx, shockWave);
 
-        var lifetime = EnsureComp<TimedDespawnComponent>(vfx);
-        lifetime.Lifetime = args.Effect.Time;
-        Dirty(vfx, lifetime);
+        EnsureComp<TimedDespawnComponent>(vfx);
     }
 }
