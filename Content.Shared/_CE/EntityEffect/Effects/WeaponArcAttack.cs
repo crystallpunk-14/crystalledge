@@ -110,8 +110,10 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         hitEntities.RemoveWhere(t => !HasComp<CEDamageableComponent>(t));
 
         // Filter out entities behind walls (line-of-sight check).
+        // Use entity-based range check so fixture distance is respected for large colliders.
+        var _args = args.Args;
         hitEntities.RemoveWhere(t =>
-            !_interaction.InRangeUnobstructed(entityCoords, t, effectiveRange + 0.1f));
+            !_interaction.InRangeUnobstructed(_args.Source, t, effectiveRange + 0.1f, overlapCheck: false));
 
         var targets = new List<EntityUid>(hitEntities);
 

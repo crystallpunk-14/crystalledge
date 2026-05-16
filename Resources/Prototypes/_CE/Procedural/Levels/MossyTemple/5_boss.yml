@@ -12,13 +12,26 @@
   config:
     !type:CERandomZNetworkConfig
     variants:
-      MossyTempleBoss: 1
+      Boss1GiantSlimeBasic: 1
+      Boss1ViatorLibrary: 1
 
 - type: zMap
-  id: MossyTempleBoss
+  id: Boss1GiantSlimeBasic
   maps:
   - /Maps/_CE/Dungeon/Boss1GiantSlimeBasic/Boss1GiantSlimeBasic0.yml
   - /Maps/_CE/Dungeon/Boss1GiantSlimeBasic/Boss1GiantSlimeBasic1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true
+
+- type: zMap
+  id: Boss1ViatorLibrary
+  maps:
+  - /Maps/_CE/Dungeon/Boss1ViatorLibrary/Boss1ViatorLibrary0.yml
+  - /Maps/_CE/Dungeon/Boss1ViatorLibrary/Boss1ViatorLibrary1.yml
   components:
   - type: MapLight
     ambientLightColor: "#31455a"
