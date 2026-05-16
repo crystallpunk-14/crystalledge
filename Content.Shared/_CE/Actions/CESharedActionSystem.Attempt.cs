@@ -34,11 +34,15 @@ public abstract partial class CESharedActionSystem
     {
         if (TryComp<CEMobStateComponent>(args.User, out var mobState)
             && mobState.Critical
-            && !HasComp<CEActionCastableFromCriticalComponent>(ent))
+            && !HasComp<CEActionCastableFromCriticalComponent>(ent)
+            && ent.Comp.CheckConsciousness)
         {
             args.Cancelled = true;
             return;
         }
+
+        if (!ent.Comp.CheckCanInteract)
+            return;
 
         if (!TryComp<StatusEffectContainerComponent>(args.User, out var container))
             return;
@@ -46,6 +50,7 @@ public abstract partial class CESharedActionSystem
         var effects = container.ActiveStatusEffects?.ContainedEntities;
         if (effects is null)
             return;
+
 
         foreach (var effect in effects)
         {

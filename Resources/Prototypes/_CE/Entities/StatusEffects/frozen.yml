@@ -55,6 +55,9 @@
     baseDuration: 1
     mediumAppearance: 5
     highAppearance: 10
+  - type: CEActionsProvideStatusEffect
+    actions:
+    - CEActionFrozenBreak
 
 - type: alert
   id: CEFrozen
@@ -83,3 +86,56 @@
       offset: 0.45, 0
     - map: [ "100" ]
       offset: 0.25, 0
+
+- type: entity
+  id: CEActionFrozenBreak
+  parent: CEActionSpellBase
+  name: Break free
+  description: You break free from the icy trap.
+  components:
+  - type: CEActionStaminaCost
+    cost: 8
+  - type: Action
+    useDelay: 4
+    startDelay: true
+    checkCanInteract: false
+    icon:
+      sprite: _CE/Structures/Nature/ice_rock.rsi
+      state: break
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: FrozenBreak
+
+- type: entityEffectAnimation
+  id: FrozenBreak
+  movementSpeed: 0
+  duration: 0.5
+  events:
+    0:
+    - !type:UserAnimation
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.1, 0
+      - time: 0.1
+        offset: -0.1, 0
+      - time: 0.2
+        offset: 0.1, 0
+      - time: 0.3
+        offset: -0.1, 0
+      - time: 0.4
+        offset: 0.1, 0
+    0.4:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.05
+    - !type:PlaySound
+      sound:
+        collection: GlassSmash
+    - !type:RemoveStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectFrozen
+      amount: 15
+    - !type:SpawnEntity
+      spawns:
+      - CEFreezeImpactEffect
+
