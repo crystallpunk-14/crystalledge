@@ -23,6 +23,7 @@
     - id: CEWeaponDaggerPurification
     - id: CEWeaponSkimitarMolten
     - id: CEWeaponMagicStaffCurse
+    - id: CEWeaponMagicStaffFireball
 
 - type: entityTable
   id: CERandomWeapon
