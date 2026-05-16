@@ -131,13 +131,17 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
 
         var player = args.OtherEntity;
 
+        // Always update zone membership so SpawnBlessings knows the player has left,
+        // even when the soul-animation gate below blocks blessing cleanup.
+        ent.Comp.PlayersInTriggerZone.Remove(player);
+
         if (ent.Comp.ActivePlayer != player)
             return;
 
-        // Don't tear down state while the soul system's transfer animation is still
-        // running on the player — let it finish and SpawnBlessings on completion.
-        // The statue stays locked to this player throughout the animation so other
-        // players can't barge in.
+        // Don't tear down blessing state while the soul system's transfer animation is
+        // still running on the player — let it finish and SpawnBlessings on completion.
+        // Zone membership was already updated above so SpawnBlessings will correctly
+        // skip spawning and only cache the offering.
         if (HasComp<CESoulTransferComponent>(player))
             return;
 
@@ -146,9 +150,8 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
     }
 
     /// <summary>
-    /// Re-entry trigger: a player who already paid (cached offering exists) walks back
-    /// into proximity. Re-show their blessings automatically without charging — only if
-    /// the statue is currently free.
+    /// Entry trigger: always update zone membership. If this player has a cached offering
+    /// and the statue is free, re-show their blessings automatically without charging.
     /// </summary>
     private void OnTriggerEnter(
         Entity<CEBlessingStatueComponent> ent,
@@ -158,6 +161,9 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
             return;
 
         var player = args.OtherEntity;
+
+        // Always update zone membership so SpawnBlessings can use it reliably.
+        ent.Comp.PlayersInTriggerZone.Add(player);
 
         // Only re-show if this player has a cached offer.
         if (!ent.Comp.OfferedSkills.ContainsKey(player))
@@ -243,14 +249,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
                 Dirty(player, receiver);
         }
 
-        // The soul-transfer animation may have finished while the player was running away.
-        // If they are now outside the trigger radius, cache the offering (so re-entry still
-        // works) but do NOT spawn blessing entities — they would be unreachable and stick
-        // around forever. Free the statue so other players can use it.
-        var statuePos = Transform(statue.Owner).MapPosition;
-        var playerPos = Transform(player).MapPosition;
-        if (statuePos.MapId != playerPos.MapId ||
-            (statuePos.Position - playerPos.Position).Length() > statue.Comp.TriggerRadius)
+        if (!statue.Comp.PlayersInTriggerZone.Contains(player))
         {
             statue.Comp.ActivePlayer = null;
             return;
