@@ -37,3 +37,6 @@
     - !type:ApplyTileEffect
       tileEffect: CETileEffectStoneBarrier
       amount: 1
+    - !type:ShockWaveVFX
+      effectTarget: Target
+      width: 0.1

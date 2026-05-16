@@ -51,6 +51,9 @@
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 10
+    - !type:ShockWaveVFX
+      effectTarget: Target
+      width: 0.2
 
 - type: entity
   id: CEEffectWaterBurstTelegraphy

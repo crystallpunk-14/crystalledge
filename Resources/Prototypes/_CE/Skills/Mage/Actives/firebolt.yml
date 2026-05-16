@@ -117,3 +117,6 @@
       effectTarget: Used
       spawns:
       - CEEffectPotionAlchemicalFire
+    - !type:ShockWaveVFX
+      effectTarget: Used
+      width: 0.1
