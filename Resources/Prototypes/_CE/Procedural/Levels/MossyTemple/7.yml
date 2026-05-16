@@ -75,6 +75,9 @@
     - proto: CEMobBossSlime
       cost: 10
       weight: 0.3
+    - proto: CEMobBossViator
+      cost: 10
+      weight: 0.3
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleHerbs
     budget: 5
