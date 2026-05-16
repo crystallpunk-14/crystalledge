@@ -109,14 +109,6 @@
     - !type:CEGOAPUseAction
       targetKey: enemy
       preconditions:
-        EnemyVisible: true
-      effects:
-        EnemyDead: true
-      actionPrototype: CEActionViatorThrowRat
-    - !type:CEGOAPUseAction
-      targetKey: enemy
-      preconditions:
-        EnemyVisible: true
         EnemyInMeleeRange: true
       effects:
         EnemyDead: true
@@ -142,6 +134,10 @@
       effects:
         EnemyVisible: true
       cost: 0.5
+    - !type:CEGOAPMoveToTargetAction
+      targetKey: enemy
+      effects:
+        EnemyInMeleeRange: true
 
     sensors:
     - !type:CEGOAPNearestHostileSensor
@@ -151,7 +147,7 @@
     - !type:CEGOAPRangeToTargetSensor
       conditionKey: EnemyInMeleeRange
       targetKey: enemy
-      range: 2.5
+      range: 1.5
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
@@ -184,7 +180,6 @@
     blockedEffects:
     - CEStatusEffectFrozen
     - CEStatusEffectColdSlowdown
-    - CEStatusEffectCurse
 
 
 - type: entityEffectAnimation
@@ -619,46 +614,3 @@
         width: 0.3
 
 
-
-
-
-- type: entity
-  id: CEActionViatorThrowRat
-  parent: CEActionSpellBase
-  name: Rat throw
-  description: You throw a rat at your enemy.
-  components:
-  - type: CEVisualizeWideLineAction
-    width: 1
-  - type: Action
-    useDelay: 15
-    icon:
-      sprite: _CE/Objects/Weapons/Projectile/rat_flying.rsi
-      state: aaa
-  - type: TargetAction
-    range: 20
-  - type: WorldTargetAction
-    event: !type:CEWorldTargetActionAnimationEvent
-      animation: ViatorThrowRat
-
-- type: entityEffectAnimation
-  id: ViatorThrowRat
-  movementSpeed: 0
-  duration: 1.5
-  lockRotation: true
-  events:
-    0:
-    - !type:SetTimedAppearance
-      key: attack
-      duration: 1
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Mobs/rat2.ogg
-        params:
-          variation: 0.1
-          volume: 20
-    - !type:ShootProjectile
-      projectileSpeed: 4
-      projectileMaxSpeed: 6
-      prototype: CEProjectileGnomeRat
-      projectileCount: 1

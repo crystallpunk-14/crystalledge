@@ -13,7 +13,8 @@
     !type:CERandomZNetworkConfig
     variants:
       Boss1GiantSlimeBasic: 1
-      Boss1ViatorLibrary: 1
+      Boss1ViatorLibrary: 0.5
+      Boss1ViatorLake: 0.5
 
 - type: zMap
   id: Boss1GiantSlimeBasic
@@ -35,6 +36,18 @@
   components:
   - type: MapLight
     ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true
+
+- type: zMap
+  id: Boss1ViatorLake
+  maps:
+  - /Maps/_CE/Dungeon/Boss1ViatorLake/Boss1ViatorLake0.yml
+  - /Maps/_CE/Dungeon/Boss1ViatorLake/Boss1ViatorLake1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#2068b4"
   - type: Gravity
     enabled: true
     inherent: true
