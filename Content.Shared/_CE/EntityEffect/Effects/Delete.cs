@@ -12,6 +12,6 @@ public sealed partial class CEQueueDelEffectSystem : CEEntityEffectSystem<Delete
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        QueueDel(entity);
+        PredictedQueueDel(entity);
     }
 }
