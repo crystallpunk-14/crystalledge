@@ -31,6 +31,7 @@ CrystallEdge uses an ECS architecture:
 - Use `[Dependency]` for dependency injection
 - Use `EntityQuery<T>` for performance-critical component lookups
 - Никогда не сохраняй данные внутри систем, они не сохраняются при сохранении и загрузки игры.
+- Перед созданием подписки компонента на ивент формата SubscribeLocalEvent<Comp, Event>() убедись что такой пары подписок компонент-ивент не существует, так как движок запрещает дубликаты подписок.
 
 ### Example System Structure
 ```csharp

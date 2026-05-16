@@ -175,11 +175,12 @@
   - type: StatusEffect
   - type: CEArmor
     flat:
-      Cold: 5
+      Cold: 500
   - type: CEStatusEffectImmunity
     blockedEffects:
     - CEStatusEffectFrozen
     - CEStatusEffectColdSlowdown
+    - CEStatusEffectCurse
 
 
 - type: entityEffectAnimation
@@ -374,7 +375,7 @@
       duration: 1
     - !type:CETileAffectArea
       effectTarget: Target
-      tileEffect: CETileEffectFreeze
+      tileEffect: CETileEffectCurse
       radius: 1.5
       maxStacks: 5
       fallOffFactor: 1
