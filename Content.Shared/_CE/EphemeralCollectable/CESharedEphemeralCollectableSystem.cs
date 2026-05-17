@@ -33,6 +33,19 @@ public abstract class CESharedEphemeralCollectableSystem : EntitySystem
         SubscribeLocalEvent<CEEphemeralCollectableComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<CEEphemeralCollectableComponent, InteractHandEvent>(OnInteractHand);
         SubscribeLocalEvent<CEEphemeralCollectableComponent, ActivateInWorldEvent>(OnActivate);
+        SubscribeLocalEvent<CEDungeonPlayerComponent, EntityTerminatingEvent>(OnDungeonPlayerTerminating);
+    }
+
+    private void OnDungeonPlayerTerminating(Entity<CEDungeonPlayerComponent> ent, ref EntityTerminatingEvent args)
+    {
+        var query = EntityQueryEnumerator<CEEphemeralCollectableComponent>();
+        while (query.MoveNext(out var uid, out var collectable))
+        {
+            if (!collectable.CollectedBy.Remove(ent.Owner))
+                continue;
+
+            Dirty(uid, collectable);
+        }
     }
 
     private void OnMapInit(Entity<CEEphemeralCollectableComponent> ent, ref MapInitEvent args)

@@ -8,13 +8,13 @@
   id: CEActionSpellDivineShield
   parent: CEActionSpellBase
   name: Divine Shield
-  description: You apply a [color=#1defa9]1 divine shield[/color] on the target.
+  description: You apply a [color=#1defa9]1 divine shield[/color] on the target (max 5).
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
-    manaCost: 7
+    manaCost: 8
   - type: Action
     useDelay: 5
     icon:
@@ -44,3 +44,4 @@
       sentence: "vos protegant"
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectDivineShield
+      max: 5

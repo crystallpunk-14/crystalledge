@@ -9,7 +9,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Achievements;
 
-[AdminCommand(AdminFlags.Debug)]
+[AdminCommand(AdminFlags.Host)]
 public sealed class CEAddAchievementCommand : LocalizedCommands
 {
     [Dependency] private readonly IPlayerManager _player = default!;
@@ -82,7 +82,7 @@ public sealed class CEAddAchievementCommand : LocalizedCommands
     }
 }
 
-[AdminCommand(AdminFlags.Debug)]
+[AdminCommand(AdminFlags.Host)]
 public sealed class CERemoveAchievementCommand : LocalizedCommands
 {
     [Dependency] private readonly IPlayerManager _player = default!;
@@ -208,6 +208,65 @@ public sealed class CEListAchievementsCommand : LocalizedCommands
         catch (Exception e)
         {
             shell.WriteError($"Failed to list achievements: {e.Message}");
+        }
+    }
+}
+
+[AdminCommand(AdminFlags.Admin)]
+public sealed class CEAddAchievementInspirationCommand : LocalizedCommands
+{
+    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly IPlayerLocator _locator = default!;
+
+    public override string Command => "achievement_give_admin_inspiration";
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        if (args.Length == 1)
+        {
+            var options = _player.Sessions.OrderBy(c => c.Name).Select(c => c.Name).ToArray();
+            return CompletionResult.FromHintOptions(options, "<Player>");
+        }
+
+        return CompletionResult.Empty;
+    }
+
+    public override async void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        if (args.Length < 1)
+        {
+            shell.WriteError(Loc.GetString("shell-need-minimum-one-argument"));
+            shell.WriteLine(Help);
+            return;
+        }
+
+        var playerArg = args[0];
+
+        var located = await _locator.LookupIdByNameOrIdAsync(playerArg);
+        if (located == null)
+        {
+            shell.WriteError(Loc.GetString("cmd-whitelistadd-not-found", ("username", playerArg)));
+            return;
+        }
+
+        var sessionUserId = located.UserId;
+
+        try
+        {
+            var sys = _entMan.System<CEAchievementsSystem>();
+            var added = await sys.AddPlayerAchievementAsync(sessionUserId, "KissInTheAir");
+            if (!added)
+            {
+                shell.WriteLine($"Player {located.Username} already has achievement KissInTheAir.");
+                return;
+            }
+
+            shell.WriteLine($"Added achievement KissInTheAir to player {located.Username}.");
+        }
+        catch (Exception e)
+        {
+            shell.WriteError($"Failed to add achievement: {e.Message}");
         }
     }
 }

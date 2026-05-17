@@ -1,0 +1,110 @@
+- type: skill
+  parent: BaseNeutralSkill
+  weight: 0.1 #Very rare, very meme
+  id: Kiss
+  effect: !type:AddAction
+    action: CEActionKiss
+  restrictions:
+   - !type:AchievementObtained
+     achievement: KissInTheAir
+
+- type: entity
+  id: CEActionKiss
+  parent: CEActionSpellBase
+  name: A kiss in the air
+  description: Confuse your opponents with your love. And heal them a little.
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 1.0
+    projectileMode: true
+  - type: CEActionManaCost
+    manaCost: 5
+  - type: Action
+    useDelay: 0.5
+    icon:
+      sprite: _CE/Skills/Neutral/kiss.rsi
+      state: icon
+  - type: TargetAction
+    repeat: true
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationKiss
+
+- type: entityEffectAnimation
+  id: AnimationKiss
+  movementSpeed: 0.8
+  duration: 0.5
+  lockRotation: true
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectKissImpact
+    - !type:ShootProjectile
+      projectileSpeed: 2
+      prototype: CEProjectileKiss
+      projectileCount: 1
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/kiss.ogg
+        params:
+          variation: 0.1
+          volume: 20
+
+- type: entity
+  id: CEProjectileKiss
+  name: kiss projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/kiss_projectile.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: CEProjectile
+    hitEffects:
+    - !type:Heal
+      amount: 1
+    - !type:ApplyStatusEffectStack
+      effectTarget: Target
+      statusEffect: CEStatusEffectBlessing
+      amount: 1
+      max: 1
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: Target
+      spawns:
+      - CEEffectKissImpact
+
+- type: entity
+  id: CEEffectKissImpact
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/kiss.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#fa29f3"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

@@ -91,3 +91,8 @@
   license: "CC0-1.0"
   copyright: 'ToastHatter of Freesound.org. Mixed from stereo to mono.'
   source: "https://freesound.org/people/ToastHatter/sounds/561188/"
+
+- files: ["kiss.ogg"]
+  license: "CC0-1.0"
+  copyright: 'semccab of Freesound.org. Mixed from stereo to mono.'
+  source: "https://freesound.org/people/semccab/sounds/154398/"

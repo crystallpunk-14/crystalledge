@@ -17,7 +17,7 @@
   description: You create a temporary [color=#30caf5]water sphere[/color], which you can throw.
   components:
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 3
   - type: CEActionStaminaCost
     cost: 2
   - type: Action
@@ -118,6 +118,6 @@
     - !type:CETileAffectArea
       tileEffect: CETileEffectWater
       radius: 1
-      maxStacks: 3
+      maxStacks: 6
   - type: TimedDespawn
     lifetime: 120

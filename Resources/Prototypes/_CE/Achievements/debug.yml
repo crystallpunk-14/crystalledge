@@ -1,7 +1,11 @@
 - type: achievement
-  id: AdminInspiration
-  name: ce-achievement-admin-inspiration-name
-  desc: ce-achievement-admin-inspiration-desc
+  id: KissInTheAir
+  name: ce-achievement-kiss-in-the-air-name
+  desc: ce-achievement-kiss-in-the-air-desc
+  secret: true
+  unlockedIcon:
+    sprite: _CE/Skills/Neutral/kiss.rsi
+    state: icon
 
 - type: achievement
   id: BetaTester
