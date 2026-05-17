@@ -44,6 +44,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
     /// confirmations don't produce a duplicate.
     /// </summary>
     private readonly Dictionary<EntityUid, TimeSpan> _predictedPopups = new();
+    private readonly List<EntityUid> _predictedPopupsToRemove = new();
 
     private CEDamagePopupOverlay _overlay = default!;
 
@@ -174,17 +175,18 @@ public sealed class CEDamagePopupSystem : EntitySystem
         if (_predictedPopups.Count > 0)
         {
             var now = _timing.CurTime;
+            _predictedPopupsToRemove.Clear();
+
             // Can't modify dict during foreach — collect keys to remove first.
-            List<EntityUid>? toRemove = null;
             foreach (var (uid, time) in _predictedPopups)
             {
                 if (now - time > TimeSpan.FromSeconds(2))
-                    (toRemove ??= new List<EntityUid>()).Add(uid);
+                    _predictedPopupsToRemove.Add(uid);
             }
 
-            if (toRemove != null)
+            if (_predictedPopupsToRemove.Count > 0)
             {
-                foreach (var uid in toRemove)
+                foreach (var uid in _predictedPopupsToRemove)
                 {
                     _predictedPopups.Remove(uid);
                 }

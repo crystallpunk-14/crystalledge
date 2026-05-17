@@ -29,6 +29,15 @@ public sealed class CEDamagePopupOverlay : Overlay
     private const float OutlineOffset = 3f;
 
     private static readonly Color OutlineColor = Color.Black.WithAlpha(0.85f);
+    private static readonly Vector2 OutlineOffsetLeft = new(-OutlineOffset, 0f);
+    private static readonly Vector2 OutlineOffsetRight = new(OutlineOffset, 0f);
+    private static readonly Vector2 OutlineOffsetUp = new(0f, -OutlineOffset);
+    private static readonly Vector2 OutlineOffsetDown = new(0f, OutlineOffset);
+
+    // Cheap broad-phase culling margin in pixels before doing text metrics.
+    private const float OffscreenCullMarginX = 256f;
+    private const float OffscreenCullMarginY = 128f;
+
     public readonly List<PopupEntry> Entries = new();
 
     public CEDamagePopupOverlay(IResourceCache cache)
@@ -46,6 +55,11 @@ public sealed class CEDamagePopupOverlay : Overlay
 
         var handle = args.ScreenHandle;
         var matrix = args.ViewportControl.GetWorldToScreenMatrix();
+        var viewportBounds = args.ViewportBounds;
+        var viewportLeft = viewportBounds.Left;
+        var viewportRight = viewportBounds.Right;
+        var viewportTop = viewportBounds.Top;
+        var viewportBottom = viewportBounds.Bottom;
 
         handle.SetTransform(Matrix3x2.Identity);
 
@@ -119,20 +133,45 @@ public sealed class CEDamagePopupOverlay : Overlay
             screenPos.Y -= yPixelOffset + InitialScreenYOffset;
             screenPos.X += entry.ScreenXOffset;
 
+            if (screenPos.X < viewportLeft - OffscreenCullMarginX
+                || screenPos.X > viewportRight + OffscreenCullMarginX
+                || screenPos.Y < viewportTop - OffscreenCullMarginY
+                || screenPos.Y > viewportBottom + OffscreenCullMarginY)
+            {
+                continue;
+            }
+
             var text = entry.Text;
-            var dimensions = handle.GetDimensions(font, text, scale);
+
+            if (!entry.HasBaseDimensions)
+            {
+                entry.BaseDimensions = handle.GetDimensions(font, text, 1f);
+                entry.HasBaseDimensions = true;
+            }
+
+            var dimensions = scale == 1f
+                ? entry.BaseDimensions
+                : entry.BaseDimensions * scale;
 
             // Center text horizontally, anchor at bottom vertically.
             var drawPos = screenPos - new Vector2(dimensions.X / 2f, dimensions.Y);
+
+            if (drawPos.X > viewportRight
+                || drawPos.X + dimensions.X < viewportLeft
+                || drawPos.Y > viewportBottom
+                || drawPos.Y + dimensions.Y < viewportTop)
+            {
+                continue;
+            }
 
             var color = entry.Color.WithAlpha(alpha);
             var outline = OutlineColor.WithAlpha(alpha * OutlineColor.A);
 
             // Draw dark outline (4 cardinal offsets) for readability over sprites.
-            handle.DrawString(font, drawPos + new Vector2(-OutlineOffset, 0), text, scale, outline);
-            handle.DrawString(font, drawPos + new Vector2(OutlineOffset, 0), text, scale, outline);
-            handle.DrawString(font, drawPos + new Vector2(0, -OutlineOffset), text, scale, outline);
-            handle.DrawString(font, drawPos + new Vector2(0, OutlineOffset), text, scale, outline);
+            handle.DrawString(font, drawPos + OutlineOffsetLeft, text, scale, outline);
+            handle.DrawString(font, drawPos + OutlineOffsetRight, text, scale, outline);
+            handle.DrawString(font, drawPos + OutlineOffsetUp, text, scale, outline);
+            handle.DrawString(font, drawPos + OutlineOffsetDown, text, scale, outline);
 
             // Main colored text on top.
             handle.DrawString(font, drawPos, text, scale, color);
@@ -155,6 +194,8 @@ public sealed class CEDamagePopupOverlay : Overlay
         public float RiseHeight;
         public float ScreenXOffset;
         public double Elapsed;
+        public Vector2 BaseDimensions;
+        public bool HasBaseDimensions;
     }
 
     public enum PopupFontSize : byte
