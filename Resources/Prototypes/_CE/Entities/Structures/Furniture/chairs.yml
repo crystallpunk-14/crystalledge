@@ -1,0 +1,49 @@
+- type: entity
+  name: wooden chair
+  description: Made of the most common planks. Simple and effective!
+  id: CEChairWooden
+  categories: [ ForkFiltered ]
+  parent:
+  - SeatBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/chairs.rsi
+    state: wooden
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 15
+    destroySound:
+      collection: WoodDestroy
+
+- type: entity
+  id: CEChairStoolWooden
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: stool_wooden
+
+- type: entity
+  id: CEChairStoolMetallic
+  suffix: Metallic
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: stool_metall
+
+- type: entity
+  id: CEChairStoolMetallicRed
+  suffix: Metallic Red
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: stool_metall_red
+
+- type: entity
+  id: CEChairStoolWoodenRed
+  suffix: Wooden Red
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: wooden_red
