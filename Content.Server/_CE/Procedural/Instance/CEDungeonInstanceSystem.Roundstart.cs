@@ -31,7 +31,9 @@ public sealed partial class CEDungeonInstanceSystem
             // player spawn happens. Static z-network configs finish in a few ticks; even
             // worst-case generators only block the main thread briefly during round start.
             while (!task.IsCompleted)
+            {
                 _dungeon.ProcessJobs();
+            }
 
             if (task.IsFaulted || !task.IsCompletedSuccessfully)
             {

@@ -1,7 +1,6 @@
 using Content.Shared._CE.Achievements;
 using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Shared.Network;
-using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Achievements;
@@ -17,7 +16,11 @@ public sealed class CEAchievementsRequirementManager : ICEAchievementsRequiremen
     public HashSet<string> PlayerAchievements { get; } = new();
     public Dictionary<string, float> AchievementPercentages { get; } = new();
     public bool DataLoaded => true;
-    public event Action? AchievementsUpdated;
+    public event Action? AchievementsUpdated
+    {
+        add { }
+        remove { }
+    }
 
     public bool HasAchievement(NetUserId userId, ProtoId<CEAchievementPrototype> achievement)
     {

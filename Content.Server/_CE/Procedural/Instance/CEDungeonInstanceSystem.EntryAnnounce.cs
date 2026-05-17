@@ -1,8 +1,10 @@
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Overview;
 using Content.Server._CE.Procedural.Prototypes;
+using Content.Shared._CE.Achievements.Prototypes;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.ScreenPopup;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
@@ -66,6 +68,13 @@ public sealed partial class CEDungeonInstanceSystem
         if (!_proto.TryIndex(instance.PrototypeId, out var proto))
             return;
 
+        if (TryComp<ActorComponent>(ent, out var actor)
+            && fromLevelId != instance.PrototypeId
+            && proto.Achievement is { } achievement)
+        {
+            AwardLevelAchievement(actor.PlayerSession.UserId, achievement);
+        }
+
         // Only show when at least a name or description localization key is configured.
         if (!proto.Name.HasValue && !proto.Desc.HasValue)
             return;
@@ -83,7 +92,7 @@ public sealed partial class CEDungeonInstanceSystem
         TrackLevelReached(ent, proto.ID);
 
         // Send the popup to the controlling player session.
-        if (!TryComp<ActorComponent>(ent, out var actor))
+        if (!TryComp<ActorComponent>(ent, out actor))
             return;
 
         var ev = new CEScreenPopupShowEvent
@@ -93,5 +102,10 @@ public sealed partial class CEDungeonInstanceSystem
             Sound = proto.EntrySound,
         };
         RaiseNetworkEvent(ev, actor.PlayerSession);
+    }
+
+    private async void AwardLevelAchievement(NetUserId userId, ProtoId<CEAchievementPrototype> achievement)
+    {
+        await _achievements.AddPlayerAchievementAsync(userId, achievement);
     }
 }

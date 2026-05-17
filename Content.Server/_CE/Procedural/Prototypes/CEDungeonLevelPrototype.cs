@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._CE.Achievements.Prototypes;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.PostProcess;
 using Robust.Shared.Audio;
@@ -54,6 +55,13 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     /// </summary>
     [DataField]
     public SoundSpecifier? EntrySound;
+
+    /// <summary>
+    /// Optional achievement granted when a player reaches this level.
+    /// Leave null to not grant any achievement.
+    /// </summary>
+    [DataField]
+    public ProtoId<CEAchievementPrototype>? Achievement;
 
     /// <summary>
     /// Whether this level is stable (singleton — one instance per server, e.g. safe zones)

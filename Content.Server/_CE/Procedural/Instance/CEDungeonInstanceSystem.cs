@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Content.Server._CE.Achievements;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Prototypes;
@@ -28,6 +29,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly CEAchievementsSystem _achievements = default!;
     [Dependency] private readonly CEDungeonSystem _dungeon = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;

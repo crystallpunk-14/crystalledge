@@ -1,5 +1,4 @@
 using Content.Shared._CE.Achievements;
-using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Client.Audio;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;

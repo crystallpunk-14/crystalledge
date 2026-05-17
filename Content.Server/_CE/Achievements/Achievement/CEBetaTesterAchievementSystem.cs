@@ -25,7 +25,7 @@ public sealed class CEBetaTesterAchievementSystem : EntitySystem
         // Don't award achievements in integration tests to avoid interfering with test cleanup
         if (_cfg.GetCVar(CCVars.DatabaseSynchronous))
             return;
-            
+
         await _achievement.AddPlayerAchievementAsync(ev.Player.UserId, _proto);
     }
 }
