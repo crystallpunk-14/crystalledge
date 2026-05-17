@@ -7,7 +7,6 @@
   parent:
   - BaseMossyTemplePostProcess
   name: ce-dungeon-arena-name
-  desc: ce-dungeon-arena-desc
   achievement: ClassWanderer
   uiPosition: 14,1
   exits:
