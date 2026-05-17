@@ -8,6 +8,7 @@
   - CEMagePants
   - CEGeneralShoes
   - CEGeneralBag
+  - CEGeneralBelt
 
 - type: roleLoadout
   id: JobCEPriest
@@ -18,6 +19,7 @@
   - CEPriestPants
   - CEGeneralShoes
   - CEGeneralBag
+  - CEGeneralBelt
 
 - type: roleLoadout
   id: JobCEKnight
@@ -28,6 +30,7 @@
   - CEKnightPants
   - CEGeneralShoes
   - CEGeneralBag
+  - CEGeneralBelt
 
 - type: roleLoadout
   id: JobCEWanderer
@@ -36,3 +39,4 @@
   - CEGeneralShoes
   - CEKnightPants #TODO: make wanderer pants
   - CEGeneralBag
+  - CEGeneralBelt

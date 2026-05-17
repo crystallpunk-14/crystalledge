@@ -48,3 +48,16 @@
   equipment:
     shoes: CEClothingGeneralShoesLongLeatherBoots
 
+# Belt
+
+- type: loadoutGroup
+  id: CEGeneralBelt
+  name: ce-loadout-belt
+  minLimit: 1
+  loadouts:
+  - CELantern
+
+- type: loadout
+  id: CELantern
+  equipment:
+    belt: CELantern
