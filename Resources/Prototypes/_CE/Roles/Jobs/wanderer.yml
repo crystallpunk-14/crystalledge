@@ -5,6 +5,9 @@
   description: ce-job-desc-wanderer
   playTimeTracker: CEJobWanderer
   icon: CEJobIconWanderer
+  requirements:
+    - !type:OverallPlaytimeRequirement
+      time: 2.5h
 
 - type: playTimeTracker
   id: CEJobWanderer
