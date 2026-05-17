@@ -1,0 +1,3739 @@
+{
+    "CEDummyRule": {
+        "id": "CEDummyRule",
+        "name": null,
+        "description": null,
+        "parent": "BaseGameRule",
+        "suffix": null
+    },
+    "CEAppearanceCarcat": {
+        "id": "CEAppearanceCarcat",
+        "name": null,
+        "description": null,
+        "parent": "BaseSpeciesAppearance",
+        "suffix": null
+    },
+    "CEOrganCarcat": {
+        "id": "CEOrganCarcat",
+        "name": null,
+        "description": null,
+        "parent": "OrganBase",
+        "suffix": "carcat"
+    },
+    "CEOrganCarcatExternal": {
+        "id": "CEOrganCarcatExternal",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcat",
+        "suffix": null
+    },
+    "CEOrganCarcatEyes": {
+        "id": "CEOrganCarcatEyes",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcat",
+        "suffix": null
+    },
+    "CEAppearanceElf": {
+        "id": "CEAppearanceElf",
+        "name": null,
+        "description": null,
+        "parent": "BaseSpeciesAppearance",
+        "suffix": null
+    },
+    "CEOrganElf": {
+        "id": "CEOrganElf",
+        "name": null,
+        "description": null,
+        "parent": "OrganBase",
+        "suffix": "elf"
+    },
+    "CEOrganElfExternal": {
+        "id": "CEOrganElfExternal",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElf",
+        "suffix": null
+    },
+    "CEAppearanceGoblin": {
+        "id": "CEAppearanceGoblin",
+        "name": null,
+        "description": null,
+        "parent": "BaseSpeciesAppearance",
+        "suffix": null
+    },
+    "CEOrganGoblin": {
+        "id": "CEOrganGoblin",
+        "name": null,
+        "description": null,
+        "parent": "OrganBase",
+        "suffix": "goblin"
+    },
+    "CEOrganGoblinExternal": {
+        "id": "CEOrganGoblinExternal",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblin",
+        "suffix": null
+    },
+    "CEAppearanceHuman": {
+        "id": "CEAppearanceHuman",
+        "name": null,
+        "description": null,
+        "parent": "BaseSpeciesAppearance",
+        "suffix": null
+    },
+    "CEOrganHuman": {
+        "id": "CEOrganHuman",
+        "name": null,
+        "description": null,
+        "parent": "OrganBase",
+        "suffix": "human"
+    },
+    "CEOrganHumanExternal": {
+        "id": "CEOrganHumanExternal",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHuman",
+        "suffix": null
+    },
+    "CEAppearanceTiefling": {
+        "id": "CEAppearanceTiefling",
+        "name": null,
+        "description": null,
+        "parent": "BaseSpeciesAppearance",
+        "suffix": null
+    },
+    "CEOrganTiefling": {
+        "id": "CEOrganTiefling",
+        "name": null,
+        "description": null,
+        "parent": "OrganBase",
+        "suffix": "tiefling"
+    },
+    "CEOrganTieflingExternal": {
+        "id": "CEOrganTieflingExternal",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTiefling",
+        "suffix": null
+    },
+    "CEChestWoodenOldFilled": {
+        "id": "CEChestWoodenOldFilled",
+        "name": null,
+        "description": null,
+        "parent": "CEChestWoodenOld",
+        "suffix": "Filled"
+    },
+    "CEChestWoodenFilled": {
+        "id": "CEChestWoodenFilled",
+        "name": null,
+        "description": null,
+        "parent": "CEChestWooden",
+        "suffix": "Filled"
+    },
+    "CEChestGoldFilled": {
+        "id": "CEChestGoldFilled",
+        "name": null,
+        "description": null,
+        "parent": "CEChestGold",
+        "suffix": "Filled"
+    },
+    "CESpawnerRandomLoot": {
+        "id": "CESpawnerRandomLoot",
+        "name": "random loot spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CESpawnerRandomFlowers": {
+        "id": "CESpawnerRandomFlowers",
+        "name": "random flowers spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": "100%"
+    },
+    "CESpawnerRandomPotion": {
+        "id": "CESpawnerRandomPotion",
+        "name": "random potion spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CESpawnerRandomDungeonProp": {
+        "id": "CESpawnerRandomDungeonProp",
+        "name": "random dungeon prop spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": "10%"
+    },
+    "CESpawnerRandomWeapon": {
+        "id": "CESpawnerRandomWeapon",
+        "name": "random weapon spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CEActionAdminDungeonOverview": {
+        "id": "CEActionAdminDungeonOverview",
+        "name": "Dungeon Overview",
+        "description": "View dungeon levels, their instances, and players in them.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionRespawn": {
+        "id": "CEActionRespawn",
+        "name": "Respawn",
+        "description": "Return to the lobby to start new game.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionZLevelUp": {
+        "id": "CEActionZLevelUp",
+        "name": "Move up",
+        "description": "Move up one Z-Level",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionZLevelDown": {
+        "id": "CEActionZLevelDown",
+        "name": "Move down",
+        "description": "Move down one Z-Level",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionToggleLookUp": {
+        "id": "CEActionToggleLookUp",
+        "name": "Look up",
+        "description": "You lift your head and look up at the sky.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEClothingBackBackpackBase": {
+        "id": "CEClothingBackBackpackBase",
+        "name": null,
+        "description": null,
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingBackSatchelBase": {
+        "id": "CEClothingBackSatchelBase",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingBackBackpackBase",
+        "suffix": null
+    },
+    "CEClothingBackBackpack": {
+        "id": "CEClothingBackBackpack",
+        "name": "backpack",
+        "description": "A standard backpack with decent storage space. Perfect for everyday use. It covers your back from blows!",
+        "parent": "CEClothingBackBackpackBase",
+        "suffix": null
+    },
+    "CEClothingBackSatchel": {
+        "id": "CEClothingBackSatchel",
+        "name": "rustic satchel",
+        "description": "A handcrafted leather satchel with rustic charm. Provides modest storage with traditional styling. Can be worn on the over the shoulder.",
+        "parent": "CEClothingBackSatchelBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryAmuletFireStar": {
+        "id": "CEClothingAccessoryAmuletFireStar",
+        "name": "Laozel's Scorching Edge",
+        "description": "A mystical amulet shaped like a fire. Increases all outgoing [color=#ff4500]fire damage[/color] by 3.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryAmuletIceStar": {
+        "id": "CEClothingAccessoryAmuletIceStar",
+        "name": "Mierza star",
+        "description": "A mystical amulet shaped like a frozen star. Increases all outgoing [color=#05eeff]cold damage[/color] by 3.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryAmuletVitality": {
+        "id": "CEClothingAccessoryAmuletVitality",
+        "name": "vitality amulet",
+        "description": "An amulet that enhances the body's ability to heal, increasing all incoming healing by 5.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryBezoar": {
+        "id": "CEClothingAccessoryBezoar",
+        "name": "bezoar",
+        "description": "Protects the wearer from poisoning.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryCrownOfThorns": {
+        "id": "CEClothingAccessoryCrownOfThorns",
+        "name": "crown of thorns",
+        "description": "When you take damage in melee combat, you deal 6 physical damage to the attacker.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryEnergyGeode": {
+        "id": "CEClothingAccessoryEnergyGeode",
+        "name": "energy geode",
+        "description": "A cracked geode containing energy crystals. It increases the owner's [color=#3296fa]maximum mana pool by 20[/color] and can function as a energy storage.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryFighterGloves": {
+        "id": "CEClothingAccessoryFighterGloves",
+        "name": "fighter Gloves",
+        "description": "Heavyweight fighting gloves. Increases all outgoing melee [color=#05eeff]physical damage[/color] by 3.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryFlamingStone": {
+        "id": "CEClothingAccessoryFlamingStone",
+        "name": "flaming stone",
+        "description": "Your melee attacks set targets on [color=#ff4500]fire[/color]",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryNinjaBandana": {
+        "id": "CEClothingAccessoryNinjaBandana",
+        "name": "ninja bandana",
+        "description": "Increases max [color=#32cd32]stamina[/color] by 3",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryRingFire": {
+        "id": "CEClothingAccessoryRingFire",
+        "name": "fire ring",
+        "description": "A protective ring that shields the carrier from the heat of the fire.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryRingFrost": {
+        "id": "CEClothingAccessoryRingFrost",
+        "name": "frost ring",
+        "description": "A protective ring that shields the carrier from the cold.",
+        "parent": "CEClothingAccessoryBase",
+        "suffix": null
+    },
+    "CEClothingAccessoryBase": {
+        "id": "CEClothingAccessoryBase",
+        "name": null,
+        "description": null,
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingArmorChainmail": {
+        "id": "CEClothingArmorChainmail",
+        "name": "chainmail",
+        "description": "TODO",
+        "parent": "CEClothingArmorBase",
+        "suffix": null
+    },
+    "CEClothingArmorBase": {
+        "id": "CEClothingArmorBase",
+        "name": "armor",
+        "description": "Protect your internal organs from being pierced by sharp foreign objects.",
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingShirtBase": {
+        "id": "CEClothingShirtBase",
+        "name": "shirt",
+        "description": "Cover up your nakedness!",
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingPantsBase": {
+        "id": "CEClothingPantsBase",
+        "name": "pants",
+        "description": "Pants to cover my thighs from the cold.",
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingCloakBase": {
+        "id": "CEClothingCloakBase",
+        "name": "cloak",
+        "description": "TODO",
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingHeadBase": {
+        "id": "CEClothingHeadBase",
+        "name": "head",
+        "description": "TODO",
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingShoesBase": {
+        "id": "CEClothingShoesBase",
+        "name": "shoes",
+        "description": "TODO",
+        "parent": "Clothing",
+        "suffix": null
+    },
+    "CEClothingGeneralPantsDark": {
+        "id": "CEClothingGeneralPantsDark",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingPantsBase",
+        "suffix": null
+    },
+    "CEClothingGeneralShoesAristocraticBlack": {
+        "id": "CEClothingGeneralShoesAristocraticBlack",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShoesBase",
+        "suffix": null
+    },
+    "CEClothingGeneralShoesLongLeatherBoots": {
+        "id": "CEClothingGeneralShoesLongLeatherBoots",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShoesBase",
+        "suffix": null
+    },
+    "CEClothingKnightCloakCapeRed": {
+        "id": "CEClothingKnightCloakCapeRed",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingCloakBase",
+        "suffix": null
+    },
+    "CEClothingKnightCloakFurRed": {
+        "id": "CEClothingKnightCloakFurRed",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingCloakBase",
+        "suffix": null
+    },
+    "CEClothingKnightShirtFighter": {
+        "id": "CEClothingKnightShirtFighter",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingMageCloakCape": {
+        "id": "CEClothingMageCloakCape",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingCloakBase",
+        "suffix": null
+    },
+    "CEClothingMageHeadTriangular": {
+        "id": "CEClothingMageHeadTriangular",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingHeadBase",
+        "suffix": null
+    },
+    "CEClothingMagePantsBlue": {
+        "id": "CEClothingMagePantsBlue",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingPantsBase",
+        "suffix": null
+    },
+    "CEClothingMagePantsPurple": {
+        "id": "CEClothingMagePantsPurple",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingPantsBase",
+        "suffix": null
+    },
+    "CEClothingMageShirtBlue": {
+        "id": "CEClothingMageShirtBlue",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingMageShirtBlueJacket": {
+        "id": "CEClothingMageShirtBlueJacket",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingMageShirtOpenPurpleDress": {
+        "id": "CEClothingMageShirtOpenPurpleDress",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingMageShirtPurple": {
+        "id": "CEClothingMageShirtPurple",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingMageShirtWhitePurpleDress": {
+        "id": "CEClothingMageShirtWhitePurpleDress",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingPriestPantsDark": {
+        "id": "CEClothingPriestPantsDark",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingPantsBase",
+        "suffix": null
+    },
+    "CEClothingPriestPantsWhite": {
+        "id": "CEClothingPriestPantsWhite",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingPantsBase",
+        "suffix": null
+    },
+    "CEClothingPriestShirtDark": {
+        "id": "CEClothingPriestShirtDark",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingPriestShirtWhite": {
+        "id": "CEClothingPriestShirtWhite",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingPriestShirtWhiteWide": {
+        "id": "CEClothingPriestShirtWhiteWide",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEClothingWandererShirt": {
+        "id": "CEClothingWandererShirt",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingShirtBase",
+        "suffix": null
+    },
+    "CEAlarmInRange5": {
+        "id": "CEAlarmInRange5",
+        "name": "Alarm mobs",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": "5 range"
+    },
+    "CEAlarmInRange10": {
+        "id": "CEAlarmInRange10",
+        "name": null,
+        "description": null,
+        "parent": "CEAlarmInRange5",
+        "suffix": "10 range"
+    },
+    "CEAttackImpact2": {
+        "id": "CEAttackImpact2",
+        "name": null,
+        "description": null,
+        "parent": "CEAttackImpact",
+        "suffix": null
+    },
+    "CEAttackImpact3": {
+        "id": "CEAttackImpact3",
+        "name": null,
+        "description": null,
+        "parent": "CEAttackImpact",
+        "suffix": null
+    },
+    "CEDustEffect": {
+        "id": "CEDustEffect",
+        "name": "dust effect",
+        "description": null,
+        "parent": null,
+        "suffix": "VFX"
+    },
+    "CEGodRays": {
+        "id": "CEGodRays",
+        "name": "god rays",
+        "description": null,
+        "parent": null,
+        "suffix": "Sun"
+    },
+    "CEGodRaysMoon": {
+        "id": "CEGodRaysMoon",
+        "name": null,
+        "description": null,
+        "parent": "CEGodRays",
+        "suffix": "Moon"
+    },
+    "CESteamEffect": {
+        "id": "CESteamEffect",
+        "name": "steam",
+        "description": "A burst of steam from opposing elements colliding.",
+        "parent": null,
+        "suffix": null
+    },
+    "CERoomPasswayMarker": {
+        "id": "CERoomPasswayMarker",
+        "name": "room passway marker",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CESpawnPointJob": {
+        "id": "CESpawnPointJob",
+        "name": "Players spawnpoint",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CEBaseBiomeSpawner": {
+        "id": "CEBaseBiomeSpawner",
+        "name": "biome spawner",
+        "description": "Spawns of various biomes on the map.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEBiomeSpawnerGrassland": {
+        "id": "CEBiomeSpawnerGrassland",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseBiomeSpawner",
+        "suffix": "Grassland"
+    },
+    "CEActionFireConstructExplosion": {
+        "id": "CEActionFireConstructExplosion",
+        "name": "Fire construct explosion",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionFireConstructFirebolt": {
+        "id": "CEActionFireConstructFirebolt",
+        "name": "Firebolt",
+        "description": "You hurl a 3 fireballs that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileFireConstructFirebolt": {
+        "id": "CEProjectileFireConstructFirebolt",
+        "name": "firebolt projectile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEMobFlem2": {
+        "id": "CEMobFlem2",
+        "name": null,
+        "description": null,
+        "parent": "CEMobFlem",
+        "suffix": "Fire"
+    },
+    "CEMobFlem3": {
+        "id": "CEMobFlem3",
+        "name": null,
+        "description": null,
+        "parent": "CEMobFlem",
+        "suffix": "Frost"
+    },
+    "CEActionGnomeJump": {
+        "id": "CEActionGnomeJump",
+        "name": "fire slime jump",
+        "description": "The slime leaps toward a target.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionGnomeThrowStone": {
+        "id": "CEActionGnomeThrowStone",
+        "name": "Throw stone",
+        "description": "You throw a stone at your enemy, dealing minor damage.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileGnomeStone": {
+        "id": "CEProjectileGnomeStone",
+        "name": "gnome projectile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionGnomeHeal": {
+        "id": "CEActionGnomeHeal",
+        "name": "Cure wounds",
+        "description": "You restore [color=#1defa9]5 health[/color] to the creature you touch.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionGnomeThrowRat": {
+        "id": "CEActionGnomeThrowRat",
+        "name": "Rat throw",
+        "description": "You throw a rat at your enemy.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileGnomeRat": {
+        "id": "CEProjectileGnomeRat",
+        "name": "gnome rat projectile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionFireSlimeJump": {
+        "id": "CEActionFireSlimeJump",
+        "name": "fire slime jump",
+        "description": "The slime leaps toward a target.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionWaterSlimeJump": {
+        "id": "CEActionWaterSlimeJump",
+        "name": "water slime jump",
+        "description": "The slime leaps toward a target.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobBossSlimeSpawner": {
+        "id": "CEMobBossSlimeSpawner",
+        "name": "Giant crystal slime Spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": "Boss"
+    },
+    "CEActionGiantSlimeSpreadShot": {
+        "id": "CEActionGiantSlimeSpreadShot",
+        "name": "Shoot",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileGiantSlimeSpreadShot": {
+        "id": "CEProjectileGiantSlimeSpreadShot",
+        "name": null,
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionGiantSlimeSplashAttack": {
+        "id": "CEActionGiantSlimeSplashAttack",
+        "name": "Melee attack",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionGiantSlimeHighTeleport": {
+        "id": "CEActionGiantSlimeHighTeleport",
+        "name": "High Teleport Jump",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEMobBossViatorSpawner": {
+        "id": "CEMobBossViatorSpawner",
+        "name": "Viator Spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": "Boss"
+    },
+    "CEActionViatorSelfHeal": {
+        "id": "CEActionViatorSelfHeal",
+        "name": "Self Heal",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionViatorManaSteal": {
+        "id": "CEActionViatorManaSteal",
+        "name": "Mana Steal",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectViatorStealMana": {
+        "id": "CEEffectViatorStealMana",
+        "name": null,
+        "description": null,
+        "parent": "CEEffectAreaHealingTelegraphy",
+        "suffix": null
+    },
+    "CEActionViatorIcicles": {
+        "id": "CEActionViatorIcicles",
+        "name": "Shoot",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileViatorIcicle": {
+        "id": "CEProjectileViatorIcicle",
+        "name": null,
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionViatorMelee": {
+        "id": "CEActionViatorMelee",
+        "name": "Melee dash attack",
+        "description": null,
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEMobBossBase": {
+        "id": "CEMobBossBase",
+        "name": null,
+        "description": null,
+        "parent": null,
+        "suffix": "Boss"
+    },
+    "CEConsumableBloodRose": {
+        "id": "CEConsumableBloodRose",
+        "name": "blood rose",
+        "description": "A scarlet rose that grows in places where much blood has been shed. In the right hands, it serves as an ingredient for healing potions.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEConsumableBlueAelyta": {
+        "id": "CEConsumableBlueAelyta",
+        "name": "blue aelyta",
+        "description": "A blue flower that grows in areas where magical energy congregates. In the right hands, it serves as an ingredient for mana-restoring potions.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEConsumableYellowDayflin": {
+        "id": "CEConsumableYellowDayflin",
+        "name": "yellow dayflin",
+        "description": "A yellow flower that is remarkable for its ability to grow quickly almost anywhere.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEIronKey": {
+        "id": "CEIronKey",
+        "name": "iron key",
+        "description": "A worn iron key. Fits a golden lock.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEKnowledgeBook_Acceleration": {
+        "id": "CEKnowledgeBook_Acceleration",
+        "name": "acceleration",
+        "description": "This slim volume contains a detailed recipe for brewing a potion that increases movement speed for a short duration.",
+        "parent": "CEBaseKnowledgeBook",
+        "suffix": null
+    },
+    "CEKnowledgeBook_BasicAlchemy": {
+        "id": "CEKnowledgeBook_BasicAlchemy",
+        "name": "basic alchemy",
+        "description": "A Guide to Alchemy for Complete Beginners. This book describes basic recipes for brewing the most common and simple potions.",
+        "parent": "CEBaseKnowledgeBook",
+        "suffix": null
+    },
+    "CEKnowledgeBook_AlchemicalBombs": {
+        "id": "CEKnowledgeBook_AlchemicalBombs",
+        "name": "alchemical bombs",
+        "description": "Do you want to unleash scorching fire or freezing cold on your enemies? But you don’t want to waste your mana? This treatise will be the greatest discovery of your life.",
+        "parent": "CEBaseKnowledgeBook",
+        "suffix": null
+    },
+    "CEKnowledgeBook_ManaConservation": {
+        "id": "CEKnowledgeBook_ManaConservation",
+        "name": "mana conservation",
+        "description": "A description of a magical technique that allows you to preserve your own magical energy in liquid form. It's not the most pleasant process, but it serves as an alternative to creating mana-restoring potions.",
+        "parent": "CEBaseKnowledgeBook",
+        "suffix": null
+    },
+    "CEKnowledgeBook_Regeneration": {
+        "id": "CEKnowledgeBook_Regeneration",
+        "name": "regeneration",
+        "description": "This slim volume contains a detailed recipe for brewing a health-regeneration potion. Useful information!",
+        "parent": "CEBaseKnowledgeBook",
+        "suffix": null
+    },
+    "CEBaseKnowledgeBook": {
+        "id": "CEBaseKnowledgeBook",
+        "name": "knowledge scroll",
+        "description": "An ancient scroll containing knowledge of item creation. Read it to learn recipes.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEEffectKnowledgeSparks": {
+        "id": "CEEffectKnowledgeSparks",
+        "name": "knowledge sparks",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEConsumableSlimeCoreFire": {
+        "id": "CEConsumableSlimeCoreFire",
+        "name": "Fire slime core",
+        "description": "A pulsating core from a fire slime. It heats the surrounding air but is cool to the touch. It seems fragile.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEConsumableSlimeCoreWater": {
+        "id": "CEConsumableSlimeCoreWater",
+        "name": "Water slime core",
+        "description": "A pulsating core from a water slime. It humidifies the surrounding air. It seems fragile.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEEffectPotionAlchemicalFire": {
+        "id": "CEEffectPotionAlchemicalFire",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEEffectPotionHealing": {
+        "id": "CEEffectPotionHealing",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEEffectPotionManaRestore": {
+        "id": "CEEffectPotionManaRestore",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEPotionBase": {
+        "id": "CEPotionBase",
+        "name": "empty vial",
+        "description": "A potion was poured here once. Or will be. Who knows?",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEConsumablePotionBase": {
+        "id": "CEConsumablePotionBase",
+        "name": null,
+        "description": null,
+        "parent": "CEPotionBase",
+        "suffix": null
+    },
+    "CEPotionEmptyMedium": {
+        "id": "CEPotionEmptyMedium",
+        "name": null,
+        "description": null,
+        "parent": "CEPotionBase",
+        "suffix": null
+    },
+    "CEPotionEmptySmall": {
+        "id": "CEPotionEmptySmall",
+        "name": null,
+        "description": null,
+        "parent": "CEPotionBase",
+        "suffix": null
+    },
+    "CEPotionEmptyCube": {
+        "id": "CEPotionEmptyCube",
+        "name": null,
+        "description": null,
+        "parent": "CEPotionBase",
+        "suffix": null
+    },
+    "CEPotionEmptyStar": {
+        "id": "CEPotionEmptyStar",
+        "name": null,
+        "description": null,
+        "parent": "CEPotionBase",
+        "suffix": null
+    },
+    "CEGlassShard": {
+        "id": "CEGlassShard",
+        "name": "glass shard",
+        "description": "Sharp pieces of glass. Don't step on it!",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CESoulShard": {
+        "id": "CESoulShard",
+        "name": "soul essence",
+        "description": "A fragment of the soul that can be offered as a gift to sacred statues in exchange for powerful blessings",
+        "parent": null,
+        "suffix": null
+    },
+    "CEEffectSoulCollect": {
+        "id": "CEEffectSoulCollect",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CESoulTransferParticle": {
+        "id": "CESoulTransferParticle",
+        "name": "soul fragment",
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CECoinBase": {
+        "id": "CECoinBase",
+        "name": null,
+        "description": null,
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CECoinCopper1": {
+        "id": "CECoinCopper1",
+        "name": "copper coin",
+        "description": "The smallest denomination coin. Copper.",
+        "parent": "CECoinBase",
+        "suffix": "1 coin"
+    },
+    "CECoinCopper5": {
+        "id": "CECoinCopper5",
+        "name": null,
+        "description": null,
+        "parent": "CECoinCopper1",
+        "suffix": "5 coins"
+    },
+    "CECoinCopper10": {
+        "id": "CECoinCopper10",
+        "name": null,
+        "description": null,
+        "parent": "CECoinCopper1",
+        "suffix": "10 coins"
+    },
+    "CECoinSilver1": {
+        "id": "CECoinSilver1",
+        "name": "silver coin",
+        "description": "A valuable coin made from a precisely calibrated silver alloy... and something else. Equal in value to ten coppers.",
+        "parent": "CECoinBase",
+        "suffix": "1 coin"
+    },
+    "CECoinSilver5": {
+        "id": "CECoinSilver5",
+        "name": null,
+        "description": null,
+        "parent": "CECoinSilver1",
+        "suffix": "5 coins"
+    },
+    "CECoinSilver10": {
+        "id": "CECoinSilver10",
+        "name": null,
+        "description": null,
+        "parent": "CECoinSilver1",
+        "suffix": "10 coins"
+    },
+    "CECoinGold1": {
+        "id": "CECoinGold1",
+        "name": "gold coin",
+        "description": "A gold, big, beautiful coin. Valuable enough to be stolen by bandits. Equal in value to ten silver coins.",
+        "parent": "CECoinBase",
+        "suffix": "1 coin"
+    },
+    "CECoinGold5": {
+        "id": "CECoinGold5",
+        "name": null,
+        "description": null,
+        "parent": "CECoinGold1",
+        "suffix": "5 coins"
+    },
+    "CECoinGold10": {
+        "id": "CECoinGold10",
+        "name": null,
+        "description": null,
+        "parent": "CECoinGold1",
+        "suffix": "10 coins"
+    },
+    "CECoinPlatinum1": {
+        "id": "CECoinPlatinum1",
+        "name": "platinum coin",
+        "description": "A platinum coin? It's so rare. Ten gold pieces is the price of one.",
+        "parent": "CECoinBase",
+        "suffix": "1 coin"
+    },
+    "CECoinPlatinum5": {
+        "id": "CECoinPlatinum5",
+        "name": null,
+        "description": null,
+        "parent": "CECoinPlatinum1",
+        "suffix": "5 coins"
+    },
+    "CECoinPlatinum10": {
+        "id": "CECoinPlatinum10",
+        "name": null,
+        "description": null,
+        "parent": "CECoinPlatinum1",
+        "suffix": "10 coins"
+    },
+    "CEInstrumentFlute": {
+        "id": "CEInstrumentFlute",
+        "name": "flute",
+        "description": "A compact musical wind instrument, popular in villages as well as with large musical troupes.",
+        "parent": "BaseHandheldInstrument",
+        "suffix": null
+    },
+    "CEInstrumentLyra": {
+        "id": "CEInstrumentLyra",
+        "name": "lyra",
+        "description": "A common stringed instrument throughout Sylate, popular with various bards and musical troupes.",
+        "parent": "BaseHandheldInstrument",
+        "suffix": null
+    },
+    "CEInstrumentLute": {
+        "id": "CEInstrumentLute",
+        "name": "lute",
+        "description": "A legend among bards.",
+        "parent": "BaseHandheldInstrument",
+        "suffix": null
+    },
+    "CEInstrumentGuitarSkeleton": {
+        "id": "CEInstrumentGuitarSkeleton",
+        "name": "skelute",
+        "description": "A true weapon for brutal rock skeletons. What does \"rock\" mean?",
+        "parent": "BaseHandheldInstrument",
+        "suffix": null
+    },
+    "CEBaseWeapon": {
+        "id": "CEBaseWeapon",
+        "name": null,
+        "description": null,
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffCurse": {
+        "id": "CEWeaponMagicStaffCurse",
+        "name": "curse staff",
+        "description": "TODO",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileMagicCurse": {
+        "id": "CEProjectileMagicCurse",
+        "name": "curse bolt",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponDebugMagicStaff": {
+        "id": "CEWeaponDebugMagicStaff",
+        "name": "admin missile staff",
+        "description": "INFINITY ENERGY",
+        "parent": "CEBaseWeapon",
+        "suffix": "DEBUG"
+    },
+    "CEProjectileMagicMissileDebug": {
+        "id": "CEProjectileMagicMissileDebug",
+        "name": "magic missile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffFireball": {
+        "id": "CEWeaponMagicStaffFireball",
+        "name": "staff of fireballs",
+        "description": "I CAST FIREBALL",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileStaffFirebolt": {
+        "id": "CEProjectileStaffFirebolt",
+        "name": "firebolt projectile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffHealing": {
+        "id": "CEWeaponMagicStaffHealing",
+        "name": "healing staff",
+        "description": "A staff imbued with healing magic. Restores health to anything it hit.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileMagicHealing": {
+        "id": "CEProjectileMagicHealing",
+        "name": "healing energy bolt",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffIce": {
+        "id": "CEWeaponMagicStaffIce",
+        "name": "ice staff",
+        "description": "A staff imbued with ice magic. Launches freezing projectiles at enemies.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileMagicIce": {
+        "id": "CEProjectileMagicIce",
+        "name": "ice bolt",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffMagicMissile": {
+        "id": "CEWeaponMagicStaffMagicMissile",
+        "name": "magic missile staff",
+        "description": "A mage's standard weapon that fires compressed beams of energy.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileMagicMissile": {
+        "id": "CEProjectileMagicMissile",
+        "name": "magic missile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffSparkle": {
+        "id": "CEWeaponMagicStaffSparkle",
+        "name": "fire sparkle staff",
+        "description": "The simplest magical weapon that shoots hot sparks",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileMagicSparkle": {
+        "id": "CEProjectileMagicSparkle",
+        "name": "fire bolt",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponMagicStaffWater": {
+        "id": "CEWeaponMagicStaffWater",
+        "name": "water staff",
+        "description": "A staff imbued with water magic. Launches slow water orbs that drench and repel their target.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEProjectileMagicWater": {
+        "id": "CEProjectileMagicWater",
+        "name": "water bolt",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEWeaponSwordDebug": {
+        "id": "CEWeaponSwordDebug",
+        "name": "admin sword",
+        "description": "INFINITY POWER",
+        "parent": "CEBaseWeapon",
+        "suffix": "DEBUG"
+    },
+    "CEWeaponHeavyClub": {
+        "id": "CEWeaponHeavyClub",
+        "name": "heavy club",
+        "description": "TODO",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponStaffHolyStick": {
+        "id": "CEWeaponStaffHolyStick",
+        "name": "holy stick",
+        "description": "Sometimes, to bless someone, you have to give them a firm tap on the head.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponSkimitarIron": {
+        "id": "CEWeaponSkimitarIron",
+        "name": "iron skimitar",
+        "description": "TODO",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponSkimitarMolten": {
+        "id": "CEWeaponSkimitarMolten",
+        "name": "molten skimitar",
+        "description": "TODO",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponDaggerPurification": {
+        "id": "CEWeaponDaggerPurification",
+        "name": "purification dagger",
+        "description": "An enchanted dagger that cleanses the target of all negative status effects.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponSpearIron": {
+        "id": "CEWeaponSpearIron",
+        "name": "iron spear",
+        "description": "A long iron-tipped spear. Excellent reach keeps enemies at bay.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponSpearSoulCatcher": {
+        "id": "CEWeaponSpearSoulCatcher",
+        "name": "soul catcher",
+        "description": "A rare magical weapon that does not deal physical damage but wounds the soul, draining mana from it and transferring it to the wielder",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponSwordBone": {
+        "id": "CEWeaponSwordBone",
+        "name": "bone sword",
+        "description": "Nicks on the blade leave bruise wounds, increasing the damage dealt to the target",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponSwordIron": {
+        "id": "CEWeaponSwordIron",
+        "name": "iron sword",
+        "description": "A finely crafted sword favored by imperial officers. Its blade gleams with authority and tradition.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponTwoHandedSwordIron": {
+        "id": "CEWeaponTwoHandedSwordIron",
+        "name": "iron two-handed sword",
+        "description": "A large and heavy two-handed sword. Heavy means reliable.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEWeaponStaffWooden": {
+        "id": "CEWeaponStaffWooden",
+        "name": "wooden staff",
+        "description": "A long wooden stick with an iron tip.",
+        "parent": "CEBaseWeapon",
+        "suffix": null
+    },
+    "CEStatusEffectAcceleration": {
+        "id": "CEStatusEffectAcceleration",
+        "name": "Acceleration",
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectBlessing": {
+        "id": "CEStatusEffectBlessing",
+        "name": "blessing",
+        "description": "Increases incoming healing.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectBruise": {
+        "id": "CEStatusEffectBruise",
+        "name": "Bruise",
+        "description": "Increases incoming physical damage.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectBurn": {
+        "id": "CEStatusEffectBurn",
+        "name": "Burn",
+        "description": "Increases incoming fire damage.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectColdSlowdown": {
+        "id": "CEStatusEffectColdSlowdown",
+        "name": "Cold Slowdown",
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectCurse": {
+        "id": "CEStatusEffectCurse",
+        "name": "Curse",
+        "description": "Increases all incoming damage.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEEffectAddCurse": {
+        "id": "CEEffectAddCurse",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEStatusEffectDivineShield": {
+        "id": "CEStatusEffectDivineShield",
+        "name": "Divine Shield",
+        "description": "When you heal something, you heal [color=#1defa9]2 health[/color] more.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEEffectBreakDivineShield": {
+        "id": "CEEffectBreakDivineShield",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEStatusEffectFightForSurvival": {
+        "id": "CEStatusEffectFightForSurvival",
+        "name": "Fight for Survival",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectFire": {
+        "id": "CEStatusEffectFire",
+        "name": "Fire!",
+        "description": "On fire!",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectFrostbite": {
+        "id": "CEStatusEffectFrostbite",
+        "name": "Frostbite",
+        "description": "Increases incoming cold damage.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectFrozen": {
+        "id": "CEStatusEffectFrozen",
+        "name": "Frozen",
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionFrozenBreak": {
+        "id": "CEActionFrozenBreak",
+        "name": "Break free",
+        "description": "You break free from the icy trap.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEStatusEffectPacifism": {
+        "id": "CEStatusEffectPacifism",
+        "name": "Pacifism",
+        "description": "All combat is disabled.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectPoison": {
+        "id": "CEStatusEffectPoison",
+        "name": "Poison",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectRegeneration": {
+        "id": "CEStatusEffectRegeneration",
+        "name": "Regeneration",
+        "description": "Regenerating health over time.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectStrength": {
+        "id": "CEStatusEffectStrength",
+        "name": "Strength",
+        "description": "Increases melee damage per stack.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectTempShield": {
+        "id": "CEStatusEffectTempShield",
+        "name": "Temporary Shield",
+        "description": "Absorbs damage, fades over time.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEEffectAddTempShieldPhysical": {
+        "id": "CEEffectAddTempShieldPhysical",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEEffectTakeDamageTempShieldPhysical": {
+        "id": "CEEffectTakeDamageTempShieldPhysical",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEEffectBreakTempShieldPhysical": {
+        "id": "CEEffectBreakTempShieldPhysical",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEStatusEffectWet": {
+        "id": "CEStatusEffectWet",
+        "name": "Wet",
+        "description": "Soaked with water. Fire has no power here.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEBonfire": {
+        "id": "CEBonfire",
+        "name": "Bonfire",
+        "description": "Interact to restore health and mana. TODO: immersive name and description",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEChasm": {
+        "id": "CEChasm",
+        "name": "chasm",
+        "description": "You can't even see the bottom.",
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CECrystalBase": {
+        "id": "CECrystalBase",
+        "name": "crystals",
+        "description": "TODO",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CECrystalQuartzWhite": {
+        "id": "CECrystalQuartzWhite",
+        "name": null,
+        "description": null,
+        "parent": "CECrystalBase",
+        "suffix": "White"
+    },
+    "CECrystalQuartzRed": {
+        "id": "CECrystalQuartzRed",
+        "name": null,
+        "description": null,
+        "parent": "CECrystalBase",
+        "suffix": "Red"
+    },
+    "CECrystalQuartzBlue": {
+        "id": "CECrystalQuartzBlue",
+        "name": null,
+        "description": null,
+        "parent": "CECrystalBase",
+        "suffix": "Blue"
+    },
+    "CECrystalQuartzGreen": {
+        "id": "CECrystalQuartzGreen",
+        "name": null,
+        "description": null,
+        "parent": "CECrystalBase",
+        "suffix": "Green"
+    },
+    "CECrystalQuartzPurple": {
+        "id": "CECrystalQuartzPurple",
+        "name": null,
+        "description": null,
+        "parent": "CECrystalBase",
+        "suffix": "Purple"
+    },
+    "CEFogGate": {
+        "id": "CEFogGate",
+        "name": "fog gate",
+        "description": "A mysterious wall of dense fog. Those who approach from the front pass through freely; those who approach from behind find it impassable.",
+        "parent": null,
+        "suffix": null
+    },
+    "CELava": {
+        "id": "CELava",
+        "name": "lava",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CELavaMoving": {
+        "id": "CELavaMoving",
+        "name": null,
+        "description": null,
+        "parent": "CELava",
+        "suffix": "Moving"
+    },
+    "CESpiderWeb": {
+        "id": "CESpiderWeb",
+        "name": "spider web",
+        "description": "It's stringy and sticky.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEUpgradeStatue": {
+        "id": "CEUpgradeStatue",
+        "name": "Level up statue",
+        "description": "Interact to level up. TODO: immersive name and description",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEUpgradePostament": {
+        "id": "CEUpgradePostament",
+        "name": "Level up postament",
+        "description": "Select one of the upgrade options to apply it. TODO: immersive name and description",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEUpgradeBlank": {
+        "id": "CEUpgradeBlank",
+        "name": "blessing",
+        "description": null,
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEUpgradeRandom": {
+        "id": "CEUpgradeRandom",
+        "name": "Random Blessing",
+        "description": null,
+        "parent": "CEUpgradeBlank",
+        "suffix": null
+    },
+    "CEWater": {
+        "id": "CEWater",
+        "name": "water",
+        "description": "You're definitely going to get your feet wet",
+        "parent": null,
+        "suffix": null
+    },
+    "CEWaterMoving": {
+        "id": "CEWaterMoving",
+        "name": null,
+        "description": null,
+        "parent": "CEWater",
+        "suffix": "Moving"
+    },
+    "CEIce": {
+        "id": "CEIce",
+        "name": "ice",
+        "description": "Slippery cold ice. Watch your step.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEIceFrozenStream": {
+        "id": "CEIceFrozenStream",
+        "name": null,
+        "description": "A frozen stream, the current trapped under ice.",
+        "parent": "CEIce",
+        "suffix": "Frozen Stream"
+    },
+    "CEWaterPoisoned": {
+        "id": "CEWaterPoisoned",
+        "name": "poisoned water",
+        "description": "This water has been contaminated with a dangerous substance.",
+        "parent": "CEWater",
+        "suffix": "Poisoned"
+    },
+    "CEWaterPoisonedMoving": {
+        "id": "CEWaterPoisonedMoving",
+        "name": null,
+        "description": null,
+        "parent": "CEWaterPoisoned",
+        "suffix": "Moving"
+    },
+    "CEIcePoisoned": {
+        "id": "CEIcePoisoned",
+        "name": null,
+        "description": null,
+        "parent": "CEIce",
+        "suffix": "Poisoned"
+    },
+    "CEIceFrozenPoisonedStream": {
+        "id": "CEIceFrozenPoisonedStream",
+        "name": null,
+        "description": "A frozen stream, the current trapped under ice.",
+        "parent": "CEIcePoisoned",
+        "suffix": "Poisoned Frozen Stream"
+    },
+    "CEBaseDoor": {
+        "id": "CEBaseDoor",
+        "name": null,
+        "description": null,
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEIronDoorMirrored": {
+        "id": "CEIronDoorMirrored",
+        "name": null,
+        "description": null,
+        "parent": "CEIronDoor",
+        "suffix": "Opened, Mirrored"
+    },
+    "CEIronDoorWindowedMirrored": {
+        "id": "CEIronDoorWindowedMirrored",
+        "name": null,
+        "description": null,
+        "parent": "CEIronDoorWindowed",
+        "suffix": "Opened, Mirrored"
+    },
+    "CEWoodenDoorMirrored": {
+        "id": "CEWoodenDoorMirrored",
+        "name": null,
+        "description": null,
+        "parent": "CEWoodenDoor",
+        "suffix": "Opened, Mirrored"
+    },
+    "CEWoodenDoorWindowedMirrored": {
+        "id": "CEWoodenDoorWindowedMirrored",
+        "name": null,
+        "description": null,
+        "parent": "CEWoodenDoorWindowed",
+        "suffix": "Opened, Mirrored"
+    },
+    "CEBaseFenceBig": {
+        "id": "CEBaseFenceBig",
+        "name": "big fence",
+        "description": "You definitely need a towel to get to the other side",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEFenceBigIron": {
+        "id": "CEFenceBigIron",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFenceBig",
+        "suffix": "Iron"
+    },
+    "CEBaseFenceGateBig": {
+        "id": "CEBaseFenceGateBig",
+        "name": "fence big gate",
+        "description": "Big man-sized gates. What's your next move?",
+        "parent": "CEBaseFenceBig",
+        "suffix": null
+    },
+    "CEBaseFence": {
+        "id": "CEBaseFence",
+        "name": "fence",
+        "description": "A low fence restricting movement in a purely nominal way.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEBaseFenceGate": {
+        "id": "CEBaseFenceGate",
+        "name": "fence gate",
+        "description": "You have two paths. You can open the door like a normal person, or you can climb over the door like a funny person.",
+        "parent": "CEBaseFence",
+        "suffix": null
+    },
+    "CEWallStoneBrick": {
+        "id": "CEWallStoneBrick",
+        "name": "stone brick wall",
+        "description": null,
+        "parent": "CEBaseWall",
+        "suffix": "Indestructable"
+    },
+    "CEWallStone": {
+        "id": "CEWallStone",
+        "name": "stone",
+        "description": null,
+        "parent": "CEBaseWall",
+        "suffix": "Indestructable"
+    },
+    "CEWallDirt": {
+        "id": "CEWallDirt",
+        "name": "dirt",
+        "description": null,
+        "parent": "CEBaseWall",
+        "suffix": "Indestructable"
+    },
+    "CEWallInvinsible": {
+        "id": "CEWallInvinsible",
+        "name": "invinsible barrier",
+        "description": "invinsible and indestructible wall for admemes.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEWallWoodenBase": {
+        "id": "CEWallWoodenBase",
+        "name": "wooden wall",
+        "description": null,
+        "parent": null,
+        "suffix": "Flammable, Destructable"
+    },
+    "CEBaseWall": {
+        "id": "CEBaseWall",
+        "name": "wall",
+        "description": "Sturdy enough to cover you from threats or cold winds.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEBaseWallFrame": {
+        "id": "CEBaseWallFrame",
+        "name": null,
+        "description": "This wall is now in an indeterminate state between existence and non-existence.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEBaseFastPortal": {
+        "id": "CEBaseFastPortal",
+        "name": "fast portal",
+        "description": "Transports you to a another place!",
+        "parent": null,
+        "suffix": null
+    },
+    "CEPortalArena1": {
+        "id": "CEPortalArena1",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFastPortal",
+        "suffix": "Arena 1"
+    },
+    "CEPortalArena2": {
+        "id": "CEPortalArena2",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFastPortal",
+        "suffix": "Arena 2"
+    },
+    "CEWallBossEndDelete": {
+        "id": "CEWallBossEndDelete",
+        "name": null,
+        "description": null,
+        "parent": "CEWallStoneBrick",
+        "suffix": "Deleted on END boss fight"
+    },
+    "CEWallBossStartDelete": {
+        "id": "CEWallBossStartDelete",
+        "name": null,
+        "description": null,
+        "parent": "CEWallStoneBrick",
+        "suffix": "Deleted on START boss fight"
+    },
+    "CEBossDoorStartDelete": {
+        "id": "CEBossDoorStartDelete",
+        "name": "boss door",
+        "description": "This door looks like it leads to a boss fight. Are you sure you want to open it?",
+        "parent": "CEIronDoor",
+        "suffix": "Deleted on START boss fight"
+    },
+    "CEBossDoorMirroredStartDelete": {
+        "id": "CEBossDoorMirroredStartDelete",
+        "name": null,
+        "description": null,
+        "parent": "CEBossDoorStartDelete",
+        "suffix": "Deleted on START boss fight, Mirrored"
+    },
+    "CEDungeonPortalBase": {
+        "id": "CEDungeonPortalBase",
+        "name": "dungeon portal",
+        "description": "A shimmering rift between dungeon levels.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEDungeonLevelExitBase": {
+        "id": "CEDungeonLevelExitBase",
+        "name": "dungeon rift",
+        "description": "A rift leading deeper into the dungeon. Interact to enter.",
+        "parent": "CEDungeonPortalBase",
+        "suffix": null
+    },
+    "CEDungeonLevelExit1": {
+        "id": "CEDungeonLevelExit1",
+        "name": null,
+        "description": null,
+        "parent": "CEDungeonLevelExitBase",
+        "suffix": "Slot 1"
+    },
+    "CEDungeonLevelExit2": {
+        "id": "CEDungeonLevelExit2",
+        "name": null,
+        "description": null,
+        "parent": "CEDungeonLevelExitBase",
+        "suffix": "Slot 2"
+    },
+    "CEDungeonLevelExit3": {
+        "id": "CEDungeonLevelExit3",
+        "name": null,
+        "description": null,
+        "parent": "CEDungeonLevelExitBase",
+        "suffix": "Slot 3"
+    },
+    "CEDungeonLevelEntry": {
+        "id": "CEDungeonLevelEntry",
+        "name": "dungeon entry point",
+        "description": "An arrival point for adventurers entering this level.",
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CEWayfindingStone": {
+        "id": "CEWayfindingStone",
+        "name": "waystone",
+        "description": "An ancient stone with a map of known levels carved into its sides. Touch it to see where other travelers are currently located.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEBookshelfBase": {
+        "id": "CEBookshelfBase",
+        "name": "bookshelf",
+        "description": "Mostly filled with books.",
+        "parent": "BaseStructure",
+        "suffix": "Empty"
+    },
+    "CEBookshelfWooden": {
+        "id": "CEBookshelfWooden",
+        "name": null,
+        "description": null,
+        "parent": "CEBookshelfBase",
+        "suffix": null
+    },
+    "CEBookshelfWoodenFilled": {
+        "id": "CEBookshelfWoodenFilled",
+        "name": null,
+        "description": null,
+        "parent": "CEBookshelfWooden",
+        "suffix": "Random filled"
+    },
+    "CEBookshelfStone": {
+        "id": "CEBookshelfStone",
+        "name": null,
+        "description": null,
+        "parent": "CEBookshelfBase",
+        "suffix": null
+    },
+    "CEBookshelfStoneFilled": {
+        "id": "CEBookshelfStoneFilled",
+        "name": null,
+        "description": null,
+        "parent": "CEBookshelfStone",
+        "suffix": "Random filled"
+    },
+    "CEBookshelfStoneFilledGuaranteed": {
+        "id": "CEBookshelfStoneFilledGuaranteed",
+        "name": null,
+        "description": null,
+        "parent": "CEBookshelfStone",
+        "suffix": "Guaranteed 1 book"
+    },
+    "CEChestBase": {
+        "id": "CEChestBase",
+        "name": "chest",
+        "description": "Chest.",
+        "parent": "BaseStructureDynamic",
+        "suffix": null
+    },
+    "CEChestWooden": {
+        "id": "CEChestWooden",
+        "name": "wooden chest",
+        "description": null,
+        "parent": "CEChestBase",
+        "suffix": null
+    },
+    "CEChestGold": {
+        "id": "CEChestGold",
+        "name": "golden chest",
+        "description": null,
+        "parent": "CEChestBase",
+        "suffix": null
+    },
+    "CEChestWoodenOld": {
+        "id": "CEChestWoodenOld",
+        "name": "old wooden chest",
+        "description": null,
+        "parent": "CEChestBase",
+        "suffix": null
+    },
+    "CEPot": {
+        "id": "CEPot",
+        "name": "pot",
+        "description": "TODO",
+        "parent": "BaseStructureDynamic",
+        "suffix": null
+    },
+    "CETableWoodenFrame": {
+        "id": "CETableWoodenFrame",
+        "name": "wooden table frame",
+        "description": "Base for any wooden table",
+        "parent": "CEWoodenTableBase",
+        "suffix": null
+    },
+    "CETableWooden": {
+        "id": "CETableWooden",
+        "name": "wooden table",
+        "description": "A simple table made of boards.",
+        "parent": "CEWoodenTableBase",
+        "suffix": null
+    },
+    "CEFloorTorchAlwaysPowered": {
+        "id": "CEFloorTorchAlwaysPowered",
+        "name": "floor torch",
+        "description": null,
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEWallmountTorchAlwaysPowered": {
+        "id": "CEWallmountTorchAlwaysPowered",
+        "name": "wallmount torch",
+        "description": null,
+        "parent": "CEBaseWallmount",
+        "suffix": "Debug, Infinite"
+    },
+    "CEHighBush": {
+        "id": "CEHighBush",
+        "name": "high bush",
+        "description": "Very tall and dense thickets. Perhaps someone is watching you from them",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CERandomBushOffsetSpawner": {
+        "id": "CERandomBushOffsetSpawner",
+        "name": "random bush offset spawner",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": null
+    },
+    "CEBaseTree": {
+        "id": "CEBaseTree",
+        "name": "tree",
+        "description": "Decades of life and growth, saturating the surrounding nature with fresh air.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEBaseTreeLarge": {
+        "id": "CEBaseTreeLarge",
+        "name": "large tree",
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": null
+    },
+    "CEFloraTreeGreen": {
+        "id": "CEFloraTreeGreen",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": null
+    },
+    "CEFloraTreeSnow": {
+        "id": "CEFloraTreeSnow",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": null
+    },
+    "CEFloraTreeDead": {
+        "id": "CEFloraTreeDead",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": null
+    },
+    "CEFloraTreeDeadSmall": {
+        "id": "CEFloraTreeDeadSmall",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": null
+    },
+    "CEFloraTreeGreenLarge": {
+        "id": "CEFloraTreeGreenLarge",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTreeLarge",
+        "suffix": null
+    },
+    "CEFloraTreeBirchSmall": {
+        "id": "CEFloraTreeBirchSmall",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": "Small"
+    },
+    "CEFloraTreeBirchMedium": {
+        "id": "CEFloraTreeBirchMedium",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": "Medium"
+    },
+    "CEFloraTreeBirchLarge": {
+        "id": "CEFloraTreeBirchLarge",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": "Large"
+    },
+    "CEFloraTreeSpruceSmall": {
+        "id": "CEFloraTreeSpruceSmall",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": "Small"
+    },
+    "CEFloraTreeSpruceMedium": {
+        "id": "CEFloraTreeSpruceMedium",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": "Medium"
+    },
+    "CEFloraTreeSpruceLarge": {
+        "id": "CEFloraTreeSpruceLarge",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseTree",
+        "suffix": "Large"
+    },
+    "CEWaterLilies": {
+        "id": "CEWaterLilies",
+        "name": "water lilies",
+        "description": "Wow, these are plants that don't grow on land, but on water! Nature is amazing.",
+        "parent": "BaseStructureDynamic",
+        "suffix": null
+    },
+    "CEWaterReeds": {
+        "id": "CEWaterReeds",
+        "name": "reed",
+        "description": "Usually grows in swamps and on river banks.",
+        "parent": "CEWaterLilies",
+        "suffix": null
+    },
+    "CEGatherableBloodRose": {
+        "id": "CEGatherableBloodRose",
+        "name": "blood roses",
+        "description": "Scarlet roses growing in places where much blood has been shed. In the right hands, it serves as an ingredient for healing potions.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEGatherableBlueAelyta": {
+        "id": "CEGatherableBlueAelyta",
+        "name": "blue aelyta",
+        "description": "A blue flower that grows in areas where magical energy congregates. In the right hands, it serves as an ingredient for mana-restoring potions.A blue flower that grows in areas where magical energy congregates. In the right hands, it serves as an ingredient for mana-restoring potions.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CEGatherableYellowDayflin": {
+        "id": "CEGatherableYellowDayflin",
+        "name": "yellow dayflin",
+        "description": "A flower that is remarkable for its ability to grow quickly almost anywhere.",
+        "parent": "BaseStructure",
+        "suffix": null
+    },
+    "CETileEffectBlessing": {
+        "id": "CETileEffectBlessing",
+        "name": "blessing",
+        "description": "A benevolent blessing that increases all incoming healing.",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEBlessingSpawner1": {
+        "id": "CEBlessingSpawner1",
+        "name": "tile effect - blessing",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CEBlessingSpawner5": {
+        "id": "CEBlessingSpawner5",
+        "name": null,
+        "description": null,
+        "parent": "CEBlessingSpawner1",
+        "suffix": 5
+    },
+    "CEBlessingSpawner10": {
+        "id": "CEBlessingSpawner10",
+        "name": null,
+        "description": null,
+        "parent": "CEBlessingSpawner1",
+        "suffix": 10
+    },
+    "CETileEffectCurse": {
+        "id": "CETileEffectCurse",
+        "name": "curse",
+        "description": "A malevolent curse that increases all incoming damage.",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CECurseSpawner1": {
+        "id": "CECurseSpawner1",
+        "name": "tile effect - curse",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CECurseSpawner5": {
+        "id": "CECurseSpawner5",
+        "name": null,
+        "description": null,
+        "parent": "CECurseSpawner1",
+        "suffix": 5
+    },
+    "CECurseSpawner10": {
+        "id": "CECurseSpawner10",
+        "name": null,
+        "description": null,
+        "parent": "CECurseSpawner1",
+        "suffix": 10
+    },
+    "CETileEffectFire": {
+        "id": "CETileEffectFire",
+        "name": "fire",
+        "description": "A scorching hot flame. You definitely shouldn't touch it just like that.",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEFireImpactEffect": {
+        "id": "CEFireImpactEffect",
+        "name": "fire impact",
+        "description": "A burst of fire upon impact.",
+        "parent": null,
+        "suffix": "VFX"
+    },
+    "CEFireSpawner1": {
+        "id": "CEFireSpawner1",
+        "name": "tile effect - fire",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CEFireSpawner5": {
+        "id": "CEFireSpawner5",
+        "name": null,
+        "description": null,
+        "parent": "CEFireSpawner1",
+        "suffix": 5
+    },
+    "CEFireSpawner10": {
+        "id": "CEFireSpawner10",
+        "name": null,
+        "description": null,
+        "parent": "CEFireSpawner1",
+        "suffix": 10
+    },
+    "CETileEffectCursedFire": {
+        "id": "CETileEffectCursedFire",
+        "name": "cursed fire",
+        "description": "a searing, unquenchable flame, eternally fueled by a curse",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CECursedFireSpawner1": {
+        "id": "CECursedFireSpawner1",
+        "name": "tile effect - cursed fire",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CECursedFireSpawner5": {
+        "id": "CECursedFireSpawner5",
+        "name": null,
+        "description": null,
+        "parent": "CECursedFireSpawner1",
+        "suffix": 5
+    },
+    "CECursedFireSpawner10": {
+        "id": "CECursedFireSpawner10",
+        "name": null,
+        "description": null,
+        "parent": "CECursedFireSpawner1",
+        "suffix": 10
+    },
+    "CETileEffectFreeze": {
+        "id": "CETileEffectFreeze",
+        "name": "freeze",
+        "description": "A cold burst of frost.",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEFreezeImpactEffect": {
+        "id": "CEFreezeImpactEffect",
+        "name": "freeze impact",
+        "description": null,
+        "parent": null,
+        "suffix": "VFX"
+    },
+    "CEFreezeSpawner1": {
+        "id": "CEFreezeSpawner1",
+        "name": "tile effect - freeze",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CEFreezeSpawner5": {
+        "id": "CEFreezeSpawner5",
+        "name": null,
+        "description": null,
+        "parent": "CEFreezeSpawner1",
+        "suffix": 5
+    },
+    "CEFreezeSpawner10": {
+        "id": "CEFreezeSpawner10",
+        "name": null,
+        "description": null,
+        "parent": "CEFreezeSpawner1",
+        "suffix": 10
+    },
+    "CETileEffectIceSpikes": {
+        "id": "CETileEffectIceSpikes",
+        "name": "ice spikes",
+        "description": "TODO",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEIceSpikesSpawner1": {
+        "id": "CEIceSpikesSpawner1",
+        "name": "tile effect - ice spikes",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CETileEffectStoneBarrier": {
+        "id": "CETileEffectStoneBarrier",
+        "name": "stone barrier",
+        "description": "A sturdy stone barrier that blocks movement and projectiles.",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEStoneBarrierSpawner1": {
+        "id": "CEStoneBarrierSpawner1",
+        "name": "tile effect - stone barrier",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CETileEffectStoneSpikes": {
+        "id": "CETileEffectStoneSpikes",
+        "name": "stone spikes",
+        "description": "TODO",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEStoneSpikesSpawner1": {
+        "id": "CEStoneSpikesSpawner1",
+        "name": "tile effect - stone spikes",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CEDustTileEffect": {
+        "id": "CEDustTileEffect",
+        "name": "dust effect",
+        "description": "A burst of dust upon impact.",
+        "parent": null,
+        "suffix": "VFX"
+    },
+    "CETileEffectWater": {
+        "id": "CETileEffectWater",
+        "name": "water splash",
+        "description": "A splash of water upon impact.",
+        "parent": "CETileEffectBase",
+        "suffix": null
+    },
+    "CEWaterImpactEffect": {
+        "id": "CEWaterImpactEffect",
+        "name": "water impact",
+        "description": null,
+        "parent": null,
+        "suffix": "VFX"
+    },
+    "CEWaterSpawner1": {
+        "id": "CEWaterSpawner1",
+        "name": "tile effect - water",
+        "description": null,
+        "parent": "MarkerBase",
+        "suffix": 1
+    },
+    "CEWaterSpawner5": {
+        "id": "CEWaterSpawner5",
+        "name": null,
+        "description": null,
+        "parent": "CEWaterSpawner1",
+        "suffix": 5
+    },
+    "CEWaterSpawner10": {
+        "id": "CEWaterSpawner10",
+        "name": null,
+        "description": null,
+        "parent": "CEWaterSpawner1",
+        "suffix": 10
+    },
+    "CEMapEndText": {
+        "id": "CEMapEndText",
+        "name": "Map end text",
+        "description": null,
+        "parent": "MapText",
+        "suffix": null
+    },
+    "CEMapStartText": {
+        "id": "CEMapStartText",
+        "name": "Map start text EN",
+        "description": null,
+        "parent": "MapText",
+        "suffix": null
+    },
+    "CEMapStartBlockedText": {
+        "id": "CEMapStartBlockedText",
+        "name": "Map blocked text",
+        "description": null,
+        "parent": "MapText",
+        "suffix": null
+    },
+    "CEMapStartNotStartedText": {
+        "id": "CEMapStartNotStartedText",
+        "name": "Map not started text",
+        "description": null,
+        "parent": "MapText",
+        "suffix": null
+    },
+    "CEMapTextPeace": {
+        "id": "CEMapTextPeace",
+        "name": "Map text - Peaceful",
+        "description": null,
+        "parent": "MapText",
+        "suffix": null
+    },
+    "CEMapTextDanger": {
+        "id": "CEMapTextDanger",
+        "name": "Map text - Dangerous",
+        "description": null,
+        "parent": "MapText",
+        "suffix": null
+    },
+    "CEBaseMagicRune": {
+        "id": "CEBaseMagicRune",
+        "name": "magic rune",
+        "description": "manifestation of magical energy in the physical plane",
+        "parent": null,
+        "suffix": null
+    },
+    "CEBaseMagicImpact": {
+        "id": "CEBaseMagicImpact",
+        "name": "magic impact",
+        "description": "manifestation of magical energy in the physical plane",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionSpellCruelty": {
+        "id": "CEActionSpellCruelty",
+        "name": "Cruelty",
+        "description": "Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectCrueltyTelegraphy": {
+        "id": "CEEffectCrueltyTelegraphy",
+        "name": "focus cruelty",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEStatusEffectCruelty": {
+        "id": "CEStatusEffectCruelty",
+        "name": "Cruelty",
+        "description": "Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionKick": {
+        "id": "CEActionKick",
+        "name": "Kick",
+        "description": "A powerful kick that deals 15 damage in melee combat and strongly knocks back targets",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellRaiseShields": {
+        "id": "CEActionSpellRaiseShields",
+        "name": "Raise Shields",
+        "description": "You grant [color=#b2e3eb]35 physical shields[/color] to all creatures in a small area.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectRaiseShieldsTelegraphy": {
+        "id": "CEEffectRaiseShieldsTelegraphy",
+        "name": "raise shields telegraphy",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEActionSpellStoneSkin": {
+        "id": "CEActionSpellStoneSkin",
+        "name": "Stone Skin",
+        "description": "Grants [color=#b2e3eb]50 temporary shields[/color] that absorb damage. Shields decay over time.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionStoneWall": {
+        "id": "CEActionStoneWall",
+        "name": "Stone Wall",
+        "description": "You raise a [color=#aaaaaa]stone barrier[/color] beneath your cursor.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionWaveOfSpikes": {
+        "id": "CEActionWaveOfSpikes",
+        "name": "Wave of spikes",
+        "description": "You unleash a wave of [color=#ff4500]sharp spikes[/color].",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileWaveOfSpikes": {
+        "id": "CEProjectileWaveOfSpikes",
+        "name": null,
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEStatusEffectFortress": {
+        "id": "CEStatusEffectFortress",
+        "name": "Fortress",
+        "description": "When you apply [color=#b2e3eb]temporary shields[/color] on someone, you gain [color=#b2e3eb]10 temporary shields[/color].",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectManeuverability": {
+        "id": "CEStatusEffectManeuverability",
+        "name": "Maneuverability",
+        "description": "Taking damage grants [color=#c3ec49]1 Acceleration[/color] stacks.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionFirebolt": {
+        "id": "CEActionFirebolt",
+        "name": "Firebolt",
+        "description": "You hurl a fireball that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectFireboltCharge": {
+        "id": "CEEffectFireboltCharge",
+        "name": "firebolt charge",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEProjectileFirebolt": {
+        "id": "CEProjectileFirebolt",
+        "name": "firebolt projectile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionFirewall": {
+        "id": "CEActionFirewall",
+        "name": "Firewall",
+        "description": "You create a wall of fire that sets creatures and the ground [color=#ff8a05]on fire[/color].",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectFirewallTelegraphy": {
+        "id": "CEEffectFirewallTelegraphy",
+        "name": "firewall telegraphy",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEEffectFireballCharge": {
+        "id": "CEEffectFireballCharge",
+        "name": "fireball charge",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEProjectileFirewall": {
+        "id": "CEProjectileFirewall",
+        "name": "firewall",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionFireWave": {
+        "id": "CEActionFireWave",
+        "name": "Fire wave",
+        "description": "You unleash a wave of fire, dealing massive [color=#ff4500]fire damage[/color] in close distance.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileFireWave": {
+        "id": "CEProjectileFireWave",
+        "name": "fire wave",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionFrostBlade": {
+        "id": "CEActionFrostBlade",
+        "name": "Frost blade",
+        "description": "You create a powerful temporary weapon made of ice that deals high damage and [color=#30caf5]freezes[/color] targets.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEWeaponSwordFrostTemporary": {
+        "id": "CEWeaponSwordFrostTemporary",
+        "name": "frost blade",
+        "description": "A magical weapon woven from ice, which will soon melt away.",
+        "parent": "CEBaseWeapon",
+        "suffix": "120 seconds"
+    },
+    "CEEffectFrostBladeSpawn": {
+        "id": "CEEffectFrostBladeSpawn",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEActionFrostFlow": {
+        "id": "CEActionFrostFlow",
+        "name": "Frost Flow",
+        "description": "You unleash a stream of frost that covers the ground in [color=#30caf5]ice[/color] and [color=#30caf5]slows[/color] creatures caught in it.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectFrostFlowTelegraphy": {
+        "id": "CEEffectFrostFlowTelegraphy",
+        "name": "frost flow telegraphy",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEEffectFrostFlowCharge": {
+        "id": "CEEffectFrostFlowCharge",
+        "name": "frost flow charge",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEProjectileFrostFlow": {
+        "id": "CEProjectileFrostFlow",
+        "name": "frost flow",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEActionHealingFrost": {
+        "id": "CEActionHealingFrost",
+        "name": "Healing Frost",
+        "description": "You restore [color=#1defa9]15 health[/color] to a target and apply [color=#30caf5]5 freeze stacks[/color].",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectHealingFrostVFX": {
+        "id": "CEEffectHealingFrostVFX",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEActionManaGift": {
+        "id": "CEActionManaGift",
+        "name": "Mana Gift",
+        "description": "Restore [color=#3082f5]25 mana[/color] to the selected target",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectManaRestore": {
+        "id": "CEEffectManaRestore",
+        "name": "mana restore effect",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEActionManaSteal": {
+        "id": "CEActionManaSteal",
+        "name": "Mana Steal",
+        "description": "Steal [color=#3082f5]20 mana[/color] from the selected target and transfer it to yourself.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectManaDrain": {
+        "id": "CEEffectManaDrain",
+        "name": "mana drain effect",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEActionTripleIcicles": {
+        "id": "CEActionTripleIcicles",
+        "name": "Triple Icicles",
+        "description": "You unleash three icicles that deal [color=#30caf5]cold[/color] damage and [color=#30caf5]freeze[/color] the area on hit.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileTripleIcicle": {
+        "id": "CEProjectileTripleIcicle",
+        "name": "triple icicle",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEStatusEffectAffinityFire": {
+        "id": "CEStatusEffectAffinityFire",
+        "name": "Fire Affinity",
+        "description": "You take 5 less [color=#ff8a05]fire damage[/color] from all sources.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectAffinityIce": {
+        "id": "CEStatusEffectAffinityIce",
+        "name": "Ice Affinity",
+        "description": "You take 5 less [color=#05eeff]cold damage[/color] from all sources and are immune to [color=#05eeff]cold slowdown[/color] and [color=#05eeff]frozen[/color].",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectCursedFlame": {
+        "id": "CEStatusEffectCursedFlame",
+        "name": "Cursed Flame",
+        "description": "Every flame you create is cursed.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectDanceOfFireAndIce": {
+        "id": "CEStatusEffectDanceOfFireAndIce",
+        "name": "Dance of Fire and Ice",
+        "description": "You deal [color=#ff8a05]5 bonus fire damage[/color] to [color=#05eeff]frozen[/color] targets and [color=#05eeff]5 bonus cold damage[/color] to [color=#ff8a05]burning[/color] targets.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectManaCore": {
+        "id": "CEStatusEffectManaCore",
+        "name": "Magic Core",
+        "description": "[color=#1776eb]Mana regeneration[/color] from all sources has been [color=#1776eb]doubled[/color]",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectSharpFloor": {
+        "id": "CEStatusEffectSharpFloor",
+        "name": "Sharp Floor",
+        "description": "When you freeze an area, you also cover it with sharp ice spikes.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionSpellAcceleration": {
+        "id": "CEActionSpellAcceleration",
+        "name": "Acceleration",
+        "description": "Increases your movement speed for a short duration.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionFireCreation": {
+        "id": "CEActionFireCreation",
+        "name": "Fire creation",
+        "description": "You create a temporary [color=#ff4500]fire[/color], which you can throw.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectFireCreation": {
+        "id": "CEEffectFireCreation",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEHandheldFire": {
+        "id": "CEHandheldFire",
+        "name": "handheld fire",
+        "description": "A small flame, burning in your hand. It can be thrown to burn something.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEActionRatThrow": {
+        "id": "CEActionRatThrow",
+        "name": "Rat Throw",
+        "description": "You throw a rat.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEProjectileRat": {
+        "id": "CEProjectileRat",
+        "name": "gnome rat projectile",
+        "description": null,
+        "parent": "BaseBullet",
+        "suffix": null
+    },
+    "CEMobRatFrendly": {
+        "id": "CEMobRatFrendly",
+        "name": null,
+        "description": null,
+        "parent": "CEMobRat",
+        "suffix": "Frendly"
+    },
+    "CEActionSpellSelfTreatment": {
+        "id": "CEActionSpellSelfTreatment",
+        "name": "Self Treatment",
+        "description": "You restore [color=#1defa9]10 health[/color] to yourself.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellSmallBarrier": {
+        "id": "CEActionSpellSmallBarrier",
+        "name": "Barrier",
+        "description": "Grants [color=#b2e3eb]20 temporary shields[/color] that absorb damage. Shields decay over time.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellSoulEater": {
+        "id": "CEActionSpellSoulEater",
+        "name": "Soul Eater",
+        "description": "You restore [color=#1776eb]15 mana[/color].",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellSphereOfLight": {
+        "id": "CEActionSpellSphereOfLight",
+        "name": "Sphere of Light",
+        "description": "You can make almost any object glow for a long time at will.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEImpactEffectSphereOfLight": {
+        "id": "CEImpactEffectSphereOfLight",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEStatusEffectGlowing": {
+        "id": "CEStatusEffectGlowing",
+        "name": "glowing",
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionWaterCreation": {
+        "id": "CEActionWaterCreation",
+        "name": "Water creation",
+        "description": "You create a temporary [color=#30caf5]water sphere[/color], which you can throw.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectWaterCreation": {
+        "id": "CEEffectWaterCreation",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEConsumableWaterDrop": {
+        "id": "CEConsumableWaterDrop",
+        "name": "water droplet",
+        "description": "Magic water, condensed into a droplet. It can be thrown to get something wet.",
+        "parent": "BaseItem",
+        "suffix": null
+    },
+    "CEStatusEffectAgility": {
+        "id": "CEStatusEffectAgility",
+        "name": "Agility",
+        "description": "Your maximum stamina is increased by [color=#2bef1d]5[/color].",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectPathOfKnight": {
+        "id": "CEStatusEffectPathOfKnight",
+        "name": "Path of the Knight",
+        "description": "Knight skills may now appear in your blessing pool.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectPathOfMage": {
+        "id": "CEStatusEffectPathOfMage",
+        "name": "Path of the Mage",
+        "description": "Mage skills may now appear in your blessing pool.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectPathOfPriest": {
+        "id": "CEStatusEffectPathOfPriest",
+        "name": "Path of the Priest",
+        "description": "Priest skills may now appear in your blessing pool.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectThickSkin": {
+        "id": "CEStatusEffectThickSkin",
+        "name": "Thick Skin",
+        "description": "You take 1 less damage from all sources (except poison).",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectVitality": {
+        "id": "CEStatusEffectVitality",
+        "name": "Vitality",
+        "description": "Your maximum health is increased by [color=#f54730]50[/color].",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectWisdom": {
+        "id": "CEStatusEffectWisdom",
+        "name": "Wisdom",
+        "description": "Your maximum mana is increased by [color=#3296fa]50[/color].",
+        "parent": null,
+        "suffix": null
+    },
+    "CEActionSpellAreaHealing": {
+        "id": "CEActionSpellAreaHealing",
+        "name": "Prayer for health",
+        "description": "You restore [color=1defa9]15 health[/color] to all creatures in a small area.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectAreaHealingTelegraphy": {
+        "id": "CEEffectAreaHealingTelegraphy",
+        "name": "area healing telegraphy",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEEffectAreaHealingEffect": {
+        "id": "CEEffectAreaHealingEffect",
+        "name": "area healing impact",
+        "description": null,
+        "parent": "CEEffectAreaHealingTelegraphy",
+        "suffix": null
+    },
+    "CEEffectHealingGeneric": {
+        "id": "CEEffectHealingGeneric",
+        "name": "healing impact",
+        "description": null,
+        "parent": "CEEffectAreaHealingTelegraphy",
+        "suffix": null
+    },
+    "CEActionSpellCaringForOthers": {
+        "id": "CEActionSpellCaringForOthers",
+        "name": "Caring for others",
+        "description": "You restore [color=#1defa9]40 health[/color] to the creature you touch. But you can't treat yourself.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellCureWounds": {
+        "id": "CEActionSpellCureWounds",
+        "name": "Cure wounds",
+        "description": "You restore [color=#1defa9]25 health[/color] to the creature you touch.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellCurse": {
+        "id": "CEActionSpellCurse",
+        "name": "Curse",
+        "description": "You curse the selected area and all creatures within it.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectAreaCurseTelegraphy": {
+        "id": "CEEffectAreaCurseTelegraphy",
+        "name": "area curse telegraphy",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEActionSpellDivineShield": {
+        "id": "CEActionSpellDivineShield",
+        "name": "Divine Shield",
+        "description": "You apply a [color=#1defa9]1 divine shield[/color] on the target.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellHolyGround": {
+        "id": "CEActionSpellHolyGround",
+        "name": "Holy ground",
+        "description": "You bless the chosen territory and all the beings within it.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionPurification": {
+        "id": "CEActionPurification",
+        "name": "Purification",
+        "description": "You cleanse the target of all negative status effects.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEActionSpellWaterBurst": {
+        "id": "CEActionSpellWaterBurst",
+        "name": "Water Burst",
+        "description": "You call upon the waters, drenching a targeted area.",
+        "parent": "CEActionSpellBase",
+        "suffix": null
+    },
+    "CEEffectWaterBurstTelegraphy": {
+        "id": "CEEffectWaterBurstTelegraphy",
+        "name": "water burst telegraphy",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEEffectWaterBurstEffect": {
+        "id": "CEEffectWaterBurstEffect",
+        "name": "water burst impact",
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": "VFX"
+    },
+    "CEStatusEffectApostasy": {
+        "id": "CEStatusEffectApostasy",
+        "name": "Apostasy",
+        "description": "All your healing now deals [color=#E1341E]Fire[/color] damage instead.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEEffectApostasyFire": {
+        "id": "CEEffectApostasyFire",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseMagicImpact",
+        "suffix": null
+    },
+    "CEStatusEffectBlackHeart": {
+        "id": "CEStatusEffectBlackHeart",
+        "name": "Black Heart",
+        "description": "You are immune to [color=#8752b3]Curse[/color]. When you deal damage in melee combat, you [color=#8752b3]curse[/color] targets.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectBlessedAndProtected": {
+        "id": "CEStatusEffectBlessedAndProtected",
+        "name": "Blessed and Protected",
+        "description": "When you [color=#1defa9]bless[/color] a creature, you also grant it [color=#1defa9]1 Divine Shield[/color] (up to a maximum of 3)",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectExperiencedHealer": {
+        "id": "CEStatusEffectExperiencedHealer",
+        "name": "Experienced Healer",
+        "description": "When you heal something, you heal [color=#1defa9]5 health[/color] more.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectHealingWaters": {
+        "id": "CEStatusEffectHealingWaters",
+        "name": "Healing Waters",
+        "description": "When you heal a [color=#1db7ef]wet target[/color], you heal [color=#1defa9]10 health[/color] more and dry it off.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEStatusEffectWaterShield": {
+        "id": "CEStatusEffectWaterShield",
+        "name": "Water Shield",
+        "description": "When the [color=#1defa9]divine shield[/color] you've cast breaks, it triggers a repulsive [color=#1db7ef]water blast[/color].",
+        "parent": null,
+        "suffix": null
+    },
+    "CEBaseSpeciesMob": {
+        "id": "CEBaseSpeciesMob",
+        "name": null,
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobCarcat": {
+        "id": "CEMobCarcat",
+        "name": "Mr. Cat",
+        "description": null,
+        "parent": [
+            "CEBaseSpeciesMob",
+            "CEAppearanceCarcat"
+        ],
+        "suffix": null
+    },
+    "CEOrganCarcatTorso": {
+        "id": "CEOrganCarcatTorso",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatHead": {
+        "id": "CEOrganCarcatHead",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatArmLeft": {
+        "id": "CEOrganCarcatArmLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatArmRight": {
+        "id": "CEOrganCarcatArmRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatHandLeft": {
+        "id": "CEOrganCarcatHandLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatHandRight": {
+        "id": "CEOrganCarcatHandRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatLegLeft": {
+        "id": "CEOrganCarcatLegLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatLegRight": {
+        "id": "CEOrganCarcatLegRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatFootLeft": {
+        "id": "CEOrganCarcatFootLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEOrganCarcatFootRight": {
+        "id": "CEOrganCarcatFootRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganCarcatExternal",
+        "suffix": null
+    },
+    "CEMobElf": {
+        "id": "CEMobElf",
+        "name": "Mr. Elf",
+        "description": null,
+        "parent": [
+            "CEBaseSpeciesMob",
+            "CEAppearanceElf"
+        ],
+        "suffix": null
+    },
+    "CEOrganElfTorso": {
+        "id": "CEOrganElfTorso",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfHead": {
+        "id": "CEOrganElfHead",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfArmLeft": {
+        "id": "CEOrganElfArmLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfArmRight": {
+        "id": "CEOrganElfArmRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfHandLeft": {
+        "id": "CEOrganElfHandLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfHandRight": {
+        "id": "CEOrganElfHandRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfLegLeft": {
+        "id": "CEOrganElfLegLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfLegRight": {
+        "id": "CEOrganElfLegRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfFootLeft": {
+        "id": "CEOrganElfFootLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfFootRight": {
+        "id": "CEOrganElfFootRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEOrganElfEyes": {
+        "id": "CEOrganElfEyes",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganElfExternal",
+        "suffix": null
+    },
+    "CEMobGoblin": {
+        "id": "CEMobGoblin",
+        "name": "Mr. Goblin",
+        "description": null,
+        "parent": [
+            "CEBaseSpeciesMob",
+            "CEAppearanceGoblin"
+        ],
+        "suffix": null
+    },
+    "CEOrganGoblinTorso": {
+        "id": "CEOrganGoblinTorso",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinHead": {
+        "id": "CEOrganGoblinHead",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinArmLeft": {
+        "id": "CEOrganGoblinArmLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinArmRight": {
+        "id": "CEOrganGoblinArmRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinHandLeft": {
+        "id": "CEOrganGoblinHandLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinHandRight": {
+        "id": "CEOrganGoblinHandRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinLegLeft": {
+        "id": "CEOrganGoblinLegLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinLegRight": {
+        "id": "CEOrganGoblinLegRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinFootLeft": {
+        "id": "CEOrganGoblinFootLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinFootRight": {
+        "id": "CEOrganGoblinFootRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEOrganGoblinEyes": {
+        "id": "CEOrganGoblinEyes",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganGoblinExternal",
+        "suffix": null
+    },
+    "CEMobHuman": {
+        "id": "CEMobHuman",
+        "name": "Mr. Human",
+        "description": null,
+        "parent": [
+            "CEBaseSpeciesMob",
+            "CEAppearanceHuman"
+        ],
+        "suffix": null
+    },
+    "CEOrganHumanTorso": {
+        "id": "CEOrganHumanTorso",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanHead": {
+        "id": "CEOrganHumanHead",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanArmLeft": {
+        "id": "CEOrganHumanArmLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanArmRight": {
+        "id": "CEOrganHumanArmRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanHandLeft": {
+        "id": "CEOrganHumanHandLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanHandRight": {
+        "id": "CEOrganHumanHandRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanLegLeft": {
+        "id": "CEOrganHumanLegLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanLegRight": {
+        "id": "CEOrganHumanLegRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanFootLeft": {
+        "id": "CEOrganHumanFootLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanFootRight": {
+        "id": "CEOrganHumanFootRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEOrganHumanEyes": {
+        "id": "CEOrganHumanEyes",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganHumanExternal",
+        "suffix": null
+    },
+    "CEMobTiefling": {
+        "id": "CEMobTiefling",
+        "name": "Mr. Tiefling",
+        "description": null,
+        "parent": [
+            "CEBaseSpeciesMob",
+            "CEAppearanceTiefling"
+        ],
+        "suffix": null
+    },
+    "CEOrganTieflingTorso": {
+        "id": "CEOrganTieflingTorso",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingHead": {
+        "id": "CEOrganTieflingHead",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingArmLeft": {
+        "id": "CEOrganTieflingArmLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingArmRight": {
+        "id": "CEOrganTieflingArmRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingHandLeft": {
+        "id": "CEOrganTieflingHandLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingHandRight": {
+        "id": "CEOrganTieflingHandRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingLegLeft": {
+        "id": "CEOrganTieflingLegLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingLegRight": {
+        "id": "CEOrganTieflingLegRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingFootLeft": {
+        "id": "CEOrganTieflingFootLeft",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingFootRight": {
+        "id": "CEOrganTieflingFootRight",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEOrganTieflingEyes": {
+        "id": "CEOrganTieflingEyes",
+        "name": null,
+        "description": null,
+        "parent": "CEOrganTieflingExternal",
+        "suffix": null
+    },
+    "CEClothingPriestCloakDark": {
+        "id": "CEClothingPriestCloakDark",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingCloakBase",
+        "suffix": null
+    },
+    "CEClothingPriestCloakWhite": {
+        "id": "CEClothingPriestCloakWhite",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingCloakBase",
+        "suffix": null
+    },
+    "CEClothingPriestCloakWhite2": {
+        "id": "CEClothingPriestCloakWhite2",
+        "name": null,
+        "description": null,
+        "parent": "CEClothingCloakBase",
+        "suffix": null
+    },
+    "CEMobFireConstruct": {
+        "id": "CEMobFireConstruct",
+        "name": "fire construct",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobFlem": {
+        "id": "CEMobFlem",
+        "name": "flem",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobGnome": {
+        "id": "CEMobGnome",
+        "name": "gnome",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobRat": {
+        "id": "CEMobRat",
+        "name": "rat",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobSlimeFire": {
+        "id": "CEMobSlimeFire",
+        "name": "fire slime",
+        "description": "A wobbly blob of animated fire. Pops into a burst of flames when destroyed.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobSlimeFireBig": {
+        "id": "CEMobSlimeFireBig",
+        "name": "big fire slime",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobSlimeWater": {
+        "id": "CEMobSlimeWater",
+        "name": "water slime",
+        "description": "A wobbly blob of animated water. Pops into a splash when destroyed.",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobSlimeWaterBig": {
+        "id": "CEMobSlimeWaterBig",
+        "name": "big water slime",
+        "description": "TODO",
+        "parent": null,
+        "suffix": null
+    },
+    "CEMobBossSlime": {
+        "id": "CEMobBossSlime",
+        "name": "giant crystal slime",
+        "description": "TODO",
+        "parent": "CEMobBossBase",
+        "suffix": null
+    },
+    "CEMobBossViator": {
+        "id": "CEMobBossViator",
+        "name": "Viator",
+        "description": "TODO",
+        "parent": "CEMobBossBase",
+        "suffix": null
+    },
+    "CEConsumablePotionAcceleration": {
+        "id": "CEConsumablePotionAcceleration",
+        "name": "acceleration potion",
+        "description": "Increases your movement speed for a short duration.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionAlchemicalFire": {
+        "id": "CEConsumablePotionAlchemicalFire",
+        "name": "alchemical fire",
+        "description": "A liquid flame, just waiting to burst forth and reduce everything around it to ashes. A large red label reads “DO NOT DRINK.”",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionFrost": {
+        "id": "CEConsumablePotionFrost",
+        "name": "frost potion",
+        "description": "A liquid crystal so cold that it's uncomfortable to even hold the vial in your hands. If it were to break, everything around it would instantly.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionHealingSmall": {
+        "id": "CEConsumablePotionHealingSmall",
+        "name": "small healing potion",
+        "description": "A simple healing potion. Drink it, or throw it at whoever you want to see get well.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionHealingMedium": {
+        "id": "CEConsumablePotionHealingMedium",
+        "name": "healing potion",
+        "description": "A simple healing potion. Drink it, or throw it at whoever you want to see get well.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionManaSmall": {
+        "id": "CEConsumablePotionManaSmall",
+        "name": "small mana potion",
+        "description": "TODO",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionManaMedium": {
+        "id": "CEConsumablePotionManaMedium",
+        "name": "mana potion",
+        "description": "TODO",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionManaSmallCondensated": {
+        "id": "CEConsumablePotionManaSmallCondensated",
+        "name": "condensated small mana potion",
+        "description": "Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": "Condensated, mana restoring modifiers doesnt work."
+    },
+    "CEConsumablePotionManaMediumCondensated": {
+        "id": "CEConsumablePotionManaMediumCondensated",
+        "name": "condensated mana potion",
+        "description": "Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": "Condensated, mana restoring modifiers doesnt work."
+    },
+    "CEConsumablePotionRegeneration": {
+        "id": "CEConsumablePotionRegeneration",
+        "name": "regeneration potion",
+        "description": "Slowly restores health over time.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionShield": {
+        "id": "CEConsumablePotionShield",
+        "name": "potion of stone skin",
+        "description": "A thick, metallic brew that coats the body in a shimmering barrier. Grants temporary shields against damage.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEConsumablePotionStrength": {
+        "id": "CEConsumablePotionStrength",
+        "name": "strength potion",
+        "description": "Increases your melee damage for a short duration.",
+        "parent": "CEConsumablePotionBase",
+        "suffix": null
+    },
+    "CEGoldenLockedDoor": {
+        "id": "CEGoldenLockedDoor",
+        "name": "golden locked door",
+        "description": "A heavy door sealed with a golden lock. It won't open without a key.",
+        "parent": "CEBaseDoor",
+        "suffix": "Locked, Gold"
+    },
+    "CEIronDoor": {
+        "id": "CEIronDoor",
+        "name": "iron door",
+        "description": "Well, if there's a solid iron door, there must be something valuable behind it.",
+        "parent": "CEBaseDoor",
+        "suffix": "Opened"
+    },
+    "CEIronDoorWindowed": {
+        "id": "CEIronDoorWindowed",
+        "name": "iron windowed door",
+        "description": "a solid iron door with a small window. You can look through it, of course, but it's hard to put your hand through.",
+        "parent": "CEBaseDoor",
+        "suffix": "Opened"
+    },
+    "CEWoodenDoor": {
+        "id": "CEWoodenDoor",
+        "name": "wooden door",
+        "description": "Not the most solid construction, but it's better than nothing.",
+        "parent": "CEBaseDoor",
+        "suffix": "Opened"
+    },
+    "CEWoodenDoorWindowed": {
+        "id": "CEWoodenDoorWindowed",
+        "name": "wooden windowed door",
+        "description": "Not the most solid construction, but it's better than nothing.",
+        "parent": "CEBaseDoor",
+        "suffix": "Opened"
+    },
+    "CEFenceBigWooden": {
+        "id": "CEFenceBigWooden",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFenceBig",
+        "suffix": "Wooden"
+    },
+    "CEFenceGateBigWooden": {
+        "id": "CEFenceGateBigWooden",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFenceGateBig",
+        "suffix": "Wooden"
+    },
+    "CEFenceGateBigIron": {
+        "id": "CEFenceGateBigIron",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFenceGateBig",
+        "suffix": "Iron"
+    },
+    "CEFenceWooden": {
+        "id": "CEFenceWooden",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFence",
+        "suffix": "Wooden"
+    },
+    "CEFenceIron": {
+        "id": "CEFenceIron",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFence",
+        "suffix": "Iron"
+    },
+    "CEFenceGateWooden": {
+        "id": "CEFenceGateWooden",
+        "name": null,
+        "description": null,
+        "parent": "CEBaseFenceGate",
+        "suffix": "Wooden"
+    },
+    "CEWallLeaf": {
+        "id": "CEWallLeaf",
+        "name": "leaf wall",
+        "description": "Dense, marginal bushes. You can climb through them, but watch out for thorny branches!",
+        "parent": "CEBaseWall",
+        "suffix": null
+    },
+    "CEWallWooden": {
+        "id": "CEWallWooden",
+        "name": "wooden wall",
+        "description": null,
+        "parent": [
+            "CEBaseWall",
+            "CEWallWoodenBase"
+        ],
+        "suffix": null
+    },
+    "CEWallWoodenDark": {
+        "id": "CEWallWoodenDark",
+        "name": "dark wooden wall",
+        "description": null,
+        "parent": [
+            "CEBaseWall",
+            "CEWallWoodenBase"
+        ],
+        "suffix": null
+    },
+    "CEWallWoodenLight": {
+        "id": "CEWallWoodenLight",
+        "name": "light wooden wall",
+        "description": null,
+        "parent": [
+            "CEBaseWall",
+            "CEWallWoodenBase"
+        ],
+        "suffix": null
+    },
+    "CEWallWoodenFrame": {
+        "id": "CEWallWoodenFrame",
+        "name": "wooden wall frame",
+        "description": null,
+        "parent": [
+            "CEBaseWallFrame",
+            "CEWallWoodenBase"
+        ],
+        "suffix": null
+    },
+    "CETableBase": {
+        "id": "CETableBase",
+        "name": null,
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEWoodenTableBase": {
+        "id": "CEWoodenTableBase",
+        "name": null,
+        "description": null,
+        "parent": "CETableBase",
+        "suffix": null
+    },
+    "CEBaseWorkbench": {
+        "id": "CEBaseWorkbench",
+        "name": null,
+        "description": null,
+        "parent": null,
+        "suffix": null
+    },
+    "CEWorkbenchAlchemyTable": {
+        "id": "CEWorkbenchAlchemyTable",
+        "name": "alchemy lab",
+        "description": "A small setup with everything needed for brewing potions",
+        "parent": "CEBaseWorkbench",
+        "suffix": null
+    }
+}

@@ -26,7 +26,6 @@
     linearDamping: 1.5
     angularDamping: 1.5
     fixedRotation: true
-    bodyStatus: InAir
   - type: Fixtures
     fixtures:
       fix1:
