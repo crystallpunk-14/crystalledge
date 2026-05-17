@@ -1,48 +1,3 @@
-ent-CEDummyRule = None
-
-ent-CEAppearanceCarcat = None
-
-ent-CEOrganCarcat = None
-    .suffix = каркат
-
-ent-CEOrganCarcatExternal = None
-    .suffix = каркат
-
-ent-CEOrganCarcatEyes = None
-    .suffix = каркат
-
-ent-CEAppearanceElf = None
-
-ent-CEOrganElf = None
-    .suffix = эльф
-
-ent-CEOrganElfExternal = None
-    .suffix = эльф
-
-ent-CEAppearanceGoblin = None
-
-ent-CEOrganGoblin = None
-    .suffix = гоблин
-
-ent-CEOrganGoblinExternal = None
-    .suffix = гоблин
-
-ent-CEAppearanceHuman = None
-
-ent-CEOrganHuman = None
-    .suffix = человек
-
-ent-CEOrganHumanExternal = None
-    .suffix = человек
-
-ent-CEAppearanceTiefling = None
-
-ent-CEOrganTiefling = None
-    .suffix = тифлинг
-
-ent-CEOrganTieflingExternal = None
-    .suffix = тифлинг
-
 ent-CEChestWoodenOldFilled = { ent-CEChestWoodenOld }
     .desc = { ent-CEChestBase.desc }
     .suffix = Наполненный
@@ -54,18 +9,6 @@ ent-CEChestWoodenFilled = { ent-CEChestWooden }
 ent-CEChestGoldFilled = { ent-CEChestGold }
     .desc = { ent-CEChestBase.desc }
     .suffix = Наполненный
-
-ent-CESpawnerRandomLoot = спаунер случайной добычи
-
-ent-CESpawnerRandomFlowers = спаунер случайных цветов
-    .suffix = 100%
-
-ent-CESpawnerRandomPotion = спаунер случайных зелий
-
-ent-CESpawnerRandomDungeonProp = спаунер случайных объектов подземелья
-    .suffix = 10%
-
-ent-CESpawnerRandomWeapon = спаунер случайного оружия
 
 ent-CEActionAdminDungeonOverview = Обзор подземелья
     .desc = Просмотр уровней подземелья, их экземпляров и игроков в них.
@@ -211,25 +154,6 @@ ent-CEClothingPriestShirtWhiteWide = { ent-CEClothingShirtBase }
 ent-CEClothingWandererShirt = { ent-CEClothingShirtBase }
     .desc = { ent-CEClothingShirtBase.desc }
 
-ent-CEAlarmInRange5 = Потревожить мобов
-    .suffix = радиус 5
-
-ent-CEAlarmInRange10 = { ent-CEAlarmInRange5 }
-    .suffix = радиус 10
-
-ent-CEAttackImpact2 = None
-
-ent-CEAttackImpact3 = None
-
-ent-CEDustEffect = эффект пыли
-    .suffix = VFX
-
-ent-CEGodRays = лучи бога
-    .suffix = Солнце
-
-ent-CEGodRaysMoon = { ent-CEGodRays }
-    .suffix = Луна
-
 ent-CESteamEffect = пар
     .desc = Взрыв пара от столкновения противоположных стихий.
 
@@ -282,9 +206,6 @@ ent-CEActionFireSlimeJump = прыжок огненной слизи
 ent-CEActionWaterSlimeJump = прыжок водяной слизи
     .desc = Слизь прыгает в сторону цели.
 
-ent-CEMobBossSlimeSpawner = Спаунер гигантской кристаллической слизи
-    .suffix = Босс
-
 ent-CEActionGiantSlimeSpreadShot = Выстрел
 
 ent-CEProjectileGiantSlimeSpreadShot = None
@@ -292,9 +213,6 @@ ent-CEProjectileGiantSlimeSpreadShot = None
 ent-CEActionGiantSlimeSplashAttack = Атака в ближнем бою
 
 ent-CEActionGiantSlimeHighTeleport = Высокий телепортационный прыжок
-
-ent-CEMobBossViatorSpawner = Спаунер Виатора
-    .suffix = Босс
 
 ent-CEActionViatorSelfHeal = Самолечение
 
@@ -316,10 +234,10 @@ ent-CEMobBossBase = None
 ent-CEConsumableBloodRose = кровавая роза
     .desc = Алая роза, растущая в местах, где пролито много крови. В умелых руках служит ингредиентом для зелий лечения.
 
-ent-CEConsumableBlueAelyta = синяя аэлита
+ent-CEConsumableBlueAelyta = лазурная аэлита
     .desc = Синий цветок, растущий в местах скопления магической энергии. В умелых руках служит ингредиентом для зелий восстановления маны.
 
-ent-CEConsumableYellowDayflin = жёлтый дэйфлин
+ent-CEConsumableYellowDayflin = жёлтый солнцецвет
     .desc = Жёлтый цветок, примечательный своей способностью быстро расти практически где угодно.
 
 ent-CEIronKey = железный ключ
@@ -334,26 +252,24 @@ ent-CEKnowledgeBook_BasicAlchemy = основы алхимии
 ent-CEKnowledgeBook_AlchemicalBombs = алхимические бомбы
     .desc = Хотите обрушить на врагов испепеляющий огонь или сковывающий холод? Но не хотите тратить ману? Этот трактат станет величайшим открытием в вашей жизни.
 
-ent-CEKnowledgeBook_ManaConservation = сохранение маны’ent-CEKnowledgeBook_ManaConservation = сохранение маны
+ent-CEKnowledgeBook_ManaConservation = консервация маны
     .desc = Описание магической техники, позволяющей сохранять собственную магическую энергию в жидком виде. Это не самый приятный процесс, но он служит альтернативой созданию зелий восстановления маны.
 
-ent-CEKnowledgeBook_Regeneration = регенерация's not the most pleasant process, but it serves as an alternative to creating mana-restoring potions.
+ent-CEKnowledgeBook_Regeneration = регенерация
+    .desc = Этот тонкий том содержит подробный рецепт приготовления зелья регенерации здоровья. Полезная информация!
 
-ent-CEKnowledgeBook_Regeneration = regeneration
-    .desc = This slim volume contains a detailed recipe for brewing a health-regeneration potion. Useful information!
+ent-CEBaseKnowledgeBook = свиток знаний
+    .desc = Древний свиток, содержащий знания о создании предметов. Прочтите его, чтобы изучить рецепты.
 
-ent-CEBaseKnowledgeBook = knowledge scroll
-    .desc = An ancient scroll containing knowledge of item creation. Read it to learn recipes.
-
-ent-CEEffectKnowledgeSparks = knowledge sparks
+ent-CEEffectKnowledgeSparks = искры знаний
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEConsumableSlimeCoreFire = Fire slime core
-    .desc = A pulsating core from a fire slime. It heats the surrounding air but is cool to the touch. It seems fragile.
+ent-CEConsumableSlimeCoreFire = ядро огненного слайма
+    .desc = Пульсирующее ядро огненной слизи. Оно нагревает окружающий воздух. Кажется хрупким.
 
-ent-CEConsumableSlimeCoreWater = Water slime core
-    .desc = A pulsating core from a water slime. It humidifies the surrounding air. It seems fragile.
+ent-CEConsumableSlimeCoreWater = ядро водяного слайма
+    .desc = Пульсирующее ядро водяной слизи. Оно увлажняет окружающий воздух. Кажется хрупким.
 
 ent-CEEffectPotionAlchemicalFire = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
@@ -364,8 +280,8 @@ ent-CEEffectPotionHealing = { ent-CEBaseMagicImpact }
 ent-CEEffectPotionManaRestore = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEPotionBase = empty vial
-    .desc = A potion was poured here once. Or will be. Who knows?
+ent-CEPotionBase = пустой флакон
+    .desc = Когда-то сюда налили зелье. Или ещё нальют. Кто знает?
 
 ent-CEConsumablePotionBase = { ent-CEPotionBase }
     .desc = { ent-CEPotionBase.desc }
@@ -382,212 +298,212 @@ ent-CEPotionEmptyCube = { ent-CEPotionBase }
 ent-CEPotionEmptyStar = { ent-CEPotionBase }
     .desc = { ent-CEPotionBase.desc }
 
-ent-CEGlassShard = glass shard
-    .desc = Sharp pieces of glass. Don't step on it!
+ent-CEGlassShard = осколок стекла
+    .desc = Острые куски стекла. Не наступите на них!
 
-ent-CESoulShard = soul essence
-    .desc = A fragment of the soul that can be offered as a gift to sacred statues in exchange for powerful blessings
+ent-CESoulShard = эссенция души
+    .desc = Фрагмент души, который можно принести в дар священным статуям в обмен на могущественные благословения.
 
 ent-CEEffectSoulCollect = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CESoulTransferParticle = soul fragment
+ent-CESoulTransferParticle = фрагмент души
 
 ent-CECoinBase = None
 
-ent-CECoinCopper1 = copper coin
-    .desc = The smallest denomination coin. Copper.
-    .suffix = 1 coin
+ent-CECoinCopper1 = медная монета
+    .desc = Монета наименьшего номинала. Медь.
+    .suffix = 1 монета
 
 ent-CECoinCopper5 = { ent-CECoinCopper1 }
     .desc = { ent-CECoinCopper1.desc }
-    .suffix = 5 coins
+    .suffix = 5 монет
 
 ent-CECoinCopper10 = { ent-CECoinCopper1 }
     .desc = { ent-CECoinCopper1.desc }
-    .suffix = 10 coins
+    .suffix = 10 монет
 
-ent-CECoinSilver1 = silver coin
-    .desc = A valuable coin made from a precisely calibrated silver alloy... and something else. Equal in value to ten coppers.
-    .suffix = 1 coin
+ent-CECoinSilver1 = серебряная монета
+    .desc = Ценная монета из точно выверенного серебряного сплава... и чего-то ещё. По стоимости равна десяти медным.
+    .suffix = 1 монета
 
 ent-CECoinSilver5 = { ent-CECoinSilver1 }
     .desc = { ent-CECoinSilver1.desc }
-    .suffix = 5 coins
+    .suffix = 5 монет
 
 ent-CECoinSilver10 = { ent-CECoinSilver1 }
     .desc = { ent-CECoinSilver1.desc }
-    .suffix = 10 coins
+    .suffix = 10 монет
 
-ent-CECoinGold1 = gold coin
-    .desc = A gold, big, beautiful coin. Valuable enough to be stolen by bandits. Equal in value to ten silver coins.
-    .suffix = 1 coin
+ent-CECoinGold1 = золотая монета
+    .desc = Золотая, большая, красивая монета. Достаточно ценная, чтобы её украли бандиты. По стоимости равна десяти серебряным.
+    .suffix = 1 монета
 
 ent-CECoinGold5 = { ent-CECoinGold1 }
     .desc = { ent-CECoinGold1.desc }
-    .suffix = 5 coins
+    .suffix = 5 монет
 
 ent-CECoinGold10 = { ent-CECoinGold1 }
     .desc = { ent-CECoinGold1.desc }
-    .suffix = 10 coins
+    .suffix = 10 монет
 
-ent-CECoinPlatinum1 = platinum coin
-    .desc = A platinum coin? It's so rare. Ten gold pieces is the price of one.
-    .suffix = 1 coin
+ent-CECoinPlatinum1 = платиновая монета
+    .desc = Платиновая монета? Она так редка. Десять золотых стоят одной такой.
+    .suffix = 1 монета
 
 ent-CECoinPlatinum5 = { ent-CECoinPlatinum1 }
     .desc = { ent-CECoinPlatinum1.desc }
-    .suffix = 5 coins
+    .suffix = 5 монет
 
 ent-CECoinPlatinum10 = { ent-CECoinPlatinum1 }
     .desc = { ent-CECoinPlatinum1.desc }
-    .suffix = 10 coins
+    .suffix = 10 монет
 
-ent-CEInstrumentFlute = flute
-    .desc = A compact musical wind instrument, popular in villages as well as with large musical troupes.
+ent-CEInstrumentFlute = флейта
+    .desc = Компактный духовой музыкальный инструмент, популярный и в деревнях, и у больших музыкальных трупп.
 
-ent-CEInstrumentLyra = lyra
-    .desc = A common stringed instrument throughout Sylate, popular with various bards and musical troupes.
+ent-CEInstrumentLyra = лира
+    .desc = Распространённый струнный инструмент по всему Силату, любимый разными бардами и музыкальными труппами.
 
-ent-CEInstrumentLute = lute
-    .desc = A legend among bards.
+ent-CEInstrumentLute = лютня
+    .desc = Легенда среди бардов.
 
-ent-CEInstrumentGuitarSkeleton = skelute
-    .desc = A true weapon for brutal rock skeletons. What does "rock" mean?
+ent-CEInstrumentGuitarSkeleton = скелютня
+    .desc = Настоящее оружие для брутальных рок-скелетов. Что вообще значит «рок»?
 
 ent-CEBaseWeapon = None
 
-ent-CEWeaponMagicStaffCurse = curse staff
+ent-CEWeaponMagicStaffCurse = посох проклятия
     .desc = TODO
 
-ent-CEProjectileMagicCurse = curse bolt
+ent-CEProjectileMagicCurse = снаряд проклятия
 
-ent-CEWeaponDebugMagicStaff = admin missile staff
+ent-CEWeaponDebugMagicStaff = админский посох ракет
     .desc = INFINITY ENERGY
     .suffix = DEBUG
 
-ent-CEProjectileMagicMissileDebug = magic missile
+ent-CEProjectileMagicMissileDebug = магическая ракета
 
-ent-CEWeaponMagicStaffFireball = staff of fireballs
+ent-CEWeaponMagicStaffFireball = посох огненных шаров
     .desc = I CAST FIREBALL
 
-ent-CEProjectileStaffFirebolt = firebolt projectile
+ent-CEProjectileStaffFirebolt = снаряд огненной стрелы
 
-ent-CEWeaponMagicStaffHealing = healing staff
-    .desc = A staff imbued with healing magic. Restores health to anything it hit.
+ent-CEWeaponMagicStaffHealing = посох исцеления
+    .desc = Посох, наполненный исцеляющей магией. Восстанавливает здоровье любой цели, в которую попадёт.
 
-ent-CEProjectileMagicHealing = healing energy bolt
+ent-CEProjectileMagicHealing = снаряд исцеляющей энергии
 
-ent-CEWeaponMagicStaffIce = ice staff
-    .desc = A staff imbued with ice magic. Launches freezing projectiles at enemies.
+ent-CEWeaponMagicStaffIce = ледяной посох
+    .desc = Посох, наполненный магией льда. Выпускает замораживающие снаряды по врагам.
 
-ent-CEProjectileMagicIce = ice bolt
+ent-CEProjectileMagicIce = ледяной снаряд
 
-ent-CEWeaponMagicStaffMagicMissile = magic missile staff
-    .desc = A mage's standard weapon that fires compressed beams of energy.
+ent-CEWeaponMagicStaffMagicMissile = посох магической ракеты
+    .desc = Стандартное оружие мага, стреляющее сжатыми лучами энергии.
 
-ent-CEProjectileMagicMissile = magic missile
+ent-CEProjectileMagicMissile = магическая ракета
 
-ent-CEWeaponMagicStaffSparkle = fire sparkle staff
-    .desc = The simplest magical weapon that shoots hot sparks
+ent-CEWeaponMagicStaffSparkle = посох огненных искр
+    .desc = Самое простое магическое оружие, стреляющее горячими искрами
 
-ent-CEProjectileMagicSparkle = fire bolt
+ent-CEProjectileMagicSparkle = огненный снаряд
 
-ent-CEWeaponMagicStaffWater = water staff
-    .desc = A staff imbued with water magic. Launches slow water orbs that drench and repel their target.
+ent-CEWeaponMagicStaffWater = водный посох
+    .desc = Посох, наполненный магией воды. Запускает медленные водяные сферы, которые промачивают и отталкивают цель.
 
-ent-CEProjectileMagicWater = water bolt
+ent-CEProjectileMagicWater = водяной снаряд
 
-ent-CEWeaponSwordDebug = admin sword
+ent-CEWeaponSwordDebug = админский меч
     .desc = INFINITY POWER
     .suffix = DEBUG
 
-ent-CEWeaponHeavyClub = heavy club
+ent-CEWeaponHeavyClub = тяжёлая дубина
     .desc = TODO
 
-ent-CEWeaponStaffHolyStick = holy stick
-    .desc = Sometimes, to bless someone, you have to give them a firm tap on the head.
+ent-CEWeaponStaffHolyStick = святая палка
+    .desc = Иногда, чтобы кого-то благословить, нужно хорошенько стукнуть его по голове.
 
-ent-CEWeaponSkimitarIron = iron skimitar
+ent-CEWeaponSkimitarIron = железная скимитар
     .desc = TODO
 
-ent-CEWeaponSkimitarMolten = molten skimitar
+ent-CEWeaponSkimitarMolten = расплавленная скимитар
     .desc = TODO
 
-ent-CEWeaponDaggerPurification = purification dagger
-    .desc = An enchanted dagger that cleanses the target of all negative status effects.
+ent-CEWeaponDaggerPurification = кинжал очищения
+    .desc = Зачарованный кинжал, очищающий цель от всех негативных статус-эффектов.
 
-ent-CEWeaponSpearIron = iron spear
-    .desc = A long iron-tipped spear. Excellent reach keeps enemies at bay.
+ent-CEWeaponSpearIron = железное копьё
+    .desc = Длинное копьё с железным наконечником. Отличная дальность не подпускает врагов.
 
-ent-CEWeaponSpearSoulCatcher = soul catcher
-    .desc = A rare magical weapon that does not deal physical damage but wounds the soul, draining mana from it and transferring it to the wielder
+ent-CEWeaponSpearSoulCatcher = ловец душ
+    .desc = Редкое магическое оружие, которое не наносит физический урон, но ранит душу, высасывая из неё ману и передавая владельцу
 
-ent-CEWeaponSwordBone = bone sword
-    .desc = Nicks on the blade leave bruise wounds, increasing the damage dealt to the target
+ent-CEWeaponSwordBone = костяной меч
+    .desc = Зазубрины на клинке оставляют ушибленные раны, увеличивая наносимый цели урон
 
-ent-CEWeaponSwordIron = iron sword
-    .desc = A finely crafted sword favored by imperial officers. Its blade gleams with authority and tradition.
+ent-CEWeaponSwordIron = железный меч
+    .desc = Тонко выкованный меч, любимый имперскими офицерами. Его клинок сияет властью и традицией.
 
-ent-CEWeaponTwoHandedSwordIron = iron two-handed sword
-    .desc = A large and heavy two-handed sword. Heavy means reliable.
+ent-CEWeaponTwoHandedSwordIron = железный двуручный меч
+    .desc = Большой и тяжёлый двуручный меч. Тяжёлый значит надёжный.
 
-ent-CEWeaponStaffWooden = wooden staff
-    .desc = A long wooden stick with an iron tip.
+ent-CEWeaponStaffWooden = деревянный посох
+    .desc = Длинная деревянная палка с железным наконечником.
 
-ent-CEStatusEffectAcceleration = Acceleration
+ent-CEStatusEffectAcceleration = Ускорение
 
-ent-CEStatusEffectBlessing = blessing
-    .desc = Increases incoming healing.
+ent-CEStatusEffectBlessing = благословение
+    .desc = Увеличивает входящее лечение.
 
-ent-CEStatusEffectBruise = Bruise
-    .desc = Increases incoming physical damage.
+ent-CEStatusEffectBruise = Ушиб
+    .desc = Увеличивает входящий физический урон.
 
-ent-CEStatusEffectBurn = Burn
-    .desc = Increases incoming fire damage.
+ent-CEStatusEffectBurn = Ожог
+    .desc = Увеличивает входящий огненный урон.
 
-ent-CEStatusEffectColdSlowdown = Cold Slowdown
+ent-CEStatusEffectColdSlowdown = Замедление от холода
 
-ent-CEStatusEffectCurse = Curse
-    .desc = Increases all incoming damage.
+ent-CEStatusEffectCurse = Проклятие
+    .desc = Увеличивает весь входящий урон.
 
 ent-CEEffectAddCurse = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEStatusEffectDivineShield = Divine Shield
-    .desc = When you heal something, you heal [color=#1defa9]2 health[/color] more.
+ent-CEStatusEffectDivineShield = Божественный щит
+    .desc = Когда вы кого-то лечите, вы восстанавливаете на [color=#1defa9]2 здоровья[/color] больше.
 
 ent-CEEffectBreakDivineShield = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEStatusEffectFightForSurvival = Fight for Survival
+ent-CEStatusEffectFightForSurvival = Битва за выживание
     .desc = TODO
 
-ent-CEStatusEffectFire = Fire!
-    .desc = On fire!
+ent-CEStatusEffectFire = Огонь!
+    .desc = Горите!
 
-ent-CEStatusEffectFrostbite = Frostbite
-    .desc = Increases incoming cold damage.
+ent-CEStatusEffectFrostbite = Обморожение
+    .desc = Увеличивает входящий урон холодом.
 
-ent-CEStatusEffectFrozen = Frozen
+ent-CEStatusEffectFrozen = Заморозка
 
-ent-CEActionFrozenBreak = Break free
-    .desc = You break free from the icy trap.
+ent-CEActionFrozenBreak = Вырваться
+    .desc = Вы вырываетесь из ледяной ловушки.
 
-ent-CEStatusEffectPacifism = Pacifism
-    .desc = All combat is disabled.
+ent-CEStatusEffectPacifism = Пацифизм
+    .desc = Любой бой отключён.
 
-ent-CEStatusEffectPoison = Poison
+ent-CEStatusEffectPoison = Яд
     .desc = TODO
 
-ent-CEStatusEffectRegeneration = Regeneration
-    .desc = Regenerating health over time.
+ent-CEStatusEffectRegeneration = Регенерация
+    .desc = Постепенно восстанавливает здоровье.
 
-ent-CEStatusEffectStrength = Strength
-    .desc = Increases melee damage per stack.
+ent-CEStatusEffectStrength = Сила
+    .desc = Увеличивает урон в ближнем бою за каждый стак.
 
-ent-CEStatusEffectTempShield = Temporary Shield
-    .desc = Absorbs damage, fades over time.
+ent-CEStatusEffectTempShield = Временный щит
+    .desc = Поглощает урон и со временем исчезает.
 
 ent-CEEffectAddTempShieldPhysical = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
@@ -598,259 +514,256 @@ ent-CEEffectTakeDamageTempShieldPhysical = { ent-CEBaseMagicImpact }
 ent-CEEffectBreakTempShieldPhysical = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEStatusEffectWet = Wet
-    .desc = Soaked with water. Fire has no power here.
+ent-CEStatusEffectWet = Мокрота
+    .desc = Вы промокли водой. Огонь здесь бессилен.
 
-ent-CEBonfire = Bonfire
-    .desc = Interact to restore health and mana. TODO: immersive name and description
+ent-CEBonfire = костёр
+    .desc = Взаимодействуйте, чтобы восстановить здоровье и ману. TODO: immersive name and description
 
-ent-CEChasm = chasm
-    .desc = You can't even see the bottom.
+ent-CEChasm = пропасть
+    .desc = Дна даже не видно.
 
-ent-CECrystalBase = crystals
+ent-CECrystalBase = кристаллы
     .desc = TODO
 
 ent-CECrystalQuartzWhite = { ent-CECrystalBase }
     .desc = { ent-CECrystalBase.desc }
-    .suffix = White
+    .suffix = Белый
 
 ent-CECrystalQuartzRed = { ent-CECrystalBase }
     .desc = { ent-CECrystalBase.desc }
-    .suffix = Red
+    .suffix = Красный
 
 ent-CECrystalQuartzBlue = { ent-CECrystalBase }
     .desc = { ent-CECrystalBase.desc }
-    .suffix = Blue
+    .suffix = Синий
 
 ent-CECrystalQuartzGreen = { ent-CECrystalBase }
     .desc = { ent-CECrystalBase.desc }
-    .suffix = Green
+    .suffix = Зелёный
 
 ent-CECrystalQuartzPurple = { ent-CECrystalBase }
     .desc = { ent-CECrystalBase.desc }
-    .suffix = Purple
+    .suffix = Фиолетовый
 
-ent-CEFogGate = fog gate
-    .desc = A mysterious wall of dense fog. Those who approach from the front pass through freely; those who approach from behind find it impassable.
+ent-CEFogGate = туманные врата
+    .desc = Таинственная стена плотного тумана. Те, кто подходит спереди, проходят свободно; тем, кто подходит сзади, путь закрыт.
 
-ent-CELava = lava
+ent-CELava = лава
     .desc = TODO
 
 ent-CELavaMoving = { ent-CELava }
     .desc = { ent-CELava.desc }
-    .suffix = Moving
+    .suffix = Движущаяся
 
-ent-CESpiderWeb = spider web
-    .desc = It's stringy and sticky.
+ent-CESpiderWeb = паутина
+    .desc = Тягучая и липкая.
 
-ent-CEUpgradeStatue = Level up statue
-    .desc = Interact to level up. TODO: immersive name and description
+ent-CEUpgradeStatue = статуя возвышения
+    .desc = Взаимодействуйте, чтобы повысить уровень. TODO: immersive name and description
 
-ent-CEUpgradePostament = Level up postament
-    .desc = Select one of the upgrade options to apply it. TODO: immersive name and description
+ent-CEUpgradePostament = постамент возвышения
+    .desc = Выберите один из вариантов улучшения, чтобы применить его. TODO: immersive name and description
 
-ent-CEUpgradeBlank = blessing
+ent-CEUpgradeBlank = благословение
 
-ent-CEUpgradeRandom = Random Blessing
+ent-CEUpgradeRandom = случайное благословение
 
-ent-CEWater = water
-    .desc = You're definitely going to get your feet wet
+ent-CEWater = вода
+    .desc = Вы точно намочите ноги
 
 ent-CEWaterMoving = { ent-CEWater }
     .desc = { ent-CEWater.desc }
-    .suffix = Moving
+    .suffix = Движущаяся
 
-ent-CEIce = ice
-    .desc = Slippery cold ice. Watch your step.
+ent-CEIce = лёд
+    .desc = Скользкий холодный лёд. Смотрите под ноги.
 
 ent-CEIceFrozenStream = { ent-CEIce }
-    .desc = A frozen stream, the current trapped under ice.
-    .suffix = Frozen Stream
+    .desc = Замёрзший ручей, течение которого сковано льдом.
+    .suffix = Замёрзший ручей
 
-ent-CEWaterPoisoned = poisoned water
-    .desc = This water has been contaminated with a dangerous substance.
-    .suffix = Poisoned
+ent-CEWaterPoisoned = отравленная вода
+    .desc = Эта вода заражена опасным веществом.
+    .suffix = Отравленная
 
 ent-CEWaterPoisonedMoving = { ent-CEWaterPoisoned }
     .desc = { ent-CEWaterPoisoned.desc }
-    .suffix = Moving
+    .suffix = Движущаяся
 
 ent-CEIcePoisoned = { ent-CEIce }
     .desc = { ent-CEIce.desc }
-    .suffix = Poisoned
+    .suffix = Отравленный
 
 ent-CEIceFrozenPoisonedStream = { ent-CEIcePoisoned }
-    .desc = A frozen stream, the current trapped under ice.
-    .suffix = Poisoned Frozen Stream
+    .desc = Замёрзший ручей, течение которого сковано льдом.
+    .suffix = Отравленный замёрзший ручей
 
 ent-CEBaseDoor = None
 
 ent-CEIronDoorMirrored = { ent-CEIronDoor }
     .desc = { ent-CEIronDoor.desc }
-    .suffix = Opened, Mirrored
+    .suffix = Открытая, Зеркальная
 
 ent-CEIronDoorWindowedMirrored = { ent-CEIronDoorWindowed }
     .desc = { ent-CEIronDoorWindowed.desc }
-    .suffix = Opened, Mirrored
+    .suffix = Открытая, Зеркальная
 
 ent-CEWoodenDoorMirrored = { ent-CEWoodenDoor }
     .desc = { ent-CEWoodenDoor.desc }
-    .suffix = Opened, Mirrored
+    .suffix = Открытая, Зеркальная
 
 ent-CEWoodenDoorWindowedMirrored = { ent-CEWoodenDoorWindowed }
     .desc = { ent-CEWoodenDoorWindowed.desc }
-    .suffix = Opened, Mirrored
+    .suffix = Открытая, Зеркальная
 
-ent-CEBaseFenceBig = big fence
-    .desc = You definitely need a towel to get to the other side
+ent-CEBaseFenceBig = большой забор
+    .desc = Чтобы попасть на ту сторону, вам точно понадобится полотенце
 
 ent-CEFenceBigIron = { ent-CEBaseFenceBig }
     .desc = { ent-CEBaseFenceBig.desc }
-    .suffix = Iron
+    .suffix = Железный
 
-ent-CEBaseFenceGateBig = fence big gate
-    .desc = Big man-sized gates. What's your next move?
+ent-CEBaseFenceGateBig = большие ворота забора
+    .desc = Большие ворота в человеческий рост. Каков ваш следующий шаг?
 
-ent-CEBaseFence = fence
-    .desc = A low fence restricting movement in a purely nominal way.
+ent-CEBaseFence = забор
+    .desc = Невысокий забор, ограничивающий движение скорее условно.
 
-ent-CEBaseFenceGate = fence gate
-    .desc = You have two paths. You can open the door like a normal person, or you can climb over the door like a funny person.
+ent-CEBaseFenceGate = калитка
+    .desc = У вас два пути: открыть дверь как нормальный человек или перелезть через неё как смешной человек.
 
-ent-CEWallStoneBrick = stone brick wall
+ent-CEWallStoneBrick = стена из каменного кирпича
     .desc = { ent-CEBaseWall.desc }
-    .suffix = Indestructable
+    .suffix = Неразрушимая
 
-ent-CEWallStone = stone
+ent-CEWallStone = камень
     .desc = { ent-CEBaseWall.desc }
-    .suffix = Indestructable
+    .suffix = Неразрушимая
 
-ent-CEWallDirt = dirt
+ent-CEWallDirt = земля
     .desc = { ent-CEBaseWall.desc }
-    .suffix = Indestructable
+    .suffix = Неразрушимая
 
-ent-CEWallInvinsible = invinsible barrier
-    .desc = invinsible and indestructible wall for admemes.
+ent-CEWallInvinsible = невидимый барьер
+    .desc = Невидимая и неразрушимая стена для админов.
 
-ent-CEWallWoodenBase = wooden wall
-    .suffix = Flammable, Destructable
+ent-CEWallWoodenBase = деревянная стена
+    .suffix = Горючая, Разрушаемая
 
-ent-CEBaseWall = wall
-    .desc = Sturdy enough to cover you from threats or cold winds.
+ent-CEBaseWall = стена
+    .desc = Достаточно прочная, чтобы укрыть вас от угроз и холодных ветров.
 
 ent-CEBaseWallFrame = None
-    .desc = This wall is now in an indeterminate state between existence and non-existence.
+    .desc = Эта стена сейчас находится в неопределённом состоянии между существованием и несуществованием.
 
-ent-CEBaseFastPortal = fast portal
-    .desc = Transports you to a another place!
+ent-CEBaseFastPortal = быстрый портал
+    .desc = Переносит вас в другое место!
 
 ent-CEPortalArena1 = { ent-CEBaseFastPortal }
     .desc = { ent-CEBaseFastPortal.desc }
-    .suffix = Arena 1
+    .suffix = Арена 1
 
 ent-CEPortalArena2 = { ent-CEBaseFastPortal }
     .desc = { ent-CEBaseFastPortal.desc }
-    .suffix = Arena 2
+    .suffix = Арена 2
 
 ent-CEWallBossEndDelete = { ent-CEWallStoneBrick }
     .desc = { ent-CEWallStoneBrick.desc }
-    .suffix = Deleted on END boss fight
+    .suffix = Удаляется в КОНЦЕ боя с боссом
 
 ent-CEWallBossStartDelete = { ent-CEWallStoneBrick }
     .desc = { ent-CEWallStoneBrick.desc }
-    .suffix = Deleted on START boss fight
+    .suffix = Удаляется в НАЧАЛЕ боя с боссом
 
-ent-CEBossDoorStartDelete = boss door
-    .desc = This door looks like it leads to a boss fight. Are you sure you want to open it?
-    .suffix = Deleted on START boss fight
+ent-CEBossDoorStartDelete = дверь босса
+    .desc = Похоже, эта дверь ведёт к битве с боссом. Вы уверены, что хотите открыть её?
+    .suffix = Удаляется в НАЧАЛЕ боя с боссом
 
 ent-CEBossDoorMirroredStartDelete = { ent-CEBossDoorStartDelete }
     .desc = { ent-CEBossDoorStartDelete.desc }
-    .suffix = Deleted on START boss fight, Mirrored
+    .suffix = Удаляется в НАЧАЛЕ боя с боссом, Зеркальная
 
-ent-CEDungeonPortalBase = dungeon portal
-    .desc = A shimmering rift between dungeon levels.
+ent-CEDungeonPortalBase = портал подземелья
+    .desc = Мерцающий разлом между уровнями подземелья.
 
-ent-CEDungeonLevelExitBase = dungeon rift
-    .desc = A rift leading deeper into the dungeon. Interact to enter.
+ent-CEDungeonLevelExitBase = разлом подземелья
+    .desc = Разлом, ведущий глубже в подземелье. Взаимодействуйте, чтобы войти.
 
 ent-CEDungeonLevelExit1 = { ent-CEDungeonLevelExitBase }
     .desc = { ent-CEDungeonLevelExitBase.desc }
-    .suffix = Slot 1
+    .suffix = Слот 1
 
 ent-CEDungeonLevelExit2 = { ent-CEDungeonLevelExitBase }
     .desc = { ent-CEDungeonLevelExitBase.desc }
-    .suffix = Slot 2
+    .suffix = Слот 2
 
 ent-CEDungeonLevelExit3 = { ent-CEDungeonLevelExitBase }
     .desc = { ent-CEDungeonLevelExitBase.desc }
-    .suffix = Slot 3
+    .suffix = Слот 3
 
-ent-CEDungeonLevelEntry = dungeon entry point
-    .desc = An arrival point for adventurers entering this level.
+ent-CEDungeonLevelEntry = точка входа в подземелье
+    .desc = Точка прибытия для авантюристов, входящих на этот уровень.
 
-ent-CEWayfindingStone = waystone
-    .desc = An ancient stone with a map of known levels carved into its sides. Touch it to see where other travelers are currently located.
+ent-CEWayfindingStone = путевой камень
+    .desc = Древний камень с картой известных уровней, высеченной на его гранях. Коснитесь его, чтобы увидеть, где сейчас находятся другие путешественники.
 
-ent-CEBookshelfBase = bookshelf
-    .desc = Mostly filled with books.
-    .suffix = Empty
+ent-CEBookshelfBase = книжный шкаф
+    .desc = В основном заполнен книгами.
+    .suffix = Пустой
 
 ent-CEBookshelfWooden = { ent-CEBookshelfBase }
     .desc = { ent-CEBookshelfBase.desc }
-    .suffix = Empty
+    .suffix = Пустой
 
 ent-CEBookshelfWoodenFilled = { ent-CEBookshelfWooden }
     .desc = { ent-CEBookshelfWooden.desc }
-    .suffix = Random filled
+    .suffix = Заполнен случайно
 
 ent-CEBookshelfStone = { ent-CEBookshelfBase }
     .desc = { ent-CEBookshelfBase.desc }
-    .suffix = Empty
+    .suffix = Пустой
 
 ent-CEBookshelfStoneFilled = { ent-CEBookshelfStone }
     .desc = { ent-CEBookshelfStone.desc }
-    .suffix = Random filled
+    .suffix = Заполнен случайно
 
 ent-CEBookshelfStoneFilledGuaranteed = { ent-CEBookshelfStone }
     .desc = { ent-CEBookshelfStone.desc }
-    .suffix = Guaranteed 1 book
+    .suffix = Гарантированно 1 книга
 
-ent-CEChestBase = chest
-    .desc = Chest.
+ent-CEChestBase = сундук
+    .desc = Сундук.
 
-ent-CEChestWooden = wooden chest
+ent-CEChestWooden = деревянный сундук
     .desc = { ent-CEChestBase.desc }
 
-ent-CEChestGold = golden chest
+ent-CEChestGold = золотой сундук
     .desc = { ent-CEChestBase.desc }
 
-ent-CEChestWoodenOld = old wooden chest
+ent-CEChestWoodenOld = старый деревянный сундук
     .desc = { ent-CEChestBase.desc }
 
-ent-CEPot = pot
+ent-CEPot = горшок
     .desc = TODO
 
-ent-CETableWoodenFrame = wooden table frame
-    .desc = Base for any wooden table
+ent-CETableWoodenFrame = каркас деревянного стола
+    .desc = Основа для любого деревянного стола
 
-ent-CETableWooden = wooden table
-    .desc = A simple table made of boards.
+ent-CETableWooden = деревянный стол
+    .desc = Простой стол из досок.
 
-ent-CEFloorTorchAlwaysPowered = floor torch
+ent-CEFloorTorchAlwaysPowered = напольный факел
 
-ent-CEWallmountTorchAlwaysPowered = wallmount torch
-    .suffix = Debug, Infinite
+ent-CEHighBush = высокий куст
+    .desc = Очень высокие и густые заросли. Возможно, кто-то наблюдает за вами из них
 
-ent-CEHighBush = high bush
-    .desc = Very tall and dense thickets. Perhaps someone is watching you from them
+ent-CERandomBushOffsetSpawner = спаунер случайного смещения кустов
 
-ent-CERandomBushOffsetSpawner = random bush offset spawner
+ent-CEBaseTree = дерево
+    .desc = Десятилетия жизни и роста, наполняющие окружающую природу свежим воздухом.
 
-ent-CEBaseTree = tree
-    .desc = Decades of life and growth, saturating the surrounding nature with fresh air.
-
-ent-CEBaseTreeLarge = large tree
+ent-CEBaseTreeLarge = большое дерево
     .desc = { ent-CEBaseTree.desc }
 
 ent-CEFloraTreeGreen = { ent-CEBaseTree }
@@ -870,603 +783,366 @@ ent-CEFloraTreeGreenLarge = { ent-CEBaseTreeLarge }
 
 ent-CEFloraTreeBirchSmall = { ent-CEBaseTree }
     .desc = { ent-CEBaseTree.desc }
-    .suffix = Small
+    .suffix = Маленькая
 
 ent-CEFloraTreeBirchMedium = { ent-CEBaseTree }
     .desc = { ent-CEBaseTree.desc }
-    .suffix = Medium
+    .suffix = Средняя
 
 ent-CEFloraTreeBirchLarge = { ent-CEBaseTree }
     .desc = { ent-CEBaseTree.desc }
-    .suffix = Large
+    .suffix = Большая
 
 ent-CEFloraTreeSpruceSmall = { ent-CEBaseTree }
     .desc = { ent-CEBaseTree.desc }
-    .suffix = Small
+    .suffix = Маленькая
 
 ent-CEFloraTreeSpruceMedium = { ent-CEBaseTree }
     .desc = { ent-CEBaseTree.desc }
-    .suffix = Medium
+    .suffix = Средняя
 
 ent-CEFloraTreeSpruceLarge = { ent-CEBaseTree }
     .desc = { ent-CEBaseTree.desc }
-    .suffix = Large
+    .suffix = Большая
 
-ent-CEWaterLilies = water lilies
-    .desc = Wow, these are plants that don't grow on land, but on water! Nature is amazing.
+ent-CEWaterLilies = кувшинки
+    .desc = Вау, это растения, которые растут не на земле, а на воде! Природа удивительна.
 
-ent-CEWaterReeds = reed
-    .desc = Usually grows in swamps and on river banks.
+ent-CEWaterReeds = камыш
+    .desc = Обычно растёт в болотах и на берегах рек.
 
-ent-CEGatherableBloodRose = blood roses
-    .desc = Scarlet roses growing in places where much blood has been shed. In the right hands, it serves as an ingredient for healing potions.
+ent-CEGatherableBloodRose = кровавые розы
+    .desc = Алые розы, растущие там, где было пролито много крови. В умелых руках служат ингредиентом для зелий лечения.
 
-ent-CEGatherableBlueAelyta = blue aelyta
-    .desc = A blue flower that grows in areas where magical energy congregates. In the right hands, it serves as an ingredient for mana-restoring potions.A blue flower that grows in areas where magical energy congregates. In the right hands, it serves as an ingredient for mana-restoring potions.
+ent-CEGatherableBlueAelyta = лазурная аэлита
+    .desc = Синий цветок, растущий в местах скопления магической энергии. В умелых руках служит ингредиентом для зелий восстановления маны.
 
-ent-CEGatherableYellowDayflin = yellow dayflin
-    .desc = A flower that is remarkable for its ability to grow quickly almost anywhere.
+ent-CEGatherableYellowDayflin = жёлтый солнцецвет
+    .desc = Цветок, примечательный способностью быстро расти практически где угодно.
 
-ent-CETileEffectBlessing = blessing
-    .desc = A benevolent blessing that increases all incoming healing.
+ent-CETileEffectBlessing = благословение
+    .desc = Благотворное благословение, увеличивающее всё входящее лечение.
 
-ent-CEBlessingSpawner1 = tile effect - blessing
-    .suffix = 1
+ent-CETileEffectCurse = проклятие
+    .desc = Злонамеренное проклятие, увеличивающее весь входящий урон.
 
-ent-CEBlessingSpawner5 = { ent-CEBlessingSpawner1 }
-    .suffix = 5
+ent-CETileEffectFire = огонь
+    .desc = Обжигающе горячее пламя. Вам точно не стоит просто так к нему прикасаться.
 
-ent-CEBlessingSpawner10 = { ent-CEBlessingSpawner1 }
-    .suffix = 10
-
-ent-CETileEffectCurse = curse
-    .desc = A malevolent curse that increases all incoming damage.
-
-ent-CECurseSpawner1 = tile effect - curse
-    .suffix = 1
-
-ent-CECurseSpawner5 = { ent-CECurseSpawner1 }
-    .suffix = 5
-
-ent-CECurseSpawner10 = { ent-CECurseSpawner1 }
-    .suffix = 10
-
-ent-CETileEffectFire = fire
-    .desc = A scorching hot flame. You definitely shouldn't touch it just like that.
-
-ent-CEFireImpactEffect = fire impact
-    .desc = A burst of fire upon impact.
+ent-CEFireImpactEffect = огненный удар
+    .desc = Вспышка огня при столкновении.
     .suffix = VFX
 
-ent-CEFireSpawner1 = tile effect - fire
-    .suffix = 1
+ent-CETileEffectCursedFire = проклятый огонь
+    .desc = Палящее неугасимое пламя, вечно подпитываемое проклятием
 
-ent-CEFireSpawner5 = { ent-CEFireSpawner1 }
-    .suffix = 5
+ent-CETileEffectFreeze = заморозка
+    .desc = Холодная вспышка мороза.
 
-ent-CEFireSpawner10 = { ent-CEFireSpawner1 }
-    .suffix = 10
+ent-CETileEffectStoneBarrier = каменный барьер
+    .desc = Прочный каменный барьер, блокирующий движение и снаряды.
 
-ent-CETileEffectCursedFire = cursed fire
-    .desc = a searing, unquenchable flame, eternally fueled by a curse
-
-ent-CECursedFireSpawner1 = tile effect - cursed fire
-    .suffix = 1
-
-ent-CECursedFireSpawner5 = { ent-CECursedFireSpawner1 }
-    .suffix = 5
-
-ent-CECursedFireSpawner10 = { ent-CECursedFireSpawner1 }
-    .suffix = 10
-
-ent-CETileEffectFreeze = freeze
-    .desc = A cold burst of frost.
-
-ent-CEFreezeImpactEffect = freeze impact
+ent-CEDustTileEffect = пылевой эффект
+    .desc = Всплеск пыли при столкновении.
     .suffix = VFX
 
-ent-CEFreezeSpawner1 = tile effect - freeze
-    .suffix = 1
+ent-CETileEffectWater = водяной всплеск
+    .desc = Всплеск воды при столкновении.
 
-ent-CEFreezeSpawner5 = { ent-CEFreezeSpawner1 }
-    .suffix = 5
+ent-CEMapEndText = Текст конца карты
 
-ent-CEFreezeSpawner10 = { ent-CEFreezeSpawner1 }
-    .suffix = 10
+ent-CEMapStartText = Текст начала карты EN
 
-ent-CETileEffectIceSpikes = ice spikes
-    .desc = TODO
+ent-CEMapStartBlockedText = Текст блокировки карты
 
-ent-CEIceSpikesSpawner1 = tile effect - ice spikes
-    .suffix = 1
+ent-CEMapStartNotStartedText = Текст «карта не начата»
 
-ent-CETileEffectStoneBarrier = stone barrier
-    .desc = A sturdy stone barrier that blocks movement and projectiles.
+ent-CEMapTextPeace = Текст карты - Мирно
 
-ent-CEStoneBarrierSpawner1 = tile effect - stone barrier
-    .suffix = 1
+ent-CEMapTextDanger = Текст карты - Опасно
 
-ent-CETileEffectStoneSpikes = stone spikes
-    .desc = TODO
+ent-CEBaseMagicRune = магическая руна
+    .desc = проявление магической энергии в физическом мире
 
-ent-CEStoneSpikesSpawner1 = tile effect - stone spikes
-    .suffix = 1
+ent-CEBaseMagicImpact = магический удар
+    .desc = проявление магической энергии в физическом мире
 
-ent-CEDustTileEffect = dust effect
-    .desc = A burst of dust upon impact.
-    .suffix = VFX
+ent-CEActionSpellCruelty = Жестокость
+    .desc = Ваша следующая атака в ближнем бою накладывает [color=#b2e3eb]5 стаков ушиба[/color], увеличивая получаемый целью физический урон.
 
-ent-CETileEffectWater = water splash
-    .desc = A splash of water upon impact.
-
-ent-CEWaterImpactEffect = water impact
-    .suffix = VFX
-
-ent-CEWaterSpawner1 = tile effect - water
-    .suffix = 1
-
-ent-CEWaterSpawner5 = { ent-CEWaterSpawner1 }
-    .suffix = 5
-
-ent-CEWaterSpawner10 = { ent-CEWaterSpawner1 }
-    .suffix = 10
-
-ent-CEMapEndText = Map end text
-
-ent-CEMapStartText = Map start text EN
-
-ent-CEMapStartBlockedText = Map blocked text
-
-ent-CEMapStartNotStartedText = Map not started text
-
-ent-CEMapTextPeace = Map text - Peaceful
-
-ent-CEMapTextDanger = Map text - Dangerous
-
-ent-CEBaseMagicRune = magic rune
-    .desc = manifestation of magical energy in the physical plane
-
-ent-CEBaseMagicImpact = magic impact
-    .desc = manifestation of magical energy in the physical plane
-
-ent-CEActionSpellCruelty = Cruelty
-    .desc = Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.
-
-ent-CEEffectCrueltyTelegraphy = focus cruelty
+ent-CEEffectCrueltyTelegraphy = фокус жестокости
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEStatusEffectCruelty = Cruelty
-    .desc = Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.
+ent-CEStatusEffectCruelty = Жестокость
+    .desc = Ваша следующая атака в ближнем бою накладывает [color=#b2e3eb]5 стаков ушиба[/color], увеличивая получаемый целью физический урон.
 
-ent-CEActionKick = Kick
-    .desc = A powerful kick that deals 15 damage in melee combat and strongly knocks back targets
+ent-CEActionKick = Пинок
+    .desc = Мощный пинок, наносящий 15 урона в ближнем бою и сильно отбрасывающий цели
 
-ent-CEActionSpellRaiseShields = Raise Shields
-    .desc = You grant [color=#b2e3eb]35 physical shields[/color] to all creatures in a small area.
+ent-CEActionSpellRaiseShields = Поднять щиты
+    .desc = Вы даёте [color=#b2e3eb]35 физических щитов[/color] всем существам в небольшой области.
 
-ent-CEEffectRaiseShieldsTelegraphy = raise shields telegraphy
+ent-CEEffectRaiseShieldsTelegraphy = телеграфия поднятия щитов
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEActionSpellStoneSkin = Stone Skin
-    .desc = Grants [color=#b2e3eb]50 temporary shields[/color] that absorb damage. Shields decay over time.
+ent-CEActionSpellStoneSkin = Каменная кожа
+    .desc = Даёт [color=#b2e3eb]50 временных щитов[/color], поглощающих урон. Щиты со временем распадаются.
 
-ent-CEActionStoneWall = Stone Wall
-    .desc = You raise a [color=#aaaaaa]stone barrier[/color] beneath your cursor.
+ent-CEActionStoneWall = Каменная стена
+    .desc = Вы воздвигаете [color=#aaaaaa]каменный барьер[/color] под курсором.
 
-ent-CEActionWaveOfSpikes = Wave of spikes
-    .desc = You unleash a wave of [color=#ff4500]sharp spikes[/color].
+ent-CEActionWaveOfSpikes = Волна шипов
+    .desc = Вы высвобождаете волну [color=#ff4500]острых шипов[/color].
 
 ent-CEProjectileWaveOfSpikes = None
 
-ent-CEStatusEffectFortress = Fortress
-    .desc = When you apply [color=#b2e3eb]temporary shields[/color] on someone, you gain [color=#b2e3eb]10 temporary shields[/color].
+ent-CEStatusEffectFortress = Крепость
+    .desc = Когда вы накладываете [color=#b2e3eb]временные щиты[/color] на кого-то, вы получаете [color=#b2e3eb]10 временных щитов[/color].
 
-ent-CEStatusEffectManeuverability = Maneuverability
-    .desc = Taking damage grants [color=#c3ec49]1 Acceleration[/color] stacks.
+ent-CEStatusEffectManeuverability = Манёвренность
+    .desc = Получение урона даёт [color=#c3ec49]1 стак ускорения[/color].
 
-ent-CEActionFirebolt = Firebolt
-    .desc = You hurl a fireball that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].
+ent-CEActionFirebolt = Огненная стрела
+    .desc = Вы бросаете огненный шар, который взрывается при ударе, поджигая землю и существ [color=#ff8a05]огнём[/color].
 
-ent-CEEffectFireboltCharge = firebolt charge
+ent-CEEffectFireboltCharge = заряд огненной стрелы
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEProjectileFirebolt = firebolt projectile
+ent-CEProjectileFirebolt = снаряд огненной стрелы
 
-ent-CEActionFirewall = Firewall
-    .desc = You create a wall of fire that sets creatures and the ground [color=#ff8a05]on fire[/color].
+ent-CEActionFirewall = Огненная стена
+    .desc = Вы создаёте стену огня, которая поджигает существ и землю [color=#ff8a05]огнём[/color].
 
-ent-CEEffectFirewallTelegraphy = firewall telegraphy
+ent-CEEffectFirewallTelegraphy = телеграфия огненной стены
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEEffectFireballCharge = fireball charge
+ent-CEEffectFireballCharge = заряд огненного шара
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEProjectileFirewall = firewall
+ent-CEProjectileFirewall = огненная стена
 
-ent-CEActionFireWave = Fire wave
-    .desc = You unleash a wave of fire, dealing massive [color=#ff4500]fire damage[/color] in close distance.
+ent-CEActionFireWave = Огненная волна
+    .desc = Вы высвобождаете волну огня, наносящую огромный [color=#ff4500]огненный урон[/color] на ближней дистанции.
 
-ent-CEProjectileFireWave = fire wave
+ent-CEProjectileFireWave = огненная волна
 
-ent-CEActionFrostBlade = Frost blade
-    .desc = You create a powerful temporary weapon made of ice that deals high damage and [color=#30caf5]freezes[/color] targets.
+ent-CEActionFrostBlade = Ледяной клинок
+    .desc = Вы создаёте мощное временное оружие изо льда, которое наносит высокий урон и [color=#30caf5]замораживает[/color] цели.
 
-ent-CEWeaponSwordFrostTemporary = frost blade
-    .desc = A magical weapon woven from ice, which will soon melt away.
-    .suffix = 120 seconds
+ent-CEWeaponSwordFrostTemporary = ледяной клинок
+    .desc = Магическое оружие, сотканное изо льда, которое вскоре растает.
+    .suffix = 120 секунд
 
 ent-CEEffectFrostBladeSpawn = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEActionFrostFlow = Frost Flow
-    .desc = You unleash a stream of frost that covers the ground in [color=#30caf5]ice[/color] and [color=#30caf5]slows[/color] creatures caught in it.
+ent-CEActionFrostFlow = Ледяной поток
+    .desc = Вы выпускаете поток холода, покрывающий землю [color=#30caf5]льдом[/color] и [color=#30caf5]замедляющий[/color] попавших в него существ.
 
-ent-CEEffectFrostFlowTelegraphy = frost flow telegraphy
+ent-CEEffectFrostFlowTelegraphy = телеграфия ледяного потока
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEEffectFrostFlowCharge = frost flow charge
+ent-CEEffectFrostFlowCharge = заряд ледяного потока
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEProjectileFrostFlow = frost flow
+ent-CEProjectileFrostFlow = ледяной поток
 
-ent-CEActionHealingFrost = Healing Frost
-    .desc = You restore [color=#1defa9]15 health[/color] to a target and apply [color=#30caf5]5 freeze stacks[/color].
+ent-CEActionHealingFrost = Исцеляющий мороз
+    .desc = Вы восстанавливаете [color=#1defa9]15 здоровья[/color] цели и накладываете [color=#30caf5]5 стаков заморозки[/color].
 
 ent-CEEffectHealingFrostVFX = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEActionManaGift = Mana Gift
-    .desc = Restore [color=#3082f5]25 mana[/color] to the selected target
+ent-CEActionManaGift = Дар маны
+    .desc = Восстанавливает [color=#3082f5]25 маны[/color] выбранной цели
 
-ent-CEEffectManaRestore = mana restore effect
+ent-CEEffectManaRestore = эффект восстановления маны
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEActionManaSteal = Mana Steal
-    .desc = Steal [color=#3082f5]20 mana[/color] from the selected target and transfer it to yourself.
+ent-CEActionManaSteal = Кража маны
+    .desc = Украдите [color=#3082f5]20 маны[/color] у выбранной цели и передайте её себе.
 
-ent-CEEffectManaDrain = mana drain effect
+ent-CEEffectManaDrain = эффект вытягивания маны
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEActionTripleIcicles = Triple Icicles
-    .desc = You unleash three icicles that deal [color=#30caf5]cold[/color] damage and [color=#30caf5]freeze[/color] the area on hit.
+ent-CEActionTripleIcicles = Тройные сосульки
+    .desc = Вы выпускаете три сосульки, которые наносят [color=#30caf5]урон холодом[/color] и [color=#30caf5]замораживают[/color] область при попадании.
 
-ent-CEProjectileTripleIcicle = triple icicle
+ent-CEProjectileTripleIcicle = тройная сосулька
 
-ent-CEStatusEffectAffinityFire = Fire Affinity
-    .desc = You take 5 less [color=#ff8a05]fire damage[/color] from all sources.
+ent-CEStatusEffectAffinityFire = Родство с огнём
+    .desc = Вы получаете на 5 меньше [color=#ff8a05]огненного урона[/color] из всех источников.
 
-ent-CEStatusEffectAffinityIce = Ice Affinity
-    .desc = You take 5 less [color=#05eeff]cold damage[/color] from all sources and are immune to [color=#05eeff]cold slowdown[/color] and [color=#05eeff]frozen[/color].
+ent-CEStatusEffectAffinityIce = Родство со льдом
+    .desc = Вы получаете на 5 меньше [color=#05eeff]урона холодом[/color] из всех источников и невосприимчивы к [color=#05eeff]замедлению от холода[/color] и [color=#05eeff]заморозке[/color].
 
-ent-CEStatusEffectCursedFlame = Cursed Flame
-    .desc = Every flame you create is cursed.
+ent-CEStatusEffectCursedFlame = Проклятое пламя
+    .desc = Любое созданное вами пламя становится проклятым.
 
-ent-CEStatusEffectDanceOfFireAndIce = Dance of Fire and Ice
-    .desc = You deal [color=#ff8a05]5 bonus fire damage[/color] to [color=#05eeff]frozen[/color] targets and [color=#05eeff]5 bonus cold damage[/color] to [color=#ff8a05]burning[/color] targets.
+ent-CEStatusEffectDanceOfFireAndIce = Танец огня и льда
+    .desc = Вы наносите [color=#ff8a05]5 бонусного огненного урона[/color] по [color=#05eeff]замороженным[/color] целям и [color=#05eeff]5 бонусного урона холодом[/color] по [color=#ff8a05]горящим[/color] целям.
 
-ent-CEStatusEffectManaCore = Magic Core
-    .desc = [color=#1776eb]Mana regeneration[/color] from all sources has been [color=#1776eb]doubled[/color]
+ent-CEStatusEffectManaCore = Ядро маны
+    .desc = [color=#1776eb]Регенерация маны[/color] из всех источников [color=#1776eb]удвоена[/color]
 
-ent-CEStatusEffectSharpFloor = Sharp Floor
-    .desc = When you freeze an area, you also cover it with sharp ice spikes.
+ent-CEStatusEffectSharpFloor = Острый пол
+    .desc = Когда вы замораживаете область, вы также покрываете её острыми ледяными шипами.
 
-ent-CEActionSpellAcceleration = Acceleration
-    .desc = Increases your movement speed for a short duration.
+ent-CEActionSpellAcceleration = Ускорение
+    .desc = Увеличивает скорость передвижения на короткое время.
 
-ent-CEActionFireCreation = Fire creation
-    .desc = You create a temporary [color=#ff4500]fire[/color], which you can throw.
+ent-CEActionFireCreation = Создание огня
+    .desc = Вы создаёте временный [color=#ff4500]огонь[/color], который можно бросить.
 
 ent-CEEffectFireCreation = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEHandheldFire = handheld fire
-    .desc = A small flame, burning in your hand. It can be thrown to burn something.
+ent-CEHandheldFire = ручной огонь
+    .desc = Маленькое пламя, горящее у вас в руке. Его можно бросить, чтобы что-то поджечь.
 
-ent-CEActionRatThrow = Rat Throw
-    .desc = You throw a rat.
+ent-CEActionRatThrow = Бросок крысы
+    .desc = Вы бросаете крысу.
 
-ent-CEProjectileRat = gnome rat projectile
+ent-CEProjectileRat = снаряд крысы гнома
 
 ent-CEMobRatFrendly = { ent-CEMobRat }
     .desc = { ent-CEMobRat.desc }
-    .suffix = Frendly
+    .suffix = Дружелюбная
 
-ent-CEActionSpellSelfTreatment = Self Treatment
-    .desc = You restore [color=#1defa9]10 health[/color] to yourself.
+ent-CEActionSpellSelfTreatment = Самолечение
+    .desc = Вы восстанавливаете себе [color=#1defa9]10 здоровья[/color].
 
-ent-CEActionSpellSmallBarrier = Barrier
-    .desc = Grants [color=#b2e3eb]20 temporary shields[/color] that absorb damage. Shields decay over time.
+ent-CEActionSpellSmallBarrier = Барьер
+    .desc = Даёт [color=#b2e3eb]20 временных щитов[/color], поглощающих урон. Щиты со временем распадаются.
 
-ent-CEActionSpellSoulEater = Soul Eater
-    .desc = You restore [color=#1776eb]15 mana[/color].
+ent-CEActionSpellSoulEater = Пожиратель душ
+    .desc = Вы восстанавливаете [color=#1776eb]15 маны[/color].
 
-ent-CEActionSpellSphereOfLight = Sphere of Light
-    .desc = You can make almost any object glow for a long time at will.
+ent-CEActionSpellSphereOfLight = Сфера света
+    .desc = Вы можете заставить почти любой объект светиться в течение долгого времени.
 
 ent-CEImpactEffectSphereOfLight = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEStatusEffectGlowing = glowing
+ent-CEStatusEffectGlowing = свечение
 
-ent-CEActionWaterCreation = Water creation
-    .desc = You create a temporary [color=#30caf5]water sphere[/color], which you can throw.
+ent-CEActionWaterCreation = Создание воды
+    .desc = Вы создаёте временную [color=#30caf5]водную сферу[/color], которую можно бросить.
 
 ent-CEEffectWaterCreation = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEConsumableWaterDrop = water droplet
-    .desc = Magic water, condensed into a droplet. It can be thrown to get something wet.
+ent-CEConsumableWaterDrop = капля воды
+    .desc = Магическая вода, сконденсированная в каплю. Её можно бросить, чтобы что-нибудь намочить.
 
-ent-CEStatusEffectAgility = Agility
-    .desc = Your maximum stamina is increased by [color=#2bef1d]5[/color].
+ent-CEStatusEffectAgility = Ловкость
+    .desc = Ваш максимум выносливости увеличен на [color=#2bef1d]5[/color].
 
-ent-CEStatusEffectPathOfKnight = Path of the Knight
-    .desc = Knight skills may now appear in your blessing pool.
+ent-CEStatusEffectPathOfKnight = Путь рыцаря
+    .desc = Навыки рыцаря теперь могут появляться в вашем пуле благословений.
 
-ent-CEStatusEffectPathOfMage = Path of the Mage
-    .desc = Mage skills may now appear in your blessing pool.
+ent-CEStatusEffectPathOfMage = Путь мага
+    .desc = Навыки мага теперь могут появляться в вашем пуле благословений.
 
-ent-CEStatusEffectPathOfPriest = Path of the Priest
-    .desc = Priest skills may now appear in your blessing pool.
+ent-CEStatusEffectPathOfPriest = Путь жреца
+    .desc = Навыки жреца теперь могут появляться в вашем пуле благословений.
 
-ent-CEStatusEffectThickSkin = Thick Skin
-    .desc = You take 1 less damage from all sources (except poison).
+ent-CEStatusEffectThickSkin = Толстая кожа
+    .desc = Вы получаете на 1 меньше урона из всех источников (кроме яда).
 
-ent-CEStatusEffectVitality = Vitality
-    .desc = Your maximum health is increased by [color=#f54730]50[/color].
+ent-CEStatusEffectVitality = Жизненная сила
+    .desc = Ваш максимум здоровья увеличен на [color=#f54730]50[/color].
 
-ent-CEStatusEffectWisdom = Wisdom
-    .desc = Your maximum mana is increased by [color=#3296fa]50[/color].
+ent-CEStatusEffectWisdom = Мудрость
+    .desc = Ваш максимум маны увеличен на [color=#3296fa]50[/color].
 
-ent-CEActionSpellAreaHealing = Prayer for health
-    .desc = You restore [color=1defa9]15 health[/color] to all creatures in a small area.
+ent-CEActionSpellAreaHealing = Молитва о здравии
+    .desc = Вы восстанавливаете [color=1defa9]15 здоровья[/color] всем существам в небольшой области.
 
-ent-CEEffectAreaHealingTelegraphy = area healing telegraphy
+ent-CEEffectAreaHealingTelegraphy = телеграфия массового лечения
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEEffectAreaHealingEffect = area healing impact
+ent-CEEffectAreaHealingEffect = эффект массового лечения
     .desc = { ent-CEEffectAreaHealingTelegraphy.desc }
     .suffix = VFX
 
-ent-CEEffectHealingGeneric = healing impact
+ent-CEEffectHealingGeneric = эффект лечения
     .desc = { ent-CEEffectAreaHealingTelegraphy.desc }
     .suffix = VFX
 
-ent-CEActionSpellCaringForOthers = Caring for others
-    .desc = You restore [color=#1defa9]40 health[/color] to the creature you touch. But you can't treat yourself.
+ent-CEActionSpellCaringForOthers = Забота о ближнем
+    .desc = Вы восстанавливаете [color=#1defa9]40 здоровья[/color] существу, которого касаетесь. Но лечить себя нельзя.
 
-ent-CEActionSpellCureWounds = Cure wounds
-    .desc = You restore [color=#1defa9]25 health[/color] to the creature you touch.
+ent-CEActionSpellCureWounds = Исцеление ран
+    .desc = Вы восстанавливаете [color=#1defa9]25 здоровья[/color] существу, которого касаетесь.
 
-ent-CEActionSpellCurse = Curse
-    .desc = You curse the selected area and all creatures within it.
+ent-CEActionSpellCurse = Проклятие
+    .desc = Вы проклинаете выбранную область и всех существ в ней.
 
-ent-CEEffectAreaCurseTelegraphy = area curse telegraphy
+ent-CEEffectAreaCurseTelegraphy = телеграфия проклятия области
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEActionSpellDivineShield = Divine Shield
-    .desc = You apply a [color=#1defa9]1 divine shield[/color] on the target.
+ent-CEActionSpellDivineShield = Божественный щит
+    .desc = Вы накладываете на цель [color=#1defa9]1 божественный щит[/color].
 
-ent-CEActionSpellHolyGround = Holy ground
-    .desc = You bless the chosen territory and all the beings within it.
+ent-CEActionSpellHolyGround = Святая земля
+    .desc = Вы благословляете выбранную территорию и всех существ на ней.
 
-ent-CEActionPurification = Purification
-    .desc = You cleanse the target of all negative status effects.
+ent-CEActionPurification = Очищение
+    .desc = Вы очищаете цель от всех негативных статус-эффектов.
 
-ent-CEActionSpellWaterBurst = Water Burst
-    .desc = You call upon the waters, drenching a targeted area.
+ent-CEActionSpellWaterBurst = Водяной всплеск
+    .desc = Вы призываете воды, заливая выбранную область.
 
-ent-CEEffectWaterBurstTelegraphy = water burst telegraphy
+ent-CEEffectWaterBurstTelegraphy = телеграфия водяного всплеска
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEEffectWaterBurstEffect = water burst impact
+ent-CEEffectWaterBurstEffect = эффект водяного всплеска
     .desc = { ent-CEBaseMagicImpact.desc }
     .suffix = VFX
 
-ent-CEStatusEffectApostasy = Apostasy
-    .desc = All your healing now deals [color=#E1341E]Fire[/color] damage instead.
+ent-CEStatusEffectApostasy = Отступничество
+    .desc = Всё ваше лечение теперь вместо этого наносит [color=#E1341E]огненный[/color] урон.
 
 ent-CEEffectApostasyFire = { ent-CEBaseMagicImpact }
     .desc = { ent-CEBaseMagicImpact.desc }
 
-ent-CEStatusEffectBlackHeart = Black Heart
-    .desc = You are immune to [color=#8752b3]Curse[/color]. When you deal damage in melee combat, you [color=#8752b3]curse[/color] targets.
+ent-CEStatusEffectBlackHeart = Чёрное сердце
+    .desc = Вы невосприимчивы к [color=#8752b3]проклятию[/color]. Когда вы наносите урон в ближнем бою, вы [color=#8752b3]проклинаете[/color] цели.
 
-ent-CEStatusEffectBlessedAndProtected = Blessed and Protected
-    .desc = When you [color=#1defa9]bless[/color] a creature, you also grant it [color=#1defa9]1 Divine Shield[/color] (up to a maximum of 3)
+ent-CEStatusEffectBlessedAndProtected = Благословлён и защищён
+    .desc = Когда вы [color=#1defa9]благословляете[/color] существо, вы также даёте ему [color=#1defa9]1 божественный щит[/color] (максимум 3)
 
-ent-CEStatusEffectExperiencedHealer = Experienced Healer
-    .desc = When you heal something, you heal [color=#1defa9]5 health[/color] more.
+ent-CEStatusEffectExperiencedHealer = Опытный целитель
+    .desc = Когда вы кого-то лечите, вы восстанавливаете на [color=#1defa9]5 здоровья[/color] больше.
 
-ent-CEStatusEffectHealingWaters = Healing Waters
-    .desc = When you heal a [color=#1db7ef]wet target[/color], you heal [color=#1defa9]10 health[/color] more and dry it off.
+ent-CEStatusEffectHealingWaters = Целебные воды
+    .desc = Когда вы лечите [color=#1db7ef]мокрую цель[/color], вы восстанавливаете на [color=#1defa9]10 здоровья[/color] больше и высушиваете её.
 
-ent-CEStatusEffectWaterShield = Water Shield
-    .desc = When the [color=#1defa9]divine shield[/color] you've cast breaks, it triggers a repulsive [color=#1db7ef]water blast[/color].
+ent-CEStatusEffectWaterShield = Водяной щит
+    .desc = Когда наложенный вами [color=#1defa9]божественный щит[/color] ломается, он вызывает отталкивающий [color=#1db7ef]водяной взрыв[/color].
 
-ent-CEMobCarcat = Mr. Cat
+ent-CEMobCarcat = мистер кот
 
-ent-CEOrganCarcatTorso = None
-    .suffix = carcat
+ent-CEMobElf = мистер эльф
 
-ent-CEOrganCarcatHead = None
-    .suffix = carcat
+ent-CEMobGoblin = мистер гоблин
 
-ent-CEOrganCarcatArmLeft = None
-    .suffix = carcat
+ent-CEMobHuman = мистер человек
 
-ent-CEOrganCarcatArmRight = None
-    .suffix = carcat
-
-ent-CEOrganCarcatHandLeft = None
-    .suffix = carcat
-
-ent-CEOrganCarcatHandRight = None
-    .suffix = carcat
-
-ent-CEOrganCarcatLegLeft = None
-    .suffix = carcat
-
-ent-CEOrganCarcatLegRight = None
-    .suffix = carcat
-
-ent-CEOrganCarcatFootLeft = None
-    .suffix = carcat
-
-ent-CEOrganCarcatFootRight = None
-    .suffix = carcat
-
-ent-CEMobElf = Mr. Elf
-
-ent-CEOrganElfTorso = None
-    .suffix = elf
-
-ent-CEOrganElfHead = None
-    .suffix = elf
-
-ent-CEOrganElfArmLeft = None
-    .suffix = elf
-
-ent-CEOrganElfArmRight = None
-    .suffix = elf
-
-ent-CEOrganElfHandLeft = None
-    .suffix = elf
-
-ent-CEOrganElfHandRight = None
-    .suffix = elf
-
-ent-CEOrganElfLegLeft = None
-    .suffix = elf
-
-ent-CEOrganElfLegRight = None
-    .suffix = elf
-
-ent-CEOrganElfFootLeft = None
-    .suffix = elf
-
-ent-CEOrganElfFootRight = None
-    .suffix = elf
-
-ent-CEOrganElfEyes = None
-    .suffix = elf
-
-ent-CEMobGoblin = Mr. Goblin
-
-ent-CEOrganGoblinTorso = None
-    .suffix = goblin
-
-ent-CEOrganGoblinHead = None
-    .suffix = goblin
-
-ent-CEOrganGoblinArmLeft = None
-    .suffix = goblin
-
-ent-CEOrganGoblinArmRight = None
-    .suffix = goblin
-
-ent-CEOrganGoblinHandLeft = None
-    .suffix = goblin
-
-ent-CEOrganGoblinHandRight = None
-    .suffix = goblin
-
-ent-CEOrganGoblinLegLeft = None
-    .suffix = goblin
-
-ent-CEOrganGoblinLegRight = None
-    .suffix = goblin
-
-ent-CEOrganGoblinFootLeft = None
-    .suffix = goblin
-
-ent-CEOrganGoblinFootRight = None
-    .suffix = goblin
-
-ent-CEOrganGoblinEyes = None
-    .suffix = goblin
-
-ent-CEMobHuman = Mr. Human
-
-ent-CEOrganHumanTorso = None
-    .suffix = human
-
-ent-CEOrganHumanHead = None
-    .suffix = human
-
-ent-CEOrganHumanArmLeft = None
-    .suffix = human
-
-ent-CEOrganHumanArmRight = None
-    .suffix = human
-
-ent-CEOrganHumanHandLeft = None
-    .suffix = human
-
-ent-CEOrganHumanHandRight = None
-    .suffix = human
-
-ent-CEOrganHumanLegLeft = None
-    .suffix = human
-
-ent-CEOrganHumanLegRight = None
-    .suffix = human
-
-ent-CEOrganHumanFootLeft = None
-    .suffix = human
-
-ent-CEOrganHumanFootRight = None
-    .suffix = human
-
-ent-CEOrganHumanEyes = None
-    .suffix = human
-
-ent-CEMobTiefling = Mr. Tiefling
-
-ent-CEOrganTieflingTorso = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingHead = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingArmLeft = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingArmRight = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingHandLeft = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingHandRight = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingLegLeft = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingLegRight = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingFootLeft = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingFootRight = None
-    .suffix = tiefling
-
-ent-CEOrganTieflingEyes = None
-    .suffix = tiefling
+ent-CEMobTiefling = мистер тифлинг
 
 ent-CEClothingPriestCloakDark = { ent-CEClothingCloakBase }
     .desc = { ent-CEClothingCloakBase.desc }
@@ -1477,141 +1153,141 @@ ent-CEClothingPriestCloakWhite = { ent-CEClothingCloakBase }
 ent-CEClothingPriestCloakWhite2 = { ent-CEClothingCloakBase }
     .desc = { ent-CEClothingCloakBase.desc }
 
-ent-CEMobFireConstruct = fire construct
+ent-CEMobFireConstruct = огненный конструкт
     .desc = TODO
 
-ent-CEMobFlem = flem
+ent-CEMobFlem = флем
     .desc = TODO
 
-ent-CEMobGnome = gnome
+ent-CEMobGnome = гном
     .desc = TODO
 
-ent-CEMobRat = rat
+ent-CEMobRat = крыса
     .desc = TODO
 
-ent-CEMobSlimeFire = fire slime
-    .desc = A wobbly blob of animated fire. Pops into a burst of flames when destroyed.
+ent-CEMobSlimeFire = огненная слизь
+    .desc = Колышущийся сгусток ожившего огня. При уничтожении лопается огненной вспышкой.
 
-ent-CEMobSlimeFireBig = big fire slime
+ent-CEMobSlimeFireBig = большая огненная слизь
     .desc = TODO
 
-ent-CEMobSlimeWater = water slime
-    .desc = A wobbly blob of animated water. Pops into a splash when destroyed.
+ent-CEMobSlimeWater = водяная слизь
+    .desc = Колышущийся сгусток ожившей воды. При уничтожении лопается брызгами.
 
-ent-CEMobSlimeWaterBig = big water slime
+ent-CEMobSlimeWaterBig = большая водяная слизь
     .desc = TODO
 
-ent-CEMobBossSlime = giant crystal slime
+ent-CEMobBossSlime = гигантская кристаллическая слизь
     .desc = TODO
-    .suffix = Boss
+    .suffix = Босс
 
 ent-CEMobBossViator = Viator
     .desc = TODO
-    .suffix = Boss
+    .suffix = Босс
 
-ent-CEConsumablePotionAcceleration = acceleration potion
-    .desc = Increases your movement speed for a short duration.
+ent-CEConsumablePotionAcceleration = зелье ускорения
+    .desc = Увеличивает скорость передвижения на короткое время.
 
-ent-CEConsumablePotionAlchemicalFire = alchemical fire
-    .desc = A liquid flame, just waiting to burst forth and reduce everything around it to ashes. A large red label reads “DO NOT DRINK.”
+ent-CEConsumablePotionAlchemicalFire = алхимический огонь
+    .desc = Жидкое пламя, только и ждущее, чтобы вырваться наружу и обратить всё вокруг в пепел. На большой красной этикетке написано «НЕ ПИТЬ».
 
-ent-CEConsumablePotionFrost = frost potion
-    .desc = A liquid crystal so cold that it's uncomfortable to even hold the vial in your hands. If it were to break, everything around it would instantly.
+ent-CEConsumablePotionFrost = зелье мороза
+    .desc = Жидкая кристаллическая жидкость настолько холодная, что даже держать флакон в руках неприятно. Если он разобьётся, всё вокруг мгновенно будет заморожено.
 
-ent-CEConsumablePotionHealingSmall = small healing potion
-    .desc = A simple healing potion. Drink it, or throw it at whoever you want to see get well.
+ent-CEConsumablePotionHealingSmall = малое зелье лечения
+    .desc = Простое лечебное зелье. Выпейте его или бросьте в того, кого хотите исцелить.
 
-ent-CEConsumablePotionHealingMedium = healing potion
-    .desc = A simple healing potion. Drink it, or throw it at whoever you want to see get well.
+ent-CEConsumablePotionHealingMedium = зелье лечения
+    .desc = Простое лечебное зелье. Выпейте его или бросьте в того, кого хотите исцелить.
 
-ent-CEConsumablePotionManaSmall = small mana potion
+ent-CEConsumablePotionManaSmall = малое зелье маны
     .desc = TODO
 
-ent-CEConsumablePotionManaMedium = mana potion
+ent-CEConsumablePotionManaMedium = зелье маны
     .desc = TODO
 
-ent-CEConsumablePotionManaSmallCondensated = condensated small mana potion
-    .desc = Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.
-    .suffix = Condensated, mana restoring modifiers doesnt work.
+ent-CEConsumablePotionManaSmallCondensated = конденсированное малое зелье маны
+    .desc = Концентрат маны другого существа. Восстанавливает ману как обычные зелья маны, но модификаторы восстановления маны не применяются.
+    .suffix = Конденсированное, модификаторы восстановления маны не работают.
 
-ent-CEConsumablePotionManaMediumCondensated = condensated mana potion
-    .desc = Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.
-    .suffix = Condensated, mana restoring modifiers doesnt work.
+ent-CEConsumablePotionManaMediumCondensated = конденсированное зелье маны
+    .desc = Концентрат маны другого существа. Восстанавливает ману как обычные зелья маны, но модификаторы восстановления маны не применяются.
+    .suffix = Конденсированное, модификаторы восстановления маны не работают.
 
-ent-CEConsumablePotionRegeneration = regeneration potion
-    .desc = Slowly restores health over time.
+ent-CEConsumablePotionRegeneration = зелье регенерации
+    .desc = Медленно восстанавливает здоровье со временем.
 
-ent-CEConsumablePotionShield = potion of stone skin
-    .desc = A thick, metallic brew that coats the body in a shimmering barrier. Grants temporary shields against damage.
+ent-CEConsumablePotionShield = зелье каменной кожи
+    .desc = Густой металлический отвар, покрывающий тело мерцающим барьером. Даёт временные щиты от урона.
 
-ent-CEConsumablePotionStrength = strength potion
-    .desc = Increases your melee damage for a short duration.
+ent-CEConsumablePotionStrength = зелье силы
+    .desc = Увеличивает урон в ближнем бою на короткое время.
 
-ent-CEGoldenLockedDoor = golden locked door
-    .desc = A heavy door sealed with a golden lock. It won't open without a key.
-    .suffix = Locked, Gold
+ent-CEGoldenLockedDoor = золотая запертая дверь
+    .desc = Тяжёлая дверь, запечатанная золотым замком. Без ключа не откроется.
+    .suffix = Запертая, Золотая
 
-ent-CEIronDoor = iron door
-    .desc = Well, if there's a solid iron door, there must be something valuable behind it.
-    .suffix = Opened
+ent-CEIronDoor = железная дверь
+    .desc = Раз есть прочная железная дверь, значит за ней наверняка что-то ценное.
+    .suffix = Открытая
 
-ent-CEIronDoorWindowed = iron windowed door
-    .desc = a solid iron door with a small window. You can look through it, of course, but it's hard to put your hand through.
-    .suffix = Opened
+ent-CEIronDoorWindowed = железная дверь с окном
+    .desc = Прочная железная дверь с небольшим окошком. Смотреть через него можно, конечно, но руку просунуть сложно.
+    .suffix = Открытая
 
-ent-CEWoodenDoor = wooden door
-    .desc = Not the most solid construction, but it's better than nothing.
-    .suffix = Opened
+ent-CEWoodenDoor = деревянная дверь
+    .desc = Не самая крепкая конструкция, но лучше, чем ничего.
+    .suffix = Открытая
 
-ent-CEWoodenDoorWindowed = wooden windowed door
-    .desc = Not the most solid construction, but it's better than nothing.
-    .suffix = Opened
+ent-CEWoodenDoorWindowed = деревянная дверь с окном
+    .desc = Не самая крепкая конструкция, но лучше, чем ничего.
+    .suffix = Открытая
 
 ent-CEFenceBigWooden = { ent-CEBaseFenceBig }
     .desc = { ent-CEBaseFenceBig.desc }
-    .suffix = Wooden
+    .suffix = Деревянный
 
 ent-CEFenceGateBigWooden = { ent-CEBaseFenceGateBig }
     .desc = { ent-CEBaseFenceGateBig.desc }
-    .suffix = Wooden
+    .suffix = Деревянные
 
 ent-CEFenceGateBigIron = { ent-CEBaseFenceGateBig }
     .desc = { ent-CEBaseFenceGateBig.desc }
-    .suffix = Iron
+    .suffix = Железные
 
 ent-CEFenceWooden = { ent-CEBaseFence }
     .desc = { ent-CEBaseFence.desc }
-    .suffix = Wooden
+    .suffix = Деревянный
 
 ent-CEFenceIron = { ent-CEBaseFence }
     .desc = { ent-CEBaseFence.desc }
-    .suffix = Iron
+    .suffix = Железный
 
 ent-CEFenceGateWooden = { ent-CEBaseFenceGate }
     .desc = { ent-CEBaseFenceGate.desc }
-    .suffix = Wooden
+    .suffix = Деревянная
 
-ent-CEWallLeaf = leaf wall
-    .desc = Dense, marginal bushes. You can climb through them, but watch out for thorny branches!
+ent-CEWallLeaf = лиственная стена
+    .desc = Густые приграничные кусты. Через них можно пролезть, но берегитесь колючих веток!
 
-ent-CEWallWooden = wooden wall
+ent-CEWallWooden = деревянная стена
     .desc = { ent-CEBaseWall.desc }
-    .suffix = Flammable, Destructable
+    .suffix = Горючая, Разрушаемая
 
-ent-CEWallWoodenDark = dark wooden wall
+ent-CEWallWoodenDark = тёмная деревянная стена
     .desc = { ent-CEBaseWall.desc }
-    .suffix = Flammable, Destructable
+    .suffix = Горючая, Разрушаемая
 
-ent-CEWallWoodenLight = light wooden wall
+ent-CEWallWoodenLight = светлая деревянная стена
     .desc = { ent-CEBaseWall.desc }
-    .suffix = Flammable, Destructable
+    .suffix = Горючая, Разрушаемая
 
-ent-CEWallWoodenFrame = wooden wall frame
+ent-CEWallWoodenFrame = каркас деревянной стены
     .desc = { ent-CEBaseWallFrame.desc }
-    .suffix = Flammable, Destructable
+    .suffix = Горючая, Разрушаемая
 
 ent-CEWoodenTableBase = None
 
-ent-CEWorkbenchAlchemyTable = alchemy lab
-    .desc = A small setup with everything needed for brewing potions
+ent-CEWorkbenchAlchemyTable = алхимическая лаборатория
+    .desc = Небольшое рабочее место со всем необходимым для приготовления зелий
 

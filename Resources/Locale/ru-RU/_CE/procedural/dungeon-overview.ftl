@@ -10,6 +10,3 @@ ce-dungeon-overview-details-header = Уровень
 ce-player-dungeon-overview-title = Карта уровней
 ce-player-dungeon-overview-graph-header = Граф уровней
 ce-player-dungeon-overview-details-header = Уровень
-
-ent-CEWayfindingStone = путеводный камень
-    .desc = Древний камень, на гранях которого вырезана карта известных уровней. Прикоснись, чтобы увидеть, где сейчас находятся другие путники.
