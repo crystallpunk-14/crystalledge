@@ -3,3 +3,6 @@ ce-achievement-admin-inspiration-desc = Impress the game masters with your magni
 
 ce-achievement-betatester-name = Beta Tester
 ce-achievement-betatester-desc = Participate in testing early versions of CrystallEdge
+
+ce-achievement-class-wanderer-name = Class "Wanderer"
+ce-achievement-class-wanderer-desc = Reach the “Arena of the Fallen” location

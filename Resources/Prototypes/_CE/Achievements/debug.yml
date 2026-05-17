@@ -7,3 +7,14 @@
   id: BetaTester
   name: ce-achievement-betatester-name
   desc: ce-achievement-betatester-desc
+
+- type: achievement
+  id: ClassWanderer
+  name: ce-achievement-class-wanderer-name
+  desc: ce-achievement-class-wanderer-desc
+  lockedIcon:
+    sprite: /Textures/_CE/Achievements/class_wanderer.rsi
+    state: locked
+  unlockedIcon:
+    sprite: /Textures/_CE/Achievements/class_wanderer.rsi
+    state: unlocked

@@ -23,13 +23,13 @@ public sealed partial class CEAchievementPrototype : IPrototype
     public LocId Desc = string.Empty;
 
     [DataField]
-    public SpriteSpecifier LockedIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Interface/achievements.rsi"), "tester_0");
+    public SpriteSpecifier LockedIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Achievements/_default.rsi"), "tester_0");
 
     [DataField]
-    public SpriteSpecifier UnlockedIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Interface/achievements.rsi"), "tester_1");
+    public SpriteSpecifier UnlockedIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Achievements/_default.rsi"), "tester_1");
 
     [DataField]
-    public SpriteSpecifier SecretIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Interface/achievements.rsi"), "secret");
+    public SpriteSpecifier SecretIcon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Achievements/_default.rsi"), "secret");
 
     [DataField]
     public bool Secret = false;

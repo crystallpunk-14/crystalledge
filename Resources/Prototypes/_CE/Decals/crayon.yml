@@ -1,6 +1,6 @@
 - type: decal
   id: CECrayonArrowUp
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -10,7 +10,7 @@
 
 - type: decal
   id: CECrayonArrowDown
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -20,7 +20,7 @@
 
 - type: decal
   id: CECrayonArrowLeft
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -30,7 +30,7 @@
 
 - type: decal
   id: CECrayonArrowRight
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -40,7 +40,7 @@
 
 - type: decal
   id: CECrayonArrowDownRight
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -50,7 +50,7 @@
 
 - type: decal
   id: CECrayonArrowDownLeft
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -60,7 +60,7 @@
 
 - type: decal
   id: CECrayonArrowUpLeft
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -70,7 +70,7 @@
 
 - type: decal
   id: CECrayonArrowUpRight
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -80,7 +80,7 @@
 
 - type: decal
   id: CECrayonSkull
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
@@ -90,7 +90,7 @@
 
 - type: decal
   id: CECrayonPoint
-  tags: ["CEcrayon", "crayon-2-alphanum"]
+  tags: ["crayon", "crayon-2-alphanum"]
   defaultCleanable: true
   defaultSnap: false
   showMenu: true
