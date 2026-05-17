@@ -10,6 +10,8 @@ role-timer-whitelisted-species = Ваш персонаж должен быть �
 role-timer-blacklisted-species = Ваш персонаж не должен быть одной из следующих рас для этой роли:
 role-timer-whitelisted-traits = Ваш персонаж должен иметь одну из следующих черт:
 role-timer-blacklisted-traits = Ваш персонаж не должен иметь ни одну из следующих черт:
+role-timer-achievement-required = Для выбора этой роли необходимо получить достижение [color=yellow]{ $achievement }[/color].
+role-timer-achievement-forbidden = Для выбора этой роли нельзя иметь достижение [color=yellow]{ $achievement }[/color].
 role-timer-locked = Закрыто (наведите курсор для подробностей)
 role-timer-department-unknown = Неизвестный отдел
 role-ban = Эта должность для вас заблокирована.

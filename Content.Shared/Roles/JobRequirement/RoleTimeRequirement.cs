@@ -4,6 +4,7 @@ using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Preferences;
 using Content.Shared.Roles.Jobs;
 using JetBrains.Annotations;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
@@ -28,7 +29,8 @@ public sealed partial class RoleTimeRequirement : JobRequirement
         IPrototypeManager protoManager,
         HumanoidCharacterProfile? profile,
         IReadOnlyDictionary<string, TimeSpan> playTimes,
-        [NotNullWhen(false)] out FormattedMessage? reason)
+        [NotNullWhen(false)] out FormattedMessage? reason,
+        NetUserId? userId = null)
     {
         reason = new FormattedMessage();
 

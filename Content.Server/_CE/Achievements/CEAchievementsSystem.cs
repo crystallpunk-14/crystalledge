@@ -39,6 +39,12 @@ public sealed class CEAchievementsSystem : EntitySystem
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
     }
 
+    public bool HasCachedAchievement(Guid player, string achievementProtoId)
+    {
+        return _playerAchievementsCache.TryGetValue(player, out var achievements)
+               && achievements.Contains(achievementProtoId);
+    }
+
     private async void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
     {
         if (args.NewStatus == SessionStatus.Disconnected)

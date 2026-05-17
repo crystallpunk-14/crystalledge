@@ -6,8 +6,8 @@
   playTimeTracker: CEJobWanderer
   icon: CEJobIconWanderer
   requirements:
-    - !type:OverallPlaytimeRequirement
-      time: 2.5h
+    - !type:CEAchievementRequirement
+      achievement: ClassWanderer
 
 - type: playTimeTracker
   id: CEJobWanderer

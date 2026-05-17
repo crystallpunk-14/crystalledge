@@ -25,6 +25,7 @@ using Content.Client.Stylesheets;
 using Content.Client.UserInterface;
 using Content.Client.Viewport;
 using Content.Client.Voting;
+using Content.Shared._CE.Achievements;
 using Content.Shared.Ame.Components;
 using Content.Shared.FeedbackSystem;
 using Content.Shared.Gravity;
@@ -80,7 +81,7 @@ namespace Content.Client.Entry
         [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
         [Dependency] private readonly ClientsidePlaytimeTrackingManager _clientsidePlaytimeManager = default!;
         [Dependency] private readonly ClientFeedbackManager _feedbackManager = null!;
-        [Dependency] private readonly CEAchievementsManager _achievements = null!; //CrystallEdge
+        [Dependency] private readonly ICEAchievementsRequirementManager _achievements = null!; //CrystallEdge
 
         public override void PreInit()
         {

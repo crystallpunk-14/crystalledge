@@ -10,6 +10,8 @@ role-timer-whitelisted-species = Your character must be one of the following spe
 role-timer-blacklisted-species = Your character must not be one of the following species for you to select this:
 role-timer-whitelisted-traits = Your character must have one of the following traits for you to select this:
 role-timer-blacklisted-traits = Your character must not have any of the following traits for you to select this:
+role-timer-achievement-required = You must unlock [color=yellow]{$achievement}[/color] to select this role.
+role-timer-achievement-forbidden = You must not have unlocked [color=yellow]{$achievement}[/color] to select this role.
 
 role-timer-locked = Locked (hover for details)
 
