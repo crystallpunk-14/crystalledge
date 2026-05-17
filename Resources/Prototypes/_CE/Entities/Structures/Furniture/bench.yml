@@ -2,7 +2,7 @@
   name: wood bench
   id: CEBenchWood
   parent:
-  - SeatBase
+  - CESeatBase
   description: A bench carved from wood, a comfortable part of the interior designed for sitting and relaxing.
   categories: [ ForkFiltered ]
   placement:
