@@ -38,6 +38,10 @@
         - !type:NestedSelector
           tableId: CERandomPotion
         - id: CEMobRat
+        - id: CEd20Dice
+          weight: 0.15
+        - id: CEd6Dice
+          weight: 0.15
   - type: Fixtures
     fixtures:
       fix1:
