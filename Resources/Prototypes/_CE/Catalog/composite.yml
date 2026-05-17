@@ -11,6 +11,9 @@
     - !type:NestedSelector
       tableId: CERandomInstrument
       weight: 0.25
+    - !type:NestedSelector
+      tableId: CERandomCrayon
+      weight: 0.25
 
 - type: entity
   id: CESpawnerRandomLoot

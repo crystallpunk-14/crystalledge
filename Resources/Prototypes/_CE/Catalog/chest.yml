@@ -22,6 +22,12 @@
           - !type:NestedSelector
             tableId: CERandomInstrument
             weight: 0.3
+        - !type:GroupSelector
+          prob: 0.1
+          children:
+          - !type:NestedSelector
+            tableId: CERandomCrayon
+            weight: 0.3
 
 - type: entity
   parent: CEChestWooden
@@ -57,6 +63,12 @@
           - !type:NestedSelector
             tableId: CERandomInstrument
             weight: 0.3
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomCrayon
+            weight: 0.3
 
 - type: entity
   parent: CEChestGold
@@ -91,4 +103,10 @@
           children:
           - !type:NestedSelector
             tableId: CERandomInstrument
+            weight: 0.3
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomCrayon
             weight: 0.3
