@@ -74,7 +74,7 @@
         max: 10
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
-    budget: 100
+    budget: 50
     entries:
     - proto: CEMobSlimeFire
       cost: 3

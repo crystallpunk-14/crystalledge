@@ -1,4 +1,4 @@
-ce-achievement-kiss-in-the-air-name = A kiss in the air
+ce-achievement-kiss-in-the-air-name = Air kiss
 ce-achievement-kiss-in-the-air-desc = Impress the game masters with your magnificent role-playing.
 
 ce-achievement-betatester-name = Beta Tester

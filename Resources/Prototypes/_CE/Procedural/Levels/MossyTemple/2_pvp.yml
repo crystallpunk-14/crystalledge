@@ -67,7 +67,7 @@
         max: 3
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
-    budget: 15
+    budget: 30
     entries:
     - proto: CEMobRat
       cost: 1

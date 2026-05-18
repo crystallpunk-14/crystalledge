@@ -11,7 +11,7 @@
 - type: entity
   id: CEActionKiss
   parent: CEActionSpellBase
-  name: A kiss in the air
+  name: Air kiss
   description: Confuse your opponents with your love. And heal them a little.
   components:
   - type: CEVisualizeWideLineAction

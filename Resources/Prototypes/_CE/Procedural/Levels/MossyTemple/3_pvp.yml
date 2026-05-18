@@ -53,7 +53,7 @@
         max: 4
   postProcess:
   - !type:CEMobBudgetSpawnPostProcess
-    budget: 20
+    budget: 40
     entries:
     - proto: CEMobSlimeWater
       cost: 2
