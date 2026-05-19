@@ -58,6 +58,7 @@ namespace Content.IntegrationTests.Tests
                     //CrystallEdge zone
                     .Where(p => !p.Components.ContainsKey("CETileEffect"))
                     .Where(p => !p.Components.ContainsKey("CETileEffectSpawner"))
+                    .Where(p => !p.Components.ContainsKey("CEProjectile"))
                     //CrystallEdge zone end
                     .Select(p => p.ID)
                     .ToList();
@@ -122,6 +123,7 @@ namespace Content.IntegrationTests.Tests
                     //CrystallEdge zone
                     .Where(p => !p.Components.ContainsKey("CETileEffect"))
                     .Where(p => !p.Components.ContainsKey("CETileEffectSpawner"))
+                    .Where(p => !p.Components.ContainsKey("CEProjectile"))
                     //CrystallEdge zone end
                     .Select(p => p.ID)
                     .ToList();
@@ -254,6 +256,11 @@ namespace Content.IntegrationTests.Tests
 
                 // makes an announcement on mapInit.
                 "AnnounceOnSpawn",
+
+                //CrystallEdge
+                "CETileEffect",
+                "CETileEffectSpawner",
+                "CEProjectile",
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);

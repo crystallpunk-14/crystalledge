@@ -6,7 +6,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._CE.TileEffects.Core;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[EntityCategory("StatusEffects")]
+[EntityCategory("StatusEffects", "Spawner")]
 public sealed partial class CETileEffectComponent : Component
 {
     /// <summary>
