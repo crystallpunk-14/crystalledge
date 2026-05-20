@@ -428,3 +428,11 @@
   id: 10034
   time: '2026-05-18T20:09:22.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/254
+- author: TheShuEd
+  changes:
+  - message: "The \u201CApostasy\u201D priest's ability becomes a 15-mana active ability\
+      \ that allows you to switch between healing and dealing fire damage"
+    type: Tweak
+  id: 10035
+  time: '2026-05-19T12:41:07.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/256

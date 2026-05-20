@@ -16,10 +16,10 @@ namespace Content.Client._CE.Stamina;
 /// </summary>
 public sealed class CEEntityStaminaBarOverlay : Overlay
 {
-    private static readonly Color StaminaColor = Color.FromHex("#44e32b");
-    private static readonly Color StaminaDarken = Color.FromHex("#334033");
-    private static readonly Color ExhaustedColor = Color.FromHex("#f2a93a");
-    private static readonly Color ExhaustedDarken = Color.FromHex("#3a3328");
+    private static readonly Color StaminaColor = FromHex("#44e32b");
+    private static readonly Color StaminaDarken = FromHex("#334033");
+    private static readonly Color ExhaustedColor = FromHex("#f2a93a");
+    private static readonly Color ExhaustedDarken = FromHex("#3a3328");
 
     private readonly IEntityManager _entManager;
 

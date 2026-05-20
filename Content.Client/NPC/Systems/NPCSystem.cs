@@ -1,5 +1,4 @@
 using Content.Client.NPC.HTN;
-using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared.NPC.Systems;
 

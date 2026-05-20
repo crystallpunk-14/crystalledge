@@ -1,6 +1,7 @@
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
+using Robust.Client.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -9,6 +10,7 @@ namespace Content.Client._CE.Animation.Core;
 public sealed partial class CEClientAnimationActionSystem : CESharedAnimationActionSystem
 {
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
 
     public override void Initialize()
     {
@@ -54,5 +56,16 @@ public sealed partial class CEClientAnimationActionSystem : CESharedAnimationAct
                 targetCoordinates)
             );
         }
+    }
+
+    /// <summary>
+    /// On the client, only the locally-controlled player entity should have its keyframe
+    /// effects fired via the shared simulation loop.  All other entities (NPCs, other players)
+    /// receive their visual effects through <see cref="CEEntityAnimationEvent"/> from the server,
+    /// avoiding the LastEvent race-condition that causes double-execution.
+    /// </summary>
+    protected override bool ShouldFireKeyframeEffects(EntityUid uid)
+    {
+        return _player.LocalEntity == uid;
     }
 }

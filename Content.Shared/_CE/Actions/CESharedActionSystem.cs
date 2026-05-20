@@ -22,13 +22,11 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private readonly CESharedSoulSystem _soul = default!;
     [Dependency] private readonly CEStaminaSystem _stamina = default!;
 
-    private EntityQuery<ActionComponent> _actionQuery;
+    [Dependency] private EntityQuery<ActionComponent> _actionQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-
-        _actionQuery = GetEntityQuery<ActionComponent>();
 
         InitializeAttempts();
         InitializeExamine();
@@ -131,6 +129,8 @@ public sealed partial class CEEntityTargetActionAnimationEvent : EntityTargetAct
     [DataField]
     public float Speed = 1f;
 }
+
+
 
 /// <summary>
 /// An event that checks all sorts of conditions, and calculates the total cost of casting a spell. Called before the spell is cast.
