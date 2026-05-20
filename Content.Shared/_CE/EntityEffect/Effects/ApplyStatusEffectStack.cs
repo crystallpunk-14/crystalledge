@@ -13,9 +13,6 @@ public sealed partial class ApplyStatusEffectStack : CEEntityEffectBase<ApplySta
     public EntProtoId StatusEffect;
 
     [DataField]
-    public TimeSpan? Duration;
-
-    [DataField]
     public int Amount = 1;
 
     /// <summary>
@@ -41,7 +38,7 @@ public sealed partial class CEApplyStatusEffectStackEffectSystem : CEEntityEffec
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, out _, args.Effect.Amount, args.Effect.Duration, source: args.Args.Source, max: args.Effect.Max, used: args.Args.Used, suppressEvents: args.Effect.SuppressEvents);
+        _effectStack.TryAddStack(entity, args.Effect.StatusEffect, out _, args.Effect.Amount, source: args.Args.Source, max: args.Effect.Max, used: args.Args.Used, suppressEvents: args.Effect.SuppressEvents);
     }
 }
 
