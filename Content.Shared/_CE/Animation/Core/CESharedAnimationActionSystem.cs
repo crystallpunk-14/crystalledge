@@ -102,7 +102,11 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 
                     foreach (var action in actions)
                     {
-                        action.Effect(effectArgs);
+                        // Only fire game-logic and visual effects on entities this peer should simulate.
+                        // On the client, only the locally-controlled player entity uses prediction;
+                        // NPCs and other players receive visual effects via CEEntityAnimationEvent instead.
+                        if (ShouldFireKeyframeEffects(uid))
+                            action.Effect(effectArgs);
                     }
 
                     controller.LastEvent = realKeyFrame;
@@ -290,6 +294,15 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
     protected virtual void OnKeyframeActions(EntityUid uid, CEActiveAnimationActionComponent controller, TimeSpan keyFrame, List<CEEntityEffect> actions)
     {
     }
+
+    /// <summary>
+    /// Returns <c>true</c> if keyframe effects should be fired for <paramref name="uid"/> on this peer.
+    /// The server always returns <c>true</c>.
+    /// The client override returns <c>true</c> only for the locally-controlled player entity so that
+    /// NPC and other-player animations don't double-fire: they receive visual effects via
+    /// <see cref="CEEntityAnimationEvent"/> from the server instead.
+    /// </summary>
+    protected virtual bool ShouldFireKeyframeEffects(EntityUid uid) => true;
 }
 
 /// <summary>

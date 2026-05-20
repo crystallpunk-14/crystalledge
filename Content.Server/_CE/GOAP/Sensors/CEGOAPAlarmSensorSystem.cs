@@ -1,9 +1,10 @@
 using System.Numerics;
+using Content.Server._CE.GOAPAlarm;
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
-using Content.Shared._CE.GOAPAlarm;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 
-namespace Content.Shared._CE.GOAP.Sensors;
+namespace Content.Server._CE.GOAP.Sensors;
 
 public sealed partial class CEGOAPAlarmSensor : CEGOAPSensorBase<CEGOAPAlarmSensor>
 {

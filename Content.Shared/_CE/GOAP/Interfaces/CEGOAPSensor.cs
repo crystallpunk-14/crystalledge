@@ -1,5 +1,3 @@
-using Content.Shared._CE.Health;
-
 namespace Content.Shared._CE.GOAP;
 
 /// <summary>

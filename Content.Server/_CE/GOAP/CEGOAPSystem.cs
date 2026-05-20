@@ -1,10 +1,11 @@
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Server._CE.GOAP;
 
 /// <summary>
 /// Main GOAP orchestrator system. Updates sensors, manages planning, and executes actions
@@ -227,7 +228,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
             ent.Comp.CurrentPlan.AddRange(_newPlanBuffer);
             ent.Comp.ActiveGoalIndex = goalIndex;
             ent.Comp.CurrentActionIndex = 0;
-            Dirty(ent, ent.Comp);
             return;
         }
 
@@ -289,7 +289,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
         {
             action.RaiseStartup(ent, EntityManager);
             ent.Comp.CurrentActionStarted = true;
-            Dirty(ent, ent.Comp);
         }
 
         var status = action.RaiseUpdate(ent, frameTime, EntityManager);
@@ -303,7 +302,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
                 action.RaiseShutdown(ent, EntityManager);
                 ent.Comp.CurrentActionIndex++;
                 ent.Comp.CurrentActionStarted = false;
-                Dirty(ent, ent.Comp);
 
                 // Plan completed
                 if (ent.Comp.CurrentActionIndex >= ent.Comp.CurrentPlan.Count)
@@ -314,7 +312,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
                 action.RaiseShutdown(ent, EntityManager);
                 ClearPlan(ent);
                 ent.Comp.NextPlanTime = TimeSpan.Zero; // Re-plan immediately
-                Dirty(ent, ent.Comp);
                 break;
         }
     }
@@ -337,6 +334,5 @@ public sealed partial class CEGOAPSystem : EntitySystem
         ent.Comp.CurrentActionIndex = 0;
         ent.Comp.CurrentActionStarted = false;
         ent.Comp.ActiveGoalIndex = -1;
-        Dirty(ent, ent.Comp);
     }
 }

@@ -1,6 +1,7 @@
 using System.Numerics;
+using Content.Shared._CE.GOAP;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Server._CE.GOAP;
 
 /// <summary>
 /// GOAP planner using forward A* search with bitmask-packed state.

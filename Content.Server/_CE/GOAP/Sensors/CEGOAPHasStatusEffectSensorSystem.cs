@@ -1,9 +1,10 @@
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.StatusEffects;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.GOAP.Sensors;
+namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks if the entity has a specific status effect active.

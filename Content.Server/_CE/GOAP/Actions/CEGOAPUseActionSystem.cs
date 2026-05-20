@@ -1,3 +1,4 @@
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
@@ -5,7 +6,7 @@ using Content.Shared.Actions.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.GOAP.Actions;
+namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
 /// Triggers action (Instant, EntityTarget, or WorldTarget).

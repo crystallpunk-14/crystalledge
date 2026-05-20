@@ -1,18 +1,15 @@
-using Robust.Shared.Audio;
+using Content.Shared._CE.Animation.Core.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
-namespace Content.Shared._CE.GOAPAlarm;
+namespace Content.Server._CE.GOAPAlarm;
 
-[RegisterComponent, NetworkedComponent]
-public sealed partial class CEGOAPAlarmComponent : Component
+[RegisterComponent]
+public sealed partial class CEGOAPAlarmAnimationComponent : Component
 {
-    [DataField]
-    public EntProtoId AlarmVFX = "CEAlarmEffect";
-
-    [DataField]
-    public SoundSpecifier? Sound;
+    [DataField(required: true)]
+    public ProtoId<CEEntityEffectAnimationPrototype> Animation = string.Empty;
 
     [DataField]
     public TimeSpan Cooldown = TimeSpan.FromSeconds(10f);

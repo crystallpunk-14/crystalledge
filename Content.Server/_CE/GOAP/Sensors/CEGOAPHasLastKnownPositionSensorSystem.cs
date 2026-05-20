@@ -1,6 +1,7 @@
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 
-namespace Content.Shared._CE.GOAP.Sensors;
+namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks whether a last-known position exists for a given target key.

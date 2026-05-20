@@ -1,7 +1,7 @@
 using Content.Shared._CE.GOAP.Components;
 using Robust.Shared.Map;
 
-namespace Content.Shared._CE.GOAP;
+namespace Content.Server._CE.GOAP;
 
 /// <summary>
 /// Partial class for last-known-position management.

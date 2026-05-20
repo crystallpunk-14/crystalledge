@@ -1,10 +1,10 @@
+using Content.Server._CE.GOAP;
 using Content.Shared._CE.Animation.Core;
-using Content.Shared._CE.GOAP;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._CE.GOAPAlarm;
+namespace Content.Server._CE.GOAPAlarm;
 
 public sealed partial class CEGOAPAlarmSystem : EntitySystem
 {

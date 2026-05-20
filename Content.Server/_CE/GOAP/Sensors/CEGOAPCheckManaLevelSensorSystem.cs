@@ -1,9 +1,9 @@
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
-using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Mana.Core.Components;
 
-namespace Content.Shared._CE.GOAP.Sensors;
+namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks if the entity's own health is below a threshold.

@@ -2,7 +2,7 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
 
-namespace Content.Shared._CE.GOAP.Sensors;
+namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks if the current target is incapacitated (critical).

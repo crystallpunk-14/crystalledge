@@ -9,7 +9,6 @@ namespace Content.Shared._CE.GOAP.Components;
 /// for goal-oriented action planning AI.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState]
 public sealed partial class CEGOAPComponent : Component
 {
     /// <summary>
@@ -22,21 +21,21 @@ public sealed partial class CEGOAPComponent : Component
     /// <summary>
     /// List of goals this entity can pursue.
     /// </summary>
-    [DataField]
+    [DataField(serverOnly: true)]
     [AlwaysPushInheritance]
     public List<CEGOAPGoal> Goals = new();
 
     /// <summary>
     /// Available actions this entity can perform.
     /// </summary>
-    [DataField]
+    [DataField(serverOnly: true)]
     [AlwaysPushInheritance]
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
     /// Sensors that update the world state each frame.
     /// </summary>
-    [DataField]
+    [DataField(serverOnly: true)]
     [AlwaysPushInheritance]
     public List<CEGOAPSensor> Sensors = new();
 
@@ -69,21 +68,18 @@ public sealed partial class CEGOAPComponent : Component
     /// <summary>
     /// Index of the currently executing action in the plan.
     /// </summary>
-    [AutoNetworkedField]
     [ViewVariables]
     public int CurrentActionIndex;
 
     /// <summary>
     /// Whether the current action has had its startup event raised.
     /// </summary>
-    [AutoNetworkedField]
     [ViewVariables]
     public bool CurrentActionStarted;
 
     /// <summary>
     /// The currently active goal being pursued (index into Goals list, -1 if none).
     /// </summary>
-    [AutoNetworkedField]
     [ViewVariables]
     public int ActiveGoalIndex = -1;
 
@@ -96,13 +92,7 @@ public sealed partial class CEGOAPComponent : Component
     /// <summary>
     /// The next game time at which re-planning is allowed.
     /// </summary>
-    [AutoNetworkedField]
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextPlanTime;
 }
-
-/// <summary>
-/// A remembered target position with an expiry time.
-/// </summary>
-public record struct MemorizedPosition();
 

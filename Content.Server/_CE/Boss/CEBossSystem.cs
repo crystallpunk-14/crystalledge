@@ -1,10 +1,11 @@
+using Content.Server._CE.GOAP;
+using Content.Shared._CE.Boss;
 using Content.Shared._CE.Boss.Components;
 using Content.Shared._CE.EntityEffect;
-using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Health;
 using Robust.Shared.Map;
 
-namespace Content.Shared._CE.Boss;
+namespace Content.Server._CE.Boss;
 
 public sealed class CEBossSystem : EntitySystem
 {
