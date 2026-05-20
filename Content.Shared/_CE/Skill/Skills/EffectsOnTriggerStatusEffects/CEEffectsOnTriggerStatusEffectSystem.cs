@@ -5,7 +5,7 @@ using Content.Shared._CE.MeleeWeapon;
 using Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects.Components;
 using Content.Shared._CE.Soul;
 using Content.Shared._CE.StatusEffects.Core;
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared._CE.TileEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
