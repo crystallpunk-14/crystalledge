@@ -314,6 +314,18 @@ namespace Content.IntegrationTests.Tests
                     // If the entity deleted itself, check that it didn't spawn other entities
                     if (!server.EntMan.EntityExists(uid))
                     {
+                        // CrystallEdge: write to stderr so diff appears in raw CI log, not just NUnit XML
+                        if (Count(server.EntMan) != count)
+                        {
+                            var d = BuildDiffString(serverEntities, Entities(server.EntMan), server.EntMan);
+                            Console.Error.WriteLine($"[EntityTest][S] {protoId} self-deleted, server count mismatch ({count}->{Count(server.EntMan)}):\n{d}");
+                        }
+                        if (Count(client.EntMan) != clientCount)
+                        {
+                            var d = BuildDiffString(clientEntities, Entities(client.EntMan), client.EntMan);
+                            Console.Error.WriteLine($"[EntityTest][C] {protoId} self-deleted, client count mismatch ({clientCount}->{Count(client.EntMan)}):\n{d}");
+                        }
+                        // CrystallEdge end
                         Assert.That(Count(server.EntMan), Is.EqualTo(count), $"Server prototype {protoId} failed on deleting itself\n" +
                             BuildDiffString(serverEntities, Entities(server.EntMan), server.EntMan));
                         Assert.That(Count(client.EntMan), Is.EqualTo(clientCount), $"Client prototype {protoId} failed on deleting itself\n" +
@@ -333,6 +345,19 @@ namespace Content.IntegrationTests.Tests
 
                     await server.WaitPost(() => server.EntMan.DeleteEntity(uid));
                     await pair.RunTicksSync(3);
+
+                    // CrystallEdge: eagerly write diff to stderr before assertions so it isn't swallowed by CI annotation truncation
+                    if (Count(server.EntMan) != count)
+                    {
+                        var d = BuildDiffString(serverEntities, Entities(server.EntMan), server.EntMan);
+                        Console.Error.WriteLine($"[EntityTest][S] {protoId} deletion count mismatch ({count}->{Count(server.EntMan)}):\n{d}");
+                    }
+                    if (Count(client.EntMan) != clientCount)
+                    {
+                        var d = BuildDiffString(clientEntities, Entities(client.EntMan), client.EntMan);
+                        Console.Error.WriteLine($"[EntityTest][C] {protoId} deletion count mismatch ({clientCount}->{Count(client.EntMan)}):\n{d}");
+                    }
+                    // CrystallEdge end
 
                     // Check that the number of entities has gone back to the original value.
                     Assert.That(Count(server.EntMan), Is.EqualTo(count), $"Server prototype {protoId} failed on deletion: count didn't reset properly\n" +
@@ -360,18 +385,27 @@ namespace Content.IntegrationTests.Tests
         }
         // CrystallEdge end
 
+        // CrystallEdge: extended diff — shows components + parent of leaked entities
         private static string BuildDiffString(IEnumerable<EntityUid> oldEnts, IEnumerable<EntityUid> newEnts, IEntityManager entMan)
         {
             var sb = new StringBuilder();
-            var addedEnts = newEnts.Except(oldEnts);
-            var removedEnts = oldEnts.Except(newEnts);
-            if (addedEnts.Any())
+            var addedEnts = newEnts.Except(oldEnts).ToList();
+            var removedEnts = oldEnts.Except(newEnts).ToList();
+            if (addedEnts.Count > 0)
                 sb.AppendLine("Listing new entities:");
             foreach (var addedEnt in addedEnts)
             {
-                sb.AppendLine(entMan.ToPrettyString(addedEnt));
+                sb.AppendLine("  " + entMan.ToPrettyString(addedEnt));
+                // List all components so CE involvement is immediately visible
+                var compNames = entMan.GetComponents(addedEnt)
+                    .Select(c => c.GetType().Name)
+                    .OrderBy(n => n);
+                sb.AppendLine($"    Components: [{string.Join(", ", compNames)}]");
+                // Show parent entity
+                if (entMan.TryGetComponent<TransformComponent>(addedEnt, out var xform) && xform.ParentUid.IsValid())
+                    sb.AppendLine($"    Parent: {entMan.ToPrettyString(xform.ParentUid)}");
             }
-            if (removedEnts.Any())
+            if (removedEnts.Count > 0)
                 sb.AppendLine("Listing removed entities:");
             foreach (var removedEnt in removedEnts)
             {
@@ -379,6 +413,7 @@ namespace Content.IntegrationTests.Tests
             }
             return sb.ToString();
         }
+        // CrystallEdge end
 
         private static bool HasRequiredDataField(Component component)
         {
