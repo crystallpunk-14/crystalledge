@@ -95,7 +95,10 @@ namespace Content.IntegrationTests.Tests
                         entityMan.DeleteEntity(uid);
                 }
 
-                Assert.That(entityMan.EntityCount, Is.Zero);
+                Assert.That(entityMan.EntityCount, Is.Zero,
+                    // CrystallEdge: show remaining entities on failure
+                    BuildRemainingString(entityMan));
+                    // CrystallEdge end
             });
         }
 
@@ -152,7 +155,10 @@ namespace Content.IntegrationTests.Tests
                         entityMan.DeleteEntity(uid);
                 }
 
-                Assert.That(entityMan.EntityCount, Is.Zero);
+                Assert.That(entityMan.EntityCount, Is.Zero,
+                    // CrystallEdge: show remaining entities on failure
+                    BuildRemainingString(entityMan));
+                    // CrystallEdge end
             });
         }
 
@@ -222,7 +228,10 @@ namespace Content.IntegrationTests.Tests
                         sEntMan.DeleteEntity(uid);
                 }
 
-                Assert.That(sEntMan.EntityCount, Is.Zero);
+                Assert.That(sEntMan.EntityCount, Is.Zero,
+                    // CrystallEdge: show remaining entities on failure
+                    BuildRemainingString(sEntMan));
+                    // CrystallEdge end
             });
         }
 
@@ -335,6 +344,21 @@ namespace Content.IntegrationTests.Tests
                 }
             });
         }
+
+        // CrystallEdge: helper to list remaining entities for failure diagnostics
+        private static string BuildRemainingString(IEntityManager entMan)
+        {
+            var sb = new StringBuilder();
+            var query = entMan.AllEntityQueryEnumerator<MetaDataComponent>();
+            sb.AppendLine("Remaining entities:");
+            while (query.MoveNext(out var uid, out var meta))
+            {
+                if (!meta.EntityDeleted)
+                    sb.AppendLine($"  [{uid}] proto={meta.EntityPrototype?.ID ?? "<none>"} name={meta.EntityName}");
+            }
+            return sb.ToString();
+        }
+        // CrystallEdge end
 
         private static string BuildDiffString(IEnumerable<EntityUid> oldEnts, IEnumerable<EntityUid> newEnts, IEntityManager entMan)
         {
