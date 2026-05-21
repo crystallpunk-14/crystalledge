@@ -37,11 +37,6 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
 
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
-
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPExploreAction> args)
