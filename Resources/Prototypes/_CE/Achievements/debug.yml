@@ -29,5 +29,5 @@
   desc: ce-achievement-neonate-lurker-slayer-desc
   secret: true
   unlockedIcon:
-    sprite: /Texture/_CE/Achievments/_default.rsi
+    sprite: /Textures/_CE/Achievements/_default.rsi
     state: secret.png

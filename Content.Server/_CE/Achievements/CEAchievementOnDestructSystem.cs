@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Content.Server._CE.Achievements.Components;
 using Content.Shared._CE.Health;
 using Content.Shared.CCVar;
@@ -18,7 +19,7 @@ public sealed class CEAchievementOnDestructSystem : EntitySystem
         SubscribeLocalEvent<CEAchievementOnDestructComponent, CEDestructedEvent>(OnDestructed);
     }
 
-    private async void OnDestructed(Entity<CEAchievementOnDestructComponent> ent, ref CEDestructedEvent args)
+    private void OnDestructed(Entity<CEAchievementOnDestructComponent> ent, ref CEDestructedEvent args)
     {
         // Don't award achievements in integration tests to avoid interfering with test cleanup.
         if (_cfg.GetCVar(CCVars.DatabaseSynchronous))
@@ -27,6 +28,6 @@ public sealed class CEAchievementOnDestructSystem : EntitySystem
         if (args.Source is not { } source || !TryComp<ActorComponent>(source, out var actor))
             return;
 
-        await _achievements.AddPlayerAchievementAsync(actor.PlayerSession.UserId, ent.Comp.Achievement);
+        _ = _achievements.AddPlayerAchievementAsync(actor.PlayerSession.UserId, ent.Comp.Achievement);
     }
 }

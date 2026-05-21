@@ -3,72 +3,79 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
-  id: CEMobRat
+  id: CEMobNeonateLurker
   name: Neonate Lurker
   description: TODO
   categories: [ ForkFiltered ]
   components:
   - type: CEGOAPAlarm
     sound:
-      path: /Audio/_CE/Mobs/rat2.ogg
+      path: /Audio/_CE/Mobs/ritual2.ogg
       params:
         variation: 0.1
   - type: CEDestructible
     destroyThreshold: 25
-  - type: CEAchievementOnDestruct
-    achievement: NeonateLurkerSlayer
   - type: CEGOAP
     goals:
-    # Keep away from nearby players/hostiles.
+    # Primary goal: Flee from enemy if visible
     - desiredState:
-        EnemyInFleeRange: false
-      priority: 3
+        EnemyClose: false
+      priority: 1
+    # Secondary goal: Kill enemy if close enough
+    - desiredState:
+        EnemyDead: true
+      priority: 2
 
     actions:
-    # Run away until the target is outside the flee range.
-    - !type:CEGOAPFleeAction
+    # Move to target (for attacking)
+    - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
       preconditions:
-        EnemyInFleeRange: true
+        EnemyInMeleeRange: true
+        EnemyClose: true
       effects:
-        EnemyInFleeRange: false
+        EnemyDead: true
       cost: 1
-      maxBfsIterations: 6
-      recalculateInterval: 0.5
-    # Attack target
+      range: 1.5
+    # Attack target when in range
     - !type:CEGOAPMeleeAttackAction
       targetKey: enemy
       preconditions:
         EnemyInMeleeRange: true
+        EnemyClose: true
       effects:
         EnemyDead: true
-      cost: 1
+      cost: 0.1
       useType: Primary
       angleVariation: 5
-    # Explore
-    - !type:CEGOAPExploreAction
-      effects:
-        EnemyVisible: true
-      cost: 2
-      exploreRadius: 8
-    # Move to enemy's last known position
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
+    # Flee from enemy
+    - !type:CEGOAPFleeAction
+      targetKey: enemy
       preconditions:
-        HasEnemyLastPos: true
-      cost: 2
+        EnemyVisible: true
+      effects:
+        EnemyClose: false
+      cost: 1
+      maxBfsIterations: 3
+      recalculateInterval: 0.3
 
     sensors:
     - !type:CEGOAPNearestHostileSensor
       conditionKey: EnemyVisible
       outputTargetKey: enemy
-      visionRadius: 6
+      visionRadius: 8
     - !type:CEGOAPRangeToTargetSensor
       conditionKey: EnemyInMeleeRange
       targetKey: enemy
       range: 1.5
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyClose
+      targetKey: enemy
+      range: 5
+    - !type:CEGOAPRangeToTargetSensor
+      conditionKey: EnemyTooFar
+      targetKey: enemy
+      range: 6
     - !type:CEGOAPHasLastKnownPositionSensor
       conditionKey: HasEnemyLastPos
       positionTargetKey: enemy
@@ -78,13 +85,16 @@
   - type: NpcFactionMember
     factions:
     - SimpleHostile
+  - type: CEAchievementOnDestruct
+    achievement: NeonateLurkerSlayer
   - type: Sprite
     drawdepth: Mobs
     sprite: _CE/Mobs/neonate_lurker.rsi
+    scale: 0.6, 0.6
     layers:
     - state: live
   - type: MovementSpeedModifier
-    baseSprintSpeed: 1.1
+    baseSprintSpeed: 6
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
@@ -97,13 +107,13 @@
           attackType: Melee
           damage:
             types:
-              Physical: 5
+              Physical: 20
     animations:
       Primary:
-      - anim: RatBite
+      - anim: ClawSwipe
 
 - type: entity
-  id: CERatBiteEffectTelegraphy
+  id: CEClawSwipeEffectTelegraphy
   components:
   - type: Sprite
     sprite: Effects/arcs.rsi
@@ -111,21 +121,21 @@
     drawdepth: Effects
 
 - type: entity
-  id: CERatBiteEffect
+  id: CEClawSwipeEffect
   components:
   - type: Sprite
     sprite: Effects/arcs.rsi
-    state: bite
+    state: claw
     drawdepth: Effects
 
 - type: entityEffectAnimation
-  id: RatBite
+  id: ClawSwipe
   movementSpeed: 0.8
   duration: 0.8
   events:
     0:
     - !type:UsedEntityAnimation
-      dummyEntity: CERatBiteEffectTelegraphy
+      dummyEntity: CEClawSwipeEffectTelegraphy
       offsetAnimation:
       - time: 0.0
         offset: 0, -0.3
@@ -146,7 +156,7 @@
         easing: QuadOut
     0.2:
     - !type:UsedEntityAnimation
-      dummyEntity: CERatBiteEffect
+      dummyEntity: CEClawSwipeEffect
       offsetAnimation:
       - time: 0.0
         offset: 0, -0.2
@@ -167,9 +177,9 @@
         easing: QuadOut
     - !type:PlaySound
       sound:
-        path: /Audio/Effects/bite.ogg
+        path: /Audio/Weapons/Xeno/alien_claw_flesh1.ogg
         params:
-          variation: 0.1
+          variation: 0.2
     0.25:
     - !type:WeaponEffectSlot
       slot: OnHit

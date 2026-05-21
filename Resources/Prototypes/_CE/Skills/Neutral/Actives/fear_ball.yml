@@ -1,0 +1,127 @@
+﻿- type: skill
+  parent: BaseNeutralSkill
+  weight: 10.1 #Very rare, very meme
+  id: FearBall
+  effect: !type:AddAction
+    action: CEActionFearball
+  restrictions:
+  - !type:AchievementObtained
+    achievement: NeonateLurkerSlayer
+
+- type: entity
+  id: CEActionFearball
+  parent: CEActionSpellBase
+  name: Fear ball
+  description: You hurl a fear, makes everything tremble in it's wake.
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 1.0
+    projectileMode: true
+  - type: CEActionManaCost
+    manaCost: 10
+  - type: CEActionStaminaCost
+    cost: 2
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/Neutral/lurkerachievementskill.rsi
+      state: fear
+  - type: TargetAction
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationFearball
+
+- type: entityEffectAnimation
+  id: AnimationFearball
+  movementSpeed: 0.3
+  duration: 0.3
+  lockRotation: true
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:UsedEntityAnimation
+      dummyEntity: CEEffectFearball
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0.5
+      - time: 0.8
+        offset: 0, -1
+    0.4:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    - !type:ShootProjectile
+      projectileSpeed: 10
+      prototype: CEProjectileFearball
+      projectileCount: 1
+      spread: 0
+
+- type: entity
+  id: CEEffectFearball
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: fear charge
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/firebolt_charge.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+      color: "#000000"
+  - type: PointLight
+    color: "#2b2b2b"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 2.5
+  - type: LightBehaviour
+    behaviours:
+    - !type:PulseBehaviour
+      interpolate: Linear
+      maxDuration: 3
+      startValue: 0
+      endValue: 5.0
+      property: Energy
+      isLooped: false
+      enabled: true
+
+- type: entity
+  id: CEProjectileFearball
+  name: fear ball projectile
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/firebolt.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+      color: "#000000"
+  - type: PointLight
+    color: "#2b2b2b"
+    radius: 2.0
+    energy: 5.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 5
+    - !type:AreaEffect
+      affectCaster: false
+      range: 1.5
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectFear
+        amount: 3
+        max: 5
+    - !type:ShockWaveVFX
+      effectTarget: Used
+      width: 0.1

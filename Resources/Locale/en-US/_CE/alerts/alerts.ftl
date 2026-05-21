@@ -54,3 +54,6 @@ ce-alert-frozen-desc = You are completely frozen! You can't do anything, but the
 
 ce-alert-acceleration-name = Acceleration
 ce-alert-acceleration-desc = You move faster!
+
+ce-alert-fear-name = Fear
+ce-alert-fear-desc = Your heartbeat quickens. Your movements are sloppy.

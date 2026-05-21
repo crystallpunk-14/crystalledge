@@ -1,0 +1,19 @@
+﻿{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "heart-on, taken from /tg/station 13 at https://github.com/tgstation/tgstation/commit/c4b7f3c41b6742aca260fe60cc358a778ba9b8c8",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+            "name": "heart-on",
+            "delays": [
+                [
+                    0.6,
+                    0.1,
+                    0.1
+                ]
+    ]
+        ]
+}
