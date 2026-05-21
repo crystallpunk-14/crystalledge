@@ -53,6 +53,7 @@
   - type: CEGOAPCheckHealthLevelSensor
     conditionKey: LowHealth
     threshold: 0.5
+    selector: !type:CEGOAPSelectorSelf
 
   - type: NpcFactionMember
     factions:

@@ -1,5 +1,6 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Mana.Core.Components;
 
@@ -14,6 +15,9 @@ public sealed partial class CEGOAPCheckManaLevelSensorComponent : Component
 {
     [DataField(required: true)]
     public string ConditionKey = string.Empty;
+
+    [DataField(required: true)]
+    public CEGOAPTargetSelector Selector = default!;
 
     /// <summary>
     /// Mana fraction (0..1) below which the condition is set to true.
@@ -39,12 +43,7 @@ public sealed class CEGOAPCheckManaLevelSensorSystem : EntitySystem
 
     private void OnManaChanged(Entity<CEGOAPCheckManaLevelSensorComponent> ent, ref CEMagicEnergyLevelChangeEvent args)
     {
-        var newFraction = (float)args.NewValue / args.MaxValue;
-
-        if (!TryComp<CEGOAPComponent>(ent, out var goap))
-            return;
-
-        goap.WorldState[ent.Comp.ConditionKey] = newFraction < ent.Comp.Threshold;
+        Evaluate(ent);
     }
 
     private void Evaluate(Entity<CEGOAPCheckManaLevelSensorComponent> ent)
@@ -52,7 +51,14 @@ public sealed class CEGOAPCheckManaLevelSensorSystem : EntitySystem
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        if (!TryComp<CEMagicEnergyContainerComponent>(ent, out var mana))
+        var result = ent.Comp.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
+        {
+            goap.WorldState[ent.Comp.ConditionKey] = false;
+            return;
+        }
+
+        if (!TryComp<CEMagicEnergyContainerComponent>(target, out var mana))
         {
             goap.WorldState[ent.Comp.ConditionKey] = false;
             return;

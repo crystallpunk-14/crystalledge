@@ -1,5 +1,6 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.StatusEffects;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
@@ -15,6 +16,9 @@ public sealed partial class CEGOAPHasStatusEffectSensorComponent : Component
 {
     [DataField(required: true)]
     public string ConditionKey = string.Empty;
+
+    [DataField(required: true)]
+    public CEGOAPTargetSelector Selector = default!;
 
     /// <summary>
     /// Prototype ID of the status effect entity to check for.
@@ -56,6 +60,13 @@ public sealed class CEGOAPHasStatusEffectSensorSystem : EntitySystem
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        goap.WorldState[ent.Comp.ConditionKey] = _statusEffect.HasStatusEffect(ent.Owner, ent.Comp.StatusEffect);
+        var result = ent.Comp.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
+        {
+            goap.WorldState[ent.Comp.ConditionKey] = false;
+            return;
+        }
+
+        goap.WorldState[ent.Comp.ConditionKey] = _statusEffect.HasStatusEffect(target, ent.Comp.StatusEffect);
     }
 }

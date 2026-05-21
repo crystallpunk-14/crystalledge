@@ -3,6 +3,7 @@ using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
+using Content.Shared._CE.Health;
 using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP.Selectors;
@@ -20,6 +21,8 @@ public sealed partial class CEGOAPSelectorNearestEnemy : CEGOAPTargetSelectorBas
 public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorNearestEnemy>
 {
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly CEMobStateSystem _mobState = default!;
+
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private readonly EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
     [Dependency] private readonly EntityQuery<CEGOAPComponent> _goapQuery = default!;
@@ -40,6 +43,9 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
 
         foreach (var enemy in cache.Enemies)
         {
+            if (!_mobState.IsAlive(enemy))
+                continue;
+
             if (!_xformQuery.TryGetComponent(enemy, out var ex))
                 continue;
 
@@ -51,10 +57,10 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
             }
         }
 
-        if (bestAlive is { } b && _xformQuery.TryGetComponent(b, out var bxform))
+        if (bestAlive is not null && _xformQuery.TryGetComponent(bestAlive.Value, out var bestAliveXform))
         {
-            ev.Entity = b;
-            ev.Position = bxform.Coordinates;
+            ev.Entity = bestAlive.Value;
+            ev.Position = bestAliveXform.Coordinates;
             return;
         }
 
@@ -68,12 +74,12 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
             if (!goap.Knowledge.TryGetValue(enemy, out var entry))
                 continue;
 
-            if (!entry.LastSeenCoords.TryDistance(EntityManager, selfXform.Coordinates, out var d))
+            if (!entry.LastSeenCoords.TryDistance(EntityManager, selfXform.Coordinates, out var distance))
                 continue;
 
-            if (d < rememberedDist)
+            if (distance < rememberedDist)
             {
-                rememberedDist = d;
+                rememberedDist = distance;
                 rememberedCoords = entry.LastSeenCoords;
             }
         }

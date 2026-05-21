@@ -4,11 +4,6 @@ using Content.Shared._CE.GOAP.Components;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
-/// <summary>
-/// Writes a boolean world-state condition that reflects whether at least one classified enemy
-/// is currently known to the agent. Event-driven via <see cref="CEGOAPKnowledgeUpdatedEvent"/>;
-/// no per-tick polling.
-/// </summary>
 [RegisterComponent]
 public sealed partial class CEGOAPHasEnemySensorComponent : Component
 {

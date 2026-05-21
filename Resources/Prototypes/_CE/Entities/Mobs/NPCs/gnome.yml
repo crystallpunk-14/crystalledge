@@ -73,7 +73,7 @@
       cost: 0.5
       actionPrototype: CEActionGnomeJump
     - !type:CEGOAPUseAction
-      selector: !type:CEGOAPSelectorNearestEnemy
+      selector: !type:CEGOAPSelectorRandomEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -82,7 +82,7 @@
       cost: 1
       actionPrototype: CEActionGnomeThrowStone
     - !type:CEGOAPUseAction
-      selector: !type:CEGOAPSelectorNearestEnemy
+      selector: !type:CEGOAPSelectorRandomEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -114,6 +114,7 @@
   - type: CEGOAPCheckHealthLevelSensor
     conditionKey: LowHealth
     threshold: 0.6
+    selector: !type:CEGOAPSelectorSelf
 
   - type: NpcFactionMember
     factions:
