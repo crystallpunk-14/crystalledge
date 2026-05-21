@@ -42,12 +42,12 @@ public abstract class CESharedStatusEffectVFXSystem : EntitySystem
         var source = GetSource(ent);
         var pos = Transform(args.Target).Coordinates;
 
-        if (args.newStack > args.oldStack)
+        if (args.NewStack > args.OldStack)
         {
             PlayEffect(args.Target, source, ent.Comp.OnStacksAddedVfx, pos);
             _audio.PlayPredicted(ent.Comp.OnStacksAddedSound, pos, source);
         }
-        else if (args.newStack < args.oldStack)
+        else if (args.NewStack < args.OldStack)
         {
             PlayEffect(args.Target, source, ent.Comp.OnStacksRemovedVfx, pos);
             _audio.PlayPredicted(ent.Comp.OnStacksRemovedSound, pos, source);

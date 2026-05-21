@@ -1,6 +1,6 @@
 using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.Core;
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._CE.StatusEffects.StaminaRegenBuff;

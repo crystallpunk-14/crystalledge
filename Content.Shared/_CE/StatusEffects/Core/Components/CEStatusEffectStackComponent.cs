@@ -1,8 +1,7 @@
-using Content.Shared._CE.StatusEffects.Core;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.StatusEffectStacks;
+namespace Content.Shared._CE.StatusEffects.Core.Components;
 
 /// <summary>
 /// Component for managing stacked status effects.

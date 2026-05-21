@@ -25,21 +25,19 @@ public sealed partial class CEClientAnimationControllerSystem : EntitySystem
     {
         base.Initialize();
 
-        // Server pushed a new component state — restart loop only if animation data changed.
         SubscribeLocalEvent<CEAnimationControllerComponent, AfterAutoHandleStateEvent>(OnHandleState);
         SubscribeLocalEvent<CEAnimationControllerComponent, AnimationCompletedEvent>(OnLoopCompleted);
 
-        // Stop loop the moment a one-shot UserAnimation begins.
         SubscribeLocalEvent<CEUserSpriteAnimationComponent, ComponentStartup>(OnOneShotStarted);
 
-        // Resume loop when the one-shot component is fully removed.
         SubscribeLocalEvent<CEUserSpriteAnimationComponent, ComponentShutdown>(OnOneShotShutdown);
     }
 
-    // ── Loop management ───────────────────────────────────────────────────
-
     private void RestartLoop(Entity<CEAnimationControllerComponent> ent, CELoopAnimationStateComponent? state = null, bool ignoreOneShot = false)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         if (!ignoreOneShot && HasComp<CEUserSpriteAnimationComponent>(ent))
             return;
 
@@ -55,10 +53,11 @@ public sealed partial class CEClientAnimationControllerSystem : EntitySystem
         _animPlayer.Play(ent, CEAnimationTrackBuilders.BuildLoopAnimation(anim), LoopKey);
     }
 
-    // ── Handlers ──────────────────────────────────────────────────────────
-
     private void OnHandleState(Entity<CEAnimationControllerComponent> ent, ref AfterAutoHandleStateEvent args)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         var state = EnsureComp<CELoopAnimationStateComponent>(ent);
 
         // Skip restart if the same animation is already playing.
@@ -70,6 +69,9 @@ public sealed partial class CEClientAnimationControllerSystem : EntitySystem
 
     private void OnLoopCompleted(Entity<CEAnimationControllerComponent> ent, ref AnimationCompletedEvent args)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         if (args.Key != LoopKey || !args.Finished)
             return;
 
@@ -91,6 +93,9 @@ public sealed partial class CEClientAnimationControllerSystem : EntitySystem
 
     private void OnOneShotShutdown(Entity<CEUserSpriteAnimationComponent> ent, ref ComponentShutdown args)
     {
+        if (TerminatingOrDeleted(ent))
+            return;
+
         if (!TryComp<CEAnimationControllerComponent>(ent, out var controller))
             return;
 

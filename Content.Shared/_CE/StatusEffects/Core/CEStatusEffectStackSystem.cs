@@ -78,20 +78,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// Adds the specified number of stacks of a status effect to the entity.
     /// This either adds the status effect if it does not exist, or edits the existing status effect.
     /// </summary>
-    /// <param name="target">Target entity with StatusEffectContainer</param>
-    /// <param name="statusEffect">Type of status effect.</param>
-    /// <param name="stack">Optional, default 1. Number of stacks. Cannot be a negative number.</param>
-    /// <param name="duration">Optional: status effect duration. If specified, the new status effect will have the specified duration, and the duration of the existing status effect will be edited.</param>
-    /// <param name="resetTimer">If true and the effect already exists, resets the cycle timer to the full duration instead of letting it continue from the current point.</param>
-    /// <param name="source">Optional source entity (attacker/caster). When provided, raises <see cref="CEAttemptApplyStatusEffectStackEvent"/> on the source and sets <see cref="CEStatusEffectSourceComponent"/> on the resulting effect entity.</param>
-    /// <param name="max">Optional maximum total stacks allowed on the target. 0 means no limit. If the target already has this many stacks or more, the call returns false.</param>
-    /// <param name="suppressEvents">When true, <see cref="CEAfterApplyStatusEffectEvent"/> is not raised after the application. Use to prevent proc loops.</param>
-    /// <returns>True if the status effect was successfully added or its stack count was increased. False if for some reason this could not be done.</returns>
     public bool TryAddStack(EntityUid target,
         EntProtoId statusEffect,
         out EntityUid? effectEntity,
         int stack = 1,
-        TimeSpan? duration = null,
         bool resetTimer = false,
         EntityUid? source = null,
         int max = 0,
@@ -106,14 +96,14 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         // Allow source-side status effects (e.g. pacifism) to cancel the application.
         if (source is { } src && Exists(src))
         {
-            var sourceAttempt = new CEAttemptApplyStatusEffectStackEvent(target, statusEffect, stack, duration);
+            var sourceAttempt = new CEAttemptApplyStatusEffectStackEvent(target, statusEffect, stack);
             RaiseLocalEvent(src, sourceAttempt);
             if (sourceAttempt.Cancelled)
                 return false;
         }
 
         // Allow target-side status effects (e.g. immunity, neutralization) to cancel or reduce the application.
-        var receiveAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, statusEffect, stack, duration, source);
+        var receiveAttempt = new CEAttemptReceiveStatusEffectStackEvent(target, statusEffect, stack, source);
         RaiseLocalEvent(target, receiveAttempt);
         if (receiveAttempt.Cancelled || receiveAttempt.RemainingStacks <= 0)
             return false;
@@ -131,29 +121,24 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
         if (!_statusEffect.TryGetStatusEffect(target, statusEffect, out var statusEnt))
         {
-            if (!_statusEffect.TrySetStatusEffectDuration(target, statusEffect, out statusEnt, duration))
+            if (!_statusEffect.TrySetStatusEffectDuration(target, statusEffect, out statusEnt))
                 return false;
 
             effectEntity = statusEnt;
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
 
             // Use the explicit duration, or fall back to the prototype-defined BaseDuration.
-            var effectiveDuration = duration ?? stackComp.BaseDuration;
-            if (effectiveDuration != null)
-            {
-                stackComp.BaseDuration = effectiveDuration;
-
-                // If we used the prototype default, set the actual timer now.
-                if (duration == null)
-                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, effectiveDuration);
-            }
+            if (stackComp.BaseDuration != null)
+                _statusEffect.TrySetStatusEffectDuration(target, statusEffect, stackComp.BaseDuration);
 
             SetStack(target, (statusEnt.Value, stackComp), stack);
             SetEffectSource(statusEnt.Value, source);
 
             if (source is { } afterSrc1 && Exists(afterSrc1))
+            {
                 if (!suppressEvents)
                     RaiseLocalEvent(afterSrc1, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
+            }
 
             return true;
         }
@@ -163,25 +148,20 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             var stackComp = EnsureComp<CEStatusEffectStackComponent>(statusEnt.Value);
             SetStack(target, (statusEnt.Value, stackComp), stackComp.Stacks + stack);
 
-            if (duration != null)
-            {
-                stackComp.BaseDuration = duration;
-                Dirty(statusEnt.Value, stackComp);
-            }
-
             var shouldReset = resetTimer || stackComp.ResetTimerOnStack;
             if (shouldReset)
             {
-                var effectiveDuration = duration ?? stackComp.BaseDuration;
-                if (effectiveDuration != null)
-                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, effectiveDuration);
+                if (stackComp.BaseDuration != null)
+                    _statusEffect.TrySetStatusEffectDuration(target, statusEffect, stackComp.BaseDuration);
             }
 
             SetEffectSource(statusEnt.Value, source);
 
             if (source is { } afterSrc2 && Exists(afterSrc2))
+            {
                 if (!suppressEvents)
                     RaiseLocalEvent(afterSrc2, new CEAfterApplyStatusEffectEvent(target, statusEffect, stack, used));
+            }
 
             return true;
         }
@@ -335,7 +315,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
             _statusEffect.TryRemoveStatusEffect(target, proto);
 
         // Apply the combined result effect, preserving the incoming applier.
-        TryAddStack(target, resultProto, out _, combinedStacks, args.Args.Duration, source: args.Args.Source);
+        TryAddStack(target, resultProto, out _, combinedStacks, source: args.Args.Source);
 
         // Cancel the original incoming application — it has been consumed by the transform.
         args.Args.Cancelled = true;
@@ -423,7 +403,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 /// Calls on effect entity, when a status effect stack is edited
 /// </summary>
 [ByRefEvent]
-public readonly record struct CEStatusEffectStackEditedEvent(EntityUid Target, int oldStack, int newStack);
+public readonly record struct CEStatusEffectStackEditedEvent(EntityUid Target, int OldStack, int NewStack);
 
 /// <summary>
 /// Calls on effect entity, when a status effect stacks effect should happens
@@ -453,13 +433,11 @@ public enum CEStatusEffectStackPowerVisuals
 public sealed class CEAttemptApplyStatusEffectStackEvent(
     EntityUid target,
     EntProtoId statusEffect,
-    int amount,
-    TimeSpan? duration) : EntityEventArgs
+    int amount) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
     public readonly int Amount = amount;
-    public readonly TimeSpan? Duration = duration;
     public bool Cancelled;
 }
 
@@ -472,13 +450,11 @@ public sealed class CEAttemptReceiveStatusEffectStackEvent(
     EntityUid target,
     EntProtoId statusEffect,
     int amount,
-    TimeSpan? duration,
     EntityUid? source = null) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
     public readonly int Amount = amount;
-    public readonly TimeSpan? Duration = duration;
 
     /// <summary>
     /// The entity applying the incoming stacks (attacker/caster). Used by transform handlers

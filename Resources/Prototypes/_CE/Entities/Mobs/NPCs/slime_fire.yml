@@ -21,6 +21,8 @@
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
+  - type: CESpawnAnimation
+    animation: FireSlimeSpawn
   - type: CEAnimationController
   - type: CEIdleAnimation
     animation:
@@ -183,3 +185,26 @@
       radius: 1
       maxStacks: 3
       fallOffFactor: 1
+
+- type: entityEffectAnimation
+  id: FireSlimeSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectFireCreation
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.0, 0.1
+      - time: 0.9
+        scale: 1.0, 1.0
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"

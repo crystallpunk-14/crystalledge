@@ -1,8 +1,7 @@
 using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffects.Core;
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
-using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._CE.Skill.Skills.Vitality;
 

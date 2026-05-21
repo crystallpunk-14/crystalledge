@@ -26,4 +26,7 @@ public sealed partial class CEDestructibleComponent : Component
 
     [DataField]
     public EntityTableSelector? LootTable;
+
+    [DataField]
+    public float SpawnOffset = 0.2f;
 }
