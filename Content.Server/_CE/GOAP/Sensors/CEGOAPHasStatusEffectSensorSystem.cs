@@ -8,10 +8,14 @@ namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
 /// Checks if the entity has a specific status effect active.
-/// Event-driven: reacts to CE status effect events raised on the target entity.
+/// Event-driven: reacts to CE status effect applied/removed events on this entity.
 /// </summary>
-public sealed partial class CEGOAPHasStatusEffectSensor : CEGOAPSensorBase<CEGOAPHasStatusEffectSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPHasStatusEffectSensorComponent : Component
 {
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
     /// <summary>
     /// Prototype ID of the status effect entity to check for.
     /// </summary>
@@ -19,41 +23,39 @@ public sealed partial class CEGOAPHasStatusEffectSensor : CEGOAPSensorBase<CEGOA
     public EntProtoId StatusEffect;
 }
 
-public sealed partial class CEGOAPHasStatusEffectSensorSystem : CEGOAPSensorSystem<CEGOAPHasStatusEffectSensor>
+public sealed class CEGOAPHasStatusEffectSensorSystem : EntitySystem
 {
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CEGOAPComponent, CEStatusEffectAppliedToEntityEvent>(OnEffectApplied);
-        SubscribeLocalEvent<CEGOAPComponent, CEStatusEffectRemovedFromEntityEvent>(OnEffectRemoved);
+
+        SubscribeLocalEvent<CEGOAPHasStatusEffectSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
+        SubscribeLocalEvent<CEGOAPHasStatusEffectSensorComponent, CEStatusEffectAppliedToEntityEvent>(OnEffectApplied);
+        SubscribeLocalEvent<CEGOAPHasStatusEffectSensorComponent, CEStatusEffectRemovedFromEntityEvent>(OnEffectRemoved);
     }
 
-    private void OnEffectApplied(Entity<CEGOAPComponent> ent, ref CEStatusEffectAppliedToEntityEvent args)
+    private void OnRefresh(Entity<CEGOAPHasStatusEffectSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
     {
-        RefreshSensors(ent);
+        Evaluate(ent);
     }
 
-    private void OnEffectRemoved(Entity<CEGOAPComponent> ent, ref CEStatusEffectRemovedFromEntityEvent args)
+    private void OnEffectApplied(Entity<CEGOAPHasStatusEffectSensorComponent> ent, ref CEStatusEffectAppliedToEntityEvent args)
     {
-        RefreshSensors(ent);
+        Evaluate(ent);
     }
 
-    private void RefreshSensors(Entity<CEGOAPComponent> ent)
+    private void OnEffectRemoved(Entity<CEGOAPHasStatusEffectSensorComponent> ent, ref CEStatusEffectRemovedFromEntityEvent args)
     {
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            if (sensor is not CEGOAPHasStatusEffectSensor statusSensor)
-                continue;
-
-            ent.Comp.WorldState[statusSensor.ConditionKey] =
-                _statusEffect.HasStatusEffect(ent, statusSensor.StatusEffect);
-        }
+        Evaluate(ent);
     }
 
-    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPHasStatusEffectSensor> args)
+    private void Evaluate(Entity<CEGOAPHasStatusEffectSensorComponent> ent)
     {
-        return _statusEffect.HasStatusEffect(ent, args.Sensor.StatusEffect);
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
+            return;
+
+        goap.WorldState[ent.Comp.ConditionKey] = _statusEffect.HasStatusEffect(ent.Owner, ent.Comp.StatusEffect);
     }
 }

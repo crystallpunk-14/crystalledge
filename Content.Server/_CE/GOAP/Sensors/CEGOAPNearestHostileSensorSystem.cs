@@ -6,6 +6,7 @@ using Content.Shared._CE.Health.Components;
 using Content.Shared.Examine;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -13,9 +14,20 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// Finds the nearest hostile entity within vision range with line-of-sight check.
 /// Sets the condition to true if a hostile is found and writes it to Targets[OutputTargetKey].
 /// </summary>
-public sealed partial class CEGOAPNearestHostileSensor : CEGOAPSensorBase<CEGOAPNearestHostileSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPNearestHostileSensorComponent : Component
 {
-    public override TimeSpan? UpdateInterval => TimeSpan.FromSeconds(0.5);
+    /// <summary>
+    /// World state key this sensor writes its result to.
+    /// </summary>
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
+    /// <summary>
+    /// Key in CEGOAPComponent.Targets to write the resolved target entity into.
+    /// </summary>
+    [DataField(required: true)]
+    public string OutputTargetKey = string.Empty;
 
     /// <summary>
     /// Detection range in tiles.
@@ -24,15 +36,20 @@ public sealed partial class CEGOAPNearestHostileSensor : CEGOAPSensorBase<CEGOAP
     public float VisionRadius = 10f;
 
     /// <summary>
-    /// Key in CEGOAPComponent.Targets to write the resolved target entity into.
+    /// How often this sensor is polled.
     /// </summary>
-    [DataField(required: true)]
-    public string OutputTargetKey = string.Empty;
+    [DataField]
+    public TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.5);
+
+    [ViewVariables]
+    public TimeSpan NextUpdateTime;
 }
 
-public sealed partial class CEGOAPNearestHostileSensorSystem
-    : CEGOAPSensorSystem<CEGOAPNearestHostileSensor>
+
+public sealed class CEGOAPNearestHostileSensorSystem : EntitySystem
 {
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly CEGOAPSystem _goap = default!;
     [Dependency] private readonly NpcFactionSystem _faction = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
@@ -40,20 +57,49 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
 
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
-    protected override bool? OnSensorUpdate(
-        Entity<CEGOAPComponent> ent,
-        ref CEGOAPSensorUpdateEvent<CEGOAPNearestHostileSensor> args)
+    public override void Initialize()
     {
-        if (!_xformQuery.TryGetComponent(ent, out var xform))
+        base.Initialize();
+
+        SubscribeLocalEvent<CEGOAPNearestHostileSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
+    }
+
+    public override void Update(float frameTime)
+    {
+        var curTime = _timing.CurTime;
+        var query = EntityQueryEnumerator<CEGOAPNearestHostileSensorComponent, CEGOAPComponent, CEActiveGOAPComponent>();
+        while (query.MoveNext(out var uid, out var sensor, out var goap, out _))
         {
-            Goap.SetTarget(ent, args.Sensor.OutputTargetKey, null);
-            return false;
+            if (curTime < sensor.NextUpdateTime)
+                continue;
+
+            sensor.NextUpdateTime = curTime + sensor.UpdateInterval;
+            Evaluate(uid, sensor, goap);
+        }
+    }
+
+    private void OnRefresh(Entity<CEGOAPNearestHostileSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
+    {
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
+            return;
+
+        Evaluate(ent, ent.Comp, goap);
+    }
+
+    private void Evaluate(EntityUid uid, CEGOAPNearestHostileSensorComponent sensor, CEGOAPComponent goap)
+    {
+        Entity<CEGOAPComponent> ent = (uid, goap);
+
+        if (!_xformQuery.TryGetComponent(uid, out var xform))
+        {
+            _goap.SetTarget(ent, sensor.OutputTargetKey, null);
+            goap.WorldState[sensor.ConditionKey] = false;
+            return;
         }
 
         var npcWorldPos = _transform.GetWorldPosition(xform);
-        Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> factionEnt =
-            (ent.Owner, null, null);
-        var hostiles = _faction.GetNearbyHostiles(factionEnt, args.Sensor.VisionRadius);
+        Entity<NpcFactionMemberComponent?, FactionExceptionComponent?> factionEnt = (uid, null, null);
+        var hostiles = _faction.GetNearbyHostiles(factionEnt, sensor.VisionRadius);
 
         EntityUid? closestTarget = null;
         var closestDistance = float.MaxValue;
@@ -69,15 +115,9 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
             if (distance >= closestDistance)
                 continue;
 
-            // Line-of-sight check
-            if (!_examine.InRangeUnOccluded(
-                    ent.Owner,
-                    targetUid,
-                    args.Sensor.VisionRadius + 0.5f))
+            if (!_examine.InRangeUnOccluded(uid, targetUid, sensor.VisionRadius + 0.5f))
                 continue;
 
-            // Only skip entities that explicitly have CEMobStateComponent and are NOT alive.
-            // Vanilla mobs (MobState only, no CEMobStateComponent) are treated as alive.
             if (TryComp<CEMobStateComponent>(targetUid, out var targetMobState)
                 && !_mobState.IsAlive(targetUid, targetMobState))
                 continue;
@@ -86,7 +126,7 @@ public sealed partial class CEGOAPNearestHostileSensorSystem
             closestTarget = targetUid;
         }
 
-        Goap.SetTarget(ent, args.Sensor.OutputTargetKey, closestTarget);
-        return closestTarget != null;
+        _goap.SetTarget(ent, sensor.OutputTargetKey, closestTarget);
+        goap.WorldState[sensor.ConditionKey] = closestTarget != null;
     }
 }

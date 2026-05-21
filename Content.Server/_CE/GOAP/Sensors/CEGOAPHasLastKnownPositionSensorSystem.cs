@@ -6,11 +6,14 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// <summary>
 /// Checks whether a last-known position exists for a given target key.
 /// Returns true if LastKnownPositions contains the key AND the target is currently lost.
-/// Event-driven: reacts to CETargetChangedEvent.
+/// Event-driven via CETargetChangedEvent on the GOAP entity.
 /// </summary>
-public sealed partial class CEGOAPHasLastKnownPositionSensor
-    : CEGOAPSensorBase<CEGOAPHasLastKnownPositionSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPHasLastKnownPositionSensorComponent : Component
 {
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
     /// <summary>
     /// The target key to check in LastKnownPositions.
     /// </summary>
@@ -18,47 +21,49 @@ public sealed partial class CEGOAPHasLastKnownPositionSensor
     public string PositionTargetKey = string.Empty;
 }
 
-public sealed partial class CEGOAPHasLastKnownPositionSensorSystem
-    : CEGOAPSensorSystem<CEGOAPHasLastKnownPositionSensor>
+public sealed class CEGOAPHasLastKnownPositionSensorSystem : EntitySystem
 {
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CEGOAPComponent, CETargetChangedEvent>(OnTargetChanged);
+
+        SubscribeLocalEvent<CEGOAPHasLastKnownPositionSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
+        SubscribeLocalEvent<CEGOAPHasLastKnownPositionSensorComponent, CETargetChangedEvent>(OnTargetChanged);
     }
 
-    private void OnTargetChanged(Entity<CEGOAPComponent> ent, ref CETargetChangedEvent args)
+    private void OnRefresh(Entity<CEGOAPHasLastKnownPositionSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
     {
-        foreach (var sensor in ent.Comp.Sensors)
+        Evaluate(ent);
+    }
+
+    private void OnTargetChanged(Entity<CEGOAPHasLastKnownPositionSensorComponent> ent, ref CETargetChangedEvent args)
+    {
+        if (ent.Comp.PositionTargetKey != args.TargetKey)
+            return;
+
+        Evaluate(ent);
+    }
+
+    private void Evaluate(Entity<CEGOAPHasLastKnownPositionSensorComponent> ent)
+    {
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
+            return;
+
+        var key = ent.Comp.PositionTargetKey;
+
+        if (!goap.LastKnownPositions.ContainsKey(key))
         {
-            if (sensor is not CEGOAPHasLastKnownPositionSensor lastPosSensor)
-                continue;
-
-            if (lastPosSensor.PositionTargetKey != args.TargetKey)
-                continue;
-
-            ent.Comp.WorldState[lastPosSensor.ConditionKey] = Evaluate(ent.Comp, lastPosSensor);
+            goap.WorldState[ent.Comp.ConditionKey] = false;
+            return;
         }
-    }
-
-    protected override bool? OnSensorUpdate(
-        Entity<CEGOAPComponent> ent,
-        ref CEGOAPSensorUpdateEvent<CEGOAPHasLastKnownPositionSensor> args)
-    {
-        return Evaluate(ent.Comp, args.Sensor);
-    }
-
-    private static bool Evaluate(CEGOAPComponent comp, CEGOAPHasLastKnownPositionSensor sensor)
-    {
-        var key = sensor.PositionTargetKey;
-
-        if (!comp.LastKnownPositions.ContainsKey(key))
-            return false;
 
         // Only true if the target is currently lost.
-        if (comp.Targets.TryGetValue(key, out var target) && target != null)
-            return false;
+        if (goap.Targets.TryGetValue(key, out var target) && target != null)
+        {
+            goap.WorldState[ent.Comp.ConditionKey] = false;
+            return;
+        }
 
-        return true;
+        goap.WorldState[ent.Comp.ConditionKey] = true;
     }
 }

@@ -8,53 +8,46 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// Event-driven sensor that sets a target when the GOAP entity takes damage and has no current target.
 /// Useful for allowing mobs to react to ranged attackers who are outside normal vision range.
 /// </summary>
-public sealed partial class CEGOAPAlertOnDamageSensor : CEGOAPSensorBase<CEGOAPAlertOnDamageSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPAlertOnDamageSensorComponent : Component
 {
     /// <summary>
-    /// Key in <see cref="CEGOAPComponent.Targets"/> to write the damage source into.
+    /// Key in CEGOAPComponent.Targets to write the damage source into.
     /// </summary>
     [DataField(required: true)]
     public string OutputTargetKey = string.Empty;
 
     /// <summary>
-    /// When true, only sets the target if there is no existing target for <see cref="OutputTargetKey"/>.
-    /// Set to false to always override the current target on damage.
+    /// When true, only sets the target if there is no existing target for OutputTargetKey.
     /// </summary>
     [DataField]
     public bool OnlyWhenNoTarget = true;
 }
 
-public sealed partial class CEGOAPAlertOnDamageSensorSystem : CEGOAPSensorSystem<CEGOAPAlertOnDamageSensor>
+public sealed class CEGOAPAlertOnDamageSensorSystem : EntitySystem
 {
-    [Dependency] private readonly EntityQuery<CEGOAPComponent> _goapQuery = default!;
+    [Dependency] private readonly CEGOAPSystem _goap = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        // TODO: OK we really need redesign GOAP sensors at that point, multiple sensors wanna subscribes to same events.
-        SubscribeLocalEvent<CEDamageChangedEvent>(OnDamage);
+        SubscribeLocalEvent<CEGOAPAlertOnDamageSensorComponent, CEDamageChangedEvent>(OnDamage);
     }
 
-    private void OnDamage(CEDamageChangedEvent args)
+    private void OnDamage(Entity<CEGOAPAlertOnDamageSensorComponent> ent, ref CEDamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.Source is not { } source)
             return;
 
-        if (!_goapQuery.TryGetComponent(args.Target, out var goap))
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        Entity<CEGOAPComponent> ent = (args.Target, goap);
+        Entity<CEGOAPComponent> goapEnt = (ent.Owner, goap);
 
-        foreach (var sensor in goap.Sensors)
-        {
-            if (sensor is not CEGOAPAlertOnDamageSensor alertSensor)
-                continue;
+        if (ent.Comp.OnlyWhenNoTarget && _goap.GetTarget(goapEnt, ent.Comp.OutputTargetKey) != null)
+            return;
 
-            if (alertSensor.OnlyWhenNoTarget && Goap.GetTarget(ent, alertSensor.OutputTargetKey) != null)
-                continue;
-
-            Goap.SetTarget(ent, alertSensor.OutputTargetKey, source);
-        }
+        _goap.SetTarget(goapEnt, ent.Comp.OutputTargetKey, source);
     }
 }

@@ -139,28 +139,25 @@
       effects:
         EnemyInMeleeRange: true
 
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
-    - !type:CEGOAPCheckManaLevelSensor
-      targetKey: self
-      threshold: 0.3
-      conditionKey: LowMana
-    - !type:CEGOAPCheckHealthLevelSensor
-      targetKey: self
-      conditionKey: LowHealth
-      threshold: 0.8
+  - type: CEGOAPNearestHostileSensor
+    conditionKey: EnemyVisible
+    outputTargetKey: enemy
+    visionRadius: 8
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyInMeleeRange
+    targetKey: enemy
+    range: 1.5
+  - type: CEGOAPHasLastKnownPositionSensor
+    conditionKey: HasEnemyLastPos
+    positionTargetKey: enemy
+  - type: CEGOAPAlarmSensor
+    outputTargetKey: enemy
+  - type: CEGOAPCheckManaLevelSensor
+    threshold: 0.3
+    conditionKey: LowMana
+  - type: CEGOAPCheckHealthLevelSensor
+    conditionKey: LowHealth
+    threshold: 0.8
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 4.5

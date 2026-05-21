@@ -123,21 +123,19 @@
       preconditions:
         HasEnemyLastPos: true
       cost: 0.5
-
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 2.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
+  - type: CEGOAPNearestHostileSensor
+    conditionKey: EnemyVisible
+    outputTargetKey: enemy
+    visionRadius: 8
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyInMeleeRange
+    targetKey: enemy
+    range: 2.5
+  - type: CEGOAPHasLastKnownPositionSensor
+    conditionKey: HasEnemyLastPos
+    positionTargetKey: enemy
+  - type: CEGOAPAlarmSensor
+    outputTargetKey: enemy
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 2

@@ -5,11 +5,15 @@ using Content.Shared._CE.Health;
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Checks if the entity's own health is below a threshold.
-/// Compares accumulated damage against the critical threshold.
+/// Checks if the entity's own health fraction is below a threshold.
+/// Event-driven via CEDamageChangedEvent.
 /// </summary>
-public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensorBase<CEGOAPCheckHealthLevelSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component
 {
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
     /// <summary>
     /// Health fraction (0..1) below which the condition is set to true.
     /// </summary>
@@ -17,34 +21,34 @@ public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensorBase<CEGO
     public float Threshold = 0.5f;
 }
 
-public sealed partial class CEGOAPCheckHealthLevelSensorSystem : CEGOAPSensorSystem<CEGOAPCheckHealthLevelSensor>
+public sealed class CEGOAPCheckHealthLevelSensorSystem : EntitySystem
 {
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CEGOAPComponent, CEDamageChangedEvent>(OnDamageChanged);
+
+        SubscribeLocalEvent<CEGOAPCheckHealthLevelSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
+        SubscribeLocalEvent<CEGOAPCheckHealthLevelSensorComponent, CEDamageChangedEvent>(OnDamageChanged);
     }
 
-    /// <summary>
-    /// Event-driven update: fires when damage changes on an entity with GOAP.
-    /// </summary>
-    private void OnDamageChanged(Entity<CEGOAPComponent> ent, ref CEDamageChangedEvent args)
+    private void OnRefresh(Entity<CEGOAPCheckHealthLevelSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
     {
-        var fraction = _damageable.GetHealthInfo(ent).Ratio;
-
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            if (sensor is not CEGOAPCheckHealthLevelSensor healthSensor)
-                continue;
-
-            ent.Comp.WorldState[healthSensor.ConditionKey] = fraction < healthSensor.Threshold;
-        }
+        Evaluate(ent);
     }
 
-    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckHealthLevelSensor> args)
+    private void OnDamageChanged(Entity<CEGOAPCheckHealthLevelSensorComponent> ent, ref CEDamageChangedEvent args)
     {
-        return _damageable.GetHealthInfo(ent).Ratio < args.Sensor.Threshold;
+        Evaluate(ent);
+    }
+
+    private void Evaluate(Entity<CEGOAPCheckHealthLevelSensorComponent> ent)
+    {
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
+            return;
+
+        var fraction = _damageable.GetHealthInfo(ent.Owner).Ratio;
+        goap.WorldState[ent.Comp.ConditionKey] = fraction < ent.Comp.Threshold;
     }
 }

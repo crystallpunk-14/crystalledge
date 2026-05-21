@@ -13,6 +13,5 @@
     souls: 25
     scatterSpeed: 50
   - type: CEGOAP
-    sensors:
-    - !type:CEGOAPAlertOnDamageSensor
-      outputTargetKey: enemy
+  - type: CEGOAPAlertOnDamageSensor
+    outputTargetKey: enemy

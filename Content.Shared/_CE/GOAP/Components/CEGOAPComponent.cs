@@ -33,13 +33,6 @@ public sealed partial class CEGOAPComponent : Component
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
-    /// Sensors that update the world state each frame.
-    /// </summary>
-    [DataField(serverOnly: true)]
-    [AlwaysPushInheritance]
-    public List<CEGOAPSensor> Sensors = new();
-
-    /// <summary>
     /// Named targets resolved by sensors.
     /// Keys are logical target names (e.g. "enemy"), values are resolved entity UIDs.
     /// </summary>

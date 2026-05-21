@@ -63,18 +63,17 @@
         EnemyDead: true
       cost: 1
       actionPrototype: CEActionFireConstructExplosion
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
+  - type: CEGOAPNearestHostileSensor
+    conditionKey: EnemyVisible
+    outputTargetKey: enemy
+    visionRadius: 8
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyInMeleeRange
+    targetKey: enemy
+    range: 1.5
+  - type: CEGOAPHasLastKnownPositionSensor
+    conditionKey: HasEnemyLastPos
+    positionTargetKey: enemy
 
   - type: NpcFactionMember
     factions:
