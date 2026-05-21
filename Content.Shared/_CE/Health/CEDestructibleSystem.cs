@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.EntityTable;
 using Content.Shared.Hands.Components;
@@ -124,7 +125,11 @@ public sealed class CEDestructibleSystem : EntitySystem
                 var spawns = _entityTable.GetSpawns(comp.LootTable);
                 foreach (var spawn in spawns)
                 {
-                    var spawnedLoot = SpawnAtPosition(spawn, position);
+                    var offset = new Vector2(
+                        _random.NextFloat(-comp.SpawnOffset, comp.SpawnOffset),
+                        _random.NextFloat(-comp.SpawnOffset, comp.SpawnOffset)
+                        );
+                    var spawnedLoot = SpawnAtPosition(spawn, position.Offset(offset));
                     ScatterDroppedItem(spawnedLoot, position);
                 }
             }

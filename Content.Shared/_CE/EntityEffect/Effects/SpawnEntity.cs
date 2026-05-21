@@ -1,3 +1,5 @@
+using System.Numerics;
+using Content.Shared.Directions;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
@@ -10,6 +12,9 @@ public sealed partial class SpawnEntity : CEEntityEffectBase<SpawnEntity>
 
     [DataField]
     public bool Reparent;
+
+    [DataField]
+    public Vector2 Offset = new(0, 0);
 }
 
 public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<SpawnEntity>
@@ -27,7 +32,7 @@ public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<Spa
 
         foreach (var spawn in args.Effect.Spawns)
         {
-            var spawned = SpawnAtPosition(spawn, coords);
+            var spawned = SpawnAtPosition(spawn, coords.Offset(args.Effect.Offset));
 
             if (args.Effect.Reparent && args.Args.Target != null)
                 _transform.SetParent(spawned, args.Args.Target.Value);

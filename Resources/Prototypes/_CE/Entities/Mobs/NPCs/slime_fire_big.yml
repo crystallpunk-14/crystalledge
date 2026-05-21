@@ -22,6 +22,8 @@
       params:
         variation: 0.1
         pitch: 0.6
+  - type: CESpawnAnimation
+    animation: BigFireSlimeSpawn
   - type: CEAnimationController
   - type: CEIdleAnimation
     animation:
@@ -52,6 +54,11 @@
       radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
+    - !type:AreaEffect
+      range: 1
+      effects:
+      - !type:ThrowFromUser
+        distance: 1
   - type: CEGOAP
 
     goals:
@@ -186,3 +193,27 @@
     1.0:
     - !type:WeaponEffectSlot
       slot: OnHit
+
+
+- type: entityEffectAnimation
+  id: BigFireSlimeSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectFireCreation
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 4.0, 0.1
+      - time: 0.9
+        scale: 2.0, 2.0
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"
