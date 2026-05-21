@@ -1,4 +1,5 @@
 using Content.Server._CE.GOAP;
+using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.Boss;
 using Content.Shared._CE.Boss.Components;
 using Content.Shared._CE.EntityEffect;
@@ -13,7 +14,7 @@ public sealed class CEBossSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEBossComponent, CETargetChangedEvent>(OnTargetChanged);
+        SubscribeLocalEvent<CEBossComponent, CEGOAPEnemyAcquiredEvent>(OnEnemyAcquired);
         SubscribeLocalEvent<CEBossComponent, CEDestructedEvent>(OnDestructed);
 
         SubscribeLocalEvent<CEBossBattleStartedEvent>(OnStartFight);
@@ -70,7 +71,7 @@ public sealed class CEBossSystem : EntitySystem
         }
     }
 
-    private void OnTargetChanged(Entity<CEBossComponent> ent, ref CETargetChangedEvent args)
+    private void OnEnemyAcquired(Entity<CEBossComponent> ent, ref CEGOAPEnemyAcquiredEvent args)
     {
         if (ent.Comp.StartedFight)
             return;

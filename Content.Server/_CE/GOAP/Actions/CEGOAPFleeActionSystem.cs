@@ -42,11 +42,14 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPFleeAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null)
+        if (args.Action.Selector == null)
             return;
 
-        FindAndRegisterFleeTarget(ent, target.Value, args.Action);
+        var result = args.Action.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
+            return;
+
+        FindAndRegisterFleeTarget(ent, target, args.Action);
         _nextRecalc[ent] = _timing.CurTime + TimeSpan.FromSeconds(args.Action.RecalculateInterval);
     }
 
@@ -54,8 +57,14 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPFleeAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null)
+        if (args.Action.Selector == null)
+        {
+            args.Status = CEGOAPActionStatus.Finished;
+            return;
+        }
+
+        var result = args.Action.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;
@@ -70,7 +79,7 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         // Recalculate flee destination periodically.
         if (_timing.CurTime >= _nextRecalc.GetValueOrDefault(ent))
         {
-            FindAndRegisterFleeTarget(ent, target.Value, args.Action);
+            FindAndRegisterFleeTarget(ent, target, args.Action);
             _nextRecalc[ent] = _timing.CurTime + TimeSpan.FromSeconds(args.Action.RecalculateInterval);
         }
 

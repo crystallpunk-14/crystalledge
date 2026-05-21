@@ -78,7 +78,7 @@
 
     actions:
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -86,7 +86,7 @@
       cost: 1
       range: 2.5
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -94,7 +94,7 @@
       cost: 1
       actionPrototype: CEActionGiantSlimeSplashAttack
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -103,7 +103,7 @@
       cost: 1
       actionPrototype: CEActionGiantSlimeSpreadShot
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -116,16 +116,9 @@
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
   - type: CEGOAPRangeToTargetSensor
     conditionKey: EnemyInMeleeRange
-    targetKey: enemy
+    selector: !type:CEGOAPSelectorNearestEnemy
     range: 2.5
 
   - type: MovementSpeedModifier

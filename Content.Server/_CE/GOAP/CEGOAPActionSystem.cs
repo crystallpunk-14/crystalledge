@@ -1,5 +1,7 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
+using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP;
 
@@ -10,6 +12,7 @@ namespace Content.Server._CE.GOAP;
 public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEGOAPActionBase<T>
 {
     [Dependency] protected readonly CEGOAPSystem Goap = default!;
+    [Dependency] private readonly EntityQuery<TransformComponent> _coordsXformQuery = default!;
 
     public override void Initialize()
     {
@@ -57,5 +60,31 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
     /// </summary>
     protected virtual void OnActionShutdown(Entity<CEGOAPComponent> ent, ref CEGOAPActionShutdownEvent<T> args)
     {
+    }
+
+    /// <summary>
+    /// Resolves a <see cref="CEGOAPTargetSelector"/> to world coordinates.
+    /// Prefers the resolved entity's transform, falling back to a raw position.
+    /// </summary>
+    protected bool TryResolveCoords(EntityUid agent, CEGOAPTargetSelector? selector, out EntityCoordinates coords)
+    {
+        coords = default;
+        if (selector == null)
+            return false;
+
+        var result = selector.Resolve(agent, EntityManager);
+        if (result.Entity is { } e && _coordsXformQuery.TryGetComponent(e, out var xform))
+        {
+            coords = xform.Coordinates;
+            return true;
+        }
+
+        if (result.Position is { } p)
+        {
+            coords = p;
+            return true;
+        }
+
+        return false;
     }
 }

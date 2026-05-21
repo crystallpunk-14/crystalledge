@@ -1,11 +1,13 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Checks if the current target is within a specified range.
+/// Checks if a selector-resolved target is within a specified range.
 /// </summary>
 [RegisterComponent]
 public sealed partial class CEGOAPRangeToTargetSensorComponent : Component
@@ -14,7 +16,7 @@ public sealed partial class CEGOAPRangeToTargetSensorComponent : Component
     public string ConditionKey = string.Empty;
 
     [DataField(required: true)]
-    public string TargetKey = string.Empty;
+    public CEGOAPTargetSelector Selector = default!;
 
     /// <summary>
     /// Range threshold in tiles.
@@ -32,7 +34,6 @@ public sealed partial class CEGOAPRangeToTargetSensorComponent : Component
 public sealed class CEGOAPRangeToTargetSensorSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
 
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
@@ -67,23 +68,22 @@ public sealed class CEGOAPRangeToTargetSensorSystem : EntitySystem
 
     private void Evaluate(EntityUid uid, CEGOAPRangeToTargetSensorComponent sensor, CEGOAPComponent goap)
     {
-        Entity<CEGOAPComponent> ent = (uid, goap);
+        var result = sensor.Selector.Resolve(uid, EntityManager);
 
-        var target = _goap.GetTarget(ent, sensor.TargetKey);
-        if (target == null)
+        if (!_xformQuery.TryGetComponent(uid, out var xform))
         {
             goap.WorldState[sensor.ConditionKey] = false;
             return;
         }
 
-        if (!_xformQuery.TryGetComponent(uid, out var xform) ||
-            !_xformQuery.TryGetComponent(target.Value, out var targetXform))
-        {
-            goap.WorldState[sensor.ConditionKey] = false;
-            return;
-        }
+        EntityCoordinates? targetCoords = null;
+        if (result.Entity is { } e && _xformQuery.TryGetComponent(e, out var ex))
+            targetCoords = ex.Coordinates;
+        else if (result.Position is { } p)
+            targetCoords = p;
 
-        if (!xform.Coordinates.TryDistance(EntityManager, targetXform.Coordinates, out var distance))
+        if (targetCoords is not { } coords ||
+            !xform.Coordinates.TryDistance(EntityManager, coords, out var distance))
         {
             goap.WorldState[sensor.ConditionKey] = false;
             return;
@@ -92,3 +92,4 @@ public sealed class CEGOAPRangeToTargetSensorSystem : EntitySystem
         goap.WorldState[sensor.ConditionKey] = distance <= sensor.Range;
     }
 }
+

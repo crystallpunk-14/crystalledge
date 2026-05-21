@@ -1,11 +1,12 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Checks if the current target is incapacitated (critical or dead).
+/// Checks if a selector-resolved target is incapacitated (critical or dead).
 /// Event-driven via CEGOAPTargetComponent: reacts to CEMobStateChangedEvent on tracked targets.
 /// </summary>
 [RegisterComponent]
@@ -15,12 +16,11 @@ public sealed partial class CEGOAPTargetIsDownSensorComponent : Component
     public string ConditionKey = string.Empty;
 
     [DataField(required: true)]
-    public string TargetKey = string.Empty;
+    public CEGOAPTargetSelector Selector = default!;
 }
 
 public sealed class CEGOAPTargetIsDownSensorSystem : EntitySystem
 {
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
     [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     public override void Initialize()
@@ -41,7 +41,7 @@ public sealed class CEGOAPTargetIsDownSensorSystem : EntitySystem
 
     private void OnTargetMobStateChanged(Entity<CEGOAPTargetComponent> ent, ref CEMobStateChangedEvent args)
     {
-        foreach (var (goapUid, keys) in ent.Comp.Trackers)
+        foreach (var goapUid in ent.Comp.Trackers)
         {
             if (!TryComp<CEGOAPComponent>(goapUid, out var goap))
                 continue;
@@ -49,16 +49,14 @@ public sealed class CEGOAPTargetIsDownSensorSystem : EntitySystem
             if (!TryComp<CEGOAPTargetIsDownSensorComponent>(goapUid, out var sensor))
                 continue;
 
-            if (!keys.Contains(sensor.TargetKey))
-                continue;
-
-            goap.WorldState[sensor.ConditionKey] = !_mobState.IsAlive(ent.Owner);
+            Evaluate((goapUid, goap), sensor);
         }
     }
 
     private void Evaluate(Entity<CEGOAPComponent> ent, CEGOAPTargetIsDownSensorComponent sensor)
     {
-        var target = _goap.GetTarget(ent, sensor.TargetKey);
-        ent.Comp.WorldState[sensor.ConditionKey] = target != null && !_mobState.IsAlive(target.Value);
+        var result = sensor.Selector.Resolve(ent, EntityManager);
+        ent.Comp.WorldState[sensor.ConditionKey] = result.Entity is { } target && !_mobState.IsAlive(target);
     }
 }
+

@@ -33,19 +33,6 @@ public sealed partial class CEGOAPComponent : Component
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
-    /// Named targets resolved by sensors.
-    /// Keys are logical target names (e.g. "enemy"), values are resolved entity UIDs.
-    /// </summary>
-    [ViewVariables]
-    public Dictionary<string, EntityUid?> Targets = new();
-
-    /// <summary>
-    /// Last known coordinates for each target key
-    /// </summary>
-    [ViewVariables]
-    public Dictionary<string, EntityCoordinates> LastKnownPositions = new();
-
-    /// <summary>
     /// Knowledge store populated by perceptors. Maps perceived entities to their
     /// last known state (position, time, source, expiry).
     /// </summary>

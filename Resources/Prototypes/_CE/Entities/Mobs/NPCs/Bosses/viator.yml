@@ -84,14 +84,14 @@
 
     actions:
     - !type:CEGOAPUseAction
-      targetKey: self
+      selector: !type:CEGOAPSelectorSelf
       preconditions:
         LowMana: false
       effects:
         LowHealth: false
       actionPrototype: CEActionViatorSelfHeal
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         LowMana: true
@@ -99,7 +99,7 @@
         LowMana: false
       actionPrototype: CEActionViatorManaSteal
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         LowMana: false
@@ -107,14 +107,14 @@
         EnemyDead: true
       actionPrototype: CEActionViatorIcicles
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
         EnemyDead: true
       actionPrototype: CEActionViatorMelee
     - !type:CEGOAPFleeAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -127,15 +127,8 @@
       cost: 1
       exploreRadius: 8
     # Move to enemy's last known position
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      preconditions:
-        HasEnemyLastPos: true
-      effects:
-        EnemyVisible: true
-      cost: 0.5
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       effects:
         EnemyInMeleeRange: true
 

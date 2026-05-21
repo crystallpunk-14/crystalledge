@@ -108,7 +108,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
-        CleanupTrackers(ent);
         ClearPlan(ent);
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);

@@ -2,6 +2,8 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
+using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP.Actions;
 
@@ -30,25 +32,16 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
 {
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
 
-    private EntityQuery<TransformComponent> _xformQuery;
-    private EntityQuery<NPCSteeringComponent> _steeringQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-        _steeringQuery = GetEntityQuery<NPCSteeringComponent>();
-    }
+    [Dependency] private readonly EntityQuery<NPCSteeringComponent> _steeringQuery = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPMoveToTargetAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
+        if (!TryResolveCoords(ent, args.Action.Selector, out var coords))
             return;
 
-        var comp = _steering.Register(ent, targetXform.Coordinates);
+        var comp = _steering.Register(ent, coords);
         comp.Range = args.Action.Range;
     }
 
@@ -56,14 +49,7 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMoveToTargetAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null)
-        {
-            args.Status = CEGOAPActionStatus.Failed;
-            return;
-        }
-
-        if (!_xformQuery.TryGetComponent(target.Value, out var targetXform))
+        if (!TryResolveCoords(ent, args.Action.Selector, out var targetCoords))
         {
             args.Status = CEGOAPActionStatus.Failed;
             return;
@@ -72,10 +58,10 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
         // Re-register steering if target has moved significantly
         if (_steeringQuery.TryComp(ent, out var steering))
         {
-            if (steering.Coordinates.TryDistance(EntityManager, targetXform.Coordinates, out var delta)
+            if (steering.Coordinates.TryDistance(EntityManager, targetCoords, out var delta)
                 && delta > args.Action.ReregisterThreshold)
             {
-                var comp = _steering.Register(ent, targetXform.Coordinates);
+                var comp = _steering.Register(ent, targetCoords);
                 comp.Range = args.Action.Range;
             }
 

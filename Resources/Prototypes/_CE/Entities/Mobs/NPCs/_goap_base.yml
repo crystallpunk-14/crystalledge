@@ -4,6 +4,7 @@
   categories: [ ForkFiltered ]
   components:
   - type: CEGOAP
+  - type: CEGOAPKnowledgeCache
   - type: CEGOAPEyesPerceptor
     visionRadius: 8
     memoryDuration: 60
@@ -11,13 +12,9 @@
     memoryDuration: 10
   - type: CEGOAPPainPerceptor
     memoryDuration: 15
-  - type: CEGOAPNearestHostileSensor
+  - type: CEGOAPHasEnemySensor
     conditionKey: EnemyVisible
-    outputTargetKey: enemy
   - type: CEGOAPRangeToTargetSensor
     conditionKey: EnemyInMeleeRange
-    targetKey: enemy
+    selector: !type:CEGOAPSelectorNearestEnemy
     range: 1.5
-  - type: CEGOAPHasLastKnownPositionSensor
-    conditionKey: HasEnemyLastPos
-    positionTargetKey: enemy

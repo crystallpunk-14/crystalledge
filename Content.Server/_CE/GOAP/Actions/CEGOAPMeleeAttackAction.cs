@@ -58,8 +58,11 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     {
         _combatMode.SetInCombatMode(ent, true);
 
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null || !_xformQuery.TryGetComponent(target.Value, out var targetXform))
+        if (args.Action.Selector == null)
+            return;
+
+        var result = args.Action.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target || !_xformQuery.TryGetComponent(target, out var targetXform))
             return;
 
         // Use absolute coordinates for proper pathfinding
@@ -71,15 +74,21 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPMeleeAttackAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null)
+        if (args.Action.Selector == null)
+        {
+            args.Status = CEGOAPActionStatus.Failed;
+            return;
+        }
+
+        var result = args.Action.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
         {
             args.Status = CEGOAPActionStatus.Failed;
             return;
         }
 
         // Check if target is neutralized
-        if (TryComp<CEMobStateComponent>(target.Value, out var targetMobState) && !_mobState.IsAlive(target.Value, targetMobState))
+        if (TryComp<CEMobStateComponent>(target, out var targetMobState) && !_mobState.IsAlive(target, targetMobState))
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;
@@ -92,7 +101,7 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         }
 
         if (!_xformQuery.TryGetComponent(ent, out var xform) ||
-            !_xformQuery.TryGetComponent(target.Value, out var targetXform))
+            !_xformQuery.TryGetComponent(target, out var targetXform))
         {
             args.Status = CEGOAPActionStatus.Failed;
             return;
