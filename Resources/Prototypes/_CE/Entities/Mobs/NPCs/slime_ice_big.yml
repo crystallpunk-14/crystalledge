@@ -3,9 +3,9 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
-  id: CEMobSlimeFireBig
-  name: big fire slime
-  description: TODO
+  id: CEMobSlimeIceBig
+  name: big ice slime
+  description: A large wobbly blob of animated ice. Shatters into smaller ice slimes when destroyed.
   categories: [ ForkFiltered ]
   components:
   - type: Sprite
@@ -15,7 +15,7 @@
     layers:
     - map: [ "base", "movement" ]
       state: base
-      color: "#ff4a08"
+      color: "#a0e8ff"
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg
@@ -23,7 +23,7 @@
         variation: 0.1
         pitch: 0.6
   - type: CESpawnAnimation
-    animation: BigFireSlimeSpawn
+    animation: BigIceSlimeSpawn
   - type: CEAnimationController
   - type: CEIdleAnimation
     animation:
@@ -38,19 +38,19 @@
     destroyThreshold: 75
     lootTable: !type:AllSelector
       children:
-      - id: CEMobSlimeFire
+      - id: CEMobSlimeIce
         amount: 2
         prob: 1
-      - id: CEMobSlimeFire
+      - id: CEMobSlimeIce
         amount: 1
         prob: 0.25
-      - id: CEMobSlimeFire
+      - id: CEMobSlimeIce
         amount: 1
         prob: 0.25
   - type: CEDestructionEffect
     effects:
     - !type:CETileAffectArea
-      tileEffect: CETileEffectFire
+      tileEffect: CETileEffectFreeze
       radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
@@ -116,7 +116,7 @@
     factions:
     - SimpleHostile
   - type: PointLight
-    color: "#ff4a08"
+    color: "#6ec6ff"
     radius: 4
     energy: 4.0
   - type: MovementSpeedModifier
@@ -126,7 +126,7 @@
     effectSlots:
       OnHit:
       - !type:CETileAffectArea
-        tileEffect: CETileEffectFire
+        tileEffect: CETileEffectFreeze
         effectTarget: User
         radius: 2
         maxStacks: 5
@@ -138,31 +138,31 @@
           attackType: Melee
           damage:
             types:
-              Fire: 15
+              Cold: 15
         - !type:ThrowFromUser
           distance: 1
     animations:
       Primary:
-      - anim: BigSlimeFireAttack
+      - anim: BigSlimeIceAttack
   - type: CEArmor
     flat:
-      Fire: 100
+      Cold: 100
 
 - type: entityEffectAnimation
-  id: BigSlimeFireAttack
+  id: BigSlimeIceAttack
   movementSpeed: 0
   duration: 1.5
   events:
     0:
     - !type:PlaySound
       sound:
-        path: /Audio/_CE/Effects/fire_whoosh.ogg
+        path: /Audio/_CE/Effects/ice_burst.ogg
         params:
           variation: 0.1
           pitch: 0.6
     - !type:SpawnEntity
       spawns:
-      - CEEffectPotionAlchemicalFire
+      - CEEffectFrostFlowTelegraphy
     - !type:UserAnimation
       scaleAnimation:
       - time: 0.0
@@ -196,7 +196,7 @@
 
 
 - type: entityEffectAnimation
-  id: BigFireSlimeSpawn
+  id: BigIceSlimeSpawn
   movementSpeed: 0
   duration: 1
   events:
@@ -205,7 +205,7 @@
       reparent: true
       effectTarget: User
       spawns:
-      - CEEffectFireCreation
+      - CEEffectHealingFrostVFX
     - !type:UserAnimation
       scaleAnimation:
       - time: 0.0

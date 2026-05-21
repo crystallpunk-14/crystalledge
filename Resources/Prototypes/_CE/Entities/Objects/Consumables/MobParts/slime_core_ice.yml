@@ -1,0 +1,38 @@
+- type: entity
+  id: CEConsumableSlimeCoreIce
+  parent: BaseItem
+  categories: [ ForkFiltered ]
+  name: Ice slime core
+  description: A pulsating core from an ice slime. It chills the surrounding air. It seems fragile.
+  components:
+  - type: Item
+    size: Tiny
+  - type: CEDamageable
+  - type: CEDamageOnLand
+    damage:
+      types:
+        Physical: 1
+  - type: CEDestructible
+    destroyThreshold: 1
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/slimecore.rsi
+    layers:
+    - state: base3
+      color: "#a0e8ff"
+  - type: CEConsumable
+    useDelay: 1.5
+    useSound:
+      path: /Audio/_CE/Effects/ice_burst.ogg
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectColdSlowdown
+      amount: 6
+  - type: CEDestructionEffect
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      radius: 1
+      maxStacks: 3
+  - type: CEArmor
+    flat:
+      Cold: 100

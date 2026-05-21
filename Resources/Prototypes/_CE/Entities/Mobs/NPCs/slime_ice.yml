@@ -3,69 +3,55 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
-  id: CEMobSlimeFireBig
-  name: big fire slime
-  description: TODO
+  id: CEMobSlimeIce
+  name: ice slime
+  description: A wobbly blob of animated ice. Shatters into a burst of frost when destroyed.
   categories: [ ForkFiltered ]
   components:
   - type: Sprite
     drawdepth: Mobs
-    scale: 2, 2
     sprite: _CE/Mobs/slime.rsi
     layers:
     - map: [ "base", "movement" ]
       state: base
-      color: "#ff4a08"
+      color: "#a0e8ff"
+      shader: unshaded
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
-        pitch: 0.6
   - type: CESpawnAnimation
-    animation: BigFireSlimeSpawn
+    animation: IceSlimeSpawn
   - type: CEAnimationController
   - type: CEIdleAnimation
     animation:
       scaleAnimation:
       - time: 0.0
-        scale: 2.1, 1.9
+        scale: 1.1, 0.9
       - time: 0.5
-        scale: 1.9, 2.1
+        scale: 0.9, 1.1
       - time: 1.0
-        scale: 2.1, 1.9
+        scale: 1.1, 0.9
   - type: CEDestructible
-    destroyThreshold: 75
+    destroyThreshold: 25
     lootTable: !type:AllSelector
       children:
-      - id: CEMobSlimeFire
-        amount: 2
-        prob: 1
-      - id: CEMobSlimeFire
+      - id: CEConsumableSlimeCoreIce
         amount: 1
-        prob: 0.25
-      - id: CEMobSlimeFire
-        amount: 1
-        prob: 0.25
+        prob: 0.75
   - type: CEDestructionEffect
     effects:
     - !type:CETileAffectArea
-      tileEffect: CETileEffectFire
+      tileEffect: CETileEffectFreeze
       radius: 1
-      maxStacks: 10
+      maxStacks: 4
       fallOffFactor: 0.5
-    - !type:AreaEffect
-      range: 1
-      effects:
-      - !type:ThrowFromUser
-        distance: 1
   - type: CEGOAP
-
     goals:
     - desiredState:
         EnemyDead: true
       priority: 1
-
     actions:
     - !type:CEGOAPMoveToTargetAction
       targetKey: enemy
@@ -84,6 +70,15 @@
       cost: 1
       useType: Primary
       angleVariation: 5
+    - !type:CEGOAPUseAction
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyInMeleeRange: true
+      cost: 0.5
+      actionPrototype: CEActionIceSlimeJump
     - !type:CEGOAPExploreAction
       effects:
         EnemyVisible: true
@@ -96,7 +91,6 @@
       preconditions:
         HasEnemyLastPos: true
       cost: 0.5
-
     sensors:
     - !type:CEGOAPNearestHostileSensor
       conditionKey: EnemyVisible
@@ -111,92 +105,90 @@
       positionTargetKey: enemy
     - !type:CEGOAPAlarmSensor
       outputTargetKey: enemy
-
   - type: NpcFactionMember
     factions:
     - SimpleHostile
   - type: PointLight
-    color: "#ff4a08"
-    radius: 4
-    energy: 4.0
+    color: "#6ec6ff"
+    radius: 2
+    energy: 2.0
   - type: MovementSpeedModifier
-    baseSprintSpeed: 0.75
+    baseSprintSpeed: 1.5
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
       OnHit:
-      - !type:CETileAffectArea
-        tileEffect: CETileEffectFire
-        effectTarget: User
-        radius: 2
-        maxStacks: 5
       - !type:WeaponArcAttack
-        range: 0.9
-        arcWidth: 360
+        range: 0.5
+        arcWidth: 40
         effects:
         - !type:Damage
           attackType: Melee
           damage:
             types:
-              Fire: 15
-        - !type:ThrowFromUser
-          distance: 1
+              Cold: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectColdSlowdown
+          amount: 1
+          max: 3
     animations:
       Primary:
-      - anim: BigSlimeFireAttack
+      - anim: SlimeBite
   - type: CEArmor
     flat:
-      Fire: 100
+      Cold: 100
+
+# -- Slime Jump (leap toward target) --
+
+- type: entity
+  id: CEActionIceSlimeJump
+  name: ice slime jump
+  description: The slime leaps toward a target.
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 1
+  - type: Action
+    useDelay: 6
+  - type: TargetAction
+    range: 8
+    interactOnMiss: false
+  - type: EntityTargetAction
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: IceSlimeJump
 
 - type: entityEffectAnimation
-  id: BigSlimeFireAttack
+  id: IceSlimeJump
   movementSpeed: 0
-  duration: 1.5
+  duration: 1
   events:
     0:
     - !type:PlaySound
       sound:
-        path: /Audio/_CE/Effects/fire_whoosh.ogg
+        path: /Audio/_CE/Effects/ice_burst.ogg
         params:
           variation: 0.1
-          pitch: 0.6
-    - !type:SpawnEntity
-      spawns:
-      - CEEffectPotionAlchemicalFire
-    - !type:UserAnimation
-      scaleAnimation:
-      - time: 0.0
-        scale: 2.4, 1.6
-        easing: QuadOut
-      - time: 0.25
-        scale: 1.6, 2.4
-        easing: QuadOut
-      - time: 0.65
-        scale: 1.6, 2.4
-      - time: 0.9
-        scale: 2.4, 1.6
-        easing: QuadIn
-      - time: 1.1
-        scale: 2, 2
-        easing: QuadOut
-      offsetAnimation:
-      - time: 0.0
-        offset: 0, 0
-      - time: 0.25
-        offset: 0, 0.4
-        easing: QuadOut
-      - time: 0.65
-        offset: 0, 0.4
-      - time: 0.9
-        offset: 0, 0
-        easing: QuadIn
-    1.0:
-    - !type:WeaponEffectSlot
-      slot: OnHit
-
+    0.4:
+    - !type:Dash
+      distance: 4
+      speed: 8
+    0.65:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/ice_burst.ogg
+        params:
+          variation: 0.1
+          pitch: 1.2
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      effectTarget: User
+      radius: 1
+      maxStacks: 3
+      fallOffFactor: 1
 
 - type: entityEffectAnimation
-  id: BigFireSlimeSpawn
+  id: IceSlimeSpawn
   movementSpeed: 0
   duration: 1
   events:
@@ -205,13 +197,13 @@
       reparent: true
       effectTarget: User
       spawns:
-      - CEEffectFireCreation
+      - CEEffectHealingFrostVFX
     - !type:UserAnimation
       scaleAnimation:
       - time: 0.0
-        scale: 4.0, 0.1
+        scale: 2.0, 0.1
       - time: 0.9
-        scale: 2.0, 2.0
+        scale: 1.0, 1.0
       colorAnimation:
       - time: 0.0
         color: "#ffffff01"
