@@ -139,19 +139,6 @@
       effects:
         EnemyInMeleeRange: true
 
-  - type: CEGOAPNearestHostileSensor
-    conditionKey: EnemyVisible
-    outputTargetKey: enemy
-    visionRadius: 8
-  - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    targetKey: enemy
-    range: 1.5
-  - type: CEGOAPHasLastKnownPositionSensor
-    conditionKey: HasEnemyLastPos
-    positionTargetKey: enemy
-  - type: CEGOAPAlarmSensor
-    outputTargetKey: enemy
   - type: CEGOAPCheckManaLevelSensor
     threshold: 0.3
     conditionKey: LowMana

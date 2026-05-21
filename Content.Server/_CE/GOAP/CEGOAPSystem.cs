@@ -140,6 +140,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
             if (!HasComp<CEActiveGOAPComponent>(uid))
                 continue;
 
+            PurgeExpiredKnowledge((uid, goap));
             UpdateAgent((uid, goap), frameTime);
             count++;
         }

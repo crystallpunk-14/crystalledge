@@ -46,6 +46,13 @@ public sealed partial class CEGOAPComponent : Component
     public Dictionary<string, EntityCoordinates> LastKnownPositions = new();
 
     /// <summary>
+    /// Knowledge store populated by perceptors. Maps perceived entities to their
+    /// last known state (position, time, source, expiry).
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<EntityUid, CEGOAPKnowledgeEntry> Knowledge = new();
+
+    /// <summary>
     /// Current world state as perceived by this entity.
     /// Keys are condition prototype IDs, values are boolean states.
     /// </summary>

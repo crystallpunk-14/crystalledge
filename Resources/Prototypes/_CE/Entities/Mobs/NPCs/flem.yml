@@ -3,6 +3,7 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobGOAPBase
   id: CEMobFlem
   name: flem
   description: TODO
@@ -56,20 +57,9 @@
       preconditions:
         HasEnemyLastPos: true
       cost: 0.5
-  - type: CEGOAPNearestHostileSensor
-    conditionKey: EnemyVisible
-    outputTargetKey: enemy
-    visionRadius: 8
   - type: CEGOAPCheckHealthLevelSensor
     conditionKey: LowHealth
     threshold: 0.5
-  - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    targetKey: enemy
-    range: 1.5
-  - type: CEGOAPHasLastKnownPositionSensor
-    conditionKey: HasEnemyLastPos
-    positionTargetKey: enemy
 
   - type: NpcFactionMember
     factions:

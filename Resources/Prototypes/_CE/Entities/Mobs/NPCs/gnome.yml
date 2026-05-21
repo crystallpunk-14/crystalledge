@@ -3,6 +3,7 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobGOAPBase
   id: CEMobGnome
   name: gnome
   description: TODO
@@ -117,22 +118,9 @@
       preconditions:
         HasEnemyLastPos: true
       cost: 0.5
-  - type: CEGOAPNearestHostileSensor
-    conditionKey: EnemyVisible
-    outputTargetKey: enemy
-    visionRadius: 8
-  - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    targetKey: enemy
-    range: 1.5
-  - type: CEGOAPHasLastKnownPositionSensor
-    conditionKey: HasEnemyLastPos
-    positionTargetKey: enemy
   - type: CEGOAPCheckHealthLevelSensor
     conditionKey: LowHealth
     threshold: 0.6
-  - type: CEGOAPAlarmSensor
-    outputTargetKey: enemy
 
   - type: NpcFactionMember
     factions:

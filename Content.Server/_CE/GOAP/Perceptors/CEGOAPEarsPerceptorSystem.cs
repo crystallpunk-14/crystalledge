@@ -1,25 +1,26 @@
-using System.Numerics;
 using Content.Server._CE.GOAPAlarm;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
+using System.Numerics;
 
-namespace Content.Server._CE.GOAP.Sensors;
+namespace Content.Server._CE.GOAP.Perceptors;
 
 /// <summary>
-/// Reacts to global CEGOAPAlarmEvent — sets the alarm target as a GOAP target on nearby
-/// GOAP entities that carry this sensor component.
+/// Hearing-based perception. Reacts to broadcast <see cref="CEGOAPAlarmEvent"/> and feeds
+/// the alarm target into the knowledge store of nearby GOAP entities.
+/// Knowledge from sound has a short lifetime — once the threat is out of earshot it fades.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CEGOAPAlarmSensorComponent : Component
+public sealed partial class CEGOAPEarsPerceptorComponent : Component
 {
     /// <summary>
-    /// Key in CEGOAPComponent.Targets to write the alarm target into.
+    /// How long a sound-perceived entity stays in knowledge.
     /// </summary>
-    [DataField(required: true)]
-    public string OutputTargetKey = string.Empty;
+    [DataField]
+    public TimeSpan MemoryDuration = TimeSpan.FromSeconds(10);
 }
 
-public sealed class CEGOAPAlarmSensorSystem : EntitySystem
+public sealed class CEGOAPEarsPerceptorSystem : EntitySystem
 {
     [Dependency] private readonly CEGOAPSystem _goap = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -28,7 +29,6 @@ public sealed class CEGOAPAlarmSensorSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
         SubscribeLocalEvent<CEGOAPAlarmEvent>(OnAlarm);
     }
 
@@ -41,8 +41,10 @@ public sealed class CEGOAPAlarmSensorSystem : EntitySystem
         var alarmPos = _transform.ToWorldPosition(ev.Source);
         _zLevel.TryGetZNetwork(alarmMap.Value, out var alarmZNetwork);
 
-        var query = EntityQueryEnumerator<CEGOAPAlarmSensorComponent, CEGOAPComponent, TransformComponent, CEActiveGOAPComponent>();
-        while (query.MoveNext(out var uid, out var sensor, out var goap, out var xform, out _))
+        var targetCoords = Transform(ev.Target).Coordinates;
+
+        var query = EntityQueryEnumerator<CEGOAPEarsPerceptorComponent, CEGOAPComponent, TransformComponent, CEActiveGOAPComponent>();
+        while (query.MoveNext(out var uid, out var ears, out var goap, out var xform, out _))
         {
             if (xform.MapUid is null)
                 continue;
@@ -52,19 +54,16 @@ public sealed class CEGOAPAlarmSensorSystem : EntitySystem
                 if (zNetwork != alarmZNetwork)
                     continue;
             }
-            else
+            else if (xform.MapUid != alarmMap)
             {
-                if (xform.MapUid != alarmMap)
-                    continue;
+                continue;
             }
 
             var worldPos = _transform.GetWorldPosition(xform);
-            var distance = Vector2.Distance(alarmPos, worldPos);
-
-            if (distance > ev.Radius)
+            if (Vector2.Distance(alarmPos, worldPos) > ev.Radius)
                 continue;
 
-            _goap.SetTarget((uid, goap), sensor.OutputTargetKey, ev.Target);
+            _goap.Remember((uid, goap), ev.Target, targetCoords, ears.MemoryDuration);
         }
     }
 }

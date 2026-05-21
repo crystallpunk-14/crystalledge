@@ -29,6 +29,12 @@ public sealed class CEGOAPHasLastKnownPositionSensorSystem : EntitySystem
 
         SubscribeLocalEvent<CEGOAPHasLastKnownPositionSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
         SubscribeLocalEvent<CEGOAPHasLastKnownPositionSensorComponent, CETargetChangedEvent>(OnTargetChanged);
+        SubscribeLocalEvent<CEGOAPHasLastKnownPositionSensorComponent, CEGOAPKnowledgeUpdatedEvent>(OnKnowledgeUpdated);
+    }
+
+    private void OnKnowledgeUpdated(Entity<CEGOAPHasLastKnownPositionSensorComponent> ent, ref CEGOAPKnowledgeUpdatedEvent args)
+    {
+        Evaluate(ent);
     }
 
     private void OnRefresh(Entity<CEGOAPHasLastKnownPositionSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)

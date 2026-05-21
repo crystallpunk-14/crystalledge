@@ -1,0 +1,23 @@
+- type: entity
+  abstract: true
+  id: CEMobGOAPBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAP
+  - type: CEGOAPEyesPerceptor
+    visionRadius: 8
+    memoryDuration: 60
+  - type: CEGOAPEarsPerceptor
+    memoryDuration: 10
+  - type: CEGOAPPainPerceptor
+    memoryDuration: 15
+  - type: CEGOAPNearestHostileSensor
+    conditionKey: EnemyVisible
+    outputTargetKey: enemy
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyInMeleeRange
+    targetKey: enemy
+    range: 1.5
+  - type: CEGOAPHasLastKnownPositionSensor
+    conditionKey: HasEnemyLastPos
+    positionTargetKey: enemy

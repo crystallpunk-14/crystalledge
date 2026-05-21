@@ -3,6 +3,7 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobGOAPBase
   id: CEMobSlimeIceBig
   name: big ice slime
   description: A large wobbly blob of animated ice. Shatters into smaller ice slimes when destroyed.
@@ -96,19 +97,6 @@
       preconditions:
         HasEnemyLastPos: true
       cost: 0.5
-  - type: CEGOAPNearestHostileSensor
-    conditionKey: EnemyVisible
-    outputTargetKey: enemy
-    visionRadius: 8
-  - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    targetKey: enemy
-    range: 1.5
-  - type: CEGOAPHasLastKnownPositionSensor
-    conditionKey: HasEnemyLastPos
-    positionTargetKey: enemy
-  - type: CEGOAPAlarmSensor
-    outputTargetKey: enemy
 
   - type: NpcFactionMember
     factions:
