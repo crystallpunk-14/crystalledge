@@ -11,6 +11,8 @@
     - id: CEWeaponSwordIron
     - id: CEWeaponStaffWooden
     - id: CEWeaponStaffHolyStick
+    - id: CEWeaponTwoHandedSwordIron
+    - id: CEWeaponWarAxeIron
 
 - type: entityTable
   id: CEUncommonWeapon

@@ -30,9 +30,10 @@ public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<Spa
         if (_net.IsClient)
             return;
 
+        var rotatedOffset = args.Args.Angle.RotateVec(args.Effect.Offset);
         foreach (var spawn in args.Effect.Spawns)
         {
-            var spawned = SpawnAtPosition(spawn, coords.Offset(args.Effect.Offset));
+            var spawned = SpawnAtPosition(spawn, coords.Offset(rotatedOffset));
 
             if (args.Effect.Reparent && args.Args.Target != null)
                 _transform.SetParent(spawned, args.Args.Target.Value);

@@ -58,8 +58,8 @@
   #    - anim: SpearAttackHeavy
   - type: CEWeaponStaminaCost
     costs:
-      Primary: 2
-      Secondary: 3
+      Primary: 1
+      Secondary: 2
   - type: Wieldable
   - type: Clothing
     slots:

@@ -518,7 +518,7 @@
         attackType: Melee
         damage:
           types:
-            Physical: 35
+            Physical: 25
       - !type:ThrowFromUser
         distance: 1
     - !type:ShockWaveVFX

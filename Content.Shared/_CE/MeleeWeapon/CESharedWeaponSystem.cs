@@ -213,11 +213,11 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         var usedEv = new CEWeaponUsedEvent(user, useType);
         RaiseLocalEvent(used, usedEv);
 
-        // Calculate the deadline: animation duration + configurable delay.
+        // Calculate the deadline: animation duration * 1.5 (adjusted for playback speed).
         var animDuration = _proto.Index(animationProtoId).Duration;
         used.Comp.LastComboUseType = useType;
         used.Comp.ComboIndex = comboIndex + 1;
-        used.Comp.ComboResetDeadline = curTime + (animDuration * animationSpeed) + used.Comp.ComboResetDelay;
+        used.Comp.ComboResetDeadline = curTime + (animDuration / animationSpeed) * 1.5;
         used.Comp.Using = true;
         Dirty(used);
 
