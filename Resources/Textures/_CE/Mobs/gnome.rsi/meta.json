@@ -1,0 +1,43 @@
+{
+    "version": 1,
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+  "license": "CC-BY-SA-4.0",
+  "copyright": "by TTTomaTTT (github) for CrystallEdge",
+    "states": [
+        {
+            "name": "base",
+            "directions": 4
+        },
+        {
+            "name": "boots",
+            "directions": 4
+        },
+        {
+            "name": "agaric",
+            "directions": 4
+        },
+        {
+            "name": "blue_amanita",
+            "directions": 4
+        },
+        {
+            "name": "lumishroom",
+            "directions": 4
+        },
+        {
+            "name": "red_rose",
+            "directions": 4
+        },
+        {
+            "name": "wild_sage",
+            "directions": 4
+        },
+        {
+            "name": "yellow_dayflin",
+            "directions": 4
+        }
+    ]
+}

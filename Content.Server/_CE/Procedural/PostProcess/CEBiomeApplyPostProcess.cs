@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using Content.Server.Decals;
 using Content.Server.Parallax;
+using Content.Shared.Maps;
 using Content.Shared.Parallax.Biomes.Layers;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -28,6 +30,7 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
         var biome = entMan.System<BiomeSystem>();
         var map = entMan.System<SharedMapSystem>();
         var decals = entMan.System<DecalSystem>();
+        var tileDefs = IoCManager.Resolve<ITileDefinitionManager>();
 
         var seed = Seed ?? new Random().Next();
         var maps = postProcess.GetAllMaps(mapUid);
@@ -41,10 +44,15 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
             var gridEnt = new Entity<MapGridComponent>(uid, grid);
 
             // Pass 1: BiomeTileLayer — set tiles (skip empty results to preserve existing tiles).
+            // Tiles flagged as transparent (e.g. abyss / floor cutouts) are also preserved so
+            // biome overlays don't paint over deliberate map holes.
             foreach (var tileRef in map.GetAllTiles(uid, grid))
             {
                 if (++counter % 500 == 0)
                     await suspend();
+
+                if (IsTransparentTile(tileDefs, tileRef.Tile))
+                    continue;
 
                 if (!biome.TryGetTile(tileRef.GridIndices, Layers, seed, gridEnt, out var tile))
                     continue;
@@ -61,6 +69,9 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
                 if (++counter % 500 == 0)
                     await suspend();
 
+                if (IsTransparentTile(tileDefs, tileRef.Tile))
+                    continue;
+
                 if (map.AnchoredEntityCount(uid, grid, tileRef.GridIndices) > 0)
                     continue;
 
@@ -74,6 +85,9 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
                 if (++counter % 200 == 0)
                     await suspend();
 
+                if (IsTransparentTile(tileDefs, tileRef.Tile))
+                    continue;
+
                 if (!biome.TryGetDecals(tileRef.GridIndices, Layers, seed, gridEnt, out var decalList))
                     continue;
 
@@ -81,5 +95,16 @@ public sealed partial class CEBiomeApplyPostProcess : CEDungeonPostProcessLayer
                     decals.TryAddDecal(id, new EntityCoordinates(uid, pos), out _);
             }
         }
+    }
+
+    private static bool IsTransparentTile(ITileDefinitionManager tileDefs, Tile tile)
+    {
+        // Empty (space) tiles are not transparent map cutouts; biome layers handle them
+        // through the normal IsEmpty check above. We only want to skip ContentTileDefinitions
+        // that opted in via the Transparent flag.
+        if (tile.IsEmpty)
+            return false;
+
+        return tileDefs[tile.TypeId] is ContentTileDefinition { Transparent: true };
     }
 }

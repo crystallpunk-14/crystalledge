@@ -1,0 +1,5 @@
+- type: lobbyBackground
+  id: CEDungeon
+  background: /Textures/_CE/LobbyScreens/dungeon.webp
+  title: ce-lobby-state-background-dungeon-title
+  artist: ce-lobby-state-background-ell-artist

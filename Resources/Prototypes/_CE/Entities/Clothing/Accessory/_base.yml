@@ -1,0 +1,14 @@
+- type: entity
+  abstract: true
+  parent: Clothing
+  id: CEClothingAccessoryBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Clothing
+    equipDelay: 0.5
+    unequipDelay: 0.5
+    equipWhileMoving: true
+    slots:
+    - eyes
+  - type: Sprite
+    state: icon

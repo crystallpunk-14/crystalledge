@@ -12,14 +12,14 @@ namespace Content.Shared._CE.Health.Components;
 public sealed partial class CEMobStateComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public CEMobState CurrentState = CEMobState.Alive;
+    public bool Critical = false;
 
     /// <summary>
     /// Base maximum health before modifiers.
     /// Used as the starting value for <see cref="CECalculateMaxHealthEvent"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int BaseMaxHealth = 20;
+    public int BaseMaxHealth = 100;
 
     /// <summary>
     /// Effective maximum health after modifiers (flat + multipliers).
@@ -27,14 +27,7 @@ public sealed partial class CEMobStateComponent : Component
     /// Set by <see cref="CEMobStateSystem.RefreshMaxHealth"/>.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public int CriticalThreshold = 20;
-}
-
-[Serializable, NetSerializable]
-public enum CEMobState : byte
-{
-    Alive,
-    Critical,
+    public int CriticalThreshold = 100;
 }
 
 [Serializable, NetSerializable]

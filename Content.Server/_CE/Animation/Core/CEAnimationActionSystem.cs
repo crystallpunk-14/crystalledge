@@ -9,37 +9,36 @@ namespace Content.Server._CE.Animation.Core;
 
 public sealed partial class CEAnimationActionSystem : CESharedAnimationActionSystem
 {
-    protected override void OnKeyFrameProcessed(
-        EntityUid uid,
-        EntityUid? used,
-        Angle angle,
-        TimeSpan keyFrame,
-        List<CEEntityEffect> actions)
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    /// <summary>
+    /// Sends <see cref="CEEntityAnimationEvent"/> to all clients in PVS (except the entity's own player)
+    /// so they can play the visual animation locally without relying on the shared update loop,
+    /// which is now skipped for them because <see cref="CEActiveAnimationActionComponent.LastEvent"/> is networked.
+    /// </summary>
+    protected override void OnKeyframeActions(EntityUid uid, CEActiveAnimationActionComponent controller, TimeSpan keyFrame, List<CEEntityEffect> actions)
     {
-        // Send visual sync event to non-predicting clients if this keyframe has visual effects
-        if (!actions.Any(a => a is EntityAnimation))
+        // Only send visual events if there is an EntityAnimation or UserAnimation effect in this keyframe.
+        if (!actions.Any(a => a is EntityAnimation || a is UserAnimation))
             return;
 
-        if (!TryComp<CEActiveAnimationActionComponent>(uid, out var comp))
+        if (controller.ActiveAnimation is not { } animId)
             return;
 
-        if (comp.ActiveAnimation is not { } animId)
-            return;
+        var angle = _transform.GetWorldRotation(uid);
 
-        var filter = CEFilter.ZPvsExcept(uid, EntityManager);
-        var effectEvent = new CEEntityAnimationEvent(
+        var ev = new CEEntityAnimationEvent(
             GetNetEntity(uid),
-            used.HasValue ? GetNetEntity(used.Value) : null,
+            controller.Used.HasValue ? GetNetEntity(controller.Used.Value) : null,
             angle,
             keyFrame,
             animId,
-            comp.AnimationSpeed,
-            comp.TargetEntity.HasValue ? GetNetEntity(comp.TargetEntity.Value) : null,
-            comp.TargetCoordinates.HasValue ? GetNetCoordinates(comp.TargetCoordinates.Value) : null);
+            controller.AnimationSpeed,
+            controller.TargetEntity.HasValue ? GetNetEntity(controller.TargetEntity.Value) : null,
+            controller.TargetCoordinates.HasValue ? GetNetCoordinates(controller.TargetCoordinates.Value) : null);
 
-        foreach (var session in filter.Recipients)
-        {
-            EntityManager.EntityNetManager!.SendSystemNetworkMessage(effectEvent, session.Channel);
-        }
+        // Exclude the entity's own player (they handle visuals via prediction).
+        var filter = CEFilter.ZPvsExcept(uid, EntityManager);
+        RaiseNetworkEvent(ev, filter);
     }
 }

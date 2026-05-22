@@ -10,20 +10,20 @@
   name: Firebolt
   description: You hurl a fireball that explodes on impact, setting the ground and creatures [color=#ff8a05]on fire[/color].
   components:
-  - type: Sprite
-    sprite: _CE/Skills/Mage/firebolt.rsi
-    state: icon
   - type: CEVisualizeWideLineAction
     width: 1.0
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 3
+    manaCost: 10
+  - type: CEActionStaminaCost
+    cost: 6
   - type: Action
-    useDelay: 3
+    useDelay: 1
     icon:
       sprite: _CE/Skills/Mage/firebolt.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -32,7 +32,7 @@
 - type: entityEffectAnimation
   id: AnimationFirebolt
   movementSpeed: 0.3
-  duration: 1.0
+  duration: 0.5
   lockRotation: true
   events:
     0:
@@ -46,12 +46,12 @@
         offset: 0, 0.5
       - time: 0.8
         offset: 0, -1
-    0.8:
+    0.4:
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/firebolt.ogg
     - !type:ShootProjectile
-      projectileSpeed: 8
+      projectileSpeed: 10
       prototype: CEProjectileFirebolt
       projectileCount: 1
       spread: 0
@@ -104,13 +104,19 @@
   - type: CEProjectile
     hitEffects:
     - !type:Damage
+      attackType: Ranged
       damage:
         types:
-          Fire: 3
-    - !type:IgniteArea
+          Fire: 20
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectFire
       radius: 2
-      maxStacks: 2
+      maxStacks: 6
     - !type:SpawnEntity
-      effectTarget: Target
+      effectTarget: Used
       spawns:
       - CEEffectPotionAlchemicalFire
+    - !type:ShockWaveVFX
+      effectTarget: Used
+      width: 0.1

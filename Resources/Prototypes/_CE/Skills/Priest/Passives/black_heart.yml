@@ -1,0 +1,29 @@
+- type: skill
+  parent: BasePriestSkill
+  id: BlackHeart
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectBlackHeart
+
+- type: entity
+  id: CEStatusEffectBlackHeart
+  name: Black Heart
+  description: You are immune to [color=#8752b3]Curse[/color]. When you deal damage in melee combat, you [color=#8752b3]curse[/color] targets.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEBlackHeart
+  - type: CEStatusEffectImmunity
+    blockedEffects:
+    - CEStatusEffectCurse
+  - type: CEEffectOnAttackStatusEffect
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectCurse
+      amount: 1
+      max: 5
+
+- type: alert
+  id: CEBlackHeart
+  icons:
+  - sprite: _CE/Skills/Priest/black_heart.rsi
+    state: icon

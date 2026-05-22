@@ -31,14 +31,8 @@ public sealed partial class CEBlessingStatueComponent : Component
     public HashSet<EntityUid> LinkedTables = new();
 
     /// <summary>
-    /// Players who have already claimed a blessing from this statue.
-    /// They can no longer use this statue.
-    /// </summary>
-    [DataField]
-    public HashSet<EntityUid> PlayersBlessed = new();
-
-    /// <summary>
-    /// The player currently inside the trigger zone receiving blessing options.
+    /// The player currently interacting with the statue (offer pending). While non-null
+    /// the statue is "occupied" — other players cannot click it.
     /// </summary>
     [DataField]
     public EntityUid? ActivePlayer;
@@ -61,4 +55,12 @@ public sealed partial class CEBlessingStatueComponent : Component
 
     [DataField]
     public string TriggerFixtureId = "trigger";
+
+    /// <summary>
+    /// TODO: delete this and use the fixture's actual shape
+    /// </summary>
+    [DataField]
+    public float TriggerRadius = 3f;
+
+    public HashSet<EntityUid> PlayersInTriggerZone = new();
 }

@@ -3,6 +3,7 @@ using Content.Shared._CE.Procedural;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Enums;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Procedural;
 
@@ -14,35 +15,14 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 {
     [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
 
     private readonly Font _font;
 
-    /// <summary>
-    /// Fill colours keyed by room type.
-    /// </summary>
-    private static readonly Dictionary<CEProceduralRoomType, Color> TypeFillColors = new()
-    {
-        { CEProceduralRoomType.General,   Color.Gray.WithAlpha(0.08f) },
-        { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.12f) },
-        { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.12f) },
-        { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.12f) },
-        { CEProceduralRoomType.DeadEnd,   Color.Orange.WithAlpha(0.10f) },
-    };
-
-    /// <summary>
-    /// Border colours keyed by room type.
-    /// </summary>
-    private static readonly Dictionary<CEProceduralRoomType, Color> TypeBorderColors = new()
-    {
-        { CEProceduralRoomType.General,   Color.Gray.WithAlpha(0.8f) },
-        { CEProceduralRoomType.Exit,      Color.Red.WithAlpha(0.8f) },
-        { CEProceduralRoomType.Entrance,  Color.Green.WithAlpha(0.8f) },
-        { CEProceduralRoomType.Blessing,  Color.Yellow.WithAlpha(0.8f) },
-        { CEProceduralRoomType.DeadEnd,   Color.Orange.WithAlpha(0.8f) },
-    };
-
+    private static readonly Color DefaultFillColor = Color.Gray.WithAlpha(0.3f);
+    private static readonly Color DefaultBorderColor = Color.Gray;
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);
 
     /// <summary>
@@ -78,11 +58,13 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         var handle = args.WorldHandle;
 
         // Draw room rectangles.
-        for (var i = 0; i < comp.Rooms.Count; i++)
+        foreach (var room in comp.Rooms)
         {
-            var room = comp.Rooms[i];
-            var fillColor = TypeFillColors.GetValueOrDefault(room.RoomType, Color.Gray.WithAlpha(0.08f));
-            var borderColor = TypeBorderColors.GetValueOrDefault(room.RoomType, Color.Gray.WithAlpha(0.8f));
+            var roomTypeProto = room.RoomType != null && _proto.Resolve(room.RoomType.Value, out var roomType)
+                ? roomType
+                : null;
+            var fillColor = roomTypeProto?.DebugFillColor ?? DefaultFillColor;
+            var borderColor = roomTypeProto?.DebugBorderColor ?? DefaultBorderColor;
 
             var box = new Box2(
                 room.Position.X,

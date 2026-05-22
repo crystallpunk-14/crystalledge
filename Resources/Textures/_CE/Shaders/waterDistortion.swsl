@@ -36,6 +36,6 @@ void fragment()
     highp vec2 offset = distortion * strength_scale * waterStrength;
 
     // Sample screen at distorted UV
-    COLOR = texture2D(SCREEN_TEXTURE, UV + offset);
+    COLOR = zTextureSpec(SCREEN_TEXTURE, UV + offset);
 }
 

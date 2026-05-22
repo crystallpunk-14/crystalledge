@@ -1,7 +1,11 @@
+using System.Numerics;
+using Content.Shared._CE.Achievements.Prototypes;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.PostProcess;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CE.Procedural.Prototypes;
 
@@ -32,10 +36,32 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     public CEDungeonGeneratorConfig Config = default!;
 
     /// <summary>
-    /// Optional human-readable name for this level, used for debugging / admin tools.
+    /// Localization key for the display name shown in the entry popup.
+    /// When set, the client resolves this key in its own locale.
     /// </summary>
     [DataField]
-    public string Name = string.Empty;
+    public LocId? Name;
+
+    /// <summary>
+    /// Localization key for the description shown in the entry popup.
+    /// When set, the client resolves this key in its own locale.
+    /// </summary>
+    [DataField]
+    public LocId? Desc;
+
+    /// <summary>
+    /// Optional sound played for a player when they see the entry popup for the first time.
+    /// Leave null for no sound.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? EntrySound;
+
+    /// <summary>
+    /// Optional achievement granted when a player reaches this level.
+    /// Leave null to not grant any achievement.
+    /// </summary>
+    [DataField]
+    public ProtoId<CEAchievementPrototype>? Achievement;
 
     /// <summary>
     /// Whether this level is stable (singleton — one instance per server, e.g. safe zones)
@@ -45,12 +71,37 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     public bool Stable;
 
     /// <summary>
-    /// Maps exit slot names to the target dungeon level prototypes.
-    /// After generation, exit entities with matching <c>ExitSlot</c> values get
-    /// their <c>TargetLevel</c> assigned from this dictionary.
+    /// How long after this level instance is created its entry points remain eligible for selection.
+    /// Once this duration has elapsed, new entrants can no longer be routed to this level's entry points.
+    /// Leave null for no time limit.
+    /// In YAML, bare numeric values are interpreted as seconds; time span strings such as <c>hh:mm:ss</c>
+    /// may also be used where supported by the serializer.
     /// </summary>
     [DataField]
-    public Dictionary<string, ProtoId<CEDungeonLevelPrototype>> Exits = new();
+    public TimeSpan? MaxEntryTime;
+
+    /// <summary>
+    /// When true, the level is auto-generated at round start and registered as an instance.
+    /// Used for entry levels: the default game map can be a placeholder (e.g. <c>Empty</c>),
+    /// and players spawn into the round-start dungeon level via its embedded spawn points.
+    /// Implies stability — round-start levels persist for the entire round.
+    /// </summary>
+    [DataField]
+    public bool Roundstart;
+
+    /// <summary>
+    /// If true - will not shown into dungeon overview map
+    /// </summary>
+    [DataField]
+    public bool Secret;
+
+    /// <summary>
+    /// Maps exit slot numbers to the target dungeon level prototypes.
+    /// After generation, exit entities with matching <c>TargetLevel</c> values get
+    /// their resolved target assigned from this dictionary.
+    /// </summary>
+    [DataField]
+    public Dictionary<int, ProtoId<CEDungeonLevelPrototype>> Exits = new();
 
     [DataField]
     [AlwaysPushInheritance]
@@ -62,4 +113,16 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     /// </summary>
     [DataField]
     public int MainZLevel = 1;
+
+    /// <summary>
+    /// Position of this level's node on the admin dungeon overview graph (virtual pixels).
+    /// </summary>
+    [DataField("uiPosition")]
+    public Vector2i UIPosition;
+
+    /// <summary>
+    /// Icon used for this level on the admin dungeon overview graph.
+    /// </summary>
+    [DataField]
+    public SpriteSpecifier? Icon;
 }

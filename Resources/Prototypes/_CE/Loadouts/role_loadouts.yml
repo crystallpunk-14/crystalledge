@@ -1,7 +1,6 @@
 - type: roleLoadout
   id: JobCEMage
   groups:
-  - CEMageSkill
   - CEMageWeapon
   - CEMageHead
   - CEMageCloak
@@ -9,26 +8,35 @@
   - CEMagePants
   - CEGeneralShoes
   - CEGeneralBag
+  - CEGeneralBelt
 
 - type: roleLoadout
   id: JobCEPriest
   groups:
-  - CEPriestSkill
   - CEPriestWeapon
   - CEPriestCloak
   - CEPriestShirt
   - CEPriestPants
   - CEGeneralShoes
   - CEGeneralBag
+  - CEGeneralBelt
 
 - type: roleLoadout
   id: JobCEKnight
   groups:
-  # Knight skills TODO
   - CEKnightWeapon
   - CEKnightCloak
   - CEKnightShirt
   - CEKnightPants
-  - CEKnightGloves
   - CEGeneralShoes
   - CEGeneralBag
+  - CEGeneralBelt
+
+- type: roleLoadout
+  id: JobCEWanderer
+  groups:
+  - CEWandererShirt
+  - CEGeneralShoes
+  - CEKnightPants #TODO: make wanderer pants
+  - CEGeneralBag
+  - CEGeneralBelt

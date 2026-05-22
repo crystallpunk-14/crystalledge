@@ -1,0 +1,31 @@
+- type: entity
+  id: CEIronKey
+  parent: BaseItem
+  name: iron key
+  description: A worn iron key. Fits a golden lock.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/keys.rsi
+    layers:
+    - state: iron
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_CE/Effects/key_drop.ogg
+      params:
+        variation: 0.05
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/_CE/Effects/key_drop.ogg
+      params:
+        variation: 0.05
+  - type: CEConsumable
+    whitelist:
+      components:
+      - Lock
+    useDelay: 0.5
+    effects:
+    - !type:Unlock
+      effectTarget: Target

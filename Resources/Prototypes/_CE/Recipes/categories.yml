@@ -1,0 +1,27 @@
+- type: CERecipeCategory
+  id: Tools
+  name: ce-recipe-category-tool
+  priority: 2
+
+- type: CERecipeCategory
+  id: Weapon
+  name: ce-recipe-category-weapon
+  priority: 2
+
+- type: CERecipeCategory
+  id: Armor
+  name: ce-recipe-category-armor
+  priority: 2
+
+- type: CERecipeCategory
+  id: Materials
+  name: ce-recipe-category-materials
+  priority: 1
+
+- type: CERecipeCategory
+  id: Clothing
+  name: ce-recipe-category-clothing
+
+- type: CERecipeCategory
+  id: Consumable
+  name: ce-recipe-category-consumable

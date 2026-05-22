@@ -15,12 +15,11 @@ public sealed partial class CEHealthUI : UIWidget
 {
     [Dependency] private readonly IResourceCache _resCache = default!;
 
-    private CEMobState _lastMobState = (CEMobState) 255; // invalid sentinel
+    private bool _lastMobCriticalState;
     private int _lastHealthState = -1;
 
     private const string AliveRsiPath = "/Textures/_CE/Interface/HealthMana/alive.rsi";
     private const string CriticalRsiPath = "/Textures/_CE/Interface/HealthMana/critical.rsi";
-    private const string DeadRsiPath = "/Textures/_CE/Interface/HealthMana/dead.rsi";
 
     private const int MaxHealthStates = 10; // health0..health9
     private const float TextureScale = 3f;
@@ -38,25 +37,25 @@ public sealed partial class CEHealthUI : UIWidget
 
     public void UpdateHealthDisplay(CEHealthInfo info)
     {
-        var currentState = info.HasMobState ? info.MobState : CEMobState.Alive;
-        var ratio = currentState == CEMobState.Alive ? info.Ratio : 0f;
+        var critical = info.HasMobState && info.Critical;
+        var ratio = !critical ? info.Ratio : 0f;
 
-        HealthLabel.Text = currentState switch
+        HealthLabel.Text = critical switch
         {
-            CEMobState.Critical when info.DestroyThreshold != null =>
+            true when info.DestroyThreshold != null =>
                 $"{info.RemainingUntilDeath}/{info.DestroyThreshold}",
             _ => $"{info.CurrentHp}/{info.MaxHp}",
         };
 
-        if (currentState != _lastMobState)
+        if (critical != _lastMobCriticalState)
         {
-            _lastMobState = currentState;
+            _lastMobCriticalState = critical;
             _lastHealthState = -1;
         }
 
-        switch (currentState)
+        switch (critical)
         {
-            case CEMobState.Alive:
+            case false:
             {
                 var stateIndex = (int) (ratio * (MaxHealthStates - 1));
                 stateIndex = Math.Clamp(stateIndex, 0, MaxHealthStates - 1);
@@ -72,7 +71,7 @@ public sealed partial class CEHealthUI : UIWidget
 
                 break;
             }
-            case CEMobState.Critical:
+            case true:
             {
                 if (_lastHealthState != -2)
                 {
@@ -80,19 +79,6 @@ public sealed partial class CEHealthUI : UIWidget
                     var specifier = new SpriteSpecifier.Rsi(
                         new ResPath(CriticalRsiPath),
                         "critical");
-                    HealthTexture.SetFromSpriteSpecifier(specifier);
-                }
-
-                break;
-            }
-            default:
-            {
-                if (_lastHealthState != -3)
-                {
-                    _lastHealthState = -3;
-                    var specifier = new SpriteSpecifier.Rsi(
-                        new ResPath(DeadRsiPath),
-                        "dead");
                     HealthTexture.SetFromSpriteSpecifier(specifier);
                 }
 

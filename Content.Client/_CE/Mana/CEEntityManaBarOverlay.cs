@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.StatusIcon.Components;

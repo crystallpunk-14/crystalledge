@@ -26,18 +26,11 @@ public sealed partial class CEBlessingReceiverComponent : Component
     /// </summary>
     public List<bool> SkillTypeOrder = new()
     {
-        true, //Level 0 not interesting - we always have starter ability.
-        true, //Level 1 and 2 - actives
         true,
-        false, //First passive on level 3
+        false,
         true,
-        false, //TODO: should be true active here, but we dont have enough content yet
         false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        true,
         false,
     };
 }

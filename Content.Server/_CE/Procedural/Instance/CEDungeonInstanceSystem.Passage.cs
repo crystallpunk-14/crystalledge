@@ -4,6 +4,7 @@ using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Prototypes;
 using Content.Shared._CE.Procedural.Components;
+using Content.Shared.Examine;
 using Content.Shared.Flash;
 using Content.Shared.Interaction;
 using Robust.Shared.Audio;
@@ -33,6 +34,44 @@ public sealed partial class CEDungeonInstanceSystem
     private void InitializePassage()
     {
         SubscribeLocalEvent<CEDungeonPassageComponent, ActivateInWorldEvent>(OnPassageInWorldActivated);
+        SubscribeLocalEvent<CEDungeonPassageComponent, ExaminedEvent>(OnPassageExamined);
+    }
+
+    private void OnPassageExamined(Entity<CEDungeonPassageComponent> ent, ref ExaminedEvent args)
+    {
+        // Show the destination level name when the portal is examined. The destination is
+        // resolved on demand from the owning dungeon instance's Exits dictionary, keyed by
+        // the passage's TargetLevel slot.
+        if (TryResolveExitTarget(ent, out var proto) && proto.Name is { } nameKey)
+        {
+            args.PushMarkup(Loc.GetString("ce-dungeon-passage-examine-target", ("level", Loc.GetString(nameKey))));
+            return;
+        }
+
+        args.PushMarkup(Loc.GetString("ce-dungeon-passage-examine-target-unknown"));
+    }
+
+    /// <summary>
+    /// Resolves the target dungeon level prototype for a passage by looking up the owning
+    /// dungeon instance and reading <see cref="CEDungeonLevelPrototype.Exits"/> with the
+    /// passage's slot key. Returns false if the passage isn't on a registered dungeon
+    /// instance, the prototype is unknown, or the slot has no mapping.
+    /// </summary>
+    private bool TryResolveExitTarget(Entity<CEDungeonPassageComponent> ent, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out CEDungeonLevelPrototype? targetProto)
+    {
+        targetProto = null;
+
+        var xform = Transform(ent);
+        if (!TryResolveInstance(xform.MapUid, out var instance))
+            return false;
+
+        if (!_proto.TryIndex(instance.PrototypeId, out var ownerProto))
+            return false;
+
+        if (!ownerProto.Exits.TryGetValue(ent.Comp.TargetLevel, out var targetId))
+            return false;
+
+        return _proto.TryIndex(targetId, out targetProto);
     }
 
     private void UpdatePassage()
@@ -73,8 +112,6 @@ public sealed partial class CEDungeonInstanceSystem
 
                 if (TryFindEnterPoint(proto, out var entry))
                 {
-                    if (!proto.Stable)
-                        entry.Value.Comp.Active = false;
                     var activeComp2 = EnsureComp<CEDungeonActivePassageComponent>(passageUid);
                     activeComp2.TargetPosition = Transform(entry.Value).Coordinates;
                 }
@@ -85,7 +122,7 @@ public sealed partial class CEDungeonInstanceSystem
         while (query.MoveNext(out var uid, out var passage))
         {
             if (passage.NextTransitionTime > _timing.CurTime)
-                continue; //Not ready for transition yet
+                continue;
 
             passage.NextTransitionTime = _timing.CurTime + passage.TransitionDelay;
 
@@ -95,12 +132,10 @@ public sealed partial class CEDungeonInstanceSystem
                 if (!TryFindEnterPoint(resolvedTarget, out var targetEntry))
                     continue;
 
-                if (!resolvedTarget.Stable)
-                    targetEntry.Value.Comp.Active = false;
                 passage.TargetPosition = Transform(targetEntry.Value).Coordinates;
             }
 
-            var candidates = GatherNearbyPlayers(uid, passage.SearchRadius, passage.Throughput);
+            var candidates = GatherNearbyPlayers(uid, passage.SearchRadius, passage.MaxPlayers);
             if (passage.TargetPosition == null)
             {
                 Log.Error("Active passage has no target position.");
@@ -114,7 +149,7 @@ public sealed partial class CEDungeonInstanceSystem
 
                 _transform.SetMapCoordinates(player, _transform.ToMapCoordinates(passage.TargetPosition.Value));
                 _flash.Flash(player, null, null, FlashDuration, 0.8f);
-                _audio.PlayEntity(TransitionSound, player, player);
+                _audio.PlayGlobal(TransitionSound, player, AudioParams.Default.WithVolume(-4));
             }
             QueueDel(uid);
         }
@@ -130,9 +165,9 @@ public sealed partial class CEDungeonInstanceSystem
 
         args.Handled = true;
 
-        if (ent.Comp.TargetLevel == null || !_proto.TryIndex(ent.Comp.TargetLevel.Value, out var proto))
+        if (!TryResolveExitTarget(ent, out var proto))
         {
-            Log.Error($"exit has no target level or unknown prototype '{ent.Comp.TargetLevel}'.");
+            Log.Error($"exit on map {Transform(ent).MapID} cannot resolve target for slot {ent.Comp.TargetLevel}.");
             QueueDel(ent);
             return;
         }
@@ -142,14 +177,11 @@ public sealed partial class CEDungeonInstanceSystem
 
         var activeComp = EnsureComp<CEDungeonActivePassageComponent>(activePassage);
         activeComp.NextTransitionTime = _timing.CurTime + activeComp.TransitionInitialDelay;
-        activeComp.TargetLevel = ent.Comp.TargetLevel;
+        activeComp.TargetLevel = proto.ID;
+        activeComp.MaxPlayers = ent.Comp.MaxPlayers;
 
         if (TryFindEnterPoint(proto, out var targetEntry))
-        {
-            if (!proto.Stable)
-                targetEntry.Value.Comp.Active = false; //Disable that entry point
-            activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates; //Set target coordinates
-        }
+            activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates;
         else
         {
             // Trigger dungeon generation and store the task; result will be processed on the main thread in UpdatePassage.
@@ -158,10 +190,6 @@ public sealed partial class CEDungeonInstanceSystem
         }
     }
 
-    /// <summary>
-    /// Gathers player entities near the exit, limited by throughput.
-    /// Uses the generic <see cref="EntityLookupSystem.GetEntitiesInRange{T}"/> overload.
-    /// </summary>
     private List<EntityUid> GatherNearbyPlayers(EntityUid origin, float radius, int maxCount)
     {
         var nearby = _lookup.GetEntitiesInRange<CEDungeonPlayerComponent>(_transform.GetMapCoordinates(origin), radius);

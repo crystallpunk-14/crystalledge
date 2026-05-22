@@ -1,0 +1,64 @@
+- type: entity
+  id: CETileEffectStoneBarrier
+  parent: CETileEffectBase
+  name: stone barrier
+  description: A sturdy stone barrier that blocks movement and projectiles.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    noRot: false
+    sprite: _CE/Structures/Nature/stone_barrier.rsi
+  - type: Icon
+    sprite: _CE/Structures/Nature/stone_barrier.rsi
+    state: full
+  - type: IconSmooth
+    key: barrier
+    base: stonebricks
+    additionalKeys:
+    - CEwall
+  - type: CETileEffect
+    maxStacks: 1
+    minDecayInterval: 5
+    maxDecayInterval: 5
+    stackDelta: 0
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 50
+    destroySound:
+      path: /Audio/Effects/break_stone.ogg
+  - type: CETileEffectVFX
+    onAppliedVfx: CEDustTileEffect
+    onAppliedSound:
+      path: /Audio/Effects/break_stone.ogg
+  - type: CEDestructionEffect
+    effects:
+    - !type:SpawnEntity
+      spawns:
+      - CEDustTileEffect
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+
+- type: entity
+  parent: MarkerBase
+  id: CEStoneBarrierSpawner1
+  name: tile effect - stone barrier
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Structures/upgrade_postament.rsi
+      state: postament
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectStoneBarrier
+    amount: 1

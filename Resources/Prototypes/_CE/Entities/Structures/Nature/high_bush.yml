@@ -23,6 +23,7 @@
         bush-1: ""
         bush-2: ""
         bush-3: ""
+  - type: CENavIgnore
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -37,6 +38,15 @@
         - TableMask
         layer:
         - TableLayer
+      fix2:
+        hard: true
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.35,0.35,0.35"
+        density: 0
+        mask: []
+        layer:
+        - Opaque
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5
@@ -49,11 +59,9 @@
     fixtureID: fix1
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 5
+    destroyThreshold: 15
     destroySound:
       collection: CEGrassGathering
-  - type: CEFlammable
-    stackDelta: 2
 
 - type: entity
   id: CERandomBushOffsetSpawner

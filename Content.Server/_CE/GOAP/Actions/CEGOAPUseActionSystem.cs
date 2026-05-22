@@ -1,8 +1,10 @@
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP.Actions;
 
@@ -22,20 +24,25 @@ public sealed partial class CEGOAPUseAction : CEGOAPActionBase<CEGOAPUseAction>
 public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUseAction>
 {
     [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
-    private EntityQuery<EntityTargetActionComponent> _entityTargetQuery;
-    private EntityQuery<WorldTargetActionComponent> _worldTargetQuery;
+    [Dependency] private readonly EntityQuery<EntityTargetActionComponent> _entityTargetQuery = default!;
+    [Dependency] private readonly EntityQuery<WorldTargetActionComponent> _worldTargetQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        _entityTargetQuery = GetEntityQuery<EntityTargetActionComponent>();
-        _worldTargetQuery = GetEntityQuery<WorldTargetActionComponent>();
+    }
+
+    protected override void OnActionInit(
+        Entity<CEGOAPComponent> ent,
+        ref CEGOAPActionInitEvent<CEGOAPUseAction> args)
+    {
+        FindOrGrantAction(ent, args.Action.ActionPrototype);
     }
 
     /// <summary>
     /// During planning: check if the action is on cooldown.
-    /// If the action hasn't been granted yet, assume it's usable.
     /// </summary>
     protected override void OnCanExecute(
         Entity<CEGOAPComponent> ent,
@@ -43,7 +50,6 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
     {
         var actionEntity = FindActionEntity(ent, args.Action.ActionPrototype);
 
-        // Not yet granted — assume available
         if (actionEntity == null)
             return;
 
@@ -62,7 +68,6 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
             return;
         }
 
-        // On cooldown — can't use
         if (_actions.IsCooldownActive(actionComp))
             args.CanExecute = false;
     }
@@ -71,6 +76,9 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPUseAction> args)
     {
+        if (_timing.ApplyingState)
+            return;
+
         var actionEntity = FindOrGrantAction(ent, args.Action.ActionPrototype);
 
         if (actionEntity == null)
@@ -93,7 +101,12 @@ public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUse
         }
 
         // Determine the target entity for EntityTarget / WorldTarget actions
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
+        EntityUid? target = null;
+        if (args.Action.Selector != null)
+        {
+            var result = args.Action.Selector.Resolve(ent, EntityManager);
+            target = result.Entity;
+        }
 
         // Set target on the action event based on auto-detected type
         if (_entityTargetQuery.HasComponent(actionEntity.Value) ||

@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
 using Content.Shared._CE.Procedural;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Procedural.Generators.Procedural;
 
 /// <summary>
-/// Partial: room type assignment (Exit, Entrance, Blessing, DeadEnd)
-/// and real room prototype selection.
+/// Partial: real prototype assignment — maps each abstract room to a concrete
+/// <see cref="CEDungeonRoom3DPrototype"/>, applies rotation and centres the room in its grid cell.
 /// </summary>
 public sealed partial class CEProceduralGeneratorSystem
 {
@@ -14,7 +15,7 @@ public sealed partial class CEProceduralGeneratorSystem
     /// that fits within MaxRoomSize, chooses a rotation that satisfies the required exit
     /// directions (based on neighbour connections), shrinks the abstract room to the
     /// real room's size, and centres it within the original grid cell.
-    /// Uses the whitelist from the room's type-specific pack.
+    /// Uses the whitelist from the room's type-specific prototype.
     /// </summary>
     internal async Task AssignRealRooms(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config, Func<ValueTask> suspend)
     {
@@ -41,9 +42,6 @@ public sealed partial class CEProceduralGeneratorSystem
 
             var room = comp.Rooms[i];
 
-            // Pick the whitelist based on the room's assigned type.
-            var pack = GetPackForType(config, room.RoomType);
-
             // Determine required exit directions for this room.
             var required = requiredExits.GetValueOrDefault(room.Index) ?? new HashSet<Direction>();
 
@@ -57,8 +55,8 @@ public sealed partial class CEProceduralGeneratorSystem
             {
                 var candidate = _dungeon.GetRoomPrototype(
                     random,
-                    pack.Whitelist,
-                    maxSize: maxSizeVec);
+                    maxSize: maxSizeVec,
+                    roomType: room.RoomType);
 
                 if (candidate == null)
                     break;
@@ -67,14 +65,18 @@ public sealed partial class CEProceduralGeneratorSystem
                 if (required.Count == 0)
                 {
                     roomProto = candidate;
-                    chosenRotation = _dungeon.GetRoomRotation(candidate, random);
+                    chosenRotation = random.Next(4) * Math.PI / 2;
                     found = true;
                     break;
                 }
 
                 // Try each of the 4 cardinal rotations to see if one satisfies all required exits.
                 // Shuffle the order so results are not biased toward 0°.
-                ShuffleArray(candidateRotations, random);
+                for (var s = candidateRotations.Length - 1; s > 0; s--)
+                {
+                    var t = random.Next(s + 1);
+                    (candidateRotations[s], candidateRotations[t]) = (candidateRotations[t], candidateRotations[s]);
+                }
 
                 foreach (var rot in candidateRotations)
                 {
@@ -136,7 +138,9 @@ public sealed partial class CEProceduralGeneratorSystem
         // Index rooms by their index for GridCoord lookup.
         var roomByIndex = new Dictionary<int, CEProceduralAbstractRoom>();
         foreach (var room in comp.Rooms)
+        {
             roomByIndex[room.Index] = room;
+        }
 
         var result = new Dictionary<int, HashSet<Direction>>();
 
@@ -186,213 +190,5 @@ public sealed partial class CEProceduralGeneratorSystem
             { Y: < 0 } => Direction.South,
             _ => Direction.Invalid,
         };
-    }
-
-    /// <summary>
-    /// Fisher–Yates shuffle for a small array.
-    /// </summary>
-    private static void ShuffleArray<T>(T[] array, Random random)
-    {
-        for (var i = array.Length - 1; i > 0; i--)
-        {
-            var j = random.Next(i + 1);
-            (array[i], array[j]) = (array[j], array[i]);
-        }
-    }
-
-    /// <summary>
-    /// Returns the <see cref="CEProceduralRoomPack"/> matching the given room type.
-    /// </summary>
-    private static CEProceduralRoomPack GetPackForType(CEProceduralConfig config, CEProceduralRoomType type)
-    {
-        return type switch
-        {
-            CEProceduralRoomType.Exit => config.ExitRoom,
-            CEProceduralRoomType.Entrance => config.EntranceRooms,
-            CEProceduralRoomType.Blessing => config.BlessingRooms,
-            CEProceduralRoomType.DeadEnd => config.DeadEndRooms,
-            _ => config.GeneralRooms,
-        };
-    }
-
-    /// <summary>
-    /// Assigns special room types after the graph is built.
-    /// <list type="bullet">
-    ///   <item>Exit: room at grid (0,0).</item>
-    ///   <item>Entrances: dead-ends (1 connection), picked maximally far apart.</item>
-    ///   <item>Blessings: remaining dead-ends, picked maximally far apart.</item>
-    ///   <item>DeadEnd: all remaining dead-end rooms.</item>
-    ///   <item>All other rooms remain General.</item>
-    /// </list>
-    /// </summary>
-    internal void AssignRoomTypes(CEGeneratingProceduralDungeonComponent comp, CEProceduralConfig config)
-    {
-        // Count connections per room.
-        var connectionCount = new Dictionary<int, int>();
-        foreach (var conn in comp.Connections)
-        {
-            connectionCount[conn.RoomA] = connectionCount.GetValueOrDefault(conn.RoomA) + 1;
-            connectionCount[conn.RoomB] = connectionCount.GetValueOrDefault(conn.RoomB) + 1;
-        }
-
-        // 1. Exit at (0, 0).
-        foreach (var room in comp.Rooms)
-        {
-            if (room.GridCoord == Vector2i.Zero)
-            {
-                room.RoomType = CEProceduralRoomType.Exit;
-                break;
-            }
-        }
-
-        // Collect dead-ends (rooms with exactly 1 connection), excluding the exit.
-        var deadEnds = new List<CEProceduralAbstractRoom>();
-        foreach (var room in comp.Rooms)
-        {
-            if (room.RoomType != CEProceduralRoomType.General)
-                continue;
-
-            if (connectionCount.GetValueOrDefault(room.Index) == 1)
-                deadEnds.Add(room);
-        }
-
-        // 2. Entrances: pick dead-ends farthest from center first, then far apart.
-        var entranceCount = _random.Next(
-            config.EntranceCount.Min,
-            config.EntranceCount.Max + 1);
-        PickFarFromCenterThenApart(deadEnds, CEProceduralRoomType.Entrance, entranceCount);
-
-        // Remove assigned rooms from dead-end pool.
-        deadEnds.RemoveAll(r => r.RoomType != CEProceduralRoomType.General);
-
-        // 3. Blessings: pick from remaining dead-ends, maximally far apart.
-        var blessingCount = _random.Next(
-            config.BlessingCount.Min,
-            config.BlessingCount.Max + 1);
-        PickFarApart(deadEnds, CEProceduralRoomType.Blessing, blessingCount);
-
-        // Remove assigned rooms from dead-end pool.
-        deadEnds.RemoveAll(r => r.RoomType != CEProceduralRoomType.General);
-
-        // 4. Dead-ends: all remaining dead-end rooms get the DeadEnd type.
-        foreach (var room in deadEnds)
-        {
-            room.RoomType = CEProceduralRoomType.DeadEnd;
-        }
-    }
-
-    /// <summary>
-    /// Greedily picks rooms from <paramref name="candidates"/> that are maximally far apart
-    /// from already-picked rooms and assigns them the given <paramref name="type"/>.
-    /// Uses grid-coordinate Manhattan distance.
-    /// </summary>
-    private static void PickFarApart(
-        List<CEProceduralAbstractRoom> candidates,
-        CEProceduralRoomType type,
-        int count)
-    {
-        if (count <= 0 || candidates.Count == 0)
-            return;
-
-        var picked = new List<CEProceduralAbstractRoom>();
-
-        for (var n = 0; n < count && candidates.Count > 0; n++)
-        {
-            CEProceduralAbstractRoom? best = null;
-            var bestMinDist = -1;
-
-            foreach (var candidate in candidates)
-            {
-                if (candidate.RoomType != CEProceduralRoomType.General)
-                    continue;
-
-                // Minimum Manhattan distance to all already picked rooms.
-                var minDist = int.MaxValue;
-                foreach (var p in picked)
-                {
-                    var dist = Math.Abs(candidate.GridCoord.X - p.GridCoord.X)
-                               + Math.Abs(candidate.GridCoord.Y - p.GridCoord.Y);
-                    if (dist < minDist)
-                        minDist = dist;
-                }
-
-                // First pick: use MaxValue so any candidate wins.
-                if (picked.Count == 0)
-                    minDist = int.MaxValue;
-
-                if (minDist > bestMinDist)
-                {
-                    bestMinDist = minDist;
-                    best = candidate;
-                }
-            }
-
-            if (best == null)
-                break;
-
-            best.RoomType = type;
-            picked.Add(best);
-        }
-    }
-
-    /// <summary>
-    /// Greedily picks rooms that are (1) farthest from the dungeon center (grid origin)
-    /// and (2) as a tiebreaker, farthest from already-picked rooms.
-    /// Uses grid-coordinate Manhattan distance.
-    /// </summary>
-    private static void PickFarFromCenterThenApart(
-        List<CEProceduralAbstractRoom> candidates,
-        CEProceduralRoomType type,
-        int count)
-    {
-        if (count <= 0 || candidates.Count == 0)
-            return;
-
-        var picked = new List<CEProceduralAbstractRoom>();
-
-        for (var n = 0; n < count && candidates.Count > 0; n++)
-        {
-            CEProceduralAbstractRoom? best = null;
-            var bestCenterDist = -1;
-            var bestMinPeerDist = -1;
-
-            foreach (var candidate in candidates)
-            {
-                if (candidate.RoomType != CEProceduralRoomType.General)
-                    continue;
-
-                // Primary: Manhattan distance from the dungeon center (0, 0).
-                var centerDist = Math.Abs(candidate.GridCoord.X) + Math.Abs(candidate.GridCoord.Y);
-
-                // Secondary: minimum Manhattan distance to all already-picked rooms.
-                var minPeerDist = int.MaxValue;
-                foreach (var p in picked)
-                {
-                    var dist = Math.Abs(candidate.GridCoord.X - p.GridCoord.X)
-                               + Math.Abs(candidate.GridCoord.Y - p.GridCoord.Y);
-                    if (dist < minPeerDist)
-                        minPeerDist = dist;
-                }
-
-                // First pick — no peers, so peer distance is irrelevant.
-                if (picked.Count == 0)
-                    minPeerDist = int.MaxValue;
-
-                // Compare: primary wins, secondary is tiebreaker.
-                if (centerDist > bestCenterDist
-                    || (centerDist == bestCenterDist && minPeerDist > bestMinPeerDist))
-                {
-                    bestCenterDist = centerDist;
-                    bestMinPeerDist = minPeerDist;
-                    best = candidate;
-                }
-            }
-
-            if (best == null)
-                break;
-
-            best.RoomType = type;
-            picked.Add(best);
-        }
     }
 }

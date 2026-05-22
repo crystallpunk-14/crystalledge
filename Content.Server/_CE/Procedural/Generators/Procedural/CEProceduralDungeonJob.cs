@@ -15,77 +15,52 @@ namespace Content.Server._CE.Procedural.Generators.Procedural;
 /// yielding periodically via <see cref="Job{T}.SuspendIfOutOfTime"/> to
 /// avoid blocking the main thread.
 /// </summary>
-public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
+public sealed class CEProceduralDungeonJob(
+    ISawmill sawmill,
+    double maxTime,
+    IEntityManager entManager,
+    IPrototypeManager proto,
+    IRobustRandom random,
+    SharedMapSystem maps,
+    CEZLevelsSystem zLevels,
+    CEProceduralGeneratorSystem generator,
+    CEProceduralConfig config,
+    CancellationToken cancellation = default)
+    : Job<CEDungeonGenerateResult>(maxTime, cancellation)
 {
-    private readonly IEntityManager _entManager;
-    private readonly IPrototypeManager _proto;
-    private readonly IRobustRandom _random;
-    private readonly SharedMapSystem _maps;
-    private readonly CEZLevelsSystem _zLevels;
-    private readonly CEProceduralGeneratorSystem _generator;
-    private readonly CEProceduralConfig _config;
-    private readonly ISawmill _sawmill;
-
-    public CEProceduralDungeonJob(
-        ISawmill sawmill,
-        double maxTime,
-        IEntityManager entManager,
-        IPrototypeManager proto,
-        IRobustRandom random,
-        SharedMapSystem maps,
-        CEZLevelsSystem zLevels,
-        CEProceduralGeneratorSystem generator,
-        CEProceduralConfig config,
-        CancellationToken cancellation = default)
-        : base(maxTime, cancellation)
-    {
-        _sawmill = sawmill;
-        _entManager = entManager;
-        _proto = proto;
-        _random = random;
-        _maps = maps;
-        _zLevels = zLevels;
-        _generator = generator;
-        _config = config;
-    }
-
     protected override async Task<CEDungeonGenerateResult> Process()
     {
-        var config = _config;
-
-        // Determine how many rooms to generate.
-        var targetCount = _random.Next(config.GeneralCount.Min, config.GeneralCount.Max + 1);
-        if (targetCount <= 0)
+        if (config.GenerationPlan.Count == 0)
+        {
+            sawmill.Error("CEProceduralDungeonJob: GenerationPlan is empty, cannot generate dungeon.");
             return new CEDungeonGenerateResult(false);
+        }
 
         // Create a new map for this dungeon.
-        var mapUid = _maps.CreateMap(out var mapId);
+        var mapUid = maps.CreateMap(out var mapId);
 
-        // Build the abstract room graph.
-        var comp = _entManager.AddComponent<CEGeneratingProceduralDungeonComponent>(mapUid);
+        // Build the abstract room graph by executing every step in the generation plan.
+        var comp = entManager.AddComponent<CEGeneratingProceduralDungeonComponent>(mapUid);
 
-        await _generator.BuildRoomGraph(comp, config.MaxRoomSize, targetCount, SuspendIfOutOfTime);
+        await generator.ExecuteGenerationPlan(comp, config, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
-        // Assign room types before selecting real prototypes.
-        _generator.AssignRoomTypes(comp, config);
-        await SuspendIfOutOfTime();
+        if (comp.Rooms.Count == 0)
+        {
+            sawmill.Error("CEProceduralDungeonJob: GenerationPlan produced no rooms.");
+            return new CEDungeonGenerateResult(false);
+        }
 
-        // Add cyclic connections between adjacent General rooms (farthest from center first).
-        var cycleCount = _random.Next(config.CycleCount.Min, config.CycleCount.Max + 1);
-        _generator.AddCyclicConnections(comp, cycleCount, _random);
-        await SuspendIfOutOfTime();
-
-        // Assign real room prototypes, apply rotation, resize and randomize position.
-        await _generator.AssignRealRooms(comp, config, SuspendIfOutOfTime);
+        // Assign real room prototypes, apply rotation, resize and randomise position.
+        await generator.AssignRealRooms(comp, config, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
         // Compact: slide rooms toward their parent (BFS order), maintaining adaptive gap.
-        await _generator.CompactRooms(comp, config.MainZLevel, SuspendIfOutOfTime);
+        await generator.CompactRooms(comp, config.MainZLevel, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
         // Create z-network so 3D rooms can be spawned across z-levels.
-        var network = _zLevels.CreateZNetwork(config.Components);
+        var network = zLevels.CreateZNetwork(config.Components);
 
         // Determine the maximum room height to know how many z-levels we need.
         var maxHeight = 1;
@@ -94,7 +69,7 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
             if (room.RoomProtoId == null)
                 continue;
 
-            if (_proto.TryIndex(room.RoomProtoId.Value, out var rp) && rp.Height > maxHeight)
+            if (proto.TryIndex(room.RoomProtoId.Value, out var rp) && rp.Height > maxHeight)
                 maxHeight = rp.Height;
         }
 
@@ -106,20 +81,20 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
 
         for (var zOffset = 1; zOffset < maxHeight; zOffset++)
         {
-            var extraMapUid = _maps.CreateMap(out _);
-            _entManager.EnsureComponent<MapGridComponent>(extraMapUid);
+            var extraMapUid = maps.CreateMap(out _);
+            entManager.EnsureComponent<MapGridComponent>(extraMapUid);
             mapsByDepth[extraMapUid] = zOffset;
         }
 
-        _zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth);
+        zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth);
         await SuspendIfOutOfTime();
 
         // Ensure the map has a grid for tile/entity placement.
-        var grid = _entManager.EnsureComponent<MapGridComponent>(mapUid);
+        var grid = entManager.EnsureComponent<MapGridComponent>(mapUid);
 
         // Spawn each room's 3D prototype onto the grid.
         var reservedTiles = new HashSet<Vector2i>();
-        await _generator.SpawnRooms(comp, mapUid, grid, reservedTiles, SuspendIfOutOfTime);
+        await generator.SpawnRooms(comp, mapUid, grid, reservedTiles, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
         // Resolve the grid at MainZLevel for corridor placement.
@@ -128,32 +103,32 @@ public sealed class CEProceduralDungeonJob : Job<CEDungeonGenerateResult>
 
         if (config.MainZLevel != 0)
         {
-            if (_zLevels.TryMapOffset(
-                    (mapUid, _entManager.EnsureComponent<CEZLevelMapComponent>(mapUid)),
+            if (zLevels.TryMapOffset(
+                    (mapUid, entManager.EnsureComponent<CEZLevelMapComponent>(mapUid)),
                     config.MainZLevel,
                     out var mainLevelMap))
             {
-                corridorGridUid = mainLevelMap;
-                corridorGrid = _entManager.EnsureComponent<MapGridComponent>(corridorGridUid);
+                corridorGridUid = mainLevelMap.Value;
+                corridorGrid = entManager.EnsureComponent<MapGridComponent>(corridorGridUid);
             }
             else
             {
-                _sawmill.Warning(
+                sawmill.Warning(
                     $"CEProceduralDungeonJob: could not resolve MainZLevel {config.MainZLevel} for corridors.");
             }
         }
 
-        var rng = new Random(_random.Next());
+        var rng = new Random(random.Next());
 
         // Build corridors and spawn doors between connected rooms.
-        await _generator.BuildCorridors(comp, config, corridorGridUid, corridorGrid, rng, reservedTiles, SuspendIfOutOfTime);
+        await generator.BuildCorridors(comp, config, corridorGridUid, corridorGrid, rng, reservedTiles, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
         // Place walls around the perimeter of all rooms and corridors on every z-level.
-        await _generator.PlaceWalls(config, mapUid, mapsByDepth, reservedTiles, SuspendIfOutOfTime);
+        await generator.PlaceWalls(config, mapUid, mapsByDepth, reservedTiles, SuspendIfOutOfTime);
         await SuspendIfOutOfTime();
 
-        _entManager.Dirty(mapUid, comp);
+        entManager.Dirty(mapUid, comp);
 
         return new CEDungeonGenerateResult(true, mapUid, mapId, network.Owner);
     }

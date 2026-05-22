@@ -85,7 +85,7 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
             if (direction == Vector2.Zero)
                 continue;
 
-            var ent = EntityManager.SpawnAtPosition(args.Effect.Prototype, spawnCoords);
+            var ent = SpawnAtPosition(args.Effect.Prototype, spawnCoords);
 
             var speed = args.Effect.ProjectileSpeed;
             if (args.Effect.ProjectileMaxSpeed is { } max)

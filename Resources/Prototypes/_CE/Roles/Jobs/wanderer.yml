@@ -1,0 +1,21 @@
+- type: job
+  id: CEWanderer
+  setPreference: true
+  name: ce-job-name-wanderer
+  description: ce-job-desc-wanderer
+  playTimeTracker: CEJobWanderer
+  icon: CEJobIconWanderer
+  requirements:
+    - !type:CEAchievementRequirement
+      achievement: ClassWanderer
+
+- type: playTimeTracker
+  id: CEJobWanderer
+
+- type: jobIcon
+  parent: CEJobIcon
+  id: CEJobIconWanderer
+  icon:
+    sprite: /Textures/_CE/Interface/job_icons.rsi
+    state: wanderer
+  jobName: ce-job-name-wanderer

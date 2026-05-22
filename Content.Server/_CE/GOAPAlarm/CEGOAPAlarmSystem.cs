@@ -1,5 +1,6 @@
 using Content.Server._CE.GOAP;
-using Robust.Server.GameObjects;
+using Content.Server._CE.GOAP.Classifiers;
+using Content.Shared._CE.Animation.Core;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
@@ -10,14 +11,30 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEGOAPAlarmComponent, CETargetChangedEvent>(OnChangeTarget);
+        SubscribeLocalEvent<CEGOAPAlarmComponent, CEGOAPEnemyAcquiredEvent>(OnEnemyAcquired);
+        SubscribeLocalEvent<CEGOAPAlarmAnimationComponent, CEGOAPEnemyAcquiredEvent>(OnAnimationEnemyAcquired);
+
         SubscribeLocalEvent<CEAlarmOnSpawnComponent, MapInitEvent>(OnAlarmOnSpawn);
+    }
+
+    private void OnAnimationEnemyAcquired(Entity<CEGOAPAlarmAnimationComponent> ent, ref CEGOAPEnemyAcquiredEvent args)
+    {
+        if (args.FirstEnemy is null)
+            return;
+
+        if (_timing.CurTime > ent.Comp.LastAlarm + ent.Comp.Cooldown)
+            _animation.TryPlayAnimationToEntity(ent, ent.Comp.Animation, args.FirstEnemy.Value, forceCancel: true);
+
+        ent.Comp.LastAlarm = _timing.CurTime;
+
+        Alarm(Transform(ent).Coordinates, args.FirstEnemy.Value, ent.Comp.Radius);
     }
 
     private void OnAlarmOnSpawn(Entity<CEAlarmOnSpawnComponent> ent, ref MapInitEvent args)
@@ -25,9 +42,9 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
         Alarm(Transform(ent).Coordinates, ent.Owner, ent.Comp.Radius);
     }
 
-    private void OnChangeTarget(Entity<CEGOAPAlarmComponent> ent, ref CETargetChangedEvent args)
+    private void OnEnemyAcquired(Entity<CEGOAPAlarmComponent> ent, ref CEGOAPEnemyAcquiredEvent args)
     {
-        if (args.NewTarget is null)
+        if (args.FirstEnemy is null)
             return;
 
         if (_timing.CurTime > ent.Comp.LastAlarm + ent.Comp.Cooldown)
@@ -39,10 +56,10 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
 
         ent.Comp.LastAlarm = _timing.CurTime;
 
-        Alarm(Transform(ent).Coordinates, args.NewTarget.Value, ent.Comp.Radius);
+        Alarm(Transform(ent).Coordinates, args.FirstEnemy.Value, ent.Comp.Radius);
     }
 
-    public void Alarm(EntityCoordinates source, EntityUid target, float radius)
+    private void Alarm(EntityCoordinates source, EntityUid target, float radius)
     {
         RaiseLocalEvent(new CEGOAPAlarmEvent(source, target, radius));
     }

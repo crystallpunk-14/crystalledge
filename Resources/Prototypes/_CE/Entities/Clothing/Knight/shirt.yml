@@ -1,8 +1,0 @@
-- type: entity
-  parent: CEClothingShirtBase
-  id: CEClothingKnightShirtFighter
-  components:
-  - type: Sprite
-    sprite: _CE/Clothing/Shirt/Knight/fighter_shirt.rsi
-  - type: Clothing
-    sprite: _CE/Clothing/Shirt/Knight/fighter_shirt.rsi

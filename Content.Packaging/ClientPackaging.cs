@@ -75,7 +75,15 @@ public static class ClientPackaging
         };
         dropSvgPass.AddDependency(graph.Input).AddBefore(graph.PresetPasses);
 
-        AssetGraph.CalculateGraph([pass, dropSvgPass, ..graph.AllPasses], logger);
+        // CrystallEdge: drop .smp source files (render project files for VFX)
+        var dropSmpPass = new AssetPassFilterDrop(f => f.Path.EndsWith(".smp"))
+        {
+            Name = "DropSmpPass",
+        };
+        dropSmpPass.AddDependency(graph.Input).AddBefore(graph.PresetPasses);
+
+        AssetGraph.CalculateGraph([pass, dropSvgPass, dropSmpPass, ..graph.AllPasses], logger);
+        // CrystallEdge end
 
         var inputPass = graph.Input;
 

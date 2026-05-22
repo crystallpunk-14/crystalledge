@@ -1,0 +1,26 @@
+- type: marking
+  id: CEGoblinNose
+  bodyPart: Snout
+  groupWhitelist: [CEGoblin]
+  forcedColoring: true
+  sprites:
+    - sprite: _CE/Mobs/Customization/goblin_nose.rsi
+      state: nose1
+
+- type: marking
+  id: CEGoblinNose2
+  bodyPart: Snout
+  groupWhitelist: [CEGoblin]
+  forcedColoring: true
+  sprites:
+    - sprite: _CE/Mobs/Customization/goblin_nose.rsi
+      state: nose2
+
+- type: marking
+  id: CEGoblinNose3
+  bodyPart: Snout
+  groupWhitelist: [CEGoblin]
+  forcedColoring: true
+  sprites:
+    - sprite: _CE/Mobs/Customization/goblin_nose.rsi
+      state: nose3

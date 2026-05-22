@@ -9,3 +9,7 @@
 - type: CEDamageType
   id: Cold
   color: "#5d9ee2"
+
+- type: CEDamageType
+  id: Poison
+  color: "#448024"

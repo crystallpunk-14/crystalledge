@@ -1,18 +1,17 @@
 - type: entity
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CEFlem
+  - CEMobGOAPBase
+  id: CEMobFlem
   name: flem
   description: TODO
   categories: [ ForkFiltered ]
   components:
   - type: CEGOAPAlarm
   - type: CEMagicEnergyContainer
-    energy: 100
-    baseMaxEnergy: 100
+    maxEnergy: 500
   - type: CEGOAP
     goals:
     # Most important - stay alive
@@ -27,7 +26,7 @@
     actions:
     # Move to target
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -36,7 +35,7 @@
       range: 1.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -51,29 +50,10 @@
       cost: 1
       exploreRadius: 8
     # Move to enemy's last known position
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
-
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPCheckHealthLevelSensor
-      conditionKey: LowHealth
-      threshold: 0.5
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
+  - type: CEGOAPCheckHealthLevelSensor
+    conditionKey: LowHealth
+    threshold: 0.5
+    selector: !type:CEGOAPSelectorSelf
 
   - type: NpcFactionMember
     factions:
@@ -103,9 +83,10 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
-              Physical: 2
+              Physical: 10
     animations:
       Primary:
       - anim: FlemAttack1

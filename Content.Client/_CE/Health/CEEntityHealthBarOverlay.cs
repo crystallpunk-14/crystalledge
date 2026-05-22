@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.StatusIcon.Components;
@@ -84,7 +84,7 @@ public sealed class CEEntityHealthBarOverlay : Overlay
             const float startX = 8f;
             var endX = widthOfMob - 8f;
 
-            var isCrit = info.HasMobState && info.MobState == CEMobState.Critical;
+            var isCrit = info.HasMobState && info.Critical;
 
             float ratio;
             Color mainColor;

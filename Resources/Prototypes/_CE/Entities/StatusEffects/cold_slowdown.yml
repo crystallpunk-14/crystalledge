@@ -2,18 +2,28 @@
   id: CEStatusEffectColdSlowdown
   name: Cold Slowdown
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:
-      - CEFreezable
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEColdSlowdown
   - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectFire
+    vfx: CESteamEffect
+    sound:
+      path: /Audio/_CE/Effects/steam_burst.ogg
+  - type: CEStatusEffectTransform
+    transforms:
+      CEStatusEffectWet: CEStatusEffectFrozen
   - type: CESpeedModifierStatusEffect
     speed: 0.8
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
     noRot: true
     layers:
     - state: effect
@@ -22,6 +32,9 @@
     radius: 1.2
     energy: 1
     color: "#30caf5"
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 5
 
 - type: alert
   id: CEColdSlowdown

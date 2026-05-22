@@ -46,4 +46,8 @@
         density: 1000
         hard: false
   - type: Climbable
+  - type: AmbientSound
+    range: 5
+    sound:
+      path: /Audio/_CE/Ambience/winds.ogg
 

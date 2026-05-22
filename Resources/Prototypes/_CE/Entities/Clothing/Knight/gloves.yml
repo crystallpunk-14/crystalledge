@@ -1,8 +1,0 @@
-- type: entity
-  parent: CEClothingGlovesBase
-  id: CEClothingKnightGlovesFighter
-  components:
-  - type: Sprite
-    sprite: _CE/Clothing/Gloves/Knight/fighter_gloves.rsi
-  - type: Clothing
-    sprite: _CE/Clothing/Gloves/Knight/fighter_gloves.rsi

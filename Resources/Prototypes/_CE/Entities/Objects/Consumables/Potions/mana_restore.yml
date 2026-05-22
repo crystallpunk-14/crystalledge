@@ -14,7 +14,7 @@
   - type: CEConsumable
     effects:
     - !type:RestoreMana
-      amount: 5
+      amount: 25
     - !type:SpawnEntity
       spawns:
       - CEEffectManaRestore
@@ -25,9 +25,10 @@
       whitelist:
         components:
         - CEMobState
+        - CEGOAP
       effects:
       - !type:RestoreMana
-        amount: 2
+        amount: 12
       - !type:SpawnEntity
         spawns:
         - CEEffectManaRestore
@@ -35,7 +36,6 @@
       effectTarget: User
       spawns:
       - CEEffectAreaHealingEffect
-  - type: CEDestructible
 
 - type: entity
   id: CEConsumablePotionManaMedium
@@ -53,7 +53,48 @@
   - type: CEConsumable
     effects:
     - !type:RestoreMana
-      amount: 10
+      amount: 50
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+        - CEGOAP
+      effects:
+      - !type:RestoreMana
+        amount: 25
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectManaRestore
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectPotionManaRestore
+
+- type: entity
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionSmall
+  id: CEConsumablePotionManaSmallCondensated
+  suffix: Condensated, mana restoring modifiers doesnt work.
+  name: condensated small mana potion
+  description: Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#1f36b6"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 25
+      applyModifiers: false
     - !type:SpawnEntity
       spawns:
       - CEEffectManaRestore
@@ -66,7 +107,8 @@
         - CEMobState
       effects:
       - !type:RestoreMana
-        amount: 5
+        amount: 12
+        applyModifiers: false
       - !type:SpawnEntity
         spawns:
         - CEEffectManaRestore
@@ -74,7 +116,47 @@
       effectTarget: User
       spawns:
       - CEEffectPotionManaRestore
-  - type: CEDestructible
+
+- type: entity
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
+  id: CEConsumablePotionManaMediumCondensated
+  suffix: Condensated, mana restoring modifiers doesnt work.
+  name: condensated mana potion
+  description: Another entity's mana concentrate. Restores mana just like mana potions, but mana restoration modifiers do not apply.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#1f36b6"
+  - type: CEConsumable
+    effects:
+    - !type:RestoreMana
+      amount: 50
+      applyModifiers: false
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectManaRestore
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:RestoreMana
+        amount: 25
+        applyModifiers: false
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectManaRestore
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectPotionManaRestore
 
 - type: entity
   id: CEEffectPotionManaRestore

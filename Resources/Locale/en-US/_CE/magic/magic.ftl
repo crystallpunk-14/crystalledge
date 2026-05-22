@@ -25,3 +25,6 @@ ce-magic-spell-target-not-mob = The target must be a living thing!
 ce-magic-spell-target-mob-state = Can only be used on {$state} targets!
 ce-magic-spell-target-mob-state-live = living
 ce-magic-spell-target-mob-state-critical = dying
+
+ce-magic-soulcost = Souls consumed
+ce-magic-spell-not-enough-soul = Not enough souls!

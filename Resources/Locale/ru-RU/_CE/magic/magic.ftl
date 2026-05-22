@@ -25,3 +25,6 @@ ce-magic-spell-target-not-mob = Цель должна быть живым сущ
 ce-magic-spell-target-mob-state = Можно использовать только на {$state} целях!
 ce-magic-spell-target-mob-state-live = живых
 ce-magic-spell-target-mob-state-critical = умирающих
+
+ce-magic-soulcost = Поглощается душ
+ce-magic-spell-not-enough-soul = Недостаточно душ!

@@ -1,0 +1,12 @@
+- type: entity
+  parent: CEBaseKnowledgeBook
+  id: CEKnowledgeBook_BasicAlchemy
+  name: basic alchemy
+  description: A Guide to Alchemy for Complete Beginners. This book describes basic recipes for brewing the most common and simple potions.
+  components:
+  - type: Sprite
+    state: basic_alchemy
+  - type: CEKnowledgeBook
+    recipes:
+    - CEConsumablePotionManaMedium
+    - CEConsumablePotionHealingMedium

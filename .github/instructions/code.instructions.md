@@ -14,7 +14,6 @@ applyTo: "**/*.cs"
 - Type parameters: `TPascalCase` (prefix with `T`)
 - Use `var` when the type is apparent from the right side
 - Use expression-bodied members for simple properties and accessors
-- Maximum line length: **120 characters**
 - Always include final newline in files
 - Braces on new lines (Allman style)
 - Minimize LINQ in performance-critical areas to avoid allocations
@@ -31,6 +30,8 @@ CrystallEdge uses an ECS architecture:
 - Components should not contain logic; systems should process component data
 - Use `[Dependency]` for dependency injection
 - Use `EntityQuery<T>` for performance-critical component lookups
+- Никогда не сохраняй данные внутри систем, они не сохраняются при сохранении и загрузки игры.
+- Перед созданием подписки компонента на ивент формата SubscribeLocalEvent<Comp, Event>() убедись что такой пары подписок компонент-ивент не существует, так как движок запрещает дубликаты подписок.
 
 ### Example System Structure
 ```csharp

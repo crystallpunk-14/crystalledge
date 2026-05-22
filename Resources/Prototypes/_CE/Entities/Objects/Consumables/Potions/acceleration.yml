@@ -1,0 +1,42 @@
+- type: entity
+  id: CEConsumablePotionAcceleration
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionStar
+  name: acceleration potion
+  description: Increases your movement speed for a short duration.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#f2c83f"
+  - type: CEConsumable
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectAcceleration
+      amount: 6
+      max: 10
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectAcceleration
+        amount: 3
+        max: 10
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible

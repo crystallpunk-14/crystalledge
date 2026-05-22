@@ -1,35 +1,62 @@
 - type: entity
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CESlimeWater
+  - CEMobGOAPBase
+  id: CEMobSlimeWater
   name: water slime
   description: A wobbly blob of animated water. Pops into a splash when destroyed.
   categories: [ ForkFiltered ]
   components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#37beef"
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
+  - type: CESpawnAnimation
+    animation: WaterSlimeSpawn
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 1.1, 0.9
+      - time: 0.5
+        scale: 0.9, 1.1
+      - time: 1.0
+        scale: 1.1, 0.9
   - type: CEDestructible
-    destroyThreshold: 10
+    destroyThreshold: 25
+    lootTable: !type:AllSelector
+      children:
+      - id: CEConsumableSlimeCoreWater
+        amount: 1
+        prob: 0.75
   - type: CEDestructionEffect
     effects:
-    - !type:WetArea
-      radius: 3
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
+      radius: 1
       maxStacks: 10
       fallOffFactor: 0.5
   - type: CEGOAP
+
     goals:
     - desiredState:
         EnemyDead: true
       priority: 1
+
     actions:
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -37,7 +64,7 @@
       cost: 1
       range: 1.5
     - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -46,7 +73,7 @@
       useType: Primary
       angleVariation: 5
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -59,44 +86,9 @@
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
   - type: NpcFactionMember
     factions:
     - SimpleHostile
-  - type: Sprite
-    drawdepth: Mobs
-    sprite: _CE/Mobs/slime.rsi
-    layers:
-    - map: [ "base", "movement" ]
-      state: base
-      color: "#37beef"
-  - type: SpriteMovement
-    movementLayers:
-      movement:
-        state: jump
-    noMovementLayers:
-      movement:
-        state: base
   - type: MovementSpeedModifier
     baseSprintSpeed: 1.5
   - type: CEWeapon
@@ -108,25 +100,47 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
-              Physical: 1
-        - !type:WetEntity
-          stacks: 1
-          maxStacks: 5
+              Physical: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectWet
+          amount: 1
+          max: 5
     animations:
       Primary:
       - anim: SlimeBite
-  - type: CEArmor
-    flat:
-      Fire: 5
 
+
+- type: entityEffectAnimation
+  id: WaterSlimeSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectWaterCreation
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.0, 0.1
+      - time: 0.9
+        scale: 1.0, 1.0
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"
 
 
 - type: entityEffectAnimation
   id: SlimeBite
   movementSpeed: 0.8
-  duration: 0.8
+  duration: 1.4
   events:
     0:
     - !type:UsedEntityAnimation
@@ -195,19 +209,18 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1
   - type: Action
-    useDelay: 5
+    useDelay: 6
   - type: TargetAction
     range: 8
     interactOnMiss: false
   - type: EntityTargetAction
     event: !type:CEEntityTargetActionAnimationEvent
       animation: WaterSlimeJump
-      cancelAnimation: true
 
 - type: entityEffectAnimation
   id: WaterSlimeJump
   movementSpeed: 0
-  duration: 0.7
+  duration: 1
   events:
     0:
     - !type:PlaySound
@@ -216,11 +229,6 @@
         params:
           variation: 0.1
     0.4:
-    - !type:WetArea
-      effectTarget: User
-      radius: 1
-      maxStacks: 3
-      fallOffFactor: 1
     - !type:Dash
       distance: 4
       speed: 8
@@ -230,7 +238,8 @@
         path: /Audio/Effects/Fluids/splash.ogg
         params:
           variation: 0.1
-    - !type:WetArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
       effectTarget: User
       radius: 1
       maxStacks: 3

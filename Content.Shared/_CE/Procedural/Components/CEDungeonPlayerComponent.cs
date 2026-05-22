@@ -1,4 +1,5 @@
 using Robust.Shared.GameObjects;
+using Robust.Shared.Serialization.Manager.Attributes;
 
 namespace Content.Shared._CE.Procedural.Components;
 
@@ -9,4 +10,12 @@ namespace Content.Shared._CE.Procedural.Components;
 /// Mobs and bosses should NOT have this component.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CEDungeonPlayerComponent : Component;
+public sealed partial class CEDungeonPlayerComponent : Component
+{
+    /// <summary>
+    /// Game time at which this player entity was initialized (round start offset).
+    /// Set server-side on MapInit; used to compute how long a player took to reach each level.
+    /// </summary>
+    [DataField]
+    public TimeSpan SessionStartedAt;
+}

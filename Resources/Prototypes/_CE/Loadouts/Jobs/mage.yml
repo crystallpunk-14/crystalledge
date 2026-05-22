@@ -86,35 +86,21 @@
   name: ce-loadout-weapon
   minLimit: 1
   loadouts:
-  - CEWeaponMagicStaffFire
+  - CEWeaponMagicStaffMagicMissile
+  - CEWeaponMagicStaffSparkle
   - CEWeaponMagicStaffIce
 
 - type: loadout
-  id: CEWeaponMagicStaffFire
+  id: CEWeaponMagicStaffMagicMissile
   equipment:
-    neck: CEWeaponMagicStaffFire
+    neck: CEWeaponMagicStaffMagicMissile
+
+- type: loadout
+  id: CEWeaponMagicStaffSparkle
+  equipment:
+    neck: CEWeaponMagicStaffSparkle
 
 - type: loadout
   id: CEWeaponMagicStaffIce
   equipment:
     neck: CEWeaponMagicStaffIce
-
-- type: loadoutGroup
-  id: CEMageSkill
-  name: ce-loadout-skill
-  minLimit: 1
-  loadouts:
-  - TripleIcicles
-  - Firebolt
-
-- type: loadout
-  id: TripleIcicles
-  dummyEntity: CEActionTripleIcicles
-  skills:
-  - TripleIcicles
-
-- type: loadout
-  id: Firebolt
-  dummyEntity: CEActionFirebolt
-  skills:
-  - Firebolt

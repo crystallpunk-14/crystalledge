@@ -1,0 +1,100 @@
+- type: entity
+  parent:
+  - BaseStructure
+  id: CEBaseWorkbench
+  categories: [ ForkFiltered ]
+  abstract: true
+  components:
+  - type: Sprite
+    snapCardinals: true
+    sprite: _CE/Structures/Furniture/workbench.rsi
+    state: filler
+  - type: Icon
+    sprite: _CE/Structures/Furniture/workbench.rsi
+    state: filler
+  - type: PlacementReplacement
+    key: walls
+  - type: ActivatableUI
+    key: enum.CEWorkbenchUiKey.Key
+    requiresComplex: true
+    singleUser: true
+  - type: Climbable
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: CEWorkbenchUserCrafter
+  - type: CEWorkbench
+    craftSpeed: 1
+  - type: InteractionOutline
+  - type: UserInterface
+    interfaces:
+      enum.CEWorkbenchUiKey.Key:
+        type: CEWorkbenchBoundUserInterface
+  - type: PlaceableSurface
+  - type: CEWorkbenchPlaceableProvider
+  - type: CEWorkbenchUserContainersProvider
+  - type: ItemPlacer
+    maxEntities: 0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 55
+        mask: # tables should collide with other tables
+        - TableMask
+        layer:
+        - TableLayer
+      fix2:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        mask:
+        - TabletopMachineMask
+        layer:
+        - Impassable
+        - MidImpassable
+        - LowImpassable
+        hard: false
+
+- type: entity
+  parent:
+  - CEBaseWorkbench
+  id: CEWorkbenchAlchemyTable
+  name: alchemy lab
+  description: A small setup with everything needed for brewing potions
+  components:
+  - type: Sprite
+    state: alchemy_table
+  - type: Icon
+    state: alchemy_table
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWood
+  - type: CEWorkbench
+    craftSound:
+      path: /Audio/Effects/Chemistry/bubbles.ogg
+      params:
+        variation: 0.1
+    recipeTags:
+    - CERecipeAlchemyTable
+  - type: CEArmor
+    flat:
+      Physical: 5
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 50
+    destroySound:
+      collection: WoodDestroy
+    lootTable: !type:AllSelector
+      children:
+      - !type:GroupSelector
+        rolls: !type:RangeNumberSelector
+          range: 1, 3
+        children:
+        - !type:NestedSelector
+          tableId: CERandomFlowers
+        - !type:NestedSelector
+          tableId: CEEmptyVials
+          weight: 2

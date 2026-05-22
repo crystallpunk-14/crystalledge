@@ -2,22 +2,30 @@
   id: CECommonWeapon
   table: !type:GroupSelector
     children:
-    - id: CEWeaponMagicStaffFire
+    - id: CEWeaponHeavyClub
+    - id: CEWeaponMagicStaffSparkle
+    - id: CEWeaponMagicStaffMagicMissile
     - id: CEWeaponMagicStaffIce
     - id: CEWeaponSkimitarIron
     - id: CEWeaponSpearIron
     - id: CEWeaponSwordIron
-    - id: CEWeaponHeavyClub
     - id: CEWeaponStaffWooden
+    - id: CEWeaponStaffHolyStick
+    - id: CEWeaponTwoHandedSwordIron
+    - id: CEWeaponWarAxeIron
 
 - type: entityTable
   id: CEUncommonWeapon
   table: !type:GroupSelector
     children:
-    - id: CEWeaponDaggerSacrificial
     - id: CEWeaponMagicStaffHealing
-    - id: CEWeaponMagicStaffWater
     - id: CEWeaponSwordBone
+    - id: CEWeaponSpearSoulCatcher
+    - id: CEWeaponMagicStaffWater
+    - id: CEWeaponDaggerPurification
+    - id: CEWeaponSkimitarMolten
+    - id: CEWeaponMagicStaffCurse
+    - id: CEWeaponMagicStaffFireball
 
 - type: entityTable
   id: CERandomWeapon
@@ -28,7 +36,7 @@
       weight: 1
     - !type:NestedSelector
       tableId: CEUncommonWeapon
-      weight: 0.3
+      weight: 0.75
 
 - type: entity
   id: CESpawnerRandomWeapon
@@ -44,4 +52,4 @@
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomWeapon
-      prob: 0.5
+      prob: 1

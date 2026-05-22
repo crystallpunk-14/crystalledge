@@ -22,6 +22,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
     private void OnMapInit(Entity<CEMagicEnergyContainerComponent> ent, ref MapInitEvent args)
     {
         RefreshMaxMana(ent, ent.Comp);
+        ChangeEnergy((ent, ent.Comp), ent.Comp.MaxEnergy, out _, out _);
     }
 
     private void OnRejuvenate(Entity<CEMagicEnergyContainerComponent> ent, ref RejuvenateEvent args)
@@ -113,6 +114,15 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
         overloadEnergy = 0;
 
         if (!Resolve(sender, ref sender.Comp) || !Resolve(receiver, ref receiver.Comp))
+            return;
+
+        // Outgoing-mana-steal hook on the receiver (thief). Lives in TransferEnergy so that
+        // every code path that drains mana from one entity into another runs the same source-side
+        // gating (e.g. pacifism cancels theft from another player).
+        var attemptEv = new CEAttemptStealManaEvent(sender, receiver, energy);
+        RaiseLocalEvent(receiver, attemptEv);
+
+        if (attemptEv.Cancelled)
             return;
 
         //We check how much space is left in the container so as not to overload it, but only if it does not support overloading
@@ -211,6 +221,19 @@ public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue
     public readonly int OldValue = oldValue;
     public readonly int NewValue = newValue;
     public readonly int MaxValue = maxValue;
+}
+
+/// <summary>
+/// Raised on the receiver User (thief) inside <see cref="CESharedMagicEnergySystem.TransferEnergy"/>
+/// before mana is drained from the sender. Status effects on the receiver can cancel via
+/// <c>StatusEffectRelayedEvent</c>; pacifism uses this to block PvP mana theft.
+/// </summary>
+public sealed class CEAttemptStealManaEvent(EntityUid target, EntityUid user, int amount) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly EntityUid User = user;
+    public readonly int Amount = amount;
+    public bool Cancelled;
 }
 
 /// <summary>

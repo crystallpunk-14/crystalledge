@@ -1,25 +1,51 @@
 - type: entity
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobDamageable
   - CEMobCombat
-  id: CESlimeFire
+  - CEMobGOAPBase
+  id: CEMobSlimeFire
   name: fire slime
   description: A wobbly blob of animated fire. Pops into a burst of flames when destroyed.
   categories: [ ForkFiltered ]
   components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#ff4a08"
+      shader: unshaded
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/slime_alert.ogg
       params:
         variation: 0.1
+  - type: CESpawnAnimation
+    animation: FireSlimeSpawn
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 1.1, 0.9
+      - time: 0.5
+        scale: 0.9, 1.1
+      - time: 1.0
+        scale: 1.1, 0.9
   - type: CEDestructible
-    destroyThreshold: 10
+    destroyThreshold: 25
+    lootTable: !type:AllSelector
+      children:
+      - id: CEConsumableSlimeCoreFire
+        amount: 1
+        prob: 0.75
   - type: CEDestructionEffect
     effects:
-    - !type:IgniteArea
-      radius: 3
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
+      radius: 1
       maxStacks: 4
       fallOffFactor: 0.5
   - type: CEGOAP
@@ -29,7 +55,7 @@
       priority: 1
     actions:
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -37,7 +63,7 @@
       cost: 1
       range: 1.5
     - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -46,7 +72,7 @@
       useType: Primary
       angleVariation: 5
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -59,49 +85,13 @@
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
   - type: NpcFactionMember
     factions:
     - SimpleHostile
-  - type: Sprite
-    drawdepth: Mobs
-    sprite: _CE/Mobs/slime.rsi
-    layers:
-    - map: [ "base", "movement" ]
-      state: base
-      color: "#ff4a08"
-      shader: unshaded
   - type: PointLight
     color: "#ff4a08"
     radius: 2
     energy: 2.0
-  - type: SpriteMovement
-    movementLayers:
-      movement:
-        state: jump
-    noMovementLayers:
-      movement:
-        state: base
   - type: MovementSpeedModifier
     baseSprintSpeed: 1.5
   - type: CEWeapon
@@ -113,12 +103,14 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
-              Fire: 1
-        - !type:IgniteEntity
-          stacks: 1
-          maxStacks: 2
+              Fire: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectFire
+          amount: 1
+          max: 2
     animations:
       Primary:
       - anim: SlimeBite
@@ -138,19 +130,18 @@
   - type: CEVisualizeAoEZoneAction
     radius: 1
   - type: Action
-    useDelay: 5
+    useDelay: 6
   - type: TargetAction
     range: 8
     interactOnMiss: false
   - type: EntityTargetAction
     event: !type:CEEntityTargetActionAnimationEvent
       animation: FireSlimeJump
-      cancelAnimation: true
 
 - type: entityEffectAnimation
   id: FireSlimeJump
   movementSpeed: 0
-  duration: 0.7
+  duration: 1
   events:
     0:
     - !type:PlaySound
@@ -159,11 +150,6 @@
         params:
           variation: 0.1
     0.4:
-    - !type:IgniteArea
-      effectTarget: User
-      radius: 1
-      maxStacks: 3
-      fallOffFactor: 1
     - !type:Dash
       distance: 4
       speed: 8
@@ -173,8 +159,32 @@
         path: /Audio/Effects/Fluids/splash.ogg
         params:
           variation: 0.1
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       effectTarget: User
       radius: 1
       maxStacks: 3
       fallOffFactor: 1
+
+- type: entityEffectAnimation
+  id: FireSlimeSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectFireCreation
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.0, 0.1
+      - time: 0.9
+        scale: 1.0, 1.0
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"

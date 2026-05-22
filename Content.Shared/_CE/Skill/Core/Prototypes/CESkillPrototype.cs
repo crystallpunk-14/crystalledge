@@ -70,6 +70,14 @@ public sealed partial class CESkillPrototype : IPrototype, IInheritingPrototype
     /// </summary>
     [DataField]
     public bool Unique = true;
+
+    /// <summary>
+    /// Relative weight of this skill when it is randomly selected for a player.
+    /// Higher values make the skill appear more frequently. Defaults to 1.
+    /// </summary>
+    [DataField]
+    [AlwaysPushInheritance]
+    public float Weight = 1f;
 }
 
 [ImplicitDataDefinitionForInheritors]

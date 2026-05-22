@@ -2,8 +2,8 @@ using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
 
 namespace Content.Server._CE.GOAP.Actions;
@@ -35,13 +35,7 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
+    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,

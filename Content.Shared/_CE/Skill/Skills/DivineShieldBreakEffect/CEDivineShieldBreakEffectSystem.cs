@@ -23,7 +23,7 @@ public sealed class CEDivineShieldBreakEffectSystem : EntitySystem
             args.Args.Applier ?? args.Args.ShieldHolder,
             null,
             Angle.Zero,
-            0f,
+            1f,
             args.Args.ShieldHolder,
             Transform(args.Args.ShieldHolder).Coordinates);
 

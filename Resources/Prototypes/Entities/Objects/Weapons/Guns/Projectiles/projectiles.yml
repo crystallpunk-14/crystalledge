@@ -85,12 +85,12 @@
         - LowImpassable
         hard: False
   - type: Projectile
-    impactEffect: BulletImpactEffect
+    #impactEffect: BulletImpactEffect
     damage:
       types:
         Piercing: 14
-    soundHit:
-      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+    #soundHit:
+    #  path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
   - type: TimedDespawn
     lifetime: 10
 

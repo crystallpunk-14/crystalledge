@@ -9,3 +9,48 @@ ce-alert-cold-slowdown-desc = Вы двигаетесь медленнее из 
 
 ce-alert-wet-name = Мокрый
 ce-alert-wet-desc = Вы промокли. Огонь не может вас поджечь, пока вы мокрые.
+
+ce-alert-temp-shield-name = Временный щит
+ce-alert-temp-shield-desc = Поглощает физический урон.
+
+ce-alert-temp-shield-fire-name = Огненный щит
+ce-alert-temp-shield-fire-desc = Поглощает урон огнём.
+
+ce-alert-temp-shield-cold-name = Ледяной щит
+ce-alert-temp-shield-cold-desc = Поглощает урон холодом.
+
+ce-alert-bruise-name = Ушиб
+ce-alert-bruise-desc = Увеличивает входящий физический урон.
+
+ce-alert-burn-name = Ожог
+ce-alert-burn-desc = Увеличивает входящий урон огнём.
+
+ce-alert-frostbite-name = Обморожение
+ce-alert-frostbite-desc = Увеличивает входящий урон холодом.
+
+ce-alert-regeneration-name = Регенерация
+ce-alert-regeneration-desc = Ваше здоровье медленно восстанавливается со временем.
+
+ce-alert-fight-for-survival-name = Борьба за жизнь
+ce-alert-fight-for-survival-desc = Вы сопротивляетесь медленно приближающейся к вам смерти.
+
+ce-alert-strength-name = Сила
+ce-alert-strength-desc = Ваши атаки в ближнем бою наносят дополнительный урон.
+
+ce-alert-poisoned-name = Отравлен
+ce-alert-poisoned-desc = Вы медленно получаете урон. Любой источник исцеления снимает 1 стак яда.
+
+ce-alert-pacifism-name = Безопасная зона
+ce-alert-pacifism-desc = Успокаивающий эффект безопасного убежища не позволяет вам причинять вред окружающим.
+
+ce-alert-blessing-name = Благословение
+ce-alert-blessing-desc = Увеличивает все входящее лечение.
+
+ce-alert-curse-name = Проклятье
+ce-alert-curse-desc = Увеличивает весь входящий урон.
+
+ce-alert-frozen-name = Заморожен
+ce-alert-frozen-desc = Вы полностью заморожены! Вы не можете ничего делать, но ледяная корка защищает вас от урона!
+
+ce-alert-acceleration-name = Ускорен
+ce-alert-acceleration-desc = Вы двигаетесь быстрее!

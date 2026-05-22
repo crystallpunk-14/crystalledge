@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.EntityTable;
 using Content.Shared.Hands.Components;
@@ -74,12 +75,28 @@ public sealed class CEDestructibleSystem : EntitySystem
         _pendingDestruction.Enqueue((ent.Owner, args.Source));
     }
 
+    /// <summary>
+    /// Bypasses damage checks and enqueues the entity for destruction directly.
+    /// </summary>
+    public void ForceDestruct(EntityUid uid, EntityUid? source)
+    {
+        if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
+            return;
+
+        _pendingDestruction.Enqueue((uid, source));
+    }
+
     private void ProcessDestruction(EntityUid uid, EntityUid? source)
     {
         if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
             return;
 
         if (!TryComp<CEDestructibleComponent>(uid, out var comp))
+            return;
+
+        var attemptEv = new CEDestructAttemptEvent(source);
+        RaiseLocalEvent(uid, ref attemptEv);
+        if (attemptEv.Cancelled)
             return;
 
         var xform = Transform(uid);
@@ -90,7 +107,10 @@ public sealed class CEDestructibleSystem : EntitySystem
         else if (xform.MapUid != null)
             position = new EntityCoordinates(xform.MapUid.Value, _transform.GetWorldPosition(xform));
         else
+        {
+            PredictedQueueDel(uid);
             return;
+        }
 
         if (comp.DestroySound is not null && _net.IsServer)
             _audio.PlayPvs(comp.DestroySound, xform.Coordinates);
@@ -105,7 +125,11 @@ public sealed class CEDestructibleSystem : EntitySystem
                 var spawns = _entityTable.GetSpawns(comp.LootTable);
                 foreach (var spawn in spawns)
                 {
-                    var spawnedLoot = SpawnAtPosition(spawn, position);
+                    var offset = new Vector2(
+                        _random.NextFloat(-comp.SpawnOffset, comp.SpawnOffset),
+                        _random.NextFloat(-comp.SpawnOffset, comp.SpawnOffset)
+                        );
+                    var spawnedLoot = SpawnAtPosition(spawn, position.Offset(offset));
                     ScatterDroppedItem(spawnedLoot, position);
                 }
             }
@@ -213,6 +237,16 @@ public sealed class CEDestructibleSystem : EntitySystem
             ScatterDroppedItem(stored, position);
         }
     }
+}
+
+/// <summary>
+/// Raised on an entity just before it is destroyed by <see cref="CEDestructibleSystem"/>.
+/// Can be cancelled to prevent destruction — e.g. to play a death animation first.
+/// </summary>
+[ByRefEvent]
+public record struct CEDestructAttemptEvent(EntityUid? Source)
+{
+    public bool Cancelled;
 }
 
 /// <summary>

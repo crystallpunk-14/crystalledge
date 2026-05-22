@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._CE.Skill.Core.Prototypes;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;

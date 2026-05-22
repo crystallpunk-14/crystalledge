@@ -64,10 +64,9 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
     protected override void Effect(ref CEEntityEffectEvent<WeaponArcAttack> args)
     {
-        if (args.Args.Used is null)
-            return;
+        var used = args.Args.Used ?? args.Args.Source;
 
-        if (!TryComp<CEWeaponComponent>(args.Args.Used.Value, out var weapon))
+        if (!TryComp<CEWeaponComponent>(used, out var weapon))
             return;
 
         var entityCoords = _transform.GetMapCoordinates(args.Args.Source);
@@ -111,27 +110,35 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         hitEntities.RemoveWhere(t => !HasComp<CEDamageableComponent>(t));
 
         // Filter out entities behind walls (line-of-sight check).
+        // Use entity-based range check so fixture distance is respected for large colliders.
+        var _args = args.Args;
         hitEntities.RemoveWhere(t =>
-            !_interaction.InRangeUnobstructed(entityCoords, t, effectiveRange + 0.1f));
+            !_interaction.InRangeUnobstructed(_args.Source, t, effectiveRange + 0.1f, overlapCheck: false));
 
         var targets = new List<EntityUid>(hitEntities);
+
+        // TODO: FIX THAT SHITCODE WITH EFFECT SLOTS & INLINE EFFECTS
 
         // Find which EffectSlot on the weapon contains this arc attack.
         // The server uses this to replay nested effects on validated targets.
         var effectSlot = FindEffectSlot(weapon, args.Effect);
 
-        // Server clears targets for player attacks (damage goes through CEWeaponArcHitEvent).
-        _melee.HandleArcAttackHit(args.Args.Source, (args.Args.Used.Value, weapon), targets, effectSlot);
-
-        foreach (var target in targets)
+        // If the arc attack was defined inline in an animation (not in weapon.EffectSlots),
+        // FindEffectSlot returns null and ApplyArcEffects would skip the effects entirely.
+        // In that case, apply the inline Effects list directly to each hit target here.
+        // This runs on both server (authoritative) and client (prediction) via the shared animation system.
+        if (effectSlot == null && args.Effect.Effects.Count > 0)
         {
-            var effectArgs = args.Args with { EntityManager = EntityManager, Target = target, Position = null };
-
-            foreach (var effect in args.Effect.Effects)
+            foreach (var target in targets)
             {
-                effect.Effect(effectArgs);
+                var inlineArgs = args.Args with { Target = target };
+                foreach (var effect in args.Effect.Effects)
+                    effect.Effect(inlineArgs);
             }
         }
+
+        // Server clears targets for player attacks (damage goes through CEWeaponArcHitEvent).
+        _melee.HandleArcAttackHit(args.Args.Source, (used, weapon), targets, effectSlot);
     }
 
     /// <summary>

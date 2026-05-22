@@ -1,0 +1,52 @@
+- type: entity
+  id: CEStatusEffectFrostbite
+  name: Frostbite
+  description: Increases incoming cold damage.
+  components:
+  - type: CENegativeStatusEffect
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: RejuvenateRemovedStatusEffect
+  - type: StatusEffectAlert
+    alert: CEFrostbite
+  - type: CEDamageVulnerabilityStatusEffect
+    extraDamagePerStack: 1
+    affectedTypes:
+    - Cold
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 20
+    resetTimerOnStack: true
+
+- type: alert
+  id: CEFrostbite
+  alertViewEntity: CEFrostbiteAlertSpriteView
+  name: ce-alert-frostbite-name
+  description: ce-alert-frostbite-desc
+  icons:
+  - sprite: _CE/Interface/vulnerability.rsi
+    state: frost
+
+- type: entity
+  id: CEFrostbiteAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/vulnerability.rsi
+      state: frost
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

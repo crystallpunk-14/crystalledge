@@ -12,7 +12,8 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    public const int MaxZLevelsAboveRendering = 1;
+    public const int MaxZLevelsBelowRendering = 1;
+    public const int MaxZLevelsAboveRendering = 0;
 
     [Dependency] protected readonly ITileDefinitionManager TileDefinition = null!;
 

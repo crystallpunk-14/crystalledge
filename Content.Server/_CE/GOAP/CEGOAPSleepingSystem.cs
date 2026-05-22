@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Server._CE.GOAPAlarm;
-using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Procedural.Components;
 using Robust.Shared.Player;

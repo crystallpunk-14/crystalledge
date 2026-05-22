@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.Alert.Components;
 using Content.Shared.StatusEffectNew.Components;
 

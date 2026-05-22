@@ -1,0 +1,52 @@
+- type: entity
+  id: CEStatusEffectPoison
+  name: Poison
+  description: TODO
+  components:
+  - type: CENegativeStatusEffect
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEGOAP
+      - CEMobState
+  - type: CEDamageStatusEffect
+    interruptDoAfters: false
+    damage:
+      types:
+        Poison: 1
+  - type: StatusEffectAlert
+    alert: CEPoisoned
+  - type: CERemoveStackOnHeal
+    healPerStack: 5
+  - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectStack
+    stackDelta: 0
+    baseDuration: 60
+
+- type: alert
+  id: CEPoisoned
+  alertViewEntity: CEPoisonedAlertSpriteView
+  name: ce-alert-poisoned-name
+  description: ce-alert-poisoned-desc
+  icons:
+  - sprite: _CE/Interface/poison.rsi
+    state: icon
+
+- type: entity
+  id: CEPoisonedAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/poison.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

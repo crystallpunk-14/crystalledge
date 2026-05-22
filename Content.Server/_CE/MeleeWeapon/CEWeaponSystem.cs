@@ -1,14 +1,17 @@
 using Content.Server._CE.ZLevels.Core;
+using Content.Server.Movement.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.MeleeWeapon;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 
 namespace Content.Server._CE.MeleeWeapon;
 
 public sealed class CEWeaponSystem : CESharedWeaponSystem
 {
+    [Dependency] private readonly LagCompensationSystem _lag = default!;
     private const int MaxTargets = 10;
 
     /// <summary>
@@ -40,54 +43,16 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
         if (HasComp<ActorComponent>(user))
         {
             // Clear targets so the nested effects loop in Effect() does nothing.
-            // Damage will be applied via OnArcHitEvent → ApplyArcEffects instead.
+            // Damage will be applied via OnArcHitEvent -> ApplyArcEffects instead.
             targets.Clear();
             return;
         }
 
         TryAttack(user, weapon, targets);
+        ApplyArcEffects(user, weapon, targets, effectSlot);
     }
 
-    /// <summary>
-    /// Runs the weapon's nested arc effects on the validated target list.
-    /// This ensures the server applies damage only to targets the client actually hit.
-    /// </summary>
-    protected override void ApplyArcEffects(
-        EntityUid user,
-        Entity<CEWeaponComponent> weapon,
-        List<EntityUid> targets,
-        string? effectSlot)
-    {
-        if (effectSlot == null
-            || !weapon.Comp.EffectSlots.TryGetValue(effectSlot, out var slotEffects)
-            || targets.Count == 0)
-            return;
-
-        foreach (var target in targets)
-        {
-            var effectArgs = new CEEntityEffectArgs(
-                EntityManager,
-                user,
-                weapon.Owner,
-                Angle.Zero,
-                1f,
-                target,
-                null);
-
-            foreach (var slotEffect in slotEffects)
-            {
-                if (slotEffect is WeaponArcAttack arc)
-                {
-                    foreach (var childEffect in arc.Effects)
-                    {
-                        childEffect.Effect(effectArgs);
-                    }
-                }
-            }
-        }
-    }
-
-    protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets)
+    protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, ICommonSession? session)
     {
         if (targets.Count > MaxTargets)
             targets = targets.GetRange(0, MaxTargets);
@@ -100,7 +65,16 @@ public sealed class CEWeaponSystem : CESharedWeaponSystem
             if (!Exists(target) || target == user)
                 continue;
 
-            if (!Interaction.InRangeUnobstructed(user, target, range))
+            if (session is { } pSession)
+            {
+                EntityCoordinates targetCoordinates;
+                Angle targetLocalAngle;
+
+                (targetCoordinates, targetLocalAngle) = _lag.GetCoordinatesAngle(target, pSession);
+                if (!Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, overlapCheck: false))
+                    continue;
+            }
+            else if (!Interaction.InRangeUnobstructed(user, target, range))
                 continue;
 
             validated.Add(target);

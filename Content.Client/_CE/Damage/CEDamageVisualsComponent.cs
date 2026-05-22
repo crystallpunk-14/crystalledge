@@ -52,7 +52,7 @@ public sealed partial class CEDamageVisualsComponent : Component
     /// <summary>
     /// Multiplier to convert fractional thresholds to RSI state suffixes.
     /// State suffix = round(threshold × this value).
-    /// Example: threshold 0.3, multiplier 10 → suffix "3".
+    /// Example: threshold 0.3, multiplier 10 -> suffix "3".
     /// </summary>
     [DataField]
     public int ThresholdMultiplier = 10;

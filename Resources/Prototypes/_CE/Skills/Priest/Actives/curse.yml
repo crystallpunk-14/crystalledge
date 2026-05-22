@@ -1,0 +1,77 @@
+- type: skill
+  parent: BasePriestSkill
+  id: Curse
+  effect: !type:AddAction
+    action: CEActionSpellCurse
+
+- type: entity
+  id: CEActionSpellCurse
+  parent: CEActionSpellBase
+  name: Curse
+  description: You curse the selected area and all creatures within it.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 2.5
+  - type: CEActionManaCost
+    manaCost: 12
+  - type: CEActionStaminaCost
+    cost: 4
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/todo.rsi
+      state: icon
+  - type: TargetAction
+    range: 6
+    interactOnMiss: false
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationCurse
+
+- type: entityEffectAnimation
+  id: AnimationCurse
+  movementSpeed: 0.5
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectAreaCurseTelegraphy
+    - !type:SayChat
+      sentence: "maledictio"
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectCurse
+      radius: 2
+      maxStacks: 10
+
+- type: entity
+  id: CEEffectAreaCurseTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: area curse telegraphy
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/area_healing_telegraphy.rsi
+    layers:
+    - state: area
+      shader: unshaded
+      color: "#781884"
+  - type: PointLight
+    color: "#781884"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

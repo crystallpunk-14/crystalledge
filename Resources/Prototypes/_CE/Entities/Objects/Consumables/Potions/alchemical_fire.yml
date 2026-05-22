@@ -5,32 +5,42 @@
   - CEConsumablePotionBase
   - CEPotionMedium
   name: alchemical fire
-  description: TODO
+  description: A liquid flame, just waiting to burst forth and reduce everything around it to ashes. A large red label reads “DO NOT DRINK.”
   components:
   - type: Sprite
     layers:
     - state: icon
     - state: fill
       color: "#ffae00"
-    - sprite: _CE/Effects/fire_status.rsi
+    - sprite: _CE/Effects/StatusEffects/fire_status.rsi
       state: effect
       shader: unshaded
   - type: CEConsumable
     effects:
-    - !type:IgniteEntity
-      stacks: 6
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectFire
+      amount: 6
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
   - type: CEDestructionEffect
     effects:
-    - !type:IgniteArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 2
-      maxStacks: 6
+      maxStacks: 9
     - !type:SpawnEntity
       effectTarget: User
       spawns:
       - CEEffectPotionAlchemicalFire
+    - !type:AreaEffect
+      range: 2
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 20
   - type: CEDestructible
   - type: PointLight
     color: "#ffae00"

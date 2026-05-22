@@ -24,6 +24,8 @@
     openTimeTwo: 0
     closedDrawDepth: Mobs
     openDrawDepth: Mobs
+    openingSpriteState: open
+    closingSpriteState: closed
     canPry: false
     openSound:
       path: /Audio/Effects/door_open.ogg
@@ -53,3 +55,7 @@
         layer:
         - AirlockLayer
         - Impassable
+  - type: ConditionalSpawner
+    prototypes:
+    - CEGodRaysMoon
+

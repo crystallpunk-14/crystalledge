@@ -13,12 +13,10 @@
       map: ["enum.DoorVisualLayers.Base"]
   - type: CEArmor
     flat:
-      Physical: 1
-  - type: CEFlammable
-    stackDelta: 2
+      Physical: 5
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 15
+    destroyThreshold: 65
     destroySound:
       collection: WoodDestroy
 
@@ -30,4 +28,6 @@
   - type: Door
     openSpriteState: open_mirrored
     closedSpriteState: closed_mirrored
+    openingSpriteState: open_mirrored
+    closingSpriteState: closed_mirrored
 

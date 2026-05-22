@@ -14,13 +14,16 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 4
+    manaCost: 20
+  - type: CEActionStaminaCost
+    cost: 4
   - type: Action
     useDelay: 8
     icon:
       sprite: _CE/Skills/Mage/frost_flow.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
@@ -29,7 +32,7 @@
 - type: entityEffectAnimation
   id: AnimationFrostFlow
   movementSpeed: 0.3
-  duration: 1.0
+  duration: 0.7
   lockRotation: true
   events:
     0:
@@ -40,7 +43,7 @@
         offset: 0, 0.5
       - time: 0.8
         offset: 0, -1
-    0.8:
+    0.5:
     - !type:ShootProjectile
       projectileSpeed: 8
       prototype: CEProjectileFrostFlow
@@ -55,7 +58,7 @@
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
     layers:
     - state: effect
       shader: unshaded
@@ -85,7 +88,7 @@
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/freeze_effect.rsi
+    sprite: _CE/Effects/TileEffects/freeze_effect.rsi
     layers:
     - state: effect
       shader: unshaded
@@ -112,7 +115,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
     layers:
     - state: effect
       shader: unshaded
@@ -140,17 +143,19 @@
         hard: false
   - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3 # Important to not affect caster, freeze and damage it immediately on spawn
+    firstDelay: 0.5 # Important to not affect caster, freeze and damage it immediately on spawn
     effects:
-    - !type:FreezeArea
-      radius: 1.5
-      maxStacks: 6
-      fallOffFactor: 1
     - !type:AreaEffect
       affectCaster: true
       range: 1.2
       effects:
       - !type:Damage
+        attackType: Ranged
         damage:
           types:
-            Cold: 1
+            Cold: 10
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      radius: 1.5
+      maxStacks: 5
+      fallOffFactor: 1

@@ -1,0 +1,11 @@
+- type: entityTable
+  id: CERandomCrayon
+  table: !type:GroupSelector
+    children:
+    - id: CECrayonRed
+    - id: CECrayonYellow
+    - id: CECrayonGreen
+    - id: CECrayonBlue
+    - id: CECrayonPurple
+    - id: CECrayonBlack
+    - id: CECrayonWhite

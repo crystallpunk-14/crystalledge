@@ -9,6 +9,16 @@
   rules:
     - Secret
 
+- type: weightedRandom
+  id: Secret
+  weights:
+    Roguelike: 1
+
+
+- type: entity
+  id: CEDummyRule
+  parent: BaseGameRule
+
 - type: gamePreset
   id: BaselineSandbox
   alias:
@@ -19,3 +29,12 @@
   maxPlayers: 5
   rules:
     - Sandbox
+
+- type: gamePreset
+  id: Roguelike
+  name: sandbox-title #TODO
+  description: sandbox-description #TODO
+  showInVote: true
+  maxPlayers: 100
+  rules:
+    - CEDummyRule

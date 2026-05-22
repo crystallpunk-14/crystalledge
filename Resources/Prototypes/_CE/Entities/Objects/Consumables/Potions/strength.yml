@@ -1,0 +1,42 @@
+- type: entity
+  id: CEConsumablePotionStrength
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionStar
+  name: strength potion
+  description: Increases your melee damage for a short duration.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#8b0000"
+  - type: CEConsumable
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectStrength
+      amount: 10
+      max: 10
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:AreaEffect
+      range: 1
+      whitelist:
+        components:
+        - CEMobState
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectStrength
+        amount: 5
+        max: 10
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible

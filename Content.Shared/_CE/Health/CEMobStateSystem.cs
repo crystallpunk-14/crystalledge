@@ -1,18 +1,18 @@
 using Content.Shared._CE.Damage;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.ActionBlocker;
+using Content.Shared.CombatMode;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
-using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
-using Content.Shared.Pointing;
 using Content.Shared.Pulling.Events;
 using Content.Shared.Rejuvenate;
-using Content.Shared.Speech;
 using Content.Shared.Standing;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Throwing;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Health;
@@ -29,8 +29,12 @@ public sealed partial class CEMobStateSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
 
     private const float CriticalSpeedModifier = 0.2f;
+
+    private readonly EntProtoId _fightStatus = "CEStatusEffectFightForSurvival";
 
     public override void Initialize()
     {
@@ -83,30 +87,22 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private void UpdateState(Entity<CEMobStateComponent> ent, CEMobStateComponent mobState, int totalDamage)
     {
-        var newState = CalculateState(mobState, totalDamage);
+        var newCriticalState = totalDamage >= mobState.CriticalThreshold;
 
-        if (newState == mobState.CurrentState)
+        if (newCriticalState == mobState.Critical)
             return;
 
-        var oldState = mobState.CurrentState;
-        mobState.CurrentState = newState;
+        var oldState = mobState.Critical;
+        mobState.Critical = newCriticalState;
         Dirty(ent);
 
-        _appearance.SetData(ent, CEMobStateVisuals.State, newState);
+        _appearance.SetData(ent, CEMobStateVisuals.State, newCriticalState);
 
-        if (!_timing.ApplyingState)
-        {
-            var ev = new CEMobStateChangedEvent(ent, oldState, newState);
-            RaiseLocalEvent(ent, ev);
-        }
-    }
+        if (_timing.ApplyingState)
+            return;
 
-    private CEMobState CalculateState(CEMobStateComponent mobState, int totalDamage)
-    {
-        if (totalDamage >= mobState.CriticalThreshold)
-            return CEMobState.Critical;
-
-        return CEMobState.Alive;
+        var ev = new CEMobStateChangedEvent(ent, newCriticalState);
+        RaiseLocalEvent(ent, ev);
     }
 
     private void SetDamageFraction(EntityUid ent, CEMobStateComponent mobState, int totalDamage)
@@ -115,33 +111,6 @@ public sealed partial class CEMobStateSystem : EntitySystem
             ? Math.Clamp((float) totalDamage / mobState.CriticalThreshold, 0f, 1f)
             : 0f;
         _appearance.SetData(ent, CEDamageVisuals.DamageFraction, fraction);
-    }
-
-    private void OnStateEntered(EntityUid target, CEMobState state)
-    {
-        _blocker.UpdateCanMove(target);
-
-        switch (state)
-        {
-            case CEMobState.Alive:
-                _standing.Stand(target);
-                break;
-            case CEMobState.Critical:
-                _standing.Down(target);
-                var dropEv = new DropHandItemsEvent();
-                RaiseLocalEvent(target, ref dropEv);
-                break;
-        }
-    }
-
-    private void OnStateExited(EntityUid target, CEMobState state)
-    {
-        switch (state)
-        {
-            case CEMobState.Critical:
-                _standing.Stand(target);
-                break;
-        }
     }
 
     public void SetThresholds(Entity<CEMobStateComponent?> ent, int criticalThreshold)
@@ -203,7 +172,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         if (!Resolve(uid, ref component, false))
             return false;
 
-        return component.CurrentState == CEMobState.Alive;
+        return component.Critical == false;
     }
 
     public bool IsCritical(EntityUid uid, CEMobStateComponent? component = null)
@@ -211,15 +180,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
         if (!Resolve(uid, ref component, false))
             return false;
 
-        return component.CurrentState == CEMobState.Critical;
-    }
-
-    public bool IsIncapacitated(EntityUid uid, CEMobStateComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return false;
-
-        return component.CurrentState == CEMobState.Critical;
+        return component.Critical;
     }
 
     #endregion
@@ -228,32 +189,49 @@ public sealed partial class CEMobStateSystem : EntitySystem
 
     private void OnBlockIfCritical(EntityUid uid, CEMobStateComponent comp, CancellableEntityEventArgs args)
     {
-        if (comp.CurrentState == CEMobState.Critical)
+        if (comp.Critical)
             args.Cancel();
     }
 
     private void OnEquipAttempt(EntityUid uid, CEMobStateComponent comp, IsEquippingAttemptEvent args)
     {
-        if (args.Equipee == uid)
+        if (args.User == uid)
             OnBlockIfCritical(uid, comp, args);
     }
 
     private void OnUnequipAttempt(EntityUid uid, CEMobStateComponent comp, IsUnequippingAttemptEvent args)
     {
-        if (args.Unequipee == uid)
+        if (args.User == uid)
             OnBlockIfCritical(uid, comp, args);
     }
 
     private void OnRefreshMoveSpeed(EntityUid uid, CEMobStateComponent comp, RefreshMovementSpeedModifiersEvent args)
     {
-        if (comp.CurrentState == CEMobState.Critical)
+        if (comp.Critical)
             args.ModifySpeed(CriticalSpeedModifier, CriticalSpeedModifier);
     }
 
     private void OnMobStateChanged(EntityUid uid, CEMobStateComponent comp, CEMobStateChangedEvent args)
     {
-        OnStateExited(uid, args.OldState);
-        OnStateEntered(uid, args.NewState);
+        _blocker.UpdateCanMove(uid);
+
+        if (args.Critical)
+        {
+            _standing.Down(uid);
+            _status.TryAddStatusEffectDuration(uid, _fightStatus, TimeSpan.FromSeconds(5));
+
+            if (TryComp<CombatModeComponent>(uid, out var combatMode))
+                _combat.SetInCombatMode(uid, false, combatMode);
+
+            var dropEv = new DropHandItemsEvent();
+            RaiseLocalEvent(uid, ref dropEv);
+        }
+        else
+        {
+            _standing.Stand(uid);
+            _status.TryRemoveStatusEffect(uid, _fightStatus);
+        }
+
         _movementSpeed.RefreshMovementSpeedModifiers(uid);
     }
 
@@ -261,12 +239,11 @@ public sealed partial class CEMobStateSystem : EntitySystem
 }
 
 /// <summary>
-/// Raised when a CE mob state changes.
+/// Raised on entity with CEMobStateComponent, when it state changes to critical or back
 /// </summary>
-public sealed class CEMobStateChangedEvent(EntityUid target, CEMobState oldState, CEMobState newState)
+public sealed class CEMobStateChangedEvent(EntityUid target, bool critical)
     : EntityEventArgs
 {
     public readonly EntityUid Target = target;
-    public readonly CEMobState OldState = oldState;
-    public readonly CEMobState NewState = newState;
+    public readonly bool Critical = critical;
 }

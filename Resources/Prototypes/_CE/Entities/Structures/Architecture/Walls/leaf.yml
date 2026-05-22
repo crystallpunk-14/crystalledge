@@ -41,6 +41,7 @@
         - FullTileMask
         layer:
         - Opaque
+  - type: CENavIgnore
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.4
     sprintSpeedModifier: 0.4
@@ -57,8 +58,6 @@
     - 0
   - type: CEDamageable
   - type: CEDestructible
-    destroyThreshold: 20
+    destroyThreshold: 50
     destroySound:
       collection: CEGrassGathering
-  - type: CEFlammable
-    stackDelta: 3

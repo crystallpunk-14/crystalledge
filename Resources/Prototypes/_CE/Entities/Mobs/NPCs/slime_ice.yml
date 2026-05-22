@@ -1,0 +1,193 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  - CEMobGOAPBase
+  id: CEMobSlimeIce
+  name: ice slime
+  description: A wobbly blob of animated ice. Shatters into a burst of frost when destroyed.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#a0e8ff"
+      shader: unshaded
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/slime_alert.ogg
+      params:
+        variation: 0.1
+  - type: CESpawnAnimation
+    animation: IceSlimeSpawn
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 1.1, 0.9
+      - time: 0.5
+        scale: 0.9, 1.1
+      - time: 1.0
+        scale: 1.1, 0.9
+  - type: CEDestructible
+    destroyThreshold: 25
+    lootTable: !type:AllSelector
+      children:
+      - id: CEConsumableSlimeCoreIce
+        amount: 1
+        prob: 0.75
+  - type: CEDestructionEffect
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      radius: 1
+      maxStacks: 4
+      fallOffFactor: 0.5
+  - type: CEGOAP
+    goals:
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+    actions:
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 1.5
+    - !type:CEGOAPMeleeAttackAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    - !type:CEGOAPUseAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyInMeleeRange: true
+      cost: 0.5
+      actionPrototype: CEActionIceSlimeJump
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+  - type: CEGOAPPainPerceptor
+    memoryDuration: 15
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: PointLight
+    color: "#6ec6ff"
+    radius: 2
+    energy: 2.0
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 1.5
+  - type: CEWeapon
+    spriteRotation: -90
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.5
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Cold: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectColdSlowdown
+          amount: 1
+          max: 3
+    animations:
+      Primary:
+      - anim: SlimeBite
+  - type: CEArmor
+    flat:
+      Cold: 100
+
+# -- Slime Jump (leap toward target) --
+
+- type: entity
+  id: CEActionIceSlimeJump
+  name: ice slime jump
+  description: The slime leaps toward a target.
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 1
+  - type: Action
+    useDelay: 6
+  - type: TargetAction
+    range: 8
+    interactOnMiss: false
+  - type: EntityTargetAction
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: IceSlimeJump
+
+- type: entityEffectAnimation
+  id: IceSlimeJump
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/ice_burst.ogg
+        params:
+          variation: 0.1
+    0.4:
+    - !type:Dash
+      distance: 4
+      speed: 8
+    0.65:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/ice_burst.ogg
+        params:
+          variation: 0.1
+          pitch: 1.2
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      effectTarget: User
+      radius: 1
+      maxStacks: 3
+      fallOffFactor: 1
+
+- type: entityEffectAnimation
+  id: IceSlimeSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectHealingFrostVFX
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.0, 0.1
+      - time: 0.9
+        scale: 1.0, 1.0
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"

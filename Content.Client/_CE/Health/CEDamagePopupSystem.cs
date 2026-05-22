@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Examine;
+using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
@@ -29,6 +30,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly ExamineSystemShared _examine = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly IEyeManager _eye = default!;
 
     private static readonly Color HealColor = Color.FromHex("#44DD44");
 
@@ -42,6 +44,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
     /// confirmations don't produce a duplicate.
     /// </summary>
     private readonly Dictionary<EntityUid, TimeSpan> _predictedPopups = new();
+    private readonly List<EntityUid> _predictedPopupsToRemove = new();
 
     private CEDamagePopupOverlay _overlay = default!;
 
@@ -85,23 +88,26 @@ public sealed class CEDamagePopupSystem : EntitySystem
                 return;
         }
 
-        // FOV / occlusion check: don't show popups for entities behind walls.
-        if (_player.LocalEntity is { } localPlayer)
+        if (_eye.CurrentEye.DrawFov)
         {
-            var entityMapPos = _transform.GetMapCoordinates(Transform(ent));
-            var playerMapPos = _transform.GetMapCoordinates(Transform(localPlayer));
-
-            if (entityMapPos.MapId != playerMapPos.MapId)
-                return;
-
-            var dist = (entityMapPos.Position - playerMapPos.Position).Length();
-            if (!_examine.InRangeUnOccluded(
-                    playerMapPos,
-                    entityMapPos,
-                    dist,
-                    e => e == ent.Owner || e == localPlayer))
+            // FOV / occlusion check: don't show popups for entities behind walls.
+            if (_player.LocalEntity is { } localPlayer)
             {
-                return;
+                var entityMapPos = _transform.GetMapCoordinates(Transform(ent));
+                var playerMapPos = _transform.GetMapCoordinates(Transform(localPlayer));
+
+                if (entityMapPos.MapId != playerMapPos.MapId)
+                    return;
+
+                var dist = (entityMapPos.Position - playerMapPos.Position).Length();
+                if (!_examine.InRangeUnOccluded(
+                        playerMapPos,
+                        entityMapPos,
+                        dist,
+                        e => e == ent.Owner || e == localPlayer))
+                {
+                    return;
+                }
             }
         }
 
@@ -119,7 +125,7 @@ public sealed class CEDamagePopupSystem : EntitySystem
                     continue;
 
                 var color = _proto.TryIndex(typeId, out var proto) ? proto.Color : Color.White;
-                SpawnPopup(FormatDamageText(typeDelta), color, typeDelta, worldPos);
+                SpawnPopup(typeDelta.ToString(), color, typeDelta, worldPos);
             }
         }
         else
@@ -135,15 +141,22 @@ public sealed class CEDamagePopupSystem : EntitySystem
 
         var fontSize = absAmount switch
         {
-            <= 5 => PopupFontSize.Small,
-            <= 10 => PopupFontSize.Medium,
+            <= 25 => PopupFontSize.Small,
+            <= 50 => PopupFontSize.Medium,
             _ => PopupFontSize.Large,
+        };
+
+        var realText = absAmount switch
+        {
+            <= 25 => text,
+            <= 50 => $"{text}!",
+            _ => $"{text}!!!",
         };
 
         var entry = new PopupEntry
         {
             WorldPosition = worldPos,
-            Text = text,
+            Text = realText,
             Color = color,
             FontSize = fontSize,
             Duration = 1.2f * _random.NextFloat(0.7f, 1.3f),
@@ -154,16 +167,6 @@ public sealed class CEDamagePopupSystem : EntitySystem
         _overlay.Entries.Add(entry);
     }
 
-    private static string FormatDamageText(int amount)
-    {
-        return amount switch
-        {
-            <= 5 => amount.ToString(),
-            <= 10 => $"{amount}!",
-            _ => $"{amount}!!!",
-        };
-    }
-
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
@@ -172,17 +175,18 @@ public sealed class CEDamagePopupSystem : EntitySystem
         if (_predictedPopups.Count > 0)
         {
             var now = _timing.CurTime;
+            _predictedPopupsToRemove.Clear();
+
             // Can't modify dict during foreach — collect keys to remove first.
-            List<EntityUid>? toRemove = null;
             foreach (var (uid, time) in _predictedPopups)
             {
                 if (now - time > TimeSpan.FromSeconds(2))
-                    (toRemove ??= new List<EntityUid>()).Add(uid);
+                    _predictedPopupsToRemove.Add(uid);
             }
 
-            if (toRemove != null)
+            if (_predictedPopupsToRemove.Count > 0)
             {
-                foreach (var uid in toRemove)
+                foreach (var uid in _predictedPopupsToRemove)
                 {
                     _predictedPopups.Remove(uid);
                 }

@@ -6,15 +6,10 @@
   - type: CEDamageable
   - type: CEDamagePopup
   - type: CEDestructible
-    destroyThreshold: 20
+    destroyThreshold: 100
     destroySound:
       collection: gib
   - type: Pullable
-  - type: CEFlammable
-    stackDelta: -1
-  - type: CEFreezable
-  - type: CEWettable
-  - type: FloorOcclusion
 
 - type: entity
   id: CEMobMagical
@@ -31,8 +26,8 @@
   - type: CombatMode
   - type: StatusIcon #TODO not here!
   - type: ContentEye
-    maxZoom: 0.6, 0.6
-    targetZoom: 0.6, 0.6
+    maxZoom: 0.8, 0.8
+    targetZoom: 0.8, 0.8
   - type: CEWeapon
     spriteRotation: 0
     effectSlots:
@@ -42,12 +37,14 @@
         arcWidth: 40
         effects:
         - !type:Damage
+          attackType: Melee
           damage:
             types:
-              Physical: 1
+              Physical: 5
     animations:
       Primary:
       - anim: Punch1
-        staminaCost: 1
       - anim: Punch2
-        staminaCost: 1
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1

@@ -14,7 +14,9 @@
   - type: CEVisualizeAoEZoneAction
     radius: 3.0
   - type: CEActionManaCost
-    manaCost: 1
+    manaCost: 10
+  - type: CEActionStaminaCost
+    cost: 3
   - type: Action
     useDelay: 8
     icon:
@@ -44,10 +46,14 @@
       - CEEffectWaterBurstEffect
     - !type:SayChat
       sentence: "flumine!"
-    - !type:WetArea
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
       radius: 3
       fallOffFactor: 0.5
       maxStacks: 10
+    - !type:ShockWaveVFX
+      effectTarget: Target
+      width: 0.2
 
 - type: entity
   id: CEEffectWaterBurstTelegraphy
@@ -88,7 +94,7 @@
   save: false
   components:
   - type: Sprite
-    sprite: _CE/Effects/water_tile_impact.rsi
+    sprite: _CE/Effects/TileEffects/water_tile_impact.rsi
     layers:
     - state: effect
       shader: unshaded

@@ -1,0 +1,36 @@
+- type: dungeonLevel
+  id: MossyTempleSafe
+  stable: true
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+    state: center
+  parent:
+  - BaseMossyTemplePostProcess
+  name: ce-dungeon-mossy-temple-safe-name
+  uiPosition: 6,1
+  exits:
+    1: MossyTemple3
+    2: MossyTemple3_Pvp
+  config:
+    !type:CERandomZNetworkConfig
+    variants:
+      MossyTempleSafe: 1
+  postProcess:
+  # LOOT
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHerbs
+    budget: 20
+
+- type: zMap
+  id: MossyTempleSafe
+  maps:
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe0.yml
+  - /Maps/_CE/Dungeon/MossyTempleSafe/MossyTempleSafe1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: CEMapStatusEffects
+    effects:
+    - CEStatusEffectPacifism
+  - type: CEMapAmbientMusicTheme
+    theme: MossySafe

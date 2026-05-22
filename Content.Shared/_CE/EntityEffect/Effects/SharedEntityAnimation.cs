@@ -103,7 +103,7 @@ public sealed class CEEntityAnimationEvent(
 /// <summary>
 /// Defines a keyframe for animating sprite offset (position relative to entity).
 /// </summary>
-[DataDefinition]
+[DataDefinition, Serializable, NetSerializable]
 public sealed partial class CEOffsetKeyframe
 {
     /// <summary>
@@ -128,7 +128,7 @@ public sealed partial class CEOffsetKeyframe
 /// <summary>
 /// Defines a keyframe for animating sprite rotation.
 /// </summary>
-[DataDefinition]
+[DataDefinition, Serializable, NetSerializable]
 public sealed partial class CERotationKeyframe
 {
     /// <summary>
@@ -153,7 +153,7 @@ public sealed partial class CERotationKeyframe
 /// <summary>
 /// Defines a keyframe for animating sprite color/alpha (for fade effects).
 /// </summary>
-[DataDefinition]
+[DataDefinition, Serializable, NetSerializable]
 public sealed partial class CEColorKeyframe
 {
     /// <summary>
@@ -178,7 +178,7 @@ public sealed partial class CEColorKeyframe
 /// <summary>
 /// Defines a keyframe for animating sprite scale.
 /// </summary>
-[DataDefinition]
+[DataDefinition, Serializable, NetSerializable]
 public sealed partial class CEScaleKeyFrame
 {
     /// <summary>

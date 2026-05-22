@@ -1,0 +1,26 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: ThickSkin
+  weight: 0.5
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectThickSkin
+
+- type: entity
+  id: CEStatusEffectThickSkin
+  name:  Thick Skin
+  description: You take 1 less damage from all sources (except poison).
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEThickSkin
+  - type: CEArmor
+    flat:
+      Cold: 1
+      Fire: 1
+      Physical: 1
+
+- type: alert
+  id: CEThickSkin
+  icons:
+  - sprite: _CE/Skills/Neutral/thick_skin.rsi
+    state: icon

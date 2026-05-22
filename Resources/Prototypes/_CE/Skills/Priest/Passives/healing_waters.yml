@@ -7,13 +7,13 @@
 - type: entity
   id: CEStatusEffectHealingWaters
   name: Healing Waters
-  description: When you heal a [color=#1db7ef]wet target[/color], you heal [color=#1defa9]2 health[/color] more and dry it off.
+  description: When you heal a [color=#1db7ef]wet target[/color], you heal [color=#1defa9]10 health[/color] more and dry it off.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEHealingWaters
   - type: CEHealingWatersStatusEffect
-    additionalHeal: 2
+    additionalHeal: 10
 
 - type: alert
   id: CEHealingWaters

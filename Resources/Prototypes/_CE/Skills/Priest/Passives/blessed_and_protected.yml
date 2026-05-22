@@ -1,0 +1,28 @@
+- type: skill
+  parent: BasePriestSkill
+  id: BlessedAndProtected
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectBlessedAndProtected
+
+- type: entity
+  id: CEStatusEffectBlessedAndProtected
+  name: Blessed and Protected
+  description: When you [color=#1defa9]bless[/color] a creature, you also grant it [color=#1defa9]1 Divine Shield[/color] (up to a maximum of 3)
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEBlessedAndProtected
+  - type: CEEffectOnStatusEffectApplyStatusEffect
+    sourceStatusEffects:
+    - CEStatusEffectBlessing
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectDivineShield
+      amount: 1
+      max: 3
+
+- type: alert
+  id: CEBlessedAndProtected
+  icons:
+  - sprite: _CE/Skills/todo.rsi
+    state: icon

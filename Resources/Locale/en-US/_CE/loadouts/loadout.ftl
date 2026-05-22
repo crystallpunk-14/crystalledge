@@ -7,6 +7,7 @@ ce-loadout-bag = Bags
 ce-loadout-goggles = Goggles
 ce-loadout-gloves = Gloves
 ce-loadout-masks = Masks
+ce-loadout-belt = Belt
 
 ce-loadout-music-tool = Musical instrument
 ce-loadout-instruments = Instruments

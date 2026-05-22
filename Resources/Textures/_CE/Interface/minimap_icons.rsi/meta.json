@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "size": {
+    "x": 10,
+    "y": 10
+  },
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Created by TheShuEd",
+  "states": [
+    {
+      "name": "alchemy"
+    },
+    {
+      "name": "blessing"
+    },
+    {
+      "name": "enter"
+    },
+    {
+      "name": "exit"
+    },
+    {
+      "name": "treasure"
+    },
+    {
+      "name": "secret"
+    },
+    {
+      "name": "library"
+    }
+  ]
+}

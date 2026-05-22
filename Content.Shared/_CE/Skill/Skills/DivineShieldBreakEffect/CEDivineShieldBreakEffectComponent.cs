@@ -3,7 +3,9 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Skill.Skills.DivineShieldBreakEffect;
 
-//Spawn EntityEffects when divine shield broken
+/// <summary>
+/// Applies CEEntityEffects when Divine shield breaks
+/// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CEDivineShieldBreakEffectComponent : Component
 {

@@ -1,4 +1,35 @@
 - type: entity
+  parent: CEChestWoodenOld
+  id: CEChestWoodenOldFilled
+  suffix: Filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        # Some additional fills
+        - !type:GroupSelector
+          rolls: !type:RangeNumberSelector
+            range: 1, 2
+          prob: 1
+          children:
+          - !type:NestedSelector
+            tableId: CERandomPotion
+            weight: 0.25
+        - !type:GroupSelector
+          prob: 0.1
+          children:
+          - !type:NestedSelector
+            tableId: CERandomInstrument
+            weight: 0.3
+        - !type:GroupSelector
+          prob: 0.1
+          children:
+          - !type:NestedSelector
+            tableId: CERandomCrayon
+            weight: 0.3
+
+- type: entity
   parent: CEChestWooden
   id: CEChestWoodenFilled
   suffix: Filled
@@ -8,12 +39,74 @@
       storagebase: !type:AllSelector
         children:
         # Single cool unique item
-        - !type:NestedSelector
-          tableId: CERandomWeapon
+        - !type:GroupSelector
+          rolls: !type:RangeNumberSelector
+          prob: 0.5
+          children:
+          - !type:NestedSelector
+            tableId: CERandomWeapon
+          - !type:NestedSelector
+            tableId: CEAccessories
+          - !type:NestedSelector
+            tableId: CECommonArmor
+            weight: 0.5
         # Some additional fills
         - !type:GroupSelector
           rolls: !type:RangeNumberSelector
-            range: 3, 5
+            range: 0, 2
           children:
           - !type:NestedSelector
             tableId: CERandomPotion
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomInstrument
+            weight: 0.3
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomCrayon
+            weight: 0.3
+
+- type: entity
+  parent: CEChestGold
+  id: CEChestGoldFilled
+  suffix: Filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        # Single cool unique item
+        - !type:GroupSelector
+          rolls: !type:RangeNumberSelector
+            range: 2, 3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomWeapon
+          - !type:NestedSelector
+            tableId: CEAccessories
+          - !type:NestedSelector
+            tableId: CECommonArmor
+            weight: 0.5
+        # Some additional fills
+        - !type:GroupSelector
+          rolls: !type:RangeNumberSelector
+            range: 1, 4
+          children:
+          - !type:NestedSelector
+            tableId: CERandomPotion
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomInstrument
+            weight: 0.3
+        - !type:GroupSelector
+          prob: 0.3
+          children:
+          - !type:NestedSelector
+            tableId: CERandomCrayon
+            weight: 0.3

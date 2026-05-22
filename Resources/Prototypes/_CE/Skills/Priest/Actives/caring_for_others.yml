@@ -1,0 +1,61 @@
+- type: skill
+  parent: BasePriestSkill
+  id: CaringForOthers
+  effect: !type:AddAction
+    action: CEActionSpellCaringForOthers
+
+- type: entity
+  id: CEActionSpellCaringForOthers
+  parent: CEActionSpellBase
+  name: Caring for others
+  description: You restore [color=#1defa9]40 health[/color] to the creature you touch. But you can't treat yourself.
+  components:
+  - type: CEVisualizeRadiusTargetAction
+  - type: CEVisualizeAoEZoneAction
+    radius: 0.5
+  - type: CEActionManaCost
+    manaCost: 35
+  - type: CEActionStaminaCost
+    cost: 3
+  - type: Action
+    useDelay: 5
+    icon:
+      sprite: _CE/Skills/Priest/caring_for_others.rsi
+      state: icon
+  - type: TargetAction
+    range: 3.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components:
+      - CEMobState
+      - CEGOAP
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: AnimationCaringForOthers
+
+- type: entityEffectAnimation
+  id: AnimationCaringForOthers
+  movementSpeed: 0.5
+  duration: 2
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    - !type:SayChat
+      sentence: "Ad alios curare"
+    0.5:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    1.0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    1.5:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+    - !type:Heal
+      amount: 40

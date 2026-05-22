@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Content.Server._CE.Achievements;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
 using Content.Server._CE.Procedural.Prototypes;
@@ -27,6 +29,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly CEAchievementsSystem _achievements = default!;
     [Dependency] private readonly CEDungeonSystem _dungeon = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -35,7 +38,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     /// <summary>
     /// How long an empty unstable instance persists before cleanup.
     /// </summary>
-    private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan UnstableCleanupDelay = TimeSpan.FromMinutes(3);
 
     /// <summary>
     /// How often the cleanup check runs (avoid per-frame iteration).
@@ -54,6 +57,8 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
 
         InitializePassage();
+        InitializeEntryAnnounce();
+        InitializeRoundstart();
     }
 
     public override void Update(float frameTime)
@@ -117,5 +122,22 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
             Log.Info($"cleaning up empty unstable instance '{inst.PrototypeId}'.");
             _zLevels.DeleteZNetwork(uid);
         }
+    }
+
+    /// <summary>
+    /// Resolves the dungeon instance that owns a given map entity.
+    /// Checks the z-network anchor first, then falls back to the map entity itself.
+    /// </summary>
+    private bool TryResolveInstance(EntityUid? mapUid, [NotNullWhen(true)] out CEDungeonInstanceComponent? instance)
+    {
+        instance = null;
+
+        if (mapUid is null)
+            return false;
+
+        if (_zLevels.TryGetZNetwork(mapUid.Value, out var zNet) && _instanceQuery.TryComp(zNet.Value.Owner, out instance))
+            return true;
+
+        return _instanceQuery.TryComp(mapUid, out instance);
     }
 }

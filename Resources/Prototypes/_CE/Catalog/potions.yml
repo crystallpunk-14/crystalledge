@@ -4,6 +4,8 @@
     children:
     - id: CEConsumablePotionHealingMedium
       weight: 0.5
+    - id: CEConsumablePotionRegeneration
+      weight: 0.75
     - id: CEConsumablePotionHealingSmall
 
 - type: entityTable
@@ -15,27 +17,34 @@
     - id: CEConsumablePotionManaSmall
 
 - type: entityTable
-  id: CEStaminaPotion
+  id: CESpecialPotion
   table: !type:GroupSelector
     children:
-    - id: CEConsumablePotionStaminaMedium
-      weight: 0.5
-    - id: CEConsumablePotionStaminaSmall
+    - id: CEConsumablePotionFrost
+    - id: CEConsumablePotionAlchemicalFire
+    - id: CEConsumablePotionAcceleration
+    - id: CEConsumablePotionShield
+    - id: CEConsumablePotionStrength
+
+- type: entityTable
+  id: CEEmptyVials
+  table: !type:GroupSelector
+    children:
+    - id: CEPotionEmptyMedium
+    - id: CEPotionEmptySmall
+    - id: CEPotionEmptyCube
+    - id: CEPotionEmptyStar
 
 - type: entityTable
   id: CERandomPotion
   table: !type:GroupSelector
     children:
     - !type:NestedSelector
-      tableId: CEHealingPotion
+      tableId: CEEmptyVials
+      weight: 0.8
     - !type:NestedSelector
-      tableId: CEManaPotion
-    - !type:NestedSelector
-      tableId: CEStaminaPotion
-    - id: CEConsumablePotionFrost
-      weight: 0.5
-    - id: CEConsumablePotionAlchemicalFire
-      weight: 0.5
+      tableId: CESpecialPotion
+      weight: 0.3
 
 - type: entity
   id: CESpawnerRandomPotion
@@ -51,4 +60,4 @@
   - type: EntityTableSpawner
     table: !type:NestedSelector
       tableId: CERandomPotion
-      prob: 0.3
+      prob: 0.1

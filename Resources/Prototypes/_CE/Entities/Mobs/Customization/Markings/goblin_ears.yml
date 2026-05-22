@@ -1,0 +1,26 @@
+- type: marking
+  id: CEGoblinEars
+  bodyPart: HeadTop
+  groupWhitelist: [CEGoblin]
+  forcedColoring: true
+  sprites:
+    - sprite: _CE/Mobs/Customization/goblin_ears.rsi
+      state: ears1
+
+- type: marking
+  id: CEGoblinEars2
+  bodyPart: HeadTop
+  groupWhitelist: [CEGoblin]
+  forcedColoring: true
+  sprites:
+    - sprite: _CE/Mobs/Customization/goblin_ears.rsi
+      state: ears2
+
+- type: marking
+  id: CEGoblinEars3
+  bodyPart: HeadTop
+  groupWhitelist: [CEGoblin]
+  forcedColoring: true
+  sprites:
+    - sprite: _CE/Mobs/Customization/goblin_ears.rsi
+      state: ears3

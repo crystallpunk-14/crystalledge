@@ -81,6 +81,32 @@ public sealed class CEStaminaSystem : EntitySystem
     }
 
     /// <summary>
+    /// Returns whether the entity has enough stamina to spend (not exhausted and stamina > 0).
+    /// Does NOT consume stamina.
+    /// </summary>
+    public bool CanAfford(Entity<CEStaminaComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return true; // Entities without stamina always succeed
+
+        if (ent.Comp.Exhausted)
+        {
+            TryPopupNotEnough(ent, ent.Comp);
+            return false;
+        }
+
+        var current = GetStamina(ent);
+
+        if (current <= 0)
+        {
+            TryPopupNotEnough(ent, ent.Comp);
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// Tries to spend stamina. Returns true if stamina was available (>0 and not exhausted),
     /// false if the entity is exhausted or has no stamina.
     /// </summary>
@@ -203,6 +229,9 @@ public sealed class CEStaminaSystem : EntitySystem
 
         comp.MaxStamina = newMax;
         Dirty(uid, comp);
+
+        // Regen rate depends on MaxStamina, so refresh it too.
+        RefreshStaminaRegen(uid, comp);
     }
 
     /// <summary>
@@ -215,7 +244,11 @@ public sealed class CEStaminaSystem : EntitySystem
         if (!Resolve(uid, ref comp, false))
             return;
 
-        var ev = new CECalculateStaminaRegenEvent(comp.BaseRegenRate);
+        var baseRate = comp.FullRegenDuration > 0f
+            ? comp.MaxStamina / comp.FullRegenDuration
+            : 0f;
+
+        var ev = new CECalculateStaminaRegenEvent(baseRate);
         RaiseLocalEvent(uid, ev);
 
         var newRate = MathF.Max(0f, ev.RegenRate);

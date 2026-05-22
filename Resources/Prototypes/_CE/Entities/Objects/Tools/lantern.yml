@@ -1,0 +1,60 @@
+- type: entity
+  parent:
+  - BaseItem
+  id: CELantern
+  name: lantern
+  description: A device that converts energy from crystals into a source of directional light. Convenient for traveling.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Tools/lantern.rsi
+    noRot: false
+    layers:
+    - state: icon
+    - state: light_icon
+      color: "#ec8c47"
+      map: ["crystal"]
+      visible: true
+    - state: light_icon
+      color: "#ec8c47"
+      shader: unshaded
+      visible: true
+      map: ["light"]
+  - type: UseDelay
+    delay: 1
+  - type: PointLight
+    enabled: true
+    energy: 3
+    radius: 6
+    color: "#ec8c47"
+    netsync: false
+  - type: Appearance
+  - type: ToggleableVisuals
+    spriteLayer: light
+    inhandVisuals:
+      left:
+      - state: light_inhand-left
+        color: "#ec8c47"
+        shader: unshaded
+      right:
+      - state: light_inhand-right
+        color: "#ec8c47"
+        shader: unshaded
+  - type: ItemTogglePointLight
+  - type: Clothing
+    equipDelay: 0.25
+    unequipDelay: 0.25
+    sprite: _CE/Objects/Tools/lantern.rsi
+    quickEquip: false
+    equipWhileMoving: true
+    slots:
+    - belt
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/toolbox_drop.ogg
+  - type: Item
+    size: Normal
+    shape:
+    - 0, 0, 1, 1
+  - type: Rotatable
+  - type: CELantern

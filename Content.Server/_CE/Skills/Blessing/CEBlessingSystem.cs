@@ -6,6 +6,10 @@ using Content.Shared._CE.Skill.Core;
 using Content.Shared._CE.Skill.Core.Components;
 using Content.Shared._CE.Skill.Core.Effects;
 using Content.Shared._CE.Skill.Core.Prototypes;
+using Content.Shared._CE.Soul;
+using Content.Shared._CE.Soul.Components;
+using Content.Shared.Interaction;
+using Content.Shared.Popups;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -20,55 +24,102 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
     [Dependency] private readonly CESharedSkillSystem _skill = default!;
     [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly CESharedSoulSystem _souls = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CEBlessingStatueComponent, ActivateInWorldEvent>(OnActivate);
+        SubscribeLocalEvent<CEBlessingStatueComponent, CESoulSpentEvent>(OnSoulReceived);
         SubscribeLocalEvent<CEBlessingStatueComponent, StartCollideEvent>(OnTriggerEnter);
         SubscribeLocalEvent<CEBlessingStatueComponent, EndCollideEvent>(OnTriggerExit);
         SubscribeLocalEvent<CEBlessingComponent, CEBlessingClaimedEvent>(OnBlessingClaimed);
     }
 
-    private void OnTriggerEnter(
-        Entity<CEBlessingStatueComponent> ent,
-        ref StartCollideEvent args)
+    private void OnActivate(Entity<CEBlessingStatueComponent> ent, ref ActivateInWorldEvent args)
     {
-        if (args.OurFixtureId != ent.Comp.TriggerFixtureId)
+        if (args.Handled)
             return;
 
-        if (!ent.Comp.StatueInitialized)
-        {
-            var entities = new HashSet<EntityUid>();
-            _lookup.GetEntitiesInRange(ent.Owner, ent.Comp.LinkRadius, entities);
-
-            foreach (var uid in entities)
-            {
-                if (HasComp<CEBlessingTableComponent>(uid))
-                    ent.Comp.LinkedTables.Add(uid);
-            }
-
-            ent.Comp.StatueInitialized = true;
-        }
-
-        var player = args.OtherEntity;
+        var player = args.User;
 
         if (!HasComp<CEBlessingReceiverComponent>(player))
             return;
 
-        // Already claimed a blessing from this statue
-        if (ent.Comp.PlayersBlessed.Contains(player))
+        // Statue is currently displaying blessings to a different player — busy.
+        // Lock is based on whether blessings are visibly offered (ActivePlayer != null),
+        // not on cached offerings, so other players can use the statue while this
+        // player's offer is dormant (they walked away without picking a skill).
+        if (ent.Comp.ActivePlayer is { } active && active != player)
+        {
+            _popup.PopupEntity(Loc.GetString("ce-blessing-statue-busy"), ent, player);
+            return;
+        }
+
+        EnsureLinkedTables(ent);
+
+        // Re-entry path: this player walked away earlier without picking a skill,
+        // their offer is still cached. Re-show it without charging again.
+        if (ent.Comp.OfferedSkills.ContainsKey(player))
+        {
+            // Already showing for this player — clicking again is a no-op so the
+            // statue doesn't keep stacking duplicate blessing entities.
+            if (ent.Comp.ActivePlayer == player && ent.Comp.ActiveBlessings.Count > 0)
+            {
+                args.Handled = true;
+                return;
+            }
+
+            ent.Comp.ActivePlayer = player;
+            args.Handled = true;
+            SpawnBlessings(ent, player);
+            return;
+        }
+
+        // Fresh interaction: charge souls. The soul system starts a delayed transfer
+        // (animation) and raises CESoulReceivedEvent -> OnSoulReceived -> SpawnBlessings
+        // only after the animation finishes. We tentatively lock the statue to this
+        // player up-front so concurrent clicks from other players see "busy" while
+        // the animation plays; we revert the lock if TrySpendSouls fails.
+        if (!HasComp<CESoulReceiverComponent>(ent))
             return;
 
-        // Another player is currently active
-        if (ent.Comp.ActivePlayer is not null && ent.Comp.ActivePlayer != player)
+        var previousActive = ent.Comp.ActivePlayer;
+        ent.Comp.ActivePlayer = player;
+
+        if (_souls.TrySpendSouls(ent.Owner, player))
+            args.Handled = true;
+        else
+            ent.Comp.ActivePlayer = previousActive;
+    }
+
+    private void OnSoulReceived(
+        Entity<CEBlessingStatueComponent> ent,
+        ref CESoulSpentEvent args)
+    {
+        // ActivePlayer was already set by OnActivate to keep the statue locked during
+        // the soul-transfer animation. By the time this event fires the lock should
+        // already match args.Player.
+        SpawnBlessings(ent, args.Player);
+    }
+
+    private void EnsureLinkedTables(Entity<CEBlessingStatueComponent> ent)
+    {
+        if (ent.Comp.StatueInitialized)
             return;
 
-        // Already active for this player (shouldn't double-spawn)
-        if (ent.Comp.ActivePlayer == player)
-            return;
+        var entities = new HashSet<EntityUid>();
+        _lookup.GetEntitiesInRange(ent.Owner, ent.Comp.LinkRadius, entities);
 
-        SpawnBlessings(ent, player);
+        foreach (var uid in entities)
+        {
+            if (HasComp<CEBlessingTableComponent>(uid))
+                ent.Comp.LinkedTables.Add(uid);
+        }
+
+        ent.Comp.StatueInitialized = true;
     }
 
     private void OnTriggerExit(
@@ -80,11 +131,51 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
 
         var player = args.OtherEntity;
 
+        // Always update zone membership so SpawnBlessings knows the player has left,
+        // even when the soul-animation gate below blocks blessing cleanup.
+        ent.Comp.PlayersInTriggerZone.Remove(player);
+
         if (ent.Comp.ActivePlayer != player)
+            return;
+
+        // Don't tear down blessing state while the soul system's transfer animation is
+        // still running on the player — let it finish and SpawnBlessings on completion.
+        // Zone membership was already updated above so SpawnBlessings will correctly
+        // skip spawning and only cache the offering.
+        if (HasComp<CESoulTransferComponent>(player))
             return;
 
         // Delete spawned entities but keep OfferedSkills cache for re-entry
         CleanupBlessings(ent);
+    }
+
+    /// <summary>
+    /// Entry trigger: always update zone membership. If this player has a cached offering
+    /// and the statue is free, re-show their blessings automatically without charging.
+    /// </summary>
+    private void OnTriggerEnter(
+        Entity<CEBlessingStatueComponent> ent,
+        ref StartCollideEvent args)
+    {
+        if (args.OurFixtureId != ent.Comp.TriggerFixtureId)
+            return;
+
+        var player = args.OtherEntity;
+
+        // Always update zone membership so SpawnBlessings can use it reliably.
+        ent.Comp.PlayersInTriggerZone.Add(player);
+
+        // Only re-show if this player has a cached offer.
+        if (!ent.Comp.OfferedSkills.ContainsKey(player))
+            return;
+
+        // Statue is currently busy — don't override (also covers the same player still
+        // having the blessings spawned, in which case ActivePlayer == player already).
+        if (ent.Comp.ActivePlayer is not null)
+            return;
+
+        ent.Comp.ActivePlayer = player;
+        SpawnBlessings(ent, player);
     }
 
     private void OnBlessingClaimed(
@@ -97,11 +188,13 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         if (!TryComp<CEBlessingStatueComponent>(statueUid, out var statue))
             return;
 
-        // Mark player as blessed — they can no longer use this statue
-        statue.PlayersBlessed.Add(args.Player);
-        statue.OfferedSkills.Remove(args.Player);
+        if (ent.Comp.Skill is { } chosenSkill)
+            TrackChosen(args.Player, chosenSkill);
 
-        // Clear active state (blessing entities already predicted-deleted by shared system)
+        // Clear the offer cache for this player and free the statue so it (and the
+        // player) can be used again. Statues are reusable as long as the player
+        // keeps paying souls.
+        statue.OfferedSkills.Remove(args.Player);
         statue.ActiveBlessings.Clear();
         statue.ActivePlayer = null;
     }
@@ -111,6 +204,15 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
         EntityUid player)
     {
         statue.Comp.ActivePlayer = player;
+
+        // Defensive: despawn any leftover blessings to keep the function idempotent.
+        // Without this, calling SpawnBlessings while entities are still alive would
+        // leak them and stack duplicate visuals on the pedestals.
+        foreach (var leftover in statue.Comp.ActiveBlessings)
+        {
+            if (Exists(leftover))
+                QueueDel(leftover);
+        }
         statue.Comp.ActiveBlessings.Clear();
 
         if (!TryComp<CEBlessingReceiverComponent>(player, out var receiver))
@@ -129,6 +231,7 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
             }
 
             statue.Comp.OfferedSkills[player] = statueOffering;
+            TrackOffered(player, statueOffering);
 
             // Immediately mark all generated skills as proposed to prevent
             // other statues from duplicating them this session.
@@ -144,6 +247,12 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
 
             if (dirty)
                 Dirty(player, receiver);
+        }
+
+        if (!statue.Comp.PlayersInTriggerZone.Contains(player))
+        {
+            statue.Comp.ActivePlayer = null;
+            return;
         }
 
         var blessingEntities = new List<EntityUid>();
@@ -234,7 +343,18 @@ public sealed partial class CEBlessingSystem : CESharedBlessingSystem
             return null;
         }
 
-        return _random.Pick(candidates);
+        // Weighted random selection: skills with higher Weight appear more often
+        var totalWeight = candidates.Sum(c => c.Weight);
+        var roll = _random.NextFloat() * totalWeight;
+        var accumulated = 0f;
+        foreach (var candidate in candidates)
+        {
+            accumulated += candidate.Weight;
+            if (roll < accumulated)
+                return candidate.ID;
+        }
+
+        return candidates[^1].ID;
     }
 
     private List<CESkillPrototype> GetSkillCandidates(

@@ -1,0 +1,38 @@
+- type: entity
+  name: wood bench
+  id: CEBenchWood
+  parent:
+  - CESeatBase
+  description: A bench carved from wood, a comfortable part of the interior designed for sitting and relaxing.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: CEDamageable
+  - type: Rotatable
+  - type: Sprite
+    noRot: false
+    sprite: _CE/Structures/Furniture/bench.rsi
+    state: wooden
+  - type: Physics
+    bodyType: Static
+  - type: CEDestructible
+    destroyThreshold: 25
+    destroySound:
+      collection: WoodDestroy
+
+- type: entity
+  id: CEBenchWoodLight
+  parent: CEBenchWood
+  components:
+  - type: Sprite
+    state: light
+
+- type: entity
+  id: CEBenchWoodDark
+  parent: CEBenchWood
+  components:
+  - type: Sprite
+    state: dark

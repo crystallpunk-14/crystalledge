@@ -232,8 +232,9 @@ namespace Content.Client.Construction
             if (entity == default)
                 return false;
 
-            // TODO: Decide if entity can craft, using capabilities or something
-            return true;
+            // CrystallEdge: vanilla crafting disabled — always unavailable
+            return false;
+            // CrystallEdge end
         }
 
         private bool HandleUse(in PointerInputCmdHandler.PointerInputCmdArgs args)

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Created by infrared_baron",
+  "size":
+  {
+    "x": 48,
+    "y": 48
+  },
+  "states":
+  [
+    {
+      "name": "mob",
+      "directions": 4
+    },
+    {
+      "name": "eye",
+      "directions": 4
+    }
+  ]
+}

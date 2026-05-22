@@ -1,7 +1,7 @@
 - type: entity
   id: CEWater
   name: water
-  description: TODO
+  description: You're definitely going to get your feet wet
   categories: [ "ForkFiltered" ]
   placement:
     mode: SnapgridCenter
@@ -23,7 +23,7 @@
     bodyType: Static
   - type: Fixtures
     fixtures:
-      conveyor:
+      fix1:
         shape: !type:PolygonShape
           vertices:
           - -0.50,-0.50
@@ -42,11 +42,21 @@
       collection: FootstepWater
       params:
         volume: 8
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.4
-  - type: CEWater
-  - type: CEFreezeTransform
-    freezesInto: CEIce
+  - type: CEPreventTileEffect
+    blocks:
+    - CETileEffectFire
+    - CETileEffectCursedFire
+  - type: CEEntityEffectOnCollide
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectWet
+      amount: 1
+      max: 5
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIce
   - type: RandomSpawner
     prototypes:
     - CEWaterReeds
@@ -54,6 +64,11 @@
     chance: 0.4
     offset: 0.1
     deleteSpawnerAfterSpawn: false
+  - type: AmbientSound
+    volume: 5
+    range: 4
+    sound:
+      path: /Audio/_CE/Ambience/water.ogg
 
 - type: entity
   parent: CEWater
@@ -63,27 +78,75 @@
   - type: Sprite
     state: moving
     snapCardinals: false
-  - type: CEWaterDistortion
+  - type: CETileDistortion
     intensity: 0.6
-  - type: CEWater
-    flowing: true
-  - type: CEFreezeTransform
-    freezesInto: CEIceFrozenStream
+  - type: CEAutoConveyor
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFreeze: CEIceFrozenStream
   - type: Conveyor
     speed: 0.25
 
 - type: entity
-  id: CEWaterTileImpactEffect
-  name: water splash
-  description: A splash of water upon impact.
+  id: CEIce
+  name: ice
+  description: Slippery cold ice. Watch your step.
   categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+    snap:
+      - Wall
   components:
   - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: PlacementReplacement
+    key: floorTile
+  - type: CEIconSmooth
+    key: floorTile
+    additionalKeys:
+    - CEwall
   - type: Sprite
-    sprite: _CE/Effects/water_tile_impact.rsi
-    snapCardinals: true
+    drawdepth: FloorTiles
+    sprite: _CE/Structures/Nature/ice.rsi
     layers:
-    - state: effect
-    drawdepth: Effects
-  - type: TimedDespawn
-    lifetime: 2.0
+    - state: ice1
+      map: [ "random" ]
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          ice1: ""
+          ice2: ""
+          ice3: ""
+          ice4: ""
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        density: 7
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - MidImpassable
+  - type: FrictionContacts
+  - type: TileFrictionModifier
+    modifier: 0.05
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWater
+      CETileEffectCursedFire: CEWater
+
+- type: entity
+  parent: CEIce
+  id: CEIceFrozenStream
+  suffix: Frozen Stream
+  description: A frozen stream, the current trapped under ice.
+  components:
+  - type: CETileEffectTransform
+    transforms:
+      CETileEffectFire: CEWaterMoving
+      CETileEffectCursedFire: CEWaterMoving
+

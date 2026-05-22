@@ -1,9 +1,8 @@
-using System.Numerics;
 using System.Threading.Tasks;
-using Content.Shared._CE.GOAP;
 using Content.Shared._CE.Procedural;
 using Content.Shared.Maps;
 using Content.Shared.Whitelist;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -41,20 +40,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
     /// </summary>
     [DataField]
     public EntityWhitelist? AnchoredWhitelist;
-
-    /// <summary>
-    /// If true, spawned entities with <see cref="CEGOAPComponent"/> will have their
-    /// <see cref="CEGOAPSleepingComponent"/> removed so they are immediately active.
-    /// </summary>
-    [DataField]
-    public bool WakeOnSpawn;
-
-    /// <summary>
-    /// Room types to exclude from spawning. Tiles inside rooms of these types
-    /// will not be considered as candidates.
-    /// </summary>
-    [DataField]
-    public List<CEProceduralRoomType> ExcludedRoomTypes = new();
 
     /// <summary>
     /// If true, only spawn on the main z-level (as defined by the dungeon level prototype).
@@ -187,10 +172,6 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
 
             entMan.SpawnEntity(entry.Proto, coords);
 
-            // Wake mob if requested.
-            if (WakeOnSpawn)
-                WakeSpawnedEntity(entMan, coords);
-
             remaining -= entry.Cost;
         }
     }
@@ -234,37 +215,17 @@ public sealed partial class CEBudgetSpawnPostProcess : CEDungeonPostProcessLayer
         return null;
     }
 
-    private static void WakeSpawnedEntity(IEntityManager entMan, EntityCoordinates coords)
-    {
-        var sleepingSystem = entMan.System<GOAP.CEGOAPSleepingSystem>();
-        var lookup = entMan.System<EntityLookupSystem>();
-
-        var nearby = new HashSet<Entity<CEGOAPSleepingComponent>>();
-        lookup.GetEntitiesInRange(coords, 0.5f, nearby);
-
-        foreach (var ent in nearby)
-        {
-            sleepingSystem.WakeMob(ent);
-        }
-    }
-
-    /// <summary>
-    /// Reads room data from the dungeon component on the map and builds
-    /// a list of bounding boxes for rooms whose type is in <see cref="ExcludedRoomTypes"/>.
-    /// </summary>
     private List<(Vector2i Pos, Vector2i Size)> BuildExcludedZones(IEntityManager entMan, EntityUid mapUid)
     {
         var zones = new List<(Vector2i Pos, Vector2i Size)>();
 
-        if (ExcludedRoomTypes.Count == 0)
-            return zones;
-
         if (!entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(mapUid, out var dungeon))
             return zones;
 
+        var proto = IoCManager.Resolve<IPrototypeManager>();
         foreach (var room in dungeon.Rooms)
         {
-            if (ExcludedRoomTypes.Contains(room.RoomType))
+            if (room.RoomType != null && proto.Resolve(room.RoomType.Value, out var roomTypeProto) && !roomTypeProto.AllowLootSpawn)
                 zones.Add((room.Position, room.Size));
         }
 
@@ -298,7 +259,7 @@ public sealed partial class BudgetSpawnEntry
     /// <summary>
     /// Budget cost for spawning one of this entity.
     /// </summary>
-    [DataField(required: true)]
+    [DataField]
     public int Cost = 1;
 
     /// <summary>

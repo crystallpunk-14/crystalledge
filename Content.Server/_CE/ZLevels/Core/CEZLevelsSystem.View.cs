@@ -19,7 +19,7 @@ namespace Content.Server._CE.ZLevels.Core;
 public sealed partial class CEZLevelsSystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    //[Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly ViewSubscriberSystem _viewSubscriber = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
 
@@ -58,13 +58,13 @@ public sealed partial class CEZLevelsSystem
 
     private void OnViewerInit(Entity<CEZLevelViewerComponent> ent, ref MapInitEvent args)
     {
-        _actions.AddAction(ent, ref ent.Comp.ZLevelActionEntity, ent.Comp.ActionProto);
+        //_actions.AddAction(ent, ref ent.Comp.ZLevelActionEntity, ent.Comp.ActionProto);
         _meta.AddFlag(ent, MetaDataFlags.ExtraTransformEvents);
     }
 
     private void OnCompRemove(Entity<CEZLevelViewerComponent> ent, ref ComponentRemove args)
     {
-        _actions.RemoveAction(ent.Comp.ZLevelActionEntity);
+        //_actions.RemoveAction(ent.Comp.ZLevelActionEntity);
         _meta.RemoveFlag(ent, MetaDataFlags.ExtraTransformEvents);
 
         foreach (var eye in ent.Comp.Eyes)

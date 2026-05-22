@@ -33,6 +33,9 @@ public sealed partial class CEConsumableComponent : Component
     [DataField]
     public SoundSpecifier? UseSound;
 
+    [DataField]
+    public bool BreakOnMove = false;
+
     /// <summary>
     /// If set, spawns this entity at the item's position when the item is consumed or depleted.
     /// For example, an empty vial after drinking a potion.
@@ -45,11 +48,25 @@ public sealed partial class CEConsumableComponent : Component
     /// If set, only entities matching this whitelist can be targeted by this consumable.
     /// </summary>
     [DataField]
-    public EntityWhitelist? Whitelist;
+    public EntityWhitelist Whitelist = new()
+    {
+        Components = new []
+        {
+            "CEGOAP",
+            "CEMobState",
+        }
+    };
 
     /// <summary>
     /// If set, entities matching this blacklist cannot be targeted by this consumable.
     /// </summary>
     [DataField]
     public EntityWhitelist? Blacklist;
+
+    /// <summary>
+    /// If false, the item is not deleted after use and can be consumed repeatedly.
+    /// Defaults to true (single-use behavior).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool SingleUse = true;
 }

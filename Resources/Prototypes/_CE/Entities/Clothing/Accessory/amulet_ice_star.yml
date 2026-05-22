@@ -1,0 +1,27 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryAmuletIceStar
+  name: Mierza star
+  description: A mystical amulet shaped like a frozen star. Increases all outgoing [color=#05eeff]cold damage[/color] by 3.
+  components:
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/ice_star.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectAmuletIceStar
+
+- type: entity
+  id: CEStatusEffectAmuletIceStar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+    stackDelta: 0
+  - type: CEBonusDamageStatusEffect
+    bonusDamagePerStack:
+      types:
+        Cold: 3
+    attackTypes:
+    - Melee
+    - Ranged

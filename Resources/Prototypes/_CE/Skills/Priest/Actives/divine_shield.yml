@@ -8,13 +8,13 @@
   id: CEActionSpellDivineShield
   parent: CEActionSpellBase
   name: Divine Shield
-  description: You apply a [color=#1defa9]1 divine shield[/color] on the target.
+  description: You apply a [color=#1defa9]1 divine shield[/color] on the target (max 5).
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeAoEZoneAction
     radius: 0.5
   - type: CEActionManaCost
-    manaCost: 1
+    manaCost: 8
   - type: Action
     useDelay: 5
     icon:
@@ -26,7 +26,8 @@
   - type: EntityTargetAction
     whitelist:
       components:
-      - CEDamageable
+      - CEMobState
+      - CEGOAP
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationDivineShield
 
@@ -36,15 +37,11 @@
   duration: 1.5
   events:
     0:
-    #- !type:SpawnEntity
-    #  spawns:
-    #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat
       sentence: "Et in necessitate"
     0.2:
-    #- !type:SpawnEntity
-    #  spawns:
-    #  - CEImpactEffectCureWounds #TODO effect
     - !type:SayChat
       sentence: "vos protegant"
-    - !type:AddDivineShield
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectDivineShield
+      max: 5

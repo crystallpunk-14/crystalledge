@@ -5,3 +5,4 @@ ce-skill-effect-active = [color=gold]Активная способность[/co
 ce-skill-effect-passive = [color=aqua]Пассивная способность[/color]
 
 ce-blessing-wrong-player = [color=red]Вы не можете поглотить благословение, предназначенное другому.[/color]
+ce-blessing-statue-busy = Кто-то уже общается со статуей.

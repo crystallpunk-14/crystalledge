@@ -1,0 +1,17 @@
+- type: entity
+  id: CEActionAdminDungeonOverview
+  name: Dungeon Overview
+  description: View dungeon levels, their instances, and players in them.
+  components:
+  - type: Action
+    icon: 
+      sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+      state: center
+    iconOn: 
+      sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+      state: center
+    keywords: [ "admin", "dungeon" ]
+    priority: -11
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent 
+      key: enum.CEAdminDungeonOverviewUiKey.Key

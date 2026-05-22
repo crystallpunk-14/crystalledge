@@ -1,5 +1,4 @@
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Health.Components;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -12,6 +11,9 @@ public sealed partial class Damage : CEEntityEffectBase<Damage>
 {
     [DataField("damage", required: true)]
     public CEDamageSpecifier DamageSpec = new();
+
+    [DataField(required: true)]
+    public CEAttackType AttackType;
 
     [DataField]
     public bool IgnoreArmor;
@@ -29,6 +31,16 @@ public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _health.TakeDamage(entity, args.Effect.DamageSpec, args.Args.Source, args.Args.Used, args.Effect.IgnoreArmor, args.Effect.InterruptDoAfters);
+        var damage = new CEDamageSpecifier(args.Effect.DamageSpec);
+
+        _health.TakeDamage(
+            entity,
+            damage,
+            args.Args.Source,
+            args.Args.Used,
+            args.Effect.IgnoreArmor,
+            args.Effect.InterruptDoAfters,
+            args.Effect.AttackType);
     }
 }
+

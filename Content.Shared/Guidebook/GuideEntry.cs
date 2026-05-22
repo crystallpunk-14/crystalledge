@@ -26,7 +26,7 @@ public class GuideEntry
     /// <summary>
     ///     The name of this guide. This gets localized.
     /// </summary>
-    [DataField(required: true)] public string Name = default!;
+    [DataField(required: true)] public string Name = default!; //CrystallEdge: Not LocId, because we have non localized entry names beetwen different lang
 
     /// <summary>
     ///     The "children" of this guide for when guides are shown in a tree / table of contents.

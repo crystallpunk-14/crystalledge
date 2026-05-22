@@ -3,6 +3,7 @@ using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared.NPC;
 using Robust.Shared.Timing;
 
@@ -37,20 +38,18 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextRecalc = new();
 
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
-
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPFleeAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null)
+        if (args.Action.Selector == null)
             return;
 
-        FindAndRegisterFleeTarget(ent, target.Value, args.Action);
+        var result = args.Action.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
+            return;
+
+        FindAndRegisterFleeTarget(ent, target, args.Action);
         _nextRecalc[ent] = _timing.CurTime + TimeSpan.FromSeconds(args.Action.RecalculateInterval);
     }
 
@@ -58,8 +57,14 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPFleeAction> args)
     {
-        var target = Goap.GetTarget(ent, args.Action.TargetKey);
-        if (target == null)
+        if (args.Action.Selector == null)
+        {
+            args.Status = CEGOAPActionStatus.Finished;
+            return;
+        }
+
+        var result = args.Action.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
         {
             args.Status = CEGOAPActionStatus.Finished;
             return;
@@ -74,7 +79,7 @@ public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFl
         // Recalculate flee destination periodically.
         if (_timing.CurTime >= _nextRecalc.GetValueOrDefault(ent))
         {
-            FindAndRegisterFleeTarget(ent, target.Value, args.Action);
+            FindAndRegisterFleeTarget(ent, target, args.Action);
             _nextRecalc[ent] = _timing.CurTime + TimeSpan.FromSeconds(args.Action.RecalculateInterval);
         }
 
