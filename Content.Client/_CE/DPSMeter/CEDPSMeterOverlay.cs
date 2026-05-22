@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Numerics;
 using Content.Shared._CE.DPSMeter;
 using Robust.Client.GameObjects;
@@ -29,10 +30,19 @@ public sealed class CEDPSMeterOverlay : Overlay
     private const float OutlineOffset = 2f;
     private const float LineGap = 2f;
 
+    // Pre-calculated cardinal-direction offsets — created once, reused every draw call.
+    private static readonly Vector2 OLeft  = new(-OutlineOffset, 0f);
+    private static readonly Vector2 ORight = new(OutlineOffset, 0f);
+    private static readonly Vector2 OUp = new(0f, -OutlineOffset);
+    private static readonly Vector2 ODown  = new(0f,  OutlineOffset);
+
     private readonly IEntityManager _entManager;
     private readonly SharedTransformSystem _transform;
     private readonly IGameTiming _timing;
     private readonly Font _font;
+
+    // Per-entity text + dimension cache — only recomputed when underlying value changes.
+    private readonly Dictionary<EntityUid, DPSCache> _cache = new();
 
     public CEDPSMeterOverlay(IEntityManager entManager, IResourceCache cache, IGameTiming timing)
     {
@@ -44,6 +54,8 @@ public sealed class CEDPSMeterOverlay : Overlay
         _font = new VectorFont(fontResource, 14);
     }
 
+    public void ClearCache(EntityUid uid) => _cache.Remove(uid);
+
     protected override void Draw(in OverlayDrawArgs args)
     {
         if (args.ViewportControl == null)
@@ -52,12 +64,18 @@ public sealed class CEDPSMeterOverlay : Overlay
         var handle = args.ScreenHandle;
         handle.SetTransform(Matrix3x2.Identity);
 
-        var matrix = args.ViewportControl.GetWorldToScreenMatrix();
-        var scale = new Vector2(matrix.M11, matrix.M12).Length();
+        var matrix  = args.ViewportControl.GetWorldToScreenMatrix();
+        var scale   = new Vector2(matrix.M11, matrix.M12).Length();
         var curTime = _timing.CurTime;
 
+        var vb= args.ViewportBounds;
+        var vLeft = vb.Left - 128f;
+        var vRight= vb.Right + 128f;
+        var vTop= vb.Top - 64f;
+        var vBottom = vb.Bottom + 64f;
+
         var query = _entManager.AllEntityQueryEnumerator<CEDPSMeterComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var meter, out var xform))
+        while (query.MoveNext(out var uid, out var meter, out var xform))
         {
             if (xform.MapID != args.MapId)
                 continue;
@@ -81,47 +99,96 @@ public sealed class CEDPSMeterOverlay : Overlay
             if (alpha <= 0f)
                 continue;
 
-            // Live DPS — denominator grows every frame so value decreases naturally.
-            var elapsed = (curTime - meter.StartTrackTime).TotalSeconds;
-            var liveDPS = (float)(meter.TotalDamage / Math.Max(elapsed, 1.0));
-
-            var totalText = $"Total: {meter.TotalDamage}";
-            var maxText   = $"Max: {meter.MaxDPS:F1}";
-            var dpsText   = $"DPS: {liveDPS:F1}";
-            var timeText  = $"Time: {elapsed:F1}s";
-
-            var worldPos = _transform.GetWorldPosition(xform);
+            var worldPos  = _transform.GetWorldPosition(xform);
             var screenPos = Vector2.Transform(worldPos, matrix);
             screenPos.X += meter.Offset.X * scale;
             screenPos.Y -= meter.Offset.Y * scale;
 
-            var totalDims = handle.GetDimensions(_font, totalText, 1f);
-            var maxDims   = handle.GetDimensions(_font, maxText,   1f);
-            var dpsDims   = handle.GetDimensions(_font, dpsText,   1f);
-            var timeDims  = handle.GetDimensions(_font, timeText,  1f);
+            // Broad-phase cull before string formatting and text metrics.
+            if (screenPos.X < vLeft || screenPos.X > vRight ||
+                screenPos.Y < vTop  || screenPos.Y > vBottom)
+                continue;
 
-            var blockHeight = totalDims.Y + LineGap + maxDims.Y + LineGap + dpsDims.Y + LineGap + timeDims.Y;
+            // Live DPS — denominator grows every frame so value decreases naturally.
+            var elapsed= (curTime - meter.StartTrackTime).TotalSeconds;
+            var liveDPS = (float)(meter.TotalDamage / Math.Max(elapsed, 1.0));
+            var dpsRounded = MathF.Round(liveDPS, 1);
+            var timeRounded = MathF.Round((float)elapsed, 1);
 
-            var totalPos = new Vector2(screenPos.X - totalDims.X / 2f, screenPos.Y - blockHeight);
-            var maxPos   = new Vector2(screenPos.X - maxDims.X   / 2f, totalPos.Y + totalDims.Y + LineGap);
-            var dpsPos   = new Vector2(screenPos.X - dpsDims.X   / 2f, maxPos.Y   + maxDims.Y   + LineGap);
-            var timePos  = new Vector2(screenPos.X - timeDims.X  / 2f, dpsPos.Y   + dpsDims.Y   + LineGap);
+            // Retrieve or create per-entity cache; refresh each line only when its value changed.
+            if (!_cache.TryGetValue(uid, out var c))
+            {
+                c = new DPSCache();
+                _cache[uid] = c;
+            }
 
-            DrawOutlined(handle, totalPos, totalText, MaxColor.WithAlpha(alpha));
-            DrawOutlined(handle, maxPos,   maxText,   MaxColor.WithAlpha(alpha));
-            DrawOutlined(handle, dpsPos,   dpsText,   DPSColor.WithAlpha(alpha));
-            DrawOutlined(handle, timePos,  timeText,  DPSColor.WithAlpha(alpha));
+            if (c.LastTotal != meter.TotalDamage)
+            {
+                c.LastTotal = meter.TotalDamage;
+                c.TotalText = $"Total: {meter.TotalDamage}";
+                c.TotalDims = handle.GetDimensions(_font, c.TotalText, 1f);
+            }
+
+            if (Math.Abs(c.LastMaxDPS - meter.MaxDPS) > 0.01f)
+            {
+                c.LastMaxDPS = meter.MaxDPS;
+                c.MaxText    = $"Max: {meter.MaxDPS:F1}";
+                c.MaxDims    = handle.GetDimensions(_font, c.MaxText, 1f);
+            }
+
+            if (Math.Abs(c.LastDPSRounded - dpsRounded) > 0.01f)
+            {
+                c.LastDPSRounded = dpsRounded;
+                c.DPSText        = $"DPS: {dpsRounded:F1}";
+                c.DPSDims        = handle.GetDimensions(_font, c.DPSText, 1f);
+            }
+
+            if (Math.Abs(c.LastTimeRounded - timeRounded) > 0.01f)
+            {
+                c.LastTimeRounded = timeRounded;
+                c.TimeText        = $"Time: {timeRounded:F1}s";
+                c.TimeDims        = handle.GetDimensions(_font, c.TimeText, 1f);
+            }
+
+            var blockHeight = c.TotalDims.Y + LineGap + c.MaxDims.Y + LineGap + c.DPSDims.Y + LineGap + c.TimeDims.Y;
+
+            var totalPos = new Vector2(screenPos.X - c.TotalDims.X / 2f, screenPos.Y - blockHeight);
+            var maxPos   = new Vector2(screenPos.X - c.MaxDims.X   / 2f, totalPos.Y + c.TotalDims.Y + LineGap);
+            var dpsPos   = new Vector2(screenPos.X - c.DPSDims.X   / 2f, maxPos.Y   + c.MaxDims.Y   + LineGap);
+            var timePos  = new Vector2(screenPos.X - c.TimeDims.X  / 2f, dpsPos.Y   + c.DPSDims.Y   + LineGap);
+
+            DrawOutlined(handle, totalPos, c.TotalText, MaxColor.WithAlpha(alpha));
+            DrawOutlined(handle, maxPos,   c.MaxText,   MaxColor.WithAlpha(alpha));
+            DrawOutlined(handle, dpsPos,   c.DPSText,   DPSColor.WithAlpha(alpha));
+            DrawOutlined(handle, timePos,  c.TimeText,  DPSColor.WithAlpha(alpha));
         }
     }
 
     private void DrawOutlined(DrawingHandleScreen handle, Vector2 pos, string text, Color color)
     {
         var outline = OutlineColor.WithAlpha(OutlineColor.A * color.A);
-        const float o = OutlineOffset;
-        handle.DrawString(_font, pos + new Vector2(-o, 0), text, 1f, outline);
-        handle.DrawString(_font, pos + new Vector2(o, 0), text, 1f, outline);
-        handle.DrawString(_font, pos + new Vector2(0, -o), text, 1f, outline);
-        handle.DrawString(_font, pos + new Vector2(0, o), text, 1f, outline);
-        handle.DrawString(_font, pos, text, 1f, color);
+        handle.DrawString(_font, pos + OLeft,  text, 1f, outline);
+        handle.DrawString(_font, pos + ORight, text, 1f, outline);
+        handle.DrawString(_font, pos + OUp,    text, 1f, outline);
+        handle.DrawString(_font, pos + ODown,  text, 1f, outline);
+        handle.DrawString(_font, pos,          text, 1f, color);
+    }
+
+    private sealed class DPSCache
+    {
+        public int LastTotal = int.MinValue;
+        public float LastMaxDPS = float.MinValue;
+        public float LastDPSRounded = float.MinValue;
+        public float LastTimeRounded = float.MinValue;
+
+        public string TotalText = string.Empty;
+        public string MaxText = string.Empty;
+        public string DPSText = string.Empty;
+        public string TimeText = string.Empty;
+
+        public Vector2 TotalDims;
+        public Vector2 MaxDims;
+        public Vector2 DPSDims;
+        public Vector2 TimeDims;
     }
 }

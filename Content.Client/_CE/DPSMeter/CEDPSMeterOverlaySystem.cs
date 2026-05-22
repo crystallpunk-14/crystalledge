@@ -1,3 +1,4 @@
+using Content.Shared._CE.DPSMeter;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Timing;
@@ -21,6 +22,8 @@ public sealed class CEDPSMeterOverlaySystem : EntitySystem
 
         _overlay = new CEDPSMeterOverlay(EntityManager, _cache, _timing);
         _overlayMan.AddOverlay(_overlay);
+
+        SubscribeLocalEvent<CEDPSMeterComponent, ComponentRemove>(OnMeterRemoved);
     }
 
     public override void Shutdown()
@@ -28,5 +31,10 @@ public sealed class CEDPSMeterOverlaySystem : EntitySystem
         base.Shutdown();
 
         _overlayMan.RemoveOverlay(_overlay);
+    }
+
+    private void OnMeterRemoved(Entity<CEDPSMeterComponent> ent, ref ComponentRemove args)
+    {
+        _overlay.ClearCache(ent);
     }
 }

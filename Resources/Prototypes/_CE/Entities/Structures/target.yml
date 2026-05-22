@@ -15,7 +15,7 @@
     noRot: true
     drawdepth: Mobs
     sprite: _CE/Structures/Furniture/target.rsi
-    state: target_effigy
+    state: target_icon
     offset: 0,0.2
   - type: Physics
     bodyType: Static
