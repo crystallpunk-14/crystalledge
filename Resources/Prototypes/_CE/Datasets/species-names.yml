@@ -59,3 +59,17 @@
   values:
     prefix: ce-species-name-carcat-first-
     count: 50
+
+# Silva
+
+- type: localizedDataset
+  id: CE_Names_Silva_Male_First
+  values:
+    prefix: ce-species-name-silva-male-first-
+    count: 20
+
+- type: localizedDataset
+  id: CE_Names_Silva_Female_First
+  values:
+    prefix: ce-species-name-silva-female-first-
+    count: 20
