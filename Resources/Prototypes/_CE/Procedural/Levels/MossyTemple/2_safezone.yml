@@ -29,9 +29,6 @@
   components:
   - type: MapLight
     ambientLightColor: "#31455a"
-  - type: Gravity
-    enabled: true
-    inherent: true
   - type: CEMapStatusEffects
     effects:
     - CEStatusEffectPacifism

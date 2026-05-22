@@ -20,12 +20,14 @@
   - /Maps/_CE/Dungeon/Tutorial/Tutorial0.yml
   - /Maps/_CE/Dungeon/Tutorial/Tutorial1.yml
   components:
-    - type: SunShadowCycle
-      offset: 490
-    - type: LightCycle
-      offset: 490
-      originalColor: "#c8fdff"
-    - type: CEZLevelMapRoof
-    - type: SunShadow
-    - type: MapLight
-      ambientLightColor: "#c8fdff"
+  - type: SunShadowCycle
+    offset: 490
+  - type: LightCycle
+    offset: 490
+    originalColor: "#c8fdff"
+  - type: CEZLevelMapRoof
+  - type: SunShadow
+  - type: MapLight
+    ambientLightColor: "#c8fdff"
+  - type: CEMapAmbientMusicTheme
+    theme: MossySafe
