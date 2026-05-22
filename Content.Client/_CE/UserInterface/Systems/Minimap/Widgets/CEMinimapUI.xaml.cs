@@ -284,7 +284,7 @@ public sealed partial class CEMinimapUI : UIWidget
         if (!zLevels.TryGetZNetwork(currentMap, out var zNet))
             return false;
 
-        foreach (var sibling in zNet.Value.Comp.ZLevels.Values)
+        foreach (var sibling in zNet.Comp.ZLevels.Values)
         {
             if (sibling is { } siblingUid
                 && _entMan.TryGetComponent(siblingUid, out CEGeneratingProceduralDungeonComponent? found))

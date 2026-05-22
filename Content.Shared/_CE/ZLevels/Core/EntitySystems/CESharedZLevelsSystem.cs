@@ -15,19 +15,19 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = null!;
-    [Dependency] private readonly IConfigurationManager _configuration = null!;
+    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IConfigurationManager _configuration = default!;
 
-    [Dependency] private readonly SharedTransformSystem _transform = null!;
-    [Dependency] private readonly SharedAudioSystem _audio = null!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = null!;
-    [Dependency] private readonly EntityLookupSystem _lookup = null!;
-    [Dependency] private readonly SharedMapSystem _map = null!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
 
-    private EntityQuery<MapComponent> _mapQuery;
-    private EntityQuery<CEZLevelMapComponent> _zMapQuery;
-    private EntityQuery<CEZLevelsNetworkComponent> _zNetworkQuery;
-    private EntityQuery<MapGridComponent> _gridQuery;
+    [Dependency] private readonly EntityQuery<MapComponent> _mapQuery = default!;
+    [Dependency] private readonly EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
+    [Dependency] private readonly EntityQuery<CEZLevelsNetworkComponent> _zNetworkQuery = default!;
+    [Dependency] private readonly EntityQuery<MapGridComponent> _gridQuery = default!;
 
     protected EntityQuery<CEZPhysicsComponent> ZPhysicsQuery;
 
@@ -45,11 +45,6 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
         _configuration.OnValueChanged(CCVars.CEZLevelsPhysicsImpactVelocity, v => ZImpactVelocityLimit = v, true);
         _configuration.OnValueChanged(CCVars.CEZLevelsPhysicsVelocityLimit, v => ZVelocityLimit = v, true);
         _configuration.OnValueChanged(CCVars.CEZLevelsRenderingMaxZLevelsBelowRendering, v => MaxZLevelsBelowRendering = v, true);
-
-        _mapQuery = GetEntityQuery<MapComponent>();
-        _zMapQuery = GetEntityQuery<CEZLevelMapComponent>();
-        _zNetworkQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
-        _gridQuery = GetEntityQuery<MapGridComponent>();
 
         ZPhysicsQuery = GetEntityQuery<CEZPhysicsComponent>();
 

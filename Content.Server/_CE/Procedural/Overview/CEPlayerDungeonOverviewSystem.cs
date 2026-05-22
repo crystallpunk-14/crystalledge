@@ -145,7 +145,7 @@ public sealed class CEPlayerDungeonOverviewSystem : EntitySystem
             return null;
 
         if (_zLevels.TryGetZNetwork(mapUid, out var zNetAnchor)
-            && _instanceQuery.TryComp(zNetAnchor.Value.Owner, out var zInst))
+            && _instanceQuery.TryComp(zNetAnchor.Owner, out var zInst))
         {
             return zInst.PrototypeId;
         }

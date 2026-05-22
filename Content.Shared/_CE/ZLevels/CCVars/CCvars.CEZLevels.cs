@@ -3,11 +3,8 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
-using Robust.Shared;
 using Robust.Shared.Configuration;
 
-// Why you put all configs in one ss14 container
-// You can create your own
 namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
