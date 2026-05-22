@@ -70,7 +70,7 @@
   parent: MapText
   categories: [ ForkFiltered ]
   name: Tutorial interaction text 1
-  suffox: "E interaction"
+  suffix: "E interaction"
   components:
   - type: MapText
     text: "Press E to interact"
@@ -80,7 +80,7 @@
   parent: MapText
   categories: [ ForkFiltered ]
   name: Tutorial interaction text 2
-  suffox: "X interaction"
+  suffix: "X interaction"
   components:
   - type: MapText
     text: "Press X to change active hand"
@@ -90,7 +90,7 @@
   parent: MapText
   categories: [ ForkFiltered ]
   name: Tutorial interaction text 3
-  suffox: "Q interaction"
+  suffix: "Q interaction"
   components:
   - type: MapText
     text: "Press Q to to place the object \ncarefully from active hand"
@@ -100,7 +100,7 @@
   parent: MapText
   categories: [ ForkFiltered ]
   name: Tutorial interaction text 4
-  suffox: "Ctrl+Q interaction"
+  suffix: "Ctrl+Q interaction"
   components:
   - type: MapText
     text: "Press Ctrl+Q to to throw item \nfrom active hand"
@@ -110,7 +110,7 @@
   parent: MapText
   categories: [ ForkFiltered ]
   name: Tutorial battle text 1
-  suffox: "Harm mode"
+  suffix: "Harm mode"
   components:
   - type: MapText
     text: "Press 1 to toggle harm mode on/off"
