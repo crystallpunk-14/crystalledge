@@ -90,6 +90,12 @@ public sealed partial class CEDungeonLevelPrototype : IPrototype, IInheritingPro
     public bool Roundstart;
 
     /// <summary>
+    /// If true - will not shown into dungeon overview map
+    /// </summary>
+    [DataField]
+    public bool Secret;
+
+    /// <summary>
     /// Maps exit slot numbers to the target dungeon level prototypes.
     /// After generation, exit entities with matching <c>TargetLevel</c> values get
     /// their resolved target assigned from this dictionary.

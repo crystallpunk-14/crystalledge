@@ -3,6 +3,7 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobGOAPBase
   id: CEMobSlimeWater
   name: water slime
   description: A wobbly blob of animated water. Pops into a splash when destroyed.
@@ -55,7 +56,7 @@
 
     actions:
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -63,7 +64,7 @@
       cost: 1
       range: 1.5
     - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
       effects:
@@ -72,7 +73,7 @@
       useType: Primary
       angleVariation: 5
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -85,28 +86,6 @@
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
-
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
   - type: NpcFactionMember
     factions:
     - SimpleHostile

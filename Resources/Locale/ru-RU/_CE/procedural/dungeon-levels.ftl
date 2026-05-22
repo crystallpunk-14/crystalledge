@@ -1,6 +1,7 @@
 ## PvE — Заросший храм
-ce-dungeon-mossy-temple-start-name = Заросший храм - Вход
-ce-dungeon-mossy-temple-start-desc = Порог Заросшего храма. Шагните в разлом, чтобы спуститься.
+
+ce-dungeon-start-name = Внешний слой
+ce-dungeon-tutorial-name = Обучение
 
 ce-dungeon-mossy-temple-1-name = Заросший храм - I
 ce-dungeon-mossy-temple-2-name = Заросший храм - II

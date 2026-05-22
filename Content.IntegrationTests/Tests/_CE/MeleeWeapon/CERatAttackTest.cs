@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health.Components;
@@ -69,9 +70,9 @@ public sealed class CERatAttackTest : GameTest
             Assert.That(SEntMan.HasComponent<CEActiveGOAPComponent>(rat),
                 "Enemy GOAP should be active");
 
-            var goap = SEntMan.GetComponent<CEGOAPComponent>(rat);
-            Assert.That(goap.Targets.ContainsKey("enemy"),
-                "Enemy should have an enemy target");
+            var cache = SEntMan.GetComponent<CEGOAPKnowledgeCacheComponent>(rat);
+            Assert.That(cache.Enemies, Is.Not.Empty,
+                "Enemy should have classified at least one enemy");
         });
     }
 }

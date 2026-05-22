@@ -35,12 +35,6 @@ public sealed partial class CEWeaponComponent : Component
     public bool Using;
 
     /// <summary>
-    /// Extra time after the animation ends before the combo resets.
-    /// </summary>
-    [DataField]
-    public TimeSpan ComboResetDelay = TimeSpan.FromSeconds(0.5);
-
-    /// <summary>
     /// Which use type the current combo chain belongs to.
     /// Switching to a different use type resets the combo.
     /// </summary>
@@ -55,7 +49,7 @@ public sealed partial class CEWeaponComponent : Component
 
     /// <summary>
     /// Absolute time after which the combo resets to the first animation.
-    /// Calculated as: attack time + animation duration + <see cref="ComboResetDelay"/>.
+    /// Calculated as: attack time + animation duration * 1.5 (adjusted for playback speed).
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan ComboResetDeadline = TimeSpan.Zero;

@@ -95,11 +95,9 @@ public sealed partial class CEGOAPSystem : EntitySystem
             }
         }
 
-        // Force all sensors to evaluate once so WorldState is populated immediately.
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
-        }
+        // Force all sensor components on this entity to evaluate once so WorldState is populated immediately.
+        var refreshEv = new CEGOAPSensorRefreshEvent();
+        RaiseLocalEvent(ent, ref refreshEv);
 
         // If StartSleeping is set, add the sleeping marker so the entity stays dormant.
         if (ent.Comp.StartSleeping)
@@ -110,7 +108,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnShutdown(Entity<CEGOAPComponent> ent, ref ComponentShutdown args)
     {
-        CleanupTrackers(ent);
         ClearPlan(ent);
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
@@ -142,6 +139,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
             if (!HasComp<CEActiveGOAPComponent>(uid))
                 continue;
 
+            PurgeExpiredKnowledge((uid, goap));
             UpdateAgent((uid, goap), frameTime);
             count++;
         }
@@ -149,37 +147,13 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 1. Update sensors
-        UpdateSensors(ent);
-
-        // 2. Check if we need to re-plan
+        // 1. Check if we need to re-plan
         if (ent.Comp.CurrentPlan.Count == 0 || _timing.CurTime >= ent.Comp.NextPlanTime)
             Replan(ent);
 
-        // 3. Execute current action
+        // 2. Execute current action
         if (ent.Comp.CurrentPlan.Count != 0 && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
-    }
-
-    private void UpdateSensors(Entity<CEGOAPComponent> ent)
-    {
-        var curTime = _timing.CurTime;
-
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            var interval = sensor.UpdateInterval;
-
-            // Event-only sensors are not polled.
-            if (interval is null || interval.Value <= TimeSpan.Zero)
-                continue;
-
-            // Per-sensor timing.
-            if (curTime < sensor.NextUpdateTime)
-                continue;
-
-            sensor.NextUpdateTime = curTime + interval.Value;
-            sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
-        }
     }
 
     private void Replan(Entity<CEGOAPComponent> ent)
@@ -336,3 +310,10 @@ public sealed partial class CEGOAPSystem : EntitySystem
         ent.Comp.ActiveGoalIndex = -1;
     }
 }
+
+/// <summary>
+/// Raised on a GOAP entity to force every sensor component on it to re-evaluate
+/// its world state condition. Used at map init and on demand.
+/// </summary>
+[ByRefEvent]
+public readonly record struct CEGOAPSensorRefreshEvent;

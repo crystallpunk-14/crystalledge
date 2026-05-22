@@ -1,5 +1,7 @@
 namespace Content.Shared._CE.GOAP;
 
+using Content.Shared._CE.GOAP.Selectors;
+
 /// <summary>
 /// Execution status of a GOAP action.
 /// </summary>
@@ -45,13 +47,11 @@ public abstract partial class CEGOAPAction
     public float Cost = 1f;
 
     /// <summary>
-    /// Key into the CEGOAPComponent.Targets dictionary.
-    /// Actions that need a target read it by this key.
-    /// Null means the action has no target (GetTarget returns null).
-    /// Use "self" to target the entity itself.
+    /// Selector that resolves this action's target entity and/or coordinate at runtime.
+    /// Null means the action has no target.
     /// </summary>
     [DataField]
-    public string? TargetKey;
+    public CEGOAPTargetSelector? Selector;
 
     /// <summary>
     /// Called once during entity map initialization.

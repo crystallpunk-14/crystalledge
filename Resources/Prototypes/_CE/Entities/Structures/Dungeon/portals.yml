@@ -70,7 +70,7 @@
 - type: entity
   id: CEDungeonLevelExit1
   parent: CEDungeonLevelExitBase
-  suffix: Slot 1
+  suffix: Slot 1, 4 Players
   components:
   - type: CEDungeonPassage
     targetLevel: 1
@@ -78,7 +78,7 @@
 - type: entity
   id: CEDungeonLevelExit2
   parent: CEDungeonLevelExitBase
-  suffix: Slot 2
+  suffix: Slot 2, 4 Players
   components:
   - type: CEDungeonPassage
     targetLevel: 2
@@ -86,10 +86,19 @@
 - type: entity
   id: CEDungeonLevelExit3
   parent: CEDungeonLevelExitBase
-  suffix: Slot 3
+  suffix: Slot 3, 4 Players
   components:
   - type: CEDungeonPassage
     targetLevel: 3
+
+- type: entity
+  id: CEDungeonLevelExit3Solo
+  parent: CEDungeonLevelExitBase
+  suffix: Slot 3, 1 Players
+  components:
+  - type: CEDungeonPassage
+    targetLevel: 3
+    maxPlayers: 1
 
 
 - type: entity

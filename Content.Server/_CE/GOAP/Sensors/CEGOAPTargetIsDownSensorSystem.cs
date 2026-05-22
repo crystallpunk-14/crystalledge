@@ -1,53 +1,62 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Checks if the current target is incapacitated (critical).
-/// Event-driven: reacts to CEMobStateChangedEvent via CEGOAPTargetComponent.
+/// Checks if a selector-resolved target is incapacitated (critical or dead).
+/// Event-driven via CEGOAPTargetComponent: reacts to CEMobStateChangedEvent on tracked targets.
 /// </summary>
-public sealed partial class CEGOAPTargetIsDownSensor : CEGOAPSensorBase<CEGOAPTargetIsDownSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPTargetIsDownSensorComponent : Component
 {
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
+    [DataField(required: true)]
+    public CEGOAPTargetSelector Selector = default!;
 }
 
-public sealed partial class CEGOAPTargetIsDownSensorSystem : CEGOAPSensorSystem<CEGOAPTargetIsDownSensor>
+public sealed class CEGOAPTargetIsDownSensorSystem : EntitySystem
 {
     [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+
+        SubscribeLocalEvent<CEGOAPTargetIsDownSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
         SubscribeLocalEvent<CEGOAPTargetComponent, CEMobStateChangedEvent>(OnTargetMobStateChanged);
+    }
+
+    private void OnRefresh(Entity<CEGOAPTargetIsDownSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
+    {
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
+            return;
+
+        Evaluate((ent.Owner, goap), ent.Comp);
     }
 
     private void OnTargetMobStateChanged(Entity<CEGOAPTargetComponent> ent, ref CEMobStateChangedEvent args)
     {
-        foreach (var (goapUid, keys) in ent.Comp.Trackers)
+        foreach (var goapUid in ent.Comp.Trackers)
         {
             if (!TryComp<CEGOAPComponent>(goapUid, out var goap))
                 continue;
 
-            foreach (var sensor in goap.Sensors)
-            {
-                if (sensor is not CEGOAPTargetIsDownSensor downSensor)
-                    continue;
+            if (!TryComp<CEGOAPTargetIsDownSensorComponent>(goapUid, out var sensor))
+                continue;
 
-                if (downSensor.TargetKey == null || !keys.Contains(downSensor.TargetKey))
-                    continue;
-
-                goap.WorldState[downSensor.ConditionKey] = !_mobState.IsAlive(ent.Owner);
-            }
+            Evaluate((goapUid, goap), sensor);
         }
     }
 
-    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPTargetIsDownSensor> args)
+    private void Evaluate(Entity<CEGOAPComponent> ent, CEGOAPTargetIsDownSensorComponent sensor)
     {
-        var target = Goap.GetTarget(ent, args.Sensor.TargetKey);
-        if (target == null)
-            return false;
-
-        return !_mobState.IsAlive(target.Value);
+        var result = sensor.Selector.Resolve(ent, EntityManager);
+        ent.Comp.WorldState[sensor.ConditionKey] = result.Entity is { } target && !_mobState.IsAlive(target);
     }
 }
+

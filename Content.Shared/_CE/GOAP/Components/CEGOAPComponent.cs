@@ -33,24 +33,11 @@ public sealed partial class CEGOAPComponent : Component
     public List<CEGOAPAction> Actions = new();
 
     /// <summary>
-    /// Sensors that update the world state each frame.
-    /// </summary>
-    [DataField(serverOnly: true)]
-    [AlwaysPushInheritance]
-    public List<CEGOAPSensor> Sensors = new();
-
-    /// <summary>
-    /// Named targets resolved by sensors.
-    /// Keys are logical target names (e.g. "enemy"), values are resolved entity UIDs.
+    /// Knowledge store populated by perceptors. Maps perceived entities to their
+    /// last known state (position, time, source, expiry).
     /// </summary>
     [ViewVariables]
-    public Dictionary<string, EntityUid?> Targets = new();
-
-    /// <summary>
-    /// Last known coordinates for each target key
-    /// </summary>
-    [ViewVariables]
-    public Dictionary<string, EntityCoordinates> LastKnownPositions = new();
+    public Dictionary<EntityUid, CEGOAPKnowledgeEntry> Knowledge = new();
 
     /// <summary>
     /// Current world state as perceived by this entity.

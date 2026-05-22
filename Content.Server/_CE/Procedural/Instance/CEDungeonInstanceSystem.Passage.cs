@@ -135,7 +135,7 @@ public sealed partial class CEDungeonInstanceSystem
                 passage.TargetPosition = Transform(targetEntry.Value).Coordinates;
             }
 
-            var candidates = GatherNearbyPlayers(uid, passage.SearchRadius, passage.Throughput);
+            var candidates = GatherNearbyPlayers(uid, passage.SearchRadius, passage.MaxPlayers);
             if (passage.TargetPosition == null)
             {
                 Log.Error("Active passage has no target position.");
@@ -178,6 +178,7 @@ public sealed partial class CEDungeonInstanceSystem
         var activeComp = EnsureComp<CEDungeonActivePassageComponent>(activePassage);
         activeComp.NextTransitionTime = _timing.CurTime + activeComp.TransitionInitialDelay;
         activeComp.TargetLevel = proto.ID;
+        activeComp.MaxPlayers = ent.Comp.MaxPlayers;
 
         if (TryFindEnterPoint(proto, out var targetEntry))
             activeComp.TargetPosition = Transform(targetEntry.Value).Coordinates;

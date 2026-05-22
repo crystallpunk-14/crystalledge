@@ -1,54 +1,70 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Mana.Core.Components;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
 /// <summary>
-/// Checks if the entity's own health is below a threshold.
-/// Compares accumulated damage against the critical threshold.
+/// Checks if the entity's mana fraction is below a threshold.
+/// Event-driven via CEMagicEnergyLevelChangeEvent.
 /// </summary>
-public sealed partial class CEGOAPCheckManaLevelSensor : CEGOAPSensorBase<CEGOAPCheckManaLevelSensor>
+[RegisterComponent]
+public sealed partial class CEGOAPCheckManaLevelSensorComponent : Component
 {
+    [DataField(required: true)]
+    public string ConditionKey = string.Empty;
+
+    [DataField(required: true)]
+    public CEGOAPTargetSelector Selector = default!;
+
     /// <summary>
-    /// Health fraction (0..1) below which the condition is set to true.
+    /// Mana fraction (0..1) below which the condition is set to true.
     /// </summary>
     [DataField]
     public float Threshold = 0.5f;
 }
 
-public sealed partial class CEGOAPCheckManaLevelSensorSystem : CEGOAPSensorSystem<CEGOAPCheckManaLevelSensor>
+public sealed class CEGOAPCheckManaLevelSensorSystem : EntitySystem
 {
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<CEGOAPComponent, CEMagicEnergyLevelChangeEvent>(OnManaChanged);
+
+        SubscribeLocalEvent<CEGOAPCheckManaLevelSensorComponent, CEGOAPSensorRefreshEvent>(OnRefresh);
+        SubscribeLocalEvent<CEGOAPCheckManaLevelSensorComponent, CEMagicEnergyLevelChangeEvent>(OnManaChanged);
     }
 
-    /// <summary>
-    /// Event-driven update: fires when damage changes on an entity with GOAP.
-    /// </summary>
-    private void OnManaChanged(Entity<CEGOAPComponent> ent, ref CEMagicEnergyLevelChangeEvent args)
+    private void OnRefresh(Entity<CEGOAPCheckManaLevelSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
     {
-        var newFraction = (float)args.NewValue / (float)args.MaxValue;
+        Evaluate(ent);
+    }
 
-        foreach (var sensor in ent.Comp.Sensors)
+    private void OnManaChanged(Entity<CEGOAPCheckManaLevelSensorComponent> ent, ref CEMagicEnergyLevelChangeEvent args)
+    {
+        Evaluate(ent);
+    }
+
+    private void Evaluate(Entity<CEGOAPCheckManaLevelSensorComponent> ent)
+    {
+        if (!TryComp<CEGOAPComponent>(ent, out var goap))
+            return;
+
+        var result = ent.Comp.Selector.Resolve(ent, EntityManager);
+        if (result.Entity is not { } target)
         {
-            if (sensor is not CEGOAPCheckManaLevelSensor healthSensor)
-                continue;
-
-            ent.Comp.WorldState[healthSensor.ConditionKey] = newFraction < healthSensor.Threshold;
+            goap.WorldState[ent.Comp.ConditionKey] = false;
+            return;
         }
-    }
 
-    protected override bool? OnSensorUpdate(Entity<CEGOAPComponent> ent, ref CEGOAPSensorUpdateEvent<CEGOAPCheckManaLevelSensor> args)
-    {
-        if (!TryComp<CEMagicEnergyContainerComponent>(ent, out var mana))
-            return false;
+        if (!TryComp<CEMagicEnergyContainerComponent>(target, out var mana))
+        {
+            goap.WorldState[ent.Comp.ConditionKey] = false;
+            return;
+        }
 
-        var fraction = (float)mana.Energy / (float)mana.MaxEnergy;
-
-        return fraction < args.Sensor.Threshold;
+        var fraction = (float)mana.Energy / mana.MaxEnergy;
+        goap.WorldState[ent.Comp.ConditionKey] = fraction < ent.Comp.Threshold;
     }
 }

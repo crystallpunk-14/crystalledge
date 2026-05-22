@@ -18,11 +18,11 @@
           attackType: Melee
           damage:
             types:
-              Physical: 20
+              Physical: 30
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.72
-        arcWidth: 180
+        range: 0.9
+        arcWidth: 40
         effects:
         - !type:Damage
           attackType: Melee
@@ -31,30 +31,14 @@
               Physical: 20
     animations:
       Primary:
-      - anim: SwordAttackLight1
-        speed: 0.5
-      - anim: SwordAttackLight2
-        speed: 0.5
+      - anim: WarAxeAttackLight
+      - anim: WarAxeAttackLight2
       Secondary:
-      - anim: SwordAttackLight1
-        speed: 0.5
-      - anim: SwordAttackLight2
-        speed: 0.5
-  - type: CEWieldedWeapon
-    animations:
-      Primary:
-      - anim: SwordAttackHeavy1
-        speed: 0.5
-      - anim: SwordAttackHeavy2
-        speed: 0.5
-      Secondary:
-      - anim: SwordAttackHeavy1
-        speed: 0.5
-      - anim: SwordAttackHeavy2
-        speed: 0.5
+      - anim: SpearAttackHeavy
+      - anim: SpearAttackHeavy2
   - type: CEWeaponStaminaCost
     costs:
-      Primary: 2.5
+      Primary: 2
       Secondary: 2.5
   - type: Clothing
     slots:

@@ -1,4 +1,5 @@
 - type: entity
+  parent: CEMobGOAPBase
   id: CEMobBossBase
   suffix: Boss
   abstract: true
@@ -12,7 +13,3 @@
   - type: CESoulDropOnDeath
     souls: 25
     scatterSpeed: 50
-  - type: CEGOAP
-    sensors:
-    - !type:CEGOAPAlertOnDamageSensor
-      outputTargetKey: enemy

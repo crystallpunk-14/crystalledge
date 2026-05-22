@@ -1144,6 +1144,8 @@ ent-CEMobHuman = мистер человек
 
 ent-CEMobTiefling = мистер тифлинг
 
+ent-CEMobSilva = мистер сильва
+
 ent-CEClothingPriestCloakDark = { ent-CEClothingCloakBase }
     .desc = { ent-CEClothingCloakBase.desc }
 

@@ -2,6 +2,7 @@
   parent:
   - BaseMob
   - CEMobDamageable
+  - CEMobGOAPBase
   id: CEMobFireConstruct
   name: fire construct
   description: TODO
@@ -20,7 +21,7 @@
 
     actions:
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
       effects:
@@ -33,20 +34,13 @@
       cost: 1
       exploreRadius: 8
     - !type:CEGOAPFleeAction
+      selector: !type:CEGOAPSelectorNearestEnemy
       effects:
         EnemyInMeleeRange: false
     # Move to enemy's last known position
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
-
     # Attacks
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -55,7 +49,7 @@
       cost: 1
       actionPrototype: CEActionFireConstructFirebolt
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: true
@@ -63,18 +57,6 @@
         EnemyDead: true
       cost: 1
       actionPrototype: CEActionFireConstructExplosion
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
 
   - type: NpcFactionMember
     factions:

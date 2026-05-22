@@ -76,6 +76,9 @@ public sealed class CEPlayerDungeonOverviewSystem : EntitySystem
             if (proto.Abstract)
                 continue;
 
+            if (proto.Secret)
+                continue;
+
             countsByLevel.TryGetValue(proto.ID, out var count);
 
             levels.Add(new CEPlayerDungeonOverviewLevelEntry

@@ -1,6 +1,6 @@
 ## PvE — Mossy Temple
-ce-dungeon-mossy-temple-start-name = Mossy Temple - Entry
-ce-dungeon-mossy-temple-start-desc = The threshold of the Mossy Temple. Step through the rift to descend.
+ce-dungeon-start-name = Outer layer
+ce-dungeon-tutorial-name = Tutorial
 
 ce-dungeon-mossy-temple-1-name = Mossy Temple - I
 ce-dungeon-mossy-temple-2-name = Mossy Temple - II

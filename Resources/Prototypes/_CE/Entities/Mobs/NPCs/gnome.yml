@@ -3,6 +3,7 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobGOAPBase
   id: CEMobGnome
   name: gnome
   description: TODO
@@ -43,7 +44,7 @@
     actions:
     # Move to target
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         LowHealth: false
@@ -53,7 +54,7 @@
       range: 1.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
         LowHealth: false
@@ -63,7 +64,7 @@
       useType: Primary
       angleVariation: 5
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -72,7 +73,7 @@
       cost: 0.5
       actionPrototype: CEActionGnomeJump
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorRandomEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -81,7 +82,7 @@
       cost: 1
       actionPrototype: CEActionGnomeThrowStone
     - !type:CEGOAPUseAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorRandomEnemy
       preconditions:
         EnemyVisible: true
         EnemyInMeleeRange: false
@@ -90,7 +91,7 @@
       cost: 1
       actionPrototype: CEActionGnomeThrowRat
     - !type:CEGOAPUseAction
-      targetKey: self
+      selector: !type:CEGOAPSelectorSelf
       preconditions:
         EnemyVisible: false
       effects:
@@ -98,7 +99,7 @@
       cost: 1
       actionPrototype: CEActionGnomeHeal
     - !type:CEGOAPFleeAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       effects:
         EnemyVisible: false
         EnemyInMeleeRange: false
@@ -110,32 +111,10 @@
       cost: 1
       exploreRadius: 8
     # Move to enemy's last known position
-    - !type:CEGOAPMoveToLastKnownPositionAction
-      positionTargetKey: enemy
-      effects:
-        EnemyVisible: true
-      preconditions:
-        HasEnemyLastPos: true
-      cost: 0.5
-
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPCheckHealthLevelSensor
-      targetKey: self
-      conditionKey: LowHealth
-      threshold: 0.6
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
+  - type: CEGOAPCheckHealthLevelSensor
+    conditionKey: LowHealth
+    threshold: 0.6
+    selector: !type:CEGOAPSelectorSelf
 
   - type: NpcFactionMember
     factions:
