@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 05/06/2026 19:25:05
-  entityCount: 1466
+  time: 05/22/2026 11:00:18
+  entityCount: 1425
 maps:
 - 1
 grids:
@@ -29,7 +29,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Mapping CELevel0Entry [1]
+      name: Mapping Start [1]
     - type: Transform
     - type: Map
       mapPaused: True
@@ -40,7 +40,7 @@ entities:
       chunks:
         -1,0:
           ind: -1,0
-          tiles: AgAAAAAIAAAAAAAAAAAAAAAAAAAAAwAAAAACAAMAAAAAAwADAAAAAAQAAwAAAAADAAMAAAAAAgADAAAAAAAAAwAAAAADAAMAAAAAAgADAAAAAAEAAwAAAAADAAMAAAAAAAADAAAAAAIAAwAAAAACAAIAAAAACAAAAAAAAAAABAAAAAAFAAMAAAAAAgADAAAAAAUAAwAAAAACAAMAAAAAAgADAAAAAAAAAwAAAAAEAAMAAAAAAwADAAAAAAEAAwAAAAAFAAMAAAAAAwADAAAAAAAAAQAAAAACAAEAAAAABAACAAAAAAwAAAAAAAAAAAQAAAAABgADAAAAAAMAAwAAAAACAAMAAAAAAgADAAAAAAUAAwAAAAAAAAMAAAAABAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAQAAQAAAAADAAEAAAAAAgABAAAAAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAQAAwAAAAACAAMAAAAAAAADAAAAAAQAAwAAAAABAAMAAAAAAAADAAAAAAUAAwAAAAAAAAMAAAAAAAADAAAAAAAAAQAAAAACAAEAAAAABAABAAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAABAAMAAAAAAwADAAAAAAAAAwAAAAAAAAMAAAAAAwADAAAAAAQAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAEAAAAAAwABAAAAAAQAAQAAAAAEAAQAAAAAAAAAAAAAAAAABQAAAAADAAQAAAAAAwADAAAAAAAAAwAAAAAFAAMAAAAAAwADAAAAAAUAAwAAAAAAAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAAEAAAAAAAAAQAAAAAEAAEAAAAAAQAEAAAAAAAAAAAAAAAAAAQAAAAADAAEAAAAAAMAAwAAAAADAAMAAAAAAAADAAAAAAQAAwAAAAAEAAMAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAAABAAAAAAAAAEAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAMABAAAAAAHAAMAAAAAAgADAAAAAAMAAwAAAAAAAAMAAAAAAQADAAAAAAAAAwAAAAAAAAMAAAAAAgADAAAAAAUABAAAAAAAAAQAAAAAAAABAAAAAAAAAQAAAAAAAAQAAAAAAAAEAAAAAAcABAAAAAAKAAQAAAAAAwADAAAAAAAAAwAAAAAFAAMAAAAABQADAAAAAAAAAwAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAEAAAAAAAABAAAAAAAABQAAAAAAAAQAAAAADAADAAAAAAIAAwAAAAADAAMAAAAAAQADAAAAAAQABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAwAAAAAAAAQAAAAAAAABAAAAAAAAAQAAAAAAAAQAAAAACQADAAAAAAEAAwAAAAAEAAMAAAAABQADAAAAAAQAAwAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAADAAAAAAUAAwAAAAAEAAQAAAAAAAABAAAAAAAABQAAAAAAAAEAAAAAAAAEAAAAAAUAAwAAAAADAAMAAAAAAQADAAAAAAIAAwAAAAADAAMAAAAAAAABAAAAAAEABgAAAAACAAEAAAAAAwABAAAAAAAAAQAAAAABAAEAAAAAAAABAAAAAAQAAQAAAAAAAAUAAAAAAAAFAAAAAAAAAwAAAAAFAAMAAAAAAQADAAAAAAMAAwAAAAAEAAMAAAAAAgADAAAAAAUABQAAAAACAAYAAAAAAwABAAAAAAEAAQAAAAACAAQAAAAAAAAEAAAAAAAAAQAAAAACAAUAAAAAAAAFAAAAAAAABQAAAAAAAAMAAAAAAAADAAAAAAQAAwAAAAAFAAMAAAAAAQADAAAAAAAAAwAAAAAAAAUAAAAAAAAFAAAAAAIAAQAAAAAAAAUAAAAAAAAEAAAAAAAABAAAAAAAAAEAAAAABAAFAAAAAAAABQAAAAAAAAUAAAAAAAACAAAAAAgAAgAAAAANAAIAAAAAAgADAAAAAAQAAwAAAAAEAAMAAAAAAwAFAAAAAAMABgAAAAABAAUAAAAAAgAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAAgAAAAAMAAIAAAAADAACAAAAAAkABQAAAAACAAUAAAAAAAAFAAAAAAAABQAAAAABAAUAAAAAAQAFAAAAAAMABQAAAAADAAUAAAAAAAAFAAAAAAEABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAA==
+          tiles: AgAAAAAIAAAAAAAAAAAAAAAAAAAAAwAAAAACAAMAAAAAAwADAAAAAAQAAwAAAAADAAMAAAAAAgADAAAAAAAAAwAAAAADAAMAAAAAAgADAAAAAAEAAwAAAAADAAMAAAAAAAADAAAAAAIAAwAAAAACAAIAAAAACAAAAAAAAAAABAAAAAAFAAMAAAAAAgADAAAAAAUAAwAAAAACAAMAAAAAAgADAAAAAAAAAwAAAAAEAAMAAAAAAwADAAAAAAEAAwAAAAAFAAMAAAAAAwADAAAAAAAAAQAAAAACAAEAAAAABAACAAAAAAwAAAAAAAAAAAQAAAAABgADAAAAAAMAAwAAAAACAAMAAAAAAgADAAAAAAUAAwAAAAAAAAMAAAAABAADAAAAAAAAAwAAAAAAAAMAAAAAAAADAAAAAAQAAQAAAAADAAEAAAAAAgABAAAAAAMAAAAAAAAAAAAAAAAAAAAEAAAAAAQAAwAAAAACAAMAAAAAAAADAAAAAAQAAwAAAAABAAUAAAAAAAADAAAAAAUAAwAAAAAAAAMAAAAAAAADAAAAAAAAAQAAAAACAAEAAAAABAABAAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAABAAMAAAAAAwADAAAAAAAAAwAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAUAAAAAAAADAAAAAAAAAwAAAAAAAAEAAAAAAwABAAAAAAQAAQAAAAAEAAQAAAAAAAAAAAAAAAAABQAAAAADAAQAAAAAAwADAAAAAAAAAwAAAAAFAAMAAAAAAwAFAAAAAAAABQAAAAAAAAUAAAAAAAADAAAAAAAAAwAAAAAAAAMAAAAAAAAEAAAAAAAAAQAAAAAEAAEAAAAAAQAEAAAAAAAAAAAAAAAAAAQAAAAADAAEAAAAAAMAAwAAAAADAAMAAAAAAAADAAAAAAQABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAAMAAAAAAAADAAAAAAAABAAAAAAAAAEAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAAAAAAEAAAAAAMABAAAAAAHAAMAAAAAAgADAAAAAAMAAwAAAAAAAAMAAAAAAQAFAAAAAAAAAwAAAAAAAAMAAAAAAgADAAAAAAUABAAAAAAAAAQAAAAAAAABAAAAAAAAAQAAAAAAAAQAAAAAAAAEAAAAAAcABAAAAAAKAAQAAAAAAwADAAAAAAAAAwAAAAAFAAMAAAAABQADAAAAAAAAAwAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAEAAAAAAAABAAAAAAAABQAAAAAAAAQAAAAADAADAAAAAAIAAwAAAAADAAMAAAAAAQADAAAAAAQABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAAAwAAAAAAAAQAAAAAAAABAAAAAAAAAQAAAAAAAAQAAAAACQADAAAAAAEAAwAAAAAEAAMAAAAABQADAAAAAAQAAwAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAADAAAAAAUAAwAAAAAEAAQAAAAAAAABAAAAAAAABQAAAAAAAAEAAAAAAAAEAAAAAAUAAwAAAAADAAMAAAAAAQADAAAAAAIAAwAAAAADAAMAAAAAAAABAAAAAAEABgAAAAACAAEAAAAAAwABAAAAAAAAAQAAAAABAAEAAAAAAAABAAAAAAQAAQAAAAAAAAUAAAAAAAAFAAAAAAAAAwAAAAAFAAMAAAAAAQADAAAAAAMAAwAAAAAEAAMAAAAAAgADAAAAAAUABQAAAAACAAYAAAAAAwABAAAAAAEAAQAAAAACAAQAAAAAAAAEAAAAAAAAAQAAAAACAAUAAAAAAAAFAAAAAAAABQAAAAAAAAMAAAAAAAADAAAAAAQAAwAAAAAFAAMAAAAAAQADAAAAAAAAAwAAAAAAAAUAAAAAAAAFAAAAAAIAAQAAAAAAAAUAAAAAAAAEAAAAAAAABAAAAAAAAAEAAAAABAAFAAAAAAAABQAAAAAAAAUAAAAAAAACAAAAAAgAAgAAAAANAAIAAAAAAgADAAAAAAQAAwAAAAAEAAMAAAAAAwAFAAAAAAMABgAAAAABAAUAAAAAAgAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABQAAAAAAAAUAAAAAAAAFAAAAAAAAAgAAAAAMAAIAAAAADAACAAAAAAkABQAAAAACAAUAAAAAAAAFAAAAAAAABQAAAAABAAUAAAAAAQAFAAAAAAMABQAAAAADAAUAAAAAAAAFAAAAAAEABQAAAAAAAAUAAAAAAAAFAAAAAAAABQAAAAAAAA==
           version: 7
         -1,1:
           ind: -1,1
@@ -60,7 +60,7 @@ entities:
           version: 7
         1,0:
           ind: 1,0
-          tiles: AQAAAAAEAAEAAAAAAAADAAAAAAMAAwAAAAADAAMAAAAAAQADAAAAAAIAAwAAAAABAAMAAAAAAwADAAAAAAMAAwAAAAAFAAMAAAAAAgADAAAAAAAAAgAAAAAHAAIAAAAAAgACAAAAAAwAAAAAAAAAAAMAAAAAAgADAAAAAAMAAwAAAAAFAAMAAAAAAgADAAAAAAUAAwAAAAAEAAMAAAAABQADAAAAAAQAAwAAAAABAAMAAAAAAAADAAAAAAAAAwAAAAAAAAIAAAAABwACAAAAAAAAAgAAAAABAAAAAAAAAAADAAAAAAIAAwAAAAAAAAMAAAAABAADAAAAAAEAAwAAAAAAAAMAAAAAAwADAAAAAAUAAwAAAAAFAAMAAAAABAADAAAAAAAAAwAAAAAFAAMAAAAABAACAAAAAAoAAgAAAAAIAAIAAAAADAAAAAAAAAAAAwAAAAAEAAMAAAAABQADAAAAAAEAAwAAAAACAAMAAAAAAAADAAAAAAQAAwAAAAACAAMAAAAABQADAAAAAAMAAwAAAAADAAMAAAAABQACAAAAAAYAAgAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAwADAAAAAAMAAwAAAAACAAMAAAAAAgADAAAAAAQAAwAAAAAAAAMAAAAAAQADAAAAAAQAAwAAAAACAAMAAAAAAQACAAAAAAUAAgAAAAAEAAIAAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAMAAwAAAAAFAAMAAAAAAAADAAAAAAQAAwAAAAADAAMAAAAAAgADAAAAAAMAAwAAAAABAAMAAAAABQACAAAAAAgAAgAAAAAKAAIAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAACAAMAAAAAAQADAAAAAAIAAwAAAAAEAAMAAAAABQACAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAACwACAAAAAAYAAgAAAAAJAAIAAAAABgACAAAAAAAAAgAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+          tiles: AQAAAAAEAAEAAAAAAAABAAAAAAAAAwAAAAADAAMAAAAAAQADAAAAAAIAAwAAAAABAAMAAAAAAwADAAAAAAMAAwAAAAAFAAMAAAAAAgADAAAAAAAAAgAAAAAHAAIAAAAAAgACAAAAAAwAAAAAAAAAAAMAAAAAAgABAAAAAAAAAQAAAAAAAAMAAAAAAgADAAAAAAUAAwAAAAAEAAMAAAAABQADAAAAAAQAAwAAAAABAAMAAAAAAAADAAAAAAAAAwAAAAAAAAIAAAAABwACAAAAAAAAAgAAAAABAAAAAAAAAAADAAAAAAIAAQAAAAAAAAEAAAAAAAABAAAAAAAAAwAAAAAAAAMAAAAAAwADAAAAAAUAAwAAAAAFAAMAAAAABAADAAAAAAAAAwAAAAAFAAMAAAAABAACAAAAAAoAAgAAAAAIAAIAAAAADAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAADAAAAAAQAAwAAAAACAAMAAAAABQADAAAAAAMAAwAAAAADAAMAAAAABQACAAAAAAYAAgAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAwAAAAAAAAMAAAAAAQADAAAAAAQAAwAAAAACAAMAAAAAAQACAAAAAAUAAgAAAAAEAAIAAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAMAAAAAAgADAAAAAAMAAwAAAAABAAMAAAAABQACAAAAAAgAAgAAAAAKAAIAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAACAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAQAAAAAAAAEAAAAAAAABAAAAAAAAAgAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
           version: 7
         1,-1:
           ind: 1,-1
@@ -264,16 +264,6 @@ entities:
     - type: Transform
       pos: -4.5,4.5
       parent: 1
-  - uid: 171
-    components:
-    - type: Transform
-      pos: -8.5,7.5
-      parent: 1
-  - uid: 172
-    components:
-    - type: Transform
-      pos: -5.5,3.5
-      parent: 1
   - uid: 175
     components:
     - type: Transform
@@ -284,16 +274,6 @@ entities:
     - type: Transform
       pos: -5.5,10.5
       parent: 1
-  - uid: 180
-    components:
-    - type: Transform
-      pos: -9.5,8.5
-      parent: 1
-  - uid: 181
-    components:
-    - type: Transform
-      pos: -7.5,7.5
-      parent: 1
   - uid: 182
     components:
     - type: Transform
@@ -302,12 +282,7 @@ entities:
   - uid: 192
     components:
     - type: Transform
-      pos: -7.5,4.5
-      parent: 1
-  - uid: 199
-    components:
-    - type: Transform
-      pos: -5.5,6.5
+      pos: -8.5,1.5
       parent: 1
   - uid: 206
     components:
@@ -317,46 +292,41 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 210
-    components:
-    - type: Transform
-      pos: -9.5,2.5
-      parent: 1
   - uid: 211
     components:
     - type: Transform
       pos: -3.5,9.5
       parent: 1
-  - uid: 212
+  - uid: 315
     components:
     - type: Transform
-      pos: -6.5,6.5
+      pos: -7.5,0.5
       parent: 1
-  - uid: 213
+  - uid: 326
     components:
     - type: Transform
-      pos: -6.5,5.5
+      pos: -8.5,0.5
+      parent: 1
+  - uid: 330
+    components:
+    - type: Transform
+      pos: -12.5,4.5
+      parent: 1
+  - uid: 338
+    components:
+    - type: Transform
+      pos: -12.5,7.5
+      parent: 1
+  - uid: 339
+    components:
+    - type: Transform
+      pos: -12.5,6.5
       parent: 1
   - uid: 553
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 0.5,-1.5
-      parent: 1
-  - uid: 588
-    components:
-    - type: Transform
-      pos: -6.5,3.5
-      parent: 1
-  - uid: 840
-    components:
-    - type: Transform
-      pos: -6.5,4.5
-      parent: 1
-  - uid: 858
-    components:
-    - type: Transform
-      pos: -8.5,4.5
       parent: 1
   - uid: 897
     components:
@@ -766,24 +736,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 948
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 21.5,0.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 949
-    components:
-    - type: Transform
-      pos: -8.5,5.5
-      parent: 1
-  - uid: 950
-    components:
-    - type: Transform
-      pos: -7.5,2.5
-      parent: 1
   - uid: 952
     components:
     - type: Transform
@@ -795,11 +747,8 @@ entities:
   - uid: 953
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,0.5
+      pos: -12.5,2.5
       parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 956
     components:
     - type: Transform
@@ -856,78 +805,11 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 964
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 965
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 966
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 19.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 967
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 19.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 968
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,2.5
+      pos: -9.5,1.5
       parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 969
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 970
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 17.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 971
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 17.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 972
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 16.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 975
     components:
     - type: Transform
@@ -1736,14 +1618,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1116
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -6.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 1118
     components:
     - type: Transform
@@ -1768,48 +1642,11 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1125
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -7.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1126
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -7.5,0.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1127
-    components:
-    - type: Transform
-      pos: -8.5,2.5
-      parent: 1
   - uid: 1132
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -8.5,-0.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1133
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -8.5,0.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1134
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -8.5,1.5
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
@@ -1821,27 +1658,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1141
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -9.5,0.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1142
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -9.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1143
-    components:
-    - type: Transform
-      pos: -9.5,3.5
-      parent: 1
   - uid: 1148
     components:
     - type: Transform
@@ -1863,14 +1679,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -10.5,1.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1151
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,2.5
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
@@ -1930,14 +1738,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1159
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -11.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 1163
     components:
     - type: Transform
@@ -1976,14 +1776,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -21.5,2.5
       parent: 1
-  - uid: 1168
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -12.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 1171
     components:
     - type: Transform
@@ -2850,38 +2642,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1284
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -12.5,4.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1285
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -12.5,5.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1286
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -12.5,7.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1287
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -12.5,6.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 1288
     components:
     - type: Transform
@@ -2922,43 +2682,11 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1293
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -11.5,4.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1294
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -11.5,5.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 1295
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -12.5,12.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1296
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -11.5,7.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1297
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -11.5,6.5
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
@@ -3002,51 +2730,11 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1303
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,5.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1304
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,4.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1305
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,6.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
   - uid: 1306
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -11.5,11.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1307
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,7.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1308
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,8.5
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
@@ -3138,31 +2826,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1328
-    components:
-    - type: Transform
-      pos: -8.5,6.5
-      parent: 1
-  - uid: 1334
-    components:
-    - type: Transform
-      pos: -5.5,5.5
-      parent: 1
-  - uid: 1336
-    components:
-    - type: Transform
-      pos: -7.5,6.5
-      parent: 1
-  - uid: 1339
-    components:
-    - type: Transform
-      pos: -5.5,4.5
-      parent: 1
-  - uid: 1341
-    components:
-    - type: Transform
-      pos: -7.5,5.5
-      parent: 1
   - uid: 1342
     components:
     - type: Transform
@@ -3200,11 +2863,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1366
-    components:
-    - type: Transform
-      pos: -7.5,3.5
-      parent: 1
   - uid: 1367
     components:
     - type: Transform
@@ -3213,11 +2871,6 @@ entities:
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
-  - uid: 1368
-    components:
-    - type: Transform
-      pos: -8.5,3.5
-      parent: 1
   - uid: 1370
     components:
     - type: Transform
@@ -3327,62 +2980,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 13.5,2.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1405
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -10.5,3.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1406
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -11.5,3.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1407
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -12.5,3.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1408
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -9.5,7.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1409
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -9.5,6.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1410
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -9.5,5.5
-      parent: 1
-    - type: CEAutoTilePlacement
-      tile: CEStone
-  - uid: 1411
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: -9.5,4.5
       parent: 1
     - type: CEAutoTilePlacement
       tile: CEStone
@@ -4063,6 +3660,18 @@ entities:
     - type: Transform
       pos: 14.5,0.5
       parent: 1
+- proto: CECrystalQuartzPurple
+  entities:
+  - uid: 973
+    components:
+    - type: Transform
+      pos: 17.5,6.5
+      parent: 1
+  - uid: 1116
+    components:
+    - type: Transform
+      pos: 19.5,4.5
+      parent: 1
 - proto: CECrystalQuartzRed
   entities:
   - uid: 26
@@ -4088,6 +3697,13 @@ entities:
     components:
     - type: Transform
       pos: -12.5,18.5
+      parent: 1
+- proto: CEDungeonLevelExit3Solo
+  entities:
+  - uid: 1142
+    components:
+    - type: Transform
+      pos: 18.5,5.5
       parent: 1
 - proto: CEFenceBigIron
   entities:
@@ -4119,6 +3735,16 @@ entities:
     components:
     - type: Transform
       pos: 0.5,6.5
+      parent: 1
+  - uid: 238
+    components:
+    - type: Transform
+      pos: -7.5,3.5
+      parent: 1
+  - uid: 316
+    components:
+    - type: Transform
+      pos: -7.5,7.5
       parent: 1
   - uid: 955
     components:
@@ -4172,6 +3798,13 @@ entities:
     - type: Transform
       pos: -4.5,19.5
       parent: 1
+- proto: CEMapTextTutorialEntry
+  entities:
+  - uid: 969
+    components:
+    - type: Transform
+      pos: 18.5,3.5
+      parent: 1
 - proto: CESoulShard
   entities:
   - uid: 1356
@@ -4201,10 +3834,10 @@ entities:
       parent: 1
 - proto: CESpawnPointJob
   entities:
-  - uid: 973
+  - uid: 308
     components:
     - type: Transform
-      pos: 20.5,-1.5
+      pos: 20.5,1.5
       parent: 1
 - proto: CETableWooden
   entities:
@@ -4239,6 +3872,16 @@ entities:
     - type: Transform
       pos: -2.5,12.5
       parent: 1
+  - uid: 171
+    components:
+    - type: Transform
+      pos: -6.5,4.5
+      parent: 1
+  - uid: 181
+    components:
+    - type: Transform
+      pos: -6.5,6.5
+      parent: 1
   - uid: 185
     components:
     - type: Transform
@@ -4254,12 +3897,27 @@ entities:
     - type: Transform
       pos: 1.5,12.5
       parent: 1
+  - uid: 311
+    components:
+    - type: Transform
+      pos: -8.5,7.5
+      parent: 1
+  - uid: 312
+    components:
+    - type: Transform
+      pos: -8.5,3.5
+      parent: 1
 - proto: CEUpgradeStatue
   entities:
   - uid: 186
     components:
     - type: Transform
       pos: -0.5,12.5
+      parent: 1
+  - uid: 858
+    components:
+    - type: Transform
+      pos: -8.5,5.5
       parent: 1
 - proto: CEWallDirt
   entities:
@@ -5264,14 +4922,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 238
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 5.5,5.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 239
     components:
     - type: Transform
@@ -5457,14 +5107,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 271
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 16.5,4.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 272
     components:
     - type: Transform
@@ -5485,14 +5127,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 10.5,7.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 277
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 16.5,5.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -5640,78 +5274,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 305
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 17.5,5.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 307
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,5.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 308
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,4.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 309
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 310
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 19.5,5.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 311
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 19.5,4.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 313
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 19.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 314
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,5.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 316
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,4.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 317
     components:
     - type: Transform
@@ -5768,41 +5330,11 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 326
-    components:
-    - type: Transform
-      pos: 16.5,7.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 327
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 16.5,6.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 328
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 23.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 329
-    components:
-    - type: Transform
-      pos: 17.5,7.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 330
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 17.5,6.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -5814,56 +5346,11 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 332
-    components:
-    - type: Transform
-      pos: 18.5,7.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 333
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.5,6.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 334
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 19.5,6.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 335
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 22.5,1.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 336
-    components:
-    - type: Transform
-      pos: 19.5,7.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 338
-    components:
-    - type: Transform
-      pos: 20.5,7.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 339
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,6.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -9154,6 +8641,83 @@ entities:
     - type: Transform
       pos: 2.5,-9.5
       parent: 1
+- proto: CEWallLeaf
+  entities:
+  - uid: 212
+    components:
+    - type: Transform
+      pos: -9.5,3.5
+      parent: 1
+  - uid: 213
+    components:
+    - type: Transform
+      pos: -9.5,4.5
+      parent: 1
+  - uid: 265
+    components:
+    - type: Transform
+      pos: -7.5,2.5
+      parent: 1
+  - uid: 305
+    components:
+    - type: Transform
+      pos: -10.5,5.5
+      parent: 1
+  - uid: 313
+    components:
+    - type: Transform
+      pos: -9.5,0.5
+      parent: 1
+  - uid: 314
+    components:
+    - type: Transform
+      pos: -10.5,2.5
+      parent: 1
+  - uid: 327
+    components:
+    - type: Transform
+      pos: -7.5,1.5
+      parent: 1
+  - uid: 336
+    components:
+    - type: Transform
+      pos: -11.5,7.5
+      parent: 1
+  - uid: 840
+    components:
+    - type: Transform
+      pos: -10.5,4.5
+      parent: 1
+  - uid: 948
+    components:
+    - type: Transform
+      pos: -9.5,7.5
+      parent: 1
+  - uid: 950
+    components:
+    - type: Transform
+      pos: -12.5,3.5
+      parent: 1
+  - uid: 964
+    components:
+    - type: Transform
+      pos: -11.5,3.5
+      parent: 1
+  - uid: 965
+    components:
+    - type: Transform
+      pos: -12.5,5.5
+      parent: 1
+  - uid: 966
+    components:
+    - type: Transform
+      pos: -11.5,2.5
+      parent: 1
+  - uid: 970
+    components:
+    - type: Transform
+      pos: 5.5,5.5
+      parent: 1
 - proto: CEWallmountTorchAlwaysPowered
   entities:
   - uid: 7
@@ -9192,6 +8756,20 @@ entities:
     components:
     - type: Transform
       pos: -12.5,14.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 307
+    components:
+    - type: Transform
+      pos: 16.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 309
+    components:
+    - type: Transform
+      pos: 20.5,2.5
       parent: 1
     - type: Fixtures
       fixtures: {}
@@ -9323,14 +8901,6 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
-  - uid: 265
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 16.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
   - uid: 291
     components:
     - type: Transform
@@ -9344,30 +8914,6 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 13.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 306
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 17.5,4.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 312
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 17.5,3.5
-      parent: 1
-    - type: CEZPhysics
-      currentGroundHeight: 1.05
-  - uid: 315
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20.5,3.5
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
@@ -10511,6 +10057,16 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
+  - uid: 971
+    components:
+    - type: Transform
+      pos: 16.5,4.5
+      parent: 1
+  - uid: 972
+    components:
+    - type: Transform
+      pos: 16.5,5.5
+      parent: 1
   - uid: 1120
     components:
     - type: Transform
@@ -10519,6 +10075,56 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
+  - uid: 1125
+    components:
+    - type: Transform
+      pos: 20.5,5.5
+      parent: 1
+  - uid: 1126
+    components:
+    - type: Transform
+      pos: 20.5,4.5
+      parent: 1
+  - uid: 1127
+    components:
+    - type: Transform
+      pos: 16.5,7.5
+      parent: 1
+  - uid: 1133
+    components:
+    - type: Transform
+      pos: 16.5,6.5
+      parent: 1
+  - uid: 1134
+    components:
+    - type: Transform
+      pos: 18.5,7.5
+      parent: 1
+  - uid: 1141
+    components:
+    - type: Transform
+      pos: 17.5,7.5
+      parent: 1
+  - uid: 1143
+    components:
+    - type: Transform
+      pos: 19.5,7.5
+      parent: 1
+  - uid: 1151
+    components:
+    - type: Transform
+      pos: 20.5,7.5
+      parent: 1
+  - uid: 1159
+    components:
+    - type: Transform
+      pos: 20.5,6.5
+      parent: 1
+  - uid: 1168
+    components:
+    - type: Transform
+      pos: 16.5,3.5
+      parent: 1
   - uid: 1169
     components:
     - type: Transform
@@ -10542,6 +10148,11 @@ entities:
       parent: 1
     - type: CEZPhysics
       currentGroundHeight: 1.05
+  - uid: 1284
+    components:
+    - type: Transform
+      pos: 20.5,3.5
+      parent: 1
   - uid: 1321
     components:
     - type: Transform
@@ -11032,46 +10643,342 @@ entities:
       rot: 3.141592653589793 rad
       pos: 8.5,3.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 863
     components:
     - type: Transform
       pos: 10.5,3.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 980
     components:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 8.5,2.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 986
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 9.5,2.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 988
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 10.5,2.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 996
     components:
     - type: Transform
       pos: 10.5,4.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 1041
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 9.5,4.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
   - uid: 1117
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 8.5,4.5
       parent: 1
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.5,-0.5
+            - 0.5,-0.5
+            - 0.5,0.5
+            - -0.5,0.5
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          - DoorPassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
+        conveyor:
+          shape: !type:PolygonShape
+            radius: 0.01
+            vertices:
+            - -0.55,-0.55
+            - 0.55,-0.55
+            - 0.55,0.55
+            - -0.55,0.55
+          mask: []
+          layer:
+          - Impassable
+          - TableLayer
+          - LowImpassable
+          density: 1
+          hard: False
+          restitution: 0
+          friction: 0.4
 - proto: CEWayfindingStone
   entities:
   - uid: 612
@@ -11081,9 +10988,9 @@ entities:
       parent: 1
 - proto: SpawnPointObserver
   entities:
-  - uid: 1357
+  - uid: 277
     components:
     - type: Transform
-      pos: 19.5,-1.5
+      pos: 19.5,0.5
       parent: 1
 ...

@@ -195,3 +195,29 @@
         color: "#ffffff01"
       - time: 0.9
         color: "#ffffff"
+
+- type: entity
+  parent: MarkerBase
+  id: CEMobSlimeIceBigSpawner
+  name: Big ice slime Spawner
+  suffix: Tutorial, 15 souls
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base
+      sprite: _CE/Mobs/slime.rsi
+      color: "#ffffff42"
+      scale: 2, 2
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobSlimeIceBigTutorial
+
+- type: entity
+  parent: CEMobSlimeIceBig
+  id: CEMobSlimeIceBigTutorial
+  suffix: Tutorial, 15 souls
+  components:
+  - type: CESoulDropOnDeath
+    souls: 15

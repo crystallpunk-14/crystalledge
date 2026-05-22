@@ -33,5 +33,5 @@ public sealed partial class CEDungeonActivePassageComponent : Component
     /// If more players are nearby, a random subset is chosen.
     /// </summary>
     [DataField]
-    public int Throughput = 4;
+    public int MaxPlayers = 4;
 }

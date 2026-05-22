@@ -32,4 +32,7 @@ public sealed partial class CEDungeonPassageComponent : Component
 
     [DataField]
     public EntityUid? ActivePassage;
+
+    [DataField]
+    public int MaxPlayers = 4;
 }

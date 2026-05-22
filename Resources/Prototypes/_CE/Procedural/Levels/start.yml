@@ -8,21 +8,22 @@
   icon:
     sprite: _CE/Interface/NodeTree/demiplane_map.rsi
     state: center
-  name: ce-dungeon-mossy-temple-start-name
+  name: ce-dungeon-start-name
   uiPosition: 0,1
   exits:
     1: MossyTemple1
     2: MossyTemple1_Pvp
+    3: Tutorial
   config:
     !type:CERandomZNetworkConfig
     variants:
-      CELevel0Entry: 1
+      Start: 1
 
 - type: zMap
-  id: CELevel0Entry
+  id: Start
   maps:
-  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry0.yml
-  - /Maps/_CE/Dungeon/CELevel0Entry/CELevel0Entry1.yml
+  - /Maps/_CE/Dungeon/Start/Start0.yml
+  - /Maps/_CE/Dungeon/Start/Start1.yml
   components:
     - type: SunShadowCycle
       offset: 490
