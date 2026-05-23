@@ -28,7 +28,7 @@ public sealed partial class CEStealManaEffectSystem : CEEntityEffectSystem<Steal
 
         if (!_energyQuery.TryComp(target, out var targetEnergy))
             return;
-        
+
         if (!_energyQuery.TryComp(user, out var userEnergy))
             return;
 

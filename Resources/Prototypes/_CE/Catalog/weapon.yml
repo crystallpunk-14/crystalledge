@@ -13,6 +13,7 @@
     - id: CEWeaponStaffHolyStick
     - id: CEWeaponTwoHandedSwordIron
     - id: CEWeaponWarAxeIron
+    - id: CEWeaponThrowingDagger
 
 - type: entityTable
   id: CEUncommonWeapon

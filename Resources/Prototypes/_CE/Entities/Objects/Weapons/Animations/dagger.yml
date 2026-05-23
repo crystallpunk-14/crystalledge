@@ -90,102 +90,6 @@
     - !type:WeaponEffectSlot
       slot: OnHit
 
-
-- type: entityEffectAnimation
-  id: DaggerAttackHeavy1
-  movementSpeed: 0.3
-  duration: 0.5
-  events:
-    0:
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
-    - !type:UsedEntityAnimation
-      offsetAnimation:
-      - time: 0.0
-        offset: -0.9, -0.1
-        easing: QuadIn
-      - time: 0.05
-        offset: -0.5, -0.3
-      - time: 0.2
-        offset: 0, -0.6
-      - time: 0.3
-        offset: 0.5, -0.3
-      - time: 0.4
-        offset: 0.9, -0.1
-        easing: QuadOut
-
-      rotationAnimation:
-      - time: 0.0
-        rotation: -90
-        easing: QuadIn
-      - time: 0.25
-        rotation: 0
-      - time: 0.5
-        rotation: 90
-#
-      colorAnimation:
-      - time: 0.3
-        color: "#ffffff"
-        easing: QuadOut
-      - time: 0.4
-        color: "#ffffff00"  # Fade out
-
-      scaleAnimation:
-      - time: 0.0
-        scale: 1, -1
-    0.2:
-    - !type:WeaponEffectSlot
-      slot: OnHeavyHit
-
-- type: entityEffectAnimation
-  id: DaggerAttackHeavy2
-  movementSpeed: 0.3
-  duration: 0.5
-  events:
-    0:
-    - !type:PlaySound
-      sound:
-        path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
-    - !type:UsedEntityAnimation
-      offsetAnimation:
-      - time: 0.0
-        offset: 0.9, -0.1
-        easing: QuadIn
-      - time: 0.05
-        offset: 0.5, -0.3
-      - time: 0.2
-        offset: 0, -0.6
-      - time: 0.3
-        offset: -0.5, -0.3
-      - time: 0.4
-        offset: -0.9, -0.1
-        easing: QuadOut
-
-      rotationAnimation:
-      - time: 0.0
-        rotation: 90
-        easing: QuadIn
-      - time: 0.25
-        rotation: 0
-      - time: 0.5
-        rotation: -90
-#
-      colorAnimation:
-      - time: 0.3
-        color: "#ffffff"
-        easing: QuadOut
-      - time: 0.4
-        color: "#ffffff00"  # Fade out
-
-      scaleAnimation:
-      - time: 0.0
-        scale: 1, 1
-    0.2:
-    - !type:WeaponEffectSlot
-      slot: OnHeavyHit
-
-
 - type: entityEffectAnimation
   id: SelfCut
   movementSpeed: 0.6
@@ -219,5 +123,60 @@
         color: "#ffffff00"  # Fade out
         easing: QuadOut
     0.39:
+    - !type:WeaponEffectSlot
+      slot: OnHeavyHit
+
+
+- type: entityEffectAnimation
+  id: DaggerAttackHeavy
+  movementSpeed: 0.5
+  duration: 0.6
+  events:
+    0:
+    - !type:Dash
+      distance: 1
+    - !type:UsedEntityAnimation
+      offsetAnimation:
+      - time: 0.0
+        offset: -0.3, -0.3
+        easing: QuadIn
+      - time: 0.4
+        offset: -0.2, 0.3
+      - time: 0.45
+        offset: -0.3, -0.3
+      - time: 0.55
+        offset: 0, -1.0
+        easing: QuadIn
+      - time: 0.75
+        offset: 0, -0.8
+        easing: QuadOut
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 0
+        easing: QuadIn
+      - time: 0.4
+        rotation: -15
+      - time: 0.45
+        rotation: 0
+      - time: 0.55
+        rotation: 5
+        easing: QuadIn
+
+      colorAnimation:
+      - time: 0.65
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.8
+        color: "#ffffff00"
+
+      scaleAnimation:
+      - time: 0.0
+        scale: 1, -1
+    0.15:
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
+    0.55:
     - !type:WeaponEffectSlot
       slot: OnHeavyHit

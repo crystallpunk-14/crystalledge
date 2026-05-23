@@ -45,6 +45,7 @@
   loadouts:
   - CEWeaponSwordIron
   - CEWeaponSpearIron
+  - CEWeaponThrowingDaggers
   - CEWeaponSkimitarIron
   - CEWeaponWarAxeIron
   - CEWeaponTwoHandedSwordIron
@@ -58,6 +59,20 @@
   id: CEWeaponSpearIron
   equipment:
     neck: CEWeaponSpearIron
+
+- type: loadout
+  id: CEWeaponThrowingDaggers
+  dummyEntity: CEWeaponThrowingDaggersDummyLoadout
+  storage:
+    back:
+    - CEWeaponThrowingDagger
+    - CEWeaponThrowingDagger
+#
+- type: entity
+  parent: CEWeaponThrowingDagger
+  id: CEWeaponThrowingDaggersDummyLoadout
+  categories: [ HideSpawnMenu ]
+  name: throwing daggers x2
 
 - type: loadout
   id: CEWeaponSkimitarIron
