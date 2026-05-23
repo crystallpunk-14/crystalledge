@@ -20,7 +20,7 @@
           attackType: Melee
           damage:
             types:
-              Physical: 50
+              Physical: 100
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 1.1
@@ -30,7 +30,7 @@
           attackType: Melee
           damage:
             types:
-              Physical: 100
+              Physical: 150
     animations:
       Primary:
       - anim: SwordAttackLight1
