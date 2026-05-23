@@ -17,6 +17,8 @@
   - type: EmbeddableProjectile
     offset: -0.15,-0.15
     removalTime: 0.5
+  - type: CEStaminaThrowable
+    cost: 2
   - type: EmitSoundOnThrow
     sound:
       path: /Audio/_CE/Effects/throw_knife.ogg
