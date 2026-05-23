@@ -12,10 +12,10 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    public const int MaxZLevelsBelowRendering = 1;
     public const int MaxZLevelsAboveRendering = 0;
 
-    [Dependency] protected readonly ITileDefinitionManager TilDefMan = default!;
+    [Dependency] protected readonly ITileDefinitionManager TileDefinition = null!;
+
     private void InitView()
     {
         SubscribeLocalEvent<CEZLevelViewerComponent, CEToggleZLevelLookUpAction>(OnToggleLookUp);
@@ -51,15 +51,15 @@ public abstract partial class CESharedZLevelsSystem
             if (!TryMapUp(checkMapUid, out var mapAboveUid))
                 break;
 
-            checkMapUid = mapAboveUid.Value.Owner;
+            checkMapUid = mapAboveUid.Owner;
 
-            if (!_gridQuery.TryComp(mapAboveUid.Value, out var mapAboveGrid))
+            if (!_gridQuery.TryComp(mapAboveUid, out var mapAboveGrid))
                 break;
 
-            if (!_map.TryGetTileRef(mapAboveUid.Value, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef))
+            if (!_map.TryGetTileRef(mapAboveUid, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef))
                 break;
 
-            var tileDef = (ContentTileDefinition)TilDefMan[tileRef.Tile.TypeId];
+            var tileDef = (ContentTileDefinition) TileDefinition[tileRef.Tile.TypeId];
 
             if (!tileDef.Transparent)
                 break;
@@ -71,6 +71,4 @@ public abstract partial class CESharedZLevelsSystem
     }
 }
 
-public sealed partial class CEToggleZLevelLookUpAction : InstantActionEvent
-{
-}
+public sealed partial class CEToggleZLevelLookUpAction : InstantActionEvent;

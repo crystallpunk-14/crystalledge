@@ -114,7 +114,7 @@ public sealed partial class CEZLevelsSystem
             if (!TryMapOffset(map.Value, -i, out var mapUidBelow))
                 break;
 
-            var newEye = SpawnAtPosition(_zEyeProto, new EntityCoordinates(mapUidBelow.Value, globalPos));
+            var newEye = SpawnAtPosition(_zEyeProto, new EntityCoordinates(mapUidBelow, globalPos));
 
             Transform(newEye).GridTraversal = false;
             _viewSubscriber.AddViewSubscriber(newEye, actor.PlayerSession);
@@ -127,7 +127,7 @@ public sealed partial class CEZLevelsSystem
             if (!TryMapOffset(map.Value, i, out var mapUidAbove))
                 break;
 
-            var newEye = SpawnAtPosition(_zEyeProto, new EntityCoordinates(mapUidAbove.Value, globalPos));
+            var newEye = SpawnAtPosition(_zEyeProto, new EntityCoordinates(mapUidAbove, globalPos));
 
             Transform(newEye).GridTraversal = false;
             _viewSubscriber.AddViewSubscriber(newEye, actor.PlayerSession);

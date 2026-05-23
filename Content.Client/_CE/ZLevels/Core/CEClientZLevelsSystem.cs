@@ -85,7 +85,7 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
 
         var pos = ent.Comp.LocalPosition;
 
-        if (xform.ParentUid != xform.MapUid && ZPhyzQuery.TryComp(xform.ParentUid, out var parentZPhys))
+        if (xform.ParentUid != xform.MapUid && ZPhysicsQuery.TryComp(xform.ParentUid, out var parentZPhys))
             pos = parentZPhys.LocalPosition;
 
         return pos;

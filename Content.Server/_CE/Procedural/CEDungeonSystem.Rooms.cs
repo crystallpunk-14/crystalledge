@@ -102,7 +102,7 @@ public sealed partial class CEDungeonSystem
                     continue;
                 }
 
-                targetMapUid = found.Value;
+                targetMapUid = found;
                 targetGrid = Comp<MapGridComponent>(targetMapUid);
             }
 

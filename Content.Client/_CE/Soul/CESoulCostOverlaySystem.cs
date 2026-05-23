@@ -1,3 +1,4 @@
+using Content.Shared._CE.Soul.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
@@ -23,6 +24,8 @@ public sealed class CESoulCostOverlaySystem : EntitySystem
 
         _overlay = new CESoulCostOverlay(EntityManager, _player, _cache);
         _overlayMan.AddOverlay(_overlay);
+
+        SubscribeLocalEvent<CESoulReceiverComponent, ComponentRemove>(OnReceiverRemoved);
     }
 
     public override void Shutdown()
@@ -30,5 +33,10 @@ public sealed class CESoulCostOverlaySystem : EntitySystem
         base.Shutdown();
 
         _overlayMan.RemoveOverlay(_overlay);
+    }
+
+    private void OnReceiverRemoved(Entity<CESoulReceiverComponent> ent, ref ComponentRemove args)
+    {
+        _overlay.ClearCache(ent);
     }
 }

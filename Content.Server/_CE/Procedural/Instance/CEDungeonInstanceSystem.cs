@@ -135,7 +135,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         if (mapUid is null)
             return false;
 
-        if (_zLevels.TryGetZNetwork(mapUid.Value, out var zNet) && _instanceQuery.TryComp(zNet.Value.Owner, out instance))
+        if (_zLevels.TryGetZNetwork(mapUid.Value, out var zNet) && _instanceQuery.TryComp(zNet.Owner, out instance))
             return true;
 
         return _instanceQuery.TryComp(mapUid, out instance);

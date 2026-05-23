@@ -1,0 +1,34 @@
+- type: entity
+  name: training target
+  id: CETrainingTarget
+  parent: BaseStructure
+  description: A surprisingly durable target for honing combat skills.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: InteractionOutline
+  - type: CEDamageable
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Structures/Furniture/target.rsi
+    state: target_icon
+    offset: 0,0.2
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 100
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: CEDPSMeter
+  - type: CEDamagePopup

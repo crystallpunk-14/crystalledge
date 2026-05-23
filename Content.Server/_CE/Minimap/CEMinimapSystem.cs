@@ -129,7 +129,7 @@ public sealed class CEMinimapSystem : EntitySystem
         if (!_zLevels.TryGetZNetwork(currentMap, out var zNet))
             return false;
 
-        foreach (var sibling in zNet.Value.Comp.ZLevels.Values)
+        foreach (var sibling in zNet.Comp.ZLevels.Values)
         {
             if (sibling is not { } siblingUid)
                 continue;

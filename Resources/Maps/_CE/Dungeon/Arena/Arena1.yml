@@ -4,8 +4,8 @@ meta:
   engineVersion: 275.2.0
   forkId: ""
   forkVersion: ""
-  time: 05/07/2026 16:15:07
-  entityCount: 387
+  time: 05/22/2026 21:07:49
+  entityCount: 390
 maps:
 - 1
 grids:
@@ -1319,6 +1319,23 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 6.5,-1.5
+      parent: 1
+- proto: CETrainingTarget
+  entities:
+  - uid: 388
+    components:
+    - type: Transform
+      pos: 15.5,5.5
+      parent: 1
+  - uid: 389
+    components:
+    - type: Transform
+      pos: 15.5,3.5
+      parent: 1
+  - uid: 390
+    components:
+    - type: Transform
+      pos: 15.5,1.5
       parent: 1
 - proto: CEUpgradePostament
   entities:
