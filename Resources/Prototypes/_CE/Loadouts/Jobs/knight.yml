@@ -46,6 +46,8 @@
   - CEWeaponSwordIron
   - CEWeaponSpearIron
   - CEWeaponSkimitarIron
+  - CEWeaponWarAxeIron
+  - CEWeaponTwoHandedSwordIron
 
 - type: loadout
   id: CEWeaponSwordIron
@@ -61,3 +63,13 @@
   id: CEWeaponSkimitarIron
   equipment:
     neck: CEWeaponSkimitarIron
+
+- type: loadout
+  id: CEWeaponWarAxeIron
+  equipment:
+    neck: CEWeaponWarAxeIron
+
+- type: loadout
+  id: CEWeaponTwoHandedSwordIron
+  equipment:
+    neck: CEWeaponTwoHandedSwordIron
