@@ -12,3 +12,5 @@
     - eyes
   - type: Sprite
     state: icon
+  - type: Item
+    size: Normal

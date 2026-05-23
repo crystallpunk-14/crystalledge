@@ -48,7 +48,7 @@
           attackType: Melee
           damage:
             types:
-              Physical: 12
+              Physical: 9
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.6
@@ -58,7 +58,7 @@
           attackType: Melee
           damage:
             types:
-              Physical: 15
+              Physical: 13
     animations:
       Primary:
       - anim: DaggerAttackLight1

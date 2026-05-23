@@ -4,8 +4,6 @@
   name: ninja bandana
   description: Increases max [color=#32cd32]stamina[/color] by 3
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/ninja_bandana.rsi
   - type: CEEquipStatusEffect

@@ -4,8 +4,6 @@
   name: energy geode
   description: A cracked geode containing energy crystals. It increases the owner's [color=#3296fa]maximum mana pool by 20[/color] and can function as a energy storage.
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/energy_geode.rsi
   - type: CEEquipStatusEffect

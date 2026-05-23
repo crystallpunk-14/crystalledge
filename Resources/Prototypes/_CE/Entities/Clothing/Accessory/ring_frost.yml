@@ -4,8 +4,6 @@
   name: frost ring
   description: A protective ring that shields the carrier from the cold.
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/ring_frost.rsi
   - type: CEEquipStatusEffect

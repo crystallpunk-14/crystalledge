@@ -4,8 +4,6 @@
   name: fighter Gloves
   description: Heavyweight fighting gloves. Increases all outgoing melee [color=#05eeff]physical damage[/color] by 3.
   components:
-  - type: Item
-    size: Normal
   - type: Sprite
     sprite: _CE/Clothing/Accessory/fighter_gloves.rsi
   - type: CEEquipStatusEffect

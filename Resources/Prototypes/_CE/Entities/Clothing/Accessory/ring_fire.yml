@@ -4,8 +4,6 @@
   name: fire ring
   description: A protective ring that shields the carrier from the heat of the fire.
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/ring_fire.rsi
   - type: CEEquipStatusEffect

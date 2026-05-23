@@ -4,8 +4,6 @@
   name: flaming stone
   description: Your melee attacks set targets on [color=#ff4500]fire[/color]
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/flaming_stone.rsi
   - type: CEEquipStatusEffect

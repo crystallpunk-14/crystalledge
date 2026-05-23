@@ -4,8 +4,6 @@
   name: vitality amulet
   description: An amulet that enhances the body's ability to heal, increasing all incoming healing by 5.
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/vitality_amulet.rsi
   - type: CEEquipStatusEffect
