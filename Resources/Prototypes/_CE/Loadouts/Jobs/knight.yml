@@ -45,10 +45,11 @@
   loadouts:
   - CEWeaponSwordIron
   - CEWeaponSpearIron
-  - CEWeaponThrowingDaggers
   - CEWeaponSkimitarIron
   - CEWeaponWarAxeIron
   - CEWeaponTwoHandedSwordIron
+  - CEWeaponThrowingDaggers
+  - CEWeaponShurikens
 
 - type: loadout
   id: CEWeaponSwordIron
@@ -73,6 +74,20 @@
   id: CEWeaponThrowingDaggersDummyLoadout
   categories: [ HideSpawnMenu ]
   name: throwing daggers x2
+
+- type: loadout
+  id: CEWeaponShurikens
+  dummyEntity: CEWeaponShurikenDummyLoadout
+  storage:
+    back:
+    - CEWeaponShuriken
+    - CEWeaponShuriken
+#
+- type: entity
+  parent: CEWeaponShuriken
+  id: CEWeaponShurikenDummyLoadout
+  categories: [ HideSpawnMenu ]
+  name: shurikens x2
 
 - type: loadout
   id: CEWeaponSkimitarIron

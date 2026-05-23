@@ -14,6 +14,7 @@
     - id: CEWeaponTwoHandedSwordIron
     - id: CEWeaponWarAxeIron
     - id: CEWeaponThrowingDagger
+    - id: CEWeaponShuriken
 
 - type: entityTable
   id: CEUncommonWeapon
