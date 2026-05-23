@@ -25,6 +25,7 @@ soft_max_players = 40
 maxplayers = 50
 lobbyduration = 18000
 role_timers = true
+closed_beta_test = true
 
 [server]
 rules_file = "CERules"
