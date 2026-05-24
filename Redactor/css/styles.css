@@ -214,14 +214,23 @@ body {
     width: 250px; outline: none;
 }
 
-/* Abstract prototype styling */
-.proto-abstract .proto-header {
-    background: linear-gradient(135deg, rgba(128, 128, 128, 0.15), transparent);
-}
-.proto-abstract .proto-type-badge {
-    background: #666;
-}
+/* Abstract prototype styling – NO bg repaint. Instead recolor text:
+   keys turn pinkish, values turn gray, so abstract cards read as
+   "templates / placeholders" without changing the card background. */
 .proto-abstract:hover { border-color: #888; }
+.proto-abstract .field-label,
+.proto-abstract .component-type,
+.proto-abstract .map-key-label {
+    color: #ff79c6; /* pink keys */
+}
+.proto-abstract .field-input,
+.proto-abstract .field-select,
+.proto-abstract .field-input[type="number"],
+.proto-abstract .field-textarea,
+.proto-abstract .toggle-label,
+.proto-abstract .proto-id-text {
+    color: #888; /* gray values */
+}
 
 .proto-abstract-toggle {
     display: inline-flex; align-items: center; cursor: pointer;
@@ -800,3 +809,577 @@ body {
 
 /* ======================== Responsive ==================== */
 @media (max-width: 900px) { :root { --sidebar-w: 220px; } }
+
+/* ====================================================================== */
+/*  YAML-EDITOR LOOK  ▪︎  Phase H                                          */
+/*  Re-skins the prototype editor area to resemble a YAML text editor:    */
+/*    – monospaced typography everywhere                                  */
+/*    – flat code-block surface (no card chrome)                          */
+/*    – syntax-coloured keys / punctuation / values                       */
+/*    – YAML-style indentation via padding-left on nested containers      */
+/*    – list items prefixed with "- " bullet                              */
+/*    – inherited rows are dimmed (opacity 0.5) but keep their colours    */
+/*    – add/reset icons fade in only on row hover                         */
+/* ====================================================================== */
+
+:root {
+    --yaml-key:        #c3e88d;   /* soft green  – field keys             */
+    --yaml-key-comp:   #c792ea;   /* magenta     – component / proto keys */
+    --yaml-punct:      #5a6a8c;   /* dim slate   – ':' '-' '!' brackets   */
+    --yaml-string:     #82aaff;   /* cyan-blue   – string scalars         */
+    --yaml-number:     #f78c6c;   /* orange      – numeric scalars        */
+    --yaml-bool:       #ff5370;   /* pink        – bool scalars           */
+    --yaml-tag:        #ffcb6b;   /* amber       – !type tags             */
+    --yaml-comment:    #546e7a;   /* greyed      – # comments / hints     */
+    --yaml-indent:     2ch;       /* 1 level of YAML indentation          */
+}
+
+/* ── 1.  Card surface → flat code block ─────────────────────────────── */
+.proto-card {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    box-shadow: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.55;
+}
+.proto-card:hover { border-color: var(--border); }
+.proto-header {
+    display: flex; flex-direction: column;
+    /* CRITICAL: base rule sets `align-items: center` which, combined with
+       flex-direction: column, horizontally centers every child (type-line,
+       id-row, abstract-row, parent-bar). We need them flush left. */
+    align-items: stretch;
+    justify-content: flex-start;
+    background: transparent;
+    border-bottom: 1px dashed var(--border-subtle);
+    font-family: var(--font-mono);
+    padding: 4px 12px;
+    cursor: default;
+    gap: 0;
+}
+.proto-type-line {
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    padding: 1px 0;
+}
+.proto-type-line .delete-proto-btn {
+    /* No margin-left:auto — stick the × right after the type name, like
+       reset buttons on field-rows do, not flung to the far right. */
+    margin-left: 4px;
+    opacity: 0;
+    transition: opacity .15s;
+}
+.proto-type-line:hover .delete-proto-btn { opacity: 1; }
+.proto-type-badge {
+    background: transparent;
+    color: var(--yaml-key-comp);
+    padding: 0;
+    border-radius: 0;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 13px;
+    font-family: var(--font-mono);
+}
+.proto-type-badge::before { content: '- type: '; color: var(--yaml-punct); font-weight: 400; }
+
+/* id/abstract sub-rows sit inside .proto-header (sticky during collapse).
+   They inherit .field-row look from section 2 below. The label text "id"
+   itself is the YAML key, so we DON'T add a "id: " ::before on .proto-id-text.
+   !important is needed because `.field-row.field-local { padding-left: 0 }`
+   in section 2 has equal specificity and would otherwise reset the indent. */
+.field-row.proto-id-row,
+.field-row.proto-abstract-row { padding-left: var(--yaml-indent) !important; }
+.proto-parent-bar { padding-left: var(--yaml-indent) !important; }
+.proto-id-text { font-size: 13px; color: var(--yaml-string); font-family: var(--font-mono); cursor: text; }
+.proto-id-text::before { content: ''; }
+.proto-id-text:hover { text-decoration: underline dashed var(--text-muted); text-underline-offset: 3px; }
+.proto-abstract-row .proto-abstract-toggle {
+    margin-left: 0; font-size: 13px; gap: 4px;
+}
+.proto-abstract-row .toggle-label { color: var(--yaml-key); }
+
+.proto-parent-bar {
+    background: transparent;
+    border-bottom: none;
+    padding: 0;
+    padding-left: var(--yaml-indent);
+}
+.proto-body {
+    padding: 2px 12px 8px;
+    padding-left: calc(12px + var(--yaml-indent));
+    gap: 0;
+}
+
+/* ── 2.  Field rows → single YAML line ──────────────────────────────── */
+.field-row {
+    display: flex; align-items: baseline; gap: 0;
+    padding: 1px 0;
+    border-bottom: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    min-height: 22px;
+    flex-wrap: wrap;
+}
+.field-row .field-label {
+    color: var(--yaml-key);
+    font-style: normal;
+    font-weight: 400;
+    /* CRITICAL: kill the 170px column-width from the base .field-label rule
+       so the value sits flush after "key: " like real YAML. */
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0;
+    padding-top: 0;
+    flex-shrink: 0;
+    font-size: 13px;
+}
+.field-row .field-label::after {
+    content: ': ';
+    color: var(--yaml-punct);
+    font-weight: 400;
+}
+.field-row.inherited {
+    opacity: 0.5;
+    color: inherit;
+}
+.field-row.inherited .field-label {
+    color: var(--yaml-key);
+    font-style: normal;
+}
+.field-row.inherited .field-label::after {
+    content: ': ';
+    color: var(--yaml-punct);
+}
+.field-row.inherited .field-input,
+.field-row.inherited .field-select,
+.field-row.inherited .toggle-label {
+    color: inherit;
+}
+.field-row.field-local { padding-left: 0; }
+.field-row.field-local .field-label { font-weight: 700; }
+/* Override-bar – keep the blue marker so locally-edited fields are spottable */
+.field-row .field-override-bar {
+    position: absolute;
+    left: -8px; top: 2px; bottom: 2px;
+    width: 2px; background: var(--accent); border-radius: 1px;
+    display: block;
+}
+
+.field-control-wrap {
+    /* No flex:1 — value width fits its own content (real YAML look) */
+    display: inline-flex; align-items: baseline; gap: 4px;
+    flex: 0 1 auto; min-width: 0;
+}
+.field-row > .field-control-wrap > .field-control { flex: 0 1 auto; }
+.field-row .field-input,
+.field-row .field-select {
+    /* width:auto + field-sizing:content makes the input fit its value
+       like a normal text run — but with a comfy minimum so typing doesn't
+       feel cramped. min-width replaces the old fixed widths that clipped
+       longer text. */
+    width: auto;
+    field-sizing: content; /* Chromium/Edge: input shrinks/grows with content */
+    min-width: 18ch;
+    max-width: 100%;
+}
+.field-row .field-input[type="number"] { min-width: 6ch; max-width: 12ch; }
+.field-row .field-input[type="text"] { min-width: 18ch; }
+
+/* When the value is a multi-line block container (list / map / nested data /
+   textarea), wrap it onto its OWN line below the key, indented one YAML step.
+   This mirrors block-style YAML:
+       key:
+         - item
+         - item
+*/
+.field-row > .field-control-wrap:has(.list-editor),
+.field-row > .field-control-wrap:has(.map-editor),
+.field-row > .field-control-wrap:has(.datadef-inline),
+.field-row > .field-control-wrap:has(.field-textarea),
+.field-row > .field-control-wrap:has(.entries-list),
+.field-row > .field-control-wrap:has(.list-items),
+.field-row > .field-control-wrap:has(.sprite-specifier-ctrl),
+.field-row > .field-control-wrap:has(.sprite-preview) {
+    flex-basis: 100%;
+    padding-left: var(--yaml-indent);
+    margin-top: 1px;
+}
+.field-row:has(> .field-control-wrap > .list-editor),
+.field-row:has(> .field-control-wrap > .map-editor),
+.field-row:has(> .field-control-wrap > .datadef-inline),
+.field-row:has(> .field-control-wrap > .field-textarea),
+.field-row:has(> .field-control-wrap > .entries-list),
+.field-row:has(> .field-control-wrap > .list-items),
+.field-row:has(.sprite-specifier-ctrl),
+.field-row:has(.sprite-preview) {
+    /* Stay row-aligned at top so the key sits on its own line and the
+       block container drops below. */
+    align-items: flex-start;
+}
+
+/* ── 3.  Scalar controls → inline YAML-value look ───────────────────── */
+.field-row .field-input,
+.field-row .field-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 0 4px;
+    color: var(--yaml-string);
+    min-height: 20px;
+    box-shadow: none;
+    border-radius: 2px;
+}
+.field-row .field-input:hover,
+.field-row .field-select:hover {
+    border-color: var(--border-subtle);
+    background: var(--bg-card);
+}
+.field-row .field-input:focus,
+.field-row .field-select:focus {
+    border-color: var(--accent);
+    background: var(--bg-card);
+    outline: none;
+}
+.field-row .field-input[type="number"] { color: var(--yaml-number); }
+.field-row .field-select { color: var(--yaml-tag); }
+.field-row .toggle-label { color: var(--yaml-key); font-family: var(--font-mono); }
+
+/* ── 4.  Reset & remove icons → hover-only ─────────────────────────── */
+.field-reset-btn,
+.item-remove-btn,
+.entry-remove-btn {
+    opacity: 0;
+    transition: opacity .15s ease;
+    background: transparent;
+    border: 1px solid transparent;
+    margin: 0;
+    padding: 0 4px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--text-muted);
+}
+.field-row:hover .field-reset-btn,
+.list-item:hover .item-remove-btn,
+.map-entry:hover .entry-remove-btn,
+.field-row:focus-within .field-reset-btn,
+.component-card:hover .component-header .field-reset-btn,
+.component-header:hover .field-reset-btn { opacity: 1; }
+.field-reset-btn:hover { background: var(--warning); color: #000; border-color: var(--warning); }
+.item-remove-btn:hover, .entry-remove-btn:hover { background: var(--error); color: #fff; }
+
+/* ── 5.  Lists & maps → YAML "- " bullets, indent, no card chrome ──── */
+.list-editor, .map-editor {
+    display: flex; flex-direction: column;
+    gap: 0;
+    padding-left: var(--yaml-indent);
+    width: 100%;
+}
+.list-item, .map-entry {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0;
+    padding: 1px 0;
+    /* flex-start so the dash & drag handle sit at the TOP of tall block
+       items (datadef, nested list/map, sprite-specifier) instead of being
+       vertically centered against the giant child. */
+    align-items: flex-start;
+    gap: 4px;
+    min-height: 22px;
+    position: relative;
+}
+.list-item::before, .map-entry::before {
+    content: '- ';
+    color: var(--yaml-punct);
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.5;
+}
+/* List items only: reorder children so the drag handle sits FIRST,
+   then the YAML dash, then the content. Map entries keep their natural
+   DOM order (`- key: value`) because they have no drag handle and the
+   key label must immediately follow the dash. */
+.list-item::before { order: 1; }
+.list-item .list-item-content { order: 2; flex: 1 1 auto; min-width: 0; }
+.list-item:hover, .map-entry:hover {
+    background: rgba(88, 166, 255, 0.04);
+    border-color: transparent;
+}
+.list-item .drag-handle,
+.map-entry .drag-handle {
+    opacity: 0;
+    transition: opacity .15s ease;
+    color: var(--text-muted);
+    padding: 0 2px;
+    order: 0;          /* first child in visual order */
+    align-self: flex-start;
+    line-height: 1.5;
+    cursor: grab;
+}
+.list-item:hover .drag-handle,
+.map-entry:hover .drag-handle { opacity: 0.6; }
+
+/* Remove buttons stick to the END of the row (just like field-reset),
+   not glued next to the drag handle. */
+.list-item .item-remove-btn,
+.map-entry .entry-remove-btn {
+    order: 9;
+    margin-left: auto;
+    align-self: flex-start;
+}
+
+.list-add-row, .map-add-row {
+    padding-left: var(--yaml-indent);
+    margin-top: 2px;
+}
+.list-add-btn, .map-add-btn {
+    background: transparent;
+    border: 1px dashed var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    font-style: italic;
+}
+.list-add-btn:hover, .map-add-btn:hover {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-style: solid;
+    border-color: var(--accent);
+}
+.list-add-btn::before, .map-add-btn::before { content: '# '; color: var(--yaml-comment); }
+
+.map-key-label {
+    color: var(--yaml-key);
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 0;
+    min-width: 0;
+}
+.map-key-label::after { content: ': '; color: var(--yaml-punct); }
+
+/* ── 6.  DataDefinition inline → indent + tag colour ───────────────── */
+.datadef-inline {
+    padding: 0;
+    padding-left: var(--yaml-indent);
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    display: flex; flex-direction: column;
+    gap: 0;
+}
+.datadef-inline .field-row { padding: 1px 0; }
+.datadef-type-row {
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    align-items: center;
+    gap: 4px;
+}
+.datadef-type-label {
+    color: var(--yaml-punct);
+    font-family: var(--font-mono);
+    font-size: 13px;
+}
+.datadef-type-label::after { content: ''; }
+.datadef-type-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--yaml-tag);
+    padding: 0 4px;
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+}
+.datadef-type-btn::before { content: '!type:'; color: var(--yaml-punct); margin-right: 2px; }
+.datadef-type-btn:hover { background: var(--bg-card); border-color: var(--border-subtle); }
+
+/* ── 7.  Components section → YAML "components:" key + indent ──────── */
+.components-section {
+    margin-top: 6px;
+    padding-top: 0;
+    border-top: none;
+    padding-left: 0;
+}
+.components-header {
+    margin-bottom: 0;
+    padding: 1px 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--yaml-key-comp);
+    text-transform: none;
+    letter-spacing: 0;
+    justify-content: flex-start;
+    gap: 6px;
+}
+.components-header > span::after { content: ':'; color: var(--yaml-punct); }
+.add-component-btn {
+    width: 18px; height: 18px;
+    background: transparent;
+    border: 1px dashed var(--border-subtle);
+    color: var(--text-muted);
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity .15s;
+}
+.components-section:hover .add-component-btn { opacity: 1; }
+.add-component-btn:hover { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); border-style: solid; }
+
+/* Each component → YAML "- type: Foo" entry with indented field rows */
+.component-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding-left: var(--yaml-indent);
+    position: relative;
+}
+.component-card:hover { border-color: transparent; }
+.component-card.inherited { border: none; opacity: 0.5; color: inherit; }
+.component-card.inherited .component-header { opacity: 1; }
+.component-card.comp-local { border-left: none; }
+.component-header {
+    padding: 1px 0;
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    gap: 6px;
+    justify-content: flex-start;
+}
+.component-header::before {
+    content: '- type: ';
+    color: var(--yaml-punct);
+    font-family: var(--font-mono);
+}
+.component-type {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--yaml-tag);
+}
+.component-header .field-reset-btn {
+    /* Same as proto delete-btn: glue × right after the component name. */
+    margin-left: 4px;
+}
+.component-body {
+    padding: 0;
+    padding-left: var(--yaml-indent);
+}
+
+/* ── 8.  Placeholder for unset defaults → YAML comment look ────────── */
+.field-default-placeholder {
+    border: none;
+    padding: 0 4px;
+    background: transparent;
+    color: var(--yaml-comment);
+    font-style: italic;
+    font-size: 13px;
+    font-family: var(--font-mono);
+}
+.field-default-placeholder::before { content: '# '; }
+.field-default-placeholder:hover { color: var(--accent); border: none; }
+
+/* ── 9.  Field validation badges keep working ──────────────────────── */
+.field-row.field-invalid > .field-control-wrap > .field-control,
+.field-row.field-warning > .field-control-wrap > .field-control {
+    box-shadow: none;
+}
+.field-row.field-invalid .field-input,
+.field-row.field-invalid .field-select { border-color: var(--error, #e54a4a); }
+.field-row.field-warning .field-input,
+.field-row.field-warning .field-select { border-color: var(--warning, #d9a14a); }
+
+/* ── 10. Dropdowns/pickers must float above every nested card ──────── */
+.dropdown-list,
+.search-dropdown .dropdown-list,
+.searchable-picker-popup {
+    z-index: 5000 !important;
+}
+/* Ensure stacking contexts of nested containers don't trap absolutes.
+   .proto-card, .component-card, .list-item, .datadef-inline must not create
+   their own opaque stacking context that clips dropdowns. */
+.proto-card, .component-card, .list-item, .map-entry, .datadef-inline,
+.field-control-wrap, .field-row { overflow: visible; }
+
+/* ── 11. Theme reshuffle: editor area dark (--bg-tertiary = #1e1f22),
+   cards FULLY transparent. The sidebar (file tree + search) is bumped to
+   a lighter shade so the file browser visibly contrasts with the dark
+   editor; the search input gets one more step of brightness so it pops. */
+.editor-area {
+    background: var(--bg-tertiary); /* #1e1f22 — darkest */
+}
+#sidebar {
+    background: #2b2d31; /* lighter than editor */
+}
+.proto-card {
+    background: transparent;
+    box-shadow: none;
+    border-color: var(--border-subtle);
+}
+.proto-card:hover { border-color: var(--accent); }
+.sidebar-search {
+    background: #2b2d31; /* inherits sidebar tone */
+}
+.sidebar-search input {
+    background: #34363c; /* one more step lighter — the only active input */
+}
+.file-tree {
+    background: #2b2d31;
+}
+
+/* ── 12. Slimmer YAML-mode toggle so bool fields don't bloat line height ─ */
+.field-row .toggle-switch {
+    width: 26px; height: 14px;
+}
+.field-row .toggle-slider { border-radius: 14px; }
+.field-row .toggle-slider::before {
+    width: 10px; height: 10px; left: 2px; bottom: 2px;
+}
+.field-row .toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(12px);
+}
+.field-row .toggle-label { margin-left: 4px; }
+
+/* ── 13. Collapsed component → show "…" so the user sees there's content
+   hidden behind the header line. Placed right after the component name. */
+.component-card.collapsed .component-header::after {
+    content: ' …';
+    color: var(--yaml-comment);
+    font-family: var(--font-mono);
+    font-style: italic;
+    font-size: 13px;
+    margin-left: 4px;
+}
+
+/* ── 14. Color field polish ──────────────────────────────────────────
+   The text value comes first (YAML token), the colored square is the
+   accessory on the right. Slimmer swatch, dark color-scheme so the
+   native picker popup uses the dark theme. */
+.color-control {
+    color-scheme: dark;
+    align-items: baseline;
+    gap: 4px;
+}
+.color-text {
+    order: 0;
+    max-width: 14ch;
+    field-sizing: content;
+}
+.color-picker {
+    order: 1;
+    width: 16px; height: 16px;
+    min-width: 16px;
+    padding: 0;
+    border: 1px solid var(--border-subtle);
+    border-radius: 3px;
+    flex-shrink: 0;
+    align-self: center;
+}
+.color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+.color-picker::-webkit-color-swatch { border: none; border-radius: 2px; }

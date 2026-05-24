@@ -136,15 +136,35 @@ function buildCard(proto, idx) {
     // Apply abstract styling
     if (isAbstract) card.classList.add('proto-abstract');
 
-    // header: (type badge) (ID) (abstract checkbox)  [delete]
+    // Multi-line header rendered as YAML lines. The header stays visible
+    // during collapse, so id/abstract live here as pseudo field-rows.
+    //   Line 1:  - type: foo                        (+ delete button on hover)
+    //   Line 2:  id: my-proto-id                    (always visible)
+    //   Line 3:  abstract: true                     (always visible, toggle)
+    // The parent-bar (see below) is appended next, also part of the sticky header.
     const hdr = _div('proto-header');
-    hdr.innerHTML = `<span class="proto-type-badge" title="${esc(meta?.summary || '')}">${esc(type)}</span>
-        <span class="proto-id-text" title="Double-click to rename ID">${esc(String(id))}</span>
-        <label class="proto-abstract-toggle" title="Abstract prototype – serves only as a template for children, never spawned at runtime">
-            <input type="checkbox" class="abstract-cb" ${isAbstract ? 'checked' : ''}>
-            <span class="abstract-label">abstract</span>
-        </label>
-        <button class="delete-proto-btn" title="Delete prototype">×</button>`;
+    hdr.innerHTML = `<div class="proto-type-line">
+            <span class="proto-type-badge" title="${esc(meta?.summary || '')}">${esc(type)}</span>
+            <button class="delete-proto-btn" title="Delete prototype">×</button>
+        </div>
+        <div class="field-row field-local proto-id-row">
+            <label class="field-label">id</label>
+            <div class="field-control-wrap">
+                <span class="proto-id-text" title="Double-click to rename ID">${esc(String(id))}</span>
+            </div>
+        </div>
+        <div class="field-row ${isAbstract ? 'field-local' : 'inherited'} proto-abstract-row">
+            <label class="field-label">abstract</label>
+            <div class="field-control-wrap">
+                <div class="field-control">
+                    <span class="abstract-label toggle-label">${isAbstract ? 'true' : 'false'}</span>
+                    <label class="toggle-switch" title="Abstract prototype – serves only as a template for children, never spawned at runtime">
+                        <input type="checkbox" class="abstract-cb" ${isAbstract ? 'checked' : ''}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>`;
 
     // Abstract checkbox
     const absCb = hdr.querySelector('.abstract-cb');
@@ -179,9 +199,11 @@ function buildCard(proto, idx) {
             renderEditor();
         }
     });
-    // Click on empty header area toggles collapse
-    hdr.addEventListener('click', e => {
-        if (e.target.closest('.abstract-cb, .proto-id-text, .delete-proto-btn, a, button, input, label')) return;
+    // Click on the type line (only) toggles collapse. id/abstract/parent
+    // sub-rows are NOT collapse-triggers because the user must be able to
+    // edit them without folding the whole card.
+    hdr.querySelector('.proto-type-line').addEventListener('click', e => {
+        if (e.target.closest('a, button, input, label')) return;
         card.classList.toggle('collapsed');
     });
     hdr.addEventListener('contextmenu', e => {
@@ -227,8 +249,8 @@ function buildCard(proto, idx) {
             else setFieldValue([idx], 'parent', arr);
         };
         const onParentReset = parentSource === 'local' ? () => deleteField([idx], 'parent') : null;
-        parentBar.appendChild(fieldRow('🌳 parent', parentMeta, parentVal, parentSource, onParentChange, onParentReset));
-        card.appendChild(parentBar);
+        parentBar.appendChild(fieldRow('parent', parentMeta, parentVal, parentSource, onParentChange, onParentReset));
+        hdr.appendChild(parentBar);
     }
 
     // body

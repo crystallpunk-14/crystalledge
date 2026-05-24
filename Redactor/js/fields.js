@@ -227,7 +227,9 @@ function boolCtrl(val, dis, cb) {
     lbl.append(inp, sl);
     const txt = _el('span'); txt.className = 'toggle-label'; txt.textContent = inp.checked ? 'true' : 'false';
     inp.addEventListener('change', () => { txt.textContent = inp.checked ? 'true' : 'false'; cb(inp.checked); });
-    w.append(lbl, txt); return w;
+    // YAML look: textual value (true/false) FIRST, switch AFTER — so it
+    // reads "enabled: true [⏻]" rather than "[⏻] true".
+    w.append(txt, lbl); return w;
 }
 
 function intCtrl(val, dis, cb) {
@@ -266,7 +268,10 @@ function colorCtrl(val, dis, cb) {
     cp.addEventListener('input', () => { tx.value = cp.value; });
     cp.addEventListener('change', () => cb(cp.value));
     tx.addEventListener('change', () => { try { cp.value = tx.value; } catch {} cb(tx.value); });
-    w.append(cp, tx); return w;
+    // YAML look: text value first, picker swatch after — keeps the textual
+    // hex token in line with other scalar inputs; the swatch is a tiny
+    // accessory on the right.
+    w.append(tx, cp); return w;
 }
 
 function enumCtrl(val, opts, dis, cb) {
