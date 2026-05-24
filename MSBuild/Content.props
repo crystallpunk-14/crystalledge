@@ -8,7 +8,6 @@
     <LangVersion Condition="'$(LangVersion)' == ''">14</LangVersion>
     <IsPackable Condition="'$(IsPackable)' == ''">false</IsPackable>
     <Nullable Condition="'$(Nullable)' == ''">enable</Nullable>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
