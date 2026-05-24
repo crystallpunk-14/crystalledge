@@ -38,13 +38,15 @@ function showSearchableTypePicker(anchorEl, items, currentFn, onPick, allowBase 
     let filtered = [];
 
     function render() {
-        const q = inp.value.trim().toLowerCase();
+        const q = inp.value;
         list.innerHTML = '';
         filtered = [];
         if (allowBase) filtered.push(null);
         for (const it of items) {
-            if (!q) { filtered.push(it); continue; }
-            if (it.toLowerCase().includes(q) || it.split('.').pop().toLowerCase().includes(q))
+            // smart search: matches either the fully-qualified name OR the
+            // short name (last segment after '.'), with subsequence + multi-
+            // token support — e.g. "throw stam" matches CEStaminaThrowable.
+            if (smartMatch(it, q) || smartMatch(it.split('.').pop(), q))
                 filtered.push(it);
         }
         if (filtered.length === 0) {

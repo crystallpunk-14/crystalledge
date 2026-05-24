@@ -311,3 +311,4 @@ Resources/MapImages
 .direnv/
 /Redactor/metadata.json
 *.lscache
+Redactor/metadata.json

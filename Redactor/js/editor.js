@@ -90,8 +90,7 @@ function showAddProtoModal() {
 
     function renderList(q) {
         listEl.innerHTML = '';
-        const lq = (q || '').toLowerCase();
-        const filtered = lq ? types.filter(t => t.toLowerCase().includes(lq)) : types;
+        const filtered = types.filter(t => smartMatch(t, q));
         if (!filtered.length) { listEl.innerHTML = '<div class="dropdown-empty">No types found</div>'; return; }
         for (const t of filtered.slice(0, 100)) {
             const el = _div('modal-list-item');
@@ -112,8 +111,12 @@ function addNewPrototype(type) {
     if (!fs) return;
     if (!Array.isArray(fs.yaml)) fs.yaml = [];
     const proto = { type, id: 'NewPrototype' };
-    const meta = state.metadata?.prototypes?.[type];
-    if (meta?.inheriting) proto.parent = '';
+    // NOTE: we intentionally do NOT seed `proto.parent = ''` here. An empty
+    // parent slot would force every new prototype into a half-filled state
+    // and dump as `parent: ''` until the user manually clears it. The
+    // parent control still works without seeding because the user can click
+    // "+ Add item" on the parent bar which commits an empty slot via
+    // `onParentChange` — keeping the add-item codepath intact.
     fs.yaml.push(proto);
     commitChange(fs);
     renderEditor();
@@ -406,15 +409,6 @@ function buildComponentsSection(proto, protoIdx, inherited) {
 }
 
 function showAddComponentModal(proto, protoIdx) {
-    // Subsequence helper for fuzzy component search.
-    function isSubsequence(needle, hay) {
-        let i = 0;
-        for (let j = 0; j < hay.length && i < needle.length; j++) {
-            if (hay[j] === needle[i]) i++;
-        }
-        return i === needle.length;
-    }
-
     const overlay = _div('modal-overlay');
     const modal = _div('modal');
     modal.innerHTML = `<div class="modal-header"><h3>Add Component</h3><button class="modal-close">\u00d7</button></div>
@@ -437,18 +431,9 @@ function showAddComponentModal(proto, protoIdx) {
 
     function renderList(q) {
         listEl.innerHTML = '';
-        const lq = (q || '').toLowerCase();
-        // First pass: classic substring match (fast, expected case).
-        // Second pass: subsequence ("staminath" → "ceStaminaThrowable") so
-        // partial / fuzzy queries still surface the right component.
-        let filtered;
-        if (!lq) {
-            filtered = types;
-        } else {
-            const substr = types.filter(t => t.toLowerCase().includes(lq));
-            if (substr.length) filtered = substr;
-            else filtered = types.filter(t => isSubsequence(lq, t.toLowerCase()));
-        }
+        // Unified smart-search: subsequence per space-separated token.
+        // Lets users find "CEStaminaThrowable" via "throw stam".
+        const filtered = types.filter(t => smartMatch(t, q));
         if (!filtered.length) { listEl.innerHTML = '<div class="dropdown-empty">No components found</div>'; return; }
         for (const t of filtered.slice(0, 100)) {
             const el = _div('modal-list-item');

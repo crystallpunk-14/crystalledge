@@ -6,7 +6,17 @@
 
 const _TagType = new jsyaml.Type('!type:', {
     kind: 'mapping', multi: true,
-    construct(data, type) { data = data || {}; data.__yamlTag = type; return data; },
+    // js-yaml's multi-tag callback passes the FULL tag URI (e.g.
+    // '!type:CEDamageEffect') in the `type` argument, not just the suffix.
+    // Strip the registered prefix so `__yamlTag` stores the bare short name
+    // (e.g. 'CEDamageEffect') — that's what the picker code, polymorphic
+    // resolver, and represent() codepath all assume.
+    construct(data, type) {
+        data = data || {};
+        const tag = typeof type === 'string' ? type.replace(/^!type:/, '') : type;
+        data.__yamlTag = tag;
+        return data;
+    },
     predicate(obj) { return obj !== null && typeof obj === 'object' && !Array.isArray(obj) && '__yamlTag' in obj; },
     represent(obj) { const out = {}; for (const k of Object.keys(obj)) if (k !== '__yamlTag') out[k] = obj[k]; return out; },
     representName(obj) { return obj.__yamlTag; },

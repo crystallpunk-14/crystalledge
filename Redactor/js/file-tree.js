@@ -18,7 +18,7 @@ function filterTreeNodes(nodes, q) {
     if (state.protoIndex) {
         for (const entries of Object.values(state.protoIndex)) {
             for (const entry of entries) {
-                if (entry.id && entry.id.toLowerCase().includes(q)) {
+                if (entry.id && smartMatch(entry.id, q)) {
                     matchingFiles.add(entry.file);
                 }
             }
@@ -29,13 +29,13 @@ function filterTreeNodes(nodes, q) {
         if (n.isDir) {
             // If the folder NAME matches, surface the whole subtree so the
             // user can browse it (instead of hiding everything inside).
-            if (n.name.toLowerCase().includes(q))
+            if (smartMatch(n.name, q))
                 return n;
             const ch = filterTreeNodes(n.children || [], q);
             return ch.length ? { ...n, children: ch } : null;
         }
         // Match by file name OR by prototype ID in this file
-        return (n.name.toLowerCase().includes(q) || matchingFiles.has(n.path)) ? n : null;
+        return (smartMatch(n.name, q) || matchingFiles.has(n.path)) ? n : null;
     }).filter(Boolean);
 }
 
@@ -45,13 +45,18 @@ function buildTreeDom(nodes, parent, depth) {
         el.className = `tree-item ${n.isDir ? 'tree-dir' : 'tree-file'}`;
         el.style.paddingLeft = `${12 + depth * 16}px`;
         if (n.isDir) {
-            el.innerHTML = `<span class="tree-icon">▶</span><span class="tree-name">${esc(n.name)}</span>`;
-            const childBox = _div('tree-children collapsed');
+            const expanded = state.expandedDirs?.has(n.path);
+            el.innerHTML = `<span class="tree-icon">${expanded ? '▼' : '▶'}</span><span class="tree-name">${esc(n.name)}</span>`;
+            if (expanded) el.classList.add('expanded');
+            const childBox = _div('tree-children' + (expanded ? '' : ' collapsed'));
             el.addEventListener('click', e => {
                 e.stopPropagation();
                 const open = el.classList.toggle('expanded');
                 el.querySelector('.tree-icon').textContent = open ? '▼' : '▶';
                 childBox.classList.toggle('collapsed', !open);
+                // Persist expansion across re-renders (refreshAll, search filter, etc.)
+                if (open) state.expandedDirs.add(n.path);
+                else state.expandedDirs.delete(n.path);
             });
             el.addEventListener('contextmenu', e => {
                 e.preventDefault(); e.stopPropagation();
@@ -107,6 +112,14 @@ async function promptCreateFile(dir) {
     if (!name) return;
     try {
         const res = await api.createFile(dir, name, '');
+        // Ensure every ancestor folder of the new file stays expanded so
+        // the file is visible after the tree re-renders. Without this, the
+        // whole explorer would appear to collapse on file creation.
+        if (res?.path) {
+            const parts = res.path.split('/');
+            for (let i = 1; i < parts.length; i++)
+                state.expandedDirs.add(parts.slice(0, i).join('/'));
+        }
         await refreshAll();
         openFile(res.path);
         toast('Created', 'success');

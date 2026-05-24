@@ -1140,6 +1140,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -1157,6 +1168,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -8055,6 +8077,13 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.RCD.RcdConstructionRule",
+          "elementEnumValues": [
+            "MustBuildOnEmptyTile",
+            "CanBuildOnEmptyTile",
+            "MustBuildOnSubfloor",
+            "IsWindow",
+            "IsCatwalk"
+          ],
           "summary": "A list of rules that govern where the entity prototype can be constructed"
         },
         {
@@ -10385,6 +10414,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Robust.Shared.Maths.Direction, Robust.Shared.Maths, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Utility.ResPath, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Robust.Shared.Maths.Direction",
+          "keyEnumValues": [
+            "Invalid",
+            "South",
+            "SouthEast",
+            "East",
+            "NorthEast",
+            "North",
+            "NorthWest",
+            "West",
+            "SouthWest"
+          ],
           "valueKind": "text",
           "valueFullType": "Robust.Shared.Utility.ResPath"
         },
@@ -11556,7 +11596,12 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Humanoid.Sex"
+          "elementFullType": "Content.Shared.Humanoid.Sex",
+          "elementEnumValues": [
+            "Male",
+            "Female",
+            "Unsexed"
+          ]
         },
         {
           "name": "MinAge",
@@ -19070,6 +19115,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "The gases and how many moles will be created of each."
@@ -22344,6 +22400,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Gas types that can be selected for the leak event."
         },
         {
@@ -30447,6 +30514,20 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.PDA.Note",
+          "elementEnumValues": [
+            "A",
+            "Asharp",
+            "B",
+            "C",
+            "Csharp",
+            "D",
+            "Dsharp",
+            "E",
+            "F",
+            "Fsharp",
+            "G",
+            "Gsharp"
+          ],
           "summary": "Notes to set ringtone to in order to lock or unlock the uplink.             Set via GenerateUplinkCodeEvent."
         },
         {
@@ -37952,7 +38033,20 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Server.GameTicking.Rules.Components.WinCondition"
+          "elementFullType": "Content.Server.GameTicking.Rules.Components.WinCondition",
+          "elementEnumValues": [
+            "NukeExplodedOnCorrectStation",
+            "NukeExplodedOnNukieOutpost",
+            "NukeExplodedOnIncorrectLocation",
+            "NukeActiveInStation",
+            "NukeActiveAtCentCom",
+            "NukeDiskOnCentCom",
+            "NukeDiskNotOnCentCom",
+            "NukiesAbandoned",
+            "AllNukiesDead",
+            "SomeNukiesAlive",
+            "AllNukiesAlive"
+          ]
         },
         {
           "name": "TargetStation",
@@ -45415,6 +45509,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Which gases this machine will scrub out.             Unlike fixed scrubbers controlled by an air alarm,             this can\u0027t be changed in game."
         },
         {
@@ -46052,7 +46157,18 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Atmos.Gas"
+          "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ]
         },
         {
           "name": "PumpDirection",
@@ -47012,6 +47128,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -47029,6 +47156,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Atmos.Monitor.AtmosAlarmThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.Atmos.Monitor.AtmosAlarmThreshold"
         },
@@ -47152,6 +47290,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Gases that will be filtered out of internal air"
         },
         {
@@ -47166,6 +47315,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Gases that will be filtered out of internal air to maintain oxygen ratio.             When oxygen is below , these gases will be filtered instead of ."
         },
         {
@@ -49391,6 +49551,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Server.Anomaly.Components.AnomalySecretData",
+          "elementEnumValues": [
+            "Severity",
+            "Stability",
+            "OutputPoint",
+            "ParticleDanger",
+            "ParticleUnstable",
+            "ParticleContainment",
+            "ParticleTransformation",
+            "Behavior",
+            "Default"
+          ],
           "summary": "Current secret data"
         },
         {
@@ -52946,6 +53117,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared._CE.Health.CEAttackType",
+          "elementEnumValues": [
+            "Melee",
+            "Ranged",
+            "TileEffect",
+            "Other"
+          ],
           "summary": "Which attack types this bonus applies to."
         },
         {
@@ -53973,6 +54150,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared._CE.Health.CEAttackType",
+          "elementEnumValues": [
+            "Melee",
+            "Ranged",
+            "TileEffect",
+            "Other"
+          ],
           "summary": "If non-empty, only trigger when the attack type matches one of these values.             Empty means trigger for all attack types."
         },
         {
@@ -55019,6 +55202,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "integer",
           "valueFullType": "System.Int32",
           "summary": "Mana energy consumed per use type."
@@ -55055,6 +55242,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "Stamina cost per use type."
@@ -56630,6 +56821,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -56764,6 +56959,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -59168,7 +59367,12 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Chemistry.ReactionMethod"
+          "elementFullType": "Content.Shared.Chemistry.ReactionMethod",
+          "elementEnumValues": [
+            "Touch",
+            "Injection",
+            "Ingestion"
+          ]
         },
         {
           "name": "Reagents",
@@ -67316,6 +67520,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "What states should trigger this?"
         },
         {
@@ -71038,6 +71248,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Localization.LocId, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "text",
           "valueFullType": "Robust.Shared.Localization.LocId",
           "summary": "The message to be send depending on the target\u0027s current mob state."
@@ -75611,6 +75827,11 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Telephone.TelephoneRange",
+          "elementEnumValues": [
+            "Grid",
+            "Map",
+            "Unlimited"
+          ],
           "summary": "The telephone can only connect with other telephones which have a              present in this list"
         },
         {
@@ -80424,6 +80645,12 @@
           "isAbstract": false,
           "elementKind": "flags",
           "elementFullType": "Content.Shared.Chat.Prototypes.EmoteCategory",
+          "elementEnumValues": [
+            "Invalid",
+            "Vocal",
+            "Hands",
+            "General"
+          ],
           "summary": "Which categories of emotes are blocked by this component."
         },
         {
@@ -80584,6 +80811,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.Sex, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Chat.Prototypes.EmoteSoundsPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.Sex",
+          "keyEnumValues": [
+            "Male",
+            "Female",
+            "Unsexed"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Chat.Prototypes.EmoteSoundsPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "emoteSounds",
@@ -80696,6 +80928,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "What mob states the action will appear in"
         },
         {
@@ -83479,6 +83717,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Silicons.Bots.MedibotTreatment, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.Silicons.Bots.MedibotTreatment",
           "summary": "Treatments to replace from the original set."
@@ -83544,6 +83788,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Silicons.Bots.MedibotTreatment, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.Silicons.Bots.MedibotTreatment",
           "summary": "Treatments the bot will apply for each mob state."
@@ -88458,6 +88708,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.RatKing.RatKingOrderType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.RatKing.RatKingOrderType",
+          "keyEnumValues": [
+            "Stay",
+            "Follow",
+            "CheeseEm",
+            "Loose"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A dictionary with an order type to the corresponding callout dataset."
@@ -89321,6 +89577,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Radiation.Components.GeigerDangerLevel, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Audio.SoundSpecifier, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Radiation.Components.GeigerDangerLevel",
+          "keyEnumValues": [
+            "None",
+            "Low",
+            "Med",
+            "High",
+            "Extreme"
+          ],
           "valueKind": "soundSpecifier",
           "valueFullType": "Robust.Shared.Audio.SoundSpecifier",
           "summary": "Map of sounds that should be play on loop for different radiation levels."
@@ -92225,6 +92488,20 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.PDA.Note",
+          "elementEnumValues": [
+            "A",
+            "Asharp",
+            "B",
+            "C",
+            "Csharp",
+            "D",
+            "Dsharp",
+            "E",
+            "F",
+            "Fsharp",
+            "G",
+            "Gsharp"
+          ],
           "summary": "The ringtone, represented as an array of notes."
         },
         {
@@ -94224,6 +94501,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Localization.LocId, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "text",
           "valueFullType": "Robust.Shared.Localization.LocId",
           "summary": "Dictionary of hunger thresholds to LocIds of the messages to display."
@@ -94682,6 +94966,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "A dictionary relating HungerThreshold to the amount of current hunger needed for each one"
@@ -94700,6 +94991,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "alert",
@@ -94731,6 +95029,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "A dictionary relating HungerThreshold to how much they modify ."
@@ -95584,6 +95889,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.ThirstThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "flags",
           "keyFullType": "Content.Shared.Nutrition.Components.ThirstThreshold",
+          "keyEnumValues": [
+            "Dead",
+            "Parched",
+            "Thirsty",
+            "Okay",
+            "OverHydrated"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -99217,6 +99529,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "valueElementKind": "text",
@@ -99265,7 +99583,13 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Mobs.MobState"
+          "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ]
         },
         {
           "name": "_netSync",
@@ -99299,7 +99623,13 @@
           "keyKind": "text",
           "keyFullType": "Content.Shared.FixedPoint.FixedPoint2",
           "valueKind": "enum",
-          "valueFullType": "Content.Shared.Mobs.MobState"
+          "valueFullType": "Content.Shared.Mobs.MobState",
+          "valueEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ]
         },
         {
           "name": "TriggersAlerts",
@@ -99343,6 +99673,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "alert",
@@ -102111,7 +102447,36 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers"
+          "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ]
         },
         {
           "name": "ModifyTime",
@@ -102860,6 +103225,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "The mobstate where the lock can be bypassed."
         },
         {
@@ -105233,6 +105604,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Hands.Components.HandLocation, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Hands.Components.HandLocation",
+          "keyEnumValues": [
+            "Right",
+            "Middle",
+            "Left"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -107249,8 +107625,62 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Inventory.SlotFlags, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "flags",
           "valueFullType": "Content.Shared.Inventory.SlotFlags",
+          "valueEnumValues": [
+            "NONE",
+            "PREVENTEQUIP",
+            "HEAD",
+            "EYES",
+            "EARS",
+            "MASK",
+            "OUTERCLOTHING",
+            "INNERCLOTHING",
+            "NECK",
+            "BACK",
+            "BELT",
+            "GLOVES",
+            "IDCARD",
+            "POCKET",
+            "LEGS",
+            "FEET",
+            "SUITSTORAGE",
+            "RING",
+            "PANTS",
+            "SHIRT",
+            "CLOAK",
+            "All",
+            "WITHOUT_POCKET"
+          ],
           "summary": "A map of the visual layers currently hidden to the equipment                 slots that are currently hiding them. This will affect the base                 sprite on this humanoid layer, and any markings that sit above it."
         },
         {
@@ -108230,6 +108660,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Power.PowerChargeStatus, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Power.PowerChargeStatus",
+          "keyEnumValues": [
+            "Broken",
+            "Unpowered",
+            "Off",
+            "On"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A map of the sprites used by the gravity generator given its status."
@@ -116548,6 +116984,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.StatusIcon.HealthIconPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.StatusIcon.HealthIconPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "healthIcon"
@@ -117432,6 +117874,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "The entitys\u0027 states that passive damage will apply in"
         },
         {
@@ -121423,6 +121871,35 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "summary": "Which layers does this hide when Unfolded? See  and"
         },
         {
@@ -121437,6 +121914,35 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "summary": "Which layers does this hide when folded? See  and"
         },
         {
@@ -121469,6 +121975,35 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "summary": "The appearance layer(s) to hide. Use Layers instead."
         },
         {
@@ -121485,8 +122020,62 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Inventory.SlotFlags, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "flags",
           "valueFullType": "Content.Shared.Inventory.SlotFlags",
+          "valueEnumValues": [
+            "NONE",
+            "PREVENTEQUIP",
+            "HEAD",
+            "EYES",
+            "EARS",
+            "MASK",
+            "OUTERCLOTHING",
+            "INNERCLOTHING",
+            "NECK",
+            "BACK",
+            "BELT",
+            "GLOVES",
+            "IDCARD",
+            "POCKET",
+            "LEGS",
+            "FEET",
+            "SUITSTORAGE",
+            "RING",
+            "PANTS",
+            "SHIRT",
+            "CLOAK",
+            "All",
+            "WITHOUT_POCKET"
+          ],
           "summary": "A map of the appearance layer(s) to hide, and the equipment slot that should hide them."
         },
         {
@@ -127246,6 +127835,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.Sex, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.Sex",
+          "keyEnumValues": [
+            "Male",
+            "Female",
+            "Unsexed"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "When applying a profile, if the sex is present in this dictionary, overrides the state of the sprite data.             Used for e.g. male vs female torsoes."
@@ -127307,6 +127901,35 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Content.Shared.Humanoid.Markings.Marking, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Content.Shared.Humanoid.Markings.Marking, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -127361,6 +127984,35 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.DisplacementMap.DisplacementData, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.DisplacementMap.DisplacementData",
           "summary": "Optional displacement data for this organ to apply to markings.             Only applies to markings which support displacement data."
@@ -129898,6 +130550,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Components.AtmosPipeLayer, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Components.AtmosPipeLayer",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary",
+            "Tertiary"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "The RSI paths that the entity will use to update its sprite when its pipe layer changes;             if empty, the entity sprite will not update when it pipe layer changes.             If you want to set specific sprite layers to update when the pipe layer changes, use              instead."
@@ -129936,6 +130593,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Components.AtmosPipeLayer, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.EntProtoId, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Components.AtmosPipeLayer",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary",
+            "Tertiary"
+          ],
           "valueKind": "entityProtoId",
           "valueFullType": "Robust.Shared.Prototypes.EntProtoId",
           "summary": "Entity prototypes that will be used to replace the current one when using             position dependent entity placement via AlignAtmosPipeLayers."
@@ -138032,6 +138694,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Hands.Components.HandLocation, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Hands.Components.HandLocation",
+          "keyEnumValues": [
+            "Right",
+            "Middle",
+            "Left"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -138289,6 +138956,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.SurveillanceCamera.SurveillanceCameraVisuals, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.SurveillanceCamera.SurveillanceCameraVisuals",
+          "keyEnumValues": [
+            "Active",
+            "InUse",
+            "Disabled",
+            "Xray",
+            "Emp"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -138816,6 +139490,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Power.Components.CellChargerStatus, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Power.Components.CellChargerStatus",
+          "keyEnumValues": [
+            "Off",
+            "Empty",
+            "Charging",
+            "Charged"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A mapping of the indicator light overlays for the power cell charger.              Maps to the state used when the charger is out of power/disabled.              Maps to the state used when the charger does not contain a power cell.              Maps to the state used when the charger is charging a power cell.              Maps to the state used when the charger contains a fully charged power cell."
@@ -138931,6 +139611,14 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Singularity.Components.ParticleAcceleratorVisualState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Singularity.Components.ParticleAcceleratorVisualState",
+          "keyEnumValues": [
+            "Unpowered",
+            "Powered",
+            "Level0",
+            "Level1",
+            "Level2",
+            "Level3"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -139389,6 +140077,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Light.PoweredLightState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Light.PoweredLightState",
+          "keyEnumValues": [
+            "Empty",
+            "On",
+            "Off",
+            "Broken",
+            "Burned"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A map of the sprite states used by this visualizer indexed by the light state they correspond to."
@@ -139967,6 +140662,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.Dictionary\u00602[[Content.Client.DamageState.DamageStateVisualLayers, Content.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "map",
           "valueFullType": "System.Collections.Generic.Dictionary\u00602[[Content.Client.DamageState.DamageStateVisualLayers, Content.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "valueElementKind": "text",
@@ -140395,6 +141096,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Monitor.AtmosAlarmType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Monitor.AtmosAlarmType",
+          "keyEnumValues": [
+            "Invalid",
+            "Normal",
+            "Warning",
+            "Danger",
+            "Emagged"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -144332,6 +145040,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "The gases and how many moles will be created of each."
@@ -148488,6 +149207,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Gas types that can be selected for the leak event."
         },
         {
@@ -157233,6 +157963,20 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.PDA.Note",
+          "elementEnumValues": [
+            "A",
+            "Asharp",
+            "B",
+            "C",
+            "Csharp",
+            "D",
+            "Dsharp",
+            "E",
+            "F",
+            "Fsharp",
+            "G",
+            "Gsharp"
+          ],
           "summary": "Notes to set ringtone to in order to lock or unlock the uplink.             Set via GenerateUplinkCodeEvent."
         },
         {
@@ -168275,7 +169019,20 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Server.GameTicking.Rules.Components.WinCondition"
+          "elementFullType": "Content.Server.GameTicking.Rules.Components.WinCondition",
+          "elementEnumValues": [
+            "NukeExplodedOnCorrectStation",
+            "NukeExplodedOnNukieOutpost",
+            "NukeExplodedOnIncorrectLocation",
+            "NukeActiveInStation",
+            "NukeActiveAtCentCom",
+            "NukeDiskOnCentCom",
+            "NukeDiskNotOnCentCom",
+            "NukiesAbandoned",
+            "AllNukiesDead",
+            "SomeNukiesAlive",
+            "AllNukiesAlive"
+          ]
         },
         {
           "name": "TargetStation",
@@ -176998,6 +177755,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -177015,6 +177783,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -178743,6 +179522,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Which gases this machine will scrub out.             Unlike fixed scrubbers controlled by an air alarm,             this can\u0027t be changed in game."
         },
         {
@@ -179380,7 +180170,18 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Atmos.Gas"
+          "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ]
         },
         {
           "name": "PumpDirection",
@@ -180387,6 +181188,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -180404,6 +181216,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Atmos.Monitor.AtmosAlarmThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.Atmos.Monitor.AtmosAlarmThreshold"
         },
@@ -180527,6 +181350,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Gases that will be filtered out of internal air"
         },
         {
@@ -180541,6 +181375,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Atmos.Gas",
+          "elementEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "summary": "Gases that will be filtered out of internal air to maintain oxygen ratio.             When oxygen is below , these gases will be filtered instead of ."
         },
         {
@@ -183125,6 +183970,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Server.Anomaly.Components.AnomalySecretData",
+          "elementEnumValues": [
+            "Severity",
+            "Stability",
+            "OutputPoint",
+            "ParticleDanger",
+            "ParticleUnstable",
+            "ParticleContainment",
+            "ParticleTransformation",
+            "Behavior",
+            "Default"
+          ],
           "summary": "Current secret data"
         },
         {
@@ -187185,6 +188041,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared._CE.Health.CEAttackType",
+          "elementEnumValues": [
+            "Melee",
+            "Ranged",
+            "TileEffect",
+            "Other"
+          ],
           "summary": "Which attack types this bonus applies to."
         },
         {
@@ -188212,6 +189074,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared._CE.Health.CEAttackType",
+          "elementEnumValues": [
+            "Melee",
+            "Ranged",
+            "TileEffect",
+            "Other"
+          ],
           "summary": "If non-empty, only trigger when the attack type matches one of these values.             Empty means trigger for all attack types."
         },
         {
@@ -189496,6 +190364,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "integer",
           "valueFullType": "System.Int32",
           "summary": "Mana energy consumed per use type."
@@ -189532,6 +190404,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "Stamina cost per use type."
@@ -193695,6 +194571,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -193859,6 +194739,10 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared._CE.Animation.Item.Components.CEUseType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared._CE.Animation.Item.Components.CEUseType",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Content.Shared._CE.Animation.Item.Components.CEAnimationEntry, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -196447,7 +197331,12 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Chemistry.ReactionMethod"
+          "elementFullType": "Content.Shared.Chemistry.ReactionMethod",
+          "elementEnumValues": [
+            "Touch",
+            "Injection",
+            "Ingestion"
+          ]
         },
         {
           "name": "Reagents",
@@ -205086,6 +205975,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "What states should trigger this?"
         },
         {
@@ -208852,6 +209747,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Localization.LocId, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "text",
           "valueFullType": "Robust.Shared.Localization.LocId",
           "summary": "The message to be send depending on the target\u0027s current mob state."
@@ -213632,6 +214533,11 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Telephone.TelephoneRange",
+          "elementEnumValues": [
+            "Grid",
+            "Map",
+            "Unlimited"
+          ],
           "summary": "The telephone can only connect with other telephones which have a              present in this list"
         },
         {
@@ -220170,6 +221076,12 @@
           "isAbstract": false,
           "elementKind": "flags",
           "elementFullType": "Content.Shared.Chat.Prototypes.EmoteCategory",
+          "elementEnumValues": [
+            "Invalid",
+            "Vocal",
+            "Hands",
+            "General"
+          ],
           "summary": "Which categories of emotes are blocked by this component."
         },
         {
@@ -220335,6 +221247,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.Sex, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Chat.Prototypes.EmoteSoundsPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.Sex",
+          "keyEnumValues": [
+            "Male",
+            "Female",
+            "Unsexed"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Chat.Prototypes.EmoteSoundsPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "emoteSounds",
@@ -220447,6 +221364,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "What mob states the action will appear in"
         },
         {
@@ -223673,6 +224596,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Silicons.Bots.MedibotTreatment, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.Silicons.Bots.MedibotTreatment",
           "summary": "Treatments to replace from the original set."
@@ -223738,6 +224667,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Silicons.Bots.MedibotTreatment, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.Silicons.Bots.MedibotTreatment",
           "summary": "Treatments the bot will apply for each mob state."
@@ -229476,6 +230411,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.RatKing.RatKingOrderType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.RatKing.RatKingOrderType",
+          "keyEnumValues": [
+            "Stay",
+            "Follow",
+            "CheeseEm",
+            "Loose"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A dictionary with an order type to the corresponding callout dataset."
@@ -230830,6 +231771,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Radiation.Components.GeigerDangerLevel, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Audio.SoundSpecifier, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Radiation.Components.GeigerDangerLevel",
+          "keyEnumValues": [
+            "None",
+            "Low",
+            "Med",
+            "High",
+            "Extreme"
+          ],
           "valueKind": "soundSpecifier",
           "valueFullType": "Robust.Shared.Audio.SoundSpecifier",
           "summary": "Map of sounds that should be play on loop for different radiation levels."
@@ -231741,6 +232689,12 @@
           "keyProtoTypeArg": "job",
           "valueKind": "enum",
           "valueFullType": "Content.Shared.Preferences.JobPriority",
+          "valueEnumValues": [
+            "Never",
+            "Low",
+            "Medium",
+            "High"
+          ],
           "summary": "Job preferences for initial spawn."
         },
         {
@@ -234747,6 +235701,20 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.PDA.Note",
+          "elementEnumValues": [
+            "A",
+            "Asharp",
+            "B",
+            "C",
+            "Csharp",
+            "D",
+            "Dsharp",
+            "E",
+            "F",
+            "Fsharp",
+            "G",
+            "Gsharp"
+          ],
           "summary": "The ringtone, represented as an array of notes."
         },
         {
@@ -237053,6 +238021,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Localization.LocId, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "text",
           "valueFullType": "Robust.Shared.Localization.LocId",
           "summary": "Dictionary of hunger thresholds to LocIds of the messages to display."
@@ -237511,6 +238486,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "A dictionary relating HungerThreshold to the amount of current hunger needed for each one"
@@ -237529,6 +238511,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "alert",
@@ -237560,6 +238549,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.HungerThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Nutrition.Components.HungerThreshold",
+          "keyEnumValues": [
+            "Overfed",
+            "Okay",
+            "Peckish",
+            "Starving",
+            "Dead"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single",
           "summary": "A dictionary relating HungerThreshold to how much they modify ."
@@ -238413,6 +239409,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Nutrition.Components.ThirstThreshold, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "flags",
           "keyFullType": "Content.Shared.Nutrition.Components.ThirstThreshold",
+          "keyEnumValues": [
+            "Dead",
+            "Parched",
+            "Thirsty",
+            "Okay",
+            "OverHydrated"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -242246,6 +243249,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "valueElementKind": "text",
@@ -242294,7 +243303,13 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Mobs.MobState"
+          "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ]
         },
         {
           "name": "_netSync",
@@ -242328,7 +243343,13 @@
           "keyKind": "text",
           "keyFullType": "Content.Shared.FixedPoint.FixedPoint2",
           "valueKind": "enum",
-          "valueFullType": "Content.Shared.Mobs.MobState"
+          "valueFullType": "Content.Shared.Mobs.MobState",
+          "valueEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ]
         },
         {
           "name": "TriggersAlerts",
@@ -242372,6 +243393,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Alert.AlertPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "alert",
@@ -246058,7 +247085,36 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers"
+          "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ]
         },
         {
           "name": "ModifyTime",
@@ -246932,6 +247988,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "The mobstate where the lock can be bypassed."
         },
         {
@@ -249643,6 +250705,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Hands.Components.HandLocation, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Hands.Components.HandLocation",
+          "keyEnumValues": [
+            "Right",
+            "Middle",
+            "Left"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -251997,8 +253064,62 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Inventory.SlotFlags, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "flags",
           "valueFullType": "Content.Shared.Inventory.SlotFlags",
+          "valueEnumValues": [
+            "NONE",
+            "PREVENTEQUIP",
+            "HEAD",
+            "EYES",
+            "EARS",
+            "MASK",
+            "OUTERCLOTHING",
+            "INNERCLOTHING",
+            "NECK",
+            "BACK",
+            "BELT",
+            "GLOVES",
+            "IDCARD",
+            "POCKET",
+            "LEGS",
+            "FEET",
+            "SUITSTORAGE",
+            "RING",
+            "PANTS",
+            "SHIRT",
+            "CLOAK",
+            "All",
+            "WITHOUT_POCKET"
+          ],
           "summary": "A map of the visual layers currently hidden to the equipment                 slots that are currently hiding them. This will affect the base                 sprite on this humanoid layer, and any markings that sit above it."
         },
         {
@@ -252196,7 +253317,13 @@
           "keyFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.Roles.JobPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyProtoTypeArg": "job",
           "valueKind": "enum",
-          "valueFullType": "Content.Shared.Preferences.JobPriority"
+          "valueFullType": "Content.Shared.Preferences.JobPriority",
+          "valueEnumValues": [
+            "Never",
+            "Low",
+            "Medium",
+            "High"
+          ]
         },
         {
           "name": "AntagPreferences",
@@ -253996,6 +255123,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Power.PowerChargeStatus, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Power.PowerChargeStatus",
+          "keyEnumValues": [
+            "Broken",
+            "Unpowered",
+            "Off",
+            "On"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A map of the sprites used by the gravity generator given its status."
@@ -264867,6 +266000,17 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Gas, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Single, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Gas",
+          "keyEnumValues": [
+            "Oxygen",
+            "Nitrogen",
+            "CarbonDioxide",
+            "Plasma",
+            "Tritium",
+            "WaterVapor",
+            "Ammonia",
+            "NitrousOxide",
+            "Frezon"
+          ],
           "valueKind": "float",
           "valueFullType": "System.Single"
         },
@@ -271621,6 +272765,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.StatusIcon.HealthIconPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "protoId",
           "valueFullType": "Robust.Shared.Prototypes.ProtoId\u00601[[Content.Shared.StatusIcon.HealthIconPrototype, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueProtoTypeArg": "healthIcon"
@@ -272505,6 +273655,12 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Mobs.MobState",
+          "elementEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "summary": "The entitys\u0027 states that passive damage will apply in"
         },
         {
@@ -277831,6 +278987,35 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "summary": "Which layers does this hide when Unfolded? See  and"
         },
         {
@@ -277845,6 +279030,35 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "summary": "Which layers does this hide when folded? See  and"
         },
         {
@@ -277877,6 +279091,35 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "summary": "The appearance layer(s) to hide. Use Layers instead."
         },
         {
@@ -277893,8 +279136,62 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.Inventory.SlotFlags, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "flags",
           "valueFullType": "Content.Shared.Inventory.SlotFlags",
+          "valueEnumValues": [
+            "NONE",
+            "PREVENTEQUIP",
+            "HEAD",
+            "EYES",
+            "EARS",
+            "MASK",
+            "OUTERCLOTHING",
+            "INNERCLOTHING",
+            "NECK",
+            "BACK",
+            "BELT",
+            "GLOVES",
+            "IDCARD",
+            "POCKET",
+            "LEGS",
+            "FEET",
+            "SUITSTORAGE",
+            "RING",
+            "PANTS",
+            "SHIRT",
+            "CLOAK",
+            "All",
+            "WITHOUT_POCKET"
+          ],
           "summary": "A map of the appearance layer(s) to hide, and the equipment slot that should hide them."
         },
         {
@@ -279577,7 +280874,12 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Chemistry.ReactionMethod"
+          "elementFullType": "Content.Shared.Chemistry.ReactionMethod",
+          "elementEnumValues": [
+            "Touch",
+            "Injection",
+            "Ingestion"
+          ]
         },
         {
           "name": "Effects",
@@ -279796,7 +281098,12 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Chemistry.ReactionMethod"
+          "elementFullType": "Content.Shared.Chemistry.ReactionMethod",
+          "elementEnumValues": [
+            "Touch",
+            "Injection",
+            "Ingestion"
+          ]
         },
         {
           "name": "Reagents",
@@ -284817,6 +286124,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.Sex, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.Sex",
+          "keyEnumValues": [
+            "Male",
+            "Female",
+            "Unsexed"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "When applying a profile, if the sex is present in this dictionary, overrides the state of the sprite data.             Used for e.g. male vs female torsoes."
@@ -284926,6 +286238,35 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Content.Shared.Humanoid.Markings.Marking, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Content.Shared.Humanoid.Markings.Marking, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -284980,6 +286321,35 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Humanoid.HumanoidVisualLayers, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Content.Shared.DisplacementMap.DisplacementData, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "keyEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ],
           "valueKind": "object",
           "valueFullType": "Content.Shared.DisplacementMap.DisplacementData",
           "summary": "Optional displacement data for this organ to apply to markings.             Only applies to markings which support displacement data."
@@ -285013,7 +286383,36 @@
           "isParent": false,
           "isAbstract": false,
           "elementKind": "enum",
-          "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers"
+          "elementFullType": "Content.Shared.Humanoid.HumanoidVisualLayers",
+          "elementEnumValues": [
+            "Special",
+            "Tail",
+            "TailOverlay",
+            "Hair",
+            "FacialHair",
+            "UndergarmentTop",
+            "UndergarmentBottom",
+            "Chest",
+            "Head",
+            "Snout",
+            "SnoutCover",
+            "HeadSide",
+            "HeadTop",
+            "Eyes",
+            "RArm",
+            "LArm",
+            "RHand",
+            "LHand",
+            "RLeg",
+            "LLeg",
+            "RFoot",
+            "LFoot",
+            "Overlay",
+            "Handcuffs",
+            "StencilMask",
+            "Ensnare",
+            "Fire"
+          ]
         },
         {
           "name": "Group",
@@ -287806,6 +289205,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Components.AtmosPipeLayer, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Components.AtmosPipeLayer",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary",
+            "Tertiary"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "The RSI paths that the entity will use to update its sprite when its pipe layer changes;             if empty, the entity sprite will not update when it pipe layer changes.             If you want to set specific sprite layers to update when the pipe layer changes, use              instead."
@@ -287844,6 +289248,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Components.AtmosPipeLayer, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Robust.Shared.Prototypes.EntProtoId, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Components.AtmosPipeLayer",
+          "keyEnumValues": [
+            "Primary",
+            "Secondary",
+            "Tertiary"
+          ],
           "valueKind": "entityProtoId",
           "valueFullType": "Robust.Shared.Prototypes.EntProtoId",
           "summary": "Entity prototypes that will be used to replace the current one when using             position dependent entity placement via AlignAtmosPipeLayers."
@@ -294027,6 +295436,17 @@
           "isAbstract": false,
           "elementKind": "enum",
           "elementFullType": "Robust.Shared.Maths.Direction",
+          "elementEnumValues": [
+            "Invalid",
+            "South",
+            "SouthEast",
+            "East",
+            "NorthEast",
+            "North",
+            "NorthWest",
+            "West",
+            "SouthWest"
+          ],
           "summary": "Directions determining where the entities will spawn."
         },
         {
@@ -299298,6 +300718,11 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Hands.Components.HandLocation, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Hands.Components.HandLocation",
+          "keyEnumValues": [
+            "Right",
+            "Middle",
+            "Left"
+          ],
           "valueKind": "list",
           "valueFullType": "System.Collections.Generic.List\u00601[[Robust.Shared.GameObjects.PrototypeLayerData, Robust.Shared, Version=275.2.0.0, Culture=neutral, PublicKeyToken=null]]",
           "valueElementKind": "object",
@@ -299555,6 +300980,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.SurveillanceCamera.SurveillanceCameraVisuals, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.SurveillanceCamera.SurveillanceCameraVisuals",
+          "keyEnumValues": [
+            "Active",
+            "InUse",
+            "Disabled",
+            "Xray",
+            "Emp"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -300340,6 +301772,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Power.Components.CellChargerStatus, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Power.Components.CellChargerStatus",
+          "keyEnumValues": [
+            "Off",
+            "Empty",
+            "Charging",
+            "Charged"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A mapping of the indicator light overlays for the power cell charger.              Maps to the state used when the charger is out of power/disabled.              Maps to the state used when the charger does not contain a power cell.              Maps to the state used when the charger is charging a power cell.              Maps to the state used when the charger contains a fully charged power cell."
@@ -300525,6 +301963,14 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Singularity.Components.ParticleAcceleratorVisualState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Singularity.Components.ParticleAcceleratorVisualState",
+          "keyEnumValues": [
+            "Unpowered",
+            "Powered",
+            "Level0",
+            "Level1",
+            "Level2",
+            "Level3"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },
@@ -301406,6 +302852,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Light.PoweredLightState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Light.PoweredLightState",
+          "keyEnumValues": [
+            "Empty",
+            "On",
+            "Off",
+            "Broken",
+            "Burned"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String",
           "summary": "A map of the sprite states used by this visualizer indexed by the light state they correspond to."
@@ -303062,6 +304515,12 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Mobs.MobState, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Collections.Generic.Dictionary\u00602[[Content.Client.DamageState.DamageStateVisualLayers, Content.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Mobs.MobState",
+          "keyEnumValues": [
+            "Invalid",
+            "Alive",
+            "Critical",
+            "Dead"
+          ],
           "valueKind": "map",
           "valueFullType": "System.Collections.Generic.Dictionary\u00602[[Content.Client.DamageState.DamageStateVisualLayers, Content.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "valueElementKind": "text",
@@ -303858,6 +305317,13 @@
           "elementFullType": "System.Collections.Generic.KeyValuePair\u00602[[Content.Shared.Atmos.Monitor.AtmosAlarmType, Content.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
           "keyKind": "enum",
           "keyFullType": "Content.Shared.Atmos.Monitor.AtmosAlarmType",
+          "keyEnumValues": [
+            "Invalid",
+            "Normal",
+            "Warning",
+            "Danger",
+            "Emagged"
+          ],
           "valueKind": "text",
           "valueFullType": "System.String"
         },

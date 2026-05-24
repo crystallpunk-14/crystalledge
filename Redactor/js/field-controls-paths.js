@@ -158,10 +158,10 @@ function resPathAutocomplete(input, opts = {}) {
             let dirs  = data.dirs  || [];
             let files = data.files || [];
 
-            // Filter by typed partial
+            // Filter by typed partial — smart search (subsequence + multi-token).
             if (typedPart) {
-                dirs  = dirs.filter(d => d.toLowerCase().includes(typedPart));
-                files = files.filter(f => f.toLowerCase().includes(typedPart));
+                dirs  = dirs.filter(d => smartMatch(d, typedPart));
+                files = files.filter(f => smartMatch(f, typedPart));
             }
 
             render(dirs, files);
@@ -294,9 +294,9 @@ function spriteSpecifierCtrl(val, dis, cb) {
         try {
             const meta = await SpriteView.loadMeta(rsiPath);
             if (!meta?.states?.length) return;
-            const lower = stateInp.value.trim().toLowerCase();
+            const lower = stateInp.value;
             const filtered = lower
-                ? meta.states.filter(s => s.name.toLowerCase().includes(lower))
+                ? meta.states.filter(s => smartMatch(s.name, lower))
                 : meta.states;
             if (!filtered.length) return;
             stateDD.classList.add('visible');

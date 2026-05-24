@@ -359,8 +359,20 @@ function searchDropdown(val, searchType, dis, cb) {
     let timer, selIdx = -1;
     async function doSearch(q) {
         try {
-            const res = await api.searchProtos(searchType, q);
-            renderDd(dd, res, inp, cb);
+            // Server search is substring-only. To make every dropdown
+            // share the same smart-search behaviour (subsequence + multi-
+            // token), we send the FIRST token as the server hint (so the
+            // returned set contains everything that contains that token
+            // anywhere), then refine on the client with smartMatch using
+            // the full query. Result: "throw stam" matches
+            // "CEStaminaThrowable" without any server changes.
+            const tokens = String(q || '').trim().split(/\s+/).filter(Boolean);
+            const serverHint = tokens[0] || '';
+            const res = await api.searchProtos(searchType, serverHint);
+            const refined = tokens.length > 1
+                ? res.filter(r => smartMatch(r.id, q) || smartMatch(r.name || '', q))
+                : res;
+            renderDd(dd, refined, inp, cb);
             dd.classList.add('visible');
             selIdx = -1;
         } catch (e) { console.error('[Fields] Prototype search failed:', e); }
