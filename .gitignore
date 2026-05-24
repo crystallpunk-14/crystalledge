@@ -309,6 +309,5 @@ Resources/MapImages
 
 # Direnv stuff
 .direnv/
-/Redactor/metadata.json
 *.lscache
 Redactor/metadata.json
