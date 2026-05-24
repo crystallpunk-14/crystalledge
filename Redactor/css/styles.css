@@ -224,14 +224,15 @@ body {
 .proto-abstract:hover { border-color: #888; }
 
 .proto-abstract-toggle {
-    display: flex; align-items: center; cursor: pointer;
-    gap: 2px; user-select: none;
+    display: inline-flex; align-items: center; cursor: pointer;
+    gap: 4px; user-select: none;
+    margin-left: 8px;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-muted);
 }
-.proto-abstract-toggle input { display: none; }
-.abstract-icon {
-    font-size: 16px; opacity: .35; transition: opacity .2s;
-}
-.proto-abstract-toggle input:checked + .abstract-icon { opacity: 1; }
+.proto-abstract-toggle input { margin: 0; cursor: pointer; }
+.proto-abstract-toggle:hover { color: var(--text-primary); }
+.proto-abstract-toggle input:checked ~ .abstract-label { color: var(--accent); font-weight: 600; }
 
 /* Parent sub-header bar */
 .proto-parent-bar {
@@ -314,12 +315,71 @@ body {
 }
 .field-default-placeholder:hover { border-color: var(--accent); color: var(--accent); }
 
+.field-unsupported-stub {
+    font-family: var(--font-mono); font-size: 11px;
+    background: #3a3416; color: #e0c060;
+    border: 1px dashed #a08a30; border-radius: var(--radius-sm);
+    padding: 6px 10px; user-select: text;
+}
+.field-unsupported-stub b { color: #ffd866; }
+.field-unsupported-raw-btn {
+    margin-left: 10px; padding: 2px 8px;
+    background: #443a1a; color: #ffd866;
+    border: 1px solid #a08a30; border-radius: var(--radius-sm);
+    font-family: var(--font-mono); font-size: 10px; cursor: pointer;
+}
+.field-unsupported-raw-btn:hover { background: #5a4d1f; }
+.field-unsupported-raw { width: 100%; margin-top: 6px; }
+
+/* ──────────────── SoundSpecifier control ──────────────── */
+.sound-specifier-ctrl { display: flex; flex-direction: column; gap: 6px; }
+.sound-mode-tabs { display: flex; gap: 2px; }
+.sound-mode-tab {
+    padding: 3px 12px; font-family: var(--font-mono); font-size: 11px;
+    background: var(--bg-tertiary, #2b2d31); color: var(--text-muted);
+    border: 1px solid var(--border-subtle); border-bottom: none;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    cursor: pointer;
+}
+.sound-mode-tab.active { background: var(--bg-secondary, #232428); color: var(--accent); }
+.sound-mode-tab:hover { color: var(--text-primary); }
+.sound-body { display: flex; flex-direction: column; gap: 6px; }
+.sound-field-row { display: flex; align-items: center; gap: 6px; }
+.sound-input-label {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+    width: 70px; min-width: 70px;
+}
+.sound-input { flex: 1; }
+.sound-play-btn {
+    width: 28px; height: 28px; padding: 0;
+    background: var(--accent, #58a6ff); color: #fff;
+    border: none; border-radius: var(--radius-sm); cursor: pointer;
+    font-size: 12px;
+}
+.sound-play-btn:disabled { background: #555; cursor: not-allowed; opacity: .6; }
+.sound-params-wrap { margin-top: 4px; }
+.sound-params-toggle {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+    background: none; border: none; cursor: pointer; padding: 2px 0;
+}
+.sound-params-toggle:hover { color: var(--text-primary); }
+.sound-params-host {
+    margin-top: 4px; padding-left: 10px;
+    border-left: 2px solid var(--border-subtle);
+}
+
+.field-required-star {
+    color: var(--error, #e54a4a); font-weight: 700;
+    margin-left: 4px; cursor: help;
+}
+
 .field-label {
     width: 170px; min-width: 170px;
     font-family: var(--font-mono); font-size: 12px;
     color: var(--text-secondary); padding-top: 6px; word-break: break-all;
 }
-.field-label.required::after { content: ' *'; color: var(--error); }
+/* Required marker is rendered by JS as `.field-required-star` so it can carry
+ * a tooltip; the old `::after` pseudo was duplicating it. */
 .field-control { flex: 1; min-width: 0; }
 
 /* ======================== Input Controls ================ */
@@ -456,6 +516,16 @@ body {
     max-height: 180px; overflow-y: auto; padding: 2px 0;
 }
 .sprite-state-dropdown.visible { display: block; }
+.sprite-state-option {
+    display: flex; align-items: center; gap: 8px;
+    padding: 3px 8px;
+}
+.sprite-state-thumb {
+    width: 24px; height: 24px; flex: 0 0 24px;
+    image-rendering: pixelated;
+    display: flex; align-items: center; justify-content: center;
+}
+.sprite-state-name { font-family: var(--font-mono); font-size: 12px; }
 
 /* ======================== ResPath Autocomplete ========== */
 .respath-dropdown {
@@ -473,6 +543,15 @@ body {
 .respath-dir  { color: var(--text-link); }
 .respath-dir::before  { content: '📁 '; }
 .respath-file::before { content: '📄 '; }
+.respath-file { display: flex; align-items: center; gap: 6px; }
+.respath-file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.respath-play-btn {
+    flex-shrink: 0; background: transparent; border: 1px solid var(--border-subtle);
+    color: var(--text); font-size: 10px; line-height: 1;
+    padding: 2px 6px; border-radius: 3px; cursor: pointer;
+    transition: background .1s;
+}
+.respath-play-btn:hover { background: var(--accent-dim); }
 
 /* ======================== Search Dropdown =============== */
 .search-dropdown { position: relative; }
@@ -513,7 +592,7 @@ body {
 .add-component-btn:hover { background: var(--accent); color: #fff; }
 
 .component-card {
-    background: var(--bg-surface); border: 1px solid var(--border-subtle);
+    background: #232428; border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md); margin-bottom: 8px; overflow: visible;
     transition: border-color .2s; position: relative;
 }
@@ -603,6 +682,22 @@ body {
 }
 .list-add-btn:hover, .map-add-btn:hover { background: var(--accent); color: #fff; }
 
+/* Drag-and-drop reorder handles for list items */
+.list-item .drag-handle {
+    cursor: grab; color: var(--text-muted); user-select: none;
+    font-size: 14px; padding: 2px 4px; flex-shrink: 0;
+    line-height: 1; border-radius: var(--radius-sm);
+}
+.list-item .drag-handle:hover { color: var(--text); background: var(--bg-default); }
+.list-item .drag-handle:active { cursor: grabbing; }
+.list-item.dragging { opacity: 0.5; }
+.list-item.drop-target { border-color: var(--accent); background: var(--accent-dim); }
+
+/* Map key host – sized so search dropdowns/enums render comfortably */
+.map-key-host { min-width: 160px; max-width: 260px; flex-shrink: 0; }
+.map-key-host .field-control { width: 100%; }
+.map-key-host .field-input { width: 100%; box-sizing: border-box; }
+
 /* DataDefinition inline */
 .datadef-inline {
     padding: 6px 8px; background: var(--bg-surface);
@@ -610,6 +705,39 @@ body {
     display: flex; flex-direction: column; gap: 3px;
 }
 .datadef-inline .field-row { padding: 4px 0; }
+
+/* Polymorphic !type: selector at the top of a dataDefCtrl */
+.datadef-type-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 0 6px 0; border-bottom: 1px dashed var(--border-subtle);
+    margin-bottom: 4px;
+}
+.datadef-type-label {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-muted); flex-shrink: 0;
+}
+.datadef-type-row .field-input { max-width: 240px; }
+.datadef-type-btn {
+    background: var(--bg-surface); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 4px 10px; font-family: var(--font-mono); font-size: 12px;
+    cursor: pointer; min-width: 140px; text-align: left;
+}
+.datadef-type-btn:hover { background: var(--accent-dim); border-color: var(--accent); }
+
+/* ======================== Searchable Type Picker Popup ======== */
+.searchable-picker-popup {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+    padding: 6px; display: flex; flex-direction: column; gap: 4px;
+    max-width: 480px;
+}
+.searchable-picker-popup .field-input { width: 100%; box-sizing: border-box; }
+.searchable-picker-list {
+    max-height: 320px; overflow-y: auto;
+    background: var(--bg-default); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+}
 
 /* Add-prototype footer */
 .add-proto-footer {

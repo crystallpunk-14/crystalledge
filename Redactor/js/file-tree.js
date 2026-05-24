@@ -27,6 +27,10 @@ function filterTreeNodes(nodes, q) {
 
     return nodes.map(n => {
         if (n.isDir) {
+            // If the folder NAME matches, surface the whole subtree so the
+            // user can browse it (instead of hiding everything inside).
+            if (n.name.toLowerCase().includes(q))
+                return n;
             const ch = filterTreeNodes(n.children || [], q);
             return ch.length ? { ...n, children: ch } : null;
         }

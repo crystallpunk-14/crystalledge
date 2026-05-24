@@ -66,6 +66,7 @@ public static class RedactorServer
         var redactorDir = Path.Combine(solutionRoot, "Redactor");
         var prototypesDir = Path.Combine(solutionRoot, "Resources", "Prototypes");
         var texturesDir = Path.Combine(solutionRoot, "Resources", "Textures");
+        var audioDir = Path.Combine(solutionRoot, "Resources", "Audio");
         var enginePrototypesDir = Path.Combine(solutionRoot, "RobustToolbox", "Resources", "EnginePrototypes");
 
         return new RedactorContext
@@ -74,6 +75,7 @@ public static class RedactorServer
             RedactorDir = redactorDir,
             PrototypesDir = prototypesDir,
             TexturesDir = texturesDir,
+            AudioDir = audioDir,
             EnginePrototypesDir = enginePrototypesDir,
             ProtoIndex = new ProtoIndexService(prototypesDir, enginePrototypesDir),
             SourceLocator = new SourceLocator(solutionRoot),

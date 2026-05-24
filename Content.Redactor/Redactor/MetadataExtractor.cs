@@ -67,6 +67,8 @@ public static class MetadataExtractor
 
         var prototypes = new Dictionary<string, PrototypeMetadata>();
         var components = new Dictionary<string, ComponentMetadata>();
+        // baseFullName -> [concreteFullName,...] for polymorphic !type: picking.
+        var polymorphicTypes = new Dictionary<string, List<string>>();
         var skippedAssemblies = 0;
         var skippedTypes = 0;
 
@@ -82,7 +84,7 @@ public static class MetadataExtractor
                 try
                 {
                     var assembly = mlc.LoadFromAssemblyPath(dllPath);
-                    ScanAssembly(assembly, prototypes, components, dataDefinitions, fieldExtractor, xmlDocs, ref skippedTypes);
+                    ScanAssembly(assembly, prototypes, components, dataDefinitions, polymorphicTypes, fieldExtractor, xmlDocs, ref skippedTypes);
                 }
                 catch (Exception ex)
                 {
@@ -97,6 +99,7 @@ public static class MetadataExtractor
             Prototypes = prototypes,
             Components = components,
             DataDefinitions = dataDefinitions,
+            PolymorphicTypes = polymorphicTypes,
         };
 
         var options = new JsonSerializerOptions
@@ -123,6 +126,7 @@ public static class MetadataExtractor
         Dictionary<string, PrototypeMetadata> prototypes,
         Dictionary<string, ComponentMetadata> components,
         Dictionary<string, DataDefinitionMetadata> dataDefinitions,
+        Dictionary<string, List<string>> polymorphicTypes,
         FieldExtractor fieldExtractor,
         XmlDocReader xmlDocs,
         ref int skippedTypes)
@@ -142,7 +146,7 @@ public static class MetadataExtractor
         {
             try
             {
-                ScanType(type, prototypes, components, dataDefinitions, fieldExtractor, xmlDocs);
+                ScanType(type, prototypes, components, dataDefinitions, polymorphicTypes, fieldExtractor, xmlDocs);
             }
             catch (Exception ex)
             {
@@ -157,29 +161,76 @@ public static class MetadataExtractor
         Dictionary<string, PrototypeMetadata> prototypes,
         Dictionary<string, ComponentMetadata> components,
         Dictionary<string, DataDefinitionMetadata> dataDefinitions,
+        Dictionary<string, List<string>> polymorphicTypes,
         FieldExtractor fieldExtractor,
         XmlDocReader xmlDocs)
     {
-        // Scan DataDefinition types
-        var hasDataDef = type.CustomAttributes
+        // Scan DataDefinition types (BOTH abstract bases and concrete
+        // implementors – abstract bases are needed so the editor can resolve
+        // `List<TBase>` element types, and to pick !type: subtypes).
+        //
+        // A type counts as a DataDefinition if it has [DataDefinition] /
+        // [ImplicitDataDefinitionForInheritors] on itself OR if any ancestor
+        // has [ImplicitDataDefinitionForInheritors] (because that attribute
+        // implicitly opts every subclass in – the concrete subclasses of
+        // e.g. CEEntityEffect do not redeclare the attribute themselves).
+        static bool HasDirectDataDefAttr(Type t) => t.CustomAttributes
             .Any(a => a.AttributeType.Name is "DataDefinitionAttribute"
                 or "ImplicitDataDefinitionForInheritorsAttribute");
 
-        if (hasDataDef && !type.IsAbstract)
+        static bool HasImplicitDataDefAncestor(Type t)
+        {
+            var b = t.BaseType;
+            while (b != null && b.FullName != "System.Object")
+            {
+                if (b.CustomAttributes.Any(a => a.AttributeType.Name == "ImplicitDataDefinitionForInheritorsAttribute"))
+                    return true;
+                b = b.BaseType;
+            }
+            return false;
+        }
+
+        var hasDataDef = HasDirectDataDefAttr(type) || HasImplicitDataDefAncestor(type);
+
+        if (hasDataDef)
         {
             var fullName = type.FullName ?? type.Name;
             if (!dataDefinitions.ContainsKey(fullName))
             {
                 var fields = fieldExtractor.ExtractDataFields(type);
-                if (fields.Count > 0)
+                // Abstract bases may have zero declared fields – keep them
+                // anyway so we know the polymorphic key exists.
+                dataDefinitions[fullName] = new DataDefinitionMetadata
                 {
-                    dataDefinitions[fullName] = new DataDefinitionMetadata
+                    ClassName = fullName,
+                    ShortName = type.Name,
+                    Summary = xmlDocs.GetTypeSummary(type),
+                    Fields = fields,
+                };
+            }
+
+            // Walk base chain – if any ancestor is also a DataDefinition,
+            // register this concrete type as an implementor of that base.
+            // Both abstract and concrete types contribute (a concrete
+            // intermediate may itself be a !type: target with further
+            // subclasses).
+            if (!type.IsAbstract)
+            {
+                var baseT = type.BaseType;
+                while (baseT != null && baseT.FullName != "System.Object")
+                {
+                    var baseHasDD = baseT.CustomAttributes
+                        .Any(a => a.AttributeType.Name is "DataDefinitionAttribute"
+                            or "ImplicitDataDefinitionForInheritorsAttribute");
+                    if (baseHasDD)
                     {
-                        ClassName = fullName,
-                        ShortName = type.Name,
-                        Summary = xmlDocs.GetTypeSummary(type),
-                        Fields = fields,
-                    };
+                        var baseFull = baseT.FullName ?? baseT.Name;
+                        if (!polymorphicTypes.TryGetValue(baseFull, out var impls))
+                            polymorphicTypes[baseFull] = impls = new List<string>();
+                        if (!impls.Contains(fullName))
+                            impls.Add(fullName);
+                    }
+                    baseT = baseT.BaseType;
                 }
             }
         }

@@ -206,6 +206,8 @@ public sealed class FieldExtractor
             "EntProtoId" => ("entityProtoId", null, null),
             "Color" => ("color", null, null),
             "SpriteSpecifier" => ("spriteSpecifier", null, null),
+            "SoundSpecifier" or "SoundPathSpecifier" or "SoundCollectionSpecifier"
+                => ("soundSpecifier", null, null),
             "Vector2" or "Vector2i" => ("vector2", null, null),
             "Vector3" or "Vector3i" => ("vector3", null, null),
             "Vector4" => ("vector4", null, null),
@@ -220,8 +222,29 @@ public sealed class FieldExtractor
             _ when type.IsEnum && type.CustomAttributes.Any(a => a.AttributeType.Name == "FlagsAttribute")
                 => ("flags", SafeEnumValues(type), null),
             _ when type.IsEnum => ("enum", SafeEnumValues(type), null),
+            _ when HasDataDefinitionAttributeChain(type) => ("object", null, null),
             _ => ("text", null, null),
         };
+    }
+
+    /// <summary>
+    /// True when <paramref name="type"/> itself or any of its ancestors is
+    /// annotated with <c>[DataDefinition]</c> or
+    /// <c>[ImplicitDataDefinitionForInheritors]</c>. Lets the editor treat
+    /// abstract polymorphic bases (e.g. <c>CEEntityEffect</c>) as object
+    /// kinds instead of falling back to plain text.
+    /// </summary>
+    private static bool HasDataDefinitionAttributeChain(Type type)
+    {
+        var t = type;
+        while (t != null && t.FullName != "System.Object")
+        {
+            if (t.CustomAttributes.Any(a => a.AttributeType.Name is "DataDefinitionAttribute"
+                or "ImplicitDataDefinitionForInheritorsAttribute"))
+                return true;
+            t = t.BaseType;
+        }
+        return false;
     }
 
     /// <summary>
@@ -293,10 +316,15 @@ public sealed class FieldExtractor
                 var elemArg = GetListElementType(memberType);
                 if (elemArg != null)
                 {
-                    var (ek, _, ep) = ClassifyType(elemArg);
+                    var (ek, eev, ep) = ClassifyType(elemArg);
                     field.ElementKind = ek;
                     field.ElementFullType = elemArg.FullName ?? elemArg.Name;
                     if (ep != null) field.ElementProtoTypeArg = ep;
+                    if (eev != null) field.ElementEnumValues = eev;
+
+                    // One level of inner nesting (List<List<X>>).
+                    var (eek, eeft, eep) = ExtractInnerElement(elemArg);
+                    if (eek != null) { field.ElementElementKind = eek; field.ElementElementFullType = eeft; field.ElementElementProtoTypeArg = eep; }
                 }
             }
             catch { /* ignore */ }
@@ -310,10 +338,14 @@ public sealed class FieldExtractor
                 var elemType = memberType.GetElementType();
                 if (elemType != null)
                 {
-                    var (ek, _, ep) = ClassifyType(elemType);
+                    var (ek, eev, ep) = ClassifyType(elemType);
                     field.ElementKind = ek;
                     field.ElementFullType = elemType.FullName ?? elemType.Name;
                     if (ep != null) field.ElementProtoTypeArg = ep;
+                    if (eev != null) field.ElementEnumValues = eev;
+
+                    var (eek, eeft, eep) = ExtractInnerElement(elemType);
+                    if (eek != null) { field.ElementElementKind = eek; field.ElementElementFullType = eeft; field.ElementElementProtoTypeArg = eep; }
                 }
             }
             catch { /* ignore */ }
@@ -327,14 +359,20 @@ public sealed class FieldExtractor
                 var (keyType, valueType) = GetDictionaryKeyValueTypes(memberType);
                 if (keyType != null && valueType != null)
                 {
-                    var (kk, _, kp) = ClassifyType(keyType);
-                    var (vk, _, vp) = ClassifyType(valueType);
+                    var (kk, kev, kp) = ClassifyType(keyType);
+                    var (vk, vev, vp) = ClassifyType(valueType);
                     field.KeyKind = kk;
                     field.KeyFullType = keyType.FullName ?? keyType.Name;
                     field.ValueKind = vk;
                     field.ValueFullType = valueType.FullName ?? valueType.Name;
                     if (kp != null) field.KeyProtoTypeArg = kp;
                     if (vp != null) field.ValueProtoTypeArg = vp;
+                    if (kev != null) field.KeyEnumValues = kev;
+                    if (vev != null) field.ValueEnumValues = vev;
+
+                    // One level of inner nesting (Dictionary<K, List<V>>).
+                    var (vek, veft, vep2) = ExtractInnerElement(valueType);
+                    if (vek != null) { field.ValueElementKind = vek; field.ValueElementFullType = veft; field.ValueElementProtoTypeArg = vep2; }
                 }
             }
             catch { /* ignore */ }
@@ -347,6 +385,23 @@ public sealed class FieldExtractor
             field.IsDataDefinition = true;
             field.DataDefinitionType = fullName;
         }
+    }
+
+    /// <summary>
+    /// Extract one level of inner element type info from a collection type
+    /// (List/Array). Returns (null, null, null) if the type is not a
+    /// recognized collection. Used to surface nested generics
+    /// (Dictionary&lt;K, List&lt;V&gt;&gt;, List&lt;List&lt;V&gt;&gt;) to the editor without
+    /// changing the existing flat metadata schema for the common case.
+    /// </summary>
+    private (string? kind, string? fullType, string? protoArg) ExtractInnerElement(Type type)
+    {
+        Type? inner = null;
+        if (IsListLike(type)) inner = GetListElementType(type);
+        else if (type.IsArray) inner = type.GetElementType();
+        if (inner == null) return (null, null, null);
+        var (k, _, p) = ClassifyType(inner);
+        return (k, inner.FullName ?? inner.Name, p);
     }
 
     private static Type? GetListElementType(Type type)
@@ -395,7 +450,25 @@ public sealed class FieldExtractor
             var args = type.GetGenericArguments();
             if (args.Length > 0)
             {
-                var argName = args[0].Name;
+                var protoType = args[0];
+
+                // Preferred: read the [Prototype("name")] attribute — the YAML
+                // index is keyed by exactly that string.  Falling back to the
+                // C# type name only works when the prototype follows the
+                // FooPrototype → "foo" convention (e.g. TagPrototype → "tag")
+                // but breaks for e.g. ContentTileDefinition → "tile".
+                foreach (var attr in protoType.GetCustomAttributesData())
+                {
+                    if (attr.AttributeType.Name != "PrototypeAttribute") continue;
+                    if (attr.ConstructorArguments.Count > 0 &&
+                        attr.ConstructorArguments[0].Value is string protoName &&
+                        !string.IsNullOrEmpty(protoName))
+                    {
+                        return ("protoId", null, protoName);
+                    }
+                }
+
+                var argName = protoType.Name;
                 if (argName.EndsWith("Prototype"))
                     argName = argName[..^"Prototype".Length];
                 var yamlType = char.ToLowerInvariant(argName[0]) + argName[1..];

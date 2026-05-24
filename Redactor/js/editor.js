@@ -133,14 +133,14 @@ function buildCard(proto, idx) {
     // Apply abstract styling
     if (isAbstract) card.classList.add('proto-abstract');
 
-    // header: (type badge) (abstract checkbox) (ID)  [delete]
+    // header: (type badge) (ID) (abstract checkbox)  [delete]
     const hdr = _div('proto-header');
     hdr.innerHTML = `<span class="proto-type-badge" title="${esc(meta?.summary || '')}">${esc(type)}</span>
-        <label class="proto-abstract-toggle" title="Abstract prototype (not instantiated)">
-            <input type="checkbox" class="abstract-cb" ${isAbstract ? 'checked' : ''}>
-            <span class="abstract-icon">👻</span>
-        </label>
         <span class="proto-id-text" title="Double-click to rename ID">${esc(String(id))}</span>
+        <label class="proto-abstract-toggle" title="Abstract prototype – serves only as a template for children, never spawned at runtime">
+            <input type="checkbox" class="abstract-cb" ${isAbstract ? 'checked' : ''}>
+            <span class="abstract-label">abstract</span>
+        </label>
         <button class="delete-proto-btn" title="Delete prototype">×</button>`;
 
     // Abstract checkbox
@@ -197,10 +197,15 @@ function buildCard(proto, idx) {
     if (inheriting) {
         const parentBar = _div('proto-parent-bar');
 
-        // Normalize parent value to always be an array for the list control
+        // Normalize parent value to always be an array for the list control.
+        // Critical: an empty string is treated as a single in-progress slot,
+        // NOT as "no parent". This is what makes "+ Add item" work – clicking
+        // it persists `proto.parent = ''` (via onParentChange below), the card
+        // re-renders, and the slot survives as an empty protoId search row
+        // for the user to fill in instead of vanishing.
         let parentVal = proto.parent;
-        if (parentVal && !Array.isArray(parentVal)) parentVal = [parentVal];
-        if (!parentVal) parentVal = [];
+        if (parentVal == null) parentVal = [];
+        else if (!Array.isArray(parentVal)) parentVal = [parentVal];
 
         const parentMeta = {
             fieldKind: 'list', tag: 'parent',
@@ -209,7 +214,11 @@ function buildCard(proto, idx) {
         };
         const parentSource = proto.parent !== undefined ? 'local' : 'default';
         const onParentChange = v => {
-            const arr = Array.isArray(v) ? v.filter(x => x) : [];
+            // Preserve empty-string slots so "+ Add item" doesn't immediately
+            // erase itself (listCtrl now commits on add so PrototypeLayerData
+            // and friends persist – an empty parent slot is a valid in-progress
+            // state that the user fills in next).
+            const arr = Array.isArray(v) ? v.filter(x => x != null) : [];
             if (arr.length === 0) deleteField([idx], 'parent');
             else if (arr.length === 1) setFieldValue([idx], 'parent', arr[0]);
             else setFieldValue([idx], 'parent', arr);
@@ -316,27 +325,39 @@ function startIdRename(idSpan, proto, idx) {
 }
 
 // ======================== COLLAPSE / EXPAND ALL ========================
+// Collapse state is keyed by *prototype id* and *component type*, not by
+// index — adding / removing / reordering a component must not bleed the
+// expanded/collapsed flag onto an unrelated card.
 function saveCollapseState(area) {
-    const state = { protos: [], comps: {} };
-    area.querySelectorAll('.proto-card').forEach((card, i) => {
-        state.protos[i] = card.classList.contains('collapsed');
-        state.comps[i] = [];
-        card.querySelectorAll('.component-card').forEach((comp, j) => {
-            state.comps[i][j] = comp.classList.contains('collapsed');
+    const state = { protos: {}, comps: {} };
+    area.querySelectorAll('.proto-card').forEach(card => {
+        const pid = card.dataset.protoId || card.querySelector('.proto-id-text')?.textContent || '';
+        if (!pid) return;
+        state.protos[pid] = card.classList.contains('collapsed');
+        state.comps[pid] = {};
+        card.querySelectorAll('.component-card').forEach(comp => {
+            const ct = comp.querySelector('.component-type')?.textContent || '';
+            if (!ct) return;
+            state.comps[pid][ct] = comp.classList.contains('collapsed');
         });
     });
     return state;
 }
 
 function restoreCollapseState(area, saved) {
-    area.querySelectorAll('.proto-card').forEach((card, i) => {
-        if (saved.protos[i] !== undefined) {
-            card.classList.toggle('collapsed', saved.protos[i]);
+    area.querySelectorAll('.proto-card').forEach(card => {
+        const pid = card.dataset.protoId || card.querySelector('.proto-id-text')?.textContent || '';
+        if (!pid) return;
+        if (saved.protos[pid] !== undefined) {
+            card.classList.toggle('collapsed', saved.protos[pid]);
         }
-        if (saved.comps[i]) {
-            card.querySelectorAll('.component-card').forEach((comp, j) => {
-                if (saved.comps[i][j] !== undefined) {
-                    comp.classList.toggle('collapsed', saved.comps[i][j]);
+        const cm = saved.comps[pid];
+        if (cm) {
+            card.querySelectorAll('.component-card').forEach(comp => {
+                const ct = comp.querySelector('.component-type')?.textContent || '';
+                if (!ct) return;
+                if (cm[ct] !== undefined) {
+                    comp.classList.toggle('collapsed', cm[ct]);
                 }
             });
         }
@@ -385,6 +406,15 @@ function buildComponentsSection(proto, protoIdx, inherited) {
 }
 
 function showAddComponentModal(proto, protoIdx) {
+    // Subsequence helper for fuzzy component search.
+    function isSubsequence(needle, hay) {
+        let i = 0;
+        for (let j = 0; j < hay.length && i < needle.length; j++) {
+            if (hay[j] === needle[i]) i++;
+        }
+        return i === needle.length;
+    }
+
     const overlay = _div('modal-overlay');
     const modal = _div('modal');
     modal.innerHTML = `<div class="modal-header"><h3>Add Component</h3><button class="modal-close">\u00d7</button></div>
@@ -408,7 +438,17 @@ function showAddComponentModal(proto, protoIdx) {
     function renderList(q) {
         listEl.innerHTML = '';
         const lq = (q || '').toLowerCase();
-        const filtered = lq ? types.filter(t => t.toLowerCase().includes(lq)) : types;
+        // First pass: classic substring match (fast, expected case).
+        // Second pass: subsequence ("staminath" → "ceStaminaThrowable") so
+        // partial / fuzzy queries still surface the right component.
+        let filtered;
+        if (!lq) {
+            filtered = types;
+        } else {
+            const substr = types.filter(t => t.toLowerCase().includes(lq));
+            if (substr.length) filtered = substr;
+            else filtered = types.filter(t => isSubsequence(lq, t.toLowerCase()));
+        }
         if (!filtered.length) { listEl.innerHTML = '<div class="dropdown-empty">No components found</div>'; return; }
         for (const t of filtered.slice(0, 100)) {
             const el = _div('modal-list-item');
@@ -444,7 +484,12 @@ function localizeComponent(protoIdx, compType) {
 }
 
 function compCard(compType, data, isInh, protoIdx, compIdx, inherited) {
-    const card = _div('component-card collapsed' + (isInh ? ' inherited' : ' comp-local'));
+    // Collapsed by default ONLY for inherited components that haven't been
+    // overridden in this prototype. Local components (= the user explicitly
+    // wrote them in this YAML, or they carry overrides on top of an inherited
+    // base) start expanded so the changes are immediately visible.
+    const startCollapsed = isInh;
+    const card = _div('component-card' + (startCollapsed ? ' collapsed' : '') + (isInh ? ' inherited' : ' comp-local'));
     const cMeta = state.metadata?.components?.[compType];
     const hdr = _div('component-header');
     hdr.innerHTML = `<span class="component-type" title="${esc(cMeta?.summary || '')}">${esc(compType)}</span>`;

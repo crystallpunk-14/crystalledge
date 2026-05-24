@@ -11,6 +11,7 @@ internal sealed class RedactorContext
     public required string RedactorDir { get; init; }
     public required string PrototypesDir { get; init; }
     public required string TexturesDir { get; init; }
+    public required string AudioDir { get; init; }
     public required string EnginePrototypesDir { get; init; }
     public required ProtoIndexService ProtoIndex { get; init; }
     public required SourceLocator SourceLocator { get; init; }
@@ -33,6 +34,9 @@ internal static class StaticMime
         ".svg" => "image/svg+xml",
         ".ico" => "image/x-icon",
         ".woff2" => "font/woff2",
+        ".ogg" => "audio/ogg",
+        ".wav" => "audio/wav",
+        ".mp3" => "audio/mpeg",
         _ => "application/octet-stream",
     };
 }

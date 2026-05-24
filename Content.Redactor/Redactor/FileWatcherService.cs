@@ -21,7 +21,7 @@ internal sealed class FileWatcherService : IDisposable
     private readonly ConcurrentDictionary<string, Timer> _pending = new();
     private readonly ConcurrentDictionary<string, DateTime> _suppress = new();
     private static readonly TimeSpan DebounceDelay = TimeSpan.FromMilliseconds(250);
-    private static readonly TimeSpan SuppressWindow = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan SuppressWindow = TimeSpan.FromSeconds(5);
 
     public event Action<FileChangeEvent>? Changed;
 
@@ -63,11 +63,15 @@ internal sealed class FileWatcherService : IDisposable
     private void Schedule(string fullPath, FileChangeKind kind)
     {
         var canonical = Path.GetFullPath(fullPath);
-        if (_suppress.TryGetValue(canonical, out var suppressedAt) &&
-            DateTime.UtcNow - suppressedAt < SuppressWindow)
+        // A single redactor write usually produces several FileSystemWatcher
+        // events (Created+Changed, or multiple Changed).  Keep the suppression
+        // timestamp until the window elapses so every event in that burst is
+        // filtered, not just the first one.
+        if (_suppress.TryGetValue(canonical, out var suppressedAt))
         {
+            if (DateTime.UtcNow - suppressedAt < SuppressWindow)
+                return;
             _suppress.TryRemove(canonical, out _);
-            return;
         }
 
         _pending.AddOrUpdate(

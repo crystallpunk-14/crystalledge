@@ -27,10 +27,17 @@ function validateField(meta, value, source) {
     const isMissing = value === undefined || value === null
         || (typeof value === 'string' && value === '');
 
-    // Required field check — only flagged when *no* effective value exists
-    // (i.e. neither local override nor inherited/default).
-    if (meta.required && isMissing && source !== 'inherited' && source !== 'default') {
-        issues.push({ severity: 'error', message: 'Required field is empty' });
+    // Required field check.
+    //
+    // A required field is satisfied only by an *explicit* value somewhere
+    // in the inheritance chain. `source === 'default'` means the field
+    // fell back to the type's default (e.g. null/0/empty string) because
+    // nothing in the prototype tree set it — this is still a missing
+    // required field from the engine's perspective and must be flagged.
+    if (meta.required) {
+        if (source === 'default' || isMissing) {
+            issues.push({ severity: 'error', message: 'Required field is empty' });
+        }
     }
 
     if (isMissing) return issues;

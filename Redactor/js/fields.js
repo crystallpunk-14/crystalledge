@@ -1,5 +1,5 @@
 ﻿// ======================================================================
-//  SS14 Prototype Redactor вЂ“ Field Renderers (Controls)
+//  SS14 Prototype Redactor – Field Renderers (Controls)
 // ======================================================================
 
 'use strict';
@@ -7,7 +7,7 @@
 /** Ctrl+click helper: find proto by type+id in the index and open its file. */
 function navigateToProto(type, id) {
     if (!id || !state.protoIndex) return;
-    // type may not always match вЂ” scan all types
+    // type may not always match — scan all types
     const types = type ? [type] : Object.keys(state.protoIndex);
     for (const t of types) {
         const entries = state.protoIndex[t];
@@ -20,12 +20,12 @@ function navigateToProto(type, id) {
 
 /**
  * Build a field row with override tracking.
- * @param {string} key вЂ“ YAML tag
- * @param {object} meta вЂ“ field metadata
- * @param {*} value вЂ“ current effective value
- * @param {string} source вЂ“ 'local' | 'inherited' | 'default'
- * @param {function} onChange вЂ“ callback when value changes
- * @param {function|null} onReset вЂ“ callback to reset (remove) the field from YAML
+ * @param {string} key – YAML tag
+ * @param {object} meta – field metadata
+ * @param {*} value – current effective value
+ * @param {string} source – 'local' | 'inherited' | 'default'
+ * @param {function} onChange – callback when value changes
+ * @param {function|null} onReset – callback to reset (remove) the field from YAML
  */
 function fieldRow(key, meta, value, source, onChange, onReset) {
     const isLocal = source === 'local';
@@ -40,6 +40,13 @@ function fieldRow(key, meta, value, source, onChange, onReset) {
     const lbl = _el('label');
     lbl.className = 'field-label' + (meta.required ? ' required' : '') + (isLocal ? ' field-label-bold' : '');
     lbl.textContent = key;
+    if (meta.required) {
+        const star = _el('span');
+        star.className = 'field-required-star';
+        star.textContent = '*';
+        star.title = 'Required field';
+        lbl.appendChild(star);
+    }
     const tipParts = [];
     if (meta.summary) tipParts.push(meta.summary);
     tipParts.push(`Type: ${meta.fullType || meta.type || meta.fieldKind || 'unknown'}`);
@@ -63,7 +70,7 @@ function fieldRow(key, meta, value, source, onChange, onReset) {
         const resetBtn = _el('button');
         resetBtn.className = 'field-reset-btn';
         resetBtn.title = 'Reset to inherited / default value';
-        resetBtn.textContent = 'в†є';
+        resetBtn.textContent = '↺';
         resetBtn.addEventListener('click', e => { e.stopPropagation(); onReset(); });
         controlWrap.appendChild(resetBtn);
     }
@@ -89,13 +96,16 @@ function genericRow(key, value, source, onChange, onReset) {
     row.appendChild(lbl);
 
     const controlWrap = _div('field-control-wrap');
+    // `autoControl` is the no-metadata sibling of `controlFor` – same
+    // architectural contract: never coerce an object into '[object Object]'.
+    // Both ultimately funnel through the same scalar/list/object renderers.
     controlWrap.appendChild(autoControl(value, false, onChange));
 
     if (isLocal && onReset) {
         const resetBtn = _el('button');
         resetBtn.className = 'field-reset-btn';
         resetBtn.title = 'Reset to inherited / default value';
-        resetBtn.textContent = 'в†є';
+        resetBtn.textContent = '↺';
         resetBtn.addEventListener('click', e => { e.stopPropagation(); onReset(); });
         controlWrap.appendChild(resetBtn);
     }
@@ -104,8 +114,42 @@ function genericRow(key, value, source, onChange, onReset) {
     return row;
 }
 
+/**
+ * Single rendering entry point for every value the editor displays – top
+ * level fields, list elements, map values, dataDef inner fields, component
+ * fields, all funnel through here. Adding a new control type means adding
+ * one switch case; there is no parallel switch elsewhere in the codebase.
+ *
+ * Robustness contract: regardless of how stale or mismatched the metadata
+ * is, this function never falls back to coercing an object value into the
+ * literal string "[object Object]". A plain object always lands in either
+ * `dataDefCtrl` (when its full type is a known DataDefinition) or
+ * `unsupportedStub` (with a raw-YAML escape hatch).
+ */
 function controlFor(meta, value, dis, onChange) {
-    switch (meta.fieldKind) {
+    const kind = meta.fieldKind;
+    const isObj = value !== null && typeof value === 'object' && !Array.isArray(value);
+
+    // Polymorphic shapes that legitimately accept BOTH scalars and objects
+    // (e.g. SoundSpecifier may be a bare path string or a {path, params}
+    // mapping) are handled inside their dedicated control – do not divert.
+    const polymorphicKinds = new Set(['soundSpecifier', 'spriteSpecifier']);
+
+    // ── Universal object-value guard ────────────────────────────────────
+    // If the metadata claims this is a scalar but the actual value is an
+    // object, the metadata is stale / mismatched – never let a scalar control
+    // stringify it. Route to the best-known structured renderer instead.
+    if (isObj && !polymorphicKinds.has(kind)
+        && kind !== 'list' && kind !== 'map' && kind !== 'vector2'
+        && kind !== 'vector3' && kind !== 'vector4' && kind !== 'box2') {
+        const ddType = meta.dataDefinitionType || meta.fullType || meta.type;
+        if (ddType && state.metadata?.dataDefinitions?.[ddType])
+            return dataDefCtrl(value, ddType, dis, onChange);
+        // Last resort: surface the gap and offer raw YAML.
+        return unsupportedStub(ddType || 'Object', value, onChange);
+    }
+
+    switch (kind) {
         case 'boolean':       return boolCtrl(value, dis, onChange);
         case 'integer':       return intCtrl(value, dis, onChange);
         case 'float':         return floatCtrl(value, dis, onChange);
@@ -122,10 +166,57 @@ function controlFor(meta, value, dis, onChange) {
         case 'vector4':       return vectorCtrl(value, ['x', 'y', 'z', 'w'], dis, onChange);
         case 'box2':          return vectorCtrl(value, ['l', 'b', 'r', 't'], dis, onChange);
         case 'spriteSpecifier': return spriteSpecifierCtrl(value, dis, onChange);
+        case 'soundSpecifier':  return soundSpecifierCtrl(value, dis, onChange);
         default:
             if (meta.isDataDefinition && meta.dataDefinitionType) return dataDefCtrl(value, meta.dataDefinitionType, dis, onChange);
-            return autoControl(value, dis, onChange);
+            return autoControl(value, dis, onChange, meta.fullType || meta.type);
     }
+}
+
+/**
+ * Render a yellow placeholder for fields whose backing C# type the editor
+ * does not yet know how to serialize. Surfaces the underlying type so the
+ * user (and we) can see exactly which serializer is missing.
+ *
+ * `value` and `onChange` are optional – when provided, the stub exposes an
+ * "Open raw YAML" toggle so power users can still hand-edit the value.
+ */
+function unsupportedStub(typeName, value, onChange) {
+    const w = _div('field-control');
+    const box = _div('field-unsupported-stub');
+    box.innerHTML = `TODO: Serialize <b>[${esc(String(typeName || 'unknown'))}]</b>`;
+    w.appendChild(box);
+
+    if (typeof onChange === 'function') {
+        const btn = _el('button');
+        btn.type = 'button';
+        btn.className = 'field-unsupported-raw-btn';
+        btn.textContent = 'Open raw YAML';
+        btn.title = 'Edit the underlying YAML by hand. Dangerous – no validation.';
+        box.appendChild(btn);
+
+        const ta = _el('textarea');
+        ta.className = 'field-textarea field-unsupported-raw';
+        ta.style.display = 'none';
+        const yamlStr = (value === undefined || value === null) ? '' : dumpYaml(value).trim();
+        ta.value = yamlStr;
+        ta.rows = Math.min(Math.max(yamlStr.split('\n').length, 3), 20);
+        ta.addEventListener('change', () => {
+            try {
+                const p = jsyaml.load(ta.value, { schema: SCHEMA });
+                ta.classList.remove('error');
+                onChange(p);
+            } catch { ta.classList.add('error'); }
+        });
+        btn.addEventListener('click', () => {
+            const open = ta.style.display === '';
+            ta.style.display = open ? 'none' : '';
+            btn.textContent = open ? 'Open raw YAML' : 'Close raw YAML';
+            if (!open) ta.focus();
+        });
+        w.appendChild(ta);
+    }
+    return w;
 }
 
 function boolCtrl(val, dis, cb) {
@@ -263,7 +354,7 @@ function searchDropdown(val, searchType, dis, cb) {
     const w = _div('field-control search-dropdown');
     const inp = _el('input'); inp.type = 'text'; inp.className = 'field-input dropdown-input';
     inp.value = val != null ? String(val) : ''; inp.disabled = dis;
-    inp.placeholder = 'Search prototypesвЂ¦'; inp.autocomplete = 'off';
+    inp.placeholder = 'Search prototypes…'; inp.autocomplete = 'off';
     const dd = _div('dropdown-list');
     let timer, selIdx = -1;
     async function doSearch(q) {
@@ -301,7 +392,7 @@ function renderDd(dd, results, inp, cb) {
     if (!results.length) { dd.innerHTML = '<div class="dropdown-empty">No results</div>'; return; }
     for (const r of results) {
         const el = _div('dropdown-item');
-        el.innerHTML = `<span class="dropdown-id">${esc(r.id)}</span>${r.name ? `<span class="dropdown-name">${esc(r.name)}</span>` : ''}`;
+        el.innerHTML = `<span class="dropdown-id">${esc(r.id)}</span>`;
         el.addEventListener('mousedown', e => { e.preventDefault(); inp.value = r.id; dd.classList.remove('visible'); cb(r.id); });
         dd.appendChild(el);
     }
@@ -312,29 +403,39 @@ function hlDd(items, idx) { items.forEach((el, i) => el.classList.toggle('select
 // listCtrl / mapCtrl / dataDefCtrl moved to field-controls-collections.js
 
 // ======================== ELEMENT HELPERS ===============================
-function elementControl(kind, fullType, protoArg, val, dis, cb) {
-    if (fullType && state.metadata?.dataDefinitions?.[fullType]) {
-        return dataDefCtrl(val, fullType, dis, cb);
-    }
-    if (val !== null && typeof val === 'object' && !Array.isArray(val) && (kind === 'text' || kind === 'object')) {
-        return autoControl(val, dis, cb);
-    }
-    switch (kind) {
-        case 'boolean':       return boolCtrl(val, dis, cb);
-        case 'integer':       return intCtrl(val, dis, cb);
-        case 'float':         return floatCtrl(val, dis, cb);
-        case 'text':          return textCtrl(val, dis, cb);
-        case 'color':         return colorCtrl(val, dis, cb);
-        case 'entityProtoId': return searchDropdown(val, 'entity', dis, cb);
-        case 'protoId':       return searchDropdown(val, protoArg || 'entity', dis, cb);
-        case 'vector2':       return vectorCtrl(val, ['x', 'y'], dis, cb);
-        case 'vector3':       return vectorCtrl(val, ['x', 'y', 'z'], dis, cb);
-        case 'vector4':       return vectorCtrl(val, ['x', 'y', 'z', 'w'], dis, cb);
-        case 'box2':          return vectorCtrl(val, ['l', 'b', 'r', 't'], dis, cb);
-        case 'spriteSpecifier': return spriteSpecifierCtrl(val, dis, cb);
-        case 'object':        return autoControl(val, dis, cb);
-        default:              return autoControl(val, dis, cb);
-    }
+/**
+ * Build a synthetic field meta describing a single *element* of a list, a
+ * single *value* of a map, or any nested value that doesn't have its own
+ * `field` entry from the C# extractor. This is the cornerstone of the
+ * "one rendering pipeline" rule: every nested value – no matter how deep –
+ * is rendered by `controlFor(meta, …)`, never by a parallel switch.
+ *
+ * @param {string|undefined} kind  – fieldKind (e.g. 'soundSpecifier', 'integer')
+ * @param {string|undefined} fullType – C# full type name, used to look up DataDefinitions
+ * @param {string|undefined} protoArg – protoTypeArg for protoId fields
+ */
+function synthMeta(kind, fullType, protoArg, extras) {
+    const isDD = !!(fullType && state.metadata?.dataDefinitions?.[fullType]);
+    const m = {
+        fieldKind: kind || (isDD ? 'object' : 'text'),
+        type: fullType,
+        fullType,
+        protoTypeArg: protoArg,
+        isDataDefinition: isDD,
+        dataDefinitionType: isDD ? fullType : null,
+        required: false,
+    };
+    if (extras) Object.assign(m, extras);
+    return m;
+}
+
+/**
+ * Render a nested element using the single unified pipeline. List and map
+ * editors call this for every element/value so behaviour is identical to a
+ * top-level field of the same type.
+ */
+function elementControl(kind, fullType, protoArg, val, dis, cb, extras) {
+    return controlFor(synthMeta(kind, fullType, protoArg, extras), val, dis, cb);
 }
 
 function defaultForKind(kind) {
@@ -343,11 +444,12 @@ function defaultForKind(kind) {
         case 'integer': return 0;
         case 'float':   return 0.0;
         case 'text': case 'entityProtoId': case 'protoId': case 'color': return '';
-        case 'vector2': return { x: 0, y: 0 };
-        case 'vector3': return { x: 0, y: 0, z: 0 };
-        case 'vector4': return { x: 0, y: 0, z: 0, w: 0 };
-        case 'box2':    return { l: 0, b: 0, r: 0, t: 0 };
+        case 'vector2': return '0, 0';
+        case 'vector3': return '0, 0, 0';
+        case 'vector4': return '0, 0, 0, 0';
+        case 'box2':    return '0, 0, 0, 0';
         case 'spriteSpecifier': return { sprite: '', state: '' };
+        case 'soundSpecifier': return { path: '' };
         case 'object':  return {};
         default: return '';
     }
@@ -357,7 +459,7 @@ function defaultValueForMeta(meta) {
     return defaultForKind(meta.fieldKind);
 }
 
-function autoControl(val, dis, cb) {
+function autoControl(val, dis, cb, typeHint) {
     if (val === null || val === undefined) return textCtrl('', dis, cb);
     if (typeof val === 'boolean') return boolCtrl(val, dis, cb);
     if (typeof val === 'number') return Number.isInteger(val) ? intCtrl(val, dis, cb) : floatCtrl(val, dis, cb);
@@ -365,16 +467,10 @@ function autoControl(val, dis, cb) {
     if (Array.isArray(val)) {
         return listCtrl(val, { elementKind: inferKindFromArray(val), elementFullType: null, elementProtoTypeArg: null }, dis, cb);
     }
-    const w = _div('field-control');
-    const ta = _el('textarea'); ta.className = 'field-textarea';
-    const yamlStr = dumpYaml(val).trim();
-    ta.value = yamlStr; ta.disabled = dis;
-    ta.rows = Math.min(yamlStr.split('\n').length + 1, 20);
-    ta.addEventListener('change', () => {
-        try { const p = jsyaml.load(ta.value, { schema: SCHEMA }); ta.classList.remove('error'); cb(p); }
-        catch { ta.classList.add('error'); }
-    });
-    w.appendChild(ta); return w;
+    // Object value with no known schema – the editor can't safely round-trip
+    // these. Surface a yellow stub pointing at the type so the gap is visible,
+    // with an opt-in raw-YAML escape hatch for power users.
+    return unsupportedStub(typeHint || 'Object', val, cb);
 }
 
 function inferKindFromArray(arr) {

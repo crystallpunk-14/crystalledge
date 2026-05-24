@@ -68,6 +68,9 @@ function startFileEventStream() {
             }
             try {
                 const { content } = await api.loadFile(path);
+                // Identical content (e.g. self-write echo that slipped past the
+                // server-side suppress window) — do nothing, keep cursor & UI.
+                if (content === fs.content) return;
                 fs.content = content;
                 fs.yaml = parseYaml(content);
                 fs.history = [content];

@@ -8,6 +8,14 @@ public sealed class MetadataRoot
     public Dictionary<string, PrototypeMetadata> Prototypes { get; set; } = new();
     public Dictionary<string, ComponentMetadata> Components { get; set; } = new();
     public Dictionary<string, DataDefinitionMetadata> DataDefinitions { get; set; } = new();
+
+    /// <summary>
+    /// Maps an abstract / polymorphic DataDefinition base type's full name
+    /// (e.g. <c>Content.Shared._CE.EntityEffects.CEEntityEffect</c>) to the
+    /// list of concrete implementor full names that can be picked at the
+    /// <c>!type:</c> YAML tag site. Empty list means "no implementors found".
+    /// </summary>
+    public Dictionary<string, List<string>> PolymorphicTypes { get; set; } = new();
 }
 
 public sealed class PrototypeMetadata
@@ -55,14 +63,27 @@ public sealed class FieldMetadata
     public string? ElementKind { get; set; }
     public string? ElementFullType { get; set; }
     public string? ElementProtoTypeArg { get; set; }
+    public string[]? ElementEnumValues { get; set; }
 
     // Map key/value info
     public string? KeyKind { get; set; }
     public string? KeyFullType { get; set; }
     public string? KeyProtoTypeArg { get; set; }
+    public string[]? KeyEnumValues { get; set; }
     public string? ValueKind { get; set; }
     public string? ValueFullType { get; set; }
     public string? ValueProtoTypeArg { get; set; }
+    public string[]? ValueEnumValues { get; set; }
+
+    // Nested element info for one level of inner generics
+    // (e.g. Dictionary<K, List<V>> -> ValueElement* describes V;
+    //  List<List<V>> -> ElementElement* describes V).
+    public string? ValueElementKind { get; set; }
+    public string? ValueElementFullType { get; set; }
+    public string? ValueElementProtoTypeArg { get; set; }
+    public string? ElementElementKind { get; set; }
+    public string? ElementElementFullType { get; set; }
+    public string? ElementElementProtoTypeArg { get; set; }
 
     // DataDefinition reference
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
