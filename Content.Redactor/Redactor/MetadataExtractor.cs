@@ -53,13 +53,10 @@ public static class MetadataExtractor
         var resolver = new PathAssemblyResolver(pathMap.Values);
         using var mlc = new MetadataLoadContext(resolver, "System.Runtime");
 
-        // Load XML documentation from all bin directories
+        // Load XML documentation from all bin directories (accumulates across calls)
         var xmlDocs = new XmlDocReader();
         foreach (var dir in binDirs)
-        {
-            var xmlFiles = Directory.GetFiles(dir, "*.xml", SearchOption.TopDirectoryOnly);
-            if (xmlFiles.Length > 0) xmlDocs.LoadFromDirectory(dir);
-        }
+            xmlDocs.LoadFromDirectory(dir);
         if (xmlDocs.Count > 0)
             Console.WriteLine($"[Redactor] Loaded {xmlDocs.Count} XML doc entries");
         else

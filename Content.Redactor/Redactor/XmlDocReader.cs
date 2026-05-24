@@ -17,10 +17,10 @@ public sealed class XmlDocReader
 
     /// <summary>
     /// Load all .xml doc files from the specified directory.
+    /// Entries accumulate across multiple calls (server and client bin dirs both contribute).
     /// </summary>
     public void LoadFromDirectory(string directory)
     {
-        _docs.Clear();
         foreach (var xmlPath in Directory.GetFiles(directory, "*.xml", SearchOption.TopDirectoryOnly))
         {
             try

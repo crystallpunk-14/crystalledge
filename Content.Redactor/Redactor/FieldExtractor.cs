@@ -214,15 +214,60 @@ public sealed class FieldExtractor
             "LocId" => ("text", null, null),
             _ when name.StartsWith("ProtoId") && type.IsGenericType => ExtractProtoIdInfo(type),
             _ when name.StartsWith("EntProtoId") && type.IsGenericType => ("entityProtoId", null, null),
-            _ when (name.Contains("List") || name.Contains("HashSet")) && type.IsGenericType
-                => ("list", null, null),
-            _ when name.Contains("Dictionary") && type.IsGenericType => ("map", null, null),
+            _ when type.IsArray => ("list", null, null),
+            _ when IsDictionaryLike(type) => ("map", null, null),
+            _ when IsListLike(type) => ("list", null, null),
             _ when type.IsEnum && type.CustomAttributes.Any(a => a.AttributeType.Name == "FlagsAttribute")
                 => ("flags", SafeEnumValues(type), null),
             _ when type.IsEnum => ("enum", SafeEnumValues(type), null),
-            _ when type.IsArray => ("list", null, null),
             _ => ("text", null, null),
         };
+    }
+
+    /// <summary>
+    /// Known generic type names (Name property, with `1/`2 suffix) treated as ordered/unordered lists.
+    /// </summary>
+    private static readonly HashSet<string> _listTypeNames = new(StringComparer.Ordinal)
+    {
+        "List`1", "IList`1", "IReadOnlyList`1",
+        "ICollection`1", "IReadOnlyCollection`1", "IEnumerable`1",
+        "HashSet`1", "ISet`1", "IReadOnlySet`1", "SortedSet`1",
+        "Queue`1", "Stack`1", "LinkedList`1",
+        "ImmutableArray`1", "ImmutableList`1", "ImmutableHashSet`1",
+        "ImmutableQueue`1", "ImmutableStack`1", "ImmutableSortedSet`1",
+        "Collection`1", "ReadOnlyCollection`1", "ObservableCollection`1",
+    };
+
+    private static readonly HashSet<string> _dictTypeNames = new(StringComparer.Ordinal)
+    {
+        "Dictionary`2", "IDictionary`2", "IReadOnlyDictionary`2",
+        "SortedDictionary`2", "SortedList`2", "ConcurrentDictionary`2",
+        "ImmutableDictionary`2", "ImmutableSortedDictionary`2",
+    };
+
+    private static bool IsListLike(Type type)
+    {
+        if (!type.IsGenericType) return false;
+        if (_listTypeNames.Contains(type.Name)) return true;
+        // Probe interfaces for IEnumerable<T> / ICollection<T> implementations.
+        foreach (var iface in type.GetInterfaces())
+        {
+            if (iface.IsGenericType && _listTypeNames.Contains(iface.Name))
+                return true;
+        }
+        return false;
+    }
+
+    private static bool IsDictionaryLike(Type type)
+    {
+        if (!type.IsGenericType) return false;
+        if (_dictTypeNames.Contains(type.Name)) return true;
+        foreach (var iface in type.GetInterfaces())
+        {
+            if (iface.IsGenericType && _dictTypeNames.Contains(iface.Name))
+                return true;
+        }
+        return false;
     }
 
     private void EnrichFieldTypeInfo(FieldMetadata field, Type memberType)
@@ -240,17 +285,17 @@ public sealed class FieldExtractor
             catch { /* fall through */ }
         }
 
-        // List / HashSet
-        if ((name.Contains("List") || name.Contains("HashSet")) && memberType.IsGenericType)
+        // List-like (any generic IEnumerable<T> we recognize)
+        if (IsListLike(memberType))
         {
             try
             {
-                var args = memberType.GetGenericArguments();
-                if (args.Length > 0)
+                var elemArg = GetListElementType(memberType);
+                if (elemArg != null)
                 {
-                    var (ek, _, ep) = ClassifyType(args[0]);
+                    var (ek, _, ep) = ClassifyType(elemArg);
                     field.ElementKind = ek;
-                    field.ElementFullType = args[0].FullName ?? args[0].Name;
+                    field.ElementFullType = elemArg.FullName ?? elemArg.Name;
                     if (ep != null) field.ElementProtoTypeArg = ep;
                 }
             }
@@ -274,20 +319,20 @@ public sealed class FieldExtractor
             catch { /* ignore */ }
         }
 
-        // Dictionary
-        if (name.Contains("Dictionary") && memberType.IsGenericType)
+        // Dictionary-like
+        if (IsDictionaryLike(memberType))
         {
             try
             {
-                var args = memberType.GetGenericArguments();
-                if (args.Length >= 2)
+                var (keyType, valueType) = GetDictionaryKeyValueTypes(memberType);
+                if (keyType != null && valueType != null)
                 {
-                    var (kk, _, kp) = ClassifyType(args[0]);
-                    var (vk, _, vp) = ClassifyType(args[1]);
+                    var (kk, _, kp) = ClassifyType(keyType);
+                    var (vk, _, vp) = ClassifyType(valueType);
                     field.KeyKind = kk;
-                    field.KeyFullType = args[0].FullName ?? args[0].Name;
+                    field.KeyFullType = keyType.FullName ?? keyType.Name;
                     field.ValueKind = vk;
-                    field.ValueFullType = args[1].FullName ?? args[1].Name;
+                    field.ValueFullType = valueType.FullName ?? valueType.Name;
                     if (kp != null) field.KeyProtoTypeArg = kp;
                     if (vp != null) field.ValueProtoTypeArg = vp;
                 }
@@ -302,6 +347,45 @@ public sealed class FieldExtractor
             field.IsDataDefinition = true;
             field.DataDefinitionType = fullName;
         }
+    }
+
+    private static Type? GetListElementType(Type type)
+    {
+        // Direct generic argument first (List<T>, HashSet<T>, ImmutableArray<T>, ...)
+        if (type.IsGenericType)
+        {
+            var args = type.GetGenericArguments();
+            if (args.Length == 1) return args[0];
+        }
+        // Otherwise probe IEnumerable<T> interface
+        foreach (var iface in type.GetInterfaces())
+        {
+            if (iface.IsGenericType && iface.Name == "IEnumerable`1")
+            {
+                var args = iface.GetGenericArguments();
+                if (args.Length == 1) return args[0];
+            }
+        }
+        return null;
+    }
+
+    private static (Type? key, Type? value) GetDictionaryKeyValueTypes(Type type)
+    {
+        if (type.IsGenericType)
+        {
+            var args = type.GetGenericArguments();
+            if (args.Length >= 2) return (args[0], args[1]);
+        }
+        foreach (var iface in type.GetInterfaces())
+        {
+            if (iface.IsGenericType &&
+                (iface.Name == "IDictionary`2" || iface.Name == "IReadOnlyDictionary`2"))
+            {
+                var args = iface.GetGenericArguments();
+                if (args.Length == 2) return (args[0], args[1]);
+            }
+        }
+        return (null, null);
     }
 
     private static (string, string[]?, string?) ExtractProtoIdInfo(Type type)

@@ -5,6 +5,20 @@
 'use strict';
 
 // ======================== EDITOR =======================================
+// renderEditor() rebuilds the whole right pane.  This is intentionally
+// blunt — the editor is rarely the bottleneck — but rapid mutations
+// (color pickers, sliders, batched undo) used to trigger many renders
+// per frame.  scheduleRenderEditor() coalesces those into one rAF tick.
+let _renderScheduled = false;
+function scheduleRenderEditor() {
+    if (_renderScheduled) return;
+    _renderScheduled = true;
+    requestAnimationFrame(() => {
+        _renderScheduled = false;
+        renderEditor();
+    });
+}
+
 function renderEditor() {
     const area = document.getElementById('editor-area');
     if (!state.currentFile) {
@@ -552,7 +566,7 @@ function setFieldValue(path, tag, value) {
     obj[tag] = value;
     state.resolvedCache.clear();
     commitChange(fs);
-    renderEditor();
+    scheduleRenderEditor();
 }
 
 function deleteField(path, tag) {
@@ -564,7 +578,7 @@ function deleteField(path, tag) {
     delete obj[tag];
     state.resolvedCache.clear();
     commitChange(fs);
-    renderEditor();
+    scheduleRenderEditor();
 }
 
 

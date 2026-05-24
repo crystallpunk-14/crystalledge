@@ -37,39 +37,56 @@ document.addEventListener('keydown', e => {
     }
 });
 
-// ======================== FILE WATCHER ==================================
-async function pollFileChanges() {
-    const paths = [...state.openFiles.keys()];
-    if (!paths.length) return;
-    try {
-        const stamps = await api.fileStamps(paths);
-        for (const [path, ticks] of Object.entries(stamps)) {
-            if (ticks === -1) continue;
-            const prev = state.fileStamps.get(path);
-            if (prev !== undefined && prev !== ticks) {
-                const fs = state.openFiles.get(path);
-                if (fs && !fs.modified) {
-                    try {
-                        const { content } = await api.loadFile(path);
-                        fs.content = content;
-                        fs.yaml = parseYaml(content);
-                        fs.history = [content]; fs.historyIdx = 0;
-                        state.resolvedCache.clear();
-                        if (state.currentFile === path) renderEditor();
-                        toast(`Reloaded: ${path.split('/').pop()}`, 'info');
-                    } catch (e) {
-                        console.error('[FileWatcher] Reload failed:', path, e);
-                    }
-                } else if (fs && fs.modified) {
-                    toast(`${path.split('/').pop()} changed externally (local edits kept)`, 'warning');
-                }
-            }
-            state.fileStamps.set(path, ticks);
-        }
-    } catch (e) {
-        // Polling errors are non-critical, but log them
-        console.warn('[FileWatcher] Poll error:', e);
+// ======================== FILE WATCHER (SSE) ============================
+// The server pushes "file-change" events over an SSE channel; we react by
+// reloading any open file whose external timestamp changed and the user hasn't
+// modified locally. Falls back silently if EventSource is unavailable.
+function startFileEventStream() {
+    if (typeof EventSource === 'undefined') {
+        console.warn('[FileWatcher] EventSource unavailable; live reload disabled.');
+        return;
     }
+    let backoff = 1000;
+    function connect() {
+        const es = new EventSource('/api/events');
+        es.onopen = () => { backoff = 1000; };
+        es.onmessage = async (ev) => {
+            let payload;
+            try { payload = JSON.parse(ev.data); } catch { return; }
+            if (!payload || payload.type !== 'file-change') return;
+            const path = payload.path;
+            if (!path) return;
+            const fs = state.openFiles.get(path);
+            if (!fs) return;
+            if (payload.kind === 'deleted') {
+                toast(`${path.split('/').pop()} was deleted externally`, 'warning');
+                return;
+            }
+            if (fs.modified) {
+                toast(`${path.split('/').pop()} changed externally (local edits kept)`, 'warning');
+                return;
+            }
+            try {
+                const { content } = await api.loadFile(path);
+                fs.content = content;
+                fs.yaml = parseYaml(content);
+                fs.history = [content];
+                fs.historyIdx = 0;
+                state.resolvedCache.clear();
+                if (state.currentFile === path) renderEditor();
+                toast(`Reloaded: ${path.split('/').pop()}`, 'info');
+            } catch (e) {
+                console.error('[FileWatcher] Reload failed:', path, e);
+            }
+        };
+        es.onerror = () => {
+            es.close();
+            // Reconnect with capped exponential backoff.
+            backoff = Math.min(backoff * 2, 30000);
+            setTimeout(connect, backoff);
+        };
+    }
+    connect();
 }
 
 // ======================== INIT =========================================
@@ -94,8 +111,8 @@ async function pollFileChanges() {
     });
     document.getElementById('refresh-btn').addEventListener('click', () => refreshAll().then(() => toast('Refreshed', 'success')));
 
-    // Start file change polling
-    setInterval(pollFileChanges, CFG.fileWatchInterval);
+    // Start file change push channel (SSE)
+    startFileEventStream();
 
     const failed = results.filter(r => r.status === 'rejected');
     if (failed.length) {

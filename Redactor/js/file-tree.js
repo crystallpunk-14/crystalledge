@@ -51,11 +51,18 @@ function buildTreeDom(nodes, parent, depth) {
             });
             el.addEventListener('contextmenu', e => {
                 e.preventDefault(); e.stopPropagation();
-                showContextMenu(e.clientX, e.clientY, [
+                const items = [
                     { label: 'New File…', action: () => promptCreateFile(n.path) },
+                    { label: 'New Folder…', action: () => promptCreateFolder(n.path) },
                     '---',
                     { label: 'Open in Explorer', action: () => api.openInExplorer(n.path) },
-                ]);
+                ];
+                if (!n.readOnly) {
+                    items.push('---');
+                    items.push({ label: 'Rename Folder…', action: () => promptRenameFolder(n.path) });
+                    items.push({ label: 'Delete Folder', danger: true, action: () => promptDeleteFolder(n.path) });
+                }
+                showContextMenu(e.clientX, e.clientY, items);
             });
             parent.appendChild(el);
             buildTreeDom(n.children || [], childBox, depth + 1);
@@ -87,6 +94,7 @@ document.getElementById('file-tree').addEventListener('contextmenu', e => {
     e.preventDefault();
     showContextMenu(e.clientX, e.clientY, [
         { label: 'New File…', action: () => promptCreateFile('') },
+        { label: 'New Folder…', action: () => promptCreateFolder('') },
     ]);
 });
 
@@ -135,5 +143,80 @@ async function promptDeleteFile(path) {
     } catch (e) {
         console.error('[FileTree] Delete file failed:', e);
         toast(`Delete failed: ${e.message}`, 'error');
+    }
+}
+
+async function promptCreateFolder(parentDir) {
+    const name = prompt('Enter new folder name:', 'NewFolder');
+    if (!name) return;
+    try {
+        await api.createFolder(parentDir, name);
+        await refreshAll();
+        toast('Folder created', 'success');
+    } catch (e) {
+        console.error('[FileTree] Create folder failed:', e);
+        toast(`Create folder failed: ${e.message}`, 'error');
+    }
+}
+
+async function promptRenameFolder(path) {
+    const oldName = path.split('/').pop();
+    const newName = prompt('Rename folder:', oldName);
+    if (!newName || newName === oldName) return;
+    try {
+        const res = await api.renameFolder(path, newName);
+        // Re-map any open files that were under the renamed folder.
+        const oldPrefix = path + '/';
+        const newPrefix = res.newPath + '/';
+        const remap = [];
+        for (const [openPath, fs] of state.openFiles) {
+            if (openPath.startsWith(oldPrefix)) {
+                remap.push([openPath, newPrefix + openPath.slice(oldPrefix.length), fs]);
+            }
+        }
+        for (const [oldP, newP, fs] of remap) {
+            state.openFiles.delete(oldP);
+            fs.path = newP;
+            state.openFiles.set(newP, fs);
+            if (state.currentFile === oldP) state.currentFile = newP;
+        }
+        await refreshAll();
+        toast('Folder renamed', 'success');
+    } catch (e) {
+        console.error('[FileTree] Rename folder failed:', e);
+        toast(`Rename folder failed: ${e.message}`, 'error');
+    }
+}
+
+async function promptDeleteFolder(path) {
+    const name = path.split('/').pop();
+    // First attempt non-recursive; if folder is non-empty, ask for confirmation and retry recursively.
+    try {
+        if (!confirm(`Delete folder ${name}?`)) return;
+        await api.deleteFolder(path, false);
+        for (const openPath of [...state.openFiles.keys()]) {
+            if (openPath.startsWith(path + '/')) closeTab(openPath);
+        }
+        await refreshAll();
+        toast('Folder deleted', 'success');
+    } catch (e) {
+        // Server returns 409 "Folder not empty" — offer recursive delete.
+        if (/Folder not empty/i.test(e.message)) {
+            if (!confirm(`Folder "${name}" is not empty. Delete it and ALL its contents?`)) return;
+            try {
+                await api.deleteFolder(path, true);
+                for (const openPath of [...state.openFiles.keys()]) {
+                    if (openPath.startsWith(path + '/')) closeTab(openPath);
+                }
+                await refreshAll();
+                toast('Folder deleted', 'success');
+            } catch (e2) {
+                console.error('[FileTree] Recursive delete failed:', e2);
+                toast(`Delete folder failed: ${e2.message}`, 'error');
+            }
+        } else {
+            console.error('[FileTree] Delete folder failed:', e);
+            toast(`Delete folder failed: ${e.message}`, 'error');
+        }
     }
 }

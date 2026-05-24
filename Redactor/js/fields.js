@@ -1,5 +1,5 @@
-// ======================================================================
-//  SS14 Prototype Redactor – Field Renderers (Controls)
+﻿// ======================================================================
+//  SS14 Prototype Redactor вЂ“ Field Renderers (Controls)
 // ======================================================================
 
 'use strict';
@@ -7,7 +7,7 @@
 /** Ctrl+click helper: find proto by type+id in the index and open its file. */
 function navigateToProto(type, id) {
     if (!id || !state.protoIndex) return;
-    // type may not always match — scan all types
+    // type may not always match вЂ” scan all types
     const types = type ? [type] : Object.keys(state.protoIndex);
     for (const t of types) {
         const entries = state.protoIndex[t];
@@ -20,12 +20,12 @@ function navigateToProto(type, id) {
 
 /**
  * Build a field row with override tracking.
- * @param {string} key – YAML tag
- * @param {object} meta – field metadata
- * @param {*} value – current effective value
- * @param {string} source – 'local' | 'inherited' | 'default'
- * @param {function} onChange – callback when value changes
- * @param {function|null} onReset – callback to reset (remove) the field from YAML
+ * @param {string} key вЂ“ YAML tag
+ * @param {object} meta вЂ“ field metadata
+ * @param {*} value вЂ“ current effective value
+ * @param {string} source вЂ“ 'local' | 'inherited' | 'default'
+ * @param {function} onChange вЂ“ callback when value changes
+ * @param {function|null} onReset вЂ“ callback to reset (remove) the field from YAML
  */
 function fieldRow(key, meta, value, source, onChange, onReset) {
     const isLocal = source === 'local';
@@ -63,12 +63,14 @@ function fieldRow(key, meta, value, source, onChange, onReset) {
         const resetBtn = _el('button');
         resetBtn.className = 'field-reset-btn';
         resetBtn.title = 'Reset to inherited / default value';
-        resetBtn.textContent = '↺';
+        resetBtn.textContent = 'в†є';
         resetBtn.addEventListener('click', e => { e.stopPropagation(); onReset(); });
         controlWrap.appendChild(resetBtn);
     }
 
     row.appendChild(controlWrap);
+    if (typeof decorateFieldValidation === 'function')
+        decorateFieldValidation(row, meta, value, source);
     return row;
 }
 
@@ -93,7 +95,7 @@ function genericRow(key, value, source, onChange, onReset) {
         const resetBtn = _el('button');
         resetBtn.className = 'field-reset-btn';
         resetBtn.title = 'Reset to inherited / default value';
-        resetBtn.textContent = '↺';
+        resetBtn.textContent = 'в†є';
         resetBtn.addEventListener('click', e => { e.stopPropagation(); onReset(); });
         controlWrap.appendChild(resetBtn);
     }
@@ -227,249 +229,7 @@ function flagsCtrl(val, opts, dis, cb) {
     w.append(toggle, dd); return w;
 }
 
-// ======================== RES-PATH AUTOCOMPLETE ========================
-/**
- * Attach filesystem autocomplete to a text input.
- * Reusable for any field that accepts a resource path.
- *
- * @param {HTMLInputElement} input - The text input element.
- * @param {object} opts
- * @param {string}   opts.apiUrl   - Browse API endpoint (default '/api/texture-browse').
- * @param {function} [opts.onPick] - Called when user selects a value.
- * @param {function} [opts.filter] - Optional filter(name) => bool for file entries.
- */
-function resPathAutocomplete(input, opts = {}) {
-    const apiUrl = opts.apiUrl || '/api/texture-browse';
-    const onPick = opts.onPick || (() => {});
-    const filter = opts.filter || null;
-
-    const dd = _div('respath-dropdown');
-    input.parentElement.style.position = 'relative';
-    input.parentElement.appendChild(dd);
-
-    let _visible = false;
-    let _items = [];
-    let _selIdx = -1;
-
-    function show() { dd.classList.add('visible'); _visible = true; }
-    function hide() { dd.classList.remove('visible'); _visible = false; _selIdx = -1; }
-
-    function render(dirs, files) {
-        dd.innerHTML = '';
-        _items = [];
-        _selIdx = -1;
-
-        for (const d of dirs) {
-            const opt = _div('respath-item respath-dir');
-            opt.textContent = d + '/';
-            opt.dataset.value = d + '/';
-            opt.dataset.isDir = 'true';
-            opt.addEventListener('mousedown', e => { e.preventDefault(); pick(opt); });
-            dd.appendChild(opt);
-            _items.push(opt);
-        }
-
-        const filtered = filter ? files.filter(filter) : files;
-        for (const f of filtered) {
-            const opt = _div('respath-item respath-file');
-            opt.textContent = f;
-            opt.dataset.value = f;
-            opt.dataset.isDir = 'false';
-            opt.addEventListener('mousedown', e => { e.preventDefault(); pick(opt); });
-            dd.appendChild(opt);
-            _items.push(opt);
-        }
-
-        if (_items.length) show(); else hide();
-    }
-
-    function pick(opt) {
-        const cur = input.value;
-        const lastSlash = cur.lastIndexOf('/');
-        const prefix = lastSlash >= 0 ? cur.substring(0, lastSlash + 1) : '';
-
-        if (opt.dataset.isDir === 'true') {
-            input.value = prefix + opt.dataset.value;
-            input.focus();
-            browse();
-        } else {
-            input.value = prefix + opt.dataset.value;
-            hide();
-            onPick(input.value);
-        }
-    }
-
-    function highlight(idx) {
-        _items.forEach(it => it.classList.remove('selected'));
-        if (idx >= 0 && idx < _items.length) {
-            _items[idx].classList.add('selected');
-            _items[idx].scrollIntoView({ block: 'nearest' });
-        }
-        _selIdx = idx;
-    }
-
-    async function browse() {
-        const cur = input.value;
-        const lastSlash = cur.lastIndexOf('/');
-        const dirPart = lastSlash >= 0 ? cur.substring(0, lastSlash) : '';
-        const typedPart = (lastSlash >= 0 ? cur.substring(lastSlash + 1) : cur).toLowerCase();
-
-        try {
-            const resp = await fetch(`${apiUrl}?path=${encodeURIComponent(dirPart)}`);
-            if (!resp.ok) { hide(); return; }
-            const data = await resp.json();
-
-            let dirs  = data.dirs  || [];
-            let files = data.files || [];
-
-            // Filter by typed partial
-            if (typedPart) {
-                dirs  = dirs.filter(d => d.toLowerCase().includes(typedPart));
-                files = files.filter(f => f.toLowerCase().includes(typedPart));
-            }
-
-            render(dirs, files);
-        } catch { hide(); }
-    }
-
-    input.addEventListener('focus', browse);
-    input.addEventListener('input', browse);
-    input.addEventListener('blur', () => setTimeout(hide, 200));
-
-    input.addEventListener('keydown', e => {
-        if (!_visible) return;
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            highlight(Math.min(_selIdx + 1, _items.length - 1));
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            highlight(Math.max(_selIdx - 1, 0));
-        } else if (e.key === 'Enter' && _selIdx >= 0) {
-            e.preventDefault();
-            pick(_items[_selIdx]);
-        } else if (e.key === 'Escape') {
-            hide();
-        }
-    });
-
-    return { browse, hide, destroy: () => dd.remove() };
-}
-
-// ======================== SPRITE SPECIFIER =============================
-/**
- * SpriteSpecifier field control.
- * Handles both formats:
- *   - RSI: { sprite: "path.rsi", state: "icon" }
- *   - Texture: "path/to/texture.png" (string)
- */
-function spriteSpecifierCtrl(val, dis, cb) {
-    const w = _div('field-control sprite-specifier-ctrl');
-
-    // Parse current value
-    let rsiPath = '', stateName = '', isTexture = false;
-    if (typeof val === 'string') {
-        // Could be "path.rsi" (bare RSI path) or "path.png" (texture)
-        if (val.endsWith('.rsi')) { rsiPath = val; }
-        else { isTexture = true; rsiPath = val; }
-    } else if (val && typeof val === 'object') {
-        rsiPath   = val.sprite || '';
-        stateName = val.state  || '';
-    }
-
-    // ── Preview area ──
-    const preview = _div('sprite-preview');
-    let view = null;
-    function updatePreview() {
-        if (view) view.destroy();
-        view = null;
-        preview.innerHTML = '';
-        if (!rsiPath) return;
-        if (isTexture) {
-            // Plain texture — show as <img>
-            const img = _el('img');
-            img.className = 'sprite-canvas';
-            img.src = `/api/texture?path=${encodeURIComponent(rsiPath)}`;
-            img.width = 64; img.height = 64;
-            img.style.imageRendering = 'pixelated';
-            img.onerror = () => { img.alt = '!'; };
-            preview.appendChild(img);
-        } else if (stateName) {
-            view = SpriteView.create(preview, rsiPath, stateName, { size: 64 });
-        }
-    }
-    updatePreview();
-
-    // ── Inputs ──
-    const fields = _div('sprite-fields');
-
-    // Sprite (RSI path) input
-    const spriteRow = _div('sprite-field-row');
-    const spriteLbl = _el('label'); spriteLbl.className = 'sprite-input-label'; spriteLbl.textContent = 'sprite';
-    const spriteInp = _el('input'); spriteInp.type = 'text'; spriteInp.className = 'field-input sprite-input';
-    spriteInp.value = rsiPath; spriteInp.disabled = dis; spriteInp.placeholder = 'Path/to/sprite.rsi';
-    spriteRow.append(spriteLbl, spriteInp);
-    fields.appendChild(spriteRow);
-
-    // State input (only for RSI, not for bare textures)
-    const stateRow = _div('sprite-field-row');
-    const stateLbl = _el('label'); stateLbl.className = 'sprite-input-label'; stateLbl.textContent = 'state';
-    const stateInp = _el('input'); stateInp.type = 'text'; stateInp.className = 'field-input sprite-input';
-    stateInp.value = stateName; stateInp.disabled = dis; stateInp.placeholder = 'State name';
-    stateRow.append(stateLbl, stateInp);
-    fields.appendChild(stateRow);
-
-    function emit() {
-        rsiPath   = spriteInp.value.trim();
-        stateName = stateInp.value.trim();
-        isTexture = rsiPath && !rsiPath.endsWith('.rsi') && !stateName;
-        updatePreview();
-        if (isTexture) cb(rsiPath);
-        else if (rsiPath && stateName) cb({ sprite: rsiPath, state: stateName });
-        else if (rsiPath) cb({ sprite: rsiPath });
-    }
-
-    // Load state dropdown suggestions from RSI meta.json
-    const stateDD = _div('sprite-state-dropdown');
-    stateRow.appendChild(stateDD);
-
-    async function loadStates() {
-        stateDD.innerHTML = '';
-        if (!rsiPath || !rsiPath.endsWith('.rsi')) return;
-        try {
-            const meta = await SpriteView.loadMeta(rsiPath);
-            if (!meta?.states?.length) return;
-            stateDD.classList.add('visible');
-            for (const s of meta.states) {
-                const opt = _div('dropdown-item');
-                opt.textContent = s.name;
-                if (s.name === stateName) opt.classList.add('selected');
-                opt.addEventListener('mousedown', e => {
-                    e.preventDefault();
-                    stateInp.value = s.name;
-                    stateDD.classList.remove('visible');
-                    emit();
-                });
-                stateDD.appendChild(opt);
-            }
-        } catch { /* RSI not found */ }
-    }
-
-    spriteInp.addEventListener('change', () => { emit(); loadStates(); });
-
-    // Attach ResPath autocomplete to sprite input
-    if (!dis) {
-        resPathAutocomplete(spriteInp, {
-            onPick(v) { spriteInp.value = v; emit(); loadStates(); },
-        });
-    }
-
-    stateInp.addEventListener('focus', loadStates);
-    stateInp.addEventListener('blur', () => setTimeout(() => stateDD.classList.remove('visible'), 180));
-    stateInp.addEventListener('change', emit);
-
-    w.append(preview, fields);
-    return w;
-}
+// resPathAutocomplete + spriteSpecifierCtrl moved to field-controls-paths.js
 
 function vectorCtrl(val, axes, dis, cb) {
     const w = _div('field-control vector-control');
@@ -503,7 +263,7 @@ function searchDropdown(val, searchType, dis, cb) {
     const w = _div('field-control search-dropdown');
     const inp = _el('input'); inp.type = 'text'; inp.className = 'field-input dropdown-input';
     inp.value = val != null ? String(val) : ''; inp.disabled = dis;
-    inp.placeholder = 'Search prototypes…'; inp.autocomplete = 'off';
+    inp.placeholder = 'Search prototypesвЂ¦'; inp.autocomplete = 'off';
     const dd = _div('dropdown-list');
     let timer, selIdx = -1;
     async function doSearch(q) {
@@ -549,103 +309,7 @@ function renderDd(dd, results, inp, cb) {
 
 function hlDd(items, idx) { items.forEach((el, i) => el.classList.toggle('selected', i === idx)); if (items[idx]) items[idx].scrollIntoView({ block: 'nearest' }); }
 
-// ======================== LIST EDITOR ==================================
-function listCtrl(val, meta, dis, onChange) {
-    const arr = Array.isArray(val) ? [...val] : [];
-    const w = _div('field-control list-editor');
-
-    function rebuild() {
-        w.innerHTML = '';
-        arr.forEach((item, i) => {
-            const row = _div('list-item');
-            const content = _div('list-item-content');
-            content.appendChild(elementControl(meta.elementKind, meta.elementFullType, meta.elementProtoTypeArg, item, dis, nv => {
-                arr[i] = nv; onChange([...arr]);
-            }));
-            row.appendChild(content);
-            if (!dis) {
-                const rm = _el('button'); rm.className = 'item-remove-btn'; rm.textContent = '×'; rm.title = 'Remove';
-                rm.addEventListener('click', () => { arr.splice(i, 1); onChange([...arr]); rebuild(); });
-                row.appendChild(rm);
-            }
-            w.appendChild(row);
-        });
-        if (!dis) {
-            const addRow = _div('list-add-row');
-            const addBtn = _el('button'); addBtn.className = 'list-add-btn'; addBtn.textContent = '+ Add item';
-            addBtn.addEventListener('click', () => { arr.push(defaultForKind(meta.elementKind)); rebuild(); });
-            addRow.appendChild(addBtn);
-            w.appendChild(addRow);
-        }
-    }
-    rebuild();
-    return w;
-}
-
-// ======================== MAP EDITOR ===================================
-function mapCtrl(val, meta, dis, onChange) {
-    const obj = (val && typeof val === 'object' && !Array.isArray(val)) ? { ...val } : {};
-    const w = _div('field-control map-editor');
-
-    function rebuild() {
-        w.innerHTML = '';
-        for (const [k, v] of Object.entries(obj)) {
-            const row = _div('map-entry');
-            const keyLabel = _div('map-key-label'); keyLabel.textContent = k;
-            row.appendChild(keyLabel);
-            const content = _div('map-entry-content');
-            content.appendChild(elementControl(meta.valueKind, meta.valueFullType, meta.valueProtoTypeArg, v, dis, nv => {
-                obj[k] = nv; onChange({ ...obj });
-            }));
-            row.appendChild(content);
-            if (!dis) {
-                const rm = _el('button'); rm.className = 'entry-remove-btn'; rm.textContent = '×'; rm.title = 'Remove';
-                rm.addEventListener('click', () => { delete obj[k]; onChange({ ...obj }); rebuild(); });
-                row.appendChild(rm);
-            }
-            w.appendChild(row);
-        }
-        if (!dis) {
-            const addRow = _div('map-add-row');
-            const keyInp = _el('input'); keyInp.type = 'text'; keyInp.className = 'field-input'; keyInp.placeholder = 'key'; keyInp.style.maxWidth = '120px';
-            const addBtn = _el('button'); addBtn.className = 'map-add-btn'; addBtn.textContent = '+ Add entry';
-            addBtn.addEventListener('click', () => {
-                const k = keyInp.value.trim(); if (!k) return;
-                obj[k] = defaultForKind(meta.valueKind); onChange({ ...obj }); rebuild();
-            });
-            addRow.append(keyInp, addBtn);
-            w.appendChild(addRow);
-        }
-    }
-    rebuild();
-    return w;
-}
-
-// ======================== DATADEFINITION EDITOR =========================
-function dataDefCtrl(val, ddType, dis, onChange) {
-    const obj = (val && typeof val === 'object') ? { ...val } : {};
-    const ddMeta = state.metadata?.dataDefinitions?.[ddType];
-    const w = _div('field-control datadef-inline');
-
-    if (!ddMeta || !ddMeta.fields || ddMeta.fields.length === 0) {
-        return autoControl(val, dis, onChange);
-    }
-
-    for (const f of ddMeta.fields) {
-        if (f.isId || f.isParent || f.isAbstract) continue;
-        const v = obj[f.tag];
-        const src = v !== undefined ? 'local' : 'default';
-        w.appendChild(fieldRow(f.tag, f, v, src, nv => {
-            obj[f.tag] = nv; onChange({ ...obj });
-        }, null));
-    }
-    for (const [k, v] of Object.entries(obj)) {
-        if (k.startsWith('__')) continue;
-        if (ddMeta.fields.some(f => f.tag === k)) continue;
-        w.appendChild(genericRow(k, v, 'local', nv => { obj[k] = nv; onChange({ ...obj }); }, null));
-    }
-    return w;
-}
+// listCtrl / mapCtrl / dataDefCtrl moved to field-controls-collections.js
 
 // ======================== ELEMENT HELPERS ===============================
 function elementControl(kind, fullType, protoArg, val, dis, cb) {

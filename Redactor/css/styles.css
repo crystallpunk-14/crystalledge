@@ -291,6 +291,21 @@ body {
 }
 .field-reset-btn:hover { background: var(--warning); color: #000; border-color: var(--warning); }
 
+/* Validation badges (non-blocking client-side checks) */
+.field-row.field-invalid > .field-control-wrap > .field-control { box-shadow: inset 0 0 0 1px var(--error, #e54a4a); }
+.field-row.field-warning > .field-control-wrap > .field-control { box-shadow: inset 0 0 0 1px var(--warning, #d9a14a); }
+.field-validation-badge {
+    position: absolute; right: -4px; top: -4px;
+    width: 16px; height: 16px; line-height: 16px;
+    border-radius: 50%; text-align: center;
+    font-size: 11px; font-weight: 700;
+    cursor: help; user-select: none;
+    pointer-events: auto;
+}
+.field-validation-badge.badge-error   { background: var(--error,   #e54a4a); color: #fff; }
+.field-validation-badge.badge-warning { background: var(--warning, #d9a14a); color: #000; }
+.field-row { position: relative; }
+
 .field-default-placeholder {
     font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
     font-style: italic; cursor: pointer; padding: 4px 8px;

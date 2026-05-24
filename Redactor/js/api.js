@@ -36,6 +36,9 @@ const api = {
     renameFile(old,n) { return this.post('/api/rename-file', { oldPath: old, newName: n }); },
     deleteFile(p)     { return this.get(`/api/delete-file?path=${encodeURIComponent(p)}`); },
     createFile(dir,n,c){ return this.post('/api/create-file', { dir, name: n, content: c || '' }); },
+    createFolder(dir, name) { return this.post('/api/create-folder', { dir, name }); },
+    renameFolder(oldPath, newName) { return this.post('/api/rename-folder', { oldPath, newName }); },
+    deleteFolder(path, recursive = false) { return this.post('/api/delete-folder', { path, recursive }); },
     fileStamps(paths) { return this.post('/api/file-stamps', { paths }); },
     renameProtoId(path, oldId, newId, type) { return this.post('/api/rename-proto-id', { path, oldId, newId, type }); },
 };

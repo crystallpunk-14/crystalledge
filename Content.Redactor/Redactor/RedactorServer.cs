@@ -2,50 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Content.Redactor.Redactor;
 
 /// <summary>
-/// Lightweight HTTP server that serves the Redactor web UI and provides
-/// REST-ish API endpoints for file browsing, reading/writing YAML, and
-/// searching prototype IDs.
+/// Lightweight HTTP server that serves the Redactor web UI and exposes
+/// REST endpoints for file browsing, reading/writing YAML, and searching
+/// prototype IDs. Routing logic lives in <see cref="ApiRouter"/>; service
+/// implementations are split into dedicated classes.
 /// </summary>
 public static class RedactorServer
 {
-    private static string _solutionRoot = "";
-    private static string _redactorDir = "";
-    private static string _prototypesDir = "";
-    private static string _texturesDir = "";
-    private static string _enginePrototypesDir = "";
-    private static Dictionary<string, List<ProtoIndexEntry>> _protoIndex = new();
-
     public static async Task StartAsync(string solutionRoot, int port)
     {
-        _solutionRoot = solutionRoot;
-        _redactorDir = Path.Combine(solutionRoot, "Redactor");
-        _prototypesDir = Path.Combine(solutionRoot, "Resources", "Prototypes");
-        _texturesDir = Path.Combine(solutionRoot, "Resources", "Textures");
-        _enginePrototypesDir = Path.Combine(solutionRoot, "RobustToolbox", "Resources", "EnginePrototypes");
+        var ctx = BuildContext(solutionRoot);
 
         Console.WriteLine("[Redactor] Building prototype index...");
-        _protoIndex = BuildProtoIndex(_prototypesDir);
-        // Merge engine prototypes (read-only)
-        if (Directory.Exists(_enginePrototypesDir))
+        ctx.ProtoIndex.Rebuild();
+        Console.WriteLine($"[Redactor] Indexed {ctx.ProtoIndex.TotalCount} prototypes across {ctx.ProtoIndex.TypeCount} types");
+
+        // Push external file changes through the event stream and keep the index fresh.
+        ctx.FileWatcher.Changed += evt =>
         {
-            var engineIndex = BuildProtoIndex(_enginePrototypesDir, readOnly: true, pathPrefix: "__engine__/");
-            foreach (var (type, entries) in engineIndex)
+            var rel = evt.RelativePath;
+            switch (evt.Kind)
             {
-                if (!_protoIndex.ContainsKey(type)) _protoIndex[type] = new List<ProtoIndexEntry>();
-                _protoIndex[type].AddRange(entries);
+                case FileChangeKind.Deleted:
+                    ctx.ProtoIndex.RefreshFile(evt.FullPath, rel);
+                    break;
+                case FileChangeKind.Created:
+                case FileChangeKind.Changed:
+                    if (File.Exists(evt.FullPath))
+                        ctx.ProtoIndex.RefreshFile(evt.FullPath, rel);
+                    break;
             }
-        }
-        Console.WriteLine($"[Redactor] Indexed {_protoIndex.Values.Sum(l => l.Count)} prototypes across {_protoIndex.Count} types");
+            ctx.Events.Broadcast(new { type = "file-change", kind = evt.Kind.ToString().ToLowerInvariant(), path = rel });
+        };
+        ctx.FileWatcher.Start();
+
+        var router = new ApiRouter(ctx);
 
         var listener = new HttpListener();
         listener.Prefixes.Add($"http://localhost:{port}/");
@@ -58,15 +56,36 @@ public static class RedactorServer
 
         while (true)
         {
-            var ctx = await listener.GetContextAsync();
-            _ = Task.Run(() => HandleRequestAsync(ctx));
+            var httpCtx = await listener.GetContextAsync();
+            _ = Task.Run(() => HandleRequestAsync(httpCtx, router, ctx));
         }
     }
 
-    private static async Task HandleRequestAsync(HttpListenerContext ctx)
+    private static RedactorContext BuildContext(string solutionRoot)
     {
-        var req = ctx.Request;
-        var res = ctx.Response;
+        var redactorDir = Path.Combine(solutionRoot, "Redactor");
+        var prototypesDir = Path.Combine(solutionRoot, "Resources", "Prototypes");
+        var texturesDir = Path.Combine(solutionRoot, "Resources", "Textures");
+        var enginePrototypesDir = Path.Combine(solutionRoot, "RobustToolbox", "Resources", "EnginePrototypes");
+
+        return new RedactorContext
+        {
+            SolutionRoot = solutionRoot,
+            RedactorDir = redactorDir,
+            PrototypesDir = prototypesDir,
+            TexturesDir = texturesDir,
+            EnginePrototypesDir = enginePrototypesDir,
+            ProtoIndex = new ProtoIndexService(prototypesDir, enginePrototypesDir),
+            SourceLocator = new SourceLocator(solutionRoot),
+            Events = new EventStreamService(),
+            FileWatcher = new FileWatcherService(prototypesDir),
+        };
+    }
+
+    private static async Task HandleRequestAsync(HttpListenerContext httpCtx, ApiRouter router, RedactorContext ctx)
+    {
+        var req = httpCtx.Request;
+        var res = httpCtx.Response;
 
         res.AddHeader("Access-Control-Allow-Origin", "*");
         res.AddHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -79,723 +98,60 @@ public static class RedactorServer
             return;
         }
 
+        bool keepAlive = false;
         try
         {
             var path = req.Url?.AbsolutePath ?? "/";
             if (path.StartsWith("/api/"))
             {
                 Console.WriteLine($"[Redactor] {req.HttpMethod} {path}");
-                await HandleApiAsync(path, req, res);
+                keepAlive = await router.DispatchAsync(path, req, res);
             }
             else
-                await ServeStaticAsync(path, res);
+            {
+                await ServeStaticAsync(path, ctx.RedactorDir, res);
+            }
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"[Redactor] ERROR handling {req.HttpMethod} {req.Url}: {ex}");
             res.StatusCode = 500;
             res.ContentType = "application/json";
-            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(new { error = ex.Message }));
-            await res.OutputStream.WriteAsync(body);
+            await HttpJson.WriteAsync(res, new { error = ex.Message });
         }
         finally
         {
-            res.Close();
+            if (!keepAlive) res.Close();
         }
     }
 
-    private static async Task HandleApiAsync(string path, HttpListenerRequest req, HttpListenerResponse res)
-    {
-        res.ContentType = "application/json; charset=utf-8";
-
-        switch (path)
-        {
-            case "/api/tree":
-            {
-                var tree = BuildFileTree(_prototypesDir, "");
-                // Append engine prototypes as a read-only subtree
-                if (Directory.Exists(_enginePrototypesDir))
-                {
-                    var engineTree = BuildFileTree(_enginePrototypesDir, "", "__engine__/");
-                    MarkReadOnly(engineTree);
-                    tree.Add(new FileTreeNode
-                    {
-                        Name = "⚙ Engine (read-only)",
-                        Path = "__engine__",
-                        IsDir = true,
-                        ReadOnly = true,
-                        Children = engineTree,
-                    });
-                }
-                await WriteJsonAsync(res, tree);
-                break;
-            }
-
-            case "/api/file":
-                await HandleFileEndpointAsync(req, res);
-                break;
-
-            case "/api/metadata":
-                await ServeMetadataAsync(res);
-                break;
-
-            case "/api/proto-index":
-                await WriteJsonAsync(res, _protoIndex);
-                break;
-
-            case "/api/search-protos":
-            {
-                var q = req.QueryString["q"] ?? "";
-                var type = req.QueryString["type"] ?? "entity";
-                var limit = int.TryParse(req.QueryString["limit"], out var l) ? l : 50;
-                await WriteJsonAsync(res, SearchProtos(type, q, limit));
-                break;
-            }
-
-            case "/api/refresh-index":
-                _protoIndex = BuildProtoIndex(_prototypesDir);
-                await WriteJsonAsync(res, new { count = _protoIndex.Values.Sum(x => x.Count) });
-                break;
-
-            case "/api/open-in-explorer":
-            {
-                var relPath = req.QueryString["path"];
-                if (!string.IsNullOrEmpty(relPath))
-                {
-                    var fullPath = Path.GetFullPath(Path.Combine(_prototypesDir, relPath));
-                    if (fullPath.StartsWith(Path.GetFullPath(_prototypesDir)))
-                    {
-                        var target = File.Exists(fullPath) ? fullPath : Path.GetDirectoryName(fullPath) ?? fullPath;
-                        try
-                        {
-                            if (OperatingSystem.IsWindows())
-                                Process.Start("explorer.exe", $"/select,\"{target}\"");
-                            else if (OperatingSystem.IsMacOS())
-                                Process.Start("open", $"-R \"{target}\"");
-                            else
-                                Process.Start("xdg-open", Path.GetDirectoryName(target) ?? target);
-                        }
-                        catch { /* non-critical */ }
-                    }
-                }
-                await WriteJsonAsync(res, new { success = true });
-                break;
-            }
-
-            case "/api/open-default":
-            {
-                var relPath = req.QueryString["path"];
-                if (!string.IsNullOrEmpty(relPath))
-                {
-                    var fullPath = Path.GetFullPath(Path.Combine(_prototypesDir, relPath));
-                    if (fullPath.StartsWith(Path.GetFullPath(_prototypesDir)) && File.Exists(fullPath))
-                    {
-                        try
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = fullPath,
-                                UseShellExecute = true, // opens with default app
-                            });
-                        }
-                        catch { /* non-critical */ }
-                    }
-                }
-                await WriteJsonAsync(res, new { success = true });
-                break;
-            }
-
-            case "/api/open-source":
-            {
-                var className = req.QueryString["class"];
-                if (!string.IsNullOrEmpty(className))
-                {
-                    // Search for .cs file containing this class in the solution
-                    var found = FindSourceFile(className);
-                    if (found != null)
-                    {
-                        try
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = found,
-                                UseShellExecute = true,
-                            });
-                        }
-                        catch { /* non-critical */ }
-                        await WriteJsonAsync(res, new { success = true, path = found });
-                        break;
-                    }
-                }
-                await WriteJsonAsync(res, new { success = false, error = "Source file not found" });
-                break;
-            }
-
-            case "/api/rename-file":
-            {
-                using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
-                var bodyStr = await reader.ReadToEndAsync();
-                var doc = JsonSerializer.Deserialize<JsonElement>(bodyStr);
-                var oldRel = doc.GetProperty("oldPath").GetString()!;
-                var newName = doc.GetProperty("newName").GetString()!;
-                var oldFull = Path.GetFullPath(Path.Combine(_prototypesDir, oldRel));
-                var newFull = Path.Combine(Path.GetDirectoryName(oldFull)!, newName);
-
-                if (!oldFull.StartsWith(Path.GetFullPath(_prototypesDir)) ||
-                    !newFull.StartsWith(Path.GetFullPath(_prototypesDir)))
-                {
-                    res.StatusCode = 403;
-                    await WriteJsonAsync(res, new { error = "Access denied" });
-                    break;
-                }
-                if (!File.Exists(oldFull))
-                {
-                    res.StatusCode = 404;
-                    await WriteJsonAsync(res, new { error = "File not found" });
-                    break;
-                }
-                File.Move(oldFull, newFull);
-                Console.WriteLine($"[Redactor] File renamed: {oldRel} -> {newName}");
-                await WriteJsonAsync(res, new { success = true, newPath = Path.GetRelativePath(_prototypesDir, newFull).Replace('\\', '/') });
-                break;
-            }
-
-            case "/api/delete-file":
-            {
-                var relPath = req.QueryString["path"];
-                if (string.IsNullOrEmpty(relPath))
-                {
-                    res.StatusCode = 400;
-                    await WriteJsonAsync(res, new { error = "Missing path" });
-                    break;
-                }
-                var fullPath = Path.GetFullPath(Path.Combine(_prototypesDir, relPath));
-                if (!fullPath.StartsWith(Path.GetFullPath(_prototypesDir)))
-                {
-                    res.StatusCode = 403;
-                    await WriteJsonAsync(res, new { error = "Access denied" });
-                    break;
-                }
-                if (File.Exists(fullPath))
-                {
-                    File.Delete(fullPath);
-                    Console.WriteLine($"[Redactor] File deleted: {relPath}");
-                }
-                await WriteJsonAsync(res, new { success = true });
-                break;
-            }
-
-            case "/api/create-file":
-            {
-                using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
-                var bodyStr = await reader.ReadToEndAsync();
-                var doc = JsonSerializer.Deserialize<JsonElement>(bodyStr);
-                var parentDir = doc.TryGetProperty("dir", out var dirEl) ? dirEl.GetString() ?? "" : "";
-                var fileName = doc.GetProperty("name").GetString()!;
-                var content = doc.TryGetProperty("content", out var cEl) ? cEl.GetString() ?? "" : "";
-
-                var dirFull = string.IsNullOrEmpty(parentDir)
-                    ? _prototypesDir
-                    : Path.GetFullPath(Path.Combine(_prototypesDir, parentDir));
-                var fileFull = Path.Combine(dirFull, fileName);
-
-                if (!fileFull.StartsWith(Path.GetFullPath(_prototypesDir)))
-                {
-                    res.StatusCode = 403;
-                    await WriteJsonAsync(res, new { error = "Access denied" });
-                    break;
-                }
-                Directory.CreateDirectory(dirFull);
-                // Normalize line endings to LF
-                content = content.Replace("\r\n", "\n").Replace("\r", "\n");
-                await File.WriteAllTextAsync(fileFull, content, new UTF8Encoding(false));
-                var rel = Path.GetRelativePath(_prototypesDir, fileFull).Replace('\\', '/');
-                RefreshIndexForFile(fileFull, rel);
-                await WriteJsonAsync(res, new { success = true, path = rel });
-                break;
-            }
-
-            case "/api/file-stamps":
-            {
-                // Return last-modified timestamps for requested files
-                using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
-                var bodyStr = await reader.ReadToEndAsync();
-                var doc = JsonSerializer.Deserialize<JsonElement>(bodyStr);
-                var paths = doc.GetProperty("paths").EnumerateArray()
-                    .Select(p => p.GetString()!).ToList();
-                var stamps = new Dictionary<string, long>();
-                foreach (var rp in paths)
-                {
-                    var fp = Path.GetFullPath(Path.Combine(_prototypesDir, rp));
-                    if (fp.StartsWith(Path.GetFullPath(_prototypesDir)) && File.Exists(fp))
-                        stamps[rp] = File.GetLastWriteTimeUtc(fp).Ticks;
-                    else
-                        stamps[rp] = -1;
-                }
-                await WriteJsonAsync(res, stamps);
-                break;
-            }
-
-            case "/api/rename-proto-id":
-            {
-                using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
-                var bodyStr = await reader.ReadToEndAsync();
-                var doc = JsonSerializer.Deserialize<JsonElement>(bodyStr);
-                var filePath = doc.GetProperty("path").GetString()!;
-                var oldId = doc.GetProperty("oldId").GetString()!;
-                var newId = doc.GetProperty("newId").GetString()!;
-                var protoType = doc.GetProperty("type").GetString()!;
-
-                var fullPath = Path.GetFullPath(Path.Combine(_prototypesDir, filePath));
-                if (!fullPath.StartsWith(Path.GetFullPath(_prototypesDir)))
-                {
-                    res.StatusCode = 403;
-                    await WriteJsonAsync(res, new { error = "Access denied" });
-                    break;
-                }
-                if (!File.Exists(fullPath))
-                {
-                    res.StatusCode = 404;
-                    await WriteJsonAsync(res, new { error = "File not found" });
-                    break;
-                }
-
-                // Update the index
-                RefreshIndexForFile(fullPath, filePath);
-                Console.WriteLine($"[Redactor] Renamed prototype ID: {protoType}/{oldId} -> {newId} in {filePath}");
-                await WriteJsonAsync(res, new { success = true });
-                break;
-            }
-
-            case "/api/texture":
-            {
-                await ServeTextureAsync(req, res);
-                break;
-            }
-
-            case "/api/texture-browse":
-            {
-                await HandleTextureBrowseAsync(req, res);
-                break;
-            }
-
-            default:
-                Console.Error.WriteLine($"[Redactor] Unknown API endpoint: {path}");
-                res.StatusCode = 404;
-                await WriteJsonAsync(res, new { error = "Unknown API endpoint" });
-                break;
-        }
-    }
-
-    private static async Task HandleFileEndpointAsync(HttpListenerRequest req, HttpListenerResponse res)
-    {
-        var relPath = req.QueryString["path"];
-        if (string.IsNullOrEmpty(relPath))
-        {
-            res.StatusCode = 400;
-            await WriteJsonAsync(res, new { error = "Missing 'path' query parameter" });
-            return;
-        }
-
-        // Resolve engine prototype paths
-        bool isEngine = relPath.StartsWith("__engine__/");
-        var baseDir = isEngine ? _enginePrototypesDir : _prototypesDir;
-        var actualRel = isEngine ? relPath["__engine__/".Length..] : relPath;
-
-        var fullPath = Path.GetFullPath(Path.Combine(baseDir, actualRel));
-        if (!fullPath.StartsWith(Path.GetFullPath(baseDir)))
-        {
-            res.StatusCode = 403;
-            await WriteJsonAsync(res, new { error = "Access denied" });
-            return;
-        }
-
-        if (req.HttpMethod == "GET")
-        {
-            if (!File.Exists(fullPath))
-            {
-                res.StatusCode = 404;
-                await WriteJsonAsync(res, new { error = "File not found" });
-                return;
-            }
-            var content = await File.ReadAllTextAsync(fullPath, Encoding.UTF8);
-            await WriteJsonAsync(res, new { content, path = relPath, readOnly = isEngine });
-        }
-        else if (req.HttpMethod == "POST")
-        {
-            if (isEngine)
-            {
-                res.StatusCode = 403;
-                await WriteJsonAsync(res, new { error = "Engine prototypes are read-only" });
-                return;
-            }
-            using var reader = new StreamReader(req.InputStream, Encoding.UTF8);
-            var body = await reader.ReadToEndAsync();
-            var doc = JsonSerializer.Deserialize<JsonElement>(body);
-
-            if (!doc.TryGetProperty("content", out var contentEl))
-            {
-                res.StatusCode = 400;
-                await WriteJsonAsync(res, new { error = "Missing 'content' in body" });
-                return;
-            }
-
-            var content = contentEl.GetString()!;
-            // Normalize line endings to LF to match repository convention
-            content = content.Replace("\r\n", "\n").Replace("\r", "\n");
-            Directory.CreateDirectory(Path.GetDirectoryName(fullPath)!);
-            await File.WriteAllTextAsync(fullPath, content, new UTF8Encoding(false));
-
-            RefreshIndexForFile(fullPath, relPath);
-
-            await WriteJsonAsync(res, new { success = true });
-        }
-    }
-
-    private static async Task ServeMetadataAsync(HttpListenerResponse res)
-    {
-        var metaPath = Path.Combine(_redactorDir, "metadata.json");
-        if (!File.Exists(metaPath))
-        {
-            res.StatusCode = 404;
-            await WriteJsonAsync(res, new { error = "metadata.json not found. Build the project first." });
-            return;
-        }
-        var bytes = await File.ReadAllBytesAsync(metaPath);
-        res.ContentLength64 = bytes.Length;
-        await res.OutputStream.WriteAsync(bytes);
-    }
-
-    /// <summary>
-    /// Serves files from Resources/Textures/ (RSI meta.json, PNGs, etc.).
-    /// GET /api/texture?path=Clothing/Uniforms/Shorts/Color/red.rsi/meta.json
-    /// </summary>
-    private static async Task ServeTextureAsync(HttpListenerRequest req, HttpListenerResponse res)
-    {
-        var relPath = req.QueryString["path"];
-        if (string.IsNullOrEmpty(relPath))
-        {
-            res.StatusCode = 400;
-            await WriteJsonAsync(res, new { error = "Missing 'path' query parameter" });
-            return;
-        }
-
-        // Normalize path separators and strip leading slashes/Textures prefix
-        relPath = relPath.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
-
-        var fullPath = Path.GetFullPath(Path.Combine(_texturesDir, relPath));
-        if (!fullPath.StartsWith(Path.GetFullPath(_texturesDir)))
-        {
-            res.StatusCode = 403;
-            await WriteJsonAsync(res, new { error = "Access denied" });
-            return;
-        }
-
-        if (!File.Exists(fullPath))
-        {
-            res.StatusCode = 404;
-            await WriteJsonAsync(res, new { error = "File not found" });
-            return;
-        }
-
-        res.ContentType = MimeType(fullPath);
-        res.AddHeader("Cache-Control", "public, max-age=300");
-        var bytes = await File.ReadAllBytesAsync(fullPath);
-        res.ContentLength64 = bytes.Length;
-        await res.OutputStream.WriteAsync(bytes);
-    }
-
-    private static async Task HandleTextureBrowseAsync(HttpListenerRequest req, HttpListenerResponse res)
-    {
-        var relPath = (req.QueryString["path"] ?? "").Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
-
-        var fullPath = Path.GetFullPath(Path.Combine(_texturesDir, relPath));
-        if (!fullPath.StartsWith(Path.GetFullPath(_texturesDir)))
-        {
-            res.StatusCode = 403;
-            await WriteJsonAsync(res, new { error = "Access denied" });
-            return;
-        }
-
-        if (!Directory.Exists(fullPath))
-        {
-            await WriteJsonAsync(res, new { dirs = Array.Empty<string>(), files = Array.Empty<string>() });
-            return;
-        }
-
-        var dirs = Directory.GetDirectories(fullPath)
-            .Select(d => Path.GetFileName(d))
-            .OrderBy(n => n)
-            .ToList();
-
-        var files = Directory.GetFiles(fullPath)
-            .Select(f => Path.GetFileName(f))
-            .Where(n => !n.StartsWith('.'))
-            .OrderBy(n => n)
-            .ToList();
-
-        await WriteJsonAsync(res, new { dirs, files });
-    }
-
-    private static async Task ServeStaticAsync(string urlPath, HttpListenerResponse res)
+    private static async Task ServeStaticAsync(string urlPath, string redactorDir, HttpListenerResponse res)
     {
         if (urlPath == "/") urlPath = "/index.html";
+        var filePath = Path.Combine(redactorDir, urlPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
 
-        var filePath = Path.Combine(_redactorDir, urlPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+        // Ensure the static path stays inside redactorDir.
+        if (!filePath.StartsWith(Path.GetFullPath(redactorDir), StringComparison.OrdinalIgnoreCase)
+            && !File.Exists(filePath))
+        {
+            res.StatusCode = 404;
+            res.ContentType = "text/plain";
+            await res.OutputStream.WriteAsync(Encoding.UTF8.GetBytes("404 Not Found"));
+            return;
+        }
 
         if (!File.Exists(filePath))
         {
             res.StatusCode = 404;
-            var msg = Encoding.UTF8.GetBytes("404 Not Found");
             res.ContentType = "text/plain";
-            await res.OutputStream.WriteAsync(msg);
+            await res.OutputStream.WriteAsync(Encoding.UTF8.GetBytes("404 Not Found"));
             return;
         }
 
-        res.ContentType = MimeType(filePath);
+        res.ContentType = StaticMime.For(filePath);
         var content = await File.ReadAllBytesAsync(filePath);
         res.ContentLength64 = content.Length;
         await res.OutputStream.WriteAsync(content);
-    }
-
-    private static void MarkReadOnly(List<FileTreeNode> nodes)
-    {
-        foreach (var n in nodes)
-        {
-            n.ReadOnly = true;
-            if (n.Children != null) MarkReadOnly(n.Children);
-        }
-    }
-
-    private static string MimeType(string path) => Path.GetExtension(path).ToLowerInvariant() switch
-    {
-        ".html" => "text/html; charset=utf-8",
-        ".css" => "text/css; charset=utf-8",
-        ".js" => "application/javascript; charset=utf-8",
-        ".json" => "application/json; charset=utf-8",
-        ".png" => "image/png",
-        ".svg" => "image/svg+xml",
-        ".ico" => "image/x-icon",
-        ".woff2" => "font/woff2",
-        _ => "application/octet-stream",
-    };
-
-    private static List<FileTreeNode> BuildFileTree(string baseDir, string relativePath, string pathPrefix = "")
-    {
-        var fullPath = string.IsNullOrEmpty(relativePath) ? baseDir : Path.Combine(baseDir, relativePath);
-        if (!Directory.Exists(fullPath))
-            return new();
-
-        var nodes = new List<FileTreeNode>();
-
-        foreach (var dir in Directory.GetDirectories(fullPath).OrderBy(d => d))
-        {
-            var name = Path.GetFileName(dir);
-            var rel = string.IsNullOrEmpty(relativePath) ? name : $"{relativePath}/{name}";
-            nodes.Add(new FileTreeNode
-            {
-                Name = name,
-                Path = pathPrefix + rel,
-                IsDir = true,
-                Children = BuildFileTree(baseDir, rel, pathPrefix),
-            });
-        }
-
-        foreach (var file in Directory.GetFiles(fullPath)
-                     .Where(f => f.EndsWith(".yml", StringComparison.OrdinalIgnoreCase) ||
-                                 f.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-                     .OrderBy(f => f))
-        {
-            var name = Path.GetFileName(file);
-            var rel = string.IsNullOrEmpty(relativePath) ? name : $"{relativePath}/{name}";
-            nodes.Add(new FileTreeNode { Name = name, Path = pathPrefix + rel, IsDir = false });
-        }
-
-        return nodes;
-    }
-
-    private static Dictionary<string, List<ProtoIndexEntry>> BuildProtoIndex(string prototypesDir, bool readOnly = false, string pathPrefix = "")
-    {
-        var index = new Dictionary<string, List<ProtoIndexEntry>>();
-        if (!Directory.Exists(prototypesDir))
-            return index;
-
-        var files = Directory.GetFiles(prototypesDir, "*.yml", SearchOption.AllDirectories)
-            .Concat(Directory.GetFiles(prototypesDir, "*.yaml", SearchOption.AllDirectories));
-
-        foreach (var file in files)
-        {
-            try
-            {
-                var rel = pathPrefix + Path.GetRelativePath(prototypesDir, file).Replace('\\', '/');
-                ScanYamlFile(file, rel, index, readOnly);
-            }
-            catch { /* skip unreadable files */ }
-        }
-
-        return index;
-    }
-
-    private static void ScanYamlFile(string filePath, string relativePath,
-        Dictionary<string, List<ProtoIndexEntry>> index, bool readOnly = false)
-    {
-        var lines = File.ReadAllLines(filePath);
-        string? curType = null, curId = null, curName = null;
-        List<string>? curParents = null;
-        bool curAbstract = false;
-        bool inParentList = false;
-
-        void Flush()
-        {
-            if (curType == null || curId == null) return;
-            if (!index.ContainsKey(curType))
-                index[curType] = new List<ProtoIndexEntry>();
-
-            index[curType].Add(new ProtoIndexEntry
-            {
-                Id = curId,
-                Name = curName,
-                File = relativePath,
-                Parents = curParents?.ToArray(),
-                Abstract = curAbstract,
-                ReadOnly = readOnly,
-            });
-        }
-
-        foreach (var line in lines)
-        {
-            var m = Regex.Match(line, @"^- type:\s+(.+)$");
-            if (m.Success)
-            {
-                Flush();
-                curType = m.Groups[1].Value.Trim();
-                curId = null; curName = null; curParents = null; curAbstract = false; inParentList = false;
-                continue;
-            }
-
-            if (curType == null) continue;
-
-            m = Regex.Match(line, @"^  id:\s+(.+)$");
-            if (m.Success) { curId = m.Groups[1].Value.Trim(); inParentList = false; continue; }
-
-            m = Regex.Match(line, @"^  name:\s+(.+)$");
-            if (m.Success) { curName = m.Groups[1].Value.Trim(); inParentList = false; continue; }
-
-            if (line == "  parent:")
-            {
-                curParents = new List<string>();
-                inParentList = true;
-                continue;
-            }
-
-            m = Regex.Match(line, @"^  parent:\s+(.+)$");
-            if (m.Success)
-            {
-                var val = m.Groups[1].Value.Trim();
-                if (val.StartsWith('['))
-                {
-                    curParents = val.Trim('[', ']').Split(',')
-                        .Select(s => s.Trim()).Where(s => s.Length > 0).ToList();
-                }
-                else
-                {
-                    curParents = new List<string> { val };
-                }
-                inParentList = false;
-                continue;
-            }
-
-            if (inParentList)
-            {
-                m = Regex.Match(line, @"^  - (.+)$");
-                if (m.Success)
-                {
-                    curParents?.Add(m.Groups[1].Value.Trim());
-                    continue;
-                }
-                inParentList = false;
-            }
-
-            m = Regex.Match(line, @"^  abstract:\s+(true|false)$");
-            if (m.Success) { curAbstract = m.Groups[1].Value == "true"; continue; }
-        }
-
-        Flush();
-    }
-
-    private static void RefreshIndexForFile(string fullPath, string relativePath)
-    {
-        foreach (var list in _protoIndex.Values)
-            list.RemoveAll(e => e.File == relativePath);
-
-        try { ScanYamlFile(fullPath, relativePath, _protoIndex); }
-        catch { /* ignore */ }
-    }
-
-    private static List<ProtoSearchResult> SearchProtos(string type, string query, int limit)
-    {
-        if (!_protoIndex.TryGetValue(type, out var entries))
-            return new();
-
-        if (string.IsNullOrWhiteSpace(query))
-            return entries.Take(limit).Select(e => new ProtoSearchResult { Id = e.Id, Name = e.Name }).ToList();
-
-        var lower = query.ToLowerInvariant();
-
-        var prefix = entries
-            .Where(e => e.Id.ToLowerInvariant().StartsWith(lower))
-            .Select(e => new ProtoSearchResult { Id = e.Id, Name = e.Name });
-
-        var contains = entries
-            .Where(e => !e.Id.ToLowerInvariant().StartsWith(lower) &&
-                        (e.Id.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                         (e.Name?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)))
-            .Select(e => new ProtoSearchResult { Id = e.Id, Name = e.Name });
-
-        return prefix.Concat(contains).Take(limit).ToList();
-    }
-
-    private static async Task WriteJsonAsync(HttpListenerResponse res, object data)
-    {
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        });
-        var bytes = Encoding.UTF8.GetBytes(json);
-        res.ContentLength64 = bytes.Length;
-        await res.OutputStream.WriteAsync(bytes);
-    }
-
-    /// <summary>
-    /// Finds a .cs source file for a fully-qualified class name by scanning Content.* and RobustToolbox dirs.
-    /// </summary>
-    private static string? FindSourceFile(string className)
-    {
-        // className is like "Content.Shared.Inventory.InventoryTemplatePrototype"
-        // The file is likely named after the last segment, e.g. InventoryTemplatePrototype.cs
-        var shortName = className.Contains('.') ? className[(className.LastIndexOf('.') + 1)..] : className;
-        // Handle nested types: "Outer+Inner" → just use "Outer"
-        if (shortName.Contains('+'))
-            shortName = shortName[..shortName.IndexOf('+')];
-
-        var fileName = shortName + ".cs";
-
-        // Search in Content.* folders and RobustToolbox
-        var searchDirs = new[] { "Content.Server", "Content.Client", "Content.Shared", "RobustToolbox" };
-
-        foreach (var dir in searchDirs)
-        {
-            var fullDir = Path.Combine(_solutionRoot, dir);
-            if (!Directory.Exists(fullDir)) continue;
-            try
-            {
-                var files = Directory.GetFiles(fullDir, fileName, SearchOption.AllDirectories);
-                if (files.Length > 0) return files[0];
-            }
-            catch { /* ignore */ }
-        }
-
-        return null;
     }
 
     private static void TryOpenBrowser(string url)
