@@ -1,0 +1,79 @@
+- type: dungeonRoomType
+  id: MossyTempleGeneralRoom
+  supportsWideConnection: true
+  color: "#CCCCCC"
+
+- type: dungeonRoomType
+  id: MossyTempleExitRoom
+  supportsWideConnection: true
+  color: "#5f2f89"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: exit
+
+- type: dungeonRoomType
+  id: MossyTempleEntranceRoom
+  supportsWideConnection: true
+  allowMobsSpawn: false
+  secretRoom: true #Intended
+  color: "#4b944b"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: enter
+
+- type: dungeonRoomType
+  id: MossyTempleBlessingRoom
+  supportsWideConnection: true
+  color: "#6495ED"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: blessing
+
+- type: dungeonRoomType
+  id: MossyTempleTreasureRoom
+  doorPrototype: CEGoldenLockedDoor
+  supportsWideConnection: false
+  showIconFromNeighbour: true
+  allowMobsSpawn: false
+  allowLootSpawn: false
+  color: "#FFD700"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: treasure
+
+- type: dungeonRoomType
+  id: MossyTempleDeadEndRoom
+  supportsWideConnection: true
+  color: "#c0a87b"
+
+- type: dungeonRoomType
+  id: MossyTempleAlchemyRoom
+  supportsWideConnection: true
+  color: "#00f2ff"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: alchemy
+
+- type: dungeonRoomType
+  id: MossyTempleLibraryRoom
+  doorPrototype: CEGoldenLockedDoor
+  supportsWideConnection: false
+  showIconFromNeighbour: true
+  allowMobsSpawn: false
+  allowLootSpawn: false
+  color: "#b587dd"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: library
+
+- type: dungeonRoomType
+  id: MossyTempleSecretRoom
+  doorPrototype: CEWallWoodenDark
+  supportsWideConnection: false
+  secretRoom: true
+  allowMobsSpawn: false
+  allowLootSpawn: false
+  color: "#3e3e3e"
+  minimapIcon:
+    sprite: /Textures/_CE/Interface/minimap_icons.rsi
+    state: secret

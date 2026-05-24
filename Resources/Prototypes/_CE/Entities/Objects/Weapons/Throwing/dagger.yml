@@ -1,0 +1,81 @@
+- type: entity
+  parent:
+  - CEBaseWeapon
+  - CEBaseWeaponThrowable
+  id: CEWeaponThrowingDagger
+  name: throwing dagger
+  description: A lightweight, well-balanced dagger. Suitable for both close-quarters combat and as a throwing weapon.
+  components:
+  - type: Item
+    shape:
+    - 0, 0, 0, 1
+    size: Tiny
+    storedRotation: 90
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Dagger/iron.rsi
+    state: icon
+  - type: EmbeddableProjectile
+    offset: -0.15,-0.15
+    removalTime: 0.5
+  - type: CEStaminaThrowable
+    cost: 2
+  - type: EmitSoundOnThrow
+    sound:
+      path: /Audio/_CE/Effects/throw_knife.ogg
+      params:
+        variation: 0.1
+        volume: 20
+  - type: CEEntityEffectOnHit
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 20
+    - !type:PlaySound
+      sound:
+        path: /Audio/Weapons/genhit3.ogg
+        params:
+          variation: 0.1
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.4
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 9
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 13
+    animations:
+      Primary:
+      - anim: DaggerAttackLight1
+        speed: 1.5
+      - anim: DaggerAttackLight2
+        speed: 1.5
+      Secondary:
+      - anim: DaggerAttackHeavy
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 2
+  - type: CEThrowingRotation
+    rotationSpeed: 25.0
+    startAngle: 0
+  - type: Clothing
+    equipDelay: 0
+    unequipDelay: 0
+    slots:
+    - belt

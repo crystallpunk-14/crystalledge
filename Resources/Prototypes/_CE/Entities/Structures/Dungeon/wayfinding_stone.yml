@@ -1,0 +1,40 @@
+- type: entity
+  parent: BaseStructure
+  id: CEWayfindingStone
+  categories: [ ForkFiltered ]
+  name: waystone
+  description: An ancient stone with a map of known levels carved into its sides. Touch it to see where other travelers are currently located.
+  components:
+  - type: Sprite
+    sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+    state: center
+    drawdepth: Mobs
+    snapCardinals: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 80
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: ActivatableUI
+    key: enum.CEPlayerDungeonOverviewUiKey.Key
+    singleUser: false
+  - type: UserInterface
+    interfaces:
+      enum.CEPlayerDungeonOverviewUiKey.Key:
+        type: CEPlayerDungeonOverviewBoundUserInterface
+  - type: CEPlayerDungeonOverview
+  - type: PointLight
+    radius: 1.5
+    energy: 3
+    color: "#8f42ff"
+    netsync: false

@@ -2,8 +2,11 @@
                   xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Ghost.Widgets"
                   HorizontalAlignment="Center">
     <BoxContainer Orientation="Horizontal">
-        <Button Name="ReturnToBodyButton" Text="{Loc ghost-gui-return-to-body-button}" />
-        <Button Name="GhostWarpButton" Text="{Loc ghost-gui-ghost-warp-button}" />
-        <Button Name="GhostRolesButton" />
+        <!-- CrystallEdge: body return is disabled project-wide, keep button hidden. -->
+        <Button Name="ReturnToBodyButton" Text="{Loc ghost-gui-return-to-body-button}" Visible="False" />
+        <!-- CrystallEdge: disable player warp button in ghost HUD. -->
+        <Button Name="GhostWarpButton" Text="{Loc ghost-gui-ghost-warp-button}" Visible="False" />
+        <!-- CrystallEdge: hide ghost role list access from ghost HUD. -->
+        <Button Name="GhostRolesButton" Visible="False" />
     </BoxContainer>
 </widgets:GhostGui>

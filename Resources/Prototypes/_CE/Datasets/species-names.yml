@@ -1,0 +1,75 @@
+# Tiefling
+
+- type: localizedDataset
+  id: CE_Names_Tiefling_Male_First
+  values:
+    prefix: ce-species-name-tiefling-male-first-
+    count: 58
+
+- type: localizedDataset
+  id: CE_Names_Tiefling_Female_First
+  values:
+    prefix: ce-species-name-tiefling-female-first-
+    count: 53
+
+- type: localizedDataset
+  id: CE_Names_Tiefling_Last
+  values:
+    prefix: ce-species-name-tiefling-last-
+    count: 24
+
+# Elf
+
+- type: localizedDataset
+  id: CE_Names_Elf_Male_First
+  values:
+    prefix: ce-species-name-elf-male-first-
+    count: 28
+
+- type: localizedDataset
+  id: CE_Names_Elf_Female_First
+  values:
+    prefix: ce-species-name-elf-female-first-
+    count: 30
+
+- type: localizedDataset
+  id: CE_Names_Elf_Last
+  values:
+    prefix: ce-species-name-elf-last-
+    count: 18
+
+# Goblin
+
+- type: localizedDataset
+  id: CE_Names_Goblin_Male_First
+  values:
+    prefix: ce-species-name-goblin-male-first-
+    count: 26
+
+- type: localizedDataset
+  id: CE_Names_Goblin_Female_First
+  values:
+    prefix: ce-species-name-goblin-female-first-
+    count: 24
+
+# Carcat
+
+- type: localizedDataset
+  id: CE_Names_Carcat_First
+  values:
+    prefix: ce-species-name-carcat-first-
+    count: 50
+
+# Silva
+
+- type: localizedDataset
+  id: CE_Names_Silva_Male_First
+  values:
+    prefix: ce-species-name-silva-male-first-
+    count: 20
+
+- type: localizedDataset
+  id: CE_Names_Silva_Female_First
+  values:
+    prefix: ce-species-name-silva-female-first-
+    count: 20

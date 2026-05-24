@@ -1,0 +1,15 @@
+- type: entity
+  abstract: true
+  parent: Clothing
+  id: CEClothingArmorBase
+  categories: [ ForkFiltered ]
+  name: armor
+  description: Protect your internal organs from being pierced by sharp foreign objects.
+  components:
+  - type: Clothing
+    equipDelay: 1.5
+    unequipDelay: 1.5
+    slots:
+    - outerClothing
+  - type: Sprite
+    state: icon

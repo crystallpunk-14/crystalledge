@@ -1,0 +1,54 @@
+- type: entity
+  id: CEBaseFastPortal
+  abstract: true
+  categories: [ ForkFiltered ]
+  name: fast portal
+  description: Transports you to a another place!
+  components:
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/portal_active_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: Fixtures
+    fixtures:
+      portalFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.48,0.25,0.48"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        hard: false
+  - type: Portal
+    canTeleportToOtherMaps: true
+
+- type: entity
+  id: CEPortalArena1
+  parent: CEBaseFastPortal
+  suffix: Arena 1
+  components:
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#8f42ff"
+    netsync: false
+  - type: CEPortalAutoLink
+    key: arena1
+
+- type: entity
+  id: CEPortalArena2
+  parent: CEBaseFastPortal
+  suffix: Arena 2
+  components:
+  - type: PointLight
+    radius: 2
+    energy: 3
+    color: "#8f42ff"
+  - type: CEPortalAutoLink
+    key: arena2

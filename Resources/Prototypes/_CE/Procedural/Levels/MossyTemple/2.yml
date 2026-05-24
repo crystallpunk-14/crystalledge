@@ -1,0 +1,92 @@
+﻿- type: dungeonLevel
+  id: MossyTemple2
+  parent:
+  - BaseMossyTemplePostProcessPeaceful
+  name: ce-dungeon-mossy-temple-2-name
+  uiPosition: 4,0
+  maxEntryTime: 180
+  exits:
+    1: MossyTempleSafe
+  config:
+    !type:CEProceduralConfig
+    generationPlan:
+    - !type:SetRoomType
+      position: 0, 0
+      roomType: MossyTempleExitRoom
+    - !type:AppendRoom
+      roomType: MossyTempleGeneralRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      - MossyTempleExitRoom
+      count:
+        min: 6
+        max: 8
+    - !type:AppendRoom
+      roomType: MossyTempleEntranceRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 3
+        max: 3
+    - !type:AppendRoom
+      roomType: MossyTempleBlessingRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 1
+        max: 1
+    - !type:AppendRoom
+      roomType: MossyTempleTreasureRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 0
+        max: 2
+    - !type:AppendRoom
+      roomType: MossyTempleAlchemyRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 1
+        max: 1
+    - !type:AppendRoom
+      roomType: MossyTempleSecretRoom
+      attachToTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 0
+        max: 1
+    - !type:MarkDeadEnds
+      ofType: MossyTempleGeneralRoom
+      roomType: MossyTempleDeadEndRoom
+    - !type:ConnectRandomRooms
+      roomTypes:
+      - MossyTempleGeneralRoom
+      count:
+        min: 2
+        max: 3
+  postProcess:
+  - !type:CEMobBudgetSpawnPostProcess
+    budget: 30
+    entries:
+    - proto: CEMobRat
+      cost: 1
+    - proto: CEMobSlimeWater
+      cost: 2
+    - proto: CEMobSlimeWaterBig
+      cost: 4
+    - proto: CEMobGnome
+      cost: 4
+      weight: 0.2
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHerbs
+    budget: 5
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleKeys
+    budget: 1
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleHealing
+    budget: 50
+  - !type:CETableBudgetSpawnPostProcess
+    table: MossyTempleMana
+    budget: 10

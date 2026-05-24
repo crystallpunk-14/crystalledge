@@ -1,0 +1,15 @@
+<widgets:CESoulUI xmlns="https://spacestation14.io"
+                  xmlns:widgets="clr-namespace:Content.Client._CE.UserInterface.Systems.HealthMana.Widgets"
+                  MinSize="80 48">
+    <BoxContainer Orientation="Horizontal"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  SeparationOverride="6">
+        <AnimatedTextureRect Name="SoulIcon"
+                             SetSize="32 32"
+                             VerticalAlignment="Center" />
+        <Label Name="SoulLabel"
+               VerticalAlignment="Center"
+               FontColorOverride="#FFFFFF" />
+    </BoxContainer>
+</widgets:CESoulUI>

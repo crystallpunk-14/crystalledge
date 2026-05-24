@@ -1,0 +1,8 @@
+- type: entity
+  parent: CEClothingShirtBase
+  id: CEClothingWandererShirt
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Vanity/Shirt/Wanderer/shirt.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Vanity/Shirt/Wanderer/shirt.rsi

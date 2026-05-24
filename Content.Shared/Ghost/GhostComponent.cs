@@ -10,7 +10,7 @@ namespace Content.Shared.Ghost;
 /// Handles limiting interactions, using ghost abilities, ghost visibility, and ghost warping.
 /// </summary>
 [RegisterComponent, NetworkedComponent, Access(typeof(SharedGhostSystem))]
-[AutoGenerateComponentState(true), AutoGenerateComponentPause]
+[AutoGenerateComponentState(true)]
 public sealed partial class GhostComponent : Component
 {
     // Actions
@@ -54,7 +54,7 @@ public sealed partial class GhostComponent : Component
     /// May not reflect actual time of death if this entity has been paused,
     /// but will give an accurate length of time <i>since</i> death.
     /// </remarks>
-    [DataField, AutoPausedField]
+    [DataField, AutoNetworkedField]
     public TimeSpan TimeOfDeath = TimeSpan.Zero;
 
     /// <summary>
@@ -94,6 +94,18 @@ public sealed partial class GhostComponent : Component
     /// <remarks>Used to allow admins to change ghost colors. Should be removed if the capability to edit existing sprite colors is ever added back.</remarks>
     [DataField, AutoNetworkedField]
     public Color Color = Color.White;
+
+    /// <summary>
+    /// CrystallEdge: Ghosts can easily go to loby
+    /// </summary>
+    [DataField]
+    public EntProtoId CERespawnAction = "CEActionRespawn";
+
+    /// <summary>
+    /// CrystallEdge: Ghosts can easily go to loby
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? CERespawnActionEntity;
 }
 
 /// <summary>

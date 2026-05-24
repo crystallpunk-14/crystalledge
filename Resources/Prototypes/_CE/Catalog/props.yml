@@ -1,0 +1,31 @@
+- type: entityTable
+  id: CEDungeonProp
+  table: !type:GroupSelector
+    children:
+    - id: CEPot
+      weight: 1
+    - id: CEChestWoodenOldFilled
+      weight: 0.1
+    - id: CEChestWoodenFilled
+      weight: 0.05
+    - id: CEChestGoldFilled
+      weight: 0.01
+
+- type: entity
+  id: CESpawnerRandomDungeonProp
+  name: random dungeon prop spawner
+  suffix: 10%
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    snapCardinals: true
+    drawdepth: Mobs
+    layers:
+    - state: green
+    - sprite: _CE/Structures/Furniture/clay_pot.rsi
+      state: pot1
+  - type: EntityTableSpawner
+    table: !type:NestedSelector
+      tableId: CEDungeonProp
+      prob: 0.1

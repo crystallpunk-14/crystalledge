@@ -1,0 +1,20 @@
+- type: entity
+  id: CEGoldenLockedDoor
+  parent:
+  - CEBaseDoor
+  name: golden locked door
+  description: A heavy door sealed with a golden lock. It won't open without a key.
+  suffix: Locked, Gold
+  components:
+  - type: Sprite
+    color: "#FFCC00"
+    sprite: _CE/Structures/Architecture/Doors/golden_door.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+  - type: Lock
+    locked: true
+    showLockVerbs: false
+    unlockOnClick: false
+    lockOnClick: false
+    showExamine: true

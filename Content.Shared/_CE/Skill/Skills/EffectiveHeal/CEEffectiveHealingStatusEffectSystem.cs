@@ -1,5 +1,5 @@
 using Content.Shared._CE.Health;
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._CE.Skill.Skills.EffectiveHeal;
@@ -17,7 +17,7 @@ public sealed partial class CEEffectiveHealingStatusEffectSystem : EntitySystem
     {
         var count = ent.Comp.AdditionalHeal;
         if (TryComp<CEStatusEffectStackComponent>(ent, out var stackComp))
-            count *= stackComp.Stack;
+            count *= stackComp.Stacks;
 
         args.Args.HealAmount += count;
     }

@@ -17,7 +17,7 @@ We welcome any support from the community in the development of the game! Join o
 
 [More detailed instructions on building the project.](https://docs.spacestation14.com/en/general-development/setup.html)
 
-## Licensing/Attriibution
+## Licensing/Attribution
 
 These are just the most important points, Please read [Legal.md](https://github.com/crystallpunk-14/crystalledge/blob/master/Legal.md) for the specifics around licensing/attribution/copyright.
 - Unless specified otherwise, all Source Code, inside any _CE or CE folders, fall under the terms specified in LICENSE_CE.TXT (all right reserved) with Exhibit B enforced and the CrystallEdge CLA. All assets/content in those folders falls under CC-BY-SA 4.0 unless otherwise specified.

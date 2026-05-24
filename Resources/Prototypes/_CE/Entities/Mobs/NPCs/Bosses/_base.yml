@@ -1,0 +1,15 @@
+- type: entity
+  parent: CEMobGOAPBase
+  id: CEMobBossBase
+  suffix: Boss
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEBossHealthBar
+  - type: CEBoss
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: CESoulDropOnDeath
+    souls: 25
+    scatterSpeed: 50

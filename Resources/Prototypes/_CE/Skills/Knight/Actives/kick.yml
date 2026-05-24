@@ -1,0 +1,88 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: Kick
+  effect: !type:AddAction
+    action: CEActionKick
+
+- type: entity
+  id: CEActionKick
+  parent: CEActionSpellBase
+  name: Kick
+  description: A powerful kick that deals 15 damage in melee combat and strongly knocks back targets
+  components:
+  - type: CEVisualizeConeAction
+    width: 40
+    range: 1.5
+  - type: CEActionManaCost
+    manaCost: 6
+  - type: CEActionStaminaCost
+    cost: 3
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: _CE/Skills/Knight/kick.rsi
+      state: icon
+  - type: TargetAction
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationKick
+
+- type: entityEffectAnimation
+  id: AnimationKick
+  movementSpeed: 0.3
+  duration: 0.7
+  lockRotation: true
+  events:
+    0:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEKickEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.5
+        easing: QuadIn
+      - time: 0.5
+        offset: 0, -0.2
+        easing: QuadOut
+      - time: 0.65
+        offset: 0, -0.8
+        easing: QuadOut
+
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff"
+        easing: Linear
+      - time: 0.6
+        color: "#ffffff"
+        easing: QuadOut
+      - time: 0.69
+        color: "#ffffff00"  # Fade out
+
+      scaleAnimation:
+      - time: 0.0
+        scale: -1, 1
+    0.5:
+    - !type:WeaponArcAttack
+      range: 0.75
+      arcWidth: 35
+      effects:
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 15
+      - !type:ThrowFromUser
+        distance: 3
+        throwPower: 10
+
+
+- type: entity
+  id: CEKickEffect
+  categories: [ "HideSpawnMenu" ]
+  components:
+  - type: Sprite
+    sprite: Effects/arcs.rsi
+    state: foot
+  - type: TimedDespawn
+    lifetime: 0.4

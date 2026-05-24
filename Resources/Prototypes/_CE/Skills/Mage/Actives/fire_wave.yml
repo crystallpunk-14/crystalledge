@@ -1,0 +1,83 @@
+- type: skill
+  parent: BaseMageSkill
+  id: FireWave
+  effect: !type:AddAction
+    action: CEActionFireWave
+
+- type: entity
+  id: CEActionFireWave
+  parent: CEActionSpellBase
+  name: Fire wave
+  description: You unleash a wave of fire, dealing massive [color=#ff4500]fire damage[/color] in close distance.
+  components:
+  - type: CEVisualizeConeAction
+    width: 90
+    range: 3
+  - type: CEActionManaCost
+    manaCost: 15
+  - type: CEActionStaminaCost
+    cost: 4
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/Mage/fire_wave.rsi
+      state: icon
+  - type: TargetAction
+    repeat: true
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationFireWave
+
+- type: entityEffectAnimation
+  id: AnimationFireWave
+  movementSpeed: 0.3
+  duration: 0.7
+  lockRotation: true
+  events:
+    0:
+    - !type:ShootProjectile
+      projectileSpeed: 3
+      projectileMaxSpeed: 4
+      prototype: CEProjectileFireWave
+      projectileCount: 7
+      spread: 0.2
+
+- type: entity
+  id: CEProjectileFireWave
+  name: fire wave
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/StatusEffects/fire_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#fa9c29"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 0.75
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 0.75
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Fire: 2
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectFire
+      amount: 1
+      max: 8

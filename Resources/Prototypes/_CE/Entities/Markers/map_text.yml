@@ -1,0 +1,155 @@
+- type: entity
+  id: CEMapEndText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map end text
+  components:
+  - type: MapText
+    text: "This is the end of the demo! Thanks for playing :). \n The next level will be incredibly, absurdly difficult—meaning you'll most likely die."
+
+
+- type: entity
+  id: CEMapStartText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map start text EN
+  components:
+  - type: MapText
+    text: "A maximum of 4 players can enter the portal at the same time. \nA short demo adventure awaits you, spanning 4 floors that gradually get more challenging. \nYou may randomly encounter other groups of players inside, and it’s up to you to decide whether you’re friends or foes.\nOn each level, there is 1 statue that will boost your character’s stats.\nYour goal is to reach the end and have fun!"
+
+- type: entity
+  id: CEMapStartBlockedText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map blocked text
+  components:
+  - type: MapText
+    text: "The playtest is coming to an end. You can no longer start new runs. \nWe’re waiting for players to finish their adventures before shutting down the server."
+
+- type: entity
+  id: CEMapStartNotStartedText
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map not started text
+  components:
+  - type: MapText
+    text: "The playtest hasn't started yet. Please wait..."
+
+- type: entity
+  id: CEMapTextPeace
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map text - Peaceful
+  components:
+  - type: MapText
+    text: "PvE"
+
+- type: entity
+  id: CEMapTextDanger
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Map text - Dangerous
+  components:
+  - type: MapText
+    text: "PvP"
+
+
+# Tutorial
+
+- type: entity
+  id: CEMapTextTutorialEntry
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial entry text
+  components:
+  - type: MapText
+    text: "Tutorial"
+
+- type: entity
+  id: CEMapTextTutorialInteraction1
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial interaction text 1
+  suffix: "E interaction"
+  components:
+  - type: MapText
+    text: "Press E to interact"
+
+- type: entity
+  id: CEMapTextTutorialInteraction2
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial interaction text 2
+  suffix: "X interaction"
+  components:
+  - type: MapText
+    text: "Press X to change active hand"
+
+- type: entity
+  id: CEMapTextTutorialInteraction3
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial interaction text 3
+  suffix: "Q interaction"
+  components:
+  - type: MapText
+    text: "Press Q to to place the object \ncarefully from active hand"
+
+- type: entity
+  id: CEMapTextTutorialInteraction4
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial interaction text 4
+  suffix: "Ctrl+Q interaction"
+  components:
+  - type: MapText
+    text: "Press Ctrl+Q to to throw item \nfrom active hand"
+
+- type: entity
+  id: CEMapTextTutorialBattle1
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial battle text 1
+  suffix: "Harm mode"
+  components:
+  - type: MapText
+    text: "Press 1 to toggle harm mode on/off"
+
+- type: entity
+  id: CEMapTextTutorialStatue
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial statue text
+  components:
+  - type: MapText
+    text: "Souls drop from enemies. \nUse them to get stronger."
+
+
+- type: entity
+  id: CEMapTextTutorialBonfire
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial bonfire text
+  components:
+  - type: MapText
+    text: "Rest by the campfires \nto fully restore all your resources"
+
+    
+- type: entity
+  id: CEMapTextTutorialEnd1
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial end text
+  components:
+  - type: MapText
+    text: "Death is part of the journey. \nYou’ll die—a lot. At the hands of other players. \nAt the hands of monsters."
+
+    
+- type: entity
+  id: CEMapTextTutorialEnd2
+  parent: MapText
+  categories: [ ForkFiltered ]
+  name: Tutorial end text 2
+  components:
+  - type: MapText
+    text: "Press C to lie down on the ground. \nDie. \n\n\n\n\n\n\n\n\n\n\nDie to begin your real adventure."

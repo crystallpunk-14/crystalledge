@@ -1,0 +1,77 @@
+- type: entity
+  parent: CEMobFlem
+  id: CEMobFlem2
+  suffix: Fire
+  components:
+  - type: Sprite
+    color: Red
+  - type: CEGOAP
+    actions:
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 2
+      range: 1.5
+    # Attack target from distance
+    - !type:CEGOAPUseAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionFirewall
+    # Wander to a random nearby tile
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+  - type: CEArmor
+    flat:
+      Fire: 25
+
+- type: entity
+  parent: CEMobFlem
+  id: CEMobFlem3
+  suffix: Frost
+  components:
+  - type: Sprite
+    color: Blue
+  - type: CEGOAP
+    actions:
+    # Move to target
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 2
+      range: 1.5
+    # Attack target from distance
+    - !type:CEGOAPUseAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+        EnemyInMeleeRange: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      actionPrototype: CEActionFrostFlow
+    # Wander to a random nearby tile
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+    # Move to enemy's last known position
+  - type: CEArmor
+    flat:
+      Cold: 25

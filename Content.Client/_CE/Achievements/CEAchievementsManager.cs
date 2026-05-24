@@ -1,6 +1,10 @@
 using Content.Shared._CE.Achievements;
+using Content.Shared._CE.Achievements.Prototypes;
 using Robust.Client;
+using Robust.Client.Player;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Achievements;
 
@@ -8,10 +12,11 @@ namespace Content.Client._CE.Achievements;
 /// Client-side manager that receives and caches achievement data from the server.
 /// Registered early in IoC so the net message is known before the connection is established.
 /// </summary>
-public sealed class CEAchievementsManager
+public sealed class CEAchievementsManager : ICEAchievementsRequirementManager
 {
     [Dependency] private readonly IClientNetManager _netManager = default!;
     [Dependency] private readonly IBaseClient _client = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
 
     /// <summary>
     /// Achievement prototype IDs that the current player has earned.
@@ -57,5 +62,13 @@ public sealed class CEAchievementsManager
         DataLoaded = true;
 
         AchievementsUpdated?.Invoke();
+    }
+
+    public bool HasAchievement(NetUserId userId, ProtoId<CEAchievementPrototype> achievement)
+    {
+        if (_playerManager.LocalSession?.UserId != userId)
+            return false;
+
+        return PlayerAchievements.Contains(achievement);
     }
 }

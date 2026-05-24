@@ -34,6 +34,7 @@ public sealed partial class JobRequirementLoadoutEffect : LoadoutEffect
             collection.Resolve<IPrototypeManager>(),
             profile,
             playtimes,
-            out reason);
+            out reason,
+            session.UserId);
     }
 }

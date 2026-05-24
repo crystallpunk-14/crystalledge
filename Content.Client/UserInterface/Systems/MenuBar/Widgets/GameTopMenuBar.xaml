@@ -53,9 +53,11 @@
         HorizontalExpand="True"
         AppendStyleClass="{x:Static style:StyleClass.ButtonSquare}"
         />
+    <!-- CrystallEdge: crafting menu disabled on CE, button hidden -->
     <ui:MenuButton
         Name="CraftingButton"
         Access="Internal"
+        Visible="False"
         Icon="{xe:Tex '/Textures/Interface/hammer.svg.192dpi.png'}"
         BoundKey = "{x:Static is:ContentKeyFunctions.OpenCraftingMenu}"
         ToolTip="{Loc 'game-hud-open-crafting-menu-button-tooltip'}"
@@ -63,6 +65,7 @@
         HorizontalExpand="True"
         AppendStyleClass="{x:Static style:StyleClass.ButtonSquare}"
         />
+    <!-- CrystallEdge end -->
     <ui:MenuButton
         Name="ActionButton"
         Access="Internal"

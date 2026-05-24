@@ -105,12 +105,24 @@
   - type: ShowContrabandDetails
   - type: Inventory
     templateId: aghost
-  - type: Loadout
-    prototypes: [ MobAghostGear ]
+  #- type: Loadout
+  #  prototypes: [ MobAghostGear ]
   - type: BypassInteractionChecks
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: CESkillScanner
+  - type: CEShowMobHealth
+  - type: CEShowMobMana
+  - type: CEShowMobStamina
+  - type: CEAdminDungeonOverview
+  - type: UserInterface
+    interfaces:
+      enum.CEAdminDungeonOverviewUiKey.Key:
+        type: CEAdminDungeonOverviewBoundUserInterface
+  - type: IntrinsicUI
+    uis:
+      enum.CEAdminDungeonOverviewUiKey.Key:
+        toggleAction: CEActionAdminDungeonOverview
 
 - type: entity
   abstract: true
@@ -196,3 +208,4 @@
     priority: -7
   - type: InstantAction
     event: !type:ToggleIntrinsicUIEvent { key: enum.GeneralStationRecordConsoleKey.Key }
+

@@ -5,6 +5,7 @@
   color: "#27c732"
   editorHidden: false
   roles:
-  - CEWarrior
+  - CEKnight
   - CEMage
   - CEPriest
+  - CEWanderer

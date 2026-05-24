@@ -3,20 +3,30 @@
   name: "Fire!"
   description: "On fire!"
   components:
+  - type: CENegativeStatusEffect
   - type: StatusEffect
     whitelist:
       components:
-      - CEHealth
+      - CEDamageable
   - type: StatusEffectAlert
     alert: CEFire
   - type: RejuvenateRemovedStatusEffect
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectColdSlowdown
+    - CEStatusEffectWet
+    - CEStatusEffectFrozen
+    vfx: CESteamEffect
+    sound:
+      path: /Audio/_CE/Effects/steam_burst.ogg
   - type: CEDamageStatusEffect
+    interruptDoAfters: false
     damage:
       types:
         Fire: 1
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/fire_status.rsi
+    sprite: _CE/Effects/StatusEffects/fire_status.rsi
     noRot: true
     layers:
     - state: effect
@@ -40,6 +50,9 @@
     range: 5
     sound:
       path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 2
 
 - type: alert
   id: CEFire

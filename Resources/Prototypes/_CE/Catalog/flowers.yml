@@ -1,0 +1,35 @@
+- type: entityTable
+  id: CERandomFlowers
+  table: !type:GroupSelector
+    children:
+    - id: CEConsumableBlueAelyta
+    - id: CEConsumableBloodRose
+    - id: CEConsumableYellowDayflin
+
+
+- type: entityTable
+  id: CERandomFlowersTile
+  table: !type:GroupSelector
+    children:
+    - id: CEGatherableBlueAelyta
+    - id: CEGatherableBloodRose
+    - id: CEGatherableYellowDayflin
+
+- type: entity
+  id: CESpawnerRandomFlowers
+  name: random flowers spawner
+  suffix: 100%
+  parent: MarkerBase
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    snapCardinals: true
+    drawdepth: Mobs
+    layers:
+    - state: green
+    - sprite: _CE/Objects/Consumable/Flowers/blue_aelyta.rsi
+      state: base1
+  - type: EntityTableSpawner
+    table: !type:NestedSelector
+      tableId: CERandomFlowersTile
+      prob: 1

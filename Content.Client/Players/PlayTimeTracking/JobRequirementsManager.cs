@@ -191,9 +191,10 @@ public sealed class JobRequirementsManager : ISharedPlaytimeManager
             return true;
 
         var reasons = new List<string>();
+        var userId = _playerManager.LocalSession?.UserId;
         foreach (var requirement in requirements)
         {
-            if (requirement.Check(_entManager, _prototypes, profile, _roles, out var jobReason))
+            if (requirement.Check(_entManager, _prototypes, profile, _roles, out var jobReason, userId))
                 continue;
 
             reasons.Add(jobReason.ToMarkup());

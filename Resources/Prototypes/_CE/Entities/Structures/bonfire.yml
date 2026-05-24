@@ -1,0 +1,62 @@
+- type: entity
+  id: CEBonfire
+  parent: BaseStructure
+  name: Bonfire
+  description: "Interact to restore health and mana. TODO: immersive name and description"
+  categories: [ ForkFiltered ]
+  components:
+  - type: PlacementReplacement
+    key: walls
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    offset: "0.0,0.2"
+    sprite: _CE/Structures/bonfire.rsi
+    layers:
+    - state: bonfire
+    - state: fire
+      shader: unshaded
+    - sprite: _CE/Effects/bonfire.rsi
+      shader: unshaded
+      state: effect
+      offset: "0.1,1.4"
+    - state: heal
+      shader: unshaded
+      map: ["used"]
+      offset: "0,1.4"
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: InteractionOutline
+  - type: PointLight
+    enabled: true
+    color: "#e67c34"
+    radius: 8
+    energy: 5
+    netsync: false
+  - type: AmbientSound
+    enabled: true
+    volume: 5
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: LightBehaviour
+    behaviours:
+      - !type:RandomizeBehaviour # immediately make it bright and flickery
+        interpolate: Nearest
+        minDuration: 0.02
+        maxDuration: 0.06
+        startValue: 8.0
+        endValue: 9.0
+        property: Energy
+        isLooped: true
+        enabled: true
+  - type: CEBonfire

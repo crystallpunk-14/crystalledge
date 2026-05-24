@@ -1,4 +1,6 @@
 using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP.Components;
+using Content.Shared._CE.GOAP.Selectors;
 using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP;
@@ -9,14 +11,25 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEGOAPActionBase<T>
 {
+    [Dependency] protected readonly CEGOAPSystem Goap = default!;
+    [Dependency] private readonly EntityQuery<TransformComponent> _coordsXformQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionInitEvent<T>>(OnActionInit);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionCanExecuteEvent<T>>(OnCanExecute);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionStartupEvent<T>>(OnActionStartup);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionUpdateEvent<T>>(OnActionUpdate);
         SubscribeLocalEvent<CEGOAPComponent, CEGOAPActionShutdownEvent<T>>(OnActionShutdown);
+    }
+
+    /// <summary>
+    /// Called once during entity map initialization. Override to perform one-time setup.
+    /// </summary>
+    protected virtual void OnActionInit(Entity<CEGOAPComponent> ent, ref CEGOAPActionInitEvent<T> args)
+    {
     }
 
     /// <summary>
@@ -50,24 +63,28 @@ public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEG
     }
 
     /// <summary>
-    /// Returns the resolved entity target from the named target provider, or null if the key is absent or unresolved.
+    /// Resolves a <see cref="CEGOAPTargetSelector"/> to world coordinates.
+    /// Prefers the resolved entity's transform, falling back to a raw position.
     /// </summary>
-    protected EntityUid? GetTarget(CEGOAPComponent goap, string? providerKey)
+    protected bool TryResolveCoords(EntityUid agent, CEGOAPTargetSelector? selector, out EntityCoordinates coords)
     {
-        if (providerKey == null)
-            return null;
+        coords = default;
+        if (selector == null)
+            return false;
 
-        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetEntity : null;
-    }
+        var result = selector.Resolve(agent, EntityManager);
+        if (result.Entity is { } e && _coordsXformQuery.TryGetComponent(e, out var xform))
+        {
+            coords = xform.Coordinates;
+            return true;
+        }
 
-    /// <summary>
-    /// Returns the resolved coordinate target from the named target provider, or null if the key is absent or unresolved.
-    /// </summary>
-    protected EntityCoordinates? GetTargetCoordinates(CEGOAPComponent goap, string? providerKey)
-    {
-        if (providerKey == null)
-            return null;
+        if (result.Position is { } p)
+        {
+            coords = p;
+            return true;
+        }
 
-        return goap.TargetProviders.TryGetValue(providerKey, out var provider) ? provider.TargetCoordinates : null;
+        return false;
     }
 }

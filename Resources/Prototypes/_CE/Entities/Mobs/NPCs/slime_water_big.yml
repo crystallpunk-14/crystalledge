@@ -1,0 +1,190 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  - CEMobGOAPBase
+  id: CEMobSlimeWaterBig
+  name: big water slime
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    scale: 2, 2
+    sprite: _CE/Mobs/slime.rsi
+    layers:
+    - map: [ "base", "movement" ]
+      state: base
+      color: "#37beef"
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/slime_alert.ogg
+      params:
+        variation: 0.1
+        pitch: 0.6
+  - type: CESpawnAnimation
+    animation: BigWaterSlimeSpawn
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.1, 1.9
+      - time: 0.5
+        scale: 1.9, 2.1
+      - time: 1.0
+        scale: 2.1, 1.9
+  - type: CEDestructible
+    destroyThreshold: 75
+    lootTable: !type:AllSelector
+      children:
+      - id: CEMobSlimeWater
+        amount: 2
+        prob: 1
+      - id: CEMobSlimeWater
+        amount: 1
+        prob: 0.25
+      - id: CEMobSlimeWater
+        amount: 1
+        prob: 0.25
+  - type: CEDestructionEffect
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectWater
+      radius: 1
+      maxStacks: 10
+      fallOffFactor: 0.5
+    - !type:AreaEffect
+      range: 1
+      effects:
+      - !type:ThrowFromUser
+        distance: 1
+  - type: CEGOAP
+
+    goals:
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+
+    actions:
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 1
+      range: 1.5
+    - !type:CEGOAPMeleeAttackAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyInMeleeRange: true
+      effects:
+        EnemyDead: true
+      cost: 1
+      useType: Primary
+      angleVariation: 5
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyVisible: true
+      cost: 1
+      exploreRadius: 8
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 0.75
+  - type: CEWeapon
+    spriteRotation: -90
+    effectSlots:
+      OnHit:
+      - !type:CETileAffectArea
+        tileEffect: CETileEffectWater
+        effectTarget: User
+        radius: 2
+        maxStacks: 5
+      - !type:WeaponArcAttack
+        range: 0.9
+        arcWidth: 360
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 15
+        - !type:ThrowFromUser
+          distance: 1
+    animations:
+      Primary:
+      - anim: BigSlimeWaterAttack
+
+- type: entityEffectAnimation
+  id: BigSlimeWaterAttack
+  movementSpeed: 0
+  duration: 1.5
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/Fluids/watersplash.ogg
+        params:
+          variation: 0.1
+          pitch: 0.6
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectWaterBurstTelegraphy
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 2.4, 1.6
+        easing: QuadOut
+      - time: 0.25
+        scale: 1.6, 2.4
+        easing: QuadOut
+      - time: 0.65
+        scale: 1.6, 2.4
+      - time: 0.9
+        scale: 2.4, 1.6
+        easing: QuadIn
+      - time: 1.1
+        scale: 2, 2
+        easing: QuadOut
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0
+      - time: 0.25
+        offset: 0, 0.4
+        easing: QuadOut
+      - time: 0.65
+        offset: 0, 0.4
+      - time: 0.9
+        offset: 0, 0
+        easing: QuadIn
+    1.0:
+    - !type:WeaponEffectSlot
+      slot: OnHit
+
+
+- type: entityEffectAnimation
+  id: BigWaterSlimeSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectWaterCreation
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0.0
+        scale: 4.0, 0.1
+      - time: 0.9
+        scale: 2.0, 2.0
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"

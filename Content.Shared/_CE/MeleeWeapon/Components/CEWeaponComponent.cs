@@ -1,5 +1,6 @@
 using Content.Shared._CE.Animation.Core.Prototypes;
-using Content.Shared._CE.Health;
+using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -20,10 +21,11 @@ public sealed partial class CEWeaponComponent : Component
     public Dictionary<CEUseType, List<CEAnimationEntry>> Animations = new();
 
     /// <summary>
-    ///
+    /// Named effect slots that animations can reference via <c>WeaponEffectSlot</c>.
+    /// Allows weapons to define unique effects (e.g. on-hit, on-cast) without duplicating animations.
     /// </summary>
-    [DataField(required: true), AutoNetworkedField]
-    public CEDamageSpecifier Damage = new();
+    [DataField]
+    public Dictionary<string, List<CEEntityEffect>> EffectSlots = new();
 
     /// <summary>
     /// Are we currently holding down the mouse for an attack.
@@ -31,12 +33,6 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool Using;
-
-    /// <summary>
-    /// Extra time after the animation ends before the combo resets.
-    /// </summary>
-    [DataField]
-    public TimeSpan ComboResetDelay = TimeSpan.FromSeconds(0.5);
 
     /// <summary>
     /// Which use type the current combo chain belongs to.
@@ -53,7 +49,7 @@ public sealed partial class CEWeaponComponent : Component
 
     /// <summary>
     /// Absolute time after which the combo resets to the first animation.
-    /// Calculated as: attack time + animation duration + <see cref="ComboResetDelay"/>.
+    /// Calculated as: attack time + animation duration * 1.5 (adjusted for playback speed).
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan ComboResetDeadline = TimeSpan.Zero;
@@ -70,19 +66,13 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField]
     public SoundSpecifier HitSound = new SoundCollectionSpecifier("WeakHit");
-
-    /// <summary>
-    /// Modify weapon attack animations range
-    /// </summary>
-    [DataField]
-    public float RangeMultiplier = 1f;
 }
 
 [DataDefinition, Serializable]
 public sealed partial class CEAnimationEntry
 {
     [DataField(required: true)]
-    public ProtoId<CEAnimationActionPrototype> Anim;
+    public ProtoId<CEEntityEffectAnimationPrototype> Anim;
 
     /// <summary>
     /// animation playback speed modifier

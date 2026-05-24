@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Client._CE.UserInterface.Systems.HealthMana;
 
@@ -26,8 +27,14 @@ public sealed class CEHealthUiController : UIController
 
         SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
-        SubscribeLocalEvent<CEHealthChangedEvent>(OnHealthChanged);
-        SubscribeLocalEvent<CEMobStateChangedEvent>(OnMobStateChanged);
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+
+        if (_player.LocalEntity is { } player)
+            UpdateHealth(player);
     }
 
     private void OnScreenLoad()
@@ -56,6 +63,9 @@ public sealed class CEHealthUiController : UIController
         if (UIManager.ActiveScreen is DefaultGameScreen game)
             return game.HealthBar;
 
+        if (UIManager.ActiveScreen is SeparatedChatGameScreen separated)
+            return separated.HealthBar;
+
         return null;
     }
 
@@ -71,22 +81,6 @@ public sealed class CEHealthUiController : UIController
             _healthBar.Visible = false;
     }
 
-    private void OnHealthChanged(CEHealthChangedEvent args)
-    {
-        if (_player.LocalEntity != args.Target)
-            return;
-
-        UpdateHealth(args.Target);
-    }
-
-    private void OnMobStateChanged(CEMobStateChangedEvent args)
-    {
-        if (_player.LocalEntity != args.Target)
-            return;
-
-        UpdateHealth(args.Target);
-    }
-
     private void UpdateHealth(EntityUid uid)
     {
         if (_healthBar == null)
@@ -98,13 +92,22 @@ public sealed class CEHealthUiController : UIController
             return;
         }
 
-        if (!EntityManager.TryGetComponent<CEHealthComponent>(uid, out var health))
+        if (!EntityManager.TryGetComponent<CEDamageableComponent>(uid, out _))
+        {
+            _healthBar.Visible = false;
+            return;
+        }
+
+        var damageable = EntityManager.System<CESharedDamageableSystem>();
+        var info = damageable.GetHealthInfo(uid);
+
+        if (info.MaxHp <= 0)
         {
             _healthBar.Visible = false;
             return;
         }
 
         _healthBar.Visible = true;
-        _healthBar.UpdateHealthDisplay(health);
+        _healthBar.UpdateHealthDisplay(info);
     }
 }

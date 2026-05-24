@@ -1,0 +1,55 @@
+- type: entity
+  id: CEStatusEffectAcceleration
+  name: Acceleration
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - MovementSpeedModifier
+  - type: StatusEffectAlert
+    alert: CEAcceleration
+  - type: RejuvenateRemovedStatusEffect
+  - type: CESpeedModifierStatusEffect
+    speed: 1.05
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/StatusEffects/acceleration_status.rsi
+    noRot: true
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 1.2
+    energy: 1
+    color: "#d4f530"
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 2
+
+- type: alert
+  id: CEAcceleration
+  alertViewEntity: CEAccelerationAlertSpriteView
+  name: ce-alert-acceleration-name
+  description: ce-alert-acceleration-desc
+  icons:
+  - sprite: _CE/Interface/acceleration.rsi
+    state: icon
+
+- type: entity
+  id: CEAccelerationAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/acceleration.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

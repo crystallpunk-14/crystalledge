@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffectStacks;
+using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.Alert.Components;
 using Content.Shared.StatusEffectNew.Components;
 
@@ -44,7 +44,7 @@ public sealed class CEStatusEffectStackAlertSystem : EntitySystem
             if (!_stackCompQuery.TryComp(effectEnt, out var stackComp))
                 continue;
 
-            args.Amount = stackComp.Stack;
+            args.Amount = stackComp.Stacks;
             return;
         }
     }

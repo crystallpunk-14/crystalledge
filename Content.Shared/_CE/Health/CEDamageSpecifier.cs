@@ -39,7 +39,10 @@ public sealed partial class CEDamageSpecifier
     {
         var result = new CEDamageSpecifier();
         foreach (var (type, value) in spec.Types)
+        {
             result.Types[type] = (int)(value * multiplier);
+        }
+
         return result;
     }
 
@@ -54,4 +57,40 @@ public sealed partial class CEDamageSpecifier
 
         return result;
     }
+
+    public bool Equals(CEDamageSpecifier other)
+    {
+        if (Types.Count != other.Types.Count)
+            return false;
+
+        foreach (var (key, value) in Types)
+        {
+            if (!other.Types.TryGetValue(key, out var otherVal) || otherVal != value)
+                return false;
+        }
+
+        return true;
+    }
+
+    public override bool Equals(object? obj) => obj is CEDamageSpecifier other && Equals(other);
+
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        foreach (var (key, value) in Types)
+        {
+            hash.Add(key);
+            hash.Add(value);
+        }
+        return hash.ToHashCode();
+    }
+
+    public static bool operator ==(CEDamageSpecifier? a, CEDamageSpecifier? b)
+    {
+        if (a is null)
+            return b is null;
+        return b is not null && a.Equals(b);
+    }
+
+    public static bool operator !=(CEDamageSpecifier? a, CEDamageSpecifier? b) => !(a == b);
 }

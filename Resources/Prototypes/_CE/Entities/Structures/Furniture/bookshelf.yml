@@ -1,0 +1,106 @@
+- type: entity
+  id: CEBookshelfBase
+  categories: [ ForkFiltered ]
+  parent: BaseStructure
+  abstract: true
+  suffix: Empty
+  name: bookshelf
+  description: Mostly filled with books.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    layers:
+      - state: base
+      - state: book-0
+      - map: ["enum.StorageFillLayers.Fill"]
+  - type: Storage
+    grid:
+    - 0,0,5,5
+    maxItemSize: Normal
+    whitelist:
+      tags:
+        - Document
+        - Folder
+        - Write
+        - Book
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Anchorable
+  - type: Rotatable
+  - type: Appearance
+  - type: StorageFillVisualizer
+    maxFillLevels: 21
+    fillBaseName: book
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.35,0.5,0.5"
+        density: 75
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        - MidImpassable
+        - LowImpassable
+
+
+- type: entity
+  id: CEBookshelfWooden
+  parent: CEBookshelfBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/bookshelf.rsi
+
+- type: entity
+  id: CEBookshelfWoodenFilled
+  parent: CEBookshelfWooden
+  suffix: Random filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        prob: 0.1
+        tableId: CECommonBooks
+
+
+- type: entity
+  id: CEBookshelfStone
+  parent: CEBookshelfBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/bookshelf_stone.rsi
+
+- type: entity
+  id: CEBookshelfStoneFilled
+  parent: CEBookshelfStone
+  suffix: Random filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        prob: 0.1
+        tableId: CECommonBooks
+
+- type: entity
+  id: CEBookshelfStoneFilledGuaranteed
+  parent: CEBookshelfStone
+  suffix: Guaranteed 1 book
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        prob: 1
+        tableId: CECommonBooks

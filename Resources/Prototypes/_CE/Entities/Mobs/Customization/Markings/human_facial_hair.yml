@@ -1,6 +1,11 @@
 - type: marking
   id: CEHumanFacialHair3Clock
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: 3oclock
@@ -8,6 +13,11 @@
 - type: marking
   id: CEHumanFacialHair5oclockmoustache
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: 5oclockmoustache
@@ -15,6 +25,11 @@
 - type: marking
   id: CEHumanFacialHair7oclock
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: 7oclock
@@ -22,6 +37,11 @@
 - type: marking
   id: CEHumanFacialHair7oclockmoustache
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: 7oclockmoustache
@@ -29,6 +49,11 @@
 - type: marking
   id: CEHumanFacialHairAbe
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: abe
@@ -36,6 +61,11 @@
 - type: marking
   id: CEHumanFacialHairChinlessbeard
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: chinlessbeard
@@ -43,6 +73,11 @@
 - type: marking
   id: CEHumanFacialHairDwarf
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: dwarf
@@ -50,6 +85,11 @@
 - type: marking
   id: CEHumanFacialHairDwarf2
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: dwarf2
@@ -57,6 +97,11 @@
 - type: marking
   id: CEHumanFacialHairElvis
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: elvis
@@ -64,6 +109,11 @@
 - type: marking
   id: CEHumanFacialHairFiveoclock
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: fiveoclock
@@ -71,6 +121,11 @@
 - type: marking
   id: CEHumanFacialHairFullbeard
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: fullbeard
@@ -78,6 +133,11 @@
 - type: marking
   id: CEHumanFacialHairFumanchu
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: fumanchu
@@ -85,6 +145,11 @@
 - type: marking
   id: CEHumanFacialHairGoateemush
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: goateemush
@@ -92,6 +157,11 @@
 - type: marking
   id: CEHumanFacialHairGt
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: gt
@@ -99,6 +169,11 @@
 - type: marking
   id: CEHumanFacialHairHip
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: hip
@@ -106,6 +181,11 @@
 - type: marking
   id: CEHumanFacialHairHogan
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: hogan
@@ -113,6 +193,11 @@
 - type: marking
   id: CEHumanFacialHairHussar
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: hussar
@@ -120,6 +205,11 @@
 - type: marking
   id: CEHumanFacialHairJensen
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: jensen
@@ -127,6 +217,11 @@
 - type: marking
   id: CEHumanFacialHairLongbeard
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: longbeard
@@ -134,6 +229,11 @@
 - type: marking
   id: CEHumanFacialHairMartialartist
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: martialartist
@@ -141,6 +241,11 @@
 - type: marking
   id: CEHumanFacialHairMartialartist2
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: martialartist2
@@ -148,6 +253,11 @@
 - type: marking
   id: CEHumanFacialHairMoonshiner
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: moonshiner
@@ -155,6 +265,11 @@
 - type: marking
   id: CEHumanFacialHairMoustache
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: moustache
@@ -162,6 +277,11 @@
 - type: marking
   id: CEHumanFacialHairMutton
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: mutton
@@ -169,6 +289,11 @@
 - type: marking
   id: CEHumanFacialHairMuttonmus
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: muttonmus
@@ -176,6 +301,11 @@
 - type: marking
   id: CEHumanFacialHairNeckbeard
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: neckbeard
@@ -183,6 +313,11 @@
 - type: marking
   id: CEHumanFacialHairPencilstache
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: pencilstache
@@ -190,6 +325,11 @@
 - type: marking
   id: CEHumanFacialHairSelleck
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: selleck
@@ -197,6 +337,11 @@
 - type: marking
   id: CEHumanFacialHairSideburn
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: sideburn
@@ -204,6 +349,11 @@
 - type: marking
   id: CEHumanFacialHairSmallstache
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: smallstache
@@ -211,6 +361,11 @@
 - type: marking
   id: CEHumanFacialHairVandyke
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: vandyke
@@ -218,6 +373,11 @@
 - type: marking
   id: CEHumanFacialHairVolaju
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: volaju
@@ -225,6 +385,11 @@
 - type: marking
   id: CEHumanFacialHairWalrus
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: walrus
@@ -232,6 +397,11 @@
 - type: marking
   id: CEHumanFacialHairWatson
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: watson
@@ -239,6 +409,11 @@
 - type: marking
   id: CEHumanFacialHairWise
   bodyPart: FacialHair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_facial_hair.rsi
       state: wise

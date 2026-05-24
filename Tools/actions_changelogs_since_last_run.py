@@ -23,7 +23,7 @@ GITHUB_API_URL = os.environ.get("GITHUB_API_URL", "https://api.github.com")
 DISCORD_SPLIT_LIMIT = 2000
 DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
-CHANGELOG_FILE = "Resources/Changelog/Changelog.yml"
+CHANGELOG_FILE = "Resources/Changelog/CE_Changelog.yml"
 
 TYPES_TO_EMOJI = {"Fix": "🐛", "Add": "🆕", "Remove": "❌", "Tweak": "⚒️"}
 
@@ -31,25 +31,30 @@ ChangelogEntry = dict[str, Any]
 
 
 def main():
+    print("[DEBUG] Starting main function")
     if not DISCORD_WEBHOOK_URL:
-        print("No discord webhook URL found, skipping discord send")
+        print("[DEBUG] No discord webhook URL found, skipping discord send")
         return
 
     if DEBUG:
-        # to debug this script locally, you can use
-        # a separate local file as the old changelog
+        print("[DEBUG] DEBUG mode enabled, using local changelog file")
         last_changelog_stream = DEBUG_CHANGELOG_FILE_OLD.read_text()
     else:
-        # when running this normally in a GitHub actions workflow,
-        # it will get the old changelog from the GitHub API
+        print("[DEBUG] Fetching last changelog from GitHub API")
         last_changelog_stream = get_last_changelog()
 
+    print("[DEBUG] Parsing last changelog YAML")
     last_changelog = yaml.safe_load(last_changelog_stream)
     with open(CHANGELOG_FILE, "r") as f:
+        print(f"[DEBUG] Reading current changelog file: {CHANGELOG_FILE}")
         cur_changelog = yaml.safe_load(f)
 
-    diff = diff_changelog(last_changelog, cur_changelog)
+    print("[DEBUG] Calculating changelog diff")
+    diff = list(diff_changelog(last_changelog, cur_changelog))
+    print(f"[DEBUG] Found {len(diff)} new entries in changelog diff")
+
     message_lines = changelog_entries_to_message_lines(diff)
+    print("[DEBUG] Sending message lines to Discord")
     send_message_lines(message_lines)
 
 
@@ -87,6 +92,7 @@ def get_past_runs(sess: requests.Session, current_run: Any) -> Any:
 
 
 def get_last_changelog() -> str:
+    print("[DEBUG] Fetching last changelog using GitHub API")
     github_repository = os.environ["GITHUB_REPOSITORY"]
     github_run = os.environ["GITHUB_RUN_ID"]
     github_token = os.environ["GITHUB_TOKEN"]
@@ -98,7 +104,7 @@ def get_last_changelog() -> str:
 
     most_recent = get_most_recent_workflow(session, github_repository, github_run)
     last_sha = most_recent["head_commit"]["id"]
-    print(f"Last successful publish job was {most_recent['id']}: {last_sha}")
+    print(f"[DEBUG] Last successful publish job was {most_recent['id']}: {last_sha}")
     last_changelog_stream = get_last_changelog_by_sha(
         session, last_sha, github_repository
     )
@@ -147,24 +153,26 @@ def get_discord_body(content: str):
 
 
 def send_discord_webhook(lines: list[str]):
+    print("[DEBUG] Preparing to send Discord webhook")
     content = "".join(lines)
     body = get_discord_body(content)
     retry_attempt = 0
 
     try:
+        print("[DEBUG] Sending POST request to Discord webhook")
         response = requests.post(DISCORD_WEBHOOK_URL, json=body, timeout=10)
         while response.status_code == 429:
             retry_attempt += 1
             if retry_attempt > 20:
-                print("Too many retries on a single request despite following retry_after header... giving up")
+                print("[DEBUG] Too many retries, giving up")
                 exit(1)
             retry_after = response.json().get("retry_after", 5)
-            print(f"Rate limited, retrying after {retry_after} seconds")
+            print(f"[DEBUG] Rate limited, retrying after {retry_after} seconds")
             time.sleep(retry_after)
             response = requests.post(DISCORD_WEBHOOK_URL, json=body, timeout=10)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        print(f"Failed to send message: {e}")
+        print(f"[DEBUG] Failed to send message: {e}")
         exit(1)
 
 
@@ -201,27 +209,60 @@ def changelog_entries_to_message_lines(entries: Iterable[ChangelogEntry]) -> lis
 
 
 def send_message_lines(message_lines: list[str]):
-    """Join a list of message lines into chunks that are each below Discord's message length limit, and send them."""
+    print("[DEBUG] Splitting message lines into chunks")
+    print(f"[DEBUG] Total incoming lines: {len(message_lines)}")
+    print(f"[DEBUG] DISCORD_SPLIT_LIMIT = {DISCORD_SPLIT_LIMIT}")
+
     chunk_lines = []
     chunk_length = 0
 
-    for line in message_lines:
+    print(f"[DEBUG] chunk_lines = {chunk_lines}")
+    print(f"[DEBUG] chunk_length = {chunk_length}")
+
+    for idx, line in enumerate(message_lines):
+        print("\n[DEBUG] ---- Processing new line ----")
+        print(f"[DEBUG] Line index: {idx}")
+        print(f"[DEBUG] Line content: {repr(line)}")
+
         line_length = len(line)
         new_chunk_length = chunk_length + line_length
 
+        print(f"[DEBUG] Current chunk_length = {chunk_length}")
+        print(f"[DEBUG] new_chunk_length (after adding line) = {new_chunk_length}")
+
         if new_chunk_length > DISCORD_SPLIT_LIMIT:
-            print("Split changelog and sending to discord")
+            print("[DEBUG] !!! Chunk limit will be exceeded !!!")
+            print(f"[DEBUG] chunk_length ({chunk_length}) + line_length ({line_length}) > limit ({DISCORD_SPLIT_LIMIT})")
+            print(f"[DEBUG] Sending current chunk with {len(chunk_lines)} lines")
+            print(f"[DEBUG] Chunk content preview: {chunk_lines}")
+            
             send_discord_webhook(chunk_lines)
+
+            print("[DEBUG] Chunk sent successfully")
+            print("[DEBUG] Resetting chunk buffer")
 
             new_chunk_length = line_length
             chunk_lines.clear()
 
+            print(f"[DEBUG] chunk_lines cleared -> {chunk_lines}")
+            print(f"[DEBUG] chunk_length reset candidate = {new_chunk_length}")
+
+        print("[DEBUG] Appending line to current chunk")
         chunk_lines.append(line)
         chunk_length = new_chunk_length
 
+        print(f"[DEBUG] chunk_lines size now = {len(chunk_lines)}")
+        print(f"[DEBUG] chunk_length updated = {chunk_length}")
+
+    print("\n[DEBUG] Finished iterating over lines")
+
     if chunk_lines:
-        print("Sending final changelog to discord")
+        print("[DEBUG] Remaining lines detected, sending final chunk")
+        print(f"[DEBUG] Final chunk size (lines) = {len(chunk_lines)}")
+        print(f"[DEBUG] Final chunk_length = {chunk_length}")
+        print(f"[DEBUG] Final chunk preview: {chunk_lines}")
         send_discord_webhook(chunk_lines)
+        print("[DEBUG] Final chunk sent")
 
 
 if __name__ == "__main__":

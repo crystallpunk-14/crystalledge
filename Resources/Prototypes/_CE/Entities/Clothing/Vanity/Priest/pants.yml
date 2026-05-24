@@ -1,0 +1,17 @@
+- type: entity
+  parent: CEClothingPantsBase
+  id: CEClothingPriestPantsDark
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Vanity/Pants/Priest/dark.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Vanity/Pants/Priest/dark.rsi
+
+- type: entity
+  parent: CEClothingPantsBase
+  id: CEClothingPriestPantsWhite
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Vanity/Pants/Priest/white.rsi
+  - type: Clothing
+    sprite: _CE/Clothing/Vanity/Pants/Priest/white.rsi

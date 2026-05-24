@@ -1,0 +1,51 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: SmallBarrier
+  weight: 0.5
+  icon:
+    sprite: _CE/Interface/temp_shield.rsi
+    state: icon
+  effect: !type:AddAction
+    action: CEActionSpellSmallBarrier
+  restrictions:
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEKnight #This skill is useless for knight
+
+- type: entity
+  id: CEActionSpellSmallBarrier
+  parent: CEActionSpellBase
+  name: Barrier
+  description: Grants [color=#b2e3eb]20 temporary shields[/color] that absorb damage. Shields decay over time.
+  components:
+  - type: CEActionManaCost
+    manaCost: 15
+  - type: CEActionStaminaCost
+    cost: 2
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _CE/Interface/temp_shield.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: SmallBarrier
+
+- type: entityEffectAnimation
+  id: SmallBarrier
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/clang.ogg
+        params:
+          pitch: 0.7
+    0.6:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectTempShield
+      amount: 20
+      max: 40

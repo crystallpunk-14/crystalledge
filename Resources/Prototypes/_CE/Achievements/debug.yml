@@ -1,9 +1,24 @@
 - type: achievement
-  id: AdminInspiration
-  name: ce-achievement-admin-inspiration-name
-  desc: ce-achievement-admin-inspiration-desc
+  id: KissInTheAir
+  name: ce-achievement-kiss-in-the-air-name
+  desc: ce-achievement-kiss-in-the-air-desc
+  secret: true
+  unlockedIcon:
+    sprite: _CE/Skills/Neutral/kiss.rsi
+    state: icon
 
 - type: achievement
   id: BetaTester
   name: ce-achievement-betatester-name
   desc: ce-achievement-betatester-desc
+
+- type: achievement
+  id: ClassWanderer
+  name: ce-achievement-class-wanderer-name
+  desc: ce-achievement-class-wanderer-desc
+  lockedIcon:
+    sprite: /Textures/_CE/Achievements/class_wanderer.rsi
+    state: locked
+  unlockedIcon:
+    sprite: /Textures/_CE/Achievements/class_wanderer.rsi
+    state: unlocked

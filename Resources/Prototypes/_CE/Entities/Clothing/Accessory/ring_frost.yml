@@ -1,0 +1,20 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryRingFrost
+  name: frost ring
+  description: A protective ring that shields the carrier from the cold.
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/ring_frost.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectRingFrost
+
+- type: entity
+  id: CEStatusEffectRingFrost
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+  - type: CEArmor
+    flat:
+      Cold: 1

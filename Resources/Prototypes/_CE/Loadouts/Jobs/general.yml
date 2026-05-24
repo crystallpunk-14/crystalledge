@@ -1,0 +1,63 @@
+
+# Bags
+
+- type: loadoutGroup
+  id: CEGeneralBag
+  name: ce-loadout-bag
+  minLimit: 1
+  loadouts:
+  - CEClothingBackBackpack
+  - CEClothingBackSatchel
+
+- type: loadout
+  id: CEClothingBackBackpack
+  equipment:
+    back: CEClothingBackBackpack
+
+- type: loadout
+  id: CEClothingBackSatchel
+  equipment:
+    back: CEClothingBackSatchel
+
+
+# Pants
+
+- type: loadout
+  id: CEClothingGeneralPantsDark
+  equipment:
+    pants: CEClothingGeneralPantsDark
+
+
+# Shoes
+
+- type: loadoutGroup
+  id: CEGeneralShoes
+  name: ce-loadout-shoes
+  minLimit: 1
+  loadouts:
+  - CEClothingGeneralShoesAristocraticBlack
+  - CEClothingGeneralShoesLongLeatherBoots
+
+- type: loadout
+  id: CEClothingGeneralShoesAristocraticBlack
+  equipment:
+    shoes: CEClothingGeneralShoesAristocraticBlack
+
+- type: loadout
+  id: CEClothingGeneralShoesLongLeatherBoots
+  equipment:
+    shoes: CEClothingGeneralShoesLongLeatherBoots
+
+# Belt
+
+- type: loadoutGroup
+  id: CEGeneralBelt
+  name: ce-loadout-belt
+  minLimit: 1
+  loadouts:
+  - CELantern
+
+- type: loadout
+  id: CELantern
+  equipment:
+    belt: CELantern

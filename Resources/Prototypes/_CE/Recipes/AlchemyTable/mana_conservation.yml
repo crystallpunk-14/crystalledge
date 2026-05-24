@@ -1,0 +1,27 @@
+- type: CERecipe
+  id: CEConsumablePotionManaSmallCondensated
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:MagicEnergyResource
+    amount: 25
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionManaSmallCondensated
+  resultCount: 1
+
+- type: CERecipe
+  id: CEConsumablePotionManaMediumCondensated
+  tag: CERecipeAlchemyTable
+  category: Consumable
+  craftTime: 1
+  requirements:
+  - !type:MagicEnergyResource
+    amount: 50
+  - !type:TagResource
+    tag: Vials
+    count: 1
+  result: CEConsumablePotionManaMediumCondensated
+  resultCount: 1

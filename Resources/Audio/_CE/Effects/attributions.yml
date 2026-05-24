@@ -17,3 +17,87 @@
   license: "CC0-1.0"
   copyright: '2022-01-14-crystal-bell-01.flac by arseniiv'
   source: "https://freesound.org/s/614833/"
+
+- files: ["coins1.ogg", "coins2.ogg", "coins3.ogg", "coins_fall.ogg"]
+  license: "CC0-1.0"
+  copyright: 'by severaltimes of Freesound.org. Cropped by TheShuEd.'
+  source: "https://freesound.org/people/severaltimes/sounds/173989/"
+
+- files: ["doorknob_1.ogg"]
+  license: "CC-BY-3.0"
+  copyright: 'by Leady.'
+  source: "https://freesound.org/people/Leady/sounds/12739/"
+
+- files: ["doorknob_2.ogg"]
+  license: "CC0-1.0"
+  copyright: 'by BenjaminNelan.'
+  source: "https://freesound.org/people/BenjaminNelan/sounds/321087/"
+
+- files: ["pot_break1.ogg", "pot_break2.ogg", "pot_break3.ogg", "pot_break4.ogg"]
+  license: "CC0-1.0"
+  copyright: 'by Kinoton of Freesound.org. Cropped by TheShuEd.'
+  source: "https://freesound.org/people/Kinoton/sounds/399080/"
+
+- files: ["grass_gather.ogg", "grass_gather2.ogg", "grass_gather3.ogg"]
+  license: "CC0-1.0"
+  copyright: 'by hadescolossus of Freesound.org. Cropped and mixed from stereo to mono.'
+  source: "https://freesound.org/people/hadescolossus/sounds/705228/"
+
+- files: ["firebolt.ogg"]
+  license: "CC-BY-3.0"
+  copyright: 'by CTCollab of Freesound.org. Cropped and mixed from stereo to mono.'
+  source: "https://freesound.org/people/CTCollab/sounds/223611/"
+
+- files: ["fire_whoosh.ogg"]
+  license: "CC0-1.0"
+  copyright: 'by GrimGrum of Freesound.org. Cropped and mixed from stereo to mono.'
+  source: "https://freesound.org/people/GrimGrum/sounds/412558/"
+
+- files: ["critical.ogg"]
+  license: "CC-BY-3.0"
+  copyright: 'Created by CpawsMusic on Freesound.org'
+  source: "https://freesound.org/people/CpawsMusic/sounds/437113/"
+
+- files: ["steam_burst.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Created by pengo_au on Freesound.org'
+  source: "https://freesound.org/people/pengo_au/sounds/90143/"
+
+- files: ["ice_burst.ogg"]
+  license: "CC-BY-SA-4.0"
+  copyright: 'Created by EminYILDIRIM on Freesound.org'
+  source: "https://freesound.org/people/EminYILDIRIM/sounds/550267/"
+
+- files: ["pyro_burst.ogg"]
+  license: "Custom"
+  copyright: "Multiple sounds, edited and layered by GonTar and TheShuEd"
+  source: https://freesound.org/people/Robinhood76/sounds/612277/
+  # additional sources:
+  # source: https://freesound.org/people/Fission9/sounds/474850/
+  # source: https://pixabay.com/sound-effects/rubber-stretch-sound-effect-201310/ (Pixabay license)
+  # source: https://pixabay.com/sound-effects/fx-collection-of-flame-sword-swoosh-sound-design-elements-275902/ (Pixabay license)
+
+- files: ["knowledge_learned.ogg"]
+  license: "CC-BY-SA-4.0"
+  copyright: 'Created by Headphaze on Freesound.org'
+  source: "https://freesound.org/people/Headphaze/sounds/277033/"
+
+- files: ["key_drop.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Kyanite_ of Freesound.org. Mixed from stereo to mono.'
+  source: "https://freesound.org/people/Kyanite_/sounds/432913/"
+
+- files: ["soul_pickup.ogg"]
+  license: "CC0-1.0"
+  copyright: 'ToastHatter of Freesound.org. Mixed from stereo to mono.'
+  source: "https://freesound.org/people/ToastHatter/sounds/561188/"
+
+- files: ["kiss.ogg"]
+  license: "CC0-1.0"
+  copyright: 'semccab of Freesound.org. Mixed from stereo to mono.'
+  source: "https://freesound.org/people/semccab/sounds/154398/"
+
+- files: ["throw_knife.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Oldome of Freesound.org. Cropped by TheShuEd'
+  source: "https://freesound.org/people/Oldome/sounds/853532/"

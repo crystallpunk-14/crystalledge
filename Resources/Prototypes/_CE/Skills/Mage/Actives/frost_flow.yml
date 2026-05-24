@@ -1,0 +1,161 @@
+- type: skill
+  parent: BaseMageSkill
+  id: FrostFlow
+  effect: !type:AddAction
+    action: CEActionFrostFlow
+
+- type: entity
+  id: CEActionFrostFlow
+  parent: CEActionSpellBase
+  name: Frost Flow
+  description: You unleash a stream of frost that covers the ground in [color=#30caf5]ice[/color] and [color=#30caf5]slows[/color] creatures caught in it.
+  components:
+  - type: CEVisualizeWideLineAction
+    width: 2.5
+    projectileMode: true
+  - type: CEActionManaCost
+    manaCost: 20
+  - type: CEActionStaminaCost
+    cost: 4
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: _CE/Skills/Mage/frost_flow.rsi
+      state: icon
+  - type: TargetAction
+    checkCanAccess: false
+    range: 20
+  - type: WorldTargetAction
+    event: !type:CEWorldTargetActionAnimationEvent
+      animation: AnimationFrostFlow
+
+- type: entityEffectAnimation
+  id: AnimationFrostFlow
+  movementSpeed: 0.3
+  duration: 0.7
+  lockRotation: true
+  events:
+    0:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEEffectFrostFlowCharge
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, 0.5
+      - time: 0.8
+        offset: 0, -1
+    0.5:
+    - !type:ShootProjectile
+      projectileSpeed: 8
+      prototype: CEProjectileFrostFlow
+
+- type: entity
+  id: CEEffectFrostFlowTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: frost flow telegraphy
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectFrostFlowCharge
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: frost flow charge
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/TileEffects/freeze_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEProjectileFrostFlow
+  name: frost flow
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2.0
+    energy: 5.0
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.10,0.1,0.30"
+        hard: false
+        mask:
+        - Impassable
+      fly-by:
+        shape: !type:PhysShapeCircle
+          radius: 1.5
+        layer:
+        - Impassable
+        - MidImpassable
+        - HighImpassable
+        - LowImpassable
+        hard: false
+  - type: CEEntityEffectSpawner
+    frequency: 0.2
+    firstDelay: 0.5 # Important to not affect caster, freeze and damage it immediately on spawn
+    effects:
+    - !type:AreaEffect
+      affectCaster: true
+      range: 1.2
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Cold: 10
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      radius: 1.5
+      maxStacks: 5
+      fallOffFactor: 1

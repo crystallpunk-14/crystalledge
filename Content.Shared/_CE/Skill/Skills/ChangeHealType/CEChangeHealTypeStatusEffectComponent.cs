@@ -14,6 +14,12 @@ public sealed partial class CEChangeHealTypeStatusEffectComponent : Component
     [DataField]
     public ProtoId<CEDamageTypePrototype> Target;
 
+    /// <summary>
+    /// Multiplier applied to the original heal amount to calculate the damage dealt.
+    /// </summary>
+    [DataField]
+    public float DamageMultiplier = 1f;
+
     [DataField]
     public EntProtoId Vfx = "CEEffectApostasyFire";
 

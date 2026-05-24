@@ -44,9 +44,9 @@ public sealed class CEZLevelMappingSystem : EntitySystem
 
     private void OnMapInit(Entity<CEZLevelMapComponent> ent, ref MapInitEvent args)
     {
-        if (!_zLevels.TryZNetwork((ent, ent.Comp), out var network))
+        if (!_zLevels.TryGetZNetwork((ent, ent.Comp), out var network))
             return;
 
-        EntityManager.AddComponents(ent, network.Value.Comp.Components);
+        EntityManager.AddComponents(ent, network.Comp.Components);
     }
 }

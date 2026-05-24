@@ -11,13 +11,16 @@
       "name": "bard"
     },
     {
-      "name": "warrior"
+      "name": "knight"
     },
     {
       "name": "mage"
     },
     {
       "name": "priest"
+    },
+    {
+      "name": "wanderer"
     }
   ]
 }

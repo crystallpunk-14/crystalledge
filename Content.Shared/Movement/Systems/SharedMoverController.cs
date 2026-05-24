@@ -49,23 +49,23 @@ public abstract partial class SharedMoverController : VirtualController
     [Dependency] private   readonly SharedTransformSystem _transform = default!;
     [Dependency] private   readonly TagSystem _tags = default!;
 
-    protected EntityQuery<CanMoveInAirComponent> CanMoveInAirQuery;
-    protected EntityQuery<FootstepModifierComponent> FootstepModifierQuery;
-    protected EntityQuery<FTLComponent> FTLQuery;
-    protected EntityQuery<InputMoverComponent> MoverQuery;
-    protected EntityQuery<MapComponent> MapQuery;
-    protected EntityQuery<MapGridComponent> MapGridQuery;
-    protected EntityQuery<MobMoverComponent> MobMoverQuery;
-    protected EntityQuery<MovementRelayTargetComponent> RelayTargetQuery;
-    protected EntityQuery<MovementSpeedModifierComponent> ModifierQuery;
-    protected EntityQuery<NoRotateOnMoveComponent> NoRotateQuery;
-    protected EntityQuery<PhysicsComponent> PhysicsQuery;
-    protected EntityQuery<PilotComponent> PilotQuery;
-    protected EntityQuery<PreventPilotComponent> PreventPilotQuery;
-    protected EntityQuery<RelayInputMoverComponent> RelayQuery;
-    protected EntityQuery<PullableComponent> PullableQuery;
-    protected EntityQuery<TransformComponent> XformQuery;
-    protected EntityQuery<CEActiveAnimationActionComponent> CEAnimationQuery; //CrystallEdge - blocking rotation while in animation
+    [Dependency] protected readonly EntityQuery<CanMoveInAirComponent> CanMoveInAirQuery = default!;
+    [Dependency] protected readonly EntityQuery<FootstepModifierComponent> FootstepModifierQuery = default!;
+    [Dependency] protected readonly EntityQuery<FTLComponent> FTLQuery = default!;
+    [Dependency] protected readonly EntityQuery<InputMoverComponent> MoverQuery = default!;
+    [Dependency] protected readonly EntityQuery<MapComponent> MapQuery = default!;
+    [Dependency] protected readonly EntityQuery<MapGridComponent> MapGridQuery = default!;
+    [Dependency] protected readonly EntityQuery<MobMoverComponent> MobMoverQuery = default!;
+    [Dependency] protected readonly EntityQuery<MovementRelayTargetComponent> RelayTargetQuery = default!;
+    [Dependency] protected readonly EntityQuery<MovementSpeedModifierComponent> ModifierQuery = default!;
+    [Dependency] protected readonly EntityQuery<NoRotateOnMoveComponent> NoRotateQuery = default!;
+    [Dependency] protected readonly EntityQuery<PhysicsComponent> PhysicsQuery = default!;
+    [Dependency] protected readonly EntityQuery<PilotComponent> PilotQuery = default!;
+    [Dependency] protected readonly EntityQuery<PreventPilotComponent> PreventPilotQuery = default!;
+    [Dependency] protected readonly EntityQuery<RelayInputMoverComponent> RelayQuery = default!;
+    [Dependency] protected readonly EntityQuery<PullableComponent> PullableQuery = default!;
+    [Dependency] protected readonly EntityQuery<TransformComponent> XformQuery = default!;
+    [Dependency] protected readonly EntityQuery<CEActiveAnimationActionComponent> CEAnimationQuery = default!; //CrystallEdge - blocking rotation while in animation
 
     private static readonly ProtoId<TagPrototype> FootstepSoundTag = "FootstepSound";
 
@@ -85,26 +85,6 @@ public abstract partial class SharedMoverController : VirtualController
     {
         UpdatesBefore.Add(typeof(TileFrictionController));
         base.Initialize();
-
-        MoverQuery = GetEntityQuery<InputMoverComponent>();
-        MobMoverQuery = GetEntityQuery<MobMoverComponent>();
-        ModifierQuery = GetEntityQuery<MovementSpeedModifierComponent>();
-        RelayTargetQuery = GetEntityQuery<MovementRelayTargetComponent>();
-        PhysicsQuery = GetEntityQuery<PhysicsComponent>();
-        RelayQuery = GetEntityQuery<RelayInputMoverComponent>();
-        PullableQuery = GetEntityQuery<PullableComponent>();
-        XformQuery = GetEntityQuery<TransformComponent>();
-        NoRotateQuery = GetEntityQuery<NoRotateOnMoveComponent>();
-        CanMoveInAirQuery = GetEntityQuery<CanMoveInAirComponent>();
-        FootstepModifierQuery = GetEntityQuery<FootstepModifierComponent>();
-        MapGridQuery = GetEntityQuery<MapGridComponent>();
-        MapQuery = GetEntityQuery<MapComponent>();
-        FTLQuery = GetEntityQuery<FTLComponent>();
-        PilotQuery = GetEntityQuery<PilotComponent>();
-        PreventPilotQuery = GetEntityQuery<PreventPilotComponent>();
-        //CrystallEdge
-        CEAnimationQuery  = GetEntityQuery<CEActiveAnimationActionComponent>();
-        //CrystallEdge end
 
         SubscribeLocalEvent<MovementSpeedModifierComponent, TileFrictionEvent>(OnTileFriction);
         SubscribeLocalEvent<InputMoverComponent, ComponentStartup>(OnMoverStartup);

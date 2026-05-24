@@ -1,0 +1,20 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryRingFire
+  name: fire ring
+  description: A protective ring that shields the carrier from the heat of the fire.
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/ring_fire.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectRingFire
+
+- type: entity
+  id: CEStatusEffectRingFire
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+  - type: CEArmor
+    flat:
+      Fire: 1

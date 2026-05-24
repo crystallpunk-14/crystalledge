@@ -14,33 +14,36 @@
     width: 2.5
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 5
+    manaCost: 20
+  - type: CEActionStaminaCost
+    cost: 4
   - type: Action
-    useDelay: 5
+    useDelay: 8
     icon:
-      sprite: _CE/Skills/firewall.rsi
+      sprite: _CE/Skills/Mage/firewall.rsi
       state: icon
   - type: TargetAction
+    checkCanAccess: false
     range: 20
   - type: WorldTargetAction
     event: !type:CEWorldTargetActionAnimationEvent
       animation: AnimationFirewall
 
-- type: animationAction
+- type: entityEffectAnimation
   id: AnimationFirewall
   movementSpeed: 0.3
-  duration: 1.8
+  duration: 0.7
   lockRotation: true
   events:
     0:
-    - !type:EntityAnimation
+    - !type:UsedEntityAnimation
       dummyEntity: CEEffectFireballCharge
       offsetAnimation:
       - time: 0.0
         offset: 0, 0.5
       - time: 1.7
         offset: 0, -1
-    1.7:
+    0.5:
     - !type:ShootProjectile
       projectileSpeed: 8
       prototype: CEProjectileFirewall
@@ -140,14 +143,34 @@
         - LowImpassable
         hard: false
   - type: Projectile
-    damage:
-      types:
-        Heat: 0
-  - type: CEAnimationActionsSpawner
+  - type: CEProjectile
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Fire: 20
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectFire
+      radius: 3
+      maxStacks: 10
+  - type: CEEntityEffectSpawner
     frequency: 0.2
-    firstDelay: 0.3
+    firstDelay: 0.5
     effects:
-    - !type:IgniteArea
+    - !type:AreaEffect
+      range: 1.5
+      affectCaster: false
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 10
+
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
       radius: 1.5
-      maxStacks: 3
+      maxStacks: 6
       fallOffFactor: 1

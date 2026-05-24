@@ -1,6 +1,6 @@
 # Base
 ce-tiles-base = rock strata
-ce-tiles-space = empty space
+ce-tiles-space = air
 
 # First layer
 

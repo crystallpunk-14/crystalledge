@@ -3,6 +3,7 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using Content.Server._CE.ZLevels.Core;
 using Content.Server.Administration;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Administration;
@@ -14,6 +15,7 @@ namespace Content.Server._CE.ZLevels.Mapping.Commands;
 public sealed class CEDeleteZNetworkCommand : LocalizedEntityCommands
 {
     [Dependency] private readonly IEntityManager _entities = default!;
+    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
 
     public override string Command => "znetwork-delete";
     public override string Description => "Delete all maps into selected zNetwork + zNetwork entity";
@@ -37,28 +39,20 @@ public sealed class CEDeleteZNetworkCommand : LocalizedEntityCommands
             return;
         }
 
-        // get the target
-        EntityUid? target;
-
         if (!NetEntity.TryParse(args[0], out var targetNet) ||
-            !_entities.TryGetEntity(targetNet, out target))
+            !_entities.TryGetEntity(targetNet, out var target))
         {
-            shell.WriteError($"Unable to find entity {args[1]}");
+            shell.WriteError($"Unable to find entity {args[0]}");
             return;
         }
 
-        if (!_entities.TryGetComponent<CEZLevelsNetworkComponent>(target, out var levelComp))
+        if (!_entities.HasComponent<CEZLevelsNetworkComponent>(target))
         {
-            shell.WriteError($"Target entity doesnt have CEZLevelsNetworkComponent {args[1]}");
+            shell.WriteError($"Target entity doesnt have CEZLevelsNetworkComponent {args[0]}");
             return;
         }
 
-        //Delete all maps
-        foreach (var (depth, mapUid) in levelComp.ZLevels)
-        {
-            _entities.QueueDeleteEntity(mapUid);
-        }
-        _entities.QueueDeleteEntity(target);
+        _zLevels.DeleteZNetwork(target.Value);
 
         shell.WriteLine("ZNetwork and all its maps deleted.");
     }
