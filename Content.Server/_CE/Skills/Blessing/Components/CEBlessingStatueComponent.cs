@@ -27,23 +27,20 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// <summary>
     /// References to linked table (pedestal) entities, found during initialization.
     /// </summary>
+    [DataField]
     public HashSet<EntityUid> LinkedTables = new();
 
     /// <summary>
-    /// Players who have already claimed a blessing from this statue.
-    /// They can no longer use this statue.
+    /// The player currently interacting with the statue (offer pending). While non-null
+    /// the statue is "occupied" — other players cannot click it.
     /// </summary>
     [DataField]
-    public HashSet<EntityUid> PlayersBlessed = new();
-
-    /// <summary>
-    /// The player currently inside the trigger zone receiving blessing options.
-    /// </summary>
     public EntityUid? ActivePlayer;
 
     /// <summary>
     /// Currently spawned blessing entities on the pedestals for the active player.
     /// </summary>
+    [DataField]
     public List<EntityUid> ActiveBlessings = new();
 
     /// <summary>
@@ -52,4 +49,18 @@ public sealed partial class CEBlessingStatueComponent : Component
     /// Cleared when the player claims a blessing (non-chosen become skipped).
     /// </summary>
     public Dictionary<EntityUid, List<ProtoId<CESkillPrototype>>> OfferedSkills = new();
+
+    [DataField]
+    public bool StatueInitialized = false;
+
+    [DataField]
+    public string TriggerFixtureId = "trigger";
+
+    /// <summary>
+    /// TODO: delete this and use the fixture's actual shape
+    /// </summary>
+    [DataField]
+    public float TriggerRadius = 3f;
+
+    public HashSet<EntityUid> PlayersInTriggerZone = new();
 }

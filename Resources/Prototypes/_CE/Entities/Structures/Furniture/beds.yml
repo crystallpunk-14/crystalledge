@@ -1,0 +1,47 @@
+- type: entity
+  name: wooden bed
+  id: CEWoodenBedBase
+  abstract: true
+  parent:
+  - BaseStructure
+  description: Wooden bed. Better than nothing.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.05"
+        density: 190
+        mask:
+        - TableMask
+  - type: Strap
+    position: Down
+    rotation: -90
+  - type: Sprite
+    noRot: true
+  - type: InteractionOutline
+  - type: PlaceableSurface
+    placeCentered: true
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 25
+    destroySound:
+      collection: WoodDestroy
+
+- type: entity
+  id: CEWoodenBed
+  parent: CEWoodenBedBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/beds.rsi
+    state: wooden
+
+- type: entity
+  id: CEWoodenBedLight
+  parent: CEWoodenBedBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/beds.rsi
+    state: light

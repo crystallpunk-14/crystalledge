@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Created by TheShuEd (GitHub)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+        "name": "template"
+    },
+    {
+        "name": "basic_alchemy"
+    },
+    {
+        "name": "mana_conservation"
+    },
+    {
+        "name": "acceleration"
+    },
+    {
+        "name": "regeneration"
+    },
+    {
+        "name": "bombs"
+    }
+  ]
+}

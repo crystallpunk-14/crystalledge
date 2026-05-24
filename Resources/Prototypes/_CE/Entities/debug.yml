@@ -1,9 +1,0 @@
-- type: entity
-  parent: HandheldHealthAnalyzer
-  id: BaselineHealthAnalyzer
-  categories: [ ForkFiltered ]
-
-- type: entity
-  parent: LightPostSmall
-  id: BaselineLight
-  categories: [ ForkFiltered ]

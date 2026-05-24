@@ -249,5 +249,25 @@ public sealed class DiscordLink : IPostInjectInit
         });
     }
 
+    // CrystallEdge: Proxy method for adding emoji reactions to messages
+    /// <summary>
+    /// Adds an emoji reaction to a Discord message.
+    /// </summary>
+    public async Task AddReactionAsync(ulong channelId, ulong messageId, ReactionEmojiProperties emoji)
+    {
+        if (_client == null)
+            return;
+
+        try
+        {
+            await _client.Rest.AddMessageReactionAsync(channelId, messageId, emoji);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Failed to add reaction to Discord message {messageId}: {e}");
+        }
+    }
+    // CrystallEdge end
+
     #endregion
 }

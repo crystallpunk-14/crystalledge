@@ -1,0 +1,44 @@
+
+- type: entity
+  id: CEConsumablePotionFrost
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionMedium
+  name: frost potion
+  description: A liquid crystal so cold that it's uncomfortable to even hold the vial in your hands. If it were to break, everything around it would instantly.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#00ccff"
+    - sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+      state: effect
+      shader: unshaded
+  - type: CEConsumable
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectColdSlowdown
+      amount: 6
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      radius: 2
+      maxStacks: 6
+    - !type:AreaEffect
+      range: 2
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Cold: 20
+  - type: CEDestructible
+  - type: PointLight
+    color: "#00d9ff"
+    radius: 1.3
+    energy: 10

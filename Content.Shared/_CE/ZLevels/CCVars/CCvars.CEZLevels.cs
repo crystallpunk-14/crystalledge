@@ -3,7 +3,6 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
-using Robust.Shared;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
@@ -21,4 +20,27 @@ public sealed partial class CCVars
 
     public static readonly CVarDef<float>
         CEBaseFallingOtherStunTime = CVarDef.Create("zlevels.ce_base_falling_other_stun_time", 0.01f, CVar.SERVER | CVar.REPLICATED);
+
+    /**
+     * Physics
+     */
+
+    public static readonly CVarDef<float>
+        CEZLevelsPhysicsGravityForce = CVarDef.Create("ce.zlevels.physics.gravity_force", 9.8f, CVar.SERVER | CVar.REPLICATED);
+
+    public static readonly CVarDef<float>
+        CEZLevelsPhysicsVelocityLimit = CVarDef.Create("ce.zlevels.physics.velocity_limit", 20f, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// The minimum speed required to trigger LandEvent events.
+    /// </summary>
+    public static readonly CVarDef<float>
+        CEZLevelsPhysicsImpactVelocity = CVarDef.Create("ce.zlevels.physics.impact_velocity", 3f, CVar.SERVER | CVar.REPLICATED);
+
+    /**
+     * Rendering
+     */
+
+    public static readonly CVarDef<int>
+        CEZLevelsRenderingMaxZLevelsBelowRendering = CVarDef.Create("ce.zlevels.rendering.max_zLevels_below_rendering", 1, CVar.SERVER | CVar.REPLICATED);
 }

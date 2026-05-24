@@ -1,0 +1,53 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponStaffHolyStick
+  name: holy stick
+  description: Sometimes, to bless someone, you have to give them a firm tap on the head.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/holy_stick.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 100
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 10
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectBlessing
+          amount: 5
+          max: 5
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.78
+        arcWidth: 45
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectBlessing
+          amount: 5
+          max: 5
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+      - anim: StaffAttackLight2
+      Secondary:
+      - anim: StaffAttackHeavy
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 1
+  - type: Clothing
+    slots:
+    - neck
+  - type: Wieldable

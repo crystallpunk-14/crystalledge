@@ -1,0 +1,47 @@
+- type: entity
+  parent:
+  - CEBaseWeapon
+  - CEBaseWeaponThrowable
+  id: CEWeaponShuriken
+  name: shuriken
+  description: Sharp throwing star.
+  components:
+  - type: Item
+    shape:
+    - 0, 0, 0, 0
+    size: Tiny
+    storedRotation: 90
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/shurikens.rsi
+    state: icon
+  #- type: EmbeddableProjectile
+  #  offset: -0.15,-0.15
+  #  removalTime: 0.5
+  - type: CEStaminaThrowable
+    cost: 2
+  - type: EmitSoundOnThrow
+    sound:
+      path: /Audio/_CE/Effects/throw_knife.ogg
+      params:
+        variation: 0.1
+        volume: 20
+  - type: CEEntityEffectOnHit
+    hitEffects:
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 10
+    - !type:PlaySound
+      sound:
+        path: /Audio/Weapons/star_hit.ogg
+        params:
+          variation: 0.1
+  - type: CEThrowingRotation
+    rotationSpeed: 25.0
+    startAngle: 0
+  - type: Clothing
+    equipDelay: 0
+    unequipDelay: 0
+    slots:
+    - belt

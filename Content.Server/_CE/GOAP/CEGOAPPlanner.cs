@@ -1,164 +1,278 @@
+using System.Numerics;
 using Content.Shared._CE.GOAP;
 
 namespace Content.Server._CE.GOAP;
 
 /// <summary>
-/// GOAP planner using forward A* search from current state to goal state.
-/// Finds the cheapest sequence of actions to achieve a desired world state.
+/// GOAP planner using forward A* search with bitmask-packed state.
+/// String keys are mapped to bit indices once per call, so the search
+/// operates entirely on integers — minimal heap allocations during A*.
 /// </summary>
-public static class CEGOAPPlanner
+public sealed class CEGOAPPlanner
 {
-    private sealed class PlanNode(
-        Dictionary<string, bool> state,
-        CEGOAPAction? action,
-        PlanNode? parent,
-        float gCost,
-        float hCost)
+    private struct PlanNode
     {
-        public readonly Dictionary<string, bool> State = state;
-        public readonly CEGOAPAction? Action = action;
-        public readonly PlanNode? Parent = parent;
-        public readonly float GCost = gCost;
-        public readonly float HCost = hCost;
-        public float FCost => GCost + HCost;
+        public int State;
+        public int ActionIndex;  // -1 for start node
+        public int ParentIndex;  // -1 for start node
+        public float GCost;
+        public float HCost;
     }
 
-    /// <summary>
-    /// Plans a sequence of actions to achieve the goal from the current state.
-    /// Returns null if no plan is found.
-    /// </summary>
-    public static List<CEGOAPAction>? Plan(
-        Dictionary<string, bool> currentState,
-        Dictionary<string, bool> goalState,
-        List<CEGOAPAction> availableActions,
-        int maxIterations = 100)
+    private struct CompiledAction
     {
-        var startNode = new PlanNode(
-            new Dictionary<string, bool>(currentState),
-            null,
-            null,
-            0f,
-            Heuristic(currentState, goalState));
+        public int PrecMask;
+        public int PrecRequired;
+        public int EffMask;
+        public int EffRequired;
+        public float Cost;
+    }
 
-        var openList = new PriorityQueue<PlanNode, float>();
-        openList.Enqueue(startNode, startNode.FCost);
+    // Reusable structures cleared at the start of each Plan() call.
+    // Held as instance fields so each CEGOAPSystem gets its own planner
+    // with no shared mutable state between systems or test runs.
+    private readonly Dictionary<string, int> _keyMap = new();
+    private readonly List<CompiledAction> _compiledActions = new();
+    private readonly List<PlanNode> _nodes = new();
+    private readonly MinHeap _openList = new();
 
-        var closedStates = new HashSet<int>();
-        var iterations = 0;
+    private sealed class MinHeap
+    {
+        private readonly List<(float Priority, int Element)> _data = new();
 
-        while (openList.Count > 0 && iterations < maxIterations)
+        public int Count => _data.Count;
+
+        public void Clear() => _data.Clear();
+
+        public void Enqueue(int element, float priority)
         {
-            iterations++;
-            var current = openList.Dequeue();
+            _data.Add((priority, element));
+            SiftUp(_data.Count - 1);
+        }
 
-            if (GoalSatisfied(current.State, goalState))
-                return ReconstructPlan(current);
+        public int Dequeue()
+        {
+            var result = _data[0].Element;
+            var last = _data.Count - 1;
+            _data[0] = _data[last];
+            _data.RemoveAt(last);
+            if (_data.Count > 0)
+                SiftDown(0);
+            return result;
+        }
 
-            var stateHash = GetStateHash(current.State);
-            if (!closedStates.Add(stateHash))
-                continue;
-
-            foreach (var action in availableActions)
+        private void SiftUp(int i)
+        {
+            while (i > 0)
             {
-                if (!PreconditionsMet(current.State, action.Preconditions))
-                    continue;
-
-                var newState = ApplyEffects(current.State, action.Effects);
-                var newStateHash = GetStateHash(newState);
-
-                if (closedStates.Contains(newStateHash))
-                    continue;
-
-                var gCost = current.GCost + action.Cost;
-                var hCost = Heuristic(newState, goalState);
-                var newNode = new PlanNode(newState, action, current, gCost, hCost);
-                openList.Enqueue(newNode, newNode.FCost);
+                var parent = (i - 1) / 2;
+                if (_data[parent].Priority <= _data[i].Priority)
+                    break;
+                (_data[parent], _data[i]) = (_data[i], _data[parent]);
+                i = parent;
             }
         }
 
-        return null;
-    }
-
-    private static bool GoalSatisfied(
-        Dictionary<string, bool> state,
-        Dictionary<string, bool> goal)
-    {
-        foreach (var (key, value) in goal)
+        private void SiftDown(int i)
         {
-            if (!state.TryGetValue(key, out var current) || current != value)
-                return false;
+            var count = _data.Count;
+            while (true)
+            {
+                var smallest = i;
+                var left = 2 * i + 1;
+                var right = 2 * i + 2;
+                if (left < count && _data[left].Priority < _data[smallest].Priority)
+                    smallest = left;
+                if (right < count && _data[right].Priority < _data[smallest].Priority)
+                    smallest = right;
+                if (smallest == i)
+                    break;
+                (_data[smallest], _data[i]) = (_data[i], _data[smallest]);
+                i = smallest;
+            }
+        }
+    }
+    private readonly HashSet<int> _closedStates = new();
+
+    /// <summary>
+    /// Plans a sequence of actions to achieve the goal from the current state.
+    /// Returns true if a plan was found and populates the output plan list.
+    /// </summary>
+    public bool Plan(
+        Dictionary<string, bool> currentState,
+        Dictionary<string, bool> goalState,
+        List<CEGOAPAction> availableActions,
+        List<CEGOAPAction> outPlan,
+        int maxIterations = 100)
+    {
+        _keyMap.Clear();
+        _compiledActions.Clear();
+        _nodes.Clear();
+        _openList.Clear();
+        _closedStates.Clear();
+
+        BuildKeyMap(currentState, goalState, availableActions);
+
+        var startBits = ToBitmask(currentState);
+        ToBitmaskCondition(goalState, out var goalMask, out var goalRequired);
+
+        foreach (var action in availableActions)
+        {
+            ToBitmaskCondition(action.Preconditions, out var precMask, out var precReq);
+            ToBitmaskCondition(action.Effects, out var effMask, out var effReq);
+            _compiledActions.Add(new CompiledAction
+            {
+                PrecMask = precMask,
+                PrecRequired = precReq,
+                EffMask = effMask,
+                EffRequired = effReq,
+                Cost = action.Cost,
+            });
         }
 
-        return true;
-    }
+        var hStart = Heuristic(startBits, goalMask, goalRequired);
+        var startIdx = AddNode(startBits, -1, -1, 0f, hStart);
+        _openList.Enqueue(startIdx, hStart);
 
-    private static bool PreconditionsMet(
-        Dictionary<string, bool> state,
-        Dictionary<string, bool> preconditions)
-    {
-        foreach (var (key, value) in preconditions)
+        var iterations = 0;
+        while (_openList.Count > 0 && iterations < maxIterations)
         {
-            if (!state.TryGetValue(key, out var current) || current != value)
-                return false;
+            iterations++;
+            var currentIdx = _openList.Dequeue();
+            var current = _nodes[currentIdx];
+
+            if ((current.State & goalMask) == goalRequired)
+            {
+                ReconstructPlan(currentIdx, availableActions, outPlan);
+                return true;
+            }
+
+            if (!_closedStates.Add(current.State))
+                continue;
+
+            for (var i = 0; i < _compiledActions.Count; i++)
+            {
+                var compiled = _compiledActions[i];
+
+                if ((current.State & compiled.PrecMask) != compiled.PrecRequired)
+                    continue;
+
+                var newState = (current.State & ~compiled.EffMask) | compiled.EffRequired;
+
+                if (_closedStates.Contains(newState))
+                    continue;
+
+                var gCost = current.GCost + compiled.Cost;
+                var hCost = Heuristic(newState, goalMask, goalRequired);
+                var newIdx = AddNode(newState, i, currentIdx, gCost, hCost);
+                _openList.Enqueue(newIdx, gCost + hCost);
+            }
         }
 
-        return true;
+        return false;
     }
 
-    private static Dictionary<string, bool> ApplyEffects(
-        Dictionary<string, bool> state,
-        Dictionary<string, bool> effects)
+    private int AddNode(int state, int actionIndex, int parentIndex, float gCost, float hCost)
     {
-        var newState = new Dictionary<string, bool>(state);
-        foreach (var (key, value) in effects)
+        var idx = _nodes.Count;
+        _nodes.Add(new PlanNode
         {
-            newState[key] = value;
-        }
-
-        return newState;
+            State = state,
+            ActionIndex = actionIndex,
+            ParentIndex = parentIndex,
+            GCost = gCost,
+            HCost = hCost,
+        });
+        return idx;
     }
 
-    private static float Heuristic(
-        Dictionary<string, bool> state,
-        Dictionary<string, bool> goal)
+    private void BuildKeyMap(
+        Dictionary<string, bool> currentState,
+        Dictionary<string, bool> goalState,
+        List<CEGOAPAction> actions)
     {
-        var unsatisfied = 0;
-        foreach (var (key, value) in goal)
+        foreach (var key in currentState.Keys)
         {
-            if (!state.TryGetValue(key, out var current) || current != value)
-                unsatisfied++;
+            TryAddKey(key);
         }
 
-        return unsatisfied;
+        foreach (var key in goalState.Keys)
+        {
+            TryAddKey(key);
+        }
+
+        foreach (var action in actions)
+        {
+            foreach (var key in action.Preconditions.Keys)
+            {
+                TryAddKey(key);
+            }
+
+            foreach (var key in action.Effects.Keys)
+            {
+                TryAddKey(key);
+            }
+        }
     }
 
-    private static int GetStateHash(Dictionary<string, bool> state)
+    private void TryAddKey(string key)
     {
-        var hash = new HashCode();
-        var keys = new List<string>(state.Keys);
-        keys.Sort(StringComparer.Ordinal);
-
-        foreach (var key in keys)
-        {
-            hash.Add(key);
-            hash.Add(state[key]);
-        }
-
-        return hash.ToHashCode();
+        if (!_keyMap.ContainsKey(key))
+            _keyMap[key] = _keyMap.Count;
     }
 
-    private static List<CEGOAPAction> ReconstructPlan(PlanNode goalNode)
+    private int ToBitmask(Dictionary<string, bool> state)
     {
-        var plan = new List<CEGOAPAction>();
-        var current = goalNode;
-
-        while (current?.Action != null)
+        var bits = 0;
+        foreach (var (key, value) in state)
         {
-            plan.Add(current.Action);
-            current = current.Parent;
+            if (value && _keyMap.TryGetValue(key, out var index))
+                bits |= 1 << index;
         }
 
-        plan.Reverse();
-        return plan;
+        return bits;
+    }
+
+    private void ToBitmaskCondition(
+        Dictionary<string, bool> conditions,
+        out int mask,
+        out int required)
+    {
+        mask = 0;
+        required = 0;
+        foreach (var (key, value) in conditions)
+        {
+            if (!_keyMap.TryGetValue(key, out var index))
+                continue;
+
+            mask |= 1 << index;
+            if (value)
+                required |= 1 << index;
+        }
+    }
+
+    private static float Heuristic(int state, int goalMask, int goalRequired)
+    {
+        var diff = (state ^ goalRequired) & goalMask;
+        return BitOperations.PopCount((uint) diff);
+    }
+
+    private void ReconstructPlan(
+        int goalNodeIndex,
+        List<CEGOAPAction> availableActions,
+        List<CEGOAPAction> outPlan)
+    {
+        outPlan.Clear();
+
+        var idx = goalNodeIndex;
+        while (idx >= 0)
+        {
+            var node = _nodes[idx];
+            if (node.ActionIndex >= 0)
+                outPlan.Add(availableActions[node.ActionIndex]);
+            idx = node.ParentIndex;
+        }
+
+        outPlan.Reverse();
     }
 }

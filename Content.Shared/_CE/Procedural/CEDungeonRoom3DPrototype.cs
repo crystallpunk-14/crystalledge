@@ -1,6 +1,5 @@
 using Content.Shared._CE.ZLevels.Mapping.Prototypes;
 using Content.Shared.Maps;
-using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Procedural;
@@ -12,9 +11,6 @@ namespace Content.Shared._CE.Procedural;
 public sealed partial class CEDungeonRoom3DPrototype : IPrototype
 {
     [IdDataField] public string ID { get; private set; } = string.Empty;
-
-    [ViewVariables(VVAccess.ReadWrite), DataField]
-    public List<ProtoId<TagPrototype>> Tags = new();
 
     [DataField(required: true)]
     public Vector2i Size;
@@ -40,4 +36,18 @@ public sealed partial class CEDungeonRoom3DPrototype : IPrototype
     /// </summary>
     [DataField]
     public ProtoId<ContentTileDefinition>? IgnoreTile;
+
+    /// <summary>
+    /// Selection weight for this room. Higher values make the room appear more frequently.
+    /// </summary>
+    [DataField]
+    public float Weight = 1f;
+
+    /// <summary>
+    /// The type/role this room can serve in a procedural dungeon.
+    /// Used during generation to select rooms matching the required role,
+    /// replacing the old tag-based filtering (e.g. CEDunGenRoomGeneral).
+    /// </summary>
+    [DataField]
+    public ProtoId<CERoomTypePrototype>? RoomType;
 }

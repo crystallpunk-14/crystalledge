@@ -1,0 +1,12 @@
+﻿- type: entity
+  parent: CEBaseKnowledgeBook
+  id: CEKnowledgeBook_ManaConservation
+  name: mana conservation
+  description: A description of a magical technique that allows you to preserve your own magical energy in liquid form. It's not the most pleasant process, but it serves as an alternative to creating mana-restoring potions.
+  components:
+  - type: Sprite
+    state: mana_conservation
+  - type: CEKnowledgeBook
+    recipes:
+    - CEConsumablePotionManaSmallCondensated
+    - CEConsumablePotionManaMediumCondensated

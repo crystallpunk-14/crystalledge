@@ -2,11 +2,9 @@
   abstract: true
   parent:
   - BaseMob
-  - MobFlammable
   - CEMobCombat
   - CEMobDamageable
   - CEMobMagical
-  - CEMobStatBased
   - StripableInventoryBase
   - BaseSpeciesAppearance
   id: CEBaseSpeciesMob
@@ -20,7 +18,7 @@
   - type: HumanoidProfile
   - type: TypingIndicator
   - type: Fixtures
-    fixtures: # TODO: This needs a second fixture just for mob collisions.
+    fixtures:
       fix1:
         shape:
           !type:PhysShapeCircle
@@ -57,10 +55,14 @@
         type: HumanoidMarkingModifierBoundUserInterface
       enum.StrippingUiKey.Key:
         type: StrippableBoundUserInterface
+      enum.CERememberNameUiKey.Key:
+        type: CEIdentityRecognitionBoundUserInterface
   - type: Stripping
   - type: Puller
   - type: Speech
     speechSounds: Alto
+  - type: CEBarkSpeech
+    barkSpeech: Ed
   - type: DamageForceSay
   - type: Vocal
     sounds:
@@ -76,4 +78,60 @@
   - type: Tag
     tags:
     - FootstepSound
+  - type: CEUnknownIdentity
+  - type: WarpPoint
+    follow: true
   - type: CEBlinker
+  - type: CEBlessingReceiver
+  - type: CESoulContainer
+    souls: 20
+  - type: CESkillStorage
+  - type: CEStamina
+  - type: CEMobState
+  - type: CEDungeonPlayer
+  - type: CEMinimapData
+  - type: CEDamageVisuals
+    thresholds: [ 0.1, 0.2, 0.3, 0.5, 0.7, 1.0 ]
+    targetLayers:
+    - "enum.HumanoidVisualLayers.Chest"
+    - "enum.HumanoidVisualLayers.Head"
+    - "enum.HumanoidVisualLayers.LArm"
+    - "enum.HumanoidVisualLayers.LLeg"
+    - "enum.HumanoidVisualLayers.RArm"
+    - "enum.HumanoidVisualLayers.RLeg"
+    sprite: _CE/Mobs/Effects/brute_damage.rsi
+    color: "#FF0000"
+    statePrefix: Brute
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.01, 0.99
+      - time: 2
+        scale: 0.99, 1.01
+      - time: 4
+        scale: 1.01, 0.99
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 2
+        offset: 0, 0.01
+      - time: 4
+        offset: 0, 0
+  - type: CEWalkingAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.02, 0.98
+      - time: 0.2
+        scale: 0.98, 1.02
+      - time: 0.3
+        scale: 1.02, 0.98
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 0.2
+        offset: 0, 0.02
+      - time: 0.3
+        offset: 0, 0

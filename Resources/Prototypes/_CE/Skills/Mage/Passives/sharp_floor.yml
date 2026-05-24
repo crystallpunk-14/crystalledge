@@ -1,0 +1,27 @@
+- type: skill
+  parent: BaseMageSkill
+  id: SharpFloor
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectSharpFloor
+
+- type: entity
+  id: CEStatusEffectSharpFloor
+  name: Sharp Floor
+  description: When you freeze an area, you also cover it with sharp ice spikes.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CESharpFloor
+  - type: CEEffectOnTileApplyStatusEffect
+    sourceTileEffects:
+    - CETileEffectFreeze
+    effects:
+    - !type:ApplyTileEffect
+      tileEffect: CETileEffectIceSpikes
+      amount: 1
+
+- type: alert
+  id: CESharpFloor
+  icons:
+  - sprite: _CE/Skills/Mage/sharp_floor.rsi
+    state: icon

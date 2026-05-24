@@ -23,3 +23,13 @@
   id: CEZBlur
   kind: source
   path: "/Textures/_CE/Shaders/zblur.swsl"
+
+- type: shader
+  id: CETileDistortion
+  kind: source
+  path: "/Textures/_CE/Shaders/waterDistortion.swsl"
+
+- type: shader
+  id: CEShockWave
+  kind: source
+  path: "/Textures/_CE/Shaders/shock_wave.swsl"

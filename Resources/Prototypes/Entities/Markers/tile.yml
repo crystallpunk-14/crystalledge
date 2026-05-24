@@ -3,6 +3,7 @@
   name: Roof
   suffix: Enabled
   parent: MarkerBase
+  categories: [ ForkFiltered ]
   components:
   - type: SetRoof
     value: true
@@ -16,6 +17,7 @@
   name: Roof
   suffix: Disabled
   parent: MarkerBase
+  categories: [ ForkFiltered ]
   components:
   - type: SetRoof
     value: false

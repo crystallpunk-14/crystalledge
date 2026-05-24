@@ -1,0 +1,50 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponHeavyClub
+  name: heavy club
+  description: TODO
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/heavy_club.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 60
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 18
+        - !type:ThrowFromUser
+          throwPower: 10
+          distance: 1
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.6
+        arcWidth: 180
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 18
+    animations:
+      Primary:
+      - anim: WarAxeAttackLight
+      - anim: WarAxeAttackLight2
+      Secondary:
+      - anim: SwordAttackHeavy1
+        speed: 0.7
+      - anim: SwordAttackHeavy2
+        speed: 0.7
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 2
+      Secondary: 2
+  - type: Clothing
+    slots:
+    - neck

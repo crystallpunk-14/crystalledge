@@ -1,0 +1,510 @@
+﻿Entries:
+- author: TheShuEd
+  changes:
+  - message: 'New neutral active skill "Soul Eater": consume 1 soul to restore 1 mana'
+    type: Add
+  - message: Removed "Recovery" priest passive
+    type: Remove
+  - message: Nerfed mage fireball
+    type: Tweak
+  id: 10004
+  time: '2026-05-05T10:31:45.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/211
+- author: TheShuEd
+  changes:
+  - message: Player mana, all manacostes and mana restoring sources multiplied by
+      5. So, we have 100 mana instead 20 by default.
+    type: Tweak
+  - message: Gnomes now have mana and use it to heal themselves. As a result, gnomes'
+      healing is now limited.
+    type: Tweak
+  - message: Fixed a bug where the Cursed Staff would curse the user when used
+    type: Fix
+  - message: Disabled vanilla ambient music
+    type: Remove
+  id: 10005
+  time: '2026-05-05T11:29:58.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/212
+- author: TheShuEd
+  changes:
+  - message: Fixed a bug that allowed one player to permanently block other players
+      from using the statue
+    type: Fix
+  id: 10006
+  time: '2026-05-05T12:25:49.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/213
+- author: TheShuEd
+  changes:
+  - message: The standard wait time in the lobby has been increased from 5 minutes
+      to 5 hours. The admins are tired of shutting down the server after every update.
+      The admins can still hold impromptu closed beta tests in the middle of the day.
+    type: Fix
+  - message: Fixed small mana potions restore 5 mana instead 25.
+    type: Fix
+  id: 10007
+  time: '2026-05-05T14:41:34.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/214
+- author: TheShuEd
+  changes:
+  - message: Most combat spells now consume stamina to cast. Some spells now have
+      very short cooldowns but high stamina costs, allowing you to cast them repeatedly
+      as long as you have enough stamina.
+    type: Add
+  - message: Libraries now spawn 100% of the time on the first floor, and alchemy
+      rooms on the second floor
+    type: Tweak
+  - message: The alchemy rooms no longer require keys to enter
+    type: Tweak
+  - message: Keys, mobs, and other random loot will no longer spawn in locked rooms
+      (secrets, treasures, libraries)
+    type: Tweak
+  - message: Fixed a bug where casting multiple spells in quick succession could cancel
+      the effects of some of them, resulting in wasted resources
+    type: Fix
+  id: 10008
+  time: '2026-05-06T10:42:58.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/219
+- author: TheShuEd
+  changes:
+  - message: A new recipe book has been added, allowing you to create alchemical fire
+      and frost potions
+    type: Add
+  - message: Health and mana potions can no longer be found in chests or pots.
+    type: Tweak
+  - message: The weapons no longer fit in the backpacks.
+    type: Tweak
+  id: 10009
+  time: '2026-05-06T13:58:05.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/220
+- author: TheShuEd
+  changes:
+  - message: Bonfires have been added to safe zones. Each player can interact with
+      a bonfire once to fully restore their mana, health, and the charges of all their
+      items.
+    type: Add
+  id: 10010
+  time: '2026-05-06T19:53:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/221
+- author: TheShuEd
+  changes:
+  - message: 'Added interaction between Curse and Frost: Applying Frost effects to
+      Curse clouds will create dangerous ice spikes that deal damage on contact. They
+      can be melted with fire.'
+    type: Add
+  - message: Added 7 new room layout into dungeon. (3 corridors, 1 dead end, 1 blessing
+      room, 2 secrets room)
+    type: Add
+  - message: Added stone spike tiles that deal damage when stepped on. You can find
+      it in some of the new rooms in the dungeon.
+    type: Add
+  - message: Fixed displacement maps for female human backs that caused strange graphical
+      artifacts when wearing items on the back
+    type: Fix
+  - message: The torches are shining brightly again
+    type: Fix
+  id: 10011
+  time: '2026-05-07T10:27:09.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/222
+- author: TheShuEd, Demimoz Keroz
+  changes:
+  - message: The first version of the dungeon exploration soundtrack was added.
+    type: Add
+  id: 10012
+  time: '2026-05-07T13:47:21.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/217
+- author: TheShuEd
+  changes:
+  - message: Added new mage passive skill "Sharp floor" - When you freeze an area,
+      you also cover it with sharp ice spikes.
+    type: Add
+  - message: Tall bushes, ice spikes, and stone spikes can now be broken with melee
+      attacks
+    type: Add
+  - message: Fixed an issue where the soul requirement icon appeared misaligned above
+      statues when the camera was zoomed in at a non-standard level
+    type: Fix
+  id: 10013
+  time: '2026-05-07T16:30:57.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/223
+- author: TheShuEd
+  changes:
+  - message: Synced with upstream
+    type: Tweak
+  id: 10014
+  time: '2026-05-08T10:08:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/224
+- author: TheShuEd
+  changes:
+  - message: "The neutral abilities \u201CFire Barrier\u201D and \u201CIce Barrier\u201D\
+      \ have been removed."
+    type: Remove
+  - message: The Ice Protection and Fire Protection potions have been removed.
+    type: Remove
+  - message: Fixed ice spikes dealing damage in PvE.
+    type: Fix
+  - message: The mechanics of temporary shields now block all types of damage except
+      poison.
+    type: Tweak
+  - message: PvE no longer blocks damage that a player can inflict on themselves
+    type: Tweak
+  - message: All types of magic staffs now have a limited number of charges. Ranged
+      combat is no longer an endless safe option.
+    type: Tweak
+  - message: The alternative attacks of simple magic staffs are converted into a standard
+      physical attack that can be used when you run out of charges.
+    type: Tweak
+  id: 10015
+  time: '2026-05-08T12:06:02.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/225
+- author: TheShuEd
+  changes:
+  - message: '"Soul eater" now restore 10 mana instead 5.'
+    type: Tweak
+  - message: "The mage's new passive ability, \u201CSoul Energy.\u201D Passively restores\
+      \ 2 mana when you collect a soul."
+    type: Add
+  - message: "The priest's new active ability, \u201CCare for Others\u201D. A more\
+      \ effective treatment option for the first condition, but one that does not\
+      \ allow for self-treatment."
+    type: Add
+  - message: "The priest's new passive ability, \u201CBlack Heart.\u201D It grants\
+      \ immunity to the Curse status effect. Additionally, melee attacks will now\
+      \ curse your targets."
+    type: Add
+  - message: "The priest's new passive ability, \u201CBlessed and Protected.\u201D\
+      \ When you cast a blessing on someone, you also grant them up to 3 divine shields."
+    type: Add
+  id: 10016
+  time: '2026-05-08T21:14:55.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/227
+- author: TheShuEd
+  changes:
+  - message: "A new active spell for the Warrior, \u201CWave of Spikes,\u201D has\
+      \ been added\u2014it covers an area with stone spikes that deal damage on contact"
+    type: Add
+  - message: "A new passive skill for the Warrior, \u201CAgility,\u201D has been added.\
+      \ It increases movement speed after taking"
+    type: Add
+  - message: The number of standard magic staff projectiles is once again unlimited
+    type: Tweak
+  - message: "The warrior's active spell \u201CRaise Shields\u201D has been buffed\u2014\
+      the number of shields granted has been increased from 25 to 35"
+    type: Tweak
+  - message: "The warrior's active skill \u201CCruelty\u201D has been buffed\u2014\
+      it now costs 10 mana instead of 20"
+    type: Tweak
+  - message: "The warrior's active skill \u201CFlame Absorption\u201D has been removed."
+    type: Remove
+  - message: "The warrior's active skill \u201CAmplification\u201D has been removed."
+    type: Remove
+  - message: "The warrior's active skill \u201CRaging fury\u201D has been removed."
+    type: Remove
+  - message: Fixed doors that open with a delay
+    type: Fix
+  - message: Fixed a bug that caused mobs to take double damage from spikes
+    type: Fix
+  id: 10017
+  time: '2026-05-11T13:44:39.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/229
+- author: TheShuEd
+  changes:
+  - message: A strength potion has been added. It can be found in the dungeon.
+    type: Add
+  - message: "The Warrior's new passive skill, \u201CFortress.\u201D When the Warrior\
+      \ applies the Shield status effect to someone, they gain an additional 10 shields."
+    type: Add
+  - message: "The warrior's new active skill, \u201CStone Wall.\u201D Creates a destructible\
+      \ wall that blocks the passage."
+    type: Add
+  - message: "The Warrior's new active skill, \u201CKick.\u201D Deals 15 damage and\
+      \ strongly knocks back targets."
+    type: Add
+  - message: Fixed a bug that caused mobs to get stuck in bushes, grass walls, and
+      thorns
+    type: Fix
+  id: 10018
+  time: '2026-05-11T18:46:11.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/230
+- author: TheShuEd
+  changes:
+  - message: Collecting the soul of a defeated mob restores 5 mana. Players are now
+      much less constrained by mana.
+    type: Add
+  - message: "The mage's passive ability \u201CEnergy of souls\u201D which restores\
+      \ mana after collecting souls, has been removed."
+    type: Remove
+  - message: "The neutral spell \u201CSphere of Light\u201D has been removed."
+    type: Remove
+  - message: The alternative attack for magic staffs has been reworked.
+    type: Tweak
+  - message: All spells that restore health or provide temporary shields now cost
+      significantly more mana.
+    type: Tweak
+  - message: "\u201CDance of Fire and Ice\u201D now deals only 5 bonus damage instead\
+      \ of 10."
+    type: Tweak
+  - message: "The neutral ability \u201CSoul Eater\u201D now restores 15 mana instead\
+      \ of 10."
+    type: Tweak
+  - message: The Ice Staff is unlimited again.
+    type: Fix
+  id: 10019
+  time: '2026-05-12T09:18:15.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/231
+- author: TheShuEd, Demimoz Keroz
+  changes:
+  - message: Music has been added to the first safe zone.
+    type: Add
+  - message: Ambient water  and chasm sounds have been added.
+    type: Add
+  - message: 'Dungeon entrance rooms can no longer contain random loot on tables (keys,
+      potions). They are now also protected by a one-way passage: you can leave the
+      starting room, but you cannot go back in. This was done to protect spawn points
+      from campers.'
+    type: Add
+  - message: Souls now restore 3 mana instead of 5.
+    type: Tweak
+  id: 10020
+  time: '2026-05-12T21:06:40.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/233
+- author: TheShuEd
+  changes:
+  - message: The item charges system has been removed.
+    type: Remove
+  - message: "The mage's \u201CRecharge\u201D active ability, which restores item\
+      \ charges, has been removed."
+    type: Remove
+  - message: Magic staffs now store magical energy within them. Using the staffs consumes
+      this internal energy.
+    type: Tweak
+  - message: Alternative attacks with simple magic staffs now consume energy. Regular
+      attacks are free.
+    type: Tweak
+  - message: "The mage's active spells \u201CMana Steal\u201D and \u201CMana Gift\u201D\
+      \ can now interact with magical items, charging and discharging them."
+    type: Add
+  - message: Fixed a bug that caused gnomes to have low mana for self-healing
+    type: Fix
+  id: 10021
+  time: '2026-05-13T09:52:50.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/234
+- author: TheShuEd
+  changes:
+  - message: 3 new accessories have been added. "Crown of thorns" "Energy geode" and
+      "Ninja bandana"
+    type: Add
+  - message: Removed neutral passive skill "Open hearted"
+    type: Remove
+  - message: "Fixed a bug that prevented the effects of multiple \u201CFlame Stone\u201D\
+      \ accessories from stacking."
+    type: Fix
+  - message: Apostasy once again doubles damage dealt, due to the increased mana cost
+      of healing spells.
+    type: Tweak
+  id: 10022
+  time: '2026-05-13T14:04:48.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/235
+- author: TheShuEd
+  changes:
+  - message: Added minimap to ghosts
+    type: Add
+  - message: Reverted one-way passages for starting rooms due to the risk of soft-locking
+      through the warrior's stone wall
+    type: Remove
+  - message: Reverted Apostasy's double damage. It turns out that 100 points of unavoidable
+      damage from a single cast kills players very quickly. >:D
+    type: Tweak
+  - message: 'Warrior spells that grant barriers have been nerfed: A cap has been
+      added to the maximum armor gained.'
+    type: Tweak
+  - message: Fixed a bug that caused accessories to work in pockets
+    type: Fix
+  id: 10023
+  time: '2026-05-13T18:18:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/236
+- author: TheShuEd
+  changes:
+  - message: Pacifism no longer prevents you from inflicting negative status effects
+      on yourself.
+    type: Tweak
+  - message: All spear animations are sped up
+    type: Tweak
+  id: 10024
+  time: '2026-05-14T08:45:23.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/237
+- author: TheShuEd
+  changes:
+  - message: Player characters now have a brief breathing and walking animation
+    type: Add
+  id: 10025
+  time: '2026-05-14T15:37:18.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/240
+- author: TheShuEd
+  changes:
+  - message: The time during which you can join a level where another player is currently
+      playing now varies by floor and depends on the floor's size. The larger the
+      floor, the more time is allowed for players to connect.
+    type: Tweak
+  id: 10026
+  time: '2026-05-15T13:00:19.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/244
+- author: TheShuEd
+  changes:
+  - message: Added the boss battle level. It's still very rough around the edges for
+      now; we'll polish it up later.
+    type: Add
+  id: 10027
+  time: '2026-05-15T15:20:33.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/245
+- author: TheShuEd
+  changes:
+  - message: A second boss has been added, which can appear as an alternative opponent
+    type: Add
+  id: 10028
+  time: '2026-05-16T00:45:40.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/248
+- author: TheShuEd
+  changes:
+  - message: Shock wave distorion effects have been added to certain player spells.
+    type: Add
+  - message: "An alternative arena for the battle against the boss \u201CViator\u201D\
+      \ has been added\u2014the lake."
+    type: Add
+  - message: "The Freeze status effect now grants the temporary \u201CBreak Free\u201D\
+      \ ability, which can be used at the cost of stamina to escape the Freeze effect\
+      \ early."
+    type: Add
+  - message: Viator has gained complete immunity to cold damage and curses. His mana
+      drain ability now inflicts a curse instead of a freeze.
+    type: Tweak
+  - message: Fixed a bug where blessings were not displayed if you moved far enough
+      away.
+    type: Fix
+  - message: Fixed a collision issue with booksheslfs where mobs would get stuck
+    type: Fix
+  id: 10029
+  time: '2026-05-16T12:28:27.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/249
+- author: Viator-MV
+  changes:
+  - message: Soul essence no longer fall in abyss!
+    type: Fix
+  id: 10030
+  time: '2026-05-16T14:40:41.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/250
+- author: TheShuEd
+  changes:
+  - message: Added fireball magic staff!
+    type: Add
+  id: 10031
+  time: '2026-05-16T14:55:32.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/251
+- author: TheShuEd
+  changes:
+  - message: Added lanterns for rounstart equipment.
+    type: Add
+  - message: You can now find crayons and dices in the chests in the dungeon.
+    type: Add
+  - message: Added Russian localization
+    type: Add
+  id: 10032
+  time: '2026-05-17T15:05:57.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/252
+- author: TheShuEd and Inconnu1337
+  changes:
+  - message: "The neutral ability \u201CAir Kiss\u201D has been added. The conditions\
+      \ for obtaining it are a secret..."
+    type: Add
+  id: 10033
+  time: '2026-05-17T21:15:55.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/253
+- author: TheShuEd
+  changes:
+  - message: The PvP route now has the same number of enemies as the PvE route. This
+      is a test.
+    type: Tweak
+  - message: The third floor now has fewer enemies
+    type: Tweak
+  id: 10034
+  time: '2026-05-18T20:09:22.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/254
+- author: TheShuEd
+  changes:
+  - message: "The \u201CApostasy\u201D priest's ability becomes a 15-mana active ability\
+      \ that allows you to switch between healing and dealing fire damage"
+    type: Tweak
+  id: 10035
+  time: '2026-05-19T12:41:07.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/256
+- author: TheShuEd
+  changes:
+  - message: Small slimes that spawn from large slimes no longer attack immediately,
+      dealing unavoidable damage in melee combat.
+    type: Fix
+  id: 10036
+  time: '2026-05-21T09:50:03.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/259
+- author: TheShuEd
+  changes:
+  - message: 'Two common new weapons have been added: the two-handed Heavy Axe and
+      the two-handed sword.'
+    type: Add
+  id: 10037
+  time: '2026-05-21T20:49:33.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/261
+- author: TheShuEd
+  changes:
+  - message: Added silva species
+    type: Add
+  id: 10038
+  time: '2026-05-22T10:21:10.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/262
+- author: TheShuEd
+  changes:
+  - message: Added some kind of tutorial zone
+    type: Add
+  id: 10039
+  time: '2026-05-22T12:06:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/263
+- author: TheShuEd
+  changes:
+  - message: Fixed a bug where accessories were placed in a pocket instead of being
+      equipped when used
+    type: Fix
+  - message: 'Nerfed daggers: melee damage decreased from 12 to 9'
+    type: Tweak
+  id: 10040
+  time: '2026-05-23T14:58:42.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/266
+- author: TheShuEd
+  changes:
+  - message: Training targets have been added for testing DPS
+    type: Add
+  id: 10041
+  time: '2026-05-22T21:29:20.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/264
+- author: TheShuEd
+  changes:
+  - message: Two-handed weapons now attack more slowly when held in one hand.
+    type: Add
+  - message: 'A new weapon type has been added: throwing weapons.'
+    type: Add
+  - message: Throwing daggers and shurikens have been added
+    type: Add
+  - message: The two-handed axe, two-handed sword, and two throwing daggers are now
+      available in the loadout
+    type: Add
+  - message: The Purification Dagger has been removed from the game
+    type: Remove
+  - message: The balance of most weapons has been adjusted
+    type: Tweak
+  id: 10042
+  time: '2026-05-23T11:46:10.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/265
+- author: TheShuEd
+  changes:
+  - message: The schedule for closed testing has been added
+    type: Add
+  id: 10043
+  time: '2026-05-23T17:17:31.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/267

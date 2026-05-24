@@ -1,0 +1,48 @@
+- type: entity
+  id: CEStatusEffectBlessing
+  name: blessing
+  description: Increases incoming healing.
+  components:
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CEBlessing
+  - type: CEIncomingHealBonusStatusEffect
+    bonusPerStack: 1
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 10
+    resetTimerOnStack: true
+  - type: CEStatusEffectNeutralization
+    neutralizes:
+    - CEStatusEffectCurse
+
+- type: alert
+  id: CEBlessing
+  alertViewEntity: CEBlessingAlertSpriteView
+  name: ce-alert-blessing-name
+  description: ce-alert-blessing-desc
+  icons:
+  - sprite: _CE/Interface/blessing.rsi
+    state: icon
+
+- type: entity
+  id: CEBlessingAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Interface/blessing.rsi
+      state: icon
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0

@@ -42,7 +42,7 @@ public sealed partial class ProjectileComponent : Component
     /// <summary>
     ///     The amount of damage the projectile will do.
     /// </summary>
-    [DataField(required: true)] [ViewVariables(VVAccess.ReadWrite)]
+    [DataField] [ViewVariables(VVAccess.ReadWrite)] //CrystallEdge - not required
     public DamageSpecifier Damage = new();
 
     /// <summary>

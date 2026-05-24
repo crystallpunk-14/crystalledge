@@ -1,0 +1,114 @@
+
+- type: entity
+  id: CESoulShard
+  name: soul essence
+  description: A fragment of the soul that can be offered as a gift to sacred statues in exchange for powerful blessings
+  categories: [ ForkFiltered ]
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Effects/soul.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 1.5
+    energy: 10
+    netsync: false
+  - type: Physics
+    bodyType: Dynamic
+    linearDamping: 1.5
+    angularDamping: 1.5
+    fixedRotation: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        hard: false
+        mask:
+        - MobLayer
+        layer:
+        - MobLayer
+      fix2: # Hard collision to prevent flying throught walls
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        mask:
+        - LowImpassable
+  - type: CEEphemeralCollectable
+    collectVfx: CEEffectSoulCollect
+    collectSound:
+      path: /Audio/_CE/Effects/soul_pickup.ogg
+      params:
+        variation: 0.03
+    effects:
+    - !type:AddSoul
+      effectTarget: Target
+      amount: 1
+    - !type:RestoreMana
+      effectTarget: Target
+      amount: 3
+  - type: CEAutoFloatingVisuals
+    animationTime: 1
+    floatingStartOffset: "0.0,0.0"
+    floatingOffset: "0.0,0.2"
+  - type: CENavIgnore
+
+- type: entity
+  id: CEEffectSoulCollect
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/soul_collect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 1.2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CESoulTransferParticle
+  name: soul fragment
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Effects/soul.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#61a7e1"
+    radius: 1
+    energy: 2
+    netsync: false

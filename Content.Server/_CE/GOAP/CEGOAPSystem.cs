@@ -1,5 +1,5 @@
 using Content.Shared._CE.GOAP;
-using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.GOAP.Components;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
 using Robust.Shared.Configuration;
@@ -18,7 +18,6 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private bool _enabled = true;
     private int _maxUpdates = 128;
-    private float _sensorInterval = 0.2f;
 
     /// <summary>
     /// Reusable list for executable actions to avoid allocations during planning.
@@ -30,13 +29,36 @@ public sealed partial class CEGOAPSystem : EntitySystem
     /// </summary>
     private readonly List<int> _candidateGoals = new();
 
+    /// <summary>
+    /// Temporary plan buffer used during replanning to compare against the current plan
+    /// without discarding the running action prematurely.
+    /// </summary>
+    private readonly List<CEGOAPAction> _newPlanBuffer = new();
+
+    /// <summary>
+    /// Per-system GOAP planner instance. Holds reusable internal buffers so there is
+    /// no shared mutable state between systems or test runs.
+    /// </summary>
+    private readonly CEGOAPPlanner _planner = new();
+
+    /// <summary>
+    /// Note: CurrentPlan lists in entity components are reused and cleared/repopulated
+    /// rather than creating new lists each time to minimize GC allocations.
+    /// </summary>
+
+    /// <summary>
+    /// Snapshot buffer for active GOAP entities. Populated at the start of each Update()
+    /// to avoid collection-modified exceptions when WakeMob adds CEActiveGOAPComponent
+    /// to new entities during action execution.
+    /// </summary>
+    private readonly List<(EntityUid Uid, CEGOAPComponent Goap)> _activeSnapshot = new();
+
     public override void Initialize()
     {
         base.Initialize();
 
         Subs.CVar(_cfg, CCVars.CEGOAPEnabled, v => _enabled = v, true);
         Subs.CVar(_cfg, CCVars.CEGOAPMaxUpdates, v => _maxUpdates = v, true);
-        Subs.CVar(_cfg, CCVars.CEGOAPSensorInterval, v => _sensorInterval = v, true);
 
         InitWake();
 
@@ -46,6 +68,41 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
     {
+        foreach (var action in ent.Comp.Actions)
+        {
+            foreach (var prec in action.Preconditions)
+            {
+                ent.Comp.WorldState[prec.Key] = false;
+            }
+
+            foreach (var effect in action.Effects)
+            {
+                ent.Comp.WorldState[effect.Key] = false;
+            }
+
+            action.RaiseInit(ent, EntityManager);
+        }
+
+        foreach (var goal in ent.Comp.Goals)
+        {
+            foreach (var state in goal.DesiredState)
+            {
+                ent.Comp.WorldState[state.Key] = false;
+            }
+            foreach (var prec in goal.Preconditions)
+            {
+                ent.Comp.WorldState[prec.Key] = false;
+            }
+        }
+
+        // Force all sensor components on this entity to evaluate once so WorldState is populated immediately.
+        var refreshEv = new CEGOAPSensorRefreshEvent();
+        RaiseLocalEvent(ent, ref refreshEv);
+
+        // If StartSleeping is set, add the sleeping marker so the entity stays dormant.
+        if (ent.Comp.StartSleeping)
+            EnsureComp<CEGOAPSleepingComponent>(ent);
+
         UpdateAwakeStatus((ent, ent.Comp));
     }
 
@@ -63,13 +120,26 @@ public sealed partial class CEGOAPSystem : EntitySystem
         if (!_enabled)
             return;
 
-        var count = 0;
+        // Snapshot active entities before iterating to prevent
+        // InvalidOperationException if WakeMob adds CEActiveGOAPComponent
+        // to a new entity during action execution.
+        _activeSnapshot.Clear();
         var query = EntityQueryEnumerator<CEActiveGOAPComponent, CEGOAPComponent>();
         while (query.MoveNext(out var uid, out _, out var goap))
+        {
+            _activeSnapshot.Add((uid, goap));
+        }
+
+        var count = 0;
+        foreach (var (uid, goap) in _activeSnapshot)
         {
             if (count >= _maxUpdates)
                 break;
 
+            if (!HasComp<CEActiveGOAPComponent>(uid))
+                continue;
+
+            PurgeExpiredKnowledge((uid, goap));
             UpdateAgent((uid, goap), frameTime);
             count++;
         }
@@ -77,40 +147,16 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void UpdateAgent(Entity<CEGOAPComponent> ent, float frameTime)
     {
-        // 1. Resolve target providers, then update sensors
-        if (_timing.CurTime >= ent.Comp.NextSensorTime)
-        {
-            ResolveTargetProviders(ent);
-            UpdateSensors(ent);
-        }
+        // 1. Check if we need to re-plan
+        if (ent.Comp.CurrentPlan.Count == 0 || _timing.CurTime >= ent.Comp.NextPlanTime)
+            Replan(ent);
 
-        // 2. Check if we need to re-plan
-        if (ent.Comp.CurrentPlan == null || _timing.CurTime >= ent.Comp.NextPlanTime)
-            UpdatePlan(ent);
-
-        // 3. Execute current action
-        if (ent.Comp.CurrentPlan != null && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
+        // 2. Execute current action
+        if (ent.Comp.CurrentPlan.Count != 0 && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
             ExecuteCurrentAction(ent, frameTime);
     }
 
-    private void ResolveTargetProviders(Entity<CEGOAPComponent> ent)
-    {
-        foreach (var (_, provider) in ent.Comp.TargetProviders)
-        {
-            provider.RaiseResolve(ent, EntityManager);
-        }
-    }
-
-    private void UpdateSensors(Entity<CEGOAPComponent> ent)
-    {
-        ent.Comp.NextSensorTime = _timing.CurTime + TimeSpan.FromSeconds(_sensorInterval);
-        foreach (var sensor in ent.Comp.Sensors)
-        {
-            sensor.RaiseUpdate(ent, ent.Comp.WorldState, EntityManager);
-        }
-    }
-
-    private void UpdatePlan(Entity<CEGOAPComponent> ent)
+    private void Replan(Entity<CEGOAPComponent> ent)
     {
         ent.Comp.NextPlanTime = _timing.CurTime + ent.Comp.PlanCooldown;
 
@@ -126,21 +172,36 @@ public sealed partial class CEGOAPSystem : EntitySystem
         GetActiveGoalIndicesByPriority(ent.Comp);
         foreach (var goalIndex in _candidateGoals)
         {
-            // If this is already the active goal and plan is still valid, keep it
-            if (goalIndex == ent.Comp.ActiveGoalIndex && ent.Comp.CurrentPlan != null)
-                return;
-
             var goal = ent.Comp.Goals[goalIndex];
-            var plan = CEGOAPPlanner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions);
 
-            if (plan == null || plan.Count == 0)
+            // Always compute a fresh plan into the temporary buffer so we can compare it
+            // against what is currently executing before deciding whether to interrupt.
+            _newPlanBuffer.Clear();
+            if (!_planner.Plan(ent.Comp.WorldState, goal.DesiredState, _executableActions, _newPlanBuffer))
                 continue;
 
+            if (_newPlanBuffer.Count == 0)
+                continue;
+
+            // If the same goal is active and the new plan begins with the action already
+            // running, the current plan is still optimal — keep it to avoid thrashing.
+            if (goalIndex == ent.Comp.ActiveGoalIndex
+                && ent.Comp.CurrentPlan.Count > 0
+                && ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count
+                && _newPlanBuffer[0] == ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex])
+            {
+                return;
+            }
+
+            // A different (or better) plan was found — interrupt the current action and switch.
+            // Shutdown old action BEFORE clearing: plan list reuse means the old
+            // action reference is lost once the list is cleared.
             ShutdownCurrentAction(ent);
-            ent.Comp.ActiveGoalIndex = goalIndex;
-            ent.Comp.CurrentPlan = plan;
-            ent.Comp.CurrentActionIndex = 0;
             ent.Comp.CurrentActionStarted = false;
+            ent.Comp.CurrentPlan.Clear();
+            ent.Comp.CurrentPlan.AddRange(_newPlanBuffer);
+            ent.Comp.ActiveGoalIndex = goalIndex;
+            ent.Comp.CurrentActionIndex = 0;
             return;
         }
 
@@ -162,7 +223,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
             // Skip goals whose activation conditions are not currently met
             var active = true;
-            foreach (var (key, value) in goal.ActivationConditions)
+            foreach (var (key, value) in goal.Preconditions)
             {
                 if (!goap.WorldState.TryGetValue(key, out var current) || current != value)
                 {
@@ -231,20 +292,28 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
     private void ShutdownCurrentAction(Entity<CEGOAPComponent> ent)
     {
-        if (ent.Comp.CurrentPlan != null &&
-            ent.Comp.CurrentActionStarted &&
-            ent.Comp.CurrentActionIndex < ent.Comp.CurrentPlan.Count)
-        {
-            ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
-        }
+        if (!ent.Comp.CurrentActionStarted)
+            return;
+
+        if (ent.Comp.CurrentActionIndex >= ent.Comp.CurrentPlan.Count)
+            return;
+
+        ent.Comp.CurrentPlan[ent.Comp.CurrentActionIndex].RaiseShutdown(ent, EntityManager);
     }
 
     private void ClearPlan(Entity<CEGOAPComponent> ent)
     {
         ShutdownCurrentAction(ent);
-        ent.Comp.CurrentPlan = null;
+        ent.Comp.CurrentPlan.Clear();
         ent.Comp.CurrentActionIndex = 0;
         ent.Comp.CurrentActionStarted = false;
         ent.Comp.ActiveGoalIndex = -1;
     }
 }
+
+/// <summary>
+/// Raised on a GOAP entity to force every sensor component on it to re-evaluate
+/// its world state condition. Used at map init and on demand.
+/// </summary>
+[ByRefEvent]
+public readonly record struct CEGOAPSensorRefreshEvent;

@@ -1,0 +1,79 @@
+- type: entity
+  name: chair
+  id: CESeatBase
+  abstract: true
+  description: You sit in this. Either by will or force.
+  placement:
+    mode: PlaceFree
+  components:
+  - type: Animateable
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 100
+        mask:
+        - TableMask
+  - type: Sprite
+    sprite: Structures/Furniture/chairs.rsi
+    noRot: true
+  - type: Strap
+    position: Stand
+    buckleOffset: "0,-0.05"
+  - type: Pullable
+
+- type: entity
+  name: wooden chair
+  description: Made of the most common planks. Simple and effective!
+  id: CEChairWooden
+  categories: [ ForkFiltered ]
+  parent:
+  - CESeatBase
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/chairs.rsi
+    state: wooden
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 15
+    destroySound:
+      collection: WoodDestroy
+
+- type: entity
+  id: CEChairStoolWooden
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: stool_wooden
+
+- type: entity
+  id: CEChairStoolMetallic
+  suffix: Metallic
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: stool_metall
+
+- type: entity
+  id: CEChairStoolMetallicRed
+  suffix: Metallic Red
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: stool_metall_red
+
+- type: entity
+  id: CEChairStoolWoodenRed
+  suffix: Wooden Red
+  parent: CEChairWooden
+  components:
+  - type: Sprite
+    state: wooden_red

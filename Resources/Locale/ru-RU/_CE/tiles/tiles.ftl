@@ -1,5 +1,5 @@
 # Base
-ce-tiles-space = пустое пространство
+ce-tiles-space = воздух
 
 # First layer
 

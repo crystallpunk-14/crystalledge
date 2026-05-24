@@ -1,0 +1,21 @@
+- type: entity
+  parent: CEClothingAccessoryBase
+  id: CEClothingAccessoryBezoar
+  name: bezoar
+  description: Protects the wearer from poisoning.
+  components:
+  - type: Sprite
+    sprite: _CE/Clothing/Accessory/bezoar.rsi
+  - type: CEEquipStatusEffect
+    statusEffect: CEStatusEffectBezoar
+
+- type: entity
+  id: CEStatusEffectBezoar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StatusEffect
+  - type: CEStatusEffectStack
+  - type: CEStatusEffectImmunity
+    blockedEffects:
+    - CEStatusEffectPoison
+

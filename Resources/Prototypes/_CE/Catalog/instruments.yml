@@ -1,0 +1,9 @@
+- type: entityTable
+  id: CERandomInstrument
+  table: !type:GroupSelector
+    children:
+    - id: CEInstrumentFlute
+    - id: CEInstrumentLyra
+    - id: CEInstrumentLute
+    - id: CEInstrumentGuitarSkeleton
+      weight: 0.3

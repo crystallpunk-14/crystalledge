@@ -23,4 +23,13 @@ public sealed partial class CEZLevelsNetworkComponent : Component
     /// </summary>
     [DataField(serverOnly: true)]
     public ComponentRegistry Components = new();
+
+    [ViewVariables, AutoNetworkedField]
+    public readonly List<EntityUid> SortedZLevels = [];
+
+    [ViewVariables, AutoNetworkedField]
+    public int SortedMin = 0;
+
+    [ViewVariables, AutoNetworkedField]
+    public int SortedMax = 0;
 }

@@ -14,11 +14,14 @@ applyTo: "**/*.cs"
 - Type parameters: `TPascalCase` (prefix with `T`)
 - Use `var` when the type is apparent from the right side
 - Use expression-bodied members for simple properties and accessors
-- Maximum line length: **120 characters**
 - Always include final newline in files
 - Braces on new lines (Allman style)
 - Minimize LINQ in performance-critical areas to avoid allocations
-- Always put code inside /_CE/ subfolders, add CE prefix to class names.
+- Always put code inside /_CE/ subfolders, add CE prefix to class names. (Means CrystallEdge)
+- If you edit vanilla upstream (not _CE) code, always wraps in with comments in style:
+// CrystallEdge: description and reason for edit
+...
+// CrystallEdge end
 
 ### Entity-Component-System (ECS) Architecture
 CrystallEdge uses an ECS architecture:
@@ -27,6 +30,8 @@ CrystallEdge uses an ECS architecture:
 - Components should not contain logic; systems should process component data
 - Use `[Dependency]` for dependency injection
 - Use `EntityQuery<T>` for performance-critical component lookups
+- Никогда не сохраняй данные внутри систем, они не сохраняются при сохранении и загрузки игры.
+- Перед созданием подписки компонента на ивент формата SubscribeLocalEvent<Comp, Event>() убедись что такой пары подписок компонент-ивент не существует, так как движок запрещает дубликаты подписок.
 
 ### Example System Structure
 ```csharp
@@ -42,7 +47,7 @@ public sealed class ExampleSystem : EntitySystem
         SubscribeLocalEvent<ExampleComponent, SomeEvent>(OnSomeEvent);
     }
 
-    private void OnSomeEvent(EntityUid uid, ExampleComponent component, SomeEvent args)
+    private void OnSomeEvent(Entity<ExampleComponent> component, ref SomeEvent args)
     {
         // Logic here
     }

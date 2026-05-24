@@ -1,0 +1,11 @@
+﻿- type: entity
+  parent: CEBaseKnowledgeBook
+  id: CEKnowledgeBook_Acceleration
+  name: acceleration
+  description: This slim volume contains a detailed recipe for brewing a potion that increases movement speed for a short duration.
+  components:
+  - type: Sprite
+    state: acceleration
+  - type: CEKnowledgeBook
+    recipes:
+    - CEConsumablePotionAcceleration

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._CE.Skill.Core.Prototypes;
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -21,7 +22,7 @@ public sealed partial class AddStatusEffect : CESkillEffect
     public override void AddSkill(IEntityManager entManager, EntityUid target)
     {
         var statusEffectSystem = entManager.System<CEStatusEffectStackSystem>();
-        statusEffectSystem.TryAddStack(target, Effect, Stack);
+        statusEffectSystem.TryAddStack(target, Effect, out _, Stack);
     }
 
     public override void RemoveSkill(IEntityManager entManager, EntityUid target)

@@ -27,6 +27,7 @@ using Content.Shared.Administration.Managers;
 using Content.Shared.Chat;
 using Content.Shared.FeedbackSystem;
 using Content.Shared.IoC;
+using Content.Shared._CE.Achievements;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Players.RateLimiting;
 
@@ -67,7 +68,7 @@ namespace Content.Client.IoC
             collection.Register<ClientsidePlaytimeTrackingManager>();
             collection.Register<ClientFeedbackManager>();
             collection.Register<ISharedFeedbackManager, ClientFeedbackManager>();
-            collection.Register<CEAchievementsManager>(); //CrystallEdge
+            collection.Register<ICEAchievementsRequirementManager, CEAchievementsManager>(); //CrystallEdge
         }
     }
 }

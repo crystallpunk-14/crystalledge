@@ -1,0 +1,97 @@
+- type: entity
+  id: CEFloorTorchAlwaysPowered
+  name: floor torch
+  parent: BaseStructure
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Structures/Furniture/torch_floor.rsi
+    offset: 0, 0.3
+    layers:
+      - state: base
+      - state: fire
+        shader: unshaded
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        density: 1000
+        layer:
+        - LowImpassable
+        - MidImpassable
+  - type: PointLight
+    color: "#e67c34"
+    energy: 1
+    radius: 8
+  - type: AmbientSound
+    enabled: true
+    volume: -15
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 50
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Physical: 5
+      Fire: 10
+  - type: LightBehaviour
+    behaviours:
+      - !type:RandomizeBehaviour # immediately make it bright and flickery
+        interpolate: Nearest
+        minDuration: 0.02
+        maxDuration: 0.06
+        startValue: 2.3
+        endValue: 2.6
+        property: Energy
+        isLooped: true
+        enabled: true
+
+- type: entity
+  id: CEWallmountTorchAlwaysPowered
+  name: wallmount torch
+  parent: CEBaseWallmount
+  suffix: Debug, Infinite
+  components:
+  - type: Sprite
+    sprite: _CE/Structures/Furniture/torch_wallmount.rsi
+    layers:
+      - state: base
+      - state: fire
+        shader: unshaded
+  - type: PointLight
+    color: "#e67c34"
+    energy: 1
+    radius: 8
+  - type: AmbientSound
+    enabled: true
+    volume: -15
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 10
+    destroySound:
+      collection: WoodDestroy
+  - type: CEArmor
+    flat:
+      Fire: 1
+  - type: LightBehaviour
+    behaviours:
+      - !type:RandomizeBehaviour # immediately make it bright and flickery
+        interpolate: Nearest
+        minDuration: 0.02
+        maxDuration: 0.06
+        startValue: 2.3
+        endValue: 2.6
+        property: Energy
+        isLooped: true
+        enabled: true

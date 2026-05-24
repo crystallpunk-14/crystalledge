@@ -1,0 +1,53 @@
+- type: dungeonLevel
+  id: MossyTempleBoss
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map_locations.rsi #TODO
+    state: boss
+  parent:
+  - BaseMossyTemplePostProcess
+  name: ce-dungeon-mossy-dungeon-boss
+  uiPosition: 12,1
+  exits:
+    1: Arena
+  config:
+    !type:CERandomZNetworkConfig
+    variants:
+      Boss1GiantSlimeBasic: 1
+      Boss1ViatorLibrary: 0.5
+      Boss1ViatorLake: 0.5
+
+- type: zMap
+  id: Boss1GiantSlimeBasic
+  maps:
+  - /Maps/_CE/Dungeon/Boss1GiantSlimeBasic/Boss1GiantSlimeBasic0.yml
+  - /Maps/_CE/Dungeon/Boss1GiantSlimeBasic/Boss1GiantSlimeBasic1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true
+
+- type: zMap
+  id: Boss1ViatorLibrary
+  maps:
+  - /Maps/_CE/Dungeon/Boss1ViatorLibrary/Boss1ViatorLibrary0.yml
+  - /Maps/_CE/Dungeon/Boss1ViatorLibrary/Boss1ViatorLibrary1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#31455a"
+  - type: Gravity
+    enabled: true
+    inherent: true
+
+- type: zMap
+  id: Boss1ViatorLake
+  maps:
+  - /Maps/_CE/Dungeon/Boss1ViatorLake/Boss1ViatorLake0.yml
+  - /Maps/_CE/Dungeon/Boss1ViatorLake/Boss1ViatorLake1.yml
+  components:
+  - type: MapLight
+    ambientLightColor: "#2068b4"
+  - type: Gravity
+    enabled: true
+    inherent: true

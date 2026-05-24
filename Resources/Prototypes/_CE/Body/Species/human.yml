@@ -4,6 +4,7 @@
     enum.HumanoidVisualLayers.Hair:
       limit: 1
       required: false
+      default: [ CEHumanHair_part ]
     enum.HumanoidVisualLayers.FacialHair:
       limit: 1
       required: false
@@ -107,8 +108,8 @@
 
 - type: entity
   parent:
-  - CEAppearanceHuman
   - CEBaseSpeciesMob
+  - CEAppearanceHuman
   id: CEMobHuman
   name: Mr. Human
 

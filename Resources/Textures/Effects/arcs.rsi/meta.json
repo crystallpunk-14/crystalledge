@@ -78,6 +78,9 @@
             "name": "slash"
         },
         {
+            "name": "foot"
+        },
+        {
             "name": "fist"
         }
     ]

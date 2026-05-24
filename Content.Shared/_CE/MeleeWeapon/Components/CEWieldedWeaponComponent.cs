@@ -1,3 +1,4 @@
+using Content.Shared._CE.MeleeWeapon;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.Animation.Item.Components;

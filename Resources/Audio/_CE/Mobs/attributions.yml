@@ -1,0 +1,19 @@
+﻿- files: ["rat1.ogg", "rat2.ogg", "rat3.ogg", "rat4.ogg", "rat5.ogg", "rat6.ogg", "rat7.ogg", "rat8.ogg"]
+  license: "CC0-1.0"
+  copyright: "toefur on Freesound"
+  source: "https://freesound.org/people/toefur/sounds/288941/"
+
+- files: ["slime_alert.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Created by qubodup on Freesound.org'
+  source: "https://freesound.org/people/qubodup/sounds/751342/"
+
+- files: ["roar.ogg"]
+  license: "CC-BY-SA-4.0"
+  copyright: 'Created by mitchanary on Freesound.org'
+  source: "https://freesound.org/people/mitchanary/sounds/505131/"
+
+- files: ["gnome1.ogg", "gnome2.ogg", "gnome3.ogg", "gnome4.ogg", "gnome5.ogg", "gnome6.ogg"]
+  license: "CC0-1.0"
+  copyright: 'Created by remarknl on Freesound.org, converted to mono and cutted'
+  source: "https://freesound.org/people/remarknl/sounds/197411/"

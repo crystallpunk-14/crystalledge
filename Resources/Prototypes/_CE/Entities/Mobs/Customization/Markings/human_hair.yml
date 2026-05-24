@@ -1,6 +1,11 @@
 - type: marking
   id: CEHumanHair_80s
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: 80s
@@ -8,6 +13,11 @@
 - type: marking
   id: CEHumanHair_A
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: a
@@ -15,6 +25,11 @@
 - type: marking
   id: CEHumanHair_Afro
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: afro
@@ -22,6 +37,11 @@
 - type: marking
   id: CEHumanHair_Afro2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: afro2
@@ -29,6 +49,11 @@
 - type: marking
   id: CEHumanHair_Antenna
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: antenna
@@ -36,6 +61,11 @@
 - type: marking
   id: CEHumanHair_B
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: b
@@ -43,6 +73,11 @@
 - type: marking
   id: CEHumanHair_Bedhead
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bedhead
@@ -50,6 +85,11 @@
 - type: marking
   id: CEHumanHair_BedheadV2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bedheadv2
@@ -57,6 +97,11 @@
 - type: marking
   id: CEHumanHair_BedheadV3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bedheadv3
@@ -64,6 +109,11 @@
 - type: marking
   id: CEHumanHair_BeeHive
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: beehive
@@ -71,6 +121,11 @@
 - type: marking
   id: CEHumanHair_BeeHive2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: beehive2
@@ -78,6 +133,11 @@
 - type: marking
   id: CEHumanHair_Bigafro
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bigafro
@@ -85,6 +145,11 @@
 - type: marking
   id: CEHumanHair_BigPompadour
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bigpompadour
@@ -92,6 +157,11 @@
 - type: marking
   id: CEHumanHair_blowcut
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: blowcut
@@ -99,6 +169,11 @@
 - type: marking
   id: CEHumanHair_bob
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bob
@@ -106,6 +181,11 @@
 - type: marking
   id: CEHumanHair_bob2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bob2
@@ -113,6 +193,11 @@
 - type: marking
   id: CEHumanHair_bob4
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bob4
@@ -120,6 +205,11 @@
 - type: marking
   id: CEHumanHair_bob5
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bob5
@@ -127,6 +217,11 @@
 - type: marking
   id: CEHumanHair_bobcurl
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bobcurl
@@ -134,6 +229,11 @@
 - type: marking
   id: CEHumanHair_bobcut
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bobcut
@@ -141,6 +241,11 @@
 - type: marking
   id: CEHumanHair_boddicker
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: boddicker
@@ -148,6 +253,11 @@
 - type: marking
   id: CEHumanHair_bowlcut2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bowlcut2
@@ -155,6 +265,11 @@
 - type: marking
   id: CEHumanHair_braid
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: braid
@@ -162,6 +277,11 @@
 - type: marking
   id: CEHumanHair_braid2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: braid2
@@ -169,6 +289,11 @@
 - type: marking
   id: CEHumanHair_braided
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: braided
@@ -176,6 +301,11 @@
 - type: marking
   id: CEHumanHair_braidfront
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: braidfront
@@ -183,6 +313,11 @@
 - type: marking
   id: CEHumanHair_braidtail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: braidtail
@@ -190,6 +325,11 @@
 - type: marking
   id: CEHumanHair_bun3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bun3
@@ -197,6 +337,11 @@
 - type: marking
   id: CEHumanHair_bunhead2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: bunhead2
@@ -204,6 +349,11 @@
 - type: marking
   id: CEHumanHair_business
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: business
@@ -211,6 +361,11 @@
 - type: marking
   id: CEHumanHair_business2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: business2
@@ -218,6 +373,11 @@
 - type: marking
   id: CEHumanHair_business3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: business3
@@ -225,6 +385,11 @@
 - type: marking
   id: CEHumanHair_business4
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: business4
@@ -232,6 +397,11 @@
 - type: marking
   id: CEHumanHair_c
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: c
@@ -239,6 +409,11 @@
 - type: marking
   id: CEHumanHair_cia
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: cia
@@ -246,6 +421,11 @@
 - type: marking
   id: CEHumanHair_classicbusiness
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: classicbusiness
@@ -253,6 +433,11 @@
 - type: marking
   id: CEHumanHair_classiclong2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: classiclong2
@@ -260,6 +445,11 @@
 - type: marking
   id: CEHumanHair_classiclong3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: classiclong3
@@ -267,6 +457,11 @@
 - type: marking
   id: CEHumanHair_classicmodern
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: classicmodern
@@ -274,6 +469,11 @@
 - type: marking
   id: CEHumanHair_classicwisp
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: classicwisp
@@ -281,6 +481,11 @@
 - type: marking
   id: CEHumanHair_combover
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: combover
@@ -288,6 +493,11 @@
 - type: marking
   id: CEHumanHair_cornrowbraid
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: cornrowbraid
@@ -295,6 +505,11 @@
 - type: marking
   id: CEHumanHair_cornrowbun
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: cornrowbun
@@ -302,6 +517,11 @@
 - type: marking
   id: CEHumanHair_cornrows
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: cornrows
@@ -309,6 +529,11 @@
 - type: marking
   id: CEHumanHair_cornrows2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: cornrows2
@@ -316,6 +541,11 @@
 - type: marking
   id: CEHumanHair_cornrowtail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: cornrowtail
@@ -323,6 +553,11 @@
 - type: marking
   id: CEHumanHair_country
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: country
@@ -330,6 +565,11 @@
 - type: marking
   id: CEHumanHair_crazybald
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: crazybald
@@ -337,6 +577,11 @@
 - type: marking
   id: CEHumanHair_curls
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: curls
@@ -344,6 +589,11 @@
 - type: marking
   id: CEHumanHair_dandypompadour
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: dandypompadour
@@ -351,6 +601,11 @@
 - type: marking
   id: CEHumanHair_doublebun
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: doublebun
@@ -358,6 +613,11 @@
 - type: marking
   id: CEHumanHair_doublebun_long
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: doublebun_long
@@ -365,6 +625,11 @@
 - type: marking
   id: CEHumanHair_dreads
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: dreads
@@ -372,6 +637,11 @@
 - type: marking
   id: CEHumanHair_drillhair
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: drillhair
@@ -379,6 +649,11 @@
 - type: marking
   id: CEHumanHair_drillhairextended
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: drillhairextended
@@ -386,6 +661,11 @@
 - type: marking
   id: CEHumanHair_drillruru
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: drillruru
@@ -393,6 +673,11 @@
 - type: marking
   id: CEHumanHair_e
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: e
@@ -400,6 +685,11 @@
 - type: marking
   id: CEHumanHair_emo
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: emo
@@ -407,6 +697,11 @@
 - type: marking
   id: CEHumanHair_emo2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: emo2
@@ -414,6 +709,11 @@
 - type: marking
   id: CEHumanHair_emofringe
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: emofringe
@@ -421,6 +721,11 @@
 - type: marking
   id: CEHumanHair_f
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: f
@@ -428,6 +733,11 @@
 - type: marking
   id: CEHumanHair_father
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: father
@@ -435,6 +745,11 @@
 - type: marking
   id: CEHumanHair_feather
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: feather
@@ -442,6 +757,11 @@
 - type: marking
   id: CEHumanHair_flair
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: flair
@@ -449,6 +769,11 @@
 - type: marking
   id: CEHumanHair_floorlength_bedhead
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: floorlength_bedhead
@@ -456,6 +781,11 @@
 - type: marking
   id: CEHumanHair_fringetail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: fringetail
@@ -463,6 +793,11 @@
 - type: marking
   id: CEHumanHair_gelled
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: gelled
@@ -470,6 +805,11 @@
 - type: marking
   id: CEHumanHair_gentle
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: gentle
@@ -477,6 +817,11 @@
 - type: marking
   id: CEHumanHair_halfbang
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: halfbang
@@ -484,6 +829,11 @@
 - type: marking
   id: CEHumanHair_halfbang2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: halfbang2
@@ -491,6 +841,11 @@
 - type: marking
   id: CEHumanHair_halfshaved
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: halfshaved
@@ -498,6 +853,11 @@
 - type: marking
   id: CEHumanHair_hbraid
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: hbraid
@@ -505,6 +865,11 @@
 - type: marking
   id: CEHumanHair_hedgehog
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: hedgehog
@@ -512,6 +877,11 @@
 - type: marking
   id: CEHumanHair_highponytail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: highponytail
@@ -519,6 +889,11 @@
 - type: marking
   id: CEHumanHair_himecut
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: himecut
@@ -526,6 +901,11 @@
 - type: marking
   id: CEHumanHair_himecut2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: himecut2
@@ -533,6 +913,11 @@
 - type: marking
   id: CEHumanHair_himeup
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: himeup
@@ -540,6 +925,11 @@
 - type: marking
   id: CEHumanHair_hitop
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: hitop
@@ -547,6 +937,11 @@
 - type: marking
   id: CEHumanHair_jade
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: jade
@@ -554,6 +949,11 @@
 - type: marking
   id: CEHumanHair_jensen
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: jensen
@@ -561,6 +961,11 @@
 - type: marking
   id: CEHumanHair_joestar
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: joestar
@@ -568,6 +973,11 @@
 - type: marking
   id: CEHumanHair_kagami
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: kagami
@@ -575,6 +985,11 @@
 - type: marking
   id: CEHumanHair_keanu
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: keanu
@@ -582,6 +997,11 @@
 - type: marking
   id: CEHumanHair_kusanagi
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: kusanagi
@@ -589,6 +1009,11 @@
 - type: marking
   id: CEHumanHair_largebun
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: largebun
@@ -596,6 +1021,11 @@
 - type: marking
   id: CEHumanHair_lbangs
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: lbangs
@@ -603,6 +1033,11 @@
 - type: marking
   id: CEHumanHair_long
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: long
@@ -610,6 +1045,11 @@
 - type: marking
   id: CEHumanHair_long_bedhead
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: long_bedhead
@@ -617,6 +1057,11 @@
 - type: marking
   id: CEHumanHair_long2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: long2
@@ -624,6 +1069,11 @@
 - type: marking
   id: CEHumanHair_long3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: long3
@@ -631,6 +1081,11 @@
 - type: marking
   id: CEHumanHair_longbow
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longbow
@@ -638,6 +1093,11 @@
 - type: marking
   id: CEHumanHair_longbundled
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longbundled
@@ -645,6 +1105,11 @@
 - type: marking
   id: CEHumanHair_longemo
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longemo
@@ -652,6 +1117,11 @@
 - type: marking
   id: CEHumanHair_longfringe
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longfringe
@@ -659,6 +1129,11 @@
 - type: marking
   id: CEHumanHair_longovereye
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longovereye
@@ -666,6 +1141,11 @@
 - type: marking
   id: CEHumanHair_longsidepart
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longsidepart
@@ -673,6 +1153,11 @@
 - type: marking
   id: CEHumanHair_longstraightponytail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: longstraightponytail
@@ -680,6 +1165,11 @@
 - type: marking
   id: CEHumanHair_manbun
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: manbun
@@ -687,6 +1177,11 @@
 - type: marking
   id: CEHumanHair_maxy_shagy
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: maxy_shagy
@@ -694,6 +1189,11 @@
 - type: marking
   id: CEHumanHair_messy
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: messy
@@ -701,6 +1201,11 @@
 - type: marking
   id: CEHumanHair_modern
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: modern
@@ -708,6 +1213,11 @@
 - type: marking
   id: CEHumanHair_nitori
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: nitori
@@ -715,6 +1225,11 @@
 - type: marking
   id: CEHumanHair_odango
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: odango
@@ -722,6 +1237,11 @@
 - type: marking
   id: CEHumanHair_ombre
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ombre
@@ -729,6 +1249,11 @@
 - type: marking
   id: CEHumanHair_oneshoulder
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: oneshoulder
@@ -736,6 +1261,11 @@
 - type: marking
   id: CEHumanHair_oxton
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: oxton
@@ -743,6 +1273,11 @@
 - type: marking
   id: CEHumanHair_part
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: part
@@ -750,6 +1285,11 @@
 - type: marking
   id: CEHumanHair_parted
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: parted
@@ -757,6 +1297,11 @@
 - type: marking
   id: CEHumanHair_pigtails
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: pigtails
@@ -764,6 +1309,11 @@
 - type: marking
   id: CEHumanHair_pigtails2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: pigtails2
@@ -771,6 +1321,11 @@
 - type: marking
   id: CEHumanHair_pixie
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: pixie
@@ -778,6 +1333,11 @@
 - type: marking
   id: CEHumanHair_ponytail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail
@@ -785,6 +1345,11 @@
 - type: marking
   id: CEHumanHair_ponytail2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail2
@@ -792,6 +1357,11 @@
 - type: marking
   id: CEHumanHair_ponytail3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail3
@@ -799,6 +1369,11 @@
 - type: marking
   id: CEHumanHair_ponytail4
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail4
@@ -806,6 +1381,11 @@
 - type: marking
   id: CEHumanHair_ponytail5
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail5
@@ -813,6 +1393,11 @@
 - type: marking
   id: CEHumanHair_ponytail6
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail6
@@ -820,6 +1405,11 @@
 - type: marking
   id: CEHumanHair_ponytail7
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ponytail7
@@ -827,6 +1417,11 @@
 - type: marking
   id: CEHumanHair_protagonist
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: protagonist
@@ -834,6 +1429,11 @@
 - type: marking
   id: CEHumanHair_Pulato
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: pulato
@@ -841,6 +1441,11 @@
 - type: marking
   id: CEHumanHair_quiff
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: quiff
@@ -848,6 +1453,11 @@
 - type: marking
   id: CEHumanHair_reversemohawk
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: reversemohawk
@@ -855,6 +1465,11 @@
 - type: marking
   id: CEHumanHair_ronin
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: ronin
@@ -862,6 +1477,11 @@
 - type: marking
   id: CEHumanHair_rosa
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: rosa
@@ -869,6 +1489,11 @@
 - type: marking
   id: CEHumanHair_shaped
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shaped
@@ -876,6 +1501,11 @@
 - type: marking
   id: CEHumanHair_shortbangs
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shortbangs
@@ -883,6 +1513,11 @@
 - type: marking
   id: CEHumanHair_shortbraid
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shortbraid
@@ -890,6 +1525,11 @@
 - type: marking
   id: CEHumanHair_shorthair2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shorthair2
@@ -897,6 +1537,11 @@
 - type: marking
   id: CEHumanHair_shorthair3
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shorthair3
@@ -904,6 +1549,11 @@
 - type: marking
   id: CEHumanHair_shorthairg
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shorthairg
@@ -911,6 +1561,11 @@
 - type: marking
   id: CEHumanHair_shorthime
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shorthime
@@ -918,6 +1573,11 @@
 - type: marking
   id: CEHumanHair_shortovereye
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shortovereye
@@ -925,6 +1585,11 @@
 - type: marking
   id: CEHumanHair_shoulderlengthovereye
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: shoulderlengthovereye
@@ -932,6 +1597,11 @@
 - type: marking
   id: CEHumanHair_sidecut
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: sidecut
@@ -939,6 +1609,11 @@
 - type: marking
   id: CEHumanHair_sidetail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: sidetail
@@ -946,6 +1621,11 @@
 - type: marking
   id: CEHumanHair_sidetail2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: sidetail2
@@ -953,6 +1633,11 @@
 - type: marking
   id: CEHumanHair_sidetail4
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: sidetail4
@@ -960,6 +1645,11 @@
 - type: marking
   id: CEHumanHair_skinhead
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: skinhead
@@ -967,6 +1657,11 @@
 - type: marking
   id: CEHumanHair_spiky
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: spiky
@@ -974,6 +1669,11 @@
 - type: marking
   id: CEHumanHair_spiky2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: spiky2
@@ -981,6 +1681,11 @@
 - type: marking
   id: CEHumanHair_spikyponytail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: spikyponytail
@@ -988,6 +1693,11 @@
 - type: marking
   id: CEHumanHair_stail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: stail
@@ -995,6 +1705,11 @@
 - type: marking
   id: CEHumanHair_swept
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: swept
@@ -1002,6 +1717,11 @@
 - type: marking
   id: CEHumanHair_swept2
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: swept2
@@ -1009,6 +1729,11 @@
 - type: marking
   id: CEHumanHair_tressshoulder
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: tressshoulder
@@ -1016,6 +1741,11 @@
 - type: marking
   id: CEHumanHair_twintail
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: twintail
@@ -1023,6 +1753,11 @@
 - type: marking
   id: CEHumanHair_undercutright
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: undercutright
@@ -1030,6 +1765,11 @@
 - type: marking
   id: CEHumanHair_uneven
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: uneven
@@ -1037,6 +1777,11 @@
 - type: marking
   id: CEHumanHair_twostrands
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: twostrands
@@ -1044,6 +1789,11 @@
 - type: marking
   id: CEHumanHair_unkept
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: unkept
@@ -1051,6 +1801,11 @@
 - type: marking
   id: CEHumanHair_Updo
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: updo
@@ -1058,6 +1813,11 @@
 - type: marking
   id: CEHumanHair_VLongFringe
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: vlongfringe
@@ -1065,6 +1825,11 @@
 - type: marking
   id: CEHumanHair_Volaju
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: volaju
@@ -1072,6 +1837,11 @@
 - type: marking
   id: CEHumanHair_Wisp
   bodyPart: Hair
+  coloring:
+    default:
+      type:
+        !type:SimpleColoring
+          color: "#252020"
   sprites:
     - sprite: _CE/Mobs/Customization/human_hair.rsi
       state: wisp

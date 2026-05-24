@@ -1,0 +1,47 @@
+# Shared spawn tables for the Mossy Temple dungeon.
+# Tables define what can spawn and placement filters, but NOT the budget.
+# Budget is specified per-level in the dungeonLevel postProcess list via CETableBudgetSpawnPostProcess.
+
+# LOOT
+
+- type: dungeonSpawnTable
+  id: MossyTempleHealing
+  anchoredWhitelist:
+    components:
+    - PlaceableSurface
+  entries:
+  - proto: CEConsumablePotionHealingSmall
+    cost: 25
+  - proto: CEConsumablePotionHealingMedium
+    cost: 50
+
+- type: dungeonSpawnTable
+  id: MossyTempleMana
+  anchoredWhitelist:
+    components:
+    - PlaceableSurface
+  entries:
+  - proto: CEConsumablePotionManaSmall
+    cost: 5
+  - proto: CEConsumablePotionManaMedium
+    cost: 10
+
+- type: dungeonSpawnTable
+  id: MossyTempleHerbs
+  tileWhitelist:
+  - CEDirt
+  - CEGrass
+  - CEGrassLight
+  - CEGrassTall
+  entries:
+  - proto: CESpawnerRandomFlowers
+    cost: 1
+
+- type: dungeonSpawnTable
+  id: MossyTempleKeys
+  anchoredWhitelist:
+    components:
+    - PlaceableSurface
+  entries:
+  - proto: CEIronKey
+    cost: 1

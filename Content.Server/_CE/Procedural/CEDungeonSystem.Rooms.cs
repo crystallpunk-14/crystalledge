@@ -4,8 +4,6 @@ using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Decals;
 using Content.Shared.Maps;
-using Content.Shared.Procedural;
-using Content.Shared.Whitelist;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -18,34 +16,14 @@ public sealed partial class CEDungeonSystem
 {
     private readonly List<CEDungeonRoom3DPrototype> _availableRooms = new();
 
-    private void InitializeRooms()
-    {
-
-    }
-
-
     /// <summary>
-    /// Gets a random dungeon room matching the specified area, whitelist and size.
-    /// </summary>
-    public CEDungeonRoom3DPrototype? GetRoomPrototype(Vector2i size, Random random, EntityWhitelist? whitelist = null)
-    {
-        return GetRoomPrototype(random, whitelist, minSize: size, maxSize: size);
-    }
-
-    /// <summary>
-    /// Gets a random dungeon room matching the specified area and whitelist and size range
+    /// Gets a random dungeon room matching the specified size range and room type.
     /// </summary>
     public CEDungeonRoom3DPrototype? GetRoomPrototype(Random random,
-        EntityWhitelist? whitelist = null,
         Vector2i? minSize = null,
-        Vector2i? maxSize = null)
+        Vector2i? maxSize = null,
+        ProtoId<CERoomTypePrototype>? roomType = null)
     {
-        // Can never be true.
-        if (whitelist is { Tags: null })
-        {
-            return null;
-        }
-
         _availableRooms.Clear();
 
         foreach (var proto in _proto.EnumeratePrototypes<CEDungeonRoom3DPrototype>())
@@ -56,70 +34,31 @@ public sealed partial class CEDungeonSystem
             if (maxSize is not null && (proto.Size.X > maxSize.Value.X || proto.Size.Y > maxSize.Value.Y))
                 continue;
 
-            if (whitelist == null)
-            {
-                _availableRooms.Add(proto);
+            if (roomType != null && proto.RoomType != roomType)
                 continue;
-            }
 
-            foreach (var tag in whitelist.Tags)
-            {
-                if (!proto.Tags.Contains(tag))
-                    continue;
-
-                _availableRooms.Add(proto);
-                break;
-            }
+            _availableRooms.Add(proto);
         }
 
         if (_availableRooms.Count == 0)
             return null;
 
-        var room = _availableRooms[random.Next(_availableRooms.Count)];
-
-        return room;
-    }
-
-
-    public Angle GetRoomRotation(CEDungeonRoom3DPrototype room, Random random)
-    {
-        var roomRotation = Angle.Zero;
-
-        if (room.Size.X == room.Size.Y)
+        // Weighted random selection.
+        var totalWeight = 0f;
+        foreach (var r in _availableRooms)
         {
-            // Give it a random rotation
-            roomRotation = random.Next(4) * Math.PI / 2;
-        }
-        else if (random.Next(2) == 1)
-        {
-            roomRotation += Math.PI;
+            totalWeight += r.Weight;
         }
 
-        return roomRotation;
-    }
-
-    public bool TrySpawn3DRoom(
-        EntityUid gridUid,
-        MapGridComponent grid,
-        Vector2i origin,
-        CEDungeonRoom3DPrototype room,
-        Random random,
-        HashSet<Vector2i>? reservedTiles,
-        bool clearExisting = false,
-        bool rotation = false)
-    {
-        var originTransform = Matrix3Helpers.CreateTranslation(origin.X, origin.Y);
-        var roomRotation = Angle.Zero;
-
-        if (rotation)
+        var roll = (float)(random.NextDouble() * totalWeight);
+        foreach (var r in _availableRooms)
         {
-            roomRotation = GetRoomRotation(room, random);
+            roll -= r.Weight;
+            if (roll <= 0f)
+                return r;
         }
 
-        var roomTransform = Matrix3Helpers.CreateTransform((Vector2)room.Size / 2f, roomRotation);
-        var finalTransform = Matrix3x2.Multiply(roomTransform, originTransform);
-
-        return TrySpawn3DRoom(gridUid, grid, finalTransform, room, reservedTiles, clearExisting);
+        return _availableRooms[^1];
     }
 
     public bool TrySpawn3DRoom(
@@ -163,7 +102,7 @@ public sealed partial class CEDungeonSystem
                     continue;
                 }
 
-                targetMapUid = found.Value;
+                targetMapUid = found;
                 targetGrid = Comp<MapGridComponent>(targetMapUid);
             }
 
@@ -257,11 +196,7 @@ public sealed partial class CEDungeonSystem
                     }
                     else if (angle.Equals(Math.PI * 1.5f))
                     {
-                        if (decal.Id != "DiagonalCheckerAOverlay" &&
-                            decal.Id != "DiagonalCheckerBOverlay")
-                        {
-                            position += new Vector2(-1f / 32f, 0f);
-                        }
+                        position += new Vector2(-1f / 32f, 0f);
                     }
 
                     var tilePos = position.Floored();
@@ -288,7 +223,7 @@ public sealed partial class CEDungeonSystem
         return true;
     }
 
-    public MapId GetOrCreateTemplate(ResPath atlasPath)
+    private MapId GetOrCreateTemplate(ResPath atlasPath)
     {
         var query = AllEntityQuery<DungeonAtlasTemplateComponent>();
         DungeonAtlasTemplateComponent? comp;
@@ -307,7 +242,7 @@ public sealed partial class CEDungeonSystem
         };
 
         if (!_loader.TryLoadGeneric(atlasPath, out var res, opts) || !res.Maps.TryFirstOrNull(out var map))
-            throw new Exception($"Failed to load dungeon template.");
+            throw new Exception("Failed to load dungeon template.");
 
         comp = AddComp<DungeonAtlasTemplateComponent>(map.Value.Owner);
         comp.Path = atlasPath;

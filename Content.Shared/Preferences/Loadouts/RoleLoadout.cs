@@ -286,6 +286,17 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
             valid = valid && effect.Validate(profile, this, session, collection, out reason);
         }
 
+        //CrystallEdge
+        foreach (var skill in loadoutProto.Skills)
+        {
+            if (!protoManager.Resolve(skill, out _))
+            {
+                valid = false;
+                break;
+            }
+        }
+        //CrystallEdge end
+
         return valid;
     }
 

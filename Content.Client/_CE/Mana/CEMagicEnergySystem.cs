@@ -68,7 +68,8 @@ public sealed class CEMagicEnergyStatusControl : Control
             Value = 0
         };
         _progress.SetHeight = 8f;
-        _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#3fc488"));
+        // Mana UI is always blue.
+        _progress.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#3082f5"));
         _progress.BackgroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#0f2d42"));
         _progress.Margin = new Thickness(0, 4);
         _label = new RichTextLabel { StyleClasses = { StyleNano.StyleClassItemStatus } };
@@ -96,13 +97,14 @@ public sealed class CEMagicEnergyStatusControl : Control
         if (maxEnergy <= 0)
         {
             _progress.Value = 0;
-            _label.Text = "0%";
+            _label.Text = "0/0";
             return;
         }
-        var energy = _parent.Comp.Energy;
-        var ratio = energy / maxEnergy;
+
+        var energy = Math.Clamp(_parent.Comp.Energy, 0, maxEnergy);
+        var ratio = (float)energy / maxEnergy;
+
         _progress.Value = ratio;
-        var power = ratio * 100;
-        _label.Text = $"{power}%";
+        _label.Text = $"{energy}/{maxEnergy}";
     }
 }

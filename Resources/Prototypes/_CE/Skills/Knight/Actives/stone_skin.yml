@@ -1,0 +1,42 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: StoneSkin
+  effect: !type:AddAction
+    action: CEActionSpellStoneSkin
+
+- type: entity
+  id: CEActionSpellStoneSkin
+  parent: CEActionSpellBase
+  name: Stone Skin
+  description: Grants [color=#b2e3eb]50 temporary shields[/color] that absorb damage. Shields decay over time.
+  components:
+  - type: CEActionManaCost
+    manaCost: 25
+  - type: CEActionStaminaCost
+    cost: 3
+  - type: Action
+    useDelay: 15
+    icon:
+      sprite: _CE/Skills/Knight/stone_skin.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: StoneSkin
+
+- type: entityEffectAnimation
+  id: StoneSkin
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/clang.ogg
+        params:
+          pitch: 0.7
+    0.6:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectTempShield
+      amount: 50
+      max: 50

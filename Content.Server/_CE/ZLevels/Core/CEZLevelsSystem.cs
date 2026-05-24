@@ -23,6 +23,7 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
     public override void Initialize()
     {
         base.Initialize();
+
         InitView();
 
         SubscribeLocalEvent<CEStationZLevelsComponent, StationPostInitEvent>(OnStationPostInit);
@@ -35,18 +36,21 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
 
         var stationName = MetaData(ent).EntityName;
         var stationNetwork = CreateZNetwork(ent.Comp.ZLevelsComponentOverrides);
+
         ent.Comp.ZNetworkEntity = stationNetwork;
+
         _meta.SetEntityName(ent.Comp.ZNetworkEntity.Value, $"Station z-Network: {stationName}");
 
         var mainMap =  _station.GetLargestGrid(ent.Owner);
-
         if (mainMap is null)
             throw new Exception("Station has no grids to base z-levels off of!");
 
-        Dictionary<EntityUid, int> dict = new();
-        dict.Add(mainMap.Value, 0);
+        var dict = new Dictionary<EntityUid, int>()
+        {
+            { mainMap.Value, 0 }
+        };
 
-        //Loading maps below first
+        // Loading maps below first
         var depth = ent.Comp.MapsBelow.Count * -1;
         foreach (var mapBelow in ent.Comp.MapsBelow)
         {
@@ -64,7 +68,7 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
             depth++;
         }
 
-        //Loading maps above next
+        // Loading maps above next
         depth = 1;
         foreach (var mapAbove in ent.Comp.MapsAbove)
         {

@@ -1,0 +1,15 @@
+- type: CEDamageType
+  id: Physical
+  color: "#b2e3eb"
+
+- type: CEDamageType
+  id: Fire
+  color: "#dfad57"
+
+- type: CEDamageType
+  id: Cold
+  color: "#5d9ee2"
+
+- type: CEDamageType
+  id: Poison
+  color: "#448024"

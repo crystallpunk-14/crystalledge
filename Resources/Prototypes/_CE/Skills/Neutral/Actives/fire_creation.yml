@@ -1,0 +1,136 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: FireCreation
+  weight: 0.5
+  effect: !type:AddAction
+    action: CEActionFireCreation
+  restrictions:
+   - !type:JobWhitelist
+     inverted: true
+     jobs:
+     - CEMage # Mage have more powerful analogue of this skill (fireball)
+
+- type: entity
+  id: CEActionFireCreation
+  parent: CEActionSpellBase
+  name: Fire creation
+  description: You create a temporary [color=#ff4500]fire[/color], which you can throw.
+  components:
+  - type: CEActionManaCost
+    manaCost: 8
+  - type: CEActionStaminaCost
+    cost: 2
+  - type: Action
+    useDelay: 1
+    icon:
+      sprite: _CE/Skills/Neutral/fire_creation.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationFireCreation
+
+- type: entityEffectAnimation
+  id: AnimationFireCreation
+  movementSpeed: 0.5
+  duration: 1.0
+  lockRotation: true
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectFireCreation
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/firebolt.ogg
+    0.6:
+    - !type:SpawnInHandEntity
+      spawns:
+      - CEHandheldFire
+
+- type: entity
+  id: CEEffectFireCreation
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/fire_absorbtion.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#fa9c29"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEHandheldFire
+  parent: BaseItem
+  categories: [ ForkFiltered ]
+  name: handheld fire
+  description: A small flame, burning in your hand. It can be thrown to burn something.
+  components:
+  - type: Item
+    size: Tiny
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        shader: unshaded
+      right:
+      - state: inhand-right
+        shader: unshaded
+  - type: CEDamageable
+  - type: CEDamageOnLand
+    damage:
+      types:
+        Physical: 1
+  - type: CEDestructible
+    destroyThreshold: 1
+  - type: Sprite
+    sprite: _CE/Objects/Consumable/artificial_flame.rsi
+    layers:
+    - state: icon
+      shader: unshaded
+  - type: PointLight
+    color: "#fa9c29"
+    radius: 2
+  - type: CEConsumable
+    useDelay: 1.5
+    useSound:
+      path: /Audio/_CE/Effects/firebolt.ogg
+    effects:
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectFire
+      amount: 6
+  - type: CEDestructionEffect
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFire
+      radius: 1
+      maxStacks: 3
+    - !type:AreaEffect
+      affectCaster: true
+      effectTarget: Used
+      range: 1
+      effects:
+      - !type:Damage
+        attackType: Ranged
+        damage:
+          types:
+            Fire: 5
+  - type: TimedDespawn
+    lifetime: 120

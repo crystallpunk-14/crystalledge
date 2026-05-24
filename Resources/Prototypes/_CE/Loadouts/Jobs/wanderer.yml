@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: CEWandererShirt
+  name: ce-loadout-shirt
+  minLimit: 1
+  loadouts:
+  - CEClothingWandererShirt
+
+- type: loadout
+  id: CEClothingWandererShirt
+  equipment:
+    shirt: CEClothingWandererShirt

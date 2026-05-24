@@ -6,18 +6,18 @@
 
 - type: entity
   id: CEStatusEffectAffinityFire
-  name: Elemental Affinity Fire
-  description: You take 3 less [color=#ff8a05]fire damage[/color] from all sources.
+  name: Fire Affinity
+  description: You take 5 less [color=#ff8a05]fire damage[/color] from all sources.
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEAffinityFire
-  - type: CEDamageModifierStatusEffect
-    flatModifiers:
-      Fire: -3
+  - type: CEArmor
+    flat:
+      Fire: 5
 
 - type: alert
   id: CEAffinityFire
   icons:
-  - sprite: _CE/Skills/affinity_fire.rsi
+  - sprite: _CE/Skills/Mage/affinity_fire.rsi
     state: icon

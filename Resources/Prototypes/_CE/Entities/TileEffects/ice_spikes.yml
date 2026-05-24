@@ -1,0 +1,87 @@
+- type: entity
+  id: CETileEffectIceSpikes
+  parent: CETileEffectBase
+  name: ice spikes
+  description: TODO
+  components:
+  - type: Sprite
+    snapCardinals: true
+    noRot: false
+    drawdepth: Puddles
+    sprite: _CE/Structures/Nature/ice_spikes.rsi
+    layers:
+    - state: base1
+      map: [ "random" ]
+  - type: CETileEffect
+    maxStacks: 1
+    minDecayInterval: 5
+    maxDecayInterval: 5
+    stackDelta: 0
+  - type: CEEntityEffectOnCollide
+    effects:
+      - !type:Damage
+        attackType: TileEffect
+        damage:
+          types:
+            Cold: 6
+  - type: Appearance
+  - type: RandomSprite
+    available:
+      - random:
+          base1: ""
+          base2: ""
+          base3: ""
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.6
+    sprintSpeedModifier: 0.6
+  - type: CETileEffectNeutralization
+    neutralizes:
+    - CETileEffectFire
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 5
+    destroySound:
+      collection: GlassSmash
+  - type: CEArmor
+    flat:
+      Cold: 10
+  - type: CENavIgnore
+  - type: Fixtures
+    fixtures:
+      fix1:
+        hard: false
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 1000
+        mask:
+        - ItemMask
+        layer:
+        - SlipLayer
+      fix2:
+        hard: true
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        density: 0
+        mask: []
+        layer:
+        - Opaque
+
+# Spawners
+
+- type: entity
+  parent: MarkerBase
+  id: CEIceSpikesSpawner1
+  name: tile effect - ice spikes
+  suffix: 1
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+    - sprite: _CE/Structures/Nature/ice_spikes.rsi
+      state: base1
+  - type: CETileEffectSpawner
+    tileEffect: CETileEffectIceSpikes
+    amount: 1

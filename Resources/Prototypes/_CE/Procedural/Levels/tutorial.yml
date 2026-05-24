@@ -1,0 +1,33 @@
+- type: dungeonLevel
+  id: Tutorial
+  stable: false
+  secret: true
+  icon:
+    sprite: _CE/Interface/NodeTree/demiplane_map.rsi
+    state: center
+  parent:
+  - BaseMossyTemplePostProcess
+  name: ce-dungeon-tutorial-name
+  uiPosition: 0,3
+  config:
+    !type:CERandomZNetworkConfig
+    variants:
+      Tutorial: 1
+
+- type: zMap
+  id: Tutorial
+  maps:
+  - /Maps/_CE/Dungeon/Tutorial/Tutorial0.yml
+  - /Maps/_CE/Dungeon/Tutorial/Tutorial1.yml
+  components:
+  - type: SunShadowCycle
+    offset: 490
+  - type: LightCycle
+    offset: 490
+    originalColor: "#c8fdff"
+  - type: CEZLevelMapRoof
+  - type: SunShadow
+  - type: MapLight
+    ambientLightColor: "#c8fdff"
+  - type: CEMapAmbientMusicTheme
+    theme: MossySafe

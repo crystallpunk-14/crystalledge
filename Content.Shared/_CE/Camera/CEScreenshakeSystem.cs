@@ -64,7 +64,7 @@ public sealed class CEScreenshakeSystem : EntitySystem
         noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
 
         var accumulatedOffset = Vector2.Zero;
-        var maxOffset = new Vector2(0.15f, 0.15f);
+        var maxOffset = new Vector2(0.5f, 0.5f);
         foreach (var command in ent.Comp.Commands)
         {
             if (command.Translational == null)
