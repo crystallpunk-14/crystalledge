@@ -29,17 +29,16 @@
     actions:
     # Move to target (for attacking)
     - !type:CEGOAPMoveToTargetAction
-      targetKey: enemy
+      selector: !type: CEGOAPSelectorNearestEnemy
       preconditions:
-        EnemyInMeleeRange: true
-        EnemyClose: true
+        EnemyTooFar: true
       effects:
-        EnemyDead: true
+        EnemyInMeleeRange: true
       cost: 1
       range: 1.5
     # Attack target when in range
     - !type:CEGOAPMeleeAttackAction
-      targetKey: enemy
+      selector: !type:CEGOAPSelectoNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
         EnemyClose: true
@@ -50,6 +49,7 @@
       angleVariation: 5
     # Flee from enemy
     - !type:CEGOAPFleeAction
+      selector: !type:CEGOAPSelectorNearestEnemy
       targetKey: enemy
       preconditions:
         EnemyVisible: true
@@ -58,29 +58,14 @@
       cost: 1
       maxBfsIterations: 3
       recalculateInterval: 0.3
-
-    sensors:
-    - !type:CEGOAPNearestHostileSensor
-      conditionKey: EnemyVisible
-      outputTargetKey: enemy
-      visionRadius: 8
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyInMeleeRange
-      targetKey: enemy
-      range: 1.5
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyClose
-      targetKey: enemy
-      range: 5
-    - !type:CEGOAPRangeToTargetSensor
-      conditionKey: EnemyTooFar
-      targetKey: enemy
-      range: 6
-    - !type:CEGOAPHasLastKnownPositionSensor
-      conditionKey: HasEnemyLastPos
-      positionTargetKey: enemy
-    - !type:CEGOAPAlarmSensor
-      outputTargetKey: enemy
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyClose
+    targetKey: enemy
+    range: 5
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyTooFar
+    targetKey: enemy
+    range: 6
 
   - type: NpcFactionMember
     factions:
@@ -109,8 +94,7 @@
             types:
               Physical: 20
     animations:
-      Primary:
-      - anim: ClawSwipe
+      Primary: ClawSwipe
 
 - type: entity
   id: CEClawSwipeEffectTelegraphy
