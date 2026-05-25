@@ -1,0 +1,58 @@
+- type: entity
+  id: CEWeaponWarAxeIron
+  parent: CEBaseWeapon
+  name: iron war axe
+  description: A large and heavy iron war axe. Heavy means reliable.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/WarAxe/iron.rsi
+    state: icon
+  - type: CEWeapon
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.84
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 25
+      OnHeavyHit:
+      - !type:WeaponArcAttack
+        range: 0.84
+        arcWidth: 90
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 25
+    animations:
+      Primary:
+      - anim: WarAxeAttackLight
+        speed: 0.6
+      - anim: WarAxeAttackLight2
+        speed: 0.6
+      Secondary:
+      - anim: WarAxeAttackHeavy1
+        speed: 0.6
+      - anim: WarAxeAttackHeavy2
+        speed: 0.6
+  - type: CEWieldedWeapon
+    animations:
+      Primary:
+      - anim: WarAxeAttackLight
+      - anim: WarAxeAttackLight2
+      Secondary:
+      - anim: WarAxeAttackHeavy1
+      - anim: WarAxeAttackHeavy2
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 2
+      Secondary: 2
+  - type: Clothing
+    slots:
+    - neck
+  - type: Wieldable

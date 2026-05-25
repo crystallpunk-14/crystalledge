@@ -1,12 +1,15 @@
 - type: entity
-  id: CEWeaponSkimitarIron
+  id: CEWeaponSkimitarMolten
   parent: CEBaseWeapon
-  name: iron skimitar
+  name: molten skimitar
   description: TODO
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
-    state: icon
+    sprite: _CE/Objects/Weapons/Skimitar/molten.rsi
+    layers:
+    - state: icon
+    - state: fire
+      shader: unshaded
   - type: CEWeapon
     effectSlots:
       OnHit:
@@ -18,7 +21,12 @@
           attackType: Melee
           damage:
             types:
-              Physical: 10
+              Physical: 5
+              Fire: 5
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectFire
+          amount: 2
+          max: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 0.6
@@ -28,7 +36,13 @@
           attackType: Melee
           damage:
             types:
-              Physical: 5
+              Physical: 2
+              Fire: 3
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectFire
+          amount: 2
+          max: 10
+
     animations:
       Primary:
       - anim: SkimitarAttackLight1
@@ -38,7 +52,7 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
-      Secondary: 2
+      Secondary: 1
   - type: Clothing
     slots:
     - neck

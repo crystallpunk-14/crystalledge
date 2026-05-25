@@ -4,8 +4,6 @@
   name: crown of thorns
   description: When you take damage in melee combat, you deal 6 physical damage to the attacker.
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/crown_of_thorns.rsi
   - type: CEEquipStatusEffect

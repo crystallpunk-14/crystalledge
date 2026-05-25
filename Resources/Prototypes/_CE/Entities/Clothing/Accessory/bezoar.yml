@@ -4,8 +4,6 @@
   name: bezoar
   description: Protects the wearer from poisoning.
   components:
-  - type: Item
-    size: Tiny
   - type: Sprite
     sprite: _CE/Clothing/Accessory/bezoar.rsi
   - type: CEEquipStatusEffect

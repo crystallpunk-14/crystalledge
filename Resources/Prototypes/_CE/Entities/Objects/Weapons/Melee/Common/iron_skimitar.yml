@@ -1,46 +1,44 @@
 - type: entity
-  id: CEWeaponTwoHandedSwordIron
+  id: CEWeaponSkimitarIron
   parent: CEBaseWeapon
-  name: iron two-handed sword
-  description: A large and heavy two-handed sword. Heavy means reliable.
+  name: iron skimitar
+  description: TODO
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
+    sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
     state: icon
   - type: CEWeapon
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.84
-        arcWidth: 40
+        range: 0.6
+        arcWidth: 60
         effects:
         - !type:Damage
           attackType: Melee
           damage:
             types:
-              Physical: 30
+              Physical: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.9
-        arcWidth: 40
+        range: 0.6
+        arcWidth: 360
         effects:
         - !type:Damage
           attackType: Melee
           damage:
             types:
-              Physical: 20
+              Physical: 5
     animations:
       Primary:
-      - anim: WarAxeAttackLight
-      - anim: WarAxeAttackLight2
+      - anim: SkimitarAttackLight1
+      - anim: SkimitarAttackLight2
       Secondary:
-      - anim: SpearAttackHeavy
-      - anim: SpearAttackHeavy2
+      - anim: SkimitarAttackHeavy1
   - type: CEWeaponStaminaCost
     costs:
-      Primary: 2
-      Secondary: 2.5
+      Primary: 1
+      Secondary: 1
   - type: Clothing
     slots:
     - neck
-  - type: Wieldable

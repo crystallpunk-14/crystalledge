@@ -46,6 +46,10 @@
   - CEWeaponSwordIron
   - CEWeaponSpearIron
   - CEWeaponSkimitarIron
+  - CEWeaponWarAxeIron
+  - CEWeaponTwoHandedSwordIron
+  - CEWeaponThrowingDaggers
+  - CEWeaponShurikens
 
 - type: loadout
   id: CEWeaponSwordIron
@@ -58,6 +62,44 @@
     neck: CEWeaponSpearIron
 
 - type: loadout
+  id: CEWeaponThrowingDaggers
+  dummyEntity: CEWeaponThrowingDaggersDummyLoadout
+  storage:
+    back:
+    - CEWeaponThrowingDagger
+    - CEWeaponThrowingDagger
+#
+- type: entity
+  parent: CEWeaponThrowingDagger
+  id: CEWeaponThrowingDaggersDummyLoadout
+  categories: [ HideSpawnMenu ]
+  name: throwing daggers x2
+
+- type: loadout
+  id: CEWeaponShurikens
+  dummyEntity: CEWeaponShurikenDummyLoadout
+  storage:
+    back:
+    - CEWeaponShuriken
+    - CEWeaponShuriken
+#
+- type: entity
+  parent: CEWeaponShuriken
+  id: CEWeaponShurikenDummyLoadout
+  categories: [ HideSpawnMenu ]
+  name: shurikens x2
+
+- type: loadout
   id: CEWeaponSkimitarIron
   equipment:
     neck: CEWeaponSkimitarIron
+
+- type: loadout
+  id: CEWeaponWarAxeIron
+  equipment:
+    neck: CEWeaponWarAxeIron
+
+- type: loadout
+  id: CEWeaponTwoHandedSwordIron
+  equipment:
+    neck: CEWeaponTwoHandedSwordIron

@@ -13,6 +13,8 @@
     - id: CEWeaponStaffHolyStick
     - id: CEWeaponTwoHandedSwordIron
     - id: CEWeaponWarAxeIron
+    - id: CEWeaponThrowingDagger
+    - id: CEWeaponShuriken
 
 - type: entityTable
   id: CEUncommonWeapon
@@ -22,7 +24,6 @@
     - id: CEWeaponSwordBone
     - id: CEWeaponSpearSoulCatcher
     - id: CEWeaponMagicStaffWater
-    - id: CEWeaponDaggerPurification
     - id: CEWeaponSkimitarMolten
     - id: CEWeaponMagicStaffCurse
     - id: CEWeaponMagicStaffFireball

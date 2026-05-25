@@ -1,11 +1,11 @@
 - type: entity
-  id: CEWeaponWarAxeIron
+  id: CEWeaponTwoHandedSwordIron
   parent: CEBaseWeapon
-  name: iron war axe
-  description: A large and heavy iron war axe. Heavy means reliable.
+  name: iron two-handed sword
+  description: A large and heavy two-handed sword. Heavy means reliable.
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/WarAxe/iron.rsi
+    sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
     state: icon
   - type: CEWeapon
     effectSlots:
@@ -18,38 +18,40 @@
           attackType: Melee
           damage:
             types:
-              Physical: 30
+              Physical: 25
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.84
-        arcWidth: 80
+        range: 0.9
+        arcWidth: 40
         effects:
         - !type:Damage
           attackType: Melee
           damage:
             types:
-              Physical: 20
+              Physical: 25
+    animations:
+      Primary:
+      - anim: WarAxeAttackLight
+        speed: 0.6
+      - anim: WarAxeAttackLight2
+        speed: 0.6
+      Secondary:
+      - anim: SpearAttackHeavy
+        speed: 0.6
+      - anim: SpearAttackHeavy2
+        speed: 0.6
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 2
+      Secondary: 2.5
+  - type: CEWieldedWeapon
     animations:
       Primary:
       - anim: WarAxeAttackLight
       - anim: WarAxeAttackLight2
       Secondary:
-      - anim: WarAxeAttackHeavy1
-        speed: 0.5
-      - anim: WarAxeAttackHeavy2
-        speed: 0.5
-  #- type: CEWieldedWeapon
-  #  animations:
-  #    Primary:
-  #    - anim: WarAxeAttackLight
-  #    - anim: WarAxeAttackLight2
-  #    Secondary:
-  #    - anim: WarAxeAttackLight
-  #    - anim: WarAxeAttackLight2
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 2
-      Secondary: 2
+      - anim: SpearAttackHeavy
+      - anim: SpearAttackHeavy2
   - type: Clothing
     slots:
     - neck

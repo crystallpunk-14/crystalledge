@@ -466,3 +466,45 @@
   id: 10039
   time: '2026-05-22T12:06:54.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/263
+- author: TheShuEd
+  changes:
+  - message: Fixed a bug where accessories were placed in a pocket instead of being
+      equipped when used
+    type: Fix
+  - message: 'Nerfed daggers: melee damage decreased from 12 to 9'
+    type: Tweak
+  id: 10040
+  time: '2026-05-23T14:58:42.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/266
+- author: TheShuEd
+  changes:
+  - message: Training targets have been added for testing DPS
+    type: Add
+  id: 10041
+  time: '2026-05-22T21:29:20.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/264
+- author: TheShuEd
+  changes:
+  - message: Two-handed weapons now attack more slowly when held in one hand.
+    type: Add
+  - message: 'A new weapon type has been added: throwing weapons.'
+    type: Add
+  - message: Throwing daggers and shurikens have been added
+    type: Add
+  - message: The two-handed axe, two-handed sword, and two throwing daggers are now
+      available in the loadout
+    type: Add
+  - message: The Purification Dagger has been removed from the game
+    type: Remove
+  - message: The balance of most weapons has been adjusted
+    type: Tweak
+  id: 10042
+  time: '2026-05-23T11:46:10.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/265
+- author: TheShuEd
+  changes:
+  - message: The schedule for closed testing has been added
+    type: Add
+  id: 10043
+  time: '2026-05-23T17:17:31.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/267

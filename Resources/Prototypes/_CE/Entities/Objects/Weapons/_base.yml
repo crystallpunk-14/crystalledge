@@ -12,3 +12,25 @@
     equipWhileMoving: true
     equipDelay: 1
     unequipDelay: 1
+
+- type: entity
+  abstract: true
+  id: CEBaseWeaponThrowable
+  categories: [ ForkFiltered ]
+  components:
+  - type: LandAtCursor
+  - type: CEStaminaThrowable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PolygonShape
+          vertices:
+            - -0.40,-0.30
+            - -0.30,-0.40
+            - 0.40,0.30
+            - 0.30,0.40
+        density: 10
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2

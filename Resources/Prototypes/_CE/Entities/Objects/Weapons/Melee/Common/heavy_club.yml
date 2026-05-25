@@ -18,7 +18,7 @@
           attackType: Melee
           damage:
             types:
-              Physical: 15
+              Physical: 18
         - !type:ThrowFromUser
           throwPower: 10
           distance: 1
@@ -31,13 +31,11 @@
           attackType: Melee
           damage:
             types:
-              Physical: 15
+              Physical: 18
     animations:
       Primary:
-      - anim: StaffAttackLight1
-        speed: 0.7
-      - anim: StaffAttackLight2
-        speed: 0.7
+      - anim: WarAxeAttackLight
+      - anim: WarAxeAttackLight2
       Secondary:
       - anim: SwordAttackHeavy1
         speed: 0.7
@@ -46,7 +44,7 @@
   - type: CEWeaponStaminaCost
     costs:
       Primary: 2
-      Secondary: 3
+      Secondary: 2
   - type: Clothing
     slots:
     - neck
