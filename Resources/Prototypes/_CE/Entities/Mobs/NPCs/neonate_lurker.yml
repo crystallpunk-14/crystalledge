@@ -29,7 +29,7 @@
     actions:
     # Move to target (for attacking)
     - !type:CEGOAPMoveToTargetAction
-      selector: !type: CEGOAPSelectorNearestEnemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyTooFar: true
       effects:
