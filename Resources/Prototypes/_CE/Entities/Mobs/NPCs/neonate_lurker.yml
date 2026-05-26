@@ -38,7 +38,7 @@
       range: 1.5
     # Attack target when in range
     - !type:CEGOAPMeleeAttackAction
-      selector: !type:CEGOAPSelectoNearestEnemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
         EnemyClose: true
