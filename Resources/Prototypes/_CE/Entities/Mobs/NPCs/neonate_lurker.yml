@@ -3,6 +3,7 @@
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
+  - CEMobGOAPBase
   id: CEMobNeonateLurker
   name: Neonate Lurker
   description: TODO
@@ -12,7 +13,7 @@
     sound:
       path: /Audio/_CE/Mobs/ritual2.ogg
       params:
-        variation: 0.1
+        variation: 0.3
   - type: CEDestructible
     destroyThreshold: 25
   - type: CEGOAP
@@ -29,7 +30,7 @@
     actions:
     # Move to target (for attacking)
     - !type:CEGOAPMoveToTargetAction
-      selector: !type: CEGOAPSelectorNearestEnemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyTooFar: true
       effects:
@@ -38,7 +39,7 @@
       range: 1.5
     # Attack target when in range
     - !type:CEGOAPMeleeAttackAction
-      selector: !type:CEGOAPSelectoNearestEnemy
+      selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
         EnemyInMeleeRange: true
         EnemyClose: true
@@ -62,11 +63,6 @@
     conditionKey: EnemyClose
     targetKey: enemy
     range: 5
-  - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyTooFar
-    targetKey: enemy
-    range: 6
-
   - type: NpcFactionMember
     factions:
     - SimpleHostile
