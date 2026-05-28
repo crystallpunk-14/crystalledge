@@ -6,9 +6,12 @@
 using Content.Server._CE.ZLevels.Core.Components;
 using Content.Server.Station.Events;
 using Content.Server.Station.Systems;
+using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
+using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server._CE.ZLevels.Core;
 
@@ -87,6 +90,37 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
         }
 
         TryAddMapsIntoZNetwork(stationNetwork, dict);
+    }
+
+    /// <summary>
+    /// Initializes all uninitialized maps in the z-network.
+    /// </summary>
+    [PublicAPI]
+    public void InitializeZNetwork(Entity<CEZLevelsNetworkComponent> network)
+    {
+        foreach (var (_, mapUid) in network.Comp.ZLevels)
+        {
+            if (!TryComp<MapComponent>(mapUid, out var mapComp))
+            {
+                Log.Error($"Map entity {mapUid} does not have MapComponent.");
+                continue;
+            }
+
+            if (!_map.MapExists(mapComp.MapId))
+            {
+                Log.Error($"Map with ID {mapComp.MapId} does not exist.");
+                continue;
+            }
+
+            if (_map.IsInitialized(mapComp.MapId))
+            {
+                Log.Debug($"Map with ID {mapComp.MapId} is already initialized.");
+                continue;
+            }
+
+            _map.InitializeMap(mapComp.MapId);
+            Log.Info($"Map with ID {mapComp.MapId} initialized.");
+        }
     }
 
     public override void Update(float frameTime)

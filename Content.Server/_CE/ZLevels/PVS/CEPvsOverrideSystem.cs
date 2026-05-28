@@ -5,7 +5,7 @@
 
 using Robust.Server.GameStates;
 
-namespace Content.Server._CE.PVS;
+namespace Content.Server._CE.ZLevels.PVS;
 
 public sealed partial class CEPvsOverrideSystem : EntitySystem
 {
