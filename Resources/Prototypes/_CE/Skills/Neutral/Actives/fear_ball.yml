@@ -1,26 +1,23 @@
-﻿- type: skill
+- type: skill
   parent: BaseNeutralSkill
   weight: 10.1 #Very rare, very meme
   id: FearBall
   effect: !type:AddAction
     action: CEActionFearball
-  restrictions:
-  - !type:AchievementObtained
-    achievement: NeonateLurkerSlayer
 
 - type: entity
   id: CEActionFearball
   parent: CEActionSpellBase
   name: Fear ball
-  description: You hurl a fear, makes everything tremble in it's wake.
+  description: You hurl a fear that terrifies all in its path.
   components:
   - type: CEVisualizeWideLineAction
     width: 1.0
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 10
+    manaCost: 6
   - type: CEActionStaminaCost
-    cost: 2
+    cost: 3
   - type: Action
     useDelay: 1
     icon:
@@ -36,7 +33,7 @@
 - type: entityEffectAnimation
   id: AnimationFearball
   movementSpeed: 0.3
-  duration: 0.3
+  duration: 0.5
   lockRotation: true
   events:
     0:
@@ -44,7 +41,7 @@
       sound:
         path: /Audio/_CE/Effects/firebolt.ogg
     - !type:UsedEntityAnimation
-      dummyEntity: CEEffectFearball
+      dummyEntity: CEEffectFearballCharge
       offsetAnimation:
       - time: 0.0
         offset: 0, 0.5
@@ -61,7 +58,7 @@
       spread: 0
 
 - type: entity
-  id: CEEffectFearball
+  id: CEEffectFearballCharge
   parent: CEBaseMagicImpact
   categories: [ ForkFiltered ]
   suffix: VFX
@@ -74,22 +71,22 @@
     layers:
     - state: effect
       shader: unshaded
-      color: "#000000"
+      color: "#1a1a1a"
   - type: PointLight
-    color: "#2b2b2b"
+    color: "#2d2d2d"
     radius: 2.5
   - type: TimedDespawn
-    lifetime: 2.5
+    lifetime: 3
   - type: LightBehaviour
     behaviours:
-    - !type:PulseBehaviour
-      interpolate: Linear
-      maxDuration: 3
-      startValue: 0
-      endValue: 5.0
-      property: Energy
-      isLooped: false
-      enabled: true
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
 
 - type: entity
   id: CEProjectileFearball
@@ -102,9 +99,9 @@
     layers:
     - state: effect
       shader: unshaded
-      color: "#000000"
+      color: "#1a1a1a"
   - type: PointLight
-    color: "#2b2b2b"
+    color: "#2d2d2d"
     radius: 2.0
     energy: 5.0
   - type: CEProjectile

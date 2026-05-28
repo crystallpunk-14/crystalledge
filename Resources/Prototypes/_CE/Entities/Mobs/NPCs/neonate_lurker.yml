@@ -20,7 +20,7 @@
     goals:
     # Primary goal: Flee from enemy if visible
     - desiredState:
-        EnemyClose: false
+        EnemyVisible: false
       priority: 1
     # Secondary goal: Kill enemy if close enough
     - desiredState:
@@ -32,16 +32,15 @@
     - !type:CEGOAPMoveToTargetAction
       selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
-        EnemyTooFar: true
+        EnemyClose: true
       effects:
         EnemyInMeleeRange: true
-      cost: 1
+      cost: 2
       range: 1.5
     # Attack target when in range
     - !type:CEGOAPMeleeAttackAction
       selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:
-        EnemyInMeleeRange: true
         EnemyClose: true
       effects:
         EnemyDead: true
@@ -55,7 +54,7 @@
       preconditions:
         EnemyVisible: true
       effects:
-        EnemyClose: false
+        EnemyVisible: false
       cost: 1
       maxBfsIterations: 3
       recalculateInterval: 0.3
@@ -75,7 +74,7 @@
     layers:
     - state: live
   - type: MovementSpeedModifier
-    baseSprintSpeed: 6
+    baseSprintSpeed: 4.5
   - type: CEWeapon
     spriteRotation: -90
     effectSlots:
@@ -92,7 +91,6 @@
     animations:
       Primary:
       - anim: ClawSwipe
-
 - type: entity
   id: CEClawSwipeEffectTelegraphy
   components:
@@ -100,7 +98,6 @@
     sprite: Effects/arcs.rsi
     state: disarm
     drawdepth: Effects
-
 - type: entity
   id: CEClawSwipeEffect
   components:
@@ -108,7 +105,6 @@
     sprite: Effects/arcs.rsi
     state: claw
     drawdepth: Effects
-
 - type: entityEffectAnimation
   id: ClawSwipe
   movementSpeed: 0.8
