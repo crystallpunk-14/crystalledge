@@ -34,7 +34,7 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
     private void OnEyeOffset(Entity<CEZPhysicsComponent> ent, ref GetEyeOffsetEvent args)
     {
         Angle rotation = _eye.CurrentEye.Rotation * -1;
-        var localPosition = GetVisualsLocalPosition((ent, ent), Transform(ent));
+        var localPosition = ent.Comp.LocalPosition;// GetVisualsLocalPosition((ent, ent), Transform(ent));
         var offset = rotation.RotateVec(new Vector2(0, localPosition * ZLevelOffset));
         args.Offset += offset;
     }
@@ -59,7 +59,7 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out var sprite, out var xform))
         {
-            var localPosition = GetVisualsLocalPosition((uid, zPhys), xform);
+            var localPosition = zPhys.LocalPosition;// GetVisualsLocalPosition((uid, zPhys), xform);
 
             sprite.NoRotation = localPosition != 0 || zPhys.NoRotDefault;
 
@@ -68,20 +68,20 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         }
     }
 
-    public float GetVisualsLocalPosition(Entity<CEZPhysicsComponent?> ent, TransformComponent? xform = null)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return 0;
-        if (!Resolve(ent, ref xform, false))
-            return 0;
-
-        var pos = ent.Comp.LocalPosition;
-
-        if (xform.ParentUid != xform.MapUid && ZPhysicsQuery.TryComp(xform.ParentUid, out var parentZPhys))
-            pos = parentZPhys.LocalPosition;
-
-        return pos;
-    }
+    //public float GetVisualsLocalPosition(Entity<CEZPhysicsComponent?> ent, TransformComponent? xform = null)
+    //{
+    //    if (!Resolve(ent, ref ent.Comp, false))
+    //        return 0;
+    //    if (!Resolve(ent, ref xform, false))
+    //        return 0;
+//
+    //    var pos = ent.Comp.LocalPosition;
+//
+    //    if (xform.ParentUid != xform.MapUid && ZPhysicsQuery.TryComp(xform.ParentUid, out var parentZPhys))
+    //        pos = parentZPhys.LocalPosition;
+//
+    //    return pos;
+    //}
 
     public override void Shutdown()
     {
