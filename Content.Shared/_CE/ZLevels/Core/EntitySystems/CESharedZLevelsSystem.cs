@@ -34,7 +34,7 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
 
     #region Queries
 
-    protected EntityQuery<CEZPhysicsComponent> ZPhysicsQuery;
+    [Dependency] protected readonly EntityQuery<CEZPhysicsComponent> ZPhysicsQuery = default!;
 
     [Dependency] private readonly EntityQuery<MapComponent> _mapQuery = default!;
     [Dependency] private readonly EntityQuery<MapGridComponent> _gridQuery = default!;
