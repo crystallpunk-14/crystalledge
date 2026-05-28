@@ -11,7 +11,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CE.ZLevels.Core;
+namespace Content.Client._CE.ZLevels.Core.Overlays;
 
 public sealed class CEZLevelBlurOverlay : Overlay
 {

@@ -116,13 +116,10 @@ public sealed partial class ScalingViewport
         if (playerXform.MapUid is null)
             return;
 
-        // Calculate visible z-levels above based on whether LookUp is enabled and ceiling visibility
-        var lookUp = 0;
-        if (zLevelViewer.LookUp)
-            lookUp = _zLevels.GetVisibleZLevelsAbove(_player.LocalEntity.Value, playerXform.MapUid);
+        var lookUp = zLevelViewer.LookUp ? 1 : 0;
 
         var lowestDepth = 0;
-        for (var i = 0; i >= -_zLevels.MaxZLevelsBelowRendering; i--)
+        for (var i = 0; i >= -CESharedZLevelsSystem.MaxZLevelsBelowRendering; i--)
         {
             var checkingMap = playerXform.MapUid.Value;
 

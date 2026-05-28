@@ -4,11 +4,10 @@
  */
 
 using System.Numerics;
-using Content.Client.Damage.Systems;
+using Content.Client._CE.ZLevels.Core.Overlays;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.Camera;
-using Content.Shared.Damage.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 
@@ -20,10 +19,8 @@ namespace Content.Client._CE.ZLevels.Core;
 public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
-    //[Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
-
-    public static float ZLevelOffset = 0.7f;
 
     public override void Initialize()
     {
@@ -55,10 +52,6 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         ent.Comp.SpriteOffsetDefault = sprite.Offset;
     }
 
-    //Currently we have no need for active z-physics, so we can skip this costly loop.
-    //We will return to it when we ready.
-
-    /*
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -74,7 +67,6 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
             _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
         }
     }
-    */
 
     public float GetVisualsLocalPosition(Entity<CEZPhysicsComponent?> ent, TransformComponent? xform = null)
     {
