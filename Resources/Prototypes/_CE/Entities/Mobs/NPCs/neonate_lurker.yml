@@ -90,7 +90,8 @@
             types:
               Physical: 20
     animations:
-      Primary: ClawSwipe
+      Primary:
+      - anim: ClawSwipe
 
 - type: entity
   id: CEClawSwipeEffectTelegraphy
