@@ -35,6 +35,8 @@ CESoulShardInfinite: CESoulShard
 CEConsumablePotionFireShield: CEConsumablePotionShield
 CEConsumablePotionColdShield: CEConsumablePotionShield
 
+CEChasm: null
+
 # CrystallEdge zone end
 
 
