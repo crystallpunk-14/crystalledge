@@ -15,7 +15,7 @@
     width: 1.0
     projectileMode: true
   - type: CEActionManaCost
-    manaCost: 6
+    manaCost: 5
   - type: CEActionStaminaCost
     cost: 3
   - type: Action
