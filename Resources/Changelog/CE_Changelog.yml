@@ -508,3 +508,11 @@
   id: 10043
   time: '2026-05-23T17:17:31.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/267
+- author: freycyik
+  changes:
+  - message: 'Added new passive ability for knight - Armored: "When you getting damage,
+      you gain 4 temporary shields."'
+    type: Add
+  id: 10044
+  time: '2026-05-28T10:28:39.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/270

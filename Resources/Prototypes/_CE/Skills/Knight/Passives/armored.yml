@@ -1,0 +1,30 @@
+- type: skill
+  id: Armored
+  parent: BaseKnightSkill
+  icon:
+    sprite: _CE/Skills/todo.rsi
+    state: icon
+  effect: !type:AddStatusEffect { effect: 'CEStatusEffectArmored' }
+
+- type: entity
+  id: CEStatusEffectArmored
+  name: Armored
+  description: When you getting damage, you gain [color=#b2e3eb]4 temporary shields[/color].
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEArmored
+  - type: CEEffectOnDamagedStatusEffect
+    effects:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      amount: 4
+      max: 8
+      statusEffect: 'CEStatusEffectTempShield'
+
+- type: alert
+  id: CEArmored
+  icons:
+  - sprite: _CE/Skills/todo.rsi
+    state: icon
+
