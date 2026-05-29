@@ -17,11 +17,10 @@ public sealed partial class CEGOAPSystem
     public void Remember(
         Entity<CEGOAPComponent> ent,
         EntityUid target,
-        EntityCoordinates coords,
-        TimeSpan lifetime)
+        EntityCoordinates coords)
     {
         var now = _timing.CurTime;
-        var expires = now + lifetime;
+        var expires = now + ent.Comp.MemoryDuration;
         var changed = !ent.Comp.Knowledge.TryGetValue(target, out var existing)
                       || !existing.LastSeenCoords.Equals(coords);
 
@@ -73,7 +72,9 @@ public sealed partial class CEGOAPSystem
             return;
 
         foreach (var uid in dead)
+        {
             ent.Comp.Knowledge.Remove(uid);
+        }
 
         RaiseKnowledgeUpdated(ent);
     }

@@ -10,11 +10,6 @@ namespace Content.Server._CE.GOAP.Perceptors;
 [RegisterComponent]
 public sealed partial class CEGOAPPainPerceptorComponent : Component
 {
-    /// <summary>
-    /// How long an attacker stays in knowledge after the last hit.
-    /// </summary>
-    [DataField]
-    public TimeSpan MemoryDuration = TimeSpan.FromSeconds(15);
 }
 
 public sealed class CEGOAPPainPerceptorSystem : EntitySystem
@@ -38,10 +33,6 @@ public sealed class CEGOAPPainPerceptorSystem : EntitySystem
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        _goap.Remember(
-            (ent.Owner, goap),
-            source,
-            Transform(source).Coordinates,
-            ent.Comp.MemoryDuration);
+        _goap.Remember((ent.Owner, goap), source, Transform(source).Coordinates);
     }
 }

@@ -13,11 +13,6 @@ namespace Content.Server._CE.GOAP.Perceptors;
 [RegisterComponent]
 public sealed partial class CEGOAPEarsPerceptorComponent : Component
 {
-    /// <summary>
-    /// How long a sound-perceived entity stays in knowledge.
-    /// </summary>
-    [DataField]
-    public TimeSpan MemoryDuration = TimeSpan.FromSeconds(10);
 }
 
 public sealed class CEGOAPEarsPerceptorSystem : EntitySystem
@@ -29,6 +24,7 @@ public sealed class CEGOAPEarsPerceptorSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<CEGOAPAlarmEvent>(OnAlarm);
     }
 
@@ -63,7 +59,7 @@ public sealed class CEGOAPEarsPerceptorSystem : EntitySystem
             if (Vector2.Distance(alarmPos, worldPos) > ev.Radius)
                 continue;
 
-            _goap.Remember((uid, goap), ev.Target, targetCoords, ears.MemoryDuration);
+            _goap.Remember((uid, goap), ev.Target, targetCoords);
         }
     }
 }

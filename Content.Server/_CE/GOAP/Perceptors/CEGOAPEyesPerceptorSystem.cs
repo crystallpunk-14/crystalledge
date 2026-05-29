@@ -11,8 +11,7 @@ namespace Content.Server._CE.GOAP.Perceptors;
 /// <summary>
 /// Vision-based perception. Periodically scans living mobs in radius with line-of-sight
 /// and feeds them into the GOAP knowledge store without any faction filtering — classification
-/// (friend/foe/etc.) is the responsibility of higher layers. Entries persist after the entity
-/// leaves sight for up to <see cref="MemoryDuration"/> seconds.
+/// (friend/foe/etc.) is the responsibility of higher layers.
 /// </summary>
 [RegisterComponent]
 public sealed partial class CEGOAPEyesPerceptorComponent : Component
@@ -28,13 +27,6 @@ public sealed partial class CEGOAPEyesPerceptorComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.5);
-
-    /// <summary>
-    /// How long a sighted entity stays in knowledge after the last sighting.
-    /// Each new sighting refreshes the expiry.
-    /// </summary>
-    [DataField]
-    public TimeSpan MemoryDuration = TimeSpan.FromSeconds(60);
 
     [ViewVariables]
     public TimeSpan NextUpdateTime;
@@ -52,11 +44,6 @@ public sealed class CEGOAPEyesPerceptorSystem : EntitySystem
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
     private readonly HashSet<Entity<CEMobStateComponent>> _nearbyBuffer = new();
-
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
 
     public override void Update(float frameTime)
     {
@@ -103,11 +90,7 @@ public sealed class CEGOAPEyesPerceptorSystem : EntitySystem
             if (!_examine.InRangeUnOccluded(uid, targetUid, eyes.VisionRadius + 0.5f))
                 continue;
 
-            _goap.Remember(
-                (uid, goap),
-                targetUid,
-                targetXform.Coordinates,
-                eyes.MemoryDuration);
+            _goap.Remember((uid, goap), targetUid, targetXform.Coordinates);
         }
     }
 }
