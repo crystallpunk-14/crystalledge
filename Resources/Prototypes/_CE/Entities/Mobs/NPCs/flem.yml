@@ -32,7 +32,7 @@
       effects:
         EnemyInMeleeRange: true
       cost: 2
-      range: 1.5
+      range: 1
     # Attack target
     - !type:CEGOAPMeleeAttackAction
       selector: !type:CEGOAPSelectorNearestEnemy

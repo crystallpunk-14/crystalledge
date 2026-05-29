@@ -1,7 +1,5 @@
 using System.Numerics;
 using Content.Server._CE.MeleeWeapon;
-using Content.Server.NPC.Components;
-using Content.Server.NPC.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
@@ -14,7 +12,6 @@ namespace Content.Server._CE.GOAP.Actions;
 
 /// <summary>
 /// Performs a melee attack on the current target.
-/// Uses absolute coordinates for steering to ensure proper pathfinding.
 /// </summary>
 public sealed partial class CEGOAPMeleeAttackAction : CEGOAPActionBase<CEGOAPMeleeAttackAction>
 {
@@ -26,23 +23,10 @@ public sealed partial class CEGOAPMeleeAttackAction : CEGOAPActionBase<CEGOAPMel
     /// </summary>
     [DataField]
     public float AngleVariation = 15f;
-
-    /// <summary>
-    /// Minimal distance to the target to perform the attack.
-    /// </summary>
-    [DataField]
-    public float Range = 1.5f;
-
-    /// <summary>
-    /// How far the target must move before re-registering steering.
-    /// </summary>
-    [DataField]
-    public float ReregisterThreshold = 1.5f;
 }
 
 public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<CEGOAPMeleeAttackAction>
 {
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
     [Dependency] private readonly CEWeaponSystem _weapon = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
@@ -50,24 +34,12 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
     [Dependency] private readonly CEMobStateSystem _mobState = default!;
 
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
-    [Dependency] private readonly EntityQuery<NPCSteeringComponent> _steeringQuery = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionStartupEvent<CEGOAPMeleeAttackAction> args)
     {
         _combatMode.SetInCombatMode(ent, true);
-
-        if (args.Action.Selector == null)
-            return;
-
-        var result = args.Action.Selector.Resolve(ent, EntityManager);
-        if (result.Entity is not { } target || !_xformQuery.TryGetComponent(target, out var targetXform))
-            return;
-
-        // Use absolute coordinates for proper pathfinding
-        var comp = _steering.Register(ent, targetXform.Coordinates);
-        comp.Range = args.Action.Range;
     }
 
     protected override void OnActionUpdate(
@@ -113,43 +85,20 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
             return;
         }
 
-        // Re-register steering if target has moved significantly
-        if (_steeringQuery.TryComp(ent, out var steeringComp))
+        // In range: attack
+        var ownerPos = _transform.GetWorldPosition(xform);
+        var targetPos = _transform.GetWorldPosition(targetXform);
+        var direction = targetPos - ownerPos;
+        var angle = direction == Vector2.Zero
+            ? Angle.Zero
+            : Angle.FromWorldVec(direction);
+        angle += Angle.FromDegrees(
+            _random.NextFloat(-args.Action.AngleVariation, args.Action.AngleVariation));
+
+        if (!_weapon.TryUse(ent, weapon.Value, args.Action.UseType, angle))
         {
-            if (steeringComp.Coordinates.TryDistance(
-                    EntityManager,
-                    targetXform.Coordinates,
-                    out var delta)
-                && delta > args.Action.ReregisterThreshold)
-            {
-                var comp = _steering.Register(ent, targetXform.Coordinates);
-                comp.Range = args.Action.Range;
-            }
-
-            if (steeringComp.Status == SteeringStatus.NoPath)
-            {
-                args.Status = CEGOAPActionStatus.Failed;
-                return;
-            }
-        }
-
-        if (distance <= args.Action.Range)
-        {
-            // In range: attack
-            var ownerPos = _transform.GetWorldPosition(xform);
-            var targetPos = _transform.GetWorldPosition(targetXform);
-            var direction = targetPos - ownerPos;
-            var angle = direction == Vector2.Zero
-                ? Angle.Zero
-                : Angle.FromWorldVec(direction);
-            angle += Angle.FromDegrees(
-                _random.NextFloat(-args.Action.AngleVariation, args.Action.AngleVariation));
-
-            if (!_weapon.TryUse(ent, weapon.Value, args.Action.UseType, angle))
-            {
-                args.Status = CEGOAPActionStatus.Failed;
-                return;
-            }
+            args.Status = CEGOAPActionStatus.Failed;
+            return;
         }
 
         args.Status = CEGOAPActionStatus.Running;
@@ -160,6 +109,5 @@ public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<C
         ref CEGOAPActionShutdownEvent<CEGOAPMeleeAttackAction> args)
     {
         _combatMode.SetInCombatMode(ent, false);
-        _steering.Unregister(ent);
     }
 }

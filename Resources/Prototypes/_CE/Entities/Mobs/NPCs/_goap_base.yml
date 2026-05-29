@@ -17,4 +17,4 @@
   - type: CEGOAPRangeToTargetSensor
     conditionKey: EnemyInMeleeRange
     selector: !type:CEGOAPSelectorNearestEnemy
-    range: 1.5
+    range: 1
