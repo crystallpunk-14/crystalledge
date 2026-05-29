@@ -15,7 +15,6 @@
       effects:
         EnemyInMeleeRange: true
       cost: 2
-      range: 1.5
     # Attack target from distance
     - !type:CEGOAPUseAction
       selector: !type:CEGOAPSelectorNearestEnemy
