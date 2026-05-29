@@ -67,8 +67,6 @@ public sealed partial class CEZLevelsSystem
         levelMapComponent.Depth = depth;
         levelMapComponent.NetworkUid = network;
 
-        EntityManager.AddComponents(mapUid, network.Comp.Components);
-
         if (network.Comp.ZLevels.TryGetValue(depth + 1, out var aboveMapUid))
             levelMapComponent.MapAbove = aboveMapUid;
 
