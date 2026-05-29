@@ -83,8 +83,6 @@
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
-  - type: CEGOAPPainPerceptor
-    memoryDuration: 15
   - type: NpcFactionMember
     factions:
     - SimpleHostile
