@@ -57,9 +57,6 @@ public sealed partial class CEZLevelsSystem
 
         Dirty(network);
 
-        var ev = new CEMapAddedIntoZNetworkEvent(network, depth);
-        RaiseLocalEvent(mapUid, ref ev);
-
         // Welcome to fast api code
         QuickApiCache(network, mapUid, depth);
 
@@ -74,6 +71,9 @@ public sealed partial class CEZLevelsSystem
             levelMapComponent.MapBelow = belowMapUid;
 
         Dirty(mapUid, levelMapComponent);
+
+        var ev = new CEMapAddedIntoZNetworkEvent(network, depth);
+        RaiseLocalEvent(mapUid, ref ev);
 
         return true;
     }
