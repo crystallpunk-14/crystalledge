@@ -52,10 +52,6 @@
       collection: CEGrassGathering
   - type: TriggerOnCollide
     fixtureID: fix1
-  - type: CEZLevelHighGround
-    heightCurve:
-    - 0
-    - 0
   - type: CEDamageable
   - type: CEDestructible
     destroyThreshold: 50
