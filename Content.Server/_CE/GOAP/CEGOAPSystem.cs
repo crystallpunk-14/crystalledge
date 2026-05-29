@@ -64,6 +64,7 @@ public sealed partial class CEGOAPSystem : EntitySystem
 
         SubscribeLocalEvent<CEGOAPComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEGOAPComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<CEGOAPComponent, EntParentChangedMessage>(OnParentChanged);
     }
 
     private void OnMapInit(Entity<CEGOAPComponent> ent, ref MapInitEvent args)
@@ -111,6 +112,20 @@ public sealed partial class CEGOAPSystem : EntitySystem
         ClearPlan(ent);
         RemCompDeferred<CEActiveGOAPComponent>(ent);
         RemCompDeferred<ActiveNPCComponent>(ent);
+    }
+
+    /// <summary>
+    /// When the entity's parent changes (e.g. Z-level transition to a different map),
+    /// force an immediate re-plan so the NPC adapts to the new map.
+    /// </summary>
+    private void OnParentChanged(Entity<CEGOAPComponent> ent, ref EntParentChangedMessage args)
+    {
+        // Only trigger re-plan if the map actually changed (Z-level transition)
+        if (args.OldMapId == args.Transform.MapUid)
+            return;
+
+        ClearPlan(ent);
+        ent.Comp.NextPlanTime = TimeSpan.Zero; // Re-plan immediately next tick
     }
 
     public override void Update(float frameTime)
