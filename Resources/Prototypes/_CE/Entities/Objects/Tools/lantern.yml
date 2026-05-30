@@ -22,6 +22,7 @@
       map: ["light"]
   - type: UseDelay
     delay: 1
+  - type: CEZLevelLight
   - type: PointLight
     enabled: true
     energy: 3
