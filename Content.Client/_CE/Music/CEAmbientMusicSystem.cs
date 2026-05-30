@@ -13,12 +13,11 @@ using Robust.Shared.Timing;
 namespace Content.Client._CE.Music;
 
 /// <summary>
-/// Client-side system that plays multi-layered ambient background music based on
-/// <see cref="CEAmbientMusicPrototype"/>. All three layers always play simultaneously;
+/// Client-side system that plays two-layered ambient background music based on
+/// <see cref="CEAmbientMusicPrototype"/>. Both layers always play simultaneously;
 /// intensity controls which layers are audible:
 ///   0 — CalmLayer only
-///   1 — CalmLayer + TensionLayer
-///   2 — all three layers
+///   1 — CalmLayer + BattleLayer
 /// Volumes are smoothly interpolated toward their targets each frame.
 /// </summary>
 public sealed partial class CEAmbientMusicSystem : EntitySystem
@@ -32,28 +31,29 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
 
     private ISawmill _sawmill = default!;
 
+    private const int LayerCount = 2;
     private const float FadeRate = 8f;
     private const float MinVolume = -32f;
 
     private ProtoId<CEAmbientMusicPrototype>? _currentProtoId;
 
-    // [0] = Calm, [1] = Tension, [2] = Intense
-    private readonly EntityUid?[] _streams = new EntityUid?[3];
+    // [0] = Calm, [1] = Battle
+    private readonly EntityUid?[] _streams = new EntityUid?[LayerCount];
 
     // Natural ("on") volume per layer = specifier.Params.Volume + _volumeSlider
-    private readonly float[] _layerBaseVolumes = new float[3];
+    private readonly float[] _layerBaseVolumes = new float[LayerCount];
 
     // Volume each active layer is currently fading toward
-    private readonly float[] _targetVolumes = { MinVolume, MinVolume, MinVolume };
+    private readonly float[] _targetVolumes = { MinVolume, MinVolume };
 
     // Tracked current Params.Volume per layer (avoids reading from OpenAL each frame)
-    private readonly float[] _currentVolumes = { MinVolume, MinVolume, MinVolume };
+    private readonly float[] _currentVolumes = { MinVolume, MinVolume };
 
     private int _currentIntensity;
     private float _volumeSlider;
 
-    // Threat intensity: set to 2 when local player has CEGOAPTargetComponent.
-    // Stays at 2 for ThreatLingerSeconds after the component is removed.
+    // Threat intensity: set to 1 when local player has CEGOAPTargetComponent.
+    // Stays at 1 for ThreatLingerSeconds after the component is removed.
     private const float ThreatLingerSeconds = 6f;
     private TimeSpan _threatExpireTime = TimeSpan.Zero;
     private bool _isThreatActive;
@@ -94,7 +94,7 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
             {
                 _isThreatActive = true;
                 if (_currentProtoId != null)
-                    SetIntense(2);
+                    SetIntense(1);
             }
         }
         else if (_isThreatActive)
@@ -127,7 +127,7 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
     {
         base.Shutdown();
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             _audio.Stop(_streams[i]);
         }
@@ -154,7 +154,7 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
         if (_needsSync)
         {
             _needsSync = false;
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < LayerCount; i++)
             {
                 if (_streams[i] != null)
                 {
@@ -193,7 +193,7 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
         }
 
         // Smoothly move active layer volumes toward their targets
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             if (_streams[i] == null)
                 continue;
@@ -232,7 +232,7 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
 
         _sawmill.Debug($"Switching ambient music from '{_currentProtoId?.ToString() ?? "none"}' to '{protoId}'.");
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             if (_streams[i] != null)
             {
@@ -241,17 +241,16 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
             }
         }
 
-        _streams[0] = null;
-        _streams[1] = null;
-        _streams[2] = null;
+        for (var i = 0; i < LayerCount; i++)
+            _streams[i] = null;
 
         _currentProtoId = protoId;
         _currentIntensity = 0;
 
         var proto = _proto.Index(protoId);
-        SoundSpecifier?[] specifiers = [proto.CalmLayer, proto.TensionLayer, proto.IntenseLayer];
+        SoundSpecifier?[] specifiers = [proto.CalmLayer, proto.BattleLayer];
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             _targetVolumes[i] = MinVolume;
             _currentVolumes[i] = MinVolume;
@@ -276,10 +275,10 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
             _streams[i] = result?.Entity;
         }
 
-        // Apply intensity 0: CalmLayer fades in, others stay muted
+        // Apply intensity 0: CalmLayer fades in, BattleLayer stays muted
         ApplyIntensityTargets();
 
-        // Force all three streams to position 0 so they stay synchronized.
+        // Force all streams to position 0 so they stay synchronized.
         // NOTE: buffers may not be ready this frame — _needsSync defers the actual
         // SetPlaybackPosition to the first Update() tick where OpenAL is guaranteed ready.
         _needsSync = true;
@@ -289,13 +288,13 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
     {
         _sawmill.Debug($"Switching ambient music intensity from {_currentIntensity} to {intensity}.");
 
-        _currentIntensity = Math.Clamp(intensity, 0, 2);
+        _currentIntensity = Math.Clamp(intensity, 0, LayerCount - 1);
         ApplyIntensityTargets();
     }
 
     private void ApplyIntensityTargets()
     {
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             _targetVolumes[i] = i <= _currentIntensity
                 ? _layerBaseVolumes[i]
@@ -310,7 +309,7 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
 
         _sawmill.Debug($"Stopping ambient music (was '{_currentProtoId}').");
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             if (_streams[i] != null)
             {
@@ -319,10 +318,8 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
             }
         }
 
-        for (var i = 0; i < 3; i++)
-        {
+        for (var i = 0; i < LayerCount; i++)
             _streams[i] = null;
-        }
 
         _currentProtoId = null;
         _currentIntensity = 0;
@@ -336,9 +333,9 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
             return;
 
         var proto = _proto.Index(_currentProtoId.Value);
-        SoundSpecifier?[] specifiers = [proto.CalmLayer, proto.TensionLayer, proto.IntenseLayer];
+        SoundSpecifier?[] specifiers = [proto.CalmLayer, proto.BattleLayer];
 
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < LayerCount; i++)
         {
             if (specifiers[i] == null)
                 continue;
