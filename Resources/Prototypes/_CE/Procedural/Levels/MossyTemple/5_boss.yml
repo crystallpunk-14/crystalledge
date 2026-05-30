@@ -27,6 +27,8 @@
   - type: Gravity
     enabled: true
     inherent: true
+  - type: CEMapBossMusic
+    music: MossyBoss
 
 - type: zMap
   id: Boss1ViatorLibrary
@@ -39,6 +41,8 @@
   - type: Gravity
     enabled: true
     inherent: true
+  - type: CEMapBossMusic
+    music: MossyBoss
 
 - type: zMap
   id: Boss1ViatorLake
@@ -51,3 +55,5 @@
   - type: Gravity
     enabled: true
     inherent: true
+  - type: CEMapBossMusic
+    music: MossyBoss

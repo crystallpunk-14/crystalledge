@@ -9,3 +9,15 @@
   id: MossySafe
   calmLayer:
     path: /Audio/_CE/Ambience/Music/safe.ogg
+
+- type: CEBossMusic
+  id: MossyBoss
+  prelude:
+    path: /Audio/_CE/Ambience/Music/boss_prelude.ogg
+  intro:
+    path: /Audio/_CE/Ambience/Music/boss_intro.ogg
+  main:
+    path: /Audio/_CE/Ambience/Music/boss_main.ogg
+  victory:
+    path: /Audio/_CE/Ambience/Music/boss_victory.ogg
+  mainStartDelay: 4.7
