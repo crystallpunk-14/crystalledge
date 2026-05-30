@@ -404,14 +404,6 @@
   zLevelMap: MossyTemple
   offset: 32, -29
 
-- type: dungeonRoom3d
-  id: MossyTemple_DeadEnd_Maze
-  roomType: MossyTempleDeadEndRoom
-  size: 8, 5
-  height: 2
-  zLevelMap: MossyTemple
-  offset: 37, -29
-
 
 
 
