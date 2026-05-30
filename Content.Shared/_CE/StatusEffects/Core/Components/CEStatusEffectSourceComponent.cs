@@ -1,18 +1,29 @@
+using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared._CE.StatusEffects.Core;
+using Robust.Shared.Analyzers;
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._CE.StatusEffectStacks;
 
 /// <summary>
 /// Tracks who applied a status effect. Placed on the status effect entity.
-/// Automatically set by CEEntityEffects that apply status effects.
-/// Uses manual state handling to avoid networking errors when the source entity is deleted.
+/// State is serialized manually to safely handle a deleted source entity.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
+[Access(typeof(CEStatusEffectStackSystem), Other = AccessPermissions.None)]
 public sealed partial class CEStatusEffectSourceComponent : Component
 {
     /// <summary>
-    /// ALWAYS protect access to this field with Exists() checks. The source entity may have been deleted, and if so this will be null.
+    /// Raw backing field. Only accessible to declared friends above.
+    /// External code must use <c>CEStatusEffectStackSystem.GetSource()</c> instead.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Source;
+}
+
+[Serializable, NetSerializable]
+public sealed class CEStatusEffectSourceComponentState : ComponentState
+{
+    public NetEntity? Source;
 }

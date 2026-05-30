@@ -1,4 +1,5 @@
 using Content.Server.Discord.DiscordLink;
+using NetCord;
 using NetCord.Gateway;
 using NetCord.Rest;
 using Robust.Server.Player;

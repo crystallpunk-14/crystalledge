@@ -5,6 +5,7 @@ using Content.Shared.Alert;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -27,6 +28,28 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         SubscribeLocalEvent<CEStatusEffectNeutralizationComponent, StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent>>(OnNeutralize);
         SubscribeLocalEvent<CEStatusEffectTransformComponent, StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent>>(OnTransform);
         SubscribeLocalEvent<CEStatusEffectConsumeComponent, StatusEffectRelayedEvent<CEAttemptReceiveStatusEffectStackEvent>>(OnConsume);
+        SubscribeLocalEvent<CEStatusEffectSourceComponent, ComponentGetState>(OnSourceGetState);
+        SubscribeLocalEvent<CEStatusEffectSourceComponent, ComponentHandleState>(OnSourceHandleState);
+    }
+
+    private void OnSourceGetState(Entity<CEStatusEffectSourceComponent> ent, ref ComponentGetState args)
+    {
+        // Existence check before GetNetEntity — prevents crash when source entity is deleted.
+        NetEntity? netSource = null;
+        if (ent.Comp.Source is { } src && Exists(src))
+            netSource = GetNetEntity(src);
+
+        args.State = new CEStatusEffectSourceComponentState { Source = netSource };
+    }
+
+    private void OnSourceHandleState(Entity<CEStatusEffectSourceComponent> ent, ref ComponentHandleState args)
+    {
+        if (args.Current is not CEStatusEffectSourceComponentState state)
+            return;
+
+        ent.Comp.Source = state.Source != null
+            ? EnsureEntity<CEStatusEffectSourceComponent>(state.Source.Value, ent)
+            : null;
     }
 
     /// <summary>
@@ -175,6 +198,39 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         var sourceComp = EnsureComp<CEStatusEffectSourceComponent>(effectEntity);
         sourceComp.Source = src;
         Dirty(effectEntity, sourceComp);
+    }
+
+    /// <summary>
+    /// Returns the entity that applied this status effect, or <c>null</c> if there is no source
+    /// or if the original source entity has been deleted. If the source has been deleted, the
+    /// stored reference is cleared so subsequent lookups are cheap and consistent.
+    /// </summary>
+    public EntityUid? GetSource(Entity<CEStatusEffectSourceComponent?> effectEntity)
+    {
+        if (!Resolve(effectEntity, ref effectEntity.Comp))
+            return null;
+
+        if (effectEntity.Comp.Source is { } src && Exists(src))
+            return src;
+
+        // Original source no longer exists — drop the dangling reference.
+        if (effectEntity.Comp.Source != null)
+        {
+            SetSource(effectEntity, null);
+        }
+
+        return null;
+    }
+
+    public void SetSource(EntityUid effectEntity, EntityUid? source)
+    {
+        if (source is not { } src || !Exists(src))
+            return;
+
+        var comp = EnsureComp<CEStatusEffectSourceComponent>(effectEntity);
+
+        comp.Source = src;
+        Dirty(effectEntity, comp);
     }
 
     /// <summary>

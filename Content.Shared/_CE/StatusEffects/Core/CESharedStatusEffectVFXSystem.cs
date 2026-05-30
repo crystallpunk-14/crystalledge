@@ -1,5 +1,4 @@
 using Content.Shared._CE.StatusEffects.Core.Components;
-using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -11,6 +10,7 @@ namespace Content.Shared._CE.StatusEffects.Core;
 public abstract class CESharedStatusEffectVFXSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly CEStatusEffectStackSystem _stackSystem = default!;
 
     public override void Initialize()
     {
@@ -23,7 +23,7 @@ public abstract class CESharedStatusEffectVFXSystem : EntitySystem
 
     private void OnApplied(Entity<CEStatusEffectVFXComponent> ent, ref StatusEffectAppliedEvent args)
     {
-        var source = GetSource(ent);
+        var source = _stackSystem.GetSource(ent.Owner);
         var pos = Transform(args.Target).Coordinates;
         PlayEffect(args.Target, source, ent.Comp.OnAppliedVfx, pos);
         _audio.PlayPredicted(ent.Comp.OnAppliedSound, pos, source);
@@ -31,7 +31,7 @@ public abstract class CESharedStatusEffectVFXSystem : EntitySystem
 
     private void OnRemoved(Entity<CEStatusEffectVFXComponent> ent, ref StatusEffectRemovedEvent args)
     {
-        var source = GetSource(ent);
+        var source = _stackSystem.GetSource(ent.Owner);
         var pos = Transform(args.Target).Coordinates;
         PlayEffect(args.Target, source, ent.Comp.OnRemovedVfx, pos);
         _audio.PlayPredicted(ent.Comp.OnRemovedSound, pos, source);
@@ -39,7 +39,7 @@ public abstract class CESharedStatusEffectVFXSystem : EntitySystem
 
     private void OnStackEdited(Entity<CEStatusEffectVFXComponent> ent, ref CEStatusEffectStackEditedEvent args)
     {
-        var source = GetSource(ent);
+        var source = _stackSystem.GetSource(ent.Owner);
         var pos = Transform(args.Target).Coordinates;
 
         if (args.NewStack > args.OldStack)
@@ -52,13 +52,6 @@ public abstract class CESharedStatusEffectVFXSystem : EntitySystem
             PlayEffect(args.Target, source, ent.Comp.OnStacksRemovedVfx, pos);
             _audio.PlayPredicted(ent.Comp.OnStacksRemovedSound, pos, source);
         }
-    }
-
-    private EntityUid? GetSource(EntityUid effectEntity)
-    {
-        if (!TryComp<CEStatusEffectSourceComponent>(effectEntity, out var src))
-            return null;
-        return src.Source is { } s && Exists(s) ? s : null;
     }
 
     /// <summary>

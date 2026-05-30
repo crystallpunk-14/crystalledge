@@ -1,3 +1,4 @@
+using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
@@ -20,6 +21,7 @@ public sealed partial class ApplyStatusEffect : CEEntityEffectBase<ApplyStatusEf
 public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSystem<ApplyStatusEffect>
 {
     [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private readonly CEStatusEffectStackSystem _statusEffectStack = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ApplyStatusEffect> args)
     {
@@ -44,12 +46,7 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
         if (!_statusEffect.TrySetStatusEffectDuration(entity, args.Effect.StatusEffect, out var statusEnt, args.Effect.Duration))
             return;
 
-        if (statusEnt != null && Exists(args.Args.Source))
-        {
-            var sourceComp = EnsureComp<CEStatusEffectSourceComponent>(statusEnt.Value);
-            sourceComp.Source = args.Args.Source;
-            Dirty(statusEnt.Value, sourceComp);
-        }
+        _statusEffectStack.SetSource(statusEnt.Value, args.Args.Source);
 
         if (Exists(args.Args.Source))
             RaiseLocalEvent(args.Args.Source, new CEAfterApplyStatusEffectEvent(entity, args.Effect.StatusEffect, used: args.Args.Used));
