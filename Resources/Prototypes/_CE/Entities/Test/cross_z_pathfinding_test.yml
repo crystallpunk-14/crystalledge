@@ -1,0 +1,6 @@
+# Concrete, spawnable ramp for integration tests. Faces East (downhill = East), rises 0.1 -> 1.05.
+- type: entity
+  parent: CEZLevelLadderBase
+  id: CEZLevelTestRamp
+  name: test stairs
+  suffix: TEST
