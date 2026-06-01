@@ -32,7 +32,8 @@ public sealed class CEZPortalSystem : EntitySystem
         SubscribeLocalEvent<CEZLevelHighGroundComponent, MapInitEvent>(OnRampInit);
         SubscribeLocalEvent<CEZLevelHighGroundComponent, ComponentShutdown>(OnRampShutdown);
         SubscribeLocalEvent<CEZLevelHighGroundComponent, AnchorStateChangedEvent>(OnRampAnchorChanged);
-        SubscribeLocalEvent<CEZLevelMapComponent, CEMapAddedIntoZNetworkEvent>(OnMapAddedToNetwork);
+        // Use MapComponent (not CEZLevelMapComponent) to avoid conflicting with CEZLevelMappingSystem.
+        SubscribeLocalEvent<MapComponent, CEMapAddedIntoZNetworkEvent>(OnMapAddedToNetwork);
     }
 
     private void OnRampInit(Entity<CEZLevelHighGroundComponent> ent, ref MapInitEvent args)
@@ -54,12 +55,12 @@ public sealed class CEZPortalSystem : EntitySystem
     }
 
     // A ramp may be anchored before the map above joins the network; retry when the network grows.
-    private void OnMapAddedToNetwork(Entity<CEZLevelMapComponent> ent, ref CEMapAddedIntoZNetworkEvent args)
+    private void OnMapAddedToNetwork(Entity<MapComponent> ent, ref CEMapAddedIntoZNetworkEvent args)
     {
         var query = EntityQueryEnumerator<CEZLevelHighGroundComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var ramp, out var xform))
         {
-            if (xform.MapUid != null && _zMapQuery.HasComponent(xform.MapUid.Value))
+            if (xform.MapUid == ent.Owner)
                 TryCreateRampPortal((uid, ramp));
         }
     }

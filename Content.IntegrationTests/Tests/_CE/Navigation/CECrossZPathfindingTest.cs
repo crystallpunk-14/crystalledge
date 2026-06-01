@@ -137,7 +137,7 @@ public sealed class CECrossZPathfindingTest : GameTest
         await Server.WaitPost(() =>
         {
             // Ramp at tile (2,0) on the lower level, facing East (downhill = East).
-            var ramp = SEntMan.SpawnEntity("CEZLevelTestRamp",
+            var ramp = SEntMan.SpawnEntity("CEZLevelLadderStone",
                 new EntityCoordinates(lowerMap, new Vector2(2.5f, 0.5f)));
             xformSys.SetWorldRotation(ramp, Direction.East.ToAngle());
         });
@@ -182,7 +182,7 @@ public sealed class CECrossZPathfindingTest : GameTest
 
         await Server.WaitPost(() =>
         {
-            var ramp = SEntMan.SpawnEntity("CEZLevelTestRamp",
+            var ramp = SEntMan.SpawnEntity("CEZLevelLadderStone",
                 new EntityCoordinates(lowerMap, new Vector2(3.5f, 0.5f)));
             xformSys.SetWorldRotation(ramp, Direction.East.ToAngle());
 
@@ -193,12 +193,6 @@ public sealed class CECrossZPathfindingTest : GameTest
 
         // Build navmesh / portal, let the mob initialize.
         await RunTicksSync(90);
-
-        // Aggro the hunter exactly like CERatAttackTest does.
-        await Server.WaitPost(() =>
-        {
-            SEntMan.SpawnEntity("CEAlarmInRange5", new EntityCoordinates(lowerMap, new Vector2(5.5f, 0.5f)));
-        });
 
         // Give the GOAP agent time to plan and the NPC time to walk up the ramp.
         await RunSeconds(15);

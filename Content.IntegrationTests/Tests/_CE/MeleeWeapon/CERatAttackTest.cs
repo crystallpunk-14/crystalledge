@@ -53,11 +53,6 @@ public sealed class CERatAttackTest : GameTest
             initialDamage = damageable.Damage.Total;
         });
 
-
-        await RunSeconds(1);
-
-        await SpawnAtPosition("CEAlarmInRange5", humanCoords);
-
         await RunSeconds(5);
 
         // Assert human took damage, GOAP is active, and rat has target
