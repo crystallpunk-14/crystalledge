@@ -6,20 +6,22 @@
 
 ## Problem
 
-`CEGOAPMoveToTargetActionSystem` cannot pathfind across Z-levels. Because the pathfinder and
-steering are single-map, the action fakes cross-Z movement with a crutch: it finds the nearest
-ramp via a per-grid slope cache, steers the NPC to the ramp edge, then **teleports** the NPC to
-the map above/below with `TryMoveUp` + `SetWorldPosition`/`SetMapCoordinates`, and re-plans.
+NPC navigation cannot pathfind across Z-levels. The pathfinder (`Content.Server/NPC/Pathfinding`)
+and the steering follower (`Content.Server/NPC/Systems/NPCSteeringSystem`) both operate on a single
+map: an A* path cannot span the stacked maps that make up a Z-network, and the follower refuses any
+path node that resolves to a different map. An NPC therefore has no way to compute or follow a route
+from one floor to another.
 
-We want real pathfinding through stacked maps / Z-levels, with the actual level transition handled
-by walking ramps the same way players do — no teleport.
+We want a single A* query to produce a path through stacked maps, routed through ramps, and the NPC
+to follow it across floors. The actual level transition reuses the existing vertical physics that
+already carries players up and down ramps; the navigation layer only has to walk the NPC onto the
+correct ramp from the correct side.
 
 ## Goals
 
 - A single A* query produces a path that spans multiple Z-level maps, routed through ramps.
 - NPC follows that path; the Z transition happens by walking onto the ramp and letting the existing
-  vertical physics reparent it (identical to player traversal).
-- Remove all manual teleportation from the GOAP move action.
+  vertical physics reparent it (identical to player traversal) — no teleporting the entity.
 - Cross-Z navigation works for **all** NPCs (no opt-in gate).
 - Respect ramp directionality: a unit may only mount a ramp from its low side when ascending, and
   from its high side when descending (no entering "from the back").
@@ -57,7 +59,7 @@ is untouched.
 3. **No cross-Z portals exist** — a missing piece, not a ban. Needs a CE system to create/maintain
    portals at ramp tiles between vertically-adjacent maps.
 
-### Key enabler (removes the need to teleport)
+### Key enabler: vertical physics already crosses levels
 Vertical physics in `Content.Shared/_CE/ZLevels/Core/EntitySystems/CESharedZLevelsSystem.Update.cs:134-154`:
 walking onto a ramp (`CEZLevelHighGroundComponent` with a rising `HeightCurve`) raises the entity's
 `LocalPosition` via `AutoStep`; at `>= 1` it auto-`TryMoveUp` (reparent up), at `< 0` it
@@ -165,14 +167,13 @@ if (targetMap.MapId != ourMap.MapId)
 Adds a CE `[Dependency]` on `CEZPortalSystem` to `NPCSteeringSystem` (wrapped). `direction` is the
 existing world-space vector the method already feeds into `ApplySeek`.
 
-#### D. GOAP action rewrite — `Content.Server/_CE/GOAP/Actions/CEGOAPMoveToTargetActionSystem.cs`
-- **Delete:** `_pendingAscent`, `_pendingDescent`, `GetZOffset`, all slope-edge steering, the
-  `TryMoveUp` + `SetWorldPosition` / `SetMapCoordinates` teleport, and the `CEZLevelsLaddersCacheSystem`
-  and `CESharedZLevelsSystem` dependencies that only served the crutch.
-- **Keep:** resolve target coordinates → `_steering.Register(ent, coords)` (set `Range`) on startup;
-  on update, re-register if the target moved past `ReregisterThreshold`; report `Finished` when
-  steering is `InRange` and on the same map as the target, `Failed` on `NoPath`, else `Running`.
-- The action becomes map-agnostic (~60 lines). The pathfinder + vertical physics do the Z work.
+#### D. GOAP action — `Content.Server/_CE/GOAP/Actions/CEGOAPMoveToTargetActionSystem.cs`
+Reduced to map-agnostic steering: on startup, resolve the target coordinates and
+`_steering.Register(ent, coords)` (set `Range`); on update, re-register if the target moved past
+`ReregisterThreshold`; report `Finished` when steering is `InRange` and on the same map as the
+target, `Failed` on `NoPath`, otherwise `Running`. All Z handling — ramp selection and the level
+transition — is delegated to the pathfinder, the portal graph, and vertical physics; the action
+performs no Z-level logic of its own.
 
 #### E. Retire the ladders cache
 Delete `Content.Server/_CE/ZLevels/LaddersCache/CEZLevelsLaddersCacheSystem.cs` and
@@ -211,9 +212,9 @@ starts from the landing (high) side.
 3. **Endpoint tile selection / descent geometry.** `lowApproach` and `landing` offsets must match how
    players actually traverse the ramp (including the descent case, where the upper tile must be
    step-down-able). Verify against authored maps.
-4. **Climbable-ramp predicate.** The old cache accepted any `HeightCurve.Count >= 2`, which includes
-   flat wall-tops. The portal system needs a tighter rising-curve test so only real inter-floor
-   ramps get portals.
+4. **Climbable-ramp predicate.** Not every `CEZLevelHighGroundComponent` is a climbable ramp — a flat
+   high ground (e.g. the default `[1.05, 1.05]` wall-top) is a ledge, not an inter-floor ramp. The
+   portal system must test for a rising `HeightCurve` so only genuinely traversable ramps get portals.
 5. **Portal upkeep on chunk rebuild.** `PathfindingSystem.UpdateGrid` re-links portal neighbors each
    rebuild (already handled); confirm the chosen endpoint polys survive (non-empty tile).
 6. **Deferred portal creation.** A ramp may be cached before its `MapAbove` joins the network; create
