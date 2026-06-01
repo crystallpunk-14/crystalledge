@@ -9,7 +9,6 @@
     destroyThreshold: 100
     destroySound:
       collection: gib
-  - type: Pullable
 
 - type: entity
   id: CEMobMagical

@@ -58,6 +58,7 @@
       enum.CERememberNameUiKey.Key:
         type: CEIdentityRecognitionBoundUserInterface
   - type: Stripping
+  - type: Pullable
   - type: Puller
   - type: Speech
     speechSounds: Alto
