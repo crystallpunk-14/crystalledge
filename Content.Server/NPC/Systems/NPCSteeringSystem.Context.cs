@@ -168,13 +168,27 @@ public sealed partial class NPCSteeringSystem
         var targetMap = _transform.ToMapCoordinates(targetCoordinates);
         var ourMap = _transform.ToMapCoordinates(ourCoordinates);
 
+        Vector2 direction;
+
         if (targetMap.MapId != ourMap.MapId)
         {
-            steering.Status = SteeringStatus.NoPath;
-            return false;
+            // CrystallEdge: cross-Z seam — the next node is on the map above/below at a ramp.
+            // Keep walking onto the ramp; vertical physics reparents us, then this node is same-map.
+            if (_ceZPortal.TryGetZSeamDirection(uid, targetCoordinates, out var seamDir))
+            {
+                direction = seamDir;
+            }
+            else
+            {
+                steering.Status = SteeringStatus.NoPath;
+                return false;
+            }
+            // CrystallEdge end
         }
-
-        var direction = targetMap.Position - ourMap.Position;
+        else
+        {
+            direction = targetMap.Position - ourMap.Position;
+        }
 
         // Need to be pretty close if it's just a node to make sure LOS for door bashes or the likes.
         bool arrived;
@@ -259,16 +273,25 @@ public sealed partial class NPCSteeringSystem
 
                 targetMap = _transform.ToMapCoordinates(targetCoordinates);
 
-                // Can't make it again.
+                // CrystallEdge: cross-Z seam after dequeue — same handling as above.
                 if (ourMap.MapId != targetMap.MapId)
                 {
-                    SetDirection(uid, mover, steering, Vector2.Zero);
-                    steering.Status = SteeringStatus.NoPath;
-                    return false;
+                    if (_ceZPortal.TryGetZSeamDirection(uid, targetCoordinates, out var seamDir))
+                    {
+                        direction = seamDir;
+                    }
+                    else
+                    {
+                        SetDirection(uid, mover, steering, Vector2.Zero);
+                        steering.Status = SteeringStatus.NoPath;
+                        return false;
+                    }
                 }
-
-                // Gonna resume now business as usual
-                direction = targetMap.Position - ourMap.Position;
+                else
+                {
+                    direction = targetMap.Position - ourMap.Position;
+                }
+                // CrystallEdge end
                 ResetStuck(steering, ourCoordinates);
             }
             else

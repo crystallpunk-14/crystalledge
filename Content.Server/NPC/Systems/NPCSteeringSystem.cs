@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server._CE.ZLevels.Pathfinding;
 using Content.Server.Administration.Managers;
 using Content.Server.DoAfter;
 using Content.Server.NPC.Components;
@@ -68,6 +69,9 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedCombatModeSystem _combat = default!;
+    // CrystallEdge: cross-Z seam steering.
+    [Dependency] private readonly CEZPortalSystem _ceZPortal = default!;
+    // CrystallEdge end
 
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<MovementSpeedModifierComponent> _modifierQuery;
