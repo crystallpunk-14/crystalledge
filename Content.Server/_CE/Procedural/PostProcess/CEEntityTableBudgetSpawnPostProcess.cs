@@ -43,13 +43,6 @@ public sealed partial class CEEntityTableBudgetSpawnPostProcess : CEDungeonPostP
     [DataField]
     public EntityWhitelist? AnchoredWhitelist;
 
-    /// <summary>
-    /// If true, only spawn on the main z-level (as defined by the dungeon level prototype).
-    /// When false, spawns across all z-levels.
-    /// </summary>
-    [DataField]
-    public bool MainZLevelOnly = true;
-
     public override async Task Execute(IEntityManager entMan, EntityUid mapUid, int mainZLevel, Func<ValueTask> suspend)
     {
         var postProcess = entMan.System<CEDungeonPostProcessSystem>();
@@ -59,9 +52,7 @@ public sealed partial class CEEntityTableBudgetSpawnPostProcess : CEDungeonPostP
         var entityTable = entMan.System<EntityTableSystem>();
         var random = new Random();
 
-        var maps = MainZLevelOnly
-            ? new List<EntityUid> { postProcess.GetMapAtZLevel(mapUid, mainZLevel) }
-            : postProcess.GetAllMaps(mapUid);
+        var maps = postProcess.GetAllMaps(mapUid);
 
         var totalWeight = 0f;
         foreach (var entry in Entries)

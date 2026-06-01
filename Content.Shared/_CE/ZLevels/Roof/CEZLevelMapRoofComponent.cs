@@ -12,6 +12,4 @@ namespace Content.Shared._CE.ZLevels.Roof;
 /// Systems use this marker to add, update, or remove roof tiles when the underlying tiles change.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-public sealed partial class CEZLevelMapRoofComponent : Component
-{
-}
+public sealed partial class CEZLevelMapRoofComponent : Component;

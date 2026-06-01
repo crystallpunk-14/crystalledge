@@ -51,9 +51,6 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
     [DataField]
     public EntityWhitelist? AnchoredWhitelist;
 
-    [DataField]
-    public bool MainZLevelOnly = true;
-
     public override async Task Execute(IEntityManager entMan, EntityUid mapUid, int mainZLevel, Func<ValueTask> suspend)
     {
         var postProcess = entMan.System<CEDungeonPostProcessSystem>();
@@ -64,9 +61,7 @@ public sealed partial class CEMobBudgetSpawnPostProcess : CEDungeonPostProcessLa
         var lookup = entMan.System<EntityLookupSystem>();
         var random = new Random();
 
-        var maps = MainZLevelOnly
-            ? new List<EntityUid> { postProcess.GetMapAtZLevel(mapUid, mainZLevel) }
-            : postProcess.GetAllMaps(mapUid);
+        var maps = postProcess.GetAllMaps(mapUid);
 
         var totalWeight = 0f;
         foreach (var entry in Entries)

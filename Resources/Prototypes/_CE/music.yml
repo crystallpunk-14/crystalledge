@@ -1,13 +1,23 @@
 - type: CEAmbientMusic
   id: MossyTemple
   calmLayer:
-    path: /Audio/_CE/Ambience/Music/intensity_0.ogg
-  tensionLayer:
-    path: /Audio/_CE/Ambience/Music/intensity_1.ogg
-  intenseLayer:
-    path: /Audio/_CE/Ambience/Music/intensity_2.ogg
+    path: /Audio/_CE/Ambience/Music/exploration_calm.ogg
+  battleLayer:
+    path: /Audio/_CE/Ambience/Music/exploration_battle.ogg
 
 - type: CEAmbientMusic
   id: MossySafe
   calmLayer:
     path: /Audio/_CE/Ambience/Music/safe.ogg
+
+- type: CEBossMusic
+  id: MossyBoss
+  prelude:
+    path: /Audio/_CE/Ambience/Music/boss_prelude.ogg
+  intro:
+    path: /Audio/_CE/Ambience/Music/boss_intro.ogg
+  main:
+    path: /Audio/_CE/Ambience/Music/boss_main.ogg
+  victory:
+    path: /Audio/_CE/Ambience/Music/boss_victory.ogg
+  mainStartDelay: 4.7

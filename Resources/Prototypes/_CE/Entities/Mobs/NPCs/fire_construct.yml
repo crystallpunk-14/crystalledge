@@ -27,7 +27,6 @@
       effects:
         EnemyInMeleeRange: true
       cost: 2
-      range: 1.5
     - !type:CEGOAPExploreAction
       effects:
         EnemyVisible: true

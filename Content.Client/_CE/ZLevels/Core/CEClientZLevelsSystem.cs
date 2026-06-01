@@ -4,11 +4,10 @@
  */
 
 using System.Numerics;
-using Content.Client.Damage.Systems;
+using Content.Client._CE.ZLevels.Core.Overlays;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.Camera;
-using Content.Shared.Damage.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 
@@ -20,10 +19,7 @@ namespace Content.Client._CE.ZLevels.Core;
 public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
 {
     [Dependency] private readonly IOverlayManager _overlay = default!;
-    //[Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
-
-    public static float ZLevelOffset = 0.7f;
 
     public override void Initialize()
     {
@@ -37,7 +33,7 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
     private void OnEyeOffset(Entity<CEZPhysicsComponent> ent, ref GetEyeOffsetEvent args)
     {
         Angle rotation = _eye.CurrentEye.Rotation * -1;
-        var localPosition = GetVisualsLocalPosition((ent, ent), Transform(ent));
+        var localPosition = ent.Comp.LocalPosition;
         var offset = rotation.RotateVec(new Vector2(0, localPosition * ZLevelOffset));
         args.Offset += offset;
     }
@@ -55,45 +51,71 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         ent.Comp.SpriteOffsetDefault = sprite.Offset;
     }
 
-    //Currently we have no need for active z-physics, so we can skip this costly loop.
-    //We will return to it when we ready.
-
-    /*
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var zPhys, out var sprite, out var xform))
-        {
-            var localPosition = GetVisualsLocalPosition((uid, zPhys), xform);
-
-            sprite.NoRotation = localPosition != 0 || zPhys.NoRotDefault;
-
-            _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault + new Vector2(0, localPosition * ZLevelOffset));
-            _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
-        }
-    }
-    */
-
-    public float GetVisualsLocalPosition(Entity<CEZPhysicsComponent?> ent, TransformComponent? xform = null)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return 0;
-        if (!Resolve(ent, ref xform, false))
-            return 0;
-
-        var pos = ent.Comp.LocalPosition;
-
-        if (xform.ParentUid != xform.MapUid && ZPhysicsQuery.TryComp(xform.ParentUid, out var parentZPhys))
-            pos = parentZPhys.LocalPosition;
-
-        return pos;
-    }
-
     public override void Shutdown()
     {
         base.Shutdown();
         _overlay.RemoveOverlay<CEZLevelBlurOverlay>();
+    }
+}
+
+/// <summary>
+/// Pre-animation pass for Z-level visuals.
+/// Runs its <see cref="FrameUpdate"/> BEFORE <see cref="AnimationPlayerSystem"/> every render frame,
+/// resetting <see cref="SpriteComponent.Offset"/> to the entity's clean base (no Z).
+/// This prevents Z from accumulating across frames when no animation writes to the offset
+/// (e.g. entities that only animate scale, like SlimeIceBig).
+/// </summary>
+internal sealed class CEClientZLevelsPreAnimSystem : EntitySystem
+{
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        UpdatesBefore.Add(typeof(AnimationPlayerSystem));
+    }
+
+    public override void FrameUpdate(float frameTime)
+    {
+        // Phase 1 (per render frame): strip any Z left from last frame so the animation player
+        // always starts from a Z-free base, and Phase 2 can add exactly one Z contribution.
+        var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent>();
+        while (query.MoveNext(out var uid, out var zPhys, out var sprite))
+        {
+            var localPosition = zPhys.LocalPosition;
+            sprite.NoRotation = localPosition != 0 || zPhys.NoRotDefault;
+            _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault);
+            _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
+        }
+    }
+}
+
+/// <summary>
+/// Post-animation pass for Z-level visuals.
+/// Runs its <see cref="FrameUpdate"/> AFTER <see cref="AnimationPlayerSystem"/> so that
+/// whatever offset the animation player wrote to <see cref="SpriteComponent.Offset"/> this frame
+/// (loop animation, one-shot swing, idle bob, etc.) is preserved, and the Z-height contribution
+/// is simply added on top.  No animation code needs to know about Z levels.
+/// </summary>
+internal sealed class CEClientZLevelsPostAnimSystem : EntitySystem
+{
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        UpdatesAfter.Add(typeof(AnimationPlayerSystem));
+    }
+
+    public override void FrameUpdate(float frameTime)
+    {
+        // Phase 2: add the Z-height contribution on top of the animation-player's output.
+        // At this point sprite.Offset == animationValue (or SpriteOffsetDefault if no anim ran).
+        var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent>();
+        while (query.MoveNext(out var uid, out var zPhys, out var sprite))
+        {
+            var zOffset = new Vector2(0, zPhys.LocalPosition * CESharedZLevelsSystem.ZLevelOffset);
+            _sprite.SetOffset((uid, sprite), sprite.Offset + zOffset);
+        }
     }
 }

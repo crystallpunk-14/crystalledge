@@ -39,6 +39,9 @@ public sealed partial class CEGOAPComponent : Component
     [ViewVariables]
     public Dictionary<EntityUid, CEGOAPKnowledgeEntry> Knowledge = new();
 
+    [DataField]
+    public TimeSpan MemoryDuration = TimeSpan.FromSeconds(10);
+
     /// <summary>
     /// Current world state as perceived by this entity.
     /// Keys are condition prototype IDs, values are boolean states.

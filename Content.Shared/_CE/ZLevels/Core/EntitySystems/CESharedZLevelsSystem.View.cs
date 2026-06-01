@@ -3,8 +3,9 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
+using System.Numerics;
 using Content.Shared._CE.ZLevels.Core.Components;
-using Content.Shared.Actions;
+using Content.Shared._CE.ZLevels.Core.Events;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
 
@@ -12,63 +13,173 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    public const int MaxZLevelsAboveRendering = 0;
+    [Dependency] protected readonly ITileDefinitionManager TilDefMan = null!;
 
-    [Dependency] protected readonly ITileDefinitionManager TileDefinition = null!;
-
-    private void InitView()
+    private void InitializeView()
     {
+        SubscribeLocalEvent<CEZLevelViewerComponent, MoveEvent>(OnViewerMove);
         SubscribeLocalEvent<CEZLevelViewerComponent, CEToggleZLevelLookUpAction>(OnToggleLookUp);
     }
 
-    private void OnToggleLookUp(Entity<CEZLevelViewerComponent> ent, ref CEToggleZLevelLookUpAction args)
+    protected virtual void OnViewerMove(Entity<CEZLevelViewerComponent> entity, ref MoveEvent args)
+    {
+        if (!entity.Comp.LookUp)
+            return;
+
+        if (!HasOpaqueAbove(entity))
+            return;
+
+        entity.Comp.LookUp = false;
+        DirtyField(entity, entity.Comp, nameof(CEZLevelViewerComponent.LookUp));
+    }
+
+    private void OnToggleLookUp(Entity<CEZLevelViewerComponent> entity, ref CEToggleZLevelLookUpAction args)
     {
         if (args.Handled)
             return;
 
         args.Handled = true;
 
-        ent.Comp.LookUp = !ent.Comp.LookUp;
-        DirtyField(ent, ent.Comp, nameof(CEZLevelViewerComponent.LookUp));
+        if (HasOpaqueAbove(entity))
+        {
+            _popup.PopupClient(Loc.GetString("ce-zlevel-look-up-fail"), entity, entity);
+            return;
+        }
+
+        entity.Comp.LookUp = !entity.Comp.LookUp;
+        DirtyField(entity, entity.Comp, nameof(CEZLevelViewerComponent.LookUp));
     }
 
-    /// <summary>
-    /// Calculates the maximum number of z-levels above that are visible from the entity's current position.
-    /// Stops when an opaque tile is encountered.
-    /// </summary>
-    public int GetVisibleZLevelsAbove(EntityUid ent, Entity<CEZLevelMapComponent?>? currentMapUid = null)
+    public bool HasOpaqueAbove(EntityUid ent, Entity<CEZLevelMapComponent?>? currentMapUid = null)
     {
         currentMapUid ??= Transform(ent).MapUid;
 
         if (currentMapUid is null)
-            return 0;
+            return false;
 
-        var visibleLevels = 0;
-        var checkMapUid = currentMapUid.Value.Owner;
+        if (!TryMapUp(currentMapUid.Value, out var mapAboveUid))
+            return false;
 
-        for (var i = 1; i <= MaxZLevelsAboveRendering; i++)
+        if (!_gridQuery.TryComp(mapAboveUid, out var mapAboveGrid))
+            return false;
+
+        if (!_map.TryGetTileRef(mapAboveUid, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef))
+            return false;
+
+        var tileDef = (ContentTileDefinition)TilDefMan[tileRef.Tile.TypeId];
+        return !tileDef.Transparent;
+    }
+
+    public bool TryFindZShotOpening(
+        EntityUid sourceMap,
+        EntityUid targetMap,
+        int offset,
+        Vector2 from,
+        Vector2 to,
+        out Vector2 opening,
+        bool preferOpeningAwayFromSource = false,
+        float maxSourceDistanceFromOpeningEdgeTiles = float.PositiveInfinity)
+    {
+        opening = default;
+        if (offset == 0)
+            return false;
+
+        var openingMap = offset < 0 ? sourceMap : targetMap;
+        if (!_gridQuery.TryComp(openingMap, out var grid))
+            return false;
+
+        var sourceTile = preferOpeningAwayFromSource
+            ? _map.WorldToTile(openingMap, grid, from)
+            : default;
+
+        var fallbackOpening = Vector2.Zero;
+        var hasFallbackOpening = false;
+
+        var maxSourceDistanceFromOpeningCenter = float.IsPositiveInfinity(maxSourceDistanceFromOpeningEdgeTiles)
+            ? float.PositiveInfinity
+            : grid.TileSize * (0.5f + Math.Max(0f, maxSourceDistanceFromOpeningEdgeTiles));
+
+        var maxSourceDistanceSquared = maxSourceDistanceFromOpeningCenter * maxSourceDistanceFromOpeningCenter;
+        var selectedOpening = Vector2.Zero;
+
+        var localFrom = _map.WorldToLocal(openingMap, grid, from) / grid.TileSize;
+        var localTo = _map.WorldToLocal(openingMap, grid, to) / grid.TileSize;
+
+        var localDelta = localTo - localFrom;
+
+        var currentTile = new Vector2i((int) MathF.Floor(localFrom.X), (int) MathF.Floor(localFrom.Y));
+        var endTile = new Vector2i((int) MathF.Floor(localTo.X), (int) MathF.Floor(localTo.Y));
+
+        var stepX = Math.Sign(localDelta.X);
+        var stepY = Math.Sign(localDelta.Y);
+
+        var tDeltaX = stepX == 0 ? float.PositiveInfinity : MathF.Abs(1f / localDelta.X);
+        var tDeltaY = stepY == 0 ? float.PositiveInfinity : MathF.Abs(1f / localDelta.Y);
+
+        var nextBoundaryX = stepX > 0 ? currentTile.X + 1f : currentTile.X;
+        var nextBoundaryY = stepY > 0 ? currentTile.Y + 1f : currentTile.Y;
+
+        var tMaxX = stepX == 0 ? float.PositiveInfinity : (nextBoundaryX - localFrom.X) / localDelta.X;
+        var tMaxY = stepY == 0 ? float.PositiveInfinity : (nextBoundaryY - localFrom.Y) / localDelta.Y;
+
+        while (true)
         {
-            if (!TryMapUp(checkMapUid, out var mapAboveUid))
+            if (TryUseOpeningTile(currentTile))
+            {
+                opening = selectedOpening;
+                return true;
+            }
+
+            if (currentTile == endTile)
                 break;
 
-            checkMapUid = mapAboveUid.Owner;
+            if (tMaxX < tMaxY)
+            {
+                currentTile += new Vector2i(stepX, 0);
+                tMaxX += tDeltaX;
+                continue;
+            }
 
-            if (!_gridQuery.TryComp(mapAboveUid, out var mapAboveGrid))
-                break;
+            if (tMaxY < tMaxX)
+            {
+                currentTile += new Vector2i(0, stepY);
+                tMaxY += tDeltaY;
+                continue;
+            }
 
-            if (!_map.TryGetTileRef(mapAboveUid, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef))
-                break;
-
-            var tileDef = (ContentTileDefinition) TileDefinition[tileRef.Tile.TypeId];
-
-            if (!tileDef.Transparent)
-                break;
-
-            visibleLevels++;
+            currentTile += new Vector2i(stepX, stepY);
+            tMaxX += tDeltaX;
+            tMaxY += tDeltaY;
         }
 
-        return visibleLevels;
+        if (!hasFallbackOpening)
+            return false;
+
+        opening = fallbackOpening;
+        return true;
+
+        bool TryUseOpeningTile(Vector2i tile)
+        {
+            if (_map.TryGetTileRef(openingMap, grid, tile, out var tileRef) && !CEZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+                return false;
+
+            var openingCenter = _map.ToCenterCoordinates(openingMap, tile, grid).Position;
+            if (Vector2.DistanceSquared(from, openingCenter) > maxSourceDistanceSquared)
+                return false;
+
+            if (preferOpeningAwayFromSource && tile == sourceTile)
+            {
+                if (hasFallbackOpening)
+                    return false;
+
+                fallbackOpening = openingCenter;
+                hasFallbackOpening = true;
+
+                return false;
+            }
+
+            selectedOpening = openingCenter;
+            return true;
+        }
     }
 }
-
-public sealed partial class CEToggleZLevelLookUpAction : InstantActionEvent;

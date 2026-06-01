@@ -60,8 +60,6 @@
         EnemyVisible: true
       effects:
         EnemyInMeleeRange: true
-      cost: 1
-      range: 1.5
     - !type:CEGOAPMeleeAttackAction
       selector: !type:CEGOAPSelectorNearestEnemy
       preconditions:

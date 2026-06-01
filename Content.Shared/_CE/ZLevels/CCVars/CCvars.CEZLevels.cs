@@ -21,6 +21,12 @@ public sealed partial class CCVars
     public static readonly CVarDef<float>
         CEBaseFallingOtherStunTime = CVarDef.Create("zlevels.ce_base_falling_other_stun_time", 0.01f, CVar.SERVER | CVar.REPLICATED);
 
+    public static readonly CVarDef<int> ZLevelsPhysicsTickRate =
+        CVarDef.Create("zlevels.ce_physics.tick_rate", 60, CVar.ARCHIVE);
+
+    public static readonly CVarDef<bool> ZLevelsPhysicsClientSimulation =
+        CVarDef.Create("zlevels.ce_physics.client_simulation", true, CVar.ARCHIVE | CVar.CLIENT);
+
     /**
      * Physics
      */

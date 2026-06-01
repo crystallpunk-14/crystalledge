@@ -75,6 +75,13 @@ public sealed class DiscordLink : IPostInjectInit
     /// </summary>
     public event Action<Message>? OnMessageReceived;
 
+    // CrystallEdge: raised when the Discord gateway client is ready (after connect).
+    /// <summary>
+    ///     Event that is raised when the Discord gateway client is connected and ready.
+    /// </summary>
+    public event Action? OnReady;
+    // CrystallEdge end
+
     // TODO: consider implementing this in a way where we can unregister it in a similar way
     public void RegisterCommandCallback(Action<CommandReceivedEventArgs> callback, string command)
     {
@@ -127,6 +134,7 @@ public sealed class DiscordLink : IPostInjectInit
         _client.Ready += _ =>
         {
             _sawmill.Info("Discord client ready.");
+            OnReady?.Invoke(); // CrystallEdge
             return default;
         };
 
@@ -249,7 +257,8 @@ public sealed class DiscordLink : IPostInjectInit
         });
     }
 
-    // CrystallEdge: Proxy method for adding emoji reactions to messages
+    // CrystallEdge
+
     /// <summary>
     /// Adds an emoji reaction to a Discord message.
     /// </summary>
@@ -265,6 +274,24 @@ public sealed class DiscordLink : IPostInjectInit
         catch (Exception e)
         {
             _sawmill.Error($"Failed to add reaction to Discord message {messageId}: {e}");
+        }
+    }
+
+    /// <summary>
+    /// Updates the bot's Discord presence (status and activities).
+    /// </summary>
+    public async Task UpdatePresenceAsync(PresenceProperties presence)
+    {
+        if (_client == null)
+            return;
+
+        try
+        {
+            await _client.UpdatePresenceAsync(presence);
+        }
+        catch (Exception e)
+        {
+            _sawmill.Error($"Failed to update Discord presence: {e}");
         }
     }
     // CrystallEdge end

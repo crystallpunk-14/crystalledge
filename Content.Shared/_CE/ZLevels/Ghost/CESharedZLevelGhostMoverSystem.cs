@@ -10,7 +10,8 @@ namespace Content.Shared._CE.ZLevels.Ghost;
 
 public abstract class CESharedZLevelGhostMoverSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedZLevelsSystem _zLevel = default!;
+    [Dependency] private readonly CESharedZLevelsSystem _zLevel = null!;
+
     public override void Initialize()
     {
         base.Initialize();

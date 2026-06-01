@@ -44,7 +44,7 @@ public static class CEFilter
         if (zSystem.TryMapOffset(currentMap, 1, out var mapAbove))
             visibleMap.Add(mapAbove);
 
-        for (var i = 1; i <= zSystem.MaxZLevelsBelowRendering; i++)
+        for (var i = 1; i <= CESharedZLevelsSystem.MaxZLevelsBelowRendering; i++)
         {
             if (zSystem.TryMapOffset(currentMap, -i, out var mapBelow))
                 visibleMap.Add(mapBelow);
@@ -87,7 +87,7 @@ public static class CEFilter
         if (zSystem.TryMapOffset(currentMap, 1, out var mapAbove))
             visibleMap.Add(mapAbove);
 
-        for (var i = 1; i <= zSystem.MaxZLevelsBelowRendering; i++)
+        for (var i = 1; i <= CESharedZLevelsSystem.MaxZLevelsBelowRendering; i++)
         {
             if (zSystem.TryMapOffset(currentMap, -i, out var mapBelow))
                 visibleMap.Add(mapBelow);

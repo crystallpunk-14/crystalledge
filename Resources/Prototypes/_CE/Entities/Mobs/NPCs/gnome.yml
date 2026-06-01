@@ -50,8 +50,6 @@
         LowHealth: false
       effects:
         EnemyInMeleeRange: true
-      cost: 1
-      range: 1.5
     # Attack target
     - !type:CEGOAPMeleeAttackAction
       selector: !type:CEGOAPSelectorNearestEnemy
