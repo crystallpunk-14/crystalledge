@@ -74,9 +74,7 @@ public sealed class CECrossZPathfindingTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(pathTask!.IsCompletedSuccessfully, Is.True, "Path request should have resolved.");
-#pragma warning disable RA0004 // Task is guaranteed complete — we waited 60 ticks after kicking it.
             var result = pathTask.Result;
-#pragma warning restore RA0004
             Assert.That(result.Result, Is.EqualTo(PathResult.Path),
                 "A* should find a path spanning both maps via the portal.");
             var graphUids = result.Path.Select(p => p.GraphUid).Distinct().ToList();
@@ -158,9 +156,7 @@ public sealed class CECrossZPathfindingTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(pathTask!.IsCompletedSuccessfully, Is.True);
-#pragma warning disable RA0004 // Task is guaranteed complete — we waited 60 ticks after kicking it.
             var result = pathTask.Result;
-#pragma warning restore RA0004
             Assert.That(result.Result, Is.EqualTo(PathResult.Path),
                 "Ramp portal should let A* path from the lower level to the upper level.");
             var graphUids = result.Path.Select(p => p.GraphUid).Distinct().ToList();
