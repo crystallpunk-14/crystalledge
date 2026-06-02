@@ -19,6 +19,7 @@ public sealed class CEZPortalSystem : EntitySystem
     [Dependency] private readonly PathfindingSystem _pathfinding = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly CEZLevelsSystem _zlevels = default!;
 
     [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private readonly EntityQuery<MapGridComponent> _gridQuery = default!;
@@ -32,52 +33,48 @@ public sealed class CEZPortalSystem : EntitySystem
         SubscribeLocalEvent<CEZLevelHighGroundComponent, MapInitEvent>(OnRampInit);
         SubscribeLocalEvent<CEZLevelHighGroundComponent, ComponentShutdown>(OnRampShutdown);
         SubscribeLocalEvent<CEZLevelHighGroundComponent, AnchorStateChangedEvent>(OnRampAnchorChanged);
-        // Use MapComponent (not CEZLevelMapComponent) to avoid conflicting with CEZLevelMappingSystem.
-        SubscribeLocalEvent<MapComponent, CEMapAddedIntoZNetworkEvent>(OnMapAddedToNetwork);
+
+        SubscribeLocalEvent<CEZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
+    }
+
+    private void OnNetworkUpdated(CEZLevelNetworkUpdatedEvent ev)
+    {
+        var query = EntityQueryEnumerator<CEZLevelHighGroundComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var ramp, out var xform))
+        {
+            if (xform.MapUid is null)
+                continue;
+            if (!_zlevels.TryGetZNetwork(xform.MapUid.Value, out var z))
+                continue;
+            if (z != ev.NetworkUid)
+                continue;
+
+            AddRefreshPortal((uid, ramp));
+        }
     }
 
     private void OnRampInit(Entity<CEZLevelHighGroundComponent> ent, ref MapInitEvent args)
     {
-        TryCreateRampPortal(ent);
+        AddRefreshPortal(ent);
     }
 
     private void OnRampShutdown(Entity<CEZLevelHighGroundComponent> ent, ref ComponentShutdown args)
     {
-        RemoveRampPortal(ent);
+        RemovePortal(ent);
     }
 
     private void OnRampAnchorChanged(Entity<CEZLevelHighGroundComponent> ent, ref AnchorStateChangedEvent args)
     {
         if (args.Anchored)
-            TryCreateRampPortal(ent);
+            AddRefreshPortal(ent);
         else
-            RemoveRampPortal(ent);
+            RemovePortal(ent);
     }
 
-    // A ramp may be anchored before the map above joins the network; retry when the network grows.
-    private void OnMapAddedToNetwork(Entity<MapComponent> ent, ref CEMapAddedIntoZNetworkEvent args)
+    private void AddRefreshPortal(Entity<CEZLevelHighGroundComponent> ent)
     {
-        var query = EntityQueryEnumerator<CEZLevelHighGroundComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var ramp, out var xform))
-        {
-            if (xform.MapUid == ent.Owner)
-                TryCreateRampPortal((uid, ramp));
-        }
-    }
-
-    /// <summary>
-    /// True if this high ground is a ramp that can be climbed between floors: its curve dips low
-    /// enough to step onto from the current floor and rises to (or past) the level boundary.
-    /// Excludes flat ledges such as the default [1.05, 1.05] wall-top.
-    /// </summary>
-    private static bool IsClimbableRamp(CEZLevelHighGroundComponent comp)
-    {
-        return comp.HeightCurve.Count >= 2 && comp.HeightCurve.Min() <= 0.9f && comp.HeightCurve.Max() >= 1f;
-    }
-
-    private void TryCreateRampPortal(Entity<CEZLevelHighGroundComponent> ent)
-    {
-        if (!IsClimbableRamp(ent.Comp))
+        //Is it climbable?
+        if (!(ent.Comp.HeightCurve.Count >= 2 && ent.Comp.HeightCurve.Min() <= 0.9f && ent.Comp.HeightCurve.Max() >= 1f))
             return;
 
         if (!_xformQuery.TryGetComponent(ent, out var xform) || !xform.Anchored)
@@ -97,8 +94,12 @@ public sealed class CEZPortalSystem : EntitySystem
 
         // Don't create twice.
         var portalComp = EnsureComp<CEZPortalComponent>(gridUid.Value);
-        if (portalComp.Ramps.ContainsKey(ent.Owner))
-            return;
+        if (portalComp.Ramps.TryGetValue(ent.Owner, out var ramp))
+        {
+            //Clear old data
+            _pathfinding.RemovePortal(ramp.Handle);
+            portalComp.Ramps.Remove(ent.Owner);
+        }
 
         var rampWorld = _transform.GetWorldPosition(xform);
         var rampTile = _map.WorldToTile(gridUid.Value, grid, rampWorld);
@@ -123,7 +124,7 @@ public sealed class CEZPortalSystem : EntitySystem
         };
     }
 
-    private void RemoveRampPortal(Entity<CEZLevelHighGroundComponent> ent)
+    private void RemovePortal(Entity<CEZLevelHighGroundComponent> ent)
     {
         if (!_xformQuery.TryGetComponent(ent, out var xform))
             return;
