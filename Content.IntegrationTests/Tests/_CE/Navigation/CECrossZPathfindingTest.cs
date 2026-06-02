@@ -63,7 +63,7 @@ public sealed class CECrossZPathfindingTest : GameTest
 
         // Kick the async path request, then tick so PathfindingSystem.Update resolves it.
         // Do NOT block on the Task inside WaitPost — the resolving tick can't run while WaitPost blocks.
-        Task<PathResultEvent>? pathTask = null;
+        Task<PathResultEvent> pathTask = null!;
         await Server.WaitPost(() =>
         {
             pathTask = pathfinding.GetPath(lowerStart, upperEnd, 0.5f, 0, 0, CancellationToken.None);
@@ -73,8 +73,8 @@ public sealed class CECrossZPathfindingTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            Assert.That(pathTask!.IsCompletedSuccessfully, Is.True, "Path request should have resolved.");
-            var result = pathTask.Result;
+            Assert.That(pathTask.IsCompletedSuccessfully, Is.True, "Path request should have resolved.");
+            var result = pathTask.GetAwaiter().GetResult();
             Assert.That(result.Result, Is.EqualTo(PathResult.Path),
                 "A* should find a path spanning both maps via the portal.");
             var graphUids = result.Path.Select(p => p.GraphUid).Distinct().ToList();
@@ -146,7 +146,7 @@ public sealed class CECrossZPathfindingTest : GameTest
         var start = new EntityCoordinates(lowerMap, new Vector2(4.5f, 0.5f));
         var end = new EntityCoordinates(upperMap, new Vector2(0.5f, 0.5f));
 
-        Task<PathResultEvent>? pathTask = null;
+        Task<PathResultEvent> pathTask = null!;
         await Server.WaitPost(() =>
         {
             pathTask = pathfinding.GetPath(start, end, 0.5f, 0, 0, CancellationToken.None);
@@ -155,8 +155,8 @@ public sealed class CECrossZPathfindingTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            Assert.That(pathTask!.IsCompletedSuccessfully, Is.True);
-            var result = pathTask.Result;
+            Assert.That(pathTask.IsCompletedSuccessfully, Is.True);
+            var result = pathTask.GetAwaiter().GetResult();
             Assert.That(result.Result, Is.EqualTo(PathResult.Path),
                 "Ramp portal should let A* path from the lower level to the upper level.");
             var graphUids = result.Path.Select(p => p.GraphUid).Distinct().ToList();
