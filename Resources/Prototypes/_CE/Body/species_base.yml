@@ -59,6 +59,7 @@
         type: CEIdentityRecognitionBoundUserInterface
   - type: Stripping
   - type: Puller
+  - type: Pullable
   - type: Speech
     speechSounds: Alto
   - type: CEBarkSpeech

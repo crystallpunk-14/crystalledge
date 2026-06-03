@@ -60,8 +60,8 @@ public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem
         var baseDirection = Vector2.Zero;
         if (TryResolveTargetCoordinates(args.Args, out var targetPoint))
         {
-            baseDirection = targetPoint.ToMapPos(EntityManager, _transform) -
-                            spawnCoords.ToMapPos(EntityManager, _transform);
+            baseDirection = _transform.ToMapCoordinates(targetPoint).Position -
+                            _transform.ToMapCoordinates(spawnCoords).Position;
         }
 
         // Fall back to angle when no target or target is the user (zero direction).

@@ -46,6 +46,7 @@
     - !type:AddZVelocity
       effectTarget: User
       speed: 5.5
+      requiresGround: true
     - !type:SpawnEntity
       effectTarget: User
       spawns:
