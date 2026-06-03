@@ -8,7 +8,7 @@
   id: CEActionJump
   parent: CEActionSpellBase
   name: Jump
-  description: You perform a powerful leap that can raise you by one level. Watch out for fall damage.
+  description: You perform a powerful leap that can raise you by one level.
   components:
   - type: CEActionStaminaCost
     cost: 5
@@ -50,3 +50,15 @@
       effectTarget: User
       spawns:
       - CEDustTileEffect
+    - !type:ApplyStatusEffect
+      effectTarget: User
+      statusEffect: CEStatusEffectJumpTempFallDefence
+      duration: 1.2
+      
+- type: entity
+  id: CEStatusEffectJumpTempFallDefence
+  components:
+  - type: StatusEffect
+  - type: CEFallingImmunityStatusEffect
+    stunMultiplier: 0
+    damageMultiplier: 0
