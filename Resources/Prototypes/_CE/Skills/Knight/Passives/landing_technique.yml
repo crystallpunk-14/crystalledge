@@ -1,0 +1,26 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: LandingTechnique
+  icon:
+    sprite: _CE/Skills/todo.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectLandingTechnique
+
+- type: entity
+  id: CEStatusEffectLandingTechnique
+  name: Landing technique
+  description: When you fall from a height, you don't get stunned and only take 25% the damage.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CELandingTechnique
+  - type: CEFallingImmunityStatusEffect
+    stunMultiplier: 0
+    damageMultiplier: 0.25
+
+- type: alert
+  id: CELandingTechnique
+  icons:
+  - sprite: _CE/Skills/todo.rsi
+    state: icon

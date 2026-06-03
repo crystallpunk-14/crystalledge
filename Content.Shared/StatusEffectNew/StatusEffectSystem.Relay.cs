@@ -9,6 +9,7 @@ using Content.Shared._CE.Soul;
 using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.TileEffects.Core;
+using Content.Shared._CE.ZLevels.Damage;
 using Content.Shared.Actions.Events;
 using Content.Shared.Body.Events;
 using Content.Shared.Damage.Events;
@@ -70,9 +71,11 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, StandAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, IsEquippingAttemptEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, IsUnequippingAttemptEvent>(RelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEZFallingDamageCalculateEvent>(RelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CESoulReceivedEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptApplyTileEffectEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ActionAttemptEvent>(RefRelayStatusEffectEvent);
+
         //CrystallEdge zone end
 
         SubscribeLocalEvent<StatusEffectContainerComponent, LocalPlayerAttachedEvent>(RelayStatusEffectEvent);
