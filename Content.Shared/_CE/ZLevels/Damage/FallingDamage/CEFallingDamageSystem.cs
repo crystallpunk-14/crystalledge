@@ -4,6 +4,7 @@
  */
 
 using Content.Shared._CE.Health;
+using Content.Shared._CE.TileEffects.Core;
 
 namespace Content.Shared._CE.ZLevels.Damage.FallingDamage;
 
@@ -19,6 +20,10 @@ public sealed class CEFallingDamageSystem : EntitySystem
 
     private void OnFallOnMe(Entity<CEFallingDamageComponent> ent, ref CEZFellOnMeEvent args)
     {
-        _damageable.TakeDamage(args.Fallen, ent.Comp.Damage * args.Speed);
+        EntityUid? source = null;
+        if (TryComp<CETileEffectComponent>(ent, out var tileEffect))
+            source = tileEffect.Source;
+
+        _damageable.TakeDamage(args.Fallen, ent.Comp.Damage * args.Speed, source: source);
     }
 }

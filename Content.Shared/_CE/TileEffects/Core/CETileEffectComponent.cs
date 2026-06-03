@@ -40,7 +40,7 @@ public sealed partial class CETileEffectComponent : Component
     /// Who created this tile effect?
     /// </summary>
     [DataField]
-    public EntityUid? Applier;
+    public EntityUid? Source;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer))]
     public TimeSpan NextUpdate = TimeSpan.Zero;

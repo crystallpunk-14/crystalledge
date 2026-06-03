@@ -19,8 +19,8 @@ public sealed class CEEntityEffectOnCollideSystem : EntitySystem
 
         EntityUid source = ent;
 
-        if (TryComp<CETileEffectComponent>(ent, out var tileEffect) && tileEffect.Applier != null)
-            source = tileEffect.Applier.Value;
+        if (TryComp<CETileEffectComponent>(ent, out var tileEffect) && tileEffect.Source != null)
+            source = tileEffect.Source.Value;
 
 
         foreach (var effect in ent.Comp.Effects)

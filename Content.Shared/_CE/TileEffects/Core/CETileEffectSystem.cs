@@ -339,7 +339,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
             {
                 SetStacks((combined, combinedTileComp), selfStacks + amount, max);
                 if (source is not null)
-                    combinedTileComp.Applier = source;
+                    combinedTileComp.Source = source;
             }
 
             return true;
@@ -357,7 +357,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
 
             TryAddStack((ent, existing), amount, max);
             if (source is not null)
-                existing.Applier = source;
+                existing.Source = source;
 
             return true;
         }
@@ -368,7 +368,7 @@ public sealed partial class CETileEffectSystem : EntitySystem
             return false;
 
         if (source is not null)
-            comp.Applier = source;
+            comp.Source = source;
 
         // Use SetStacks so the initial count equals `amount`, not the prototype default + amount.
         SetStacks((spawned, comp), amount, max);

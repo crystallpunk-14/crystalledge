@@ -38,7 +38,7 @@ public sealed partial class CETileEffectContactEffectsSystem : EntitySystem
             if (stacks <= 0)
                 continue;
 
-            _stack.TryAddStack(other, effectId, out _, stacks, source: tileComp.Applier, max: stacks);
+            _stack.TryAddStack(other, effectId, out _, stacks, source: tileComp.Source, max: stacks);
         }
     }
 }

@@ -1,36 +1,37 @@
 - type: entity
   id: CETileEffectIceSpikes
-  parent: CETileEffectBase
   name: ice spikes
   description: TODO
+  parent: CETileEffectBase
   components:
   - type: Sprite
-    snapCardinals: true
-    noRot: false
     drawdepth: Puddles
     sprite: _CE/Structures/Nature/ice_spikes.rsi
     layers:
     - state: base1
-      map: [ "random" ]
+      map:
+      - random
+    snapCardinals: true
+    noRot: false
   - type: CETileEffect
     maxStacks: 1
+    stackDelta: 0
     minDecayInterval: 5
     maxDecayInterval: 5
-    stackDelta: 0
   - type: CEEntityEffectOnCollide
     effects:
-      - !type:Damage
-        attackType: TileEffect
-        damage:
-          types:
-            Cold: 6
+    - !type:Damage
+      attackType: TileEffect
+      damage:
+        types:
+          Cold: 6
   - type: Appearance
   - type: RandomSprite
     available:
-      - random:
-          base1: ""
-          base2: ""
-          base3: ""
+    - random:
+        base1: ""
+        base2: ""
+        base3: ""
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.6
     sprintSpeedModifier: 0.6
@@ -50,9 +51,8 @@
     fixtures:
       fix1:
         hard: false
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.3,-0.3,0.3,0.3"
+        shape: !type:PhysShapeAabb
+          bounds: -0.3,-0.3,0.3,0.3
         density: 1000
         mask:
         - ItemMask
@@ -60,13 +60,16 @@
         - SlipLayer
       fix2:
         hard: true
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.3,-0.3,0.3,0.3"
+        shape: !type:PhysShapeAabb
+          bounds: -0.3,-0.3,0.3,0.3
         density: 0
         mask: []
         layer:
         - Opaque
+  - type: CEFallingDamage
+    damage:
+      types:
+        Cold: 5
 
 # Spawners
 
