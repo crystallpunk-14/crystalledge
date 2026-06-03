@@ -1,6 +1,7 @@
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
+using Content.Shared._CE.GOAP.Sensors;
 using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Sensors;
@@ -10,19 +11,19 @@ namespace Content.Server._CE.GOAP.Sensors;
 /// Event-driven via CEDamageChangedEvent.
 /// </summary>
 [RegisterComponent]
-public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component
+public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component, ICEGOAPSensorBase<CEGOAPCheckHealthLevelSensor>
 {
-    [DataField(required: true)]
-    public string ConditionKey = string.Empty;
-
-    [DataField(required: true)]
-    public CEGOAPTargetSelector Selector = default!;
-
+    [DataField]
+    public List<CEGOAPCheckHealthLevelSensor> Sensors { get; set; }
+}
+public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensor
+{
     /// <summary>
     /// Health fraction (0..1) below which the condition is set to true.
     /// </summary>
     [DataField]
     public float Threshold = 0.5f;
+
 }
 
 public sealed class CEGOAPCheckHealthLevelSensorSystem : EntitySystem
@@ -52,14 +53,18 @@ public sealed class CEGOAPCheckHealthLevelSensorSystem : EntitySystem
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        var result = ent.Comp.Selector.Resolve(ent, EntityManager);
-        if (result.Entity is not { } target)
+        foreach (var sensor in ent.Comp.Sensors)
         {
-            goap.WorldState[ent.Comp.ConditionKey] = false;
-            return;
-        }
 
-        var fraction = _damageable.GetHealthInfo(target).Ratio;
-        goap.WorldState[ent.Comp.ConditionKey] = fraction < ent.Comp.Threshold;
+            var result = sensor.Selector.Resolve(ent, EntityManager);
+            if (result.Entity is not { } target)
+            {
+                goap.WorldState[sensor.ConditionKey] = false;
+                return;
+            }
+
+            var fraction = _damageable.GetHealthInfo(target).Ratio;
+            goap.WorldState[sensor.ConditionKey] = fraction < sensor.Threshold;
+        }
     }
 }
