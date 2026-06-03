@@ -137,9 +137,10 @@
     conditionKey: LowMana
     selector: !type:CEGOAPSelectorSelf
   - type: CEGOAPCheckHealthLevelSensor
-    conditionKey: LowHealth
-    threshold: 0.8
-    selector: !type:CEGOAPSelectorSelf
+    sensors:
+    - conditionKey: LowHealth
+      threshold: 0.8
+      selector: !type:CEGOAPSelectorSelf
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 4.5

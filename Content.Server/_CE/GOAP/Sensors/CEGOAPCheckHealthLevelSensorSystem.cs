@@ -16,6 +16,7 @@ public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component, I
     [DataField]
     public List<CEGOAPCheckHealthLevelSensor> Sensors { get; set; }
 }
+[DataDefinition]
 public sealed partial class CEGOAPCheckHealthLevelSensor : CEGOAPSensor
 {
     /// <summary>

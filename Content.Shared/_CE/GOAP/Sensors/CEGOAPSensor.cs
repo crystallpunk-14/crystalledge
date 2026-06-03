@@ -7,6 +7,7 @@ public interface ICEGOAPSensorBase<T> where T: CEGOAPSensor
     List<T> Sensors { get; set; }
 }
 
+[DataDefinition]
 public abstract partial class CEGOAPSensor
 {
     [DataField(required: true)]

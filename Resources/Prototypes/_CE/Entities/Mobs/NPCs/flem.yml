@@ -1,13 +1,14 @@
 - type: entity
+  id: CEMobFlem
+  name: flem
+  description: TODO
+  categories:
+  - ForkFiltered
   parent:
   - BaseMob
   - CEMobDamageable
   - CEMobCombat
   - CEMobGOAPBase
-  id: CEMobFlem
-  name: flem
-  description: TODO
-  categories: [ ForkFiltered ]
   components:
   - type: CEGOAPAlarm
   - type: CEMagicEnergyContainer
@@ -50,10 +51,12 @@
       exploreRadius: 8
     # Move to enemy's last known position
   - type: CEGOAPCheckHealthLevelSensor
-    conditionKey: LowHealth
-    threshold: 0.5
-    selector: !type:CEGOAPSelectorSelf
+    sensors:
+    - conditionKey: LowHealth
+      threshold: 0.5
+      selector:
 
+        !type:CEGOAPSelectorSelf
   - type: NpcFactionMember
     factions:
     - SimpleHostile
@@ -61,20 +64,27 @@
     drawdepth: Mobs
     sprite: _CE/Mobs/flem.rsi
     layers:
-    - map: [ "livingState" ]
+    - map:
+      - livingState
       state: alive
   - type: GenericVisualizer
     visuals:
       enum.CEMobStateVisuals.State:
         livingState:
-          Alive: { state: alive }
-          Critical: { state: dead }
-          Dead: { state: dead }
+          Alive:
+            state: alive
+          Critical:
+            state: dead
+          Dead:
+            state: dead
   - type: MovementAlwaysTouching
   - type: MovementSpeedModifier
     baseSprintSpeed: 2.5
   - type: CEWeapon
-    spriteRotation: -90
+    animations:
+      Primary:
+      - anim: FlemAttack1
+      - anim: FlemAttack2
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
@@ -86,10 +96,7 @@
           damage:
             types:
               Physical: 10
-    animations:
-      Primary:
-      - anim: FlemAttack1
-      - anim: FlemAttack2
+    spriteRotation: -90
 
 - type: entityEffectAnimation
   id: FlemAttack1
