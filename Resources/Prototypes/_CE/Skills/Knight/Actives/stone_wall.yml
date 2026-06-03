@@ -8,7 +8,7 @@
   id: CEActionStoneWall
   parent: CEActionSpellBase
   name: Stone Wall
-  description: You raise a [color=#aaaaaa]stone barrier[/color] beneath your cursor.
+  description: You raise a [color=#aaaaaa]stone barrier[/color], flinging everyone upward at the point of summoning.
   components:
   - type: CEVisualizeRadiusTargetAction
   - type: CEVisualizeTileAction
@@ -40,3 +40,9 @@
     - !type:ShockWaveVFX
       effectTarget: Target
       width: 0.1
+    - !type:AreaEffect
+      affectCaster: true
+      range: 1
+      effects:
+      - !type:AddZVelocity
+        speed: 5
