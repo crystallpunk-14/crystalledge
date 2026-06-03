@@ -1,8 +1,16 @@
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Actions;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.StatusEffects.ToggleableStatusEffectAction;
+namespace Content.Shared._CE.StatusEffects;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class CEToggleableActionComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public bool Active;
+}
 
 public sealed partial class CEToggleableStatusEffectActionSystem: EntitySystem
 {

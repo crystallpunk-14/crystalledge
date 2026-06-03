@@ -1,9 +1,22 @@
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Regeneration;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.StatusEffectNew.Components;
+using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.StatusEffects.Regeneration;
+namespace Content.Shared._CE.StatusEffects;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CERegenerationStatusEffectComponent : Component
+{
+    [DataField]
+    public int Amount = 1;
+
+    /// <summary>
+    /// Should healing be scaled based on the number of stacks of this status effect?
+    /// </summary>
+    [DataField]
+    public bool ScaleWithStacks = true;
+}
 
 public sealed class CERegenerationStatusEffectSystem : EntitySystem
 {

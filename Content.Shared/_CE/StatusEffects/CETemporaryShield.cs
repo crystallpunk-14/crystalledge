@@ -1,10 +1,42 @@
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Prototypes;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.TempShield;
+namespace Content.Shared._CE.StatusEffects;
+
+/// <summary>
+/// Status effect component for temporary shields.
+/// Each stack absorbs a configurable amount of damage from specific damage types.
+/// Stacks passively decay over time via the status effect stack system.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class CETempShieldStatusEffectComponent : Component
+{
+    /// <summary>
+    /// How much damage each stack absorbs before being consumed.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int AbsorbPerStack = 1;
+
+    /// <summary>
+    /// Which damage types this shield absorbs.
+    /// Ignored when <see cref="All"/> is true.
+    /// </summary>
+    [DataField]
+    public HashSet<ProtoId<CEDamageTypePrototype>> AbsorbedTypes = new() { "Physical" };
+
+    /// <summary>
+    /// If true, absorbs a stack for any damage type, ignoring <see cref="AbsorbedTypes"/>.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool All = false;
+}
+
 
 public sealed class CETempShieldSystem : EntitySystem
 {

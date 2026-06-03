@@ -1,10 +1,20 @@
-using Content.Shared._CE.DamageStatusEffect.Components;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
+using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.DamageStatusEffect;
+namespace Content.Shared._CE.StatusEffects;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CESpeedModifierStatusEffectComponent : Component
+{
+    /// <summary>
+    ///
+    /// </summary>
+    [DataField]
+    public float Speed = 1;
+}
 
 public sealed partial class CESpeedModifierStatusEffectSystem : EntitySystem
 {

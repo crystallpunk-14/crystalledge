@@ -2,8 +2,16 @@ using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
+using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.StatusEffects.StaminaRegenBuff;
+namespace Content.Shared._CE.StatusEffects;
+
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CEStaminaRegenBuffComponent : Component
+{
+    [DataField]
+    public float FlatRegenBonus = 1f;
+}
 
 public sealed partial class CEStaminaRegenBuffSystem : EntitySystem
 {

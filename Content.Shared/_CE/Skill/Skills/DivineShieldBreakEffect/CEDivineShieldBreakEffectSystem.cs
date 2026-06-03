@@ -1,5 +1,5 @@
-using Content.Shared._CE.DivineShield;
 using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.StatusEffects;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._CE.Skill.Skills.DivineShieldBreakEffect;

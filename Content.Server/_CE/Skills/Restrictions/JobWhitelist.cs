@@ -4,9 +4,21 @@ using Content.Shared._CE.StatusEffects;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Content.Shared.StatusEffectNew.Components;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Skills.Restrictions;
+
+/// <summary>
+/// When placed on a status effect entity, grants the affected character
+/// access to skills of additional job roles during blessing selection.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CEAdditionalRoleSkillsStatusEffectComponent : Component
+{
+    [DataField(required: true)]
+    public HashSet<ProtoId<JobPrototype>> Roles = new();
+}
 
 public sealed partial class JobWhitelist : CESkillRestriction
 {

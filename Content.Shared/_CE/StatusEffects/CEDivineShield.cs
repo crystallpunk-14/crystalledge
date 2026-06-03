@@ -2,10 +2,16 @@ using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
+using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.DivineShield;
+namespace Content.Shared._CE.StatusEffects;
 
-public sealed class CESharedDivineShieldSystem : EntitySystem
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CEDivineShieldStatusEffectComponent : Component
+{
+}
+
+public sealed class CEDivineShieldSystem : EntitySystem
 {
     [Dependency] private readonly CEStatusEffectStackSystem _status = default!;
 

@@ -1,0 +1,52 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: Jump
+  effect: !type:AddAction
+    action: CEActionJump
+
+- type: entity
+  id: CEActionJump
+  parent: CEActionSpellBase
+  name: Jump
+  description: You perform a powerful leap that can raise you by one level. Watch out for fall damage.
+  components:
+  - type: CEActionStaminaCost
+    cost: 5
+  - type: Action
+    useDelay: 3
+    icon:
+      sprite: _CE/Skills/Neutral/jump.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationJump
+
+- type: entityEffectAnimation
+  id: AnimationJump
+  movementSpeed: 1
+  duration: 1
+  events:
+    0:
+    #- !type:PlaySound
+    #  sound:
+    #    path: /Audio/Effects/egloves.ogg
+    #    params:
+    #      pitch: 0.5
+    - !type:UserAnimation
+      scaleAnimation:
+      - time: 0
+        scale: 1, 1
+      - time: 0.2
+        scale: 1.2, 0.8
+      - time: 0.3
+        scale: 1.2, 0.8
+      - time: 0.4
+        scale: 1, 1
+    0.3:
+    - !type:AddZVelocity
+      effectTarget: User
+      speed: 5.5
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEDustTileEffect

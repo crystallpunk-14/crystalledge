@@ -1,16 +1,25 @@
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.StatusEffectNew;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CE.StatusEffects.Immunity;
+namespace Content.Shared._CE.StatusEffects;
 
 /// <summary>
-/// Handles <see cref="CEStatusEffectImmunityComponent"/>: cancels incoming status effects
-/// by subscribing to target-side attempt events relayed via the StatusEffectNew relay system.
-///
-/// Target-side events (<see cref="CEAttemptReceiveStatusEffectEvent"/>, <see cref="CEAttemptReceiveStatusEffectStackEvent"/>)
-/// are raised on the entity receiving the effect — this is the correct place for target immunity.
+/// When present on a status effect entity, blocks application of the listed status effects
+/// to the entity that owns this status effect.
 /// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CEStatusEffectImmunityComponent : Component
+{
+    /// <summary>
+    /// The list of status effect prototype IDs that are blocked.
+    /// </summary>
+    [DataField(required: true)]
+    public List<EntProtoId> BlockedEffects = new();
+}
+
 public sealed class CEStatusEffectImmunitySystem : EntitySystem
 {
     public override void Initialize()

@@ -1,0 +1,42 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: Heavyweight
+  icon:
+    sprite: _CE/Skills/Knight/heavyweight.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectHeavyweight
+
+- type: entity
+  id: CEStatusEffectHeavyweight
+  name: Heavyweight
+  description: When you fall from a height, you create a powerful shockwave that knocks everyone nearby back and deals 15 damage.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEHeavyweight
+  - type: CEEffectOnLandingStatusEffect
+    effects:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.1
+    - !type:AreaEffect
+      range: 2
+      affectCaster: false
+      effects:
+      - !type:Damage
+        effectTarget: Target
+        attackType: Melee
+        damage:
+          types:
+            Physical: 15
+      - !type:ThrowFromUser
+        effectTarget: Target
+        distance: 1
+        throwPower: 10
+
+- type: alert
+  id: CEHeavyweight
+  icons:
+  - sprite: _CE/Skills/Knight/heavyweight.rsi
+    state: icon
