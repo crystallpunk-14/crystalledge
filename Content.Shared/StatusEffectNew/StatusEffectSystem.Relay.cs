@@ -29,6 +29,7 @@ using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
+using Robust.Shared.Physics.Events;
 using Robust.Shared.Player;
 
 namespace Content.Shared.StatusEffectNew;
@@ -79,6 +80,7 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptApplyTileEffectEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ActionAttemptEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEZLevelHitEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, StartCollideEvent>(RefRelayStatusEffectEvent);
 
         //CrystallEdge zone end
 

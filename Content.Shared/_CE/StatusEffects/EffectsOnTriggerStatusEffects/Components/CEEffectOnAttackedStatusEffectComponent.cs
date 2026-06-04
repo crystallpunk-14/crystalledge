@@ -11,4 +11,7 @@ public sealed partial class CEEffectOnAttackedStatusEffectComponent : Component
 
     [DataField]
     public int StackCost = 0;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

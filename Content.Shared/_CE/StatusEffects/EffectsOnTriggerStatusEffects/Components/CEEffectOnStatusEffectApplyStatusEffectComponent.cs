@@ -25,4 +25,7 @@ public sealed partial class CEEffectOnStatusEffectApplyStatusEffectComponent : C
 
     [DataField]
     public int StackCost = 0;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

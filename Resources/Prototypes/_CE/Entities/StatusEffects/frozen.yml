@@ -59,6 +59,7 @@
     actions:
     - CEActionFrozenBreak
   - type: CEEffectOnLandingStatusEffect
+    scaleWithStacks: false
     effects:
     - !type:ShockWaveVFX
       effectTarget: User

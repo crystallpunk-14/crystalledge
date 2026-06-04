@@ -11,6 +11,8 @@ using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Whitelist;
+using Robust.Shared.Physics.Events;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.StatusEffects.EffectsOnTriggerStatusEffects;
 
@@ -18,6 +20,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
 {
     [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
     [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
+    [Dependency] private readonly IGameTiming _gameTiming = default!;
 
     [Dependency] private EntityQuery<CEStatusEffectStackComponent> _stackQuery = default!;
     [Dependency] private EntityQuery<StatusEffectComponent> _statusQuery = default!;
@@ -36,6 +39,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         SubscribeLocalEvent<CEEffectOnStatusEffectApplyStatusEffectComponent, StatusEffectRelayedEvent<CEAfterApplyStatusEffectEvent>>(OnStatusEffectApply);
         SubscribeLocalEvent<CEEffectOnStatusEffectRemoveStatusEffectComponent, StatusEffectRelayedEvent<CEAfterRemoveStatusEffectEvent>>(OnStatusEffectRemove);
         SubscribeLocalEvent<CEEffectOnLandingStatusEffectComponent, StatusEffectRelayedEvent<CEZLevelHitEvent>>(OnLanding);
+        SubscribeLocalEvent<CEEffectOnHighSpeedImpactStatusEffectComponent, StatusEffectRelayedEvent<StartCollideEvent>>(OnHighSpeedImpact);
     }
 
     private void OnAfterAttack(Entity<CEEffectOnAttackStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterAttackEvent> args)
@@ -47,7 +51,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         foreach (var target in args.Args.Targets)
@@ -82,7 +86,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -111,7 +115,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -143,7 +147,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -178,7 +182,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -210,7 +214,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -245,7 +249,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -277,7 +281,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -306,7 +310,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -338,7 +342,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             return;
 
         var stack = 1;
-        if (_stackQuery.TryComp(ent, out var stackComp))
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
             stack = stackComp.Stacks;
 
         var effectArgs = new CEEntityEffectArgs(
@@ -349,6 +353,48 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             1f,
             args.Args.Target,
             Transform(args.Args.Target).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnHighSpeedImpact(Entity<CEEffectOnHighSpeedImpactStatusEffectComponent> ent, ref StatusEffectRelayedEvent<StartCollideEvent> args)
+    {
+        if (!args.Args.OurFixture.Hard || !args.Args.OtherFixture.Hard)
+            return;
+
+        var speed = args.Args.OurBody.LinearVelocity.Length();
+        if (speed < ent.Comp.MinimumSpeed)
+            return;
+
+        if (ent.Comp.LastHit != null
+            && (_gameTiming.CurTime - ent.Comp.LastHit.Value).TotalSeconds < ent.Comp.DamageCooldown)
+            return;
+
+        if (!_statusQuery.TryComp(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        ent.Comp.LastHit = _gameTiming.CurTime;
+
+        var stack = 1;
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            null,
+            Angle.Zero,
+            1f,
+            args.Args.OtherEntity,
+            Transform(status.AppliedTo.Value).Coordinates);
 
         foreach (var effect in ent.Comp.Effects)
         {

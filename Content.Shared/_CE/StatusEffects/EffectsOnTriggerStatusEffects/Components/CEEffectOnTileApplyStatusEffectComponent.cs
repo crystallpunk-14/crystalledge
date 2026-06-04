@@ -23,4 +23,7 @@ public sealed partial class CEEffectOnTileApplyStatusEffectComponent : Component
 
     [DataField]
     public int StackCost = 0;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

@@ -21,4 +21,7 @@ public sealed partial class CEEffectOnAttackStatusEffectComponent : Component
 
     [DataField]
     public EntityWhitelist? Blacklist;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

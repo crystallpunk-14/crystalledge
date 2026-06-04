@@ -50,6 +50,7 @@
     actions:
     - CEActionPetrificationBreak
   - type: CEEffectOnLandingStatusEffect
+    scaleWithStacks: false
     effects:
     - !type:ShockWaveVFX
       effectTarget: User

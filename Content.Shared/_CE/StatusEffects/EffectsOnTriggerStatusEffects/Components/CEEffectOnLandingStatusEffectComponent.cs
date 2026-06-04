@@ -15,4 +15,7 @@ public sealed partial class CEEffectOnLandingStatusEffectComponent : Component
 
     [DataField]
     public int StackCost = 0;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

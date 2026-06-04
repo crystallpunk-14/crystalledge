@@ -14,4 +14,7 @@ public sealed partial class CEEffectOnDamagedStatusEffectComponent : Component
 
     [DataField]
     public int StackCost;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

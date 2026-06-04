@@ -24,4 +24,7 @@ public sealed partial class CEEffectOnDamageStatusEffectComponent : Component
     /// </summary>
     [DataField]
     public HashSet<CEAttackType> AttackTypes = new();
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }

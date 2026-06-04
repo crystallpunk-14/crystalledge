@@ -14,4 +14,7 @@ public sealed partial class CEEffectOnHealStatusEffectComponent : Component
 
     [DataField]
     public int StackCost = 0;
+
+    [DataField]
+    public bool ScaleWithStacks = true;
 }
