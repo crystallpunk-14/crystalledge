@@ -1,0 +1,41 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: StoneMoment
+  effect: !type:AddAction
+    action: CEActionSpellStoneMoment
+
+- type: entity
+  id: CEActionSpellStoneMoment
+  parent: CEActionSpellBase
+  name: A Moment in Stone
+  description: You instantly turn yourself into a stone that blocks incoming damage.
+  components:
+  - type: CEActionManaCost
+    manaCost: 10
+  - type: CEActionStaminaCost
+    cost: 3
+  - type: Action
+    useDelay: 15
+    icon:
+      sprite: _CE/Skills/Knight/stone_skin.rsi #TODO
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: StoneMoment
+
+- type: entityEffectAnimation
+  id: StoneMoment
+  movementSpeed: 0.5
+  duration: 1
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/clang.ogg
+        params:
+          pitch: 0.7
+    0.6:
+    - !type:ApplyStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectPetrification
+      amount: 15

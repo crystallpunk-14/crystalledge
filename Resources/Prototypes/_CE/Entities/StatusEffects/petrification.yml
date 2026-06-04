@@ -1,0 +1,162 @@
+- type: entity
+  id: CEStatusEffectPetrification
+  name: Petrification
+  components:
+  - type: CENegativeStatusEffect
+  - type: StatusEffect
+    whitelist:
+      components:
+      - CEDamageable
+  - type: StatusEffectAlert
+    alert: CEPetrification
+  - type: RejuvenateRemovedStatusEffect
+  - type: CETempShieldStatusEffect
+    absorbPerStack: 4
+    all: true
+  - type: CEActionBlockerStatusEffect
+    blockActions: true
+    blockUse: true
+    blockAttack: true
+    blockMove: true
+    blockThrow: true
+    blockDrop: true
+    blockPickup: true
+    blockPull: true
+    blockStand: true
+    blockEquip: true
+    blockUnequip: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Structures/Nature/ice_rock.rsi
+    noRot: true
+    color: "#5e5438" #TODO
+    layers:
+    - state: big
+      map: [ "status" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.CEStatusEffectStackVisuals.Level:
+        status:
+          Low: { state: smol }
+          Medium: { state: med }
+          High: { state: big }
+  - type: Appearance
+  - type: CEStatusEffectStack
+    stackDelta: -1
+    baseDuration: 2
+    mediumAppearance: 5
+    highAppearance: 10
+  - type: CEActionsProvideStatusEffect
+    actions:
+    - CEActionPetrificationBreak
+  - type: CEEffectOnLandingStatusEffect
+    effects:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.1
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEDustTileEffect
+    - !type:AreaEffect
+      range: 2
+      affectCaster: false
+      effects:
+      - !type:Damage
+        effectTarget: Target
+        attackType: Melee
+        damage:
+          types:
+            Physical: 20
+      - !type:ThrowFromUser
+        effectTarget: Target
+        distance: 1
+        throwPower: 10
+      - !type:SpawnEntity
+        effectTarget: Target
+        spawns:
+        - CEDustTileEffect
+
+- type: alert
+  id: CEPetrification
+  alertViewEntity: CEPetrificationAlertSpriteView
+  name: ce-alert-petrification-name
+  description: ce-alert-petrification-desc
+  icons:
+  - sprite: _CE/Structures/Nature/ice_rock.rsi
+    state: med
+    color: "#5e5438" #TODO
+
+- type: entity
+  id: CEPetrificationAlertSpriteView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - sprite: _CE/Structures/Nature/ice_rock.rsi
+      state: med
+      color: "#5e5438" #TODO
+    - map: [ "1" ]
+      offset: 0.65, 0
+    - map: [ "10" ]
+      offset: 0.45, 0
+    - map: [ "100" ]
+      offset: 0.25, 0
+
+- type: entity
+  id: CEActionPetrificationBreak
+  parent: CEActionSpellBase
+  name: Break free
+  description: You break free from the stone trap.
+  components:
+  - type: CEActionStaminaCost
+    cost: 8
+  - type: Action
+    useDelay: 4
+    startDelay: true
+    checkCanInteract: false
+    icon:
+      sprite: _CE/Structures/Nature/ice_rock.rsi
+      state: break
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: PetrificationBreak
+
+- type: entityEffectAnimation
+  id: PetrificationBreak
+  movementSpeed: 0
+  duration: 0.5
+  events:
+    0:
+    - !type:UserAnimation
+      offsetAnimation:
+      - time: 0.0
+        offset: 0.1, 0
+      - time: 0.1
+        offset: -0.1, 0
+      - time: 0.2
+        offset: 0.1, 0
+      - time: 0.3
+        offset: -0.1, 0
+      - time: 0.4
+        offset: 0.1, 0
+    0.4:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.05
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/break_stone.ogg
+        params:
+          variation: 0.02
+    - !type:RemoveStatusEffectStack
+      effectTarget: User
+      statusEffect: CEStatusEffectPetrification
+      amount: 15
+    - !type:SpawnEntity
+      spawns:
+      - CEDustTileEffect
