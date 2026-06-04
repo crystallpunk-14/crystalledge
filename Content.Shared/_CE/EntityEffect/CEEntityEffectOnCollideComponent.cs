@@ -14,4 +14,11 @@ public sealed partial class CEEntityEffectOnCollideComponent : Component
 
     [DataField(required: true)]
     public List<CEEntityEffect> Effects = new();
+
+    /// <summary>
+    /// Whether to apply effects to airborne entities (BodyStatus.InAir).
+    /// Set to false for ground-level hazards like spikes or lava that can be jumped over.
+    /// </summary>
+    [DataField]
+    public bool AffectAirborne = false;
 }

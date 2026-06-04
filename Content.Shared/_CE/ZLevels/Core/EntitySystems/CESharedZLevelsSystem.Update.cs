@@ -5,6 +5,7 @@
 
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Throwing;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
@@ -65,23 +66,19 @@ public abstract partial class CESharedZLevelsSystem
         UpdateCalls++;
 
         var zPhysicsComponent = entity.Comp1;
-        var physicsComponent = entity.Comp2;
 
         var oldVelocity = zPhysicsComponent.Velocity;
         var oldHeight = zPhysicsComponent.LocalPosition;
 
-        if (physicsComponent.BodyStatus == BodyStatus.OnGround)
+        if (zPhysicsComponent.VelocityGravity)
+            zPhysicsComponent.Velocity -= ZGravityForce * zPhysicsComponent.GravityMultiplier * frameTime;
+
+        if (zPhysicsComponent.VelocityRaiseEvent)
         {
-            if (zPhysicsComponent.VelocityGravity)
-                zPhysicsComponent.Velocity -= ZGravityForce * zPhysicsComponent.GravityMultiplier * frameTime;
+            var velocityEvent = new CEGetZVelocityEvent((entity, zPhysicsComponent));
+            RaiseLocalEvent(entity, ref velocityEvent);
 
-            if (zPhysicsComponent.VelocityRaiseEvent)
-            {
-                var velocityEvent = new CEGetZVelocityEvent((entity, zPhysicsComponent));
-                RaiseLocalEvent(entity, ref velocityEvent);
-
-                zPhysicsComponent.Velocity += velocityEvent.VelocityDelta * frameTime;
-            }
+            zPhysicsComponent.Velocity += velocityEvent.VelocityDelta * frameTime;
         }
 
         zPhysicsComponent.LocalPosition += zPhysicsComponent.Velocity * frameTime;
@@ -161,6 +158,10 @@ public abstract partial class CESharedZLevelsSystem
 
         if (float.Abs(oldHeight - zPhysicsComponent.LocalPosition) > 0.001f)
             DirtyField(entity, zPhysicsComponent, nameof(CEZPhysicsComponent.LocalPosition));
+
+        var targetStatus = distanceToGround > AirborneHeightThreshold ? BodyStatus.InAir : BodyStatus.OnGround;
+        if (entity.Comp2.BodyStatus != targetStatus)
+            _physicsSystem.SetBodyStatus(entity, entity.Comp2, targetStatus);
 
         SleepUpdate((entity, entity.Comp1), frameTime);
     }

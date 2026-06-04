@@ -15,6 +15,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
@@ -25,6 +26,7 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = null!;
     [Dependency] private readonly IConfigurationManager _config = null!;
 
+    [Dependency] private readonly SharedPhysicsSystem _physicsSystem = null!;
     [Dependency] private readonly SharedTransformSystem _transform = null!;
     [Dependency] private readonly SharedAudioSystem _audio = null!;
     [Dependency] private readonly ActionBlockerSystem _blocker = null!;
