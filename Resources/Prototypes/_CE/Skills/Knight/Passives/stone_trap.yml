@@ -29,4 +29,4 @@
   id: CEStoneTrap
   icons:
   - sprite: _CE/Skills/todo.rsi
-    state: big
+    state: icon
