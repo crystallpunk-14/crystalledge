@@ -58,6 +58,26 @@
   - type: CEActionsProvideStatusEffect
     actions:
     - CEActionFrozenBreak
+  - type: CEEffectOnLandingStatusEffect
+    effects:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.1
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectFreeze
+      radius: 1
+      maxStacks: 5
+    - !type:AreaEffect
+      range: 2
+      affectCaster: false
+      effects:
+      - !type:Damage
+        effectTarget: Target
+        attackType: Melee
+        damage:
+          types:
+            Cold: 10
+            Physical: 10
 
 - type: alert
   id: CEFrozen
