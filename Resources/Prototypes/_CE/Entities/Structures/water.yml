@@ -33,7 +33,7 @@
         layer:
         - ConveyorMask
         hard: False
-  - type: FloorOccluder
+  - type: CEFloorOccluder
   - type: SpeedModifierContacts
     walkSpeedModifier: 0.5
     sprintSpeedModifier: 0.5

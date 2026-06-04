@@ -29,7 +29,7 @@
         - MobMask
         layer:
         - MobLayer
-  - type: FloorOcclusion
+  - type: CEFloorOcclusion
   - type: Identity
   - type: Climbing
   - type: Cuffable

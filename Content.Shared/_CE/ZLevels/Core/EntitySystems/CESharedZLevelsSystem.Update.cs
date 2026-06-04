@@ -163,7 +163,11 @@ public abstract partial class CESharedZLevelsSystem
         {
             var targetStatus = distanceToGround > AirborneHeightThreshold ? BodyStatus.InAir : BodyStatus.OnGround;
             if (entity.Comp2.BodyStatus != targetStatus)
+            {
                 _physicsSystem.SetBodyStatus(entity, entity.Comp2, targetStatus);
+                var statusEv = new CEZBodyStatusChangedEvent(targetStatus);
+                RaiseLocalEvent(entity, ref statusEv);
+            }
         }
 
         SleepUpdate((entity, entity.Comp1), frameTime);
@@ -187,3 +191,9 @@ public abstract partial class CESharedZLevelsSystem
         SleepBody((entity, entity));
     }
 }
+
+/// <summary>
+/// Raised directed on an entity when its BodyStatus changes due to Z-physics height sync.
+/// </summary>
+[ByRefEvent]
+public readonly record struct CEZBodyStatusChangedEvent(BodyStatus NewStatus);
