@@ -1,14 +1,14 @@
 - type: skill
   parent: BaseKnightSkill
-  id: Cruelty
+  id: PetrifyingStrike
   effect: !type:AddAction
-    action: CEActionSpellCruelty
+    action: CEActionSpellPetrifyingStrike
 
 - type: entity
-  id: CEActionSpellCruelty
+  id: CEActionSpellPetrifyingStrike
   parent: CEActionSpellBase
-  name: Cruelty
-  description: Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.
+  name: Petrifying Strike
+  description: Your next melee attack applies [color=#8b7355]5 Petrification[/color] stacks, immobilizing the target.
   components:
   - type: CEActionManaCost
     manaCost: 10
@@ -18,14 +18,14 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _CE/Skills/Knight/focus.rsi
+      sprite: _CE/Skills/todo.rsi #TODO
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
-      animation: AnimationCruelty
+      animation: AnimationPetrifyingStrike
 
 - type: entityEffectAnimation
-  id: AnimationCruelty
+  id: AnimationPetrifyingStrike
   movementSpeed: 0.5
   duration: 1
   events:
@@ -54,35 +54,36 @@
         easing: QuadOut
       colorAnimation:
         - time: 0.9
-          color: "#ffffff"
+          color: "#976629"
         - time: 1
-          color: "#ffffff01"
+          color: "#8b735501"
     0.6:
     - !type:UsedEntityAnimation
-      dummyEntity: CEEffectCrueltyTelegraphy
+      dummyEntity: CEEffectPetrifyingStrikeTelegraphy
       offsetAnimation:
       - time: 0
         offset: -0.6, 0.1
     - !type:ApplyStatusEffectStack
       effectTarget: User
-      statusEffect: CEStatusEffectCruelty
+      statusEffect: CEStatusEffectPetrifyingStrike
 
 - type: entity
-  id: CEEffectCrueltyTelegraphy
+  id: CEEffectPetrifyingStrikeTelegraphy
   parent: CEBaseMagicImpact
   categories: [ ForkFiltered ]
   suffix: VFX
-  name: focus cruelty
+  name: petrifying strike
   save: false
   components:
   - type: Sprite
     drawdepth: Effects
-    sprite: _CE/Effects/critical_charge.rsi
+    sprite: _CE/Structures/Nature/ice_rock.rsi
     layers:
-    - state: effect
+    - state: smol
       shader: unshaded
+      color: "#8b7355"
   - type: PointLight
-    color: "#ff0505"
+    color: "#7a5c2e"
     radius: 1.5
   - type: TimedDespawn
     lifetime: 1.5
@@ -92,30 +93,37 @@
         interpolate: Linear
         maxDuration: 1.5
         startValue: 0
-        endValue: 5.0
+        endValue: 3.0
         property: Energy
         isLooped: false
         enabled: true
 
 - type: entity
-  id: CEStatusEffectCruelty
-  name: Cruelty
-  description: Your next melee attack applies [color=#b2e3eb]5 Bruise[/color] stacks, increasing the physical damage taken by targets.
+  id: CEStatusEffectPetrifyingStrike
+  name: Petrifying Strike
+  description: Your next melee attack applies [color=#8b7355]5 Petrification[/color] stacks, immobilizing the target.
   components:
   - type: StatusEffect
   - type: CEStatusEffectStack
     baseDuration: 10
   - type: StatusEffectAlert
-    alert: CECruelty
+    alert: CEPetrifyingStrike
   - type: CEEffectOnAttackStatusEffect
     stackCost: 1
     effects:
     - !type:ApplyStatusEffectStack
-      statusEffect: CEStatusEffectBruise
+      statusEffect: CEStatusEffectPetrification
       amount: 5
+    - !type:ShockWaveVFX
+      effectTarget: Target
+      width: 0.1
+    - !type:SpawnEntity
+      effectTarget: Target
+      spawns:
+      - CEDustTileEffect
 
 - type: alert
-  id: CECruelty
+  id: CEPetrifyingStrike
   icons:
-  - sprite: _CE/Skills/Knight/focus.rsi
-    state: icon
+  - sprite: _CE/Structures/Nature/ice_rock.rsi #TODO
+    state: smol
