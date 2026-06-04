@@ -112,6 +112,7 @@
     stackCost: 1
     effects:
     - !type:ApplyStatusEffectStack
+      effectTarget: Target
       statusEffect: CEStatusEffectPetrification
       amount: 5
     - !type:ShockWaveVFX
