@@ -1,0 +1,43 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: Shattering
+  icon:
+    sprite: _CE/Skills/todo.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectShattering
+
+- type: entity
+  id: CEStatusEffectShattering
+  name: Shattering
+  description: Your melee attacks against [color=#8b7355]petrified[/color] enemies shatter the stone, removing petrification, dealing 20 extra damage, and knocking them away.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEShattering
+  - type: CEEffectOnAttackStatusEffect
+    effects:
+    - !type:ConditionalEffectGroup
+      conditions:
+      - !type:HasStatusEffectCondition
+        statusEffect: CEStatusEffectPetrification
+      effects:
+      - !type:RemoveStatusEffect
+        statusEffect: CEStatusEffectPetrification
+      - !type:Damage
+        damage:
+          types:
+            Physical: 20
+        attackType: Melee
+      - !type:ThrowFromUser
+        throwPower: 8
+        distance: 3
+      - !type:ShockWaveVFX
+        effectTarget: Target
+        width: 0.15
+
+- type: alert
+  id: CEShattering
+  icons:
+  - sprite: _CE/Skills/todo.rsi
+    state: icon

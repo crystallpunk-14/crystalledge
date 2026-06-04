@@ -1,0 +1,51 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: StoneArmy
+  effect: !type:AddAction
+    action: CEActionSpellStoneArmy
+
+- type: entity
+  id: CEActionSpellStoneArmy
+  parent: CEActionSpellBase
+  name: Stone Army
+  description: You release a burst of earth magic, [color=#8b7355]petrifying[/color] all nearby creatures — including yourself.
+  components:
+  - type: CEActionManaCost
+    manaCost: 20
+  - type: Action
+    useDelay: 20
+    icon:
+      sprite: _CE/Skills/Knight/stone_army.rsi
+      state: icon
+  - type: InstantAction
+    event: !type:CEInstantActionAnimationEvent
+      animation: AnimationStoneArmy
+
+- type: entityEffectAnimation
+  id: AnimationStoneArmy
+  movementSpeed: 0.5
+  duration: 0.8
+  events:
+    0:
+    - !type:PlaySound
+      sound:
+        path: /Audio/Effects/break_stone.ogg
+        params:
+          pitch: 0.8
+          variation: 0.02
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.15
+    0.2:
+    - !type:AreaEffect
+      affectCaster: true
+      range: 2
+      effects:
+      - !type:ApplyStatusEffectStack
+        effectTarget: Target
+        statusEffect: CEStatusEffectPetrification
+        amount: 10
+      - !type:SpawnEntity
+        effectTarget: Target
+        spawns:
+        - CEDustTileEffect
