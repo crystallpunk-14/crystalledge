@@ -2,7 +2,7 @@ using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.Health;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects.Components;
+namespace Content.Shared._CE.StatusEffects.EffectsOnTriggerStatusEffects.Components;
 
 /// <summary>
 /// Apply CEEntityEffects to the damage target when the owner of this status effect deals damage,

@@ -1,7 +1,7 @@
 ﻿using Content.Shared._CE.EntityEffect;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Skill.Skills.EffectsOnTriggerStatusEffects.Components;
+namespace Content.Shared._CE.StatusEffects.EffectsOnTriggerStatusEffects.Components;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CEEffectOnAttackedStatusEffectComponent : Component
