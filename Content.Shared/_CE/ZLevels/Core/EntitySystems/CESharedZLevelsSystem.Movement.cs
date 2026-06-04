@@ -237,6 +237,7 @@ public abstract partial class CESharedZLevelsSystem
 
         ent.Comp.LocalPosition = newPosition;
         DirtyField(ent, ent.Comp, nameof(CEZPhysicsComponent.LocalPosition));
+        WakeBody(ent);
     }
 
     [PublicAPI]
@@ -258,6 +259,7 @@ public abstract partial class CESharedZLevelsSystem
 
         ent.Comp.GravityMultiplier = newGravityMultiplier;
         DirtyField(ent, ent.Comp, nameof(CEZPhysicsComponent.GravityMultiplier));
+        WakeBody(ent);
     }
 
     /// <summary>
@@ -271,6 +273,7 @@ public abstract partial class CESharedZLevelsSystem
 
         ent.Comp.Velocity = newVelocity;
         DirtyField(ent, ent.Comp, nameof(CEZPhysicsComponent.Velocity));
+        WakeBody(ent);
     }
 
     /// <summary>
@@ -284,6 +287,7 @@ public abstract partial class CESharedZLevelsSystem
 
         ent.Comp.Velocity += newVelocity;
         DirtyField(ent, ent.Comp, nameof(CEZPhysicsComponent.Velocity));
+        WakeBody(ent);
     }
 
     [PublicAPI]

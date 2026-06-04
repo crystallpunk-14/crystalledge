@@ -77,7 +77,7 @@ public sealed partial class StatusEffectsSystem
         SubscribeLocalEvent<StatusEffectContainerComponent, CESoulReceivedEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, CEAttemptApplyTileEffectEvent>(RefRelayStatusEffectEvent);
         SubscribeLocalEvent<StatusEffectContainerComponent, ActionAttemptEvent>(RefRelayStatusEffectEvent);
-        SubscribeLocalEvent<StatusEffectContainerComponent, CEZLevelFallMapEvent>(RefRelayStatusEffectEvent);
+        SubscribeLocalEvent<StatusEffectContainerComponent, CEZLevelHitEvent>(RefRelayStatusEffectEvent);
 
         //CrystallEdge zone end
 

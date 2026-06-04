@@ -24,7 +24,7 @@
 - type: entityEffectAnimation
   id: AnimationJump
   movementSpeed: 1
-  duration: 1
+  duration: 0.4
   events:
     0:
     #- !type:PlaySound

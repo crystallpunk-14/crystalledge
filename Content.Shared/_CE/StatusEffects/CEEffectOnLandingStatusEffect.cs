@@ -20,10 +20,10 @@ public sealed class CEEffectOnLandingStatusEffectSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEEffectOnLandingStatusEffectComponent, StatusEffectRelayedEvent<CEZLevelFallMapEvent>>(OnFall);
+        SubscribeLocalEvent<CEEffectOnLandingStatusEffectComponent, StatusEffectRelayedEvent<CEZLevelHitEvent>>(OnFall);
     }
 
-    private void OnFall(Entity<CEEffectOnLandingStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEZLevelFallMapEvent> args)
+    private void OnFall(Entity<CEEffectOnLandingStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEZLevelHitEvent> args)
     {
         if (!_effectQuery.TryComp(ent, out var effectComp) || effectComp.AppliedTo is null)
             return;
