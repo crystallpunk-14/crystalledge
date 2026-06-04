@@ -14,5 +14,5 @@
   description: Your maximum health is increased by [color=#f54730]50[/color].
   components:
   - type: StatusEffect
-  - type: CEVitalityStatusEffect
+  - type: CEBonusHealth
     flatHealthBonus: 50

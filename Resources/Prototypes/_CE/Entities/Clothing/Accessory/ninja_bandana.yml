@@ -15,5 +15,5 @@
   components:
   - type: StatusEffect
   - type: CEStatusEffectStack
-  - type: CEAgilityStatusEffect
+  - type: CEBonusStamina
     flatStaminaBonus: 3

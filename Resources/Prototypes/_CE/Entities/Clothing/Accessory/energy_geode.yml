@@ -18,5 +18,5 @@
   components:
   - type: StatusEffect
   - type: CEStatusEffectStack
-  - type: CEWisdomStatusEffect
+  - type: CEBonusMana
     flatManaBonus: 20
