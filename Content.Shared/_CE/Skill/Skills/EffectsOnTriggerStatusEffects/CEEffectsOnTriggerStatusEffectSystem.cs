@@ -32,6 +32,7 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         SubscribeLocalEvent<CEEffectOnSoulReceivedStatusEffectComponent, StatusEffectRelayedEvent<CESoulReceivedEvent>>(OnSoulReceived);
         SubscribeLocalEvent<CEEffectOnTileApplyStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyTileEffectEvent>>(OnTileApply);
         SubscribeLocalEvent<CEEffectOnStatusEffectApplyStatusEffectComponent, StatusEffectRelayedEvent<CEAfterApplyStatusEffectEvent>>(OnStatusEffectApply);
+        SubscribeLocalEvent<CEEffectOnStatusEffectRemoveStatusEffectComponent, StatusEffectRelayedEvent<CEAfterRemoveStatusEffectEvent>>(OnStatusEffectRemove);
     }
 
     private void OnAfterAttack(Entity<CEEffectOnAttackStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterAttackEvent> args)
@@ -265,6 +266,38 @@ public sealed class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
     }
 
     private void OnStatusEffectApply(Entity<CEEffectOnStatusEffectApplyStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterApplyStatusEffectEvent> args)
+    {
+        if (ent.Comp.SourceStatusEffects.Count > 0 && !ent.Comp.SourceStatusEffects.Contains(args.Args.StatusEffect))
+            return;
+
+        if (!TryComp<StatusEffectComponent>(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        var stack = 1;
+        if (_stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            null,
+            Angle.Zero,
+            1f,
+            args.Args.Target,
+            Transform(args.Args.Target).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnStatusEffectRemove(Entity<CEEffectOnStatusEffectRemoveStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterRemoveStatusEffectEvent> args)
     {
         if (ent.Comp.SourceStatusEffects.Count > 0 && !ent.Comp.SourceStatusEffects.Contains(args.Args.StatusEffect))
             return;

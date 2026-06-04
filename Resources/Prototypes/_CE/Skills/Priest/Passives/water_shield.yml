@@ -12,7 +12,9 @@
   - type: StatusEffect
   - type: StatusEffectAlert
     alert: CEWaterShield
-  - type: CEDivineShieldBreakEffect
+  - type: CEEffectOnStatusEffectRemoveStatusEffect
+    sourceStatusEffects:
+    - CEStatusEffectDivineShield
     effects:
     - !type:CETileAffectArea
       tileEffect: CETileEffectWater

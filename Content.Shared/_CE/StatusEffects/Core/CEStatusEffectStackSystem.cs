@@ -207,7 +207,7 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
     /// </summary>
     public EntityUid? GetSource(Entity<CEStatusEffectSourceComponent?> effectEntity)
     {
-        if (!Resolve(effectEntity, ref effectEntity.Comp))
+        if (!Resolve(effectEntity, ref effectEntity.Comp, false))
             return null;
 
         if (effectEntity.Comp.Source is { } src && Exists(src))
@@ -252,6 +252,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
         if (!TryComp<CEStatusEffectStackComponent>(statusEnt.Value, out var stackComp))
             return false;
 
+        var source = GetSource(statusEnt.Value);
+        if (source is { } src)
+            RaiseLocalEvent(src, new CEAfterRemoveStatusEffectEvent(target, statusEffect));
+
         if (stackComp.Stacks <= stack)
         {
             _statusEffect.TryRemoveStatusEffect(target, statusEffect);
@@ -284,6 +288,10 @@ public sealed class CEStatusEffectStackSystem : EntitySystem
 
         if (proto is null)
             return false;
+
+        var source = GetSource(effect.Owner);
+        if (source is { } src)
+            RaiseLocalEvent(src, new CEAfterRemoveStatusEffectEvent(statusEffect.AppliedTo.Value, new EntProtoId(proto.ID)));
 
         if (effect.Comp.Stacks <= stack)
         {

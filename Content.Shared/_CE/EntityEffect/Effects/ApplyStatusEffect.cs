@@ -91,3 +91,13 @@ public sealed class CEAfterApplyStatusEffectEvent(EntityUid target, EntProtoId s
     public readonly int Amount = amount;
     public readonly EntityUid? Used = used;
 }
+
+/// <summary>
+/// Raised on the source (attacker/caster) when a status effect they applied to a target is removed.
+/// Relayed to the source's active status effects via <c>StatusEffectRelayedEvent</c>.
+/// </summary>
+public sealed class CEAfterRemoveStatusEffectEvent(EntityUid target, EntProtoId statusEffect) : EntityEventArgs
+{
+    public readonly EntityUid Target = target;
+    public readonly EntProtoId StatusEffect = statusEffect;
+}
