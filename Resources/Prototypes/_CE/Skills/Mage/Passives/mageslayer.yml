@@ -1,0 +1,76 @@
+- type: skill
+  parent: BaseMageSkill
+  id: Mageslayer
+  icon:
+    sprite: _CE/Skills/Mage/mageslayer.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectMageslayer
+
+- type: entity
+  id: CEStatusEffectMageslayer
+  name: Mageslayer
+  description: Your melee attacks against enemies with [color=#5d9ee2]no mana[/color] deal 10 extra [color=#5d9ee2]Cold[/color] damage, ignoring armor.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEMageslayer
+  - type: CEEffectOnAttackStatusEffect
+    effects:
+    - !type:ConditionalEffectGroup
+      conditions:
+      - !type:ManaPercentCondition
+        max: 0
+      effects:
+      - !type:Damage
+        damage:
+          types:
+            Cold: 10
+        attackType: Melee
+        ignoreArmor: true
+      - !type:SpawnEntity
+        effectTarget: Target
+        spawns:
+        - CEEffectMageSlayer
+      - !type:PlaySound
+        sound:
+          path: /Audio/Magic/staff_door.ogg
+          params:
+            variation: 0.02
+
+
+- type: alert
+  id: CEMageslayer
+  icons:
+  - sprite: _CE/Skills/Mage/mageslayer.rsi
+    state: icon
+
+- type: entity
+  id: CEEffectMageSlayer
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: mage slayer
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/critical_charge.rsi
+    layers:
+    - state: blue
+      shader: unshaded
+  - type: PointLight
+    color: "#239ef0"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
