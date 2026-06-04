@@ -1,0 +1,34 @@
+- type: skill
+  parent: BasePriestSkill
+  id: Overheal
+  icon:
+    sprite: _CE/Skills/Priest/overheal.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectOverheal
+
+- type: entity
+  id: CEStatusEffectOverheal
+  name: Overheal
+  description: When you heal a target that already has [color=#1defa9]full health[/color], they receive [color=#b2e3eb]10 temporary shields[/color] (up to a maximum of 20).
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEOverheal
+  - type: CEEffectOnHealStatusEffect
+    effects:
+    - !type:ConditionalEffectGroup
+      conditions:
+      - !type:HealthPercentCondition
+        min: 1.0
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectTempShield
+        amount: 10
+        max: 20
+
+- type: alert
+  id: CEOverheal
+  icons:
+  - sprite: _CE/Skills/Priest/overheal.rsi
+    state: icon
