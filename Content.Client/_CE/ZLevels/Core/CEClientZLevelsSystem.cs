@@ -118,7 +118,6 @@ internal sealed class CEClientZLevelsPostAnimSystem : EntitySystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
     public override void Initialize()
     {
