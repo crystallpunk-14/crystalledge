@@ -559,3 +559,18 @@
   id: 10048
   time: '2026-06-03T16:43:57.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/281
+- author: TheShuEd
+  changes:
+  - message: "A new active ability for the Knight, \u201CStone's Blink,\u201D has\
+      \ been added. It instantly applies a new petrification status effect to the\
+      \ user, granting sturdy shields and immobilizing them."
+    type: Add
+  - message: Creatures affected by freeze and petrification effects now cause a shockwave
+      when they fall from a height. Freeze and repulsion effects correspondingly.
+    type: Add
+  - message: Fixed bugs related to jumping and fall effects that were not working
+      properly on certain z-levels
+    type: Fix
+  id: 10049
+  time: '2026-06-04T11:55:21.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/282
