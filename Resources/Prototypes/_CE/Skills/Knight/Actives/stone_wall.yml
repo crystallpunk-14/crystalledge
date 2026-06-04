@@ -133,7 +133,7 @@
       attackType: Other
       damage:
         types:
-          Physical: 10
+          Physical: 25
     - !type:ThrowFromUser
       effectTarget: Target
       distance: 1
