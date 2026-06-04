@@ -11,7 +11,9 @@ using Content.Shared.Camera;
 using Content.Shared.StatusEffectNew.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Maths;
 
 namespace Content.Client._CE.ZLevels.Core;
 
@@ -48,7 +50,6 @@ public sealed partial class CEClientZLevelsSystem : CESharedZLevelsSystem
         if (sprite.SnapCardinals)
             return;
 
-        ent.Comp.NoRotDefault = sprite.NoRotation;
         ent.Comp.DrawDepthDefault = sprite.DrawDepth;
         ent.Comp.SpriteOffsetDefault = sprite.Offset;
     }
@@ -87,7 +88,6 @@ internal sealed class CEClientZLevelsPreAnimSystem : EntitySystem
         while (query.MoveNext(out var uid, out var zPhys, out var sprite))
         {
             var localPosition = zPhys.LocalPosition;
-            sprite.NoRotation = localPosition != 0 || zPhys.NoRotDefault;
             _sprite.SetOffset((uid, sprite), zPhys.SpriteOffsetDefault);
             _sprite.SetDrawDepth((uid, sprite), localPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault);
         }
@@ -117,6 +117,8 @@ internal sealed class CEClientZLevelsPreAnimSystem : EntitySystem
 internal sealed class CEClientZLevelsPostAnimSystem : EntitySystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly SharedTransformSystem _xform = default!;
+    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
 
     public override void Initialize()
     {
@@ -128,10 +130,17 @@ internal sealed class CEClientZLevelsPostAnimSystem : EntitySystem
     {
         // Phase 2: add the Z-height contribution on top of the animation-player's output.
         // At this point sprite.Offset == animationValue (or SpriteOffsetDefault if no anim ran).
-        var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent>();
-        while (query.MoveNext(out var uid, out var zPhys, out var sprite))
+        // The offset is counter-rotated by the entity's world angle so it always points world-up,
+        // preventing it from orbiting the pivot when the entity has angular velocity (e.g. shurikens).
+        var query = EntityQueryEnumerator<CEZPhysicsComponent, SpriteComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var zPhys, out var sprite, out var xform))
         {
-            var zOffset = new Vector2(0, zPhys.LocalPosition * CESharedZLevelsSystem.ZLevelOffset);
+            var rawZ = new Vector2(0, zPhys.LocalPosition * CESharedZLevelsSystem.ZLevelOffset);
+            Vector2 zOffset;
+            if (sprite.NoRotation)
+                zOffset = rawZ;
+            else
+                zOffset = new Angle(-_xform.GetWorldRotation(xform)).RotateVec(rawZ);
             _sprite.SetOffset((uid, sprite), sprite.Offset + zOffset);
         }
     }

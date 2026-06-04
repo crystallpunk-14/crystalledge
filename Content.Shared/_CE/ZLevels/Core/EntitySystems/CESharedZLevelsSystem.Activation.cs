@@ -60,9 +60,15 @@ public abstract partial class CESharedZLevelsSystem
     {
         RefreshBody(entity);
 
-        if (!ZPhysicsQuery.TryComp(args.OldParent, out var oldParentPhysics))
+        if (ZPhysicsQuery.TryComp(args.OldParent, out var oldParentPhysics))
+        {
+            SetZPosition((entity, entity), oldParentPhysics.LocalPosition);
             return;
+        }
 
-        SetZPosition((entity, entity), oldParentPhysics.LocalPosition);
+        if (ZPhysicsQuery.HasComp(Transform(entity).ParentUid))
+        {
+            SetZPosition((entity, entity), 0);
+        }
     }
 }

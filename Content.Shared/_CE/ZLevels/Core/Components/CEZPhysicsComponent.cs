@@ -49,13 +49,6 @@ public sealed partial class CEZPhysicsComponent : Component
     // Visuals
 
 
-    /// <summary>
-    /// Used only by the client.
-    /// Blocks the rotation of an object if it has <see cref="LocalPosition"/> > 0,
-    /// and saves the original NoRot value in SpriteComponent here so that it can be restored in the future.
-    /// </summary>
-    [DataField]
-    public bool NoRotDefault;
 
     /// <summary>
     /// The original DrawDepth of the object is automatically saved here. Increases by 1 when the creature has <see cref="LocalPosition"/> > 0
