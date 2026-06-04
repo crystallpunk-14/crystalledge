@@ -159,9 +159,12 @@ public abstract partial class CESharedZLevelsSystem
         if (float.Abs(oldHeight - zPhysicsComponent.LocalPosition) > 0.001f)
             DirtyField(entity, zPhysicsComponent, nameof(CEZPhysicsComponent.LocalPosition));
 
-        var targetStatus = distanceToGround > AirborneHeightThreshold ? BodyStatus.InAir : BodyStatus.OnGround;
-        if (entity.Comp2.BodyStatus != targetStatus)
-            _physicsSystem.SetBodyStatus(entity, entity.Comp2, targetStatus);
+        if (zPhysicsComponent.VelocityGravity)
+        {
+            var targetStatus = distanceToGround > AirborneHeightThreshold ? BodyStatus.InAir : BodyStatus.OnGround;
+            if (entity.Comp2.BodyStatus != targetStatus)
+                _physicsSystem.SetBodyStatus(entity, entity.Comp2, targetStatus);
+        }
 
         SleepUpdate((entity, entity.Comp1), frameTime);
     }

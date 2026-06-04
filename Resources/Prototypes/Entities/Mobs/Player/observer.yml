@@ -30,6 +30,7 @@
   #CrystallEdge
   - type: CEZPhysics
     autoStep: false
+    velocityGravity: false
   - type: CEZLevelGhostMover
   - type: CEMinimapData
 
