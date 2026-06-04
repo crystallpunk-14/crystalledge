@@ -1,0 +1,1 @@
+All content in this folder should be removed, made more reusable, and moved to the “Status Effects Components and Systems” folder
