@@ -8,8 +8,10 @@ using Content.Client._CE.ZLevels.Core.Overlays;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.Camera;
+using Content.Shared.StatusEffectNew.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Map.Components;
 
 namespace Content.Client._CE.ZLevels.Core;
 
@@ -101,6 +103,9 @@ internal sealed class CEClientZLevelsPostAnimSystem : EntitySystem
 {
     [Dependency] private readonly SpriteSystem _sprite = default!;
 
+    [Dependency] private readonly EntityQuery<MapGridComponent> _mapGridQuery = default!;
+    [Dependency] private readonly EntityQuery<CEZPhysicsComponent> _zPhysQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -115,6 +120,23 @@ internal sealed class CEClientZLevelsPostAnimSystem : EntitySystem
         while (query.MoveNext(out var uid, out var zPhys, out var sprite))
         {
             var zOffset = new Vector2(0, zPhys.LocalPosition * CESharedZLevelsSystem.ZLevelOffset);
+            _sprite.SetOffset((uid, sprite), sprite.Offset + zOffset);
+        }
+
+        // Parent-sync pass: entities marked with CEZLevelOffsetParentSyncComponent inherit
+        // their visual Z offset from the parent entity's CEZPhysicsComponent.
+        var syncQuery = EntityQueryEnumerator<StatusEffectComponent, SpriteComponent, TransformComponent>();
+        while (syncQuery.MoveNext(out var uid, out _, out var sprite, out var xform))
+        {
+            var parent = xform.ParentUid;
+
+            if (_mapGridQuery.HasComp(parent))
+                continue;
+
+            if (!_zPhysQuery.TryComp(parent, out var parentZPhys))
+                continue;
+
+            var zOffset = new Vector2(0, parentZPhys.LocalPosition * CESharedZLevelsSystem.ZLevelOffset);
             _sprite.SetOffset((uid, sprite), sprite.Offset + zOffset);
         }
     }

@@ -34,7 +34,7 @@
         path: /Audio/Effects/clang.ogg
         params:
           pitch: 0.7
-    0.6:
+    0.1:
     - !type:ApplyStatusEffectStack
       effectTarget: User
       statusEffect: CEStatusEffectPetrification

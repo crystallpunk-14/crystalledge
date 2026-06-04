@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared._CE.ZLevels.Core.Components;
 using Robust.Client.GameObjects;
 using Robust.Shared.Timing;
 
@@ -67,8 +68,13 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
 
         if (effect.OffsetAnimation.Count > 0)
         {
-            // Preserve the original value only on the first call (not on re-interruptions).
-            comp.OriginalOffset ??= sprite.Offset;
+            if (comp.OriginalOffset == null)
+            {
+                // Use Z-free base: sprite.Offset at tick time includes jump height from post-anim; restoring it would double the Z.
+                comp.OriginalOffset = TryComp<CEZPhysicsComponent>(entity, out var zPhys)
+                    ? zPhys.SpriteOffsetDefault
+                    : sprite.Offset;
+            }
             _animPlayer.Stop(entity, OffsetKey);
             _animPlayer.Play(entity, CEAnimationTrackBuilders.BuildOffsetAnimation(effect.OffsetAnimation, speedMult), OffsetKey);
         }
