@@ -18,7 +18,7 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _CE/Skills/todo.rsi #TODO
+      sprite: _CE/Skills/Knight/petrifying_strike.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
@@ -125,5 +125,5 @@
 - type: alert
   id: CEPetrifyingStrike
   icons:
-  - sprite: _CE/Structures/Nature/ice_rock.rsi #TODO
-    state: smol
+  - sprite: _CE/Skills/Knight/petrifying_strike.rsi
+    state: icon

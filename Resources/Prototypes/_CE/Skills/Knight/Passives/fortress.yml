@@ -2,7 +2,7 @@
   parent: BaseKnightSkill
   id: Fortress
   icon:
-    sprite: _CE/Skills/todo.rsi
+    sprite: _CE/Skills/Knight/fortress.rsi
     state: icon
   effect: !type:AddStatusEffect
     effect: CEStatusEffectFortress
@@ -28,5 +28,5 @@
 - type: alert
   id: CEFortress
   icons:
-  - sprite: _CE/Skills/todo.rsi
+  - sprite: _CE/Skills/Knight/fortress.rsi
     state: icon

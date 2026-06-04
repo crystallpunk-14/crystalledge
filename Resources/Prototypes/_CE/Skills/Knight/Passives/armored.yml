@@ -2,7 +2,7 @@
   id: Armored
   parent: BaseKnightSkill
   icon:
-    sprite: _CE/Skills/todo.rsi
+    sprite: _CE/Skills/Knight/armored.rsi
     state: icon
   effect: !type:AddStatusEffect { effect: 'CEStatusEffectArmored' }
 
@@ -25,6 +25,6 @@
 - type: alert
   id: CEArmored
   icons:
-  - sprite: _CE/Skills/todo.rsi
+  - sprite: _CE/Skills/Knight/armored.rsi
     state: icon
 

@@ -17,7 +17,7 @@
   - type: Action
     useDelay: 15
     icon:
-      sprite: _CE/Skills/Knight/stone_skin.rsi #TODO
+      sprite: _CE/Skills/Knight/stone_moment.rsi
       state: icon
   - type: InstantAction
     event: !type:CEInstantActionAnimationEvent
