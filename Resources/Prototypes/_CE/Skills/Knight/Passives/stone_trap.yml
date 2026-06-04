@@ -1,0 +1,32 @@
+- type: skill
+  parent: BaseKnightSkill
+  id: StoneTrap
+  icon:
+    sprite: _CE/Skills/todo.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectStoneTrap
+
+- type: entity
+  id: CEStatusEffectStoneTrap
+  name: Stone Trap
+  description: When you apply [color=#8b7355]Petrification[/color] to a entity, stone spikes erupt around them.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEStoneTrap
+  - type: CEEffectOnStatusEffectApplyStatusEffect
+    sourceStatusEffects:
+    - CEStatusEffectPetrification
+    effects:
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectStoneSpikes
+      radius: 1.5
+      maxStacks: 5
+      fallOffFactor: 1
+
+- type: alert
+  id: CEStoneTrap
+  icons:
+  - sprite: _CE/Skills/todo.rsi
+    state: big
