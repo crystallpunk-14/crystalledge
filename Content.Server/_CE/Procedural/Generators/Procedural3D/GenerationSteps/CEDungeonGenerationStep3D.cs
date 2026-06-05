@@ -13,7 +13,9 @@ namespace Content.Server._CE.Procedural.Generators.Procedural3D.GenerationSteps;
 public abstract partial class CEDungeonGenerationStep3D
 {
     public abstract Task Execute(
-        CEGeneratingProceduralDungeonComponent3D comp,
+        CEGeneratingProceduralDungeon3DComponent comp,
+        int maxRoomSize,
+        int maxRoomHeight,
         IRobustRandom random,
         ISawmill log);
 }

@@ -11,7 +11,7 @@ namespace Content.Shared._CE.Procedural;
 /// where Z is the z-level index.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class CEGeneratingProceduralDungeonComponent3D : Component
+public sealed partial class CEGeneratingProceduralDungeon3DComponent : Component
 {
     /// <summary>
     /// All abstract rooms placed so far.
@@ -34,7 +34,7 @@ public sealed partial class CEGeneratingProceduralDungeonComponent3D : Component
 public sealed partial class CEProceduralAbstractRoom3D
 {
     /// <summary>
-    /// Index of this room in the <see cref="CEGeneratingProceduralDungeonComponent3D.Rooms"/> list.
+    /// Index of this room in the <see cref="CEGeneratingProceduralDungeon3DComponent.Rooms"/> list.
     /// </summary>
     [DataField]
     public int Index;
@@ -44,6 +44,25 @@ public sealed partial class CEProceduralAbstractRoom3D
     /// </summary>
     [DataField]
     public Vector3i GridCoord;
+
+    /// <summary>
+    /// World-tile XY origin (bottom-left corner) of the room on its z-level map.
+    /// Computed from GridCoord.XY * (MaxRoomSize + 1).
+    /// </summary>
+    [DataField]
+    public Vector2i Position;
+
+    /// <summary>
+    /// XY size of the room in tiles. Defaults to (MaxRoomSize, MaxRoomSize).
+    /// </summary>
+    [DataField]
+    public Vector2i Size;
+
+    /// <summary>
+    /// Vertical size of the room in tiles. Defaults to MaxRoomHeight.
+    /// </summary>
+    [DataField]
+    public int Height;
 
     /// <summary>
     /// Prototype ID of the <see cref="CERoomTypePrototype"/> assigned to this room.

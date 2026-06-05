@@ -1,8 +1,11 @@
 using System.Numerics;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.ZLevels.Core.Components;
+using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Enums;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.Procedural;
@@ -41,16 +44,25 @@ public sealed class CEProceduralGenerationOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (!_entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(args.MapUid, out var dun))
+        // ── 2D path ──────────────────────────────────────────────────────
+        if (_entMan.TryGetComponent<CEGeneratingProceduralDungeonComponent>(args.MapUid, out var dun)
+            && dun.Rooms.Count > 0)
+        {
+            if (args.Space == OverlaySpace.WorldSpace)
+                DrawWorld(in args, dun);
+            else if (args.Space == OverlaySpace.ScreenSpace)
+                DrawScreen(in args, dun);
             return;
+        }
 
-        if (dun.Rooms.Count == 0)
-            return;
-
-        if (args.Space == OverlaySpace.WorldSpace)
-            DrawWorld(in args, dun);
-        else if (args.Space == OverlaySpace.ScreenSpace)
-            DrawScreen(in args, dun);
+        // ── 3D path ──────────────────────────────────────────────────────
+        if (TryFind3DComp(args.MapUid, out var dun3d, out var zIndex) && dun3d is not null && dun3d.Rooms.Count > 0)
+        {
+            if (args.Space == OverlaySpace.WorldSpace)
+                DrawWorld3D(in args, dun3d, zIndex);
+            else if (args.Space == OverlaySpace.ScreenSpace)
+                DrawScreen3D(in args, dun3d, zIndex);
+        }
     }
 
     private void DrawWorld(in OverlayDrawArgs args, CEGeneratingProceduralDungeonComponent comp)
@@ -141,4 +153,131 @@ public sealed class CEProceduralGenerationOverlay : Overlay
             handle.DrawString(font, screenPos, label);
         }
     }
+
+    // ════════════════════════════════════════════════════════════════════
+    // 3D drawing — pseudo-isometric cube per room
+    // ════════════════════════════════════════════════════════════════════
+
+    private void DrawWorld3D(in OverlayDrawArgs args, CEGeneratingProceduralDungeon3DComponent comp, int zIndex)
+    {
+        var handle = args.WorldHandle;
+
+        foreach (var room in comp.Rooms)
+        {
+            // Room at GridCoord.Z=n occupies z-levels [n*Height .. (n+1)*Height - 1].
+            var zStart = room.GridCoord.Z * room.Height;
+            var zEnd = zStart + room.Height - 1;
+            if (zIndex < zStart || zIndex > zEnd)
+                continue;
+
+            var roomTypeProto = room.RoomType != null && _proto.Resolve(room.RoomType.Value, out var rt) ? rt : null;
+            var baseColor = roomTypeProto?.Color ?? Color.Gray;
+
+            var box = new Box2(room.Position.X, room.Position.Y,
+                room.Position.X + room.Size.X, room.Position.Y + room.Size.Y);
+
+            handle.DrawRect(box, baseColor.WithAlpha(0.30f));
+        }
+
+        // Camera rotation inverse — same formula as CEClientZLevelsSystem.OnEyeOffset.
+        var camInverse = -(args.Viewport.Eye?.Rotation ?? Angle.Zero);
+
+        foreach (var conn in comp.Connections)
+        {
+            if ((uint)conn.RoomA >= (uint)comp.Rooms.Count || (uint)conn.RoomB >= (uint)comp.Rooms.Count)
+                continue;
+
+            var a = comp.Rooms[conn.RoomA];
+            var b = comp.Rooms[conn.RoomB];
+            var centerA = new Vector2(a.Position.X + a.Size.X / 2f, a.Position.Y + a.Size.Y / 2f);
+            var centerB = new Vector2(b.Position.X + b.Size.X / 2f, b.Position.Y + b.Size.Y / 2f);
+
+            var aZStart = a.GridCoord.Z * a.Height;
+            var aZEnd = aZStart + a.Height - 1;
+            var bZStart = b.GridCoord.Z * b.Height;
+            var bZEnd = bZStart + b.Height - 1;
+
+            if (a.GridCoord.Z == b.GridCoord.Z)
+            {
+                // Flat connection within the same z-group.
+                if (zIndex >= aZStart && zIndex <= aZEnd)
+                    handle.DrawLine(centerA, centerB, ConnectionColor);
+            }
+            else
+            {
+                // Vertical connection: ceiling of lower room → floor of upper room.
+                // Drawn on exactly two z-levels so the line is visible from both sides.
+                var lowerCenter = a.GridCoord.Z < b.GridCoord.Z ? centerA : centerB;
+                var upperCenter = a.GridCoord.Z < b.GridCoord.Z ? centerB : centerA;
+                var lowerZEnd = a.GridCoord.Z < b.GridCoord.Z ? aZEnd : bZEnd;
+                var upperZStart = a.GridCoord.Z < b.GridCoord.Z ? bZStart : aZStart;
+
+                if (zIndex == lowerZEnd)
+                {
+                    // On the ceiling of the lower room — line goes up to where upper floor appears.
+                    var toUpper = upperCenter + camInverse.RotateVec(
+                        new Vector2(0, (upperZStart - zIndex) * CESharedZLevelsSystem.ZLevelOffset));
+                    handle.DrawLine(lowerCenter, toUpper, ConnectionColor);
+                }
+                else if (zIndex == upperZStart)
+                {
+                    // On the floor of the upper room — line comes from where lower ceiling appears.
+                    var fromLower = lowerCenter + camInverse.RotateVec(
+                        new Vector2(0, (lowerZEnd - zIndex) * CESharedZLevelsSystem.ZLevelOffset));
+                    handle.DrawLine(fromLower, upperCenter, ConnectionColor);
+                }
+            }
+        }
+    }
+
+    private void DrawScreen3D(in OverlayDrawArgs args, CEGeneratingProceduralDungeon3DComponent comp, int zIndex)
+    {
+        var handle = args.ScreenHandle;
+        var viewport = args.ViewportControl;
+        if (viewport == null)
+            return;
+
+        var zoom = args.Viewport.Eye?.Zoom ?? Vector2.One;
+        var zoomFactor = Math.Max(zoom.X, zoom.Y);
+        var scaledSize = Math.Max(6, (int)(BaseFontSize / zoomFactor));
+        var font = scaledSize == BaseFontSize ? _font : new VectorFont(_fontResource, scaledSize);
+
+        foreach (var room in comp.Rooms)
+        {
+            var zStart = room.GridCoord.Z * room.Height;
+            var zEnd = zStart + room.Height - 1;
+            if (zIndex < zStart || zIndex > zEnd)
+                continue;
+
+            var worldCenter = new Vector2(room.Position.X + room.Size.X / 2f, room.Position.Y + room.Size.Y / 2f);
+            var screenPos = viewport.WorldToScreen(worldCenter);
+
+            var label = $"#{room.Index} [{room.RoomType}]\n" +
+                        $"grid: {room.GridCoord}\n" +
+                        $"pos: {room.Position}\n" +
+                        $"size: {room.Size.X}x{room.Size.Y}x{room.Height}";
+
+            handle.DrawString(font, screenPos, label);
+        }
+    }
+
+    private bool TryFind3DComp(
+        EntityUid mapUid,
+        out CEGeneratingProceduralDungeon3DComponent? comp,
+        out int zIndex)
+    {
+        // CEZLevelMapComponent is automatically added to every map in a z-network
+        // and carries NetworkUid + Depth — no restricted dictionary access needed.
+        if (_entMan.TryGetComponent<CEZLevelMapComponent>(mapUid, out var mapComp) &&
+            _entMan.TryGetComponent(mapComp.NetworkUid, out comp))
+        {
+            zIndex = mapComp.Depth;
+            return true;
+        }
+
+        comp = default!;
+        zIndex = 0;
+        return false;
+    }
+
 }

@@ -1,7 +1,5 @@
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text.Json.Serialization;
 using Robust.Shared.Maths;
 using Robust.Shared.Serialization;
 
@@ -9,13 +7,7 @@ namespace Content.Shared._CE.Maths;
 
 [Serializable, NetSerializable]
 [StructLayout(LayoutKind.Sequential)]
-public struct Vector3i :
-    IEquatable<Vector3i>,
-    ISpanFormattable,
-    IAdditionOperators<Vector3i, Vector3i, Vector3i>,
-    ISubtractionOperators<Vector3i, Vector3i, Vector3i>,
-    IMultiplyOperators<Vector3i, Vector3i, Vector3i>,
-    IMultiplyOperators<Vector3i, int, Vector3i>
+public struct Vector3i : IEquatable<Vector3i>
 {
     public static readonly Vector3i Zero  = (0, 0, 0);
     public static readonly Vector3i One   = (1, 1, 1);
@@ -23,9 +15,9 @@ public struct Vector3i :
     public static readonly Vector3i UnitY = (0, 1, 0);
     public static readonly Vector3i UnitZ = (0, 0, 1);
 
-    [JsonInclude] public int X;
-    [JsonInclude] public int Y;
-    [JsonInclude] public int Z;
+    public int X;
+    public int Y;
+    public int Z;
 
     public Vector3i(int x, int y, int z)
     {
@@ -64,20 +56,20 @@ public struct Vector3i :
     // ── Operators ─────────────────────────────────────────────────────────
 
     public static Vector3i operator +(Vector3i a, Vector3i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
-    public static Vector3i operator +(Vector3i a, int b)      => new(a.X + b,   a.Y + b,   a.Z + b);
+    public static Vector3i operator +(Vector3i a, int b) => new(a.X + b, a.Y + b, a.Z + b);
 
     public static Vector3i operator -(Vector3i a, Vector3i b) => new(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
-    public static Vector3i operator -(Vector3i a, int b)      => new(a.X - b,   a.Y - b,   a.Z - b);
-    public static Vector3i operator -(Vector3i a)             => new(-a.X, -a.Y, -a.Z);
+    public static Vector3i operator -(Vector3i a, int b) => new(a.X - b, a.Y - b, a.Z - b);
+    public static Vector3i operator -(Vector3i a) => new(-a.X, -a.Y, -a.Z);
 
     public static Vector3i operator *(Vector3i a, Vector3i b) => new(a.X * b.X, a.Y * b.Y, a.Z * b.Z);
-    public static Vector3i operator *(Vector3i a, int scale)  => new(a.X * scale, a.Y * scale, a.Z * scale);
-    public static Vector3i operator *(int scale,  Vector3i a) => a * scale;
+    public static Vector3i operator *(Vector3i a, int scale) => new(a.X * scale, a.Y * scale, a.Z * scale);
+    public static Vector3i operator *(int scale, Vector3i a) => a * scale;
 
     public static Vector3i operator /(Vector3i a, Vector3i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
-    public static Vector3i operator /(Vector3i a, int scale)  => new(a.X / scale, a.Y / scale, a.Z / scale);
+    public static Vector3i operator /(Vector3i a, int scale) => new(a.X / scale, a.Y / scale, a.Z / scale);
 
-    public static bool operator ==(Vector3i a, Vector3i b) =>  a.Equals(b);
+    public static bool operator ==(Vector3i a, Vector3i b) => a.Equals(b);
     public static bool operator !=(Vector3i a, Vector3i b) => !a.Equals(b);
 
     // ── Equality ──────────────────────────────────────────────────────────
@@ -106,11 +98,4 @@ public struct Vector3i :
     // ── Formatting ────────────────────────────────────────────────────────
 
     public readonly override string ToString() => $"({X}, {Y}, {Z})";
-
-    public string ToString(string? format, IFormatProvider? formatProvider) => ToString();
-
-    public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
-    {
-        return Robust.Shared.Utility.FormatHelpers.TryFormatInto(destination, out charsWritten, $"({X}, {Y}, {Z})");
-    }
 }

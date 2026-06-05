@@ -15,6 +15,19 @@ namespace Content.Server._CE.Procedural.Generators.Procedural3D;
 public sealed partial class CEProceduralConfig3D : CEDungeonGeneratorConfigBase<CEProceduralConfig3D>
 {
     /// <summary>
+    /// Maximum side length of any single room in world tiles (XY plane).
+    /// </summary>
+    [DataField]
+    public int MaxRoomSize = 20;
+
+    /// <summary>
+    /// Height in world tiles allocated to each room per z-level.
+    /// Used as the vertical stride when translating z-level indices to world space.
+    /// </summary>
+    [DataField]
+    public int MaxRoomHeight = 3;
+
+    /// <summary>
     /// The ordered list of abstract generation steps.
     /// Executed sequentially to build the full 3D room graph before any rooms are placed.
     /// </summary>
@@ -29,6 +42,7 @@ public sealed partial class CEProceduralConfig3D : CEDungeonGeneratorConfigBase<
 public sealed partial class CEProceduralGeneratorSystem3D : CEDungeonGeneratorSystem<CEProceduralConfig3D>
 {
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
 
     protected override Job<CEDungeonGenerateResult> CreateJob(
@@ -40,6 +54,7 @@ public sealed partial class CEProceduralGeneratorSystem3D : CEDungeonGeneratorSy
             Log,
             maxTime,
             EntityManager,
+            _maps,
             _zLevels,
             _random,
             config,

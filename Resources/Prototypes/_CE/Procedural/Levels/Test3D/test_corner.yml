@@ -11,14 +11,14 @@
       position: 0,0,0
       roomType: MossyTempleGeneralRoom
     - !type:SetRoomType3D
-      position: 0,0,1
+      position: -1,0,2
       roomType: MossyTempleGeneralRoom
     - !type:SetRoomType3D
       position: 1,0,0
       roomType: MossyTempleGeneralRoom
     - !type:ConnectRooms3D
       roomA: 0,0,0
-      roomB: 0,0,1
+      roomB: -1,0,2
     - !type:ConnectRooms3D
       roomA: 0,0,0
       roomB: 1,0,0

@@ -19,7 +19,9 @@ public sealed partial class ConnectRooms3D : CEDungeonGenerationStep3D
     public Vector3i RoomB;
 
     public override Task Execute(
-        CEGeneratingProceduralDungeonComponent3D comp,
+        CEGeneratingProceduralDungeon3DComponent comp,
+        int maxRoomSize,
+        int maxRoomHeight,
         IRobustRandom random,
         ISawmill log)
     {

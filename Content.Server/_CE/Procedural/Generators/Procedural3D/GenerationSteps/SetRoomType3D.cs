@@ -26,7 +26,9 @@ public sealed partial class SetRoomType3D : CEDungeonGenerationStep3D
     public ProtoId<CERoomTypePrototype> RoomType;
 
     public override Task Execute(
-        CEGeneratingProceduralDungeonComponent3D comp,
+        CEGeneratingProceduralDungeon3DComponent comp,
+        int maxRoomSize,
+        int maxRoomHeight,
         IRobustRandom random,
         ISawmill log)
     {
@@ -39,11 +41,15 @@ public sealed partial class SetRoomType3D : CEDungeonGenerationStep3D
             return Task.CompletedTask;
         }
 
-        // No room at this position — create one.
+        // No room at this position — create one with pre-computed world dimensions.
+        var gridStep = maxRoomSize + 1;
         var newRoom = new CEProceduralAbstractRoom3D
         {
             Index = comp.Rooms.Count,
             GridCoord = Position,
+            Position = new Vector2i(Position.X * gridStep, Position.Y * gridStep),
+            Size = new Vector2i(maxRoomSize, maxRoomSize),
+            Height = maxRoomHeight,
             RoomType = RoomType,
         };
         comp.Rooms.Add(newRoom);

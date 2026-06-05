@@ -130,7 +130,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
 
         var result = job.Result;
 
-        if (result is { Success: true, MapUid: not null })
+        if (result is { Success: true })
         {
             // Initialize z-network maps now that we are outside the job context,
             // so InitializeMap does not conflict with PVS parallel jobs.
@@ -140,21 +140,28 @@ public sealed partial class CEDungeonSystem : EntitySystem
                 _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
             }
 
-            NameDungeonResult(proto, result);
-            Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
-
-            // Run post-processing layers.
-            if (proto.PostProcess.Count > 0)
+            if (result.MapUid != null)
             {
-                var ppJob = new CEDungeonPostProcessJob(
-                    DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
-                _dungeonJobQueue.EnqueueJob(ppJob);
-                await ppJob.AsTask;
+                NameDungeonResult(proto, result);
+                Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' on map {result.MapId}.");
 
-                if (ppJob.Exception != null)
-                    Log.Error($"CEDungeonSystem: post-processing failed for '{proto.ID}': {ppJob.Exception}");
-                else
-                    Log.Info($"CEDungeonSystem: post-processing complete for '{proto.ID}'.");
+                // Run post-processing layers.
+                if (proto.PostProcess.Count > 0)
+                {
+                    var ppJob = new CEDungeonPostProcessJob(
+                        DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
+                    _dungeonJobQueue.EnqueueJob(ppJob);
+                    await ppJob.AsTask;
+
+                    if (ppJob.Exception != null)
+                        Log.Error($"CEDungeonSystem: post-processing failed for '{proto.ID}': {ppJob.Exception}");
+                    else
+                        Log.Info($"CEDungeonSystem: post-processing complete for '{proto.ID}'.");
+                }
+            }
+            else
+            {
+                Log.Info($"CEDungeonSystem: generated dungeon level '{proto.ID}' (z-network only).");
             }
         }
         else
@@ -210,7 +217,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
             }
 
             var result = job.Result;
-            if (result is { Success: true, MapUid: not null })
+            if (result is { Success: true })
             {
                 // Initialize z-network maps now that we are outside the job context.
                 if (result.ZNetworkUid != null
@@ -219,15 +226,22 @@ public sealed partial class CEDungeonSystem : EntitySystem
                     _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
                 }
 
-                NameDungeonResult(proto, result);
-                Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
-
-                // Enqueue post-processing layers.
-                if (proto.PostProcess.Count > 0)
+                if (result.MapUid != null)
                 {
-                    var ppJob = new CEDungeonPostProcessJob(
-                        DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
-                    _dungeonJobQueue.EnqueueJob(ppJob);
+                    NameDungeonResult(proto, result);
+                    Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' on map {result.MapId}.");
+
+                    // Enqueue post-processing layers.
+                    if (proto.PostProcess.Count > 0)
+                    {
+                        var ppJob = new CEDungeonPostProcessJob(
+                            DungeonJobTime, _postProcess, proto.PostProcess, result.MapUid.Value, proto.MainZLevel, cts.Token);
+                        _dungeonJobQueue.EnqueueJob(ppJob);
+                    }
+                }
+                else
+                {
+                    Log.Info($"CEDungeonSystem: generated dungeon level '{protoId}' (z-network only).");
                 }
             }
             else
