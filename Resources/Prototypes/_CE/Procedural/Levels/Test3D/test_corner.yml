@@ -1,0 +1,24 @@
+# Test prototype for 3D procedural generation.
+# Three rooms forming a 3D corner: one hub at (0,0,0),
+# one step up on Z at (0,0,1), one step right on X at (1,0,0).
+- type: dungeonLevel
+  id: Test3DCorner
+  name: ce-dungeon-test-3d-corner-name
+  config:
+    !type:CEProceduralConfig3D
+    generationPlan:
+    - !type:SetRoomType3D
+      position: 0,0,0
+      roomType: MossyTempleGeneralRoom
+    - !type:SetRoomType3D
+      position: 0,0,1
+      roomType: MossyTempleGeneralRoom
+    - !type:SetRoomType3D
+      position: 1,0,0
+      roomType: MossyTempleGeneralRoom
+    - !type:ConnectRooms3D
+      roomA: 0,0,0
+      roomB: 0,0,1
+    - !type:ConnectRooms3D
+      roomA: 0,0,0
+      roomB: 1,0,0
