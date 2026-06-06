@@ -32,7 +32,7 @@ public sealed partial class CEZLevelsSystem
     /// <summary>
     /// Attempts to add the specified map to the zNetwork network at the specified depth
     /// </summary>
-    private bool TryAddMapIntoZNetwork(Entity<CEZLevelsNetworkComponent> network, EntityUid mapUid, int depth)
+    private bool TryAddMapIntoZNetwork(Entity<CEZLevelsNetworkComponent> network, EntityUid mapUid, int depth, bool raiseUpdateEvent = true)
     {
         if (TryGetZNetwork(mapUid, out var otherNetwork))
         {
@@ -64,16 +64,16 @@ public sealed partial class CEZLevelsSystem
         levelMapComponent.Depth = depth;
         levelMapComponent.NetworkUid = network;
 
-        if (network.Comp.ZLevels.TryGetValue(depth + 1, out var aboveMapUid))
-            levelMapComponent.MapAbove = aboveMapUid;
-
-        if (network.Comp.ZLevels.TryGetValue(depth - 1, out var belowMapUid))
-            levelMapComponent.MapBelow = belowMapUid;
-
         Dirty(mapUid, levelMapComponent);
 
         var ev = new CEMapAddedIntoZNetworkEvent(network, depth);
         RaiseLocalEvent(mapUid, ref ev);
+
+        if (raiseUpdateEvent)
+        {
+            var ev2 = new CEZLevelNetworkUpdatedEvent(network);
+            RaiseLocalEvent(ev2);
+        }
 
         return true;
     }
@@ -83,11 +83,12 @@ public sealed partial class CEZLevelsSystem
         var success = true;
         foreach (var (ent, depth) in maps)
         {
-            if (!TryAddMapIntoZNetwork(network, ent, depth))
+            if (!TryAddMapIntoZNetwork(network, ent, depth, raiseUpdateEvent: false))
                 success = false;
         }
 
-        RaiseLocalEvent(network, new CEZLevelNetworkUpdatedEvent());
+        var ev = new CEZLevelNetworkUpdatedEvent(network);
+        RaiseLocalEvent(ev);
 
         return success;
     }
@@ -192,7 +193,10 @@ public sealed partial class CEZLevelsSystem
 /// <summary>
 /// Called on ZLevel Network Entity, when maps added or removed from network
 /// </summary>
-public sealed class CEZLevelNetworkUpdatedEvent : EntityEventArgs;
+public sealed class CEZLevelNetworkUpdatedEvent(Entity<CEZLevelsNetworkComponent> network) : EntityEventArgs
+{
+    public readonly Entity<CEZLevelsNetworkComponent> NetworkUid = network;
+}
 
 
 /// <summary>

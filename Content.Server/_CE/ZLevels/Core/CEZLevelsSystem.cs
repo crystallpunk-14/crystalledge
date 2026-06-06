@@ -30,6 +30,21 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
         InitView();
 
         SubscribeLocalEvent<CEStationZLevelsComponent, StationPostInitEvent>(OnStationPostInit);
+        SubscribeLocalEvent<CEZLevelNetworkUpdatedEvent>(NetworkUpdated);
+    }
+
+    private void NetworkUpdated(CEZLevelNetworkUpdatedEvent ev)
+    {
+        foreach (var (depth, map) in ev.NetworkUid.Comp.ZLevels)
+        {
+            if (map is not { } mapUid)
+                continue;
+
+            var levelMapComp = EnsureComp<CEZLevelMapComponent>(mapUid);
+            levelMapComp.MapAbove = ev.NetworkUid.Comp.ZLevels.GetValueOrDefault(depth + 1);
+            levelMapComp.MapBelow = ev.NetworkUid.Comp.ZLevels.GetValueOrDefault(depth - 1);
+            Dirty(mapUid, levelMapComp);
+        }
     }
 
     private void OnStationPostInit(Entity<CEStationZLevelsComponent> ent, ref StationPostInitEvent args)

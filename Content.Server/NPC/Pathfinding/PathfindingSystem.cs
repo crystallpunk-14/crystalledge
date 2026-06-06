@@ -192,10 +192,13 @@ namespace Content.Server.NPC.Pathfinding
             var mapUidB = _transform.GetMap(coordsB);
             handle = -1;
 
-            if (mapUidA != mapUidB || mapUidA == null)
+            // CrystallEdge: allow portals between stacked Z-level maps (was: reject if mapUidA != mapUidB).
+            // Docking is unaffected — it only ever creates same-map portals.
+            if (mapUidA == null || mapUidB == null)
             {
                 return false;
             }
+            // CrystallEdge end
 
             var gridUidA = _transform.GetGrid(coordsA);
             var gridUidB = _transform.GetGrid(coordsB);

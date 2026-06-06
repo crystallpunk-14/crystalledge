@@ -21,12 +21,12 @@ public sealed class CERoofSystem : CESharedRoofSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEZLevelsNetworkComponent, CEZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
+        SubscribeLocalEvent<CEZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
     }
 
-    private void OnNetworkUpdated(Entity<CEZLevelsNetworkComponent> ent, ref CEZLevelNetworkUpdatedEvent args)
+    private void OnNetworkUpdated(CEZLevelNetworkUpdatedEvent ev)
     {
-        RecalculateNetworkRoofs(ent);
+        RecalculateNetworkRoofs(ev.NetworkUid);
     }
 
     public void RecalculateNetworkRoofs(Entity<CEZLevelsNetworkComponent> network)
