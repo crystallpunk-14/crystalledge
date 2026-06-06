@@ -117,9 +117,10 @@
       cost: 1
       exploreRadius: 8
   - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    selector: !type:CEGOAPSelectorNearestEnemy
-    range: 2.5
+    entries:
+    - conditionKey: EnemyInMeleeRange
+      selector: !type:CEGOAPSelectorNearestEnemy
+      range: 2.5
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 2

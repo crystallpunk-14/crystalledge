@@ -1,4 +1,4 @@
-﻿using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
 using Robust.Shared.Map;
@@ -6,11 +6,8 @@ using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
-/// <summary>
-/// Checks if a selector-resolved target is within a specified range.
-/// </summary>
-[RegisterComponent]
-public sealed partial class CEGOAPRangeToTargetSensorComponent : Component
+[DataDefinition]
+public sealed partial class CEGOAPRangeToTargetSensorEntry
 {
     [DataField(required: true)]
     public string ConditionKey = string.Empty;
@@ -23,6 +20,17 @@ public sealed partial class CEGOAPRangeToTargetSensorComponent : Component
     /// </summary>
     [DataField(required: true)]
     public float Range = 1f;
+}
+
+/// <summary>
+/// Checks if a selector-resolved target is within a specified range.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CEGOAPRangeToTargetSensorComponent : Component
+{
+    [DataField]
+    [AlwaysPushInheritance]
+    public List<CEGOAPRangeToTargetSensorEntry> Entries = new();
 
     [DataField]
     public TimeSpan UpdateInterval = TimeSpan.FromSeconds(0.2);
@@ -54,7 +62,8 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : EntitySystem
                 continue;
 
             sensor.NextUpdateTime = curTime + sensor.UpdateInterval;
-            Evaluate(uid, sensor, goap);
+            foreach (var entry in sensor.Entries)
+                EvaluateEntry(uid, entry, goap);
         }
     }
 
@@ -63,16 +72,17 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : EntitySystem
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        Evaluate(ent, ent.Comp, goap);
+        foreach (var entry in ent.Comp.Entries)
+            EvaluateEntry(ent, entry, goap);
     }
 
-    private void Evaluate(EntityUid uid, CEGOAPRangeToTargetSensorComponent sensor, CEGOAPComponent goap)
+    private void EvaluateEntry(EntityUid uid, CEGOAPRangeToTargetSensorEntry entry, CEGOAPComponent goap)
     {
-        var result = sensor.Selector.Resolve(uid, EntityManager);
+        var result = entry.Selector.Resolve(uid, EntityManager);
 
         if (!_xformQuery.TryGetComponent(uid, out var xform))
         {
-            goap.WorldState[sensor.ConditionKey] = false;
+            goap.WorldState[entry.ConditionKey] = false;
             return;
         }
 
@@ -85,11 +95,10 @@ public sealed partial class CEGOAPRangeToTargetSensorSystem : EntitySystem
         if (targetCoords is not { } coords ||
             !xform.Coordinates.TryDistance(EntityManager, coords, out var distance))
         {
-            goap.WorldState[sensor.ConditionKey] = false;
+            goap.WorldState[entry.ConditionKey] = false;
             return;
         }
 
-        goap.WorldState[sensor.ConditionKey] = distance <= sensor.Range;
+        goap.WorldState[entry.ConditionKey] = distance <= entry.Range;
     }
 }
-

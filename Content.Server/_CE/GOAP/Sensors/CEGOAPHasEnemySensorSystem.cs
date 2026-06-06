@@ -4,11 +4,19 @@ using Content.Shared._CE.GOAP.Components;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
-[RegisterComponent]
-public sealed partial class CEGOAPHasEnemySensorComponent : Component
+[DataDefinition]
+public sealed partial class CEGOAPHasEnemySensorEntry
 {
     [DataField(required: true)]
     public string ConditionKey = string.Empty;
+}
+
+[RegisterComponent]
+public sealed partial class CEGOAPHasEnemySensorComponent : Component
+{
+    [DataField]
+    [AlwaysPushInheritance]
+    public List<CEGOAPHasEnemySensorEntry> Entries = [];
 }
 
 public sealed class CEGOAPHasEnemySensorSystem : EntitySystem
@@ -23,25 +31,28 @@ public sealed class CEGOAPHasEnemySensorSystem : EntitySystem
 
     private void OnCacheRebuilt(Entity<CEGOAPHasEnemySensorComponent> ent, ref CEGOAPKnowledgeCacheRebuiltEvent args)
     {
-        Evaluate(ent);
+        EvaluateAll(ent);
     }
 
     private void OnRefresh(Entity<CEGOAPHasEnemySensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
     {
-        Evaluate(ent);
+        EvaluateAll(ent);
     }
 
-    private void Evaluate(Entity<CEGOAPHasEnemySensorComponent> ent)
+    private void EvaluateAll(Entity<CEGOAPHasEnemySensorComponent> ent)
     {
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
         if (!TryComp<CEGOAPKnowledgeCacheComponent>(ent, out var cache))
         {
-            goap.WorldState[ent.Comp.ConditionKey] = false;
+            foreach (var entry in ent.Comp.Entries)
+                goap.WorldState[entry.ConditionKey] = false;
             return;
         }
 
-        goap.WorldState[ent.Comp.ConditionKey] = cache.Enemies.Count > 0;
+        var hasEnemy = cache.Enemies.Count > 0;
+        foreach (var entry in ent.Comp.Entries)
+            goap.WorldState[entry.ConditionKey] = hasEnemy;
     }
 }

@@ -1,16 +1,12 @@
-﻿using Content.Shared._CE.GOAP;
+using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
-/// <summary>
-/// Checks if the entity's own health fraction is below a threshold.
-/// Event-driven via CEDamageChangedEvent.
-/// </summary>
-[RegisterComponent]
-public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component
+[DataDefinition]
+public sealed partial class CEGOAPCheckHealthLevelSensorEntry
 {
     [DataField(required: true)]
     public string ConditionKey = string.Empty;
@@ -23,6 +19,18 @@ public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component
     /// </summary>
     [DataField]
     public float Threshold = 0.5f;
+}
+
+/// <summary>
+/// Checks if the entity's own health fraction is below a threshold.
+/// Event-driven via CEDamageChangedEvent.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CEGOAPCheckHealthLevelSensorComponent : Component
+{
+    [DataField]
+    [AlwaysPushInheritance]
+    public List<CEGOAPCheckHealthLevelSensorEntry> Entries = [];
 }
 
 public sealed partial class CEGOAPCheckHealthLevelSensorSystem : EntitySystem
@@ -39,27 +47,33 @@ public sealed partial class CEGOAPCheckHealthLevelSensorSystem : EntitySystem
 
     private void OnRefresh(Entity<CEGOAPCheckHealthLevelSensorComponent> ent, ref CEGOAPSensorRefreshEvent args)
     {
-        Evaluate(ent);
+        EvaluateAll(ent);
     }
 
     private void OnDamageChanged(Entity<CEGOAPCheckHealthLevelSensorComponent> ent, ref CEDamageChangedEvent args)
     {
-        Evaluate(ent);
+        EvaluateAll(ent);
     }
 
-    private void Evaluate(Entity<CEGOAPCheckHealthLevelSensorComponent> ent)
+    private void EvaluateAll(Entity<CEGOAPCheckHealthLevelSensorComponent> ent)
     {
         if (!TryComp<CEGOAPComponent>(ent, out var goap))
             return;
 
-        var result = ent.Comp.Selector.Resolve(ent, EntityManager);
+        foreach (var entry in ent.Comp.Entries)
+            EvaluateEntry(ent, entry, goap);
+    }
+
+    private void EvaluateEntry(EntityUid uid, CEGOAPCheckHealthLevelSensorEntry entry, CEGOAPComponent goap)
+    {
+        var result = entry.Selector.Resolve(uid, EntityManager);
         if (result.Entity is not { } target)
         {
-            goap.WorldState[ent.Comp.ConditionKey] = false;
+            goap.WorldState[entry.ConditionKey] = false;
             return;
         }
 
         var fraction = _damageable.GetHealthInfo(target).Ratio;
-        goap.WorldState[ent.Comp.ConditionKey] = fraction < ent.Comp.Threshold;
+        goap.WorldState[entry.ConditionKey] = fraction < entry.Threshold;
     }
 }
