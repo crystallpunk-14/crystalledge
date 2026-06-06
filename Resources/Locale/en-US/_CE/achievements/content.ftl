@@ -6,3 +6,6 @@ ce-achievement-betatester-desc = Participate in testing early versions of Crysta
 
 ce-achievement-class-wanderer-name = Class "Wanderer"
 ce-achievement-class-wanderer-desc = Reach the “Arena of the Fallen” location
+
+ce-achievement-neonate-lurker-slayer-name = Sound In The Dark
+ce-achievement-neonate-lurker-slayer-desc = Kill a Neonate Lurker.

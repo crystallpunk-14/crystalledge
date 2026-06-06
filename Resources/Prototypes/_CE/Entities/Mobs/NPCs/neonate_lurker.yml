@@ -1,0 +1,164 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobDamageable
+  - CEMobCombat
+  - CEMobGOAPBase
+  id: CEMobNeonateLurker
+  name: Neonate Lurker
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAPAlarm
+    sound:
+      path: /Audio/_CE/Mobs/ritual2.ogg
+      params:
+        variation: 0.3
+  - type: CEDestructible
+    destroyThreshold: 25
+  - type: CEGOAP
+    goals:
+    # Primary goal: Flee from enemy if visible
+    - desiredState:
+        EnemyVisible: false
+      priority: 1
+    # Secondary goal: Kill enemy if close enough
+    - desiredState:
+        EnemyDead: true
+      priority: 2
+
+    actions:
+    # Move to target (for attacking)
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyClose: true
+      effects:
+        EnemyInMeleeRange: true
+      cost: 2
+      range: 1.5
+    # Attack target when in range
+    - !type:CEGOAPMeleeAttackAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      preconditions:
+        EnemyClose: true
+      effects:
+        EnemyDead: true
+      cost: 0.1
+      useType: Primary
+      angleVariation: 5
+    # Flee from enemy
+    - !type:CEGOAPFleeAction
+      selector: !type:CEGOAPSelectorNearestEnemy
+      targetKey: enemy
+      preconditions:
+        EnemyVisible: true
+      effects:
+        EnemyVisible: false
+      cost: 1
+      maxBfsIterations: 3
+      recalculateInterval: 0.3
+  - type: CEGOAPRangeToTargetSensor
+    conditionKey: EnemyClose
+    targetKey: enemy
+    range: 5
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: CEAchievementOnDestruct
+    achievement: NeonateLurkerSlayer
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/neonate_lurker.rsi
+    scale: 0.6, 0.6
+    layers:
+    - state: live
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 4.5
+  - type: CEWeapon
+    spriteRotation: -90
+    effectSlots:
+      OnHit:
+      - !type:WeaponArcAttack
+        range: 0.5
+        arcWidth: 40
+        effects:
+        - !type:Damage
+          attackType: Melee
+          damage:
+            types:
+              Physical: 20
+    animations:
+      Primary:
+      - anim: ClawSwipe
+- type: entity
+  id: CEClawSwipeEffectTelegraphy
+  components:
+  - type: Sprite
+    sprite: Effects/arcs.rsi
+    state: disarm
+    drawdepth: Effects
+- type: entity
+  id: CEClawSwipeEffect
+  components:
+  - type: Sprite
+    sprite: Effects/arcs.rsi
+    state: claw
+    drawdepth: Effects
+- type: entityEffectAnimation
+  id: ClawSwipe
+  movementSpeed: 0.8
+  duration: 0.8
+  events:
+    0:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEClawSwipeEffectTelegraphy
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.3
+        easing: QuadIn
+      - time: 0.2
+        offset: 0, -0.2
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    0.2:
+    - !type:UsedEntityAnimation
+      dummyEntity: CEClawSwipeEffect
+      offsetAnimation:
+      - time: 0.0
+        offset: 0, -0.2
+        easing: QuadIn
+      - time: 0.3
+        offset: 0, -0.7
+        easing: QuadIn
+
+      rotationAnimation:
+      - time: 0.0
+        rotation: 90
+
+      colorAnimation:
+      - time: 0.1
+        color: "#ffffff"
+      - time: 0.3
+        color: "#ffffff00"  # Fade out
+        easing: QuadOut
+    - !type:PlaySound
+      sound:
+        path: /Audio/Weapons/Xeno/alien_claw_flesh1.ogg
+        params:
+          variation: 0.2
+    0.25:
+    - !type:WeaponEffectSlot
+      slot: OnHit
+    - !type:Dash
+      distance: 0.1

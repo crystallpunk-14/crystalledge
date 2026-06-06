@@ -22,3 +22,15 @@
   unlockedIcon:
     sprite: /Textures/_CE/Achievements/class_wanderer.rsi
     state: unlocked
+
+- type: achievement
+  id: NeonateLurkerSlayer
+  name: ce-achievement-neonate-lurker-slayer-name
+  desc: ce-achievement-neonate-lurker-slayer-desc
+  secret: true
+  unlockedIcon:
+    sprite: /Textures/_CE/Skills/Neutral/lurkerachievementskill.rsi
+    state: fear
+  secretIcon:
+    sprite: /Textures/_CE/Achievements/_default.rsi
+    state: 'secret'
