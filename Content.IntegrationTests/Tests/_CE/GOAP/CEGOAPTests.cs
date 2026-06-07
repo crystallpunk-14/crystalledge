@@ -59,6 +59,14 @@ public sealed class CEGOAPTests : GameTest
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
+  - type: CEGOAPRangeToTargetSensor
+    entries:
+    - conditionKey: EnemyInMeleeRange
+      selector: !type:CEGOAPSelectorNearestEnemy
+        conditions:
+        - !type:HealthPercentCondition
+          max: 0.5
+      range: 1
 ";
 
     private async Task SetupTileGrid(TestMapData map, int width = 5, int height = 5)
