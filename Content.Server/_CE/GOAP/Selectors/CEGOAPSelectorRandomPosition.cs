@@ -17,8 +17,6 @@ public sealed partial class CEGOAPSelectorRandomPositionSystem : CEGOAPTargetSel
 {
     [Dependency] private IRobustRandom _random = default!;
 
-    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
-
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorRandomPosition> ev)
     {
         if (!_xformQuery.TryGetComponent(ev.Agent, out var xform))

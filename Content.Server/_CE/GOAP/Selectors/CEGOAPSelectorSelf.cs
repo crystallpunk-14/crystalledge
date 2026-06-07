@@ -11,8 +11,6 @@ public sealed partial class CEGOAPSelectorSelf : CEGOAPTargetSelectorBase<CEGOAP
 
 public sealed partial class CEGOAPSelectorSelfSystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorSelf>
 {
-    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
-
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorSelf> ev)
     {
         ev.Entity = ev.Agent;
