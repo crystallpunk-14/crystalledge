@@ -61,15 +61,15 @@ public sealed class CEGOAPTests : GameTest
       exploreRadius: 8
 ";
 
-    private async Task SetupTileGrid(TestMapData map)
+    private async Task SetupTileGrid(TestMapData map, int width = 5, int height = 5)
     {
         await Server.WaitPost(() =>
         {
             var mapSystem = SEntMan.System<SharedMapSystem>();
             var tileMan = Server.ResolveDependency<ITileDefinitionManager>();
             var tile = new Tile(tileMan["Plating"].TileId);
-            for (var x = 0; x < 5; x++)
-                for (var y = 0; y < 5; y++)
+            for (var x = 0; x < width; x++)
+                for (var y = 0; y < height; y++)
                     mapSystem.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), tile);
         });
     }
@@ -84,10 +84,10 @@ public sealed class CEGOAPTests : GameTest
         await SetupTileGrid(map);
 
         var humanCoords = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 2.5f));
-        var ratCoords   = new EntityCoordinates(map.Grid.Owner, new Vector2(3.5f, 2.5f));
+        var mobCoords   = new EntityCoordinates(map.Grid.Owner, new Vector2(3.5f, 2.5f));
 
         var human = await SpawnAtPosition("CEMobHuman", humanCoords);
-        var rat   = await SpawnAtPosition("CEMobFlem", ratCoords);
+        var mob   = await SpawnAtPosition("CEMobFlem", mobCoords);
 
         await RunTicksSync(5);
 
@@ -105,18 +105,26 @@ public sealed class CEGOAPTests : GameTest
         {
             var damageable = SEntMan.GetComponent<CEDamageableComponent>(human);
             Assert.That(damageable.Damage.Total, Is.GreaterThan(initialDamage),
-                "Human should have taken damage from the rat");
-            Assert.That(SEntMan.HasComponent<CEActiveGOAPComponent>(rat),
-                "Rat GOAP should be active");
-            var cache = SEntMan.GetComponent<CEGOAPKnowledgeCacheComponent>(rat);
+                "Human should have taken damage from the mob");
+            Assert.That(SEntMan.HasComponent<CEActiveGOAPComponent>(mob),
+                "Mob GOAP should be active");
+            var cache = SEntMan.GetComponent<CEGOAPKnowledgeCacheComponent>(mob);
             Assert.That(cache.Enemies, Is.Not.Empty,
-                "Rat should have classified at least one enemy");
+                "Mob should have classified at least one enemy");
         });
     }
 
     /// <summary>
-    /// Condition selector: mob with HealthPercentCondition max=0.5 ignores the nearby healthy
+    /// Condition selector: mob with HealthPercentCondition max=0.5 ignores the closer healthy
     /// human and attacks the farther wounded human instead.
+    ///
+    /// Layout (top view):
+    ///   Human1 (healthy)  at (2.5, 1.5) — 1 tile ABOVE mob, distance 1
+    ///   Mob               at (2.5, 2.5)
+    ///   Human2 (wounded)  at (4.5, 2.5) — 2 tiles RIGHT of mob, distance 2
+    ///
+    /// Mob moves right toward Human2. Human1 is perpendicular (above), so it stays
+    /// outside the 40° attack arc even when Mob is adjacent to Human2.
     /// </summary>
     [Test]
     public async Task GOAPConditionSelectorTest()
@@ -124,16 +132,13 @@ public sealed class CEGOAPTests : GameTest
         var map = await Pair.CreateTestMap();
         await SetupTileGrid(map);
 
-        // Rat at center. Human1 (healthy) 1 tile away. Human2 (wounded) 2 tiles away.
-        // Without the condition the rat would pick Human1 as nearest.
-        // With HealthPercentCondition max:0.5 it must skip Human1 and target Human2.
-        var ratCoords    = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 2.5f));
-        var human1Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(3.5f, 2.5f));
-        var human2Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(4.5f, 2.5f));
+        var mobCoords    = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 2.5f));
+        var human1Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 1.5f)); // above, closer
+        var human2Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(4.5f, 2.5f)); // right, farther
 
         var human1 = await SpawnAtPosition("CEMobHuman", human1Coords);
         var human2 = await SpawnAtPosition("CEMobHuman", human2Coords);
-        var rat    = await SpawnAtPosition("CEMobFlemConditionTest", ratCoords);
+        var mob    = await SpawnAtPosition("CEMobFlemConditionTest", mobCoords);
 
         await RunTicksSync(5);
 
@@ -150,7 +155,7 @@ public sealed class CEGOAPTests : GameTest
         });
 
         await RunSeconds(1);
-        await SpawnAtPosition("CEAlarmInRange5", ratCoords);
+        await SpawnAtPosition("CEAlarmInRange5", mobCoords);
         await RunSeconds(5);
 
         await Server.WaitAssertion(() =>
@@ -159,11 +164,11 @@ public sealed class CEGOAPTests : GameTest
             var human2Damage = SEntMan.GetComponent<CEDamageableComponent>(human2).Damage.Total;
 
             Assert.That(human1Damage, Is.EqualTo(human1InitialDamage),
-                "Healthy human (nearer) should not have been attacked by the rat");
+                "Healthy human (closer) should not have been attacked by the mob");
             Assert.That(human2Damage, Is.GreaterThan(60),
-                "Wounded human should have been attacked by the rat");
-            Assert.That(SEntMan.HasComponent<CEActiveGOAPComponent>(rat),
-                "Rat GOAP should be active");
+                "Wounded human should have been attacked by the mob");
+            Assert.That(SEntMan.HasComponent<CEActiveGOAPComponent>(mob),
+                "Mob GOAP should be active");
         });
     }
 }
