@@ -1,9 +1,8 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
-using Content.Shared._CE.Health;
 using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP.Selectors;
@@ -20,10 +19,6 @@ public sealed partial class CEGOAPSelectorNearestEnemy : CEGOAPTargetSelectorBas
 
 public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorNearestEnemy>
 {
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private CEMobStateSystem _mobState = default!;
-
-    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
     [Dependency] private EntityQuery<CEGOAPComponent> _goapQuery = default!;
 
@@ -35,17 +30,14 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
         if (!_xformQuery.TryGetComponent(ev.Agent, out var selfXform))
             return;
 
-        _goapQuery.TryGetComponent(ev.Agent, out var goap);
+        var alive = GetFilteredEnemies(ev.Agent, cache.Enemies, ev.Selector.Conditions);
 
         var selfPos = _transform.GetWorldPosition(selfXform);
         EntityUid? bestAlive = null;
         var bestAliveDist = float.MaxValue;
 
-        foreach (var enemy in cache.Enemies)
+        foreach (var enemy in alive)
         {
-            if (!_mobState.IsAlive(enemy))
-                continue;
-
             if (!_xformQuery.TryGetComponent(enemy, out var ex))
                 continue;
 
@@ -64,6 +56,7 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
             return;
         }
 
+        _goapQuery.TryGetComponent(ev.Agent, out var goap);
         if (goap == null)
             return;
 
@@ -84,7 +77,7 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
             }
         }
 
-        if (rememberedCoords != null)
+        if (rememberedCoords.HasValue)
             ev.Position = rememberedCoords;
     }
 }

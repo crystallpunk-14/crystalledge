@@ -1,6 +1,5 @@
-﻿using Content.Server._CE.GOAP.Classifiers;
+using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP.Selectors;
-using Content.Shared._CE.Health;
 using Robust.Shared.Random;
 
 namespace Content.Server._CE.GOAP.Selectors;
@@ -15,9 +14,6 @@ public sealed partial class CEGOAPSelectorRandomEnemy : CEGOAPTargetSelectorBase
 public sealed partial class CEGOAPSelectorRandomEnemySystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorRandomEnemy>
 {
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private CEMobStateSystem _mobState = default!;
-
-    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
 
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorRandomEnemy> ev)
@@ -25,17 +21,11 @@ public sealed partial class CEGOAPSelectorRandomEnemySystem : CEGOAPTargetSelect
         if (!_cacheQuery.TryGetComponent(ev.Agent, out var cache) || cache.Enemies.Count == 0)
             return;
 
-        var aliveEnemies = new List<EntityUid>();
-        foreach (var enemy in cache.Enemies)
-        {
-            if (_mobState.IsAlive(enemy))
-                aliveEnemies.Add(enemy);
-        }
-
-        if (aliveEnemies.Count == 0)
+        var alive = GetFilteredEnemies(ev.Agent, cache.Enemies, ev.Selector.Conditions);
+        if (alive.Count == 0)
             return;
 
-        var chosen = _random.Pick(aliveEnemies);
+        var chosen = _random.Pick(alive);
         ev.Entity = chosen;
         if (_xformQuery.TryGetComponent(chosen, out var xform))
             ev.Position = xform.Coordinates;

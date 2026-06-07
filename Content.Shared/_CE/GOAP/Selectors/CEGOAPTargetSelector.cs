@@ -1,5 +1,8 @@
+using Content.Shared._CE.EntityEffect;
+using Content.Shared._CE.Health;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 
 namespace Content.Shared._CE.GOAP.Selectors;
 
@@ -12,6 +15,13 @@ namespace Content.Shared._CE.GOAP.Selectors;
 [MeansImplicitUse]
 public abstract partial class CEGOAPTargetSelector
 {
+    /// <summary>
+    /// Optional conditions used to pre-filter candidate entities before selection.
+    /// Each candidate must pass all conditions (AND logic). Ignored by selectors with no candidate list.
+    /// </summary>
+    [DataField]
+    public List<CEEntityCondition> Conditions = new();
+
     /// <summary>
     /// Resolves the selector to an entity and/or coordinate.
     /// </summary>
@@ -61,6 +71,10 @@ public record struct CEGOAPSelectorResolveEvent<T>(T Selector, EntityUid Agent)
 public abstract partial class CEGOAPTargetSelectorSystem<TSelector> : EntitySystem
     where TSelector : CEGOAPTargetSelectorBase<TSelector>
 {
+    [Dependency] protected CEMobStateSystem _mobState = default!;
+    [Dependency] protected SharedTransformSystem _transform = default!;
+    [Dependency] protected EntityQuery<TransformComponent> _xformQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -73,4 +87,44 @@ public abstract partial class CEGOAPTargetSelectorSystem<TSelector> : EntitySyst
     }
 
     protected abstract void Resolve(ref CEGOAPSelectorResolveEvent<TSelector> ev);
+
+    /// <summary>
+    /// Returns true if <paramref name="candidate"/> passes all <paramref name="conditions"/>.
+    /// Constructs args with <paramref name="agent"/> as Source and <paramref name="candidate"/> as Target.
+    /// </summary>
+    protected bool PassesConditions(IReadOnlyList<CEEntityCondition> conditions, EntityUid agent, EntityUid candidate)
+    {
+        if (conditions.Count == 0)
+            return true;
+
+        var args = new CEEntityEffectArgs(EntityManager, agent, null, Angle.Zero, 0f, candidate, null);
+        foreach (var cond in conditions)
+        {
+            if (!cond.Passes(args))
+                return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Filters <paramref name="candidates"/> to those that are alive and pass all selector conditions.
+    /// </summary>
+    protected List<EntityUid> GetFilteredEnemies(
+        EntityUid agent,
+        IEnumerable<EntityUid> candidates,
+        IReadOnlyList<CEEntityCondition> conditions)
+    {
+        var result = new List<EntityUid>();
+        foreach (var candidate in candidates)
+        {
+            if (!_mobState.IsAlive(candidate))
+                continue;
+
+            if (!PassesConditions(conditions, agent, candidate))
+                continue;
+
+            result.Add(candidate);
+        }
+        return result;
+    }
 }
