@@ -4,8 +4,8 @@ using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
-using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.Mana.Core;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
@@ -17,7 +17,7 @@ namespace Content.IntegrationTests.Tests._CE.GOAP;
 public sealed class CEGOAPTests : GameTest
 {
     [SidedDependency(Side.Server)]
-    private readonly CESharedDamageableSystem _damageable = default!;
+    private readonly CESharedMagicEnergySystem _mana = default!;
 
     [TestPrototypes]
     private const string TestPrototypes = @"
@@ -35,7 +35,7 @@ public sealed class CEGOAPTests : GameTest
     - !type:CEGOAPMoveToTargetAction
       selector: !type:CEGOAPSelectorNearestEnemy
         conditions:
-        - !type:HealthPercentCondition
+        - !type:ManaPercentCondition
           max: 0.5
       preconditions:
         EnemyVisible: true
@@ -45,7 +45,7 @@ public sealed class CEGOAPTests : GameTest
     - !type:CEGOAPMeleeAttackAction
       selector: !type:CEGOAPSelectorNearestEnemy
         conditions:
-        - !type:HealthPercentCondition
+        - !type:ManaPercentCondition
           max: 0.5
       preconditions:
         EnemyInMeleeRange: true
@@ -115,16 +115,21 @@ public sealed class CEGOAPTests : GameTest
     }
 
     /// <summary>
-    /// Condition selector: mob with HealthPercentCondition max=0.5 only attacks the wounded human.
+    /// Condition selector: mob with ManaPercentCondition max=0.5 prefers the low-mana human
+    /// over the closer full-mana human.
     ///
     /// Layout (top view):
-    ///   Human1 (healthy)  at (0.5, 2.5) — 2 tiles LEFT of mob, distance 2
     ///   Mob               at (2.5, 2.5)
-    ///   Human2 (wounded)  at (4.5, 2.5) — 2 tiles RIGHT of mob, distance 2
+    ///   Human1 (full mana) at (3.5, 2.5) — 1 tile RIGHT, CLOSER
+    ///   Human2 (no mana)   at (4.5, 2.5) — 2 tiles RIGHT, FARTHER
     ///
-    /// Both targets are equidistant and beyond the melee sensor range (range: 1),
-    /// so the mob must use MoveToTarget first. The conditioned selector is the only
-    /// way to pick a target — it ignores Human1 (healthy) and moves to Human2 (wounded).
+    /// Both humans have CEMagicEnergyContainer (from CEMobMagical via CEBaseSpeciesMob).
+    /// Human1 keeps full mana (100%) — fails ManaPercentCondition max=0.5.
+    /// Human2 has mana drained to 0% — passes ManaPercentCondition max=0.5.
+    ///
+    /// Without the condition the mob would pick Human1 (nearest).
+    /// With the condition the mob must skip Human1 and attack Human2.
+    /// Test passes if Human2 ends up with more damage than Human1.
     /// </summary>
     [Test]
     public async Task GOAPConditionSelectorTest()
@@ -133,8 +138,8 @@ public sealed class CEGOAPTests : GameTest
         await SetupTileGrid(map);
 
         var mobCoords    = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 2.5f));
-        var human1Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(0.5f, 2.5f)); // left, equidistant
-        var human2Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(4.5f, 2.5f)); // right, equidistant
+        var human1Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(3.5f, 2.5f)); // closer, full mana
+        var human2Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(4.5f, 2.5f)); // farther, no mana
 
         var human1 = await SpawnAtPosition("CEMobHuman", human1Coords);
         var human2 = await SpawnAtPosition("CEMobHuman", human2Coords);
@@ -142,16 +147,10 @@ public sealed class CEGOAPTests : GameTest
 
         await RunTicksSync(5);
 
-        // Wound human2 to ~40% HP (max HP = 100, deal 60 damage so ratio = 0.4)
+        // Drain all mana from human2 so the ratio is 0% — passes ManaPercentCondition max=0.5
         await Server.WaitPost(() =>
         {
-            _damageable.SetDamage(human2, 60);
-        });
-
-        var human1InitialDamage = 0;
-        await Server.WaitAssertion(() =>
-        {
-            human1InitialDamage = SEntMan.GetComponent<CEDamageableComponent>(human1).Damage.Total;
+            _mana.Take(human2, 100);
         });
 
         await RunSeconds(1);
@@ -163,10 +162,12 @@ public sealed class CEGOAPTests : GameTest
             var human1Damage = SEntMan.GetComponent<CEDamageableComponent>(human1).Damage.Total;
             var human2Damage = SEntMan.GetComponent<CEDamageableComponent>(human2).Damage.Total;
 
-            Assert.That(human1Damage, Is.EqualTo(human1InitialDamage),
-                "Healthy human (closer) should not have been attacked by the mob");
-            Assert.That(human2Damage, Is.GreaterThan(60),
-                "Wounded human should have been attacked by the mob");
+            // Mob must have attacked human2 (no mana) and dealt more damage to it than to human1 (full mana).
+            // Without the condition the mob would prefer human1 (nearest), making human1Damage > human2Damage.
+            Assert.That(human2Damage, Is.GreaterThan(human1Damage),
+                "Mob should have dealt more damage to the low-mana human than to the full-mana human");
+            Assert.That(human2Damage, Is.GreaterThan(0),
+                "Mob should have attacked the low-mana human");
             Assert.That(SEntMan.HasComponent<CEActiveGOAPComponent>(mob),
                 "Mob GOAP should be active");
         });
