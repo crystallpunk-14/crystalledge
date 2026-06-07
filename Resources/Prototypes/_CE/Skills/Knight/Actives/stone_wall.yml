@@ -94,54 +94,47 @@
     - !type:SpawnEntity
       spawns:
       - CEDustTileEffect
-  - type: CEPermanentStatusEffects
-    effects:
-    - CEStatusEffectStoneBarrier
-
-
-- type: entity
-  id: CEStatusEffectStoneBarrier
-  components:
-  - type: StatusEffect
-  - type: CEArmor
-    flat:
-      Physical: 3
-  - type: CEEffectOnLandingStatusEffect
-    effects:
-    - !type:ShockWaveVFX
-      effectTarget: User
-      width: 0.1
-    - !type:AreaEffect
-      range: 2
-      affectCaster: false
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEArmor
+      flat:
+        Physical: 3
+    - type: CEEffectOnLandingStatusEffect
+      effects:
+      - !type:ShockWaveVFX
+        effectTarget: User
+        width: 0.1
+      - !type:AreaEffect
+        range: 2
+        affectCaster: false
+        effects:
+        - !type:Damage
+          effectTarget: Target
+          attackType: Melee
+          damage:
+            types:
+              Physical: 10
+        - !type:ThrowFromUser
+          effectTarget: Target
+          distance: 1
+          throwPower: 10
+    - type: CEEffectOnHighSpeedImpactStatusEffect
+      minimumSpeed: 5
       effects:
       - !type:Damage
         effectTarget: Target
-        attackType: Melee
+        attackType: Other
         damage:
           types:
-            Physical: 10
+            Physical: 25
       - !type:ThrowFromUser
         effectTarget: Target
         distance: 1
-        throwPower: 10
-  - type: CEEffectOnHighSpeedImpactStatusEffect
-    minimumSpeed: 5
-    effects:
-    - !type:Damage
-      effectTarget: Target
-      attackType: Other
-      damage:
-        types:
-          Physical: 25
-    - !type:ThrowFromUser
-      effectTarget: Target
-      distance: 1
-      throwPower: 5
-    - !type:ShockWaveVFX
-      effectTarget: Target
-      width: 0.1
-    - !type:SpawnEntity
-      effectTarget: Target
-      spawns:
-      - CEDustTileEffect
+        throwPower: 5
+      - !type:ShockWaveVFX
+        effectTarget: Target
+        width: 0.1
+      - !type:SpawnEntity
+        effectTarget: Target
+        spawns:
+        - CEDustTileEffect

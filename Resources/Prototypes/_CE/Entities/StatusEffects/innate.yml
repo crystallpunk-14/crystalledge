@@ -1,0 +1,5 @@
+- type: entity
+  id: CEInnateStatusEffect
+  noSpawn: true
+  components:
+  - type: StatusEffect

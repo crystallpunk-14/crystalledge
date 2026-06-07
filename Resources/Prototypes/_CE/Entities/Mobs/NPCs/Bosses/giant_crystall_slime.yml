@@ -124,24 +124,18 @@
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 2
-  - type: CEPermanentStatusEffects
-    effects:
-    - CEStatusEffectGiantCrystalSlime
-
-- type: entity
-  id: CEStatusEffectGiantCrystalSlime
-  components:
-  - type: StatusEffect
-  - type: CEArmor
-    flat:
-      Cold: 3
-      Physical: 3
-      Fire: 3
-  - type: CEStatusEffectImmunity
-    blockedEffects:
-    - CEStatusEffectColdSlowdown
-    - CEStatusEffectWet
-    - CEStatusEffectFrozen
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEArmor
+      flat:
+        Cold: 3
+        Physical: 3
+        Fire: 3
+    - type: CEStatusEffectImmunity
+      blockedEffects:
+      - CEStatusEffectColdSlowdown
+      - CEStatusEffectWet
+      - CEStatusEffectFrozen
 
 
 - type: entityEffectAnimation

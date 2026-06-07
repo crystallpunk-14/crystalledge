@@ -145,23 +145,16 @@
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 4.5
-  - type: CEPermanentStatusEffects
-    effects:
-    - CEStatusEffectViator
-
-
-- type: entity
-  id: CEStatusEffectViator
-  components:
-  - type: StatusEffect
-  - type: CEArmor
-    flat:
-      Cold: 500
-  - type: CEStatusEffectImmunity
-    blockedEffects:
-    - CEStatusEffectFrozen
-    - CEStatusEffectColdSlowdown
-    - CEStatusEffectCurse
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEArmor
+      flat:
+        Cold: 500
+    - type: CEStatusEffectImmunity
+      blockedEffects:
+      - CEStatusEffectFrozen
+      - CEStatusEffectColdSlowdown
+      - CEStatusEffectCurse
 
 
 - type: entityEffectAnimation
