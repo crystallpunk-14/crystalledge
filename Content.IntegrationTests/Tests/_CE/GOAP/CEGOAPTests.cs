@@ -59,14 +59,6 @@ public sealed class CEGOAPTests : GameTest
         EnemyVisible: true
       cost: 1
       exploreRadius: 8
-  - type: CEGOAPRangeToTargetSensor
-    entries:
-    - conditionKey: EnemyInMeleeRange
-      selector: !type:CEGOAPSelectorNearestEnemy
-        conditions:
-        - !type:HealthPercentCondition
-          max: 0.5
-      range: 1
 ";
 
     private async Task SetupTileGrid(TestMapData map, int width = 5, int height = 5)
@@ -123,16 +115,16 @@ public sealed class CEGOAPTests : GameTest
     }
 
     /// <summary>
-    /// Condition selector: mob with HealthPercentCondition max=0.5 ignores the closer healthy
-    /// human and attacks the farther wounded human instead.
+    /// Condition selector: mob with HealthPercentCondition max=0.5 only attacks the wounded human.
     ///
     /// Layout (top view):
-    ///   Human1 (healthy)  at (2.5, 1.5) — 1 tile ABOVE mob, distance 1
+    ///   Human1 (healthy)  at (0.5, 2.5) — 2 tiles LEFT of mob, distance 2
     ///   Mob               at (2.5, 2.5)
     ///   Human2 (wounded)  at (4.5, 2.5) — 2 tiles RIGHT of mob, distance 2
     ///
-    /// Mob moves right toward Human2. Human1 is perpendicular (above), so it stays
-    /// outside the 40° attack arc even when Mob is adjacent to Human2.
+    /// Both targets are equidistant and beyond the melee sensor range (range: 1),
+    /// so the mob must use MoveToTarget first. The conditioned selector is the only
+    /// way to pick a target — it ignores Human1 (healthy) and moves to Human2 (wounded).
     /// </summary>
     [Test]
     public async Task GOAPConditionSelectorTest()
@@ -141,8 +133,8 @@ public sealed class CEGOAPTests : GameTest
         await SetupTileGrid(map);
 
         var mobCoords    = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 2.5f));
-        var human1Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(2.5f, 1.5f)); // above, closer
-        var human2Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(4.5f, 2.5f)); // right, farther
+        var human1Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(0.5f, 2.5f)); // left, equidistant
+        var human2Coords = new EntityCoordinates(map.Grid.Owner, new Vector2(4.5f, 2.5f)); // right, equidistant
 
         var human1 = await SpawnAtPosition("CEMobHuman", human1Coords);
         var human2 = await SpawnAtPosition("CEMobHuman", human2Coords);
