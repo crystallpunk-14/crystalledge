@@ -92,6 +92,10 @@
       actionPrototype: CEActionViatorSelfHeal
     - !type:CEGOAPUseAction
       selector: !type:CEGOAPSelectorNearestEnemy
+        conditions:
+        - !type:ManaPercentCondition
+          max: 0
+          inverted: true
       preconditions:
         EnemyVisible: true
         LowMana: true
