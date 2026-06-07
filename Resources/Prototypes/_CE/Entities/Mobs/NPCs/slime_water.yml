@@ -109,6 +109,11 @@
     animations:
       Primary:
       - anim: SlimeBite
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEFallingImmunityStatusEffect
+      stunMultiplier: 0
+      damageMultiplier: 0
 
 
 - type: entityEffectAnimation

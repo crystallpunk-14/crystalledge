@@ -115,6 +115,11 @@
   - type: CEArmor
     flat:
       Cold: 100
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEFallingImmunityStatusEffect
+      stunMultiplier: 0
+      damageMultiplier: 0
 
 # -- Slime Jump (leap toward target) --
 

@@ -116,6 +116,11 @@
     animations:
       Primary:
       - anim: BigSlimeWaterAttack
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEFallingImmunityStatusEffect
+      stunMultiplier: 0
+      damageMultiplier: 0
 
 - type: entityEffectAnimation
   id: BigSlimeWaterAttack

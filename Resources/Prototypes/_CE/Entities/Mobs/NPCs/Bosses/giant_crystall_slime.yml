@@ -136,6 +136,9 @@
       - CEStatusEffectColdSlowdown
       - CEStatusEffectWet
       - CEStatusEffectFrozen
+    - type: CEFallingImmunityStatusEffect
+      stunMultiplier: 0
+      damageMultiplier: 0
 
 
 - type: entityEffectAnimation

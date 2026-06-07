@@ -123,6 +123,11 @@
   - type: CEArmor
     flat:
       Fire: 100
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEFallingImmunityStatusEffect
+      stunMultiplier: 0
+      damageMultiplier: 0
 
 - type: entityEffectAnimation
   id: BigSlimeFireAttack
