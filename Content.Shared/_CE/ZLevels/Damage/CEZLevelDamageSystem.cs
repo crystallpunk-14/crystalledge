@@ -52,8 +52,8 @@ public sealed partial class CEZLevelDamageSystem : EntitySystem
 
         var damageToOtherEv = new CEZFallingOnTargetDamageCalculateEvent(args.ImpactPower);
         RaiseLocalEvent(ent, damageToOtherEv);
-        var otherDamage = damageToOtherEv.DamageMultiplier * BaseFallingOtherDamage * args.ImpactPower * ent.Comp.Mass;
-        var otherStun = damageToOtherEv.StunMultiplier * BaseFallingOtherStunTime * args.ImpactPower * ent.Comp.Mass;
+        var otherDamage = damageToOtherEv.DamageMultiplier * BaseFallingOtherDamage * args.ImpactPower * args.ImpactPower;
+        var otherStun = damageToOtherEv.StunMultiplier * BaseFallingOtherStunTime * args.ImpactPower * args.ImpactPower;
 
         // Calculate damage modifiers for the falling entity
         var damageToSelfEv = new CEZFallingDamageCalculateEvent(ent, args.ImpactPower);
@@ -68,13 +68,19 @@ public sealed partial class CEZLevelDamageSystem : EntitySystem
         var imFallOnEv = new CEZImFallOnEvent(entitiesAround, args.ImpactPower);
         RaiseLocalEvent(ent, imFallOnEv);
 
+        var victimDamageModifier = 1f;
+        var victimStunModifier = 1f;
+
         foreach (var victim in entitiesAround)
         {
             // Calculate damage modifiers from entities being fallen upon
             var editDamageToSelfEv = new CEZFallingDamageCalculateEvent(ent, args.ImpactPower);
             RaiseLocalEvent(victim, editDamageToSelfEv);
-            damageModifier *= editDamageToSelfEv.DamageMultiplier;
-            stunModifier *= editDamageToSelfEv.StunMultiplier;
+            // Most significant modifier (furthest from 1.0) wins across all victims
+            if (MathF.Abs(editDamageToSelfEv.DamageMultiplier - 1f) > MathF.Abs(victimDamageModifier - 1f))
+                victimDamageModifier = editDamageToSelfEv.DamageMultiplier;
+            if (MathF.Abs(editDamageToSelfEv.StunMultiplier - 1f) > MathF.Abs(victimStunModifier - 1f))
+                victimStunModifier = editDamageToSelfEv.StunMultiplier;
 
             var fellOnMeEv = new CEZFellOnMeEvent(ent, args.ImpactPower);
             RaiseLocalEvent(victim, fellOnMeEv);
@@ -88,6 +94,9 @@ public sealed partial class CEZLevelDamageSystem : EntitySystem
                 _damageable.TakeDamage(victim, otherDmgSpec, ent);
             }
         }
+
+        damageModifier *= victimDamageModifier;
+        stunModifier *= victimStunModifier;
 
         var damageAmount = args.ImpactPower * args.ImpactPower * BaseFallingDamage * damageModifier;
         if (damageAmount > 0)
