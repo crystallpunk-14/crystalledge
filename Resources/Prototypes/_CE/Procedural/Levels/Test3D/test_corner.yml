@@ -6,7 +6,7 @@
   name: ce-dungeon-test-3d-corner-name
   config:
     !type:CEProceduralConfig3D
-    generationPlan:
+    planning:
     - !type:Set
       pos: 0,0,0
       proto: MossyTempleGeneralRoom

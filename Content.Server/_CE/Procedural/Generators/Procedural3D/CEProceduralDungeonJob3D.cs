@@ -29,7 +29,7 @@ public sealed class CEProceduralDungeonJob3D(
 {
     protected override async Task<CEDungeonGenerateResult> Process()
     {
-        if (config.GenerationPlan.Count == 0)
+        if (config.Planning.Count == 0)
         {
             sawmill.Error("CEProceduralDungeonJob3D: GenerationPlan is empty, cannot generate dungeon.");
             return new CEDungeonGenerateResult(false);
@@ -42,7 +42,7 @@ public sealed class CEProceduralDungeonJob3D(
         // Built incrementally by steps that add rooms; discarded after the plan completes.
         var roomsByCoord = new Dictionary<Vector3i, int>();
 
-        foreach (var step in config.GenerationPlan)
+        foreach (var step in config.Planning)
         {
             await step.Execute(comp, roomsByCoord, config.MaxRoomSize, config.MaxRoomHeight, random, sawmill);
         }

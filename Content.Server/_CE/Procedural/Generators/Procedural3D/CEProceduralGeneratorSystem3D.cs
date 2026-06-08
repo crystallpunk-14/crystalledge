@@ -32,7 +32,7 @@ public sealed partial class CEProceduralConfig3D : CEDungeonGeneratorConfigBase<
     /// Executed sequentially to build the full 3D room graph before any rooms are placed.
     /// </summary>
     [DataField]
-    public List<CEDungeonGenerationStep3D> GenerationPlan = new();
+    public List<CEDungeonGenerationStep3D> Planning = new();
 }
 
 /// <summary>
