@@ -19,7 +19,8 @@ public sealed partial class CEGOAPSystem
         EntityUid target,
         EntityCoordinates coords)
     {
-        ent.Comp ??= EnsureComp<CEGOAPComponent>(ent);
+        if (!Resolve(ent, ref ent.Comp))
+            return;
         var now = _timing.CurTime;
         var expires = now + ent.Comp.MemoryDuration;
         var changed = !ent.Comp.Knowledge.TryGetValue(target, out var existing)
