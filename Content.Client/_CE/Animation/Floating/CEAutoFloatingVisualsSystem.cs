@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.Animation.Floating;
 using Robust.Client.GameObjects;
 using Robust.Shared.Random;
@@ -11,10 +11,10 @@ namespace Content.Client._CE.Animation.Floating;
 /// <see cref="CEAutoFloatingVisualsComponent"/>.
 /// Each entity gets a random phase offset on startup so groups of entities bob out of sync.
 /// </summary>
-public sealed class CEAutoFloatingVisualsSystem : EntitySystem
+public sealed partial class CEAutoFloatingVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server._CE.GOAPAlarm;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
@@ -15,12 +15,12 @@ namespace Content.Server._CE.GOAP;
 /// - Alarm events (noise/explosions)
 /// - Chain reaction from a nearby mob waking
 /// </summary>
-public sealed class CEGOAPSleepingSystem : EntitySystem
+public sealed partial class CEGOAPSleepingSystem : EntitySystem
 {
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private CEGOAPSystem _goap = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>
     /// How often proximity checks run.

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.Humanoid;
 using Robust.Shared.Serialization;
@@ -14,7 +15,7 @@ public sealed partial class CEElfTonedSkinColoration : ISkinColorationStrategy
 
     public SkinColorationStrategyInput InputType => SkinColorationStrategyInput.Unary;
 
-    public bool VerifySkinColor(Color color)
+    public bool VerifySkinColor(Color color, [NotNullWhen(false)] out string? reason)
     {
         var hsv = Color.ToHsv(color);
         var hue = Math.Round(hsv.X * 360f);
@@ -22,14 +23,24 @@ public sealed partial class CEElfTonedSkinColoration : ISkinColorationStrategy
         var val = Math.Round(hsv.Z * 100f);
 
         if (hue < 20f || hue > 270f)
+        {
+            reason = $"Hue {hue} out of range [20, 270]";
             return false;
+        }
 
         if (sat < 5f || sat > 50f)
+        {
+            reason = $"Saturation {sat} out of range [5, 50]";
             return false;
+        }
 
         if (val < 20f || val > 100f)
+        {
+            reason = $"Value {val} out of range [20, 100]";
             return false;
+        }
 
+        reason = null;
         return true;
     }
 

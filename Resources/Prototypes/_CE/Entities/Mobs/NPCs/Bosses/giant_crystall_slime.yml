@@ -117,30 +117,28 @@
       cost: 1
       exploreRadius: 8
   - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    selector: !type:CEGOAPSelectorNearestEnemy
-    range: 2.5
+    entries:
+    - conditionKey: EnemyInMeleeRange
+      selector: !type:CEGOAPSelectorNearestEnemy
+      range: 2.5
 
   - type: MovementSpeedModifier
     baseSprintSpeed: 2
-  - type: CEPermanentStatusEffects
-    effects:
-    - CEStatusEffectGiantCrystalSlime
-
-- type: entity
-  id: CEStatusEffectGiantCrystalSlime
-  components:
-  - type: StatusEffect
-  - type: CEArmor
-    flat:
-      Cold: 3
-      Physical: 3
-      Fire: 3
-  - type: CEStatusEffectImmunity
-    blockedEffects:
-    - CEStatusEffectColdSlowdown
-    - CEStatusEffectWet
-    - CEStatusEffectFrozen
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEArmor
+      flat:
+        Cold: 3
+        Physical: 3
+        Fire: 3
+    - type: CEStatusEffectImmunity
+      blockedEffects:
+      - CEStatusEffectColdSlowdown
+      - CEStatusEffectWet
+      - CEStatusEffectFrozen
+    - type: CEFallingImmunityStatusEffect
+      stunMultiplier: 0
+      damageMultiplier: 0
 
 
 - type: entityEffectAnimation

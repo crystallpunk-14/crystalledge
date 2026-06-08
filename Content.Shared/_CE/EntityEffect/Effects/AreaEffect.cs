@@ -1,4 +1,4 @@
-using Content.Shared.Examine;
+﻿using Content.Shared.Examine;
 using Content.Shared.Whitelist;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
@@ -35,10 +35,10 @@ public sealed partial class AreaEffect : CEEntityEffectBase<AreaEffect>
 
 public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<AreaEffect>
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelist = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedTransformSystem _transformSys = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedTransformSystem _transformSys = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<AreaEffect> args)
     {

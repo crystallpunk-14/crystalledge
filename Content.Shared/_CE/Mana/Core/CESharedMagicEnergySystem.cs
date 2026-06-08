@@ -1,4 +1,4 @@
-using Content.Shared._CE.Mana.Core.Components;
+﻿using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Audio;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
@@ -6,9 +6,9 @@ using Content.Shared.Rejuvenate;
 
 namespace Content.Shared._CE.Mana.Core;
 
-public abstract class CESharedMagicEnergySystem : EntitySystem
+public abstract partial class CESharedMagicEnergySystem : EntitySystem
 {
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
 
     public override void Initialize()
     {
@@ -214,7 +214,7 @@ public abstract class CESharedMagicEnergySystem : EntitySystem
 /// <summary>
 /// It's triggered when the energy change in MagicEnergyContainer
 /// </summary>
-public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue, int newValue, int maxValue)
+public sealed partial class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue, int newValue, int maxValue)
     : EntityEventArgs
 {
     public readonly EntityUid Target = target;
@@ -228,7 +228,7 @@ public sealed class CEMagicEnergyLevelChangeEvent(EntityUid target, int oldValue
 /// before mana is drained from the sender. Status effects on the receiver can cancel via
 /// <c>StatusEffectRelayedEvent</c>; pacifism uses this to block PvP mana theft.
 /// </summary>
-public sealed class CEAttemptStealManaEvent(EntityUid target, EntityUid user, int amount) : EntityEventArgs
+public sealed partial class CEAttemptStealManaEvent(EntityUid target, EntityUid user, int amount) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntityUid User = user;
@@ -242,7 +242,7 @@ public sealed class CEAttemptStealManaEvent(EntityUid target, EntityUid user, in
 /// Handlers can add flat bonuses and multipliers.
 /// Final max mana = (BaseMaxMana + FlatModifier) * Multiplier.
 /// </summary>
-public sealed class CECalculateMaxManaEvent(int baseMaxMana) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CECalculateMaxManaEvent(int baseMaxMana) : EntityEventArgs, IInventoryRelayEvent
 {
     public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
 
@@ -256,7 +256,7 @@ public sealed class CECalculateMaxManaEvent(int baseMaxMana) : EntityEventArgs, 
 /// <summary>
 /// Called on mana restoring source entity to calculate the amount to heal.
 /// </summary>
-public sealed class CEGetManaRestoreAmountEvent(EntityUid target, int restoreAmount) : EntityEventArgs
+public sealed partial class CEGetManaRestoreAmountEvent(EntityUid target, int restoreAmount) : EntityEventArgs
 {
     public EntityUid Target = target;
     public int RestoreAmount = restoreAmount;
@@ -265,7 +265,7 @@ public sealed class CEGetManaRestoreAmountEvent(EntityUid target, int restoreAmo
 /// <summary>
 /// Called on entity that restoring mana to calculate the amount of mana restore
 /// </summary>
-public sealed class CEGetManaRestoringAmountEvent(EntityUid? source, int restoreAmount) : EntityEventArgs
+public sealed partial class CEGetManaRestoringAmountEvent(EntityUid? source, int restoreAmount) : EntityEventArgs
 {
     public EntityUid? Source = source;
     public int RestoreAmount = restoreAmount;

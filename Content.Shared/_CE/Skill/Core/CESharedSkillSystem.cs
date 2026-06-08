@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Content.Shared._CE.Skill.Core.Components;
 using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Administration.Managers;
@@ -10,9 +10,9 @@ namespace Content.Shared._CE.Skill.Core;
 
 public abstract partial class CESharedSkillSystem : EntitySystem
 {
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly ISharedAdminManager _admin = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private ISharedAdminManager _admin = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {

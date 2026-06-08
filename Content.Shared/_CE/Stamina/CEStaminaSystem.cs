@@ -1,4 +1,4 @@
-using Content.Shared.Inventory;
+﻿using Content.Shared.Inventory;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
@@ -7,11 +7,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.Stamina;
 
-public sealed class CEStaminaSystem : EntitySystem
+public sealed partial class CEStaminaSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
 
     public override void Initialize()
     {
@@ -267,7 +267,7 @@ public sealed class CEStaminaSystem : EntitySystem
 /// Handlers can add flat bonuses and multipliers.
 /// Final max stamina = (BaseMaxStamina + FlatModifier) * Multiplier.
 /// </summary>
-public sealed class CECalculateMaxStaminaEvent(float baseMaxStamina) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CECalculateMaxStaminaEvent(float baseMaxStamina) : EntityEventArgs, IInventoryRelayEvent
 {
     public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
 
@@ -284,7 +284,7 @@ public sealed class CECalculateMaxStaminaEvent(float baseMaxStamina) : EntityEve
 /// Handlers can add flat bonuses and multipliers.
 /// Final regen rate = (BaseRegenRate + FlatModifier) * Multiplier.
 /// </summary>
-public sealed class CECalculateStaminaRegenEvent(float baseRegenRate) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CECalculateStaminaRegenEvent(float baseRegenRate) : EntityEventArgs, IInventoryRelayEvent
 {
     public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
 

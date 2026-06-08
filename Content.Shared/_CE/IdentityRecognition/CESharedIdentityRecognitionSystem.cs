@@ -1,4 +1,4 @@
-using Content.Shared.Examine;
+﻿using Content.Shared.Examine;
 using Content.Shared.Ghost;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Mind;
@@ -10,10 +10,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._CE.IdentityRecognition;
 
-public abstract class CESharedIdentityRecognitionSystem : EntitySystem
+public abstract partial class CESharedIdentityRecognitionSystem : EntitySystem
 {
-    [Dependency] private readonly SharedUserInterfaceSystem _uiSystem = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private SharedUserInterfaceSystem _uiSystem = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
 
     public override void Initialize()
     {
@@ -116,7 +116,7 @@ public abstract class CESharedIdentityRecognitionSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed class CERememberedNameChangedMessage(string name, NetEntity target) : BoundUserInterfaceMessage
+public sealed partial class CERememberedNameChangedMessage(string name, NetEntity target) : BoundUserInterfaceMessage
 {
     public string Name { get; } = name;
     public NetEntity Target { get; } = target;
@@ -129,7 +129,7 @@ public enum CERememberNameUiKey
 }
 
 [Serializable, NetSerializable]
-public sealed class CERememberNameUiState(NetEntity target) : BoundUserInterfaceState
+public sealed partial class CERememberNameUiState(NetEntity target) : BoundUserInterfaceState
 {
     public NetEntity Target = target;
 }

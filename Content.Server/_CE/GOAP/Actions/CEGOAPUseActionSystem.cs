@@ -1,4 +1,4 @@
-using Content.Shared._CE.GOAP;
+﻿using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
@@ -23,11 +23,11 @@ public sealed partial class CEGOAPUseAction : CEGOAPActionBase<CEGOAPUseAction>
 
 public sealed partial class CEGOAPUseActionSystem : CEGOAPActionSystem<CEGOAPUseAction>
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
-    [Dependency] private readonly EntityQuery<EntityTargetActionComponent> _entityTargetQuery = default!;
-    [Dependency] private readonly EntityQuery<WorldTargetActionComponent> _worldTargetQuery = default!;
+    [Dependency] private EntityQuery<EntityTargetActionComponent> _entityTargetQuery = default!;
+    [Dependency] private EntityQuery<WorldTargetActionComponent> _worldTargetQuery = default!;
 
     public override void Initialize()
     {

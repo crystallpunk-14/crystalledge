@@ -10,8 +10,10 @@
   - type: CEGOAPEarsPerceptor
   - type: CEGOAPPainPerceptor
   - type: CEGOAPHasEnemySensor
-    conditionKey: EnemyVisible
+    entries:
+    - conditionKey: EnemyVisible
   - type: CEGOAPRangeToTargetSensor
-    conditionKey: EnemyInMeleeRange
-    selector: !type:CEGOAPSelectorNearestEnemy
-    range: 1
+    entries:
+    - conditionKey: EnemyInMeleeRange
+      selector: !type:CEGOAPSelectorNearestEnemy
+      range: 1

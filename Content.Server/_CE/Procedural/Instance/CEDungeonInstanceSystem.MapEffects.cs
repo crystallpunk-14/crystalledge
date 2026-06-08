@@ -1,4 +1,4 @@
-using Content.Shared._CE.Procedural.Components;
+﻿using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.Procedural.MapEffects;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
@@ -13,7 +13,7 @@ namespace Content.Server._CE.Procedural.Instance;
 /// </summary>
 public sealed partial class CEDungeonInstanceSystem
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _stacks = default!;
+    [Dependency] private CEStatusEffectStackSystem _stacks = default!;
 
     /// <summary>
     /// Tracks which status effects are currently applied to each player from map effects.

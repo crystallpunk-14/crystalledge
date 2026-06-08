@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
@@ -20,12 +20,12 @@ public sealed partial class CEGOAPSelectorNearestEnemy : CEGOAPTargetSelectorBas
 
 public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorNearestEnemy>
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CEMobStateSystem _mobState = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CEMobStateSystem _mobState = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
-    [Dependency] private readonly EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
-    [Dependency] private readonly EntityQuery<CEGOAPComponent> _goapQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
+    [Dependency] private EntityQuery<CEGOAPComponent> _goapQuery = default!;
 
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorNearestEnemy> ev)
     {

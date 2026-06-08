@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Robust.Shared.CPUJob.JobQueues;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Components;
@@ -25,7 +25,7 @@ public sealed partial class CEStaticMapConfig : CEDungeonGeneratorConfigBase<CES
 /// </summary>
 public sealed partial class CEStaticMapGeneratorSystem : CEDungeonGeneratorSystem<CEStaticMapConfig>
 {
-    [Dependency] private readonly MapLoaderSystem _loader = default!;
+    [Dependency] private MapLoaderSystem _loader = default!;
 
     protected override Job<CEDungeonGenerateResult> CreateJob(
         CEStaticMapConfig config,

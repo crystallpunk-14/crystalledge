@@ -1,4 +1,4 @@
-using Content.Server._CE.ZLevels.LaddersCache;
+﻿using Content.Server._CE.ZLevels.LaddersCache;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
@@ -33,17 +33,17 @@ public sealed partial class CEGOAPMoveToTargetAction : CEGOAPActionBase<CEGOAPMo
 
 public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<CEGOAPMoveToTargetAction>
 {
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CESharedZLevelsSystem _zLevels = default!;
-    [Dependency] private readonly CEZLevelsLaddersCacheSystem _ladderCache = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private NPCSteeringSystem _steering = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CESharedZLevelsSystem _zLevels = default!;
+    [Dependency] private CEZLevelsLaddersCacheSystem _ladderCache = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
-    [Dependency] private readonly EntityQuery<NPCSteeringComponent> _steeringQuery = default!;
-    [Dependency] private readonly EntityQuery<MapGridComponent> _gridQuery = default!;
-    [Dependency] private readonly EntityQuery<MapComponent> _mapQuery = default!;
-    [Dependency] private readonly EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<NPCSteeringComponent> _steeringQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<MapComponent> _mapQuery = default!;
+    [Dependency] private EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
 
 
     private readonly Dictionary<EntityUid, Direction> _pendingAscent = new();

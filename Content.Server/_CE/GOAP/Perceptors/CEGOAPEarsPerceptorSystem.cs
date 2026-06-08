@@ -1,4 +1,4 @@
-using Content.Server._CE.GOAPAlarm;
+﻿using Content.Server._CE.GOAPAlarm;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using System.Numerics;
@@ -15,11 +15,11 @@ public sealed partial class CEGOAPEarsPerceptorComponent : Component
 {
 }
 
-public sealed class CEGOAPEarsPerceptorSystem : EntitySystem
+public sealed partial class CEGOAPEarsPerceptorSystem : EntitySystem
 {
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CESharedZLevelsSystem _zLevel = default!;
+    [Dependency] private CEGOAPSystem _goap = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CESharedZLevelsSystem _zLevel = default!;
 
     public override void Initialize()
     {

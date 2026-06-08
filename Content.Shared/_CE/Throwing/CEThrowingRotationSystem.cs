@@ -1,13 +1,13 @@
-using Content.Shared.Throwing;
+﻿using Content.Shared.Throwing;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared._CE.Throwing;
 
-public sealed class CEThrowingRotationSystem : EntitySystem
+public sealed partial class CEThrowingRotationSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

@@ -490,7 +490,7 @@ public sealed partial class NPCSteeringSystem
 
     #region Static Avoidance
 
-    [Dependency] private readonly EntityQuery<CENavIgnoreComponent> _navQuery = default!; //CrystallEdge
+    [Dependency] private EntityQuery<CENavIgnoreComponent> _navQuery = default!; //CrystallEdge
 
     /// <summary>
     /// Tries to avoid static blockers such as walls.

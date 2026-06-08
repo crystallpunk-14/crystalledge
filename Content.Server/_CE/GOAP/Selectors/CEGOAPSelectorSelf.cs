@@ -1,4 +1,4 @@
-using Content.Shared._CE.GOAP.Selectors;
+﻿using Content.Shared._CE.GOAP.Selectors;
 
 namespace Content.Server._CE.GOAP.Selectors;
 
@@ -11,7 +11,7 @@ public sealed partial class CEGOAPSelectorSelf : CEGOAPTargetSelectorBase<CEGOAP
 
 public sealed partial class CEGOAPSelectorSelfSystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorSelf>
 {
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorSelf> ev)
     {

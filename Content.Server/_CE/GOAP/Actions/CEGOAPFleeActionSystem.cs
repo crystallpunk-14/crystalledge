@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
@@ -31,10 +31,10 @@ public sealed partial class CEGOAPFleeAction : CEGOAPActionBase<CEGOAPFleeAction
 
 public sealed partial class CEGOAPFleeActionSystem : CEGOAPActionSystem<CEGOAPFleeAction>
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly PathfindingSystem _pathfinding = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private NPCSteeringSystem _steering = default!;
+    [Dependency] private PathfindingSystem _pathfinding = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextRecalc = new();
 

@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.TimedAppearance;
@@ -10,8 +10,8 @@ namespace Content.Shared._CE.TimedAppearance;
 /// </summary>
 public sealed partial class CETimedAppearanceSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
     {

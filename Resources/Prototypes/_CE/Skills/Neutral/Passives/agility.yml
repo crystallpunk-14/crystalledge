@@ -1,7 +1,7 @@
-# TODO: Replace masochism.rsi with a dedicated agility sprite
 - type: skill
   parent: BaseNeutralSkill
   id: Agility
+  weight: 0.5
   unique: false
   icon:
     sprite: _CE/Skills/Neutral/stamina_upgrade.rsi

@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Mapping.Prototypes;
 using Robust.Client.Graphics;
@@ -12,10 +12,10 @@ namespace Content.Client._CE.Procedural;
 /// Draws rectangles showing the size and position of each <see cref="CEDungeonRoom3DPrototype"/>
 /// that uses the selected <see cref="CEZLevelMapPrototype"/> as its atlas source.
 /// </summary>
-public sealed class CEDungeonAtlasOverlay : Overlay
+public sealed partial class CEDungeonAtlasOverlay : Overlay
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IResourceCache _cache = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace | OverlaySpace.ScreenSpace;
 

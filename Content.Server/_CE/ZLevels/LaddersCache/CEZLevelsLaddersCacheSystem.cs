@@ -1,18 +1,18 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.ZLevels.Core.Components;
 using JetBrains.Annotations;
 using Robust.Shared.Map.Components;
 
 namespace Content.Server._CE.ZLevels.LaddersCache;
 
-public sealed class CEZLevelsLaddersCacheSystem : EntitySystem
+public sealed partial class CEZLevelsLaddersCacheSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
-    [Dependency] private readonly EntityQuery<MapGridComponent> _gridQuery = default!;
-    [Dependency] private readonly EntityQuery<CEZLevelsLaddersCacheComponent> _cacheQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<CEZLevelsLaddersCacheComponent> _cacheQuery = default!;
 
     public override void Initialize()
     {

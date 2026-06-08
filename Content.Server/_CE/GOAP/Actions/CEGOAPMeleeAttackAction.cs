@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server._CE.MeleeWeapon;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.GOAP;
@@ -27,13 +27,13 @@ public sealed partial class CEGOAPMeleeAttackAction : CEGOAPActionBase<CEGOAPMel
 
 public sealed partial class CEGOAPMeleeAttackActionSystem : CEGOAPActionSystem<CEGOAPMeleeAttackAction>
 {
-    [Dependency] private readonly CEWeaponSystem _weapon = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly CEMobStateSystem _mobState = default!;
+    [Dependency] private CEWeaponSystem _weapon = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CEMobStateSystem _mobState = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,

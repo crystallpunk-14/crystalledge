@@ -1,4 +1,4 @@
-using Content.Shared._CE.TileEffects.Core;
+﻿using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
@@ -6,8 +6,8 @@ namespace Content.Shared._CE.TileEffects.EffectTransform;
 
 public sealed partial class CETileEffectTransformSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

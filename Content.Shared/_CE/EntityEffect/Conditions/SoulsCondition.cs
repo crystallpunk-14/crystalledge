@@ -1,4 +1,4 @@
-using Content.Shared._CE.Soul.Components;
+﻿using Content.Shared._CE.Soul.Components;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
 
@@ -19,7 +19,7 @@ public sealed partial class SoulsCondition : CEEntityConditionBase<SoulsConditio
 
 public sealed partial class SoulsConditionSystem : CEEntityConditionSystem<SoulsCondition>
 {
-    [Dependency] private readonly EntityQuery<CESoulContainerComponent> _soulQuery = default!;
+    [Dependency] private EntityQuery<CESoulContainerComponent> _soulQuery = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<SoulsCondition> args)
     {

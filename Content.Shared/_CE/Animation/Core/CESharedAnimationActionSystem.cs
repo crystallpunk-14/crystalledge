@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.Animation.Core.Prototypes;
@@ -14,10 +14,10 @@ namespace Content.Shared._CE.Animation.Core;
 
 public abstract partial class CESharedAnimationActionSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -310,7 +310,7 @@ public abstract partial class CESharedAnimationActionSystem : EntitySystem
 /// </summary>
 /// <param name="animation"></param>
 /// <param name="cancelled"></param>
-public sealed class CEAnimationActionEndedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation, bool cancelled)
+public sealed partial class CEAnimationActionEndedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation, bool cancelled)
     : EntityEventArgs
 {
     public ProtoId<CEEntityEffectAnimationPrototype> Animation = animation;
@@ -321,7 +321,7 @@ public sealed class CEAnimationActionEndedEvent(ProtoId<CEEntityEffectAnimationP
 /// TODO
 /// </summary>
 /// <param name="animation"></param>
-public sealed class CEAnimationActionStartedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation) : EntityEventArgs
+public sealed partial class CEAnimationActionStartedEvent(ProtoId<CEEntityEffectAnimationPrototype> animation) : EntityEventArgs
 {
     public ProtoId<CEEntityEffectAnimationPrototype> Animation = animation;
 }

@@ -1,4 +1,4 @@
-using Content.Shared._CE.TileEffects;
+﻿using Content.Shared._CE.TileEffects;
 using Content.Shared._CE.TileEffects.Core;
 using Robust.Shared.Prototypes;
 
@@ -31,7 +31,7 @@ public sealed partial class ApplyTileEffect : CEEntityEffectBase<ApplyTileEffect
 
 public sealed partial class CEApplyTileEffectSystem : CEEntityEffectSystem<ApplyTileEffect>
 {
-    [Dependency] private readonly CETileEffectSystem _tileEffect = default!;
+    [Dependency] private CETileEffectSystem _tileEffect = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ApplyTileEffect> args)
     {

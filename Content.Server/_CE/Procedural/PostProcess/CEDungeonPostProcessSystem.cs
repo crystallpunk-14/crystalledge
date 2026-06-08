@@ -1,12 +1,12 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.ZLevels.Core.Components;
 
 namespace Content.Server._CE.Procedural.PostProcess;
 
-public sealed class CEDungeonPostProcessSystem : EntitySystem
+public sealed partial class CEDungeonPostProcessSystem : EntitySystem
 {
-    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
+    [Dependency] private CEZLevelsSystem _zLevels = default!;
 
     internal async Task RunAll(
         List<CEDungeonPostProcessLayer> layers,

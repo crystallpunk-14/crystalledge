@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Mirrorcult
+﻿// SPDX-FileCopyrightText: 2026 Mirrorcult
 //
 // SPDX-License-Identifier: MIT
 
@@ -15,9 +15,9 @@ namespace Content.Shared._CE.Camera;
 ///     Handles sending rotational or translational screenshake to an entity, managing the screenshake commands
 ///     of every entity currently screenshaking, and setting offset/rotation when updated
 /// </summary>
-public sealed class CEScreenshakeSystem : EntitySystem
+public sealed partial class CEScreenshakeSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     #region Internal
 

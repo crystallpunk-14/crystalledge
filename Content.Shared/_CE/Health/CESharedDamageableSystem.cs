@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health.Components;
+﻿using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Health.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
@@ -17,8 +17,8 @@ namespace Content.Shared._CE.Health;
 /// </summary>
 public abstract partial class CESharedDamageableSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     public override void Initialize()
     {
@@ -345,7 +345,7 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
 /// Carries per-type old and new <see cref="CEDamageSpecifier"/> snapshots.
 /// Subscribers can compute per-type deltas for colored popups via <c>.OldDamage.Types</c> / <c>.NewDamage.Types</c>.
 /// </summary>
-public sealed class CEDamageChangedEvent : EntityEventArgs
+public sealed partial class CEDamageChangedEvent : EntityEventArgs
 {
     public readonly EntityUid Target;
     public readonly CEDamageSpecifier OldDamage;
@@ -405,7 +405,7 @@ public sealed class CEDamageChangedEvent : EntityEventArgs
 /// <summary>
 /// Raised before damage is applied. Systems can modify <see cref="Damage"/> or cancel the event.
 /// </summary>
-public sealed class CEDamageCalculateEvent(CEDamageSpecifier damage, EntityUid? source) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CEDamageCalculateEvent(CEDamageSpecifier damage, EntityUid? source) : EntityEventArgs, IInventoryRelayEvent
 {
     public CEDamageSpecifier Damage = damage;
     public EntityUid? Source = source;
@@ -417,7 +417,7 @@ public sealed class CEDamageCalculateEvent(CEDamageSpecifier damage, EntityUid? 
 /// <summary>
 /// Called on healer to calculate the amount to heal.
 /// </summary>
-public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : EntityEventArgs
+public sealed partial class CEGetHealAmountEvent(EntityUid target, int healAmount) : EntityEventArgs
 {
     public EntityUid Target = target;
     public int HealAmount = healAmount;
@@ -426,7 +426,7 @@ public sealed class CEGetHealAmountEvent(EntityUid target, int healAmount) : Ent
 /// <summary>
 /// Raised on healer. Can be cancelled.
 /// </summary>
-public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : CancellableEntityEventArgs
+public sealed partial class CEAttemptHealEvent(EntityUid target, int healAmount) : CancellableEntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly int HealAmount = healAmount;
@@ -435,7 +435,7 @@ public sealed class CEAttemptHealEvent(EntityUid target, int healAmount) : Cance
 /// <summary>
 /// Raised on healer when its heal another entity.
 /// </summary>
-public sealed class CEHealEvent(EntityUid target, int healAmount) : EntityEventArgs
+public sealed partial class CEHealEvent(EntityUid target, int healAmount) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly int HealAmount = healAmount;
@@ -444,7 +444,7 @@ public sealed class CEHealEvent(EntityUid target, int healAmount) : EntityEventA
 /// <summary>
 /// Raised on healed entity.
 /// </summary>
-public sealed class CEHealedEvent(EntityUid? source, int healAmount) : EntityEventArgs
+public sealed partial class CEHealedEvent(EntityUid? source, int healAmount) : EntityEventArgs
 {
     public readonly EntityUid? Source = source;
     public readonly int HealAmount = healAmount;
@@ -455,7 +455,7 @@ public sealed class CEHealedEvent(EntityUid? source, int healAmount) : EntityEve
 /// Handlers can add flat bonuses and multipliers.
 /// Final max health = (BaseMaxHealth + FlatModifier) * Multiplier.
 /// </summary>
-public sealed class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventArgs, IInventoryRelayEvent
 {
     public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
 
@@ -469,7 +469,7 @@ public sealed class CECalculateMaxHealthEvent(int baseMaxHealth) : EntityEventAr
 /// <summary>
 /// Raised on the target entity to allow inventory items to modify incoming healing.
 /// </summary>
-public sealed class CEGetIncomingHealEvent(int healAmount) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CEGetIncomingHealEvent(int healAmount) : EntityEventArgs, IInventoryRelayEvent
 {
     public SlotFlags TargetSlots => SlotFlags.WITHOUT_POCKET;
     public int HealAmount = healAmount;
@@ -507,7 +507,7 @@ public enum CEAttackType : byte
 /// before damage is applied to the target. Status effects on the attacker can modify damage or
 /// cancel the hit via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
-public sealed class CEOutgoingDamageCalculateEvent(
+public sealed partial class CEOutgoingDamageCalculateEvent(
     CEDamageSpecifier damage,
     EntityUid target,
     EntityUid? weapon,
@@ -524,7 +524,7 @@ public sealed class CEOutgoingDamageCalculateEvent(
 /// Raised on the source (attacker) entity after damage is successfully applied to the target.
 /// Relayed to active status effects on the attacker via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
-public sealed class CEAfterDealDamageEvent(
+public sealed partial class CEAfterDealDamageEvent(
     EntityUid target,
     int damage,
     CEAttackType attackType,

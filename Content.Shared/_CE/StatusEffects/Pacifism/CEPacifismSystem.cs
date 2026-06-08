@@ -1,4 +1,4 @@
-using Content.Shared._CE.EntityEffect.Effects;
+﻿using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Procedural.Components;
@@ -21,13 +21,13 @@ namespace Content.Shared._CE.StatusEffects.Pacifism;
 /// Item use, attacks, throws and ability casts are NOT blocked any more — only the harmful
 /// PvP outcomes are. PvE damage, PvE debuffs and PvE mana drains are unaffected.
 /// </summary>
-public sealed class CEPacifismSystem : EntitySystem
+public sealed partial class CEPacifismSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
 
-    [Dependency] private readonly EntityQuery<CEDungeonPlayerComponent> _playerQuery = default!;
-    [Dependency] private readonly EntityQuery<StatusEffectComponent> _statusEffectQuery = default!;
+    [Dependency] private EntityQuery<CEDungeonPlayerComponent> _playerQuery = default!;
+    [Dependency] private EntityQuery<StatusEffectComponent> _statusEffectQuery = default!;
 
     public override void Initialize()
     {

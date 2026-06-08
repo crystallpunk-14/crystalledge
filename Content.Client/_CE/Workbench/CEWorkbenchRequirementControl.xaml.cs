@@ -10,8 +10,8 @@ namespace Content.Client._CE.Workbench;
 [GenerateTypedNameReferences]
 public sealed partial class CEWorkbenchRequirementControl : Control
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private readonly SpriteSystem _sprite;
 

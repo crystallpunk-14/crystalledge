@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -11,9 +11,9 @@ public sealed partial class CEDivineShieldStatusEffectComponent : Component
 {
 }
 
-public sealed class CEDivineShieldSystem : EntitySystem
+public sealed partial class CEDivineShieldSystem : EntitySystem
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _status = default!;
+    [Dependency] private CEStatusEffectStackSystem _status = default!;
 
     public override void Initialize()
     {
@@ -47,7 +47,7 @@ public sealed class CEDivineShieldSystem : EntitySystem
 /// It is also propagated via Relay to all status effects on both entities.
 /// Use this to apply special effects when the shield breaks.
 /// </summary>
-public sealed class CEDivineShieldBrokenEvent(EntityUid shieldHolder, EntityUid? applier, int damageConsumed, bool raisedOnApplier) : EntityEventArgs
+public sealed partial class CEDivineShieldBrokenEvent(EntityUid shieldHolder, EntityUid? applier, int damageConsumed, bool raisedOnApplier) : EntityEventArgs
 {
     public EntityUid ShieldHolder = shieldHolder;
     public EntityUid? Applier = applier;

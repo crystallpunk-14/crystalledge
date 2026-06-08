@@ -1,4 +1,4 @@
-using Content.Shared._CE.GOAP;
+﻿using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared.CCVar;
 using Content.Shared.NPC;
@@ -13,8 +13,8 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public sealed partial class CEGOAPSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private bool _enabled = true;
     private int _maxUpdates = 128;

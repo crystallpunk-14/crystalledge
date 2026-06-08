@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.EntityTable;
 using Content.Shared.Hands.Components;
@@ -21,19 +21,19 @@ namespace Content.Shared._CE.Health;
 /// For entities with <see cref="CEMobStateComponent"/>, the threshold is counted
 /// from the moment they enter Critical.
 /// </summary>
-public sealed class CEDestructibleSystem : EntitySystem
+public sealed partial class CEDestructibleSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly EntityTableSystem _entityTable = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private EntityTableSystem _entityTable = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>
     /// Deferred destruction queue — processed in <see cref="Update"/> to avoid

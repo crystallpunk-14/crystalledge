@@ -1,4 +1,4 @@
-using Content.Shared._CE.GOAP;
+﻿using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
 using Robust.Shared.Map;
@@ -11,8 +11,8 @@ namespace Content.Server._CE.GOAP;
 /// </summary>
 public abstract partial class CEGOAPActionSystem<T> : EntitySystem where T : CEGOAPActionBase<T>
 {
-    [Dependency] protected readonly CEGOAPSystem Goap = default!;
-    [Dependency] private readonly EntityQuery<TransformComponent> _coordsXformQuery = default!;
+    [Dependency] protected CEGOAPSystem Goap = default!;
+    [Dependency] private EntityQuery<TransformComponent> _coordsXformQuery = default!;
 
     public override void Initialize()
     {

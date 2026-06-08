@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Actions;
 using Content.Shared._CE.Actions.Components;
@@ -20,18 +20,18 @@ namespace Content.Client._CE.Actions;
 /// Draws spell targeting visuals: cast-radius circle, wide-line trajectory, cone, and AoE zone.
 /// All visuals are drawn below entities but above the grid.
 /// </summary>
-public sealed class CEActionTargetingOverlay : Overlay
+public sealed partial class CEActionTargetingOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowEntities;
 
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly IUserInterfaceManager _uiManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private IUserInterfaceManager _uiManager = default!;
 
-    [Dependency] private readonly IStateManager _stateManager = default!;
+    [Dependency] private IStateManager _stateManager = default!;
 
     private readonly SharedTransformSystem _transform;
     private readonly SharedActionsSystem _actions;

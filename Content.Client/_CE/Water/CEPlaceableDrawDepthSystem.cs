@@ -1,4 +1,4 @@
-using Content.Shared._CE.Water;
+﻿using Content.Shared._CE.Water;
 using Content.Shared.Placeable;
 using Robust.Client.GameObjects;
 
@@ -9,9 +9,9 @@ namespace Content.Client._CE.Water;
 /// If the entity is placed on an <see cref="ItemPlacerComponent"/> surface,
 /// raises its DrawDepth above the surface entity instead.
 /// </summary>
-public sealed class CEPlaceableDrawDepthSystem : EntitySystem
+public sealed partial class CEPlaceableDrawDepthSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

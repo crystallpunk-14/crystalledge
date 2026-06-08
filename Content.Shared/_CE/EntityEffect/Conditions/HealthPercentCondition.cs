@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
 
@@ -19,7 +19,7 @@ public sealed partial class HealthPercentCondition : CEEntityConditionBase<Healt
 
 public sealed partial class HealthPercentConditionSystem : CEEntityConditionSystem<HealthPercentCondition>
 {
-    [Dependency] private readonly CESharedDamageableSystem _health = default!;
+    [Dependency] private CESharedDamageableSystem _health = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<HealthPercentCondition> args)
     {

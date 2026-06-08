@@ -1,4 +1,4 @@
-using Content.Client.IconSmoothing;
+﻿using Content.Client.IconSmoothing;
 using Content.Shared.Maps;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -14,11 +14,11 @@ namespace Content.Client._CE.IconSmoothing;
 ///     Works like Corners mode but selects the RSI for each corner from the adjacent tile's
 ///     <see cref="ContentTileDefinition.IconSmoothSprite"/>.
 /// </summary>
-public sealed class CEIconSmoothSystem : EntitySystem
+public sealed partial class CEIconSmoothSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefManager = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private ITileDefinitionManager _tileDefManager = default!;
 
     private readonly Queue<EntityUid> _dirtyEntities = new();
     private readonly Queue<EntityUid> _anchorChangedEntities = new();

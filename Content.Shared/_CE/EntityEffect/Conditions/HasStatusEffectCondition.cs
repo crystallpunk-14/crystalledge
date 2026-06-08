@@ -1,4 +1,4 @@
-using Content.Shared.StatusEffectNew;
+﻿using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
@@ -14,7 +14,7 @@ public sealed partial class HasStatusEffectCondition : CEEntityConditionBase<Has
 
 public sealed partial class HasStatusEffectConditionSystem : CEEntityConditionSystem<HasStatusEffectCondition>
 {
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<HasStatusEffectCondition> args)
     {

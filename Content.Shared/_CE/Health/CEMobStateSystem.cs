@@ -1,4 +1,4 @@
-using Content.Shared._CE.Damage;
+﻿using Content.Shared._CE.Damage;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CombatMode;
@@ -23,14 +23,14 @@ namespace Content.Shared._CE.Health;
 /// </summary>
 public sealed partial class CEMobStateSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly StandingStateSystem _standing = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly MovementSpeedModifierSystem _movementSpeed = default!;
-    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combat = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private CESharedDamageableSystem _damageable = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private SharedCombatModeSystem _combat = default!;
 
     private const float CriticalSpeedModifier = 0.2f;
 
@@ -241,7 +241,7 @@ public sealed partial class CEMobStateSystem : EntitySystem
 /// <summary>
 /// Raised on entity with CEMobStateComponent, when it state changes to critical or back
 /// </summary>
-public sealed class CEMobStateChangedEvent(EntityUid target, bool critical)
+public sealed partial class CEMobStateChangedEvent(EntityUid target, bool critical)
     : EntityEventArgs
 {
     public readonly EntityUid Target = target;

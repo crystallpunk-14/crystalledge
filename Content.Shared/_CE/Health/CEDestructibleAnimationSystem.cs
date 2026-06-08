@@ -1,4 +1,4 @@
-using Content.Shared._CE.Animation.Core;
+﻿using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health.Components;
@@ -11,11 +11,11 @@ namespace Content.Shared._CE.Health;
 /// Intercepts <see cref="CEDestructAttemptEvent"/>, plays the configured animation,
 /// and only allows destruction once the animation completes.
 /// </summary>
-public sealed class CEDestructibleAnimationSystem : EntitySystem
+public sealed partial class CEDestructibleAnimationSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
-    [Dependency] private readonly CEDestructibleSystem _destructible = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private CESharedAnimationActionSystem _animation = default!;
+    [Dependency] private CEDestructibleSystem _destructible = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

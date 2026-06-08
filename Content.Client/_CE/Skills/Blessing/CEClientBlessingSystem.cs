@@ -1,4 +1,4 @@
-using Content.Shared._CE.Skill.Blessing;
+﻿using Content.Shared._CE.Skill.Blessing;
 using Content.Shared._CE.Skill.Blessing.Components;
 using Content.Shared._CE.Skill.Core;
 using Robust.Client.GameObjects;
@@ -11,11 +11,11 @@ namespace Content.Client._CE.Skills.Blessing;
 
 public sealed partial class CEClientBlessingSystem : CESharedBlessingSystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly CESharedSkillSystem _skill = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly PointLightSystem _light = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private CESharedSkillSystem _skill = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private PointLightSystem _light = default!;
+    [Dependency] private IPlayerManager _player = default!;
     public override void Initialize()
     {
         base.Initialize();

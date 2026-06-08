@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Examine;
@@ -20,17 +20,17 @@ namespace Content.Client._CE.Health;
 /// - <c>ChangeDamage</c> (predicted melee — deduped to first prediction only), and
 /// - <c>HandleState</c> (server-only ranged/environmental — fires once when state diff is detected).
 /// </summary>
-public sealed class CEDamagePopupSystem : EntitySystem
+public sealed partial class CEDamagePopupSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IEyeManager _eye = default!;
 
     private static readonly Color HealColor = Color.FromHex("#44DD44");
 

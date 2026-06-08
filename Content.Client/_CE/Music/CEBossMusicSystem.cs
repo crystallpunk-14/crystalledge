@@ -1,4 +1,4 @@
-using Content.Shared._CE.Music;
+﻿using Content.Shared._CE.Music;
 using Content.Shared.CCVar;
 using Robust.Client.Player;
 using Robust.Shared.Audio;
@@ -18,14 +18,14 @@ namespace Content.Client._CE.Music;
 ///   Battle  — plays the intro one-shot, then starts the main loop after <see cref="CEBossMusicPrototype.MainStartDelay"/>
 ///   Victory — stops the main loop immediately and plays the victory one-shot
 /// </summary>
-public sealed class CEBossMusicSystem : EntitySystem
+public sealed partial class CEBossMusicSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     private const float MinVolume = -32f;
 

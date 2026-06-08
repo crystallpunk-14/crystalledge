@@ -1,4 +1,4 @@
-using Content.Shared._CE.GOAP.Components;
+﻿using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.Health;
 
 namespace Content.Server._CE.GOAP.Perceptors;
@@ -12,9 +12,9 @@ public sealed partial class CEGOAPPainPerceptorComponent : Component
 {
 }
 
-public sealed class CEGOAPPainPerceptorSystem : EntitySystem
+public sealed partial class CEGOAPPainPerceptorSystem : EntitySystem
 {
-    [Dependency] private readonly CEGOAPSystem _goap = default!;
+    [Dependency] private CEGOAPSystem _goap = default!;
 
     public override void Initialize()
     {

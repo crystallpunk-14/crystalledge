@@ -1,12 +1,12 @@
-using Content.Shared._CE.StatusEffects.Core.Components;
+﻿using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 
 namespace Content.Shared._CE.DebuffCleaning;
 
-public sealed class CEDebuffCleaningSystem : EntitySystem
+public sealed partial class CEDebuffCleaningSystem : EntitySystem
 {
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
 
     public void ClearDebuffs(EntityUid target, EntityUid? source)
     {
@@ -38,7 +38,7 @@ public sealed class CEDebuffCleaningSystem : EntitySystem
 /// <summary>
 /// Raised on the entity whose debuffs were cleansed.
 /// </summary>
-public sealed class CECleanedDebuffsEvent(EntityUid? source, int stacksRemoved) : EntityEventArgs
+public sealed partial class CECleanedDebuffsEvent(EntityUid? source, int stacksRemoved) : EntityEventArgs
 {
     public EntityUid? Source = source;
     public int StacksRemoved = stacksRemoved;
@@ -47,7 +47,7 @@ public sealed class CECleanedDebuffsEvent(EntityUid? source, int stacksRemoved) 
 /// <summary>
 /// Raised on the entity that performed the debuff cleanse.
 /// </summary>
-public sealed class CESourceCleanedDebuffsEvent(EntityUid target, int stacksRemoved) : EntityEventArgs
+public sealed partial class CESourceCleanedDebuffsEvent(EntityUid target, int stacksRemoved) : EntityEventArgs
 {
     public EntityUid Target = target;
     public int StacksRemoved = stacksRemoved;

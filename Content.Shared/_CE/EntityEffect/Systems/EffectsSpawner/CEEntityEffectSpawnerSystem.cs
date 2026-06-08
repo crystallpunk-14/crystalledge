@@ -1,4 +1,4 @@
-
+﻿
 using Content.Shared._CE.EntityEffect;
 using Content.Shared.Projectiles;
 using Robust.Shared.Timing;
@@ -7,7 +7,7 @@ namespace Content.Shared._CE.Animation.Effects;
 
 public sealed partial class CEEntityEffectSpawnerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

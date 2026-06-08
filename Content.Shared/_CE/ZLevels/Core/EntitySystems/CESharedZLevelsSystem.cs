@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -22,30 +22,30 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = null!;
-    [Dependency] private readonly IGameTiming _timing = null!;
-    [Dependency] private readonly IConfigurationManager _config = null!;
+    [Dependency] private INetManager _net = null!;
+    [Dependency] private IGameTiming _timing = null!;
+    [Dependency] private IConfigurationManager _config = null!;
 
-    [Dependency] private readonly SharedPhysicsSystem _physicsSystem = null!;
-    [Dependency] private readonly SharedTransformSystem _transform = null!;
-    [Dependency] private readonly SharedAudioSystem _audio = null!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = null!;
-    [Dependency] private readonly EntityLookupSystem _lookup = null!;
-    [Dependency] private readonly SharedMapSystem _map = null!;
-    [Dependency] private readonly SharedPopupSystem _popup = null!;
+    [Dependency] private SharedPhysicsSystem _physicsSystem = null!;
+    [Dependency] private SharedTransformSystem _transform = null!;
+    [Dependency] private SharedAudioSystem _audio = null!;
+    [Dependency] private ActionBlockerSystem _blocker = null!;
+    [Dependency] private EntityLookupSystem _lookup = null!;
+    [Dependency] private SharedMapSystem _map = null!;
+    [Dependency] private SharedPopupSystem _popup = null!;
 
     #region Queries
 
-    [Dependency] protected readonly EntityQuery<CEZPhysicsComponent> ZPhysicsQuery = default!;
+    [Dependency] protected EntityQuery<CEZPhysicsComponent> ZPhysicsQuery = default!;
 
-    [Dependency] private readonly EntityQuery<MapComponent> _mapQuery = default!;
-    [Dependency] private readonly EntityQuery<MapGridComponent> _gridQuery = default!;
-    [Dependency] private readonly EntityQuery<PhysicsComponent> _physicsQuery = default!;
-    [Dependency] private readonly EntityQuery<TransformComponent> _transformQuery = default!;
+    [Dependency] private EntityQuery<MapComponent> _mapQuery = default!;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _transformQuery = default!;
 
-    [Dependency] private readonly EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
-    [Dependency] private readonly EntityQuery<CEZLevelsNetworkComponent> _zNetworkQuery = default!;
-    [Dependency] private readonly EntityQuery<CEZLevelHighGroundComponent> _zHighGroundQuery = default!;
+    [Dependency] private EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
+    [Dependency] private EntityQuery<CEZLevelsNetworkComponent> _zNetworkQuery = default!;
+    [Dependency] private EntityQuery<CEZLevelHighGroundComponent> _zHighGroundQuery = default!;
 
     #endregion
 

@@ -1,4 +1,4 @@
-using Content.Shared._CE.Currency;
+﻿using Content.Shared._CE.Currency;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Stacks;
@@ -13,7 +13,7 @@ namespace Content.Server._CE.Currency;
 
 public sealed partial class CECurrencySystem
 {
-    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private TagSystem _tag = default!;
     private void InitializeConverter()
     {
         SubscribeLocalEvent<CECurrencyConverterComponent, GetVerbsEvent<Verb>>(OnGetVerb);

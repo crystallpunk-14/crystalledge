@@ -1,4 +1,4 @@
-using Content.Shared._CE.TimedAppearance;
+﻿using Content.Shared._CE.TimedAppearance;
 using JetBrains.Annotations;
 using Robust.Shared.Timing;
 
@@ -6,8 +6,8 @@ namespace Content.Shared._CE.AnimationController;
 
 public sealed partial class CEAnimationControllerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -67,7 +67,7 @@ public sealed partial class CEAnimationControllerSystem : EntitySystem
 /// Raised on an entity (via <see cref="CEAnimationControllerSystem.RefreshVisuals"/>) to determine
 /// which <em>fallback</em> appearance key should currently be active.
 /// </summary>
-public sealed class CECalculateCurrentAppearanceEvent : EntityEventArgs
+public sealed partial class CECalculateCurrentAppearanceEvent : EntityEventArgs
 {
     public string? AppearanceKey { get; private set; }
     public int Priority { get; private set; } = int.MinValue;
@@ -85,7 +85,7 @@ public sealed class CECalculateCurrentAppearanceEvent : EntityEventArgs
 /// Raised on an entity (via <see cref="CEAnimationControllerSystem.RefreshVisuals"/>) to determine
 /// which <em>fallback</em> looping <see cref="CELoopAnimationData"/> should currently play on the entity.
 /// </summary>
-public sealed class CECalculateCurrentAnimationEvent : EntityEventArgs
+public sealed partial class CECalculateCurrentAnimationEvent : EntityEventArgs
 {
     public CELoopAnimationData? Animation { get; private set; }
     public int Priority { get; private set; } = int.MinValue;

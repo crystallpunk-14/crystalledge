@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.GOAP.Selectors;
 using Robust.Shared.Random;
 
@@ -15,9 +15,9 @@ public sealed partial class CEGOAPSelectorRandomPosition : CEGOAPTargetSelectorB
 
 public sealed partial class CEGOAPSelectorRandomPositionSystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorRandomPosition>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorRandomPosition> ev)
     {

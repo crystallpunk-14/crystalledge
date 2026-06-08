@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -17,15 +17,15 @@ namespace Content.Shared._CE.ZLevels.Roof;
 /// Systems that automatically covers tiles with roofs (or removes roofs)
 /// if there is a tile on one of the levels above in the ZLevels network.
 /// </summary>
-public abstract class CESharedRoofSystem : EntitySystem
+public abstract partial class CESharedRoofSystem : EntitySystem
 {
-    [Dependency] protected readonly CESharedZLevelsSystem ZLevel = null!;
-    [Dependency] protected readonly SharedRoofSystem Roof = null!;
-    [Dependency] protected readonly SharedMapSystem Map = null!;
-    [Dependency] protected readonly ITileDefinitionManager TilDefMan = null!;
+    [Dependency] protected CESharedZLevelsSystem ZLevel = null!;
+    [Dependency] protected SharedRoofSystem Roof = null!;
+    [Dependency] protected SharedMapSystem Map = null!;
+    [Dependency] protected ITileDefinitionManager TilDefMan = null!;
 
-    [Dependency] protected readonly EntityQuery<MapGridComponent> GridQuery = default!;
-    [Dependency] protected readonly EntityQuery<RoofComponent> RoofQuery = default!;
+    [Dependency] protected EntityQuery<MapGridComponent> GridQuery = default!;
+    [Dependency] protected EntityQuery<RoofComponent> RoofQuery = default!;
 
     public override void Initialize()
     {

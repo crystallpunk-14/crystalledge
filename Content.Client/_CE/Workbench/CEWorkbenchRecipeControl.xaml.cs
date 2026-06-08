@@ -11,8 +11,8 @@ namespace Content.Client._CE.Workbench;
 [GenerateTypedNameReferences]
 public sealed partial class CEWorkbenchRecipeControl : Control
 {
-    [Dependency] private readonly IEntityManager _entity = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     public event Action<CEWorkbenchUiRecipesEntry, CEWorkbenchRecipePrototype>? OnSelect;
 

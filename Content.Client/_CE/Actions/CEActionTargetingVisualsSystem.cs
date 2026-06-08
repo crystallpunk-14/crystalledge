@@ -1,4 +1,4 @@
-using Robust.Client.Graphics;
+﻿using Robust.Client.Graphics;
 
 namespace Content.Client._CE.Actions;
 
@@ -8,9 +8,9 @@ namespace Content.Client._CE.Actions;
 /// The overlay itself reads <see cref="ActionUIController.SelectingTargetFor"/>
 /// every frame to decide what to draw.
 /// </summary>
-public sealed class CEActionTargetingVisualsSystem : EntitySystem
+public sealed partial class CEActionTargetingVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {

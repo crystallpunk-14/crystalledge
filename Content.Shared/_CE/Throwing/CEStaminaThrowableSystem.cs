@@ -1,11 +1,11 @@
-using Content.Shared._CE.Stamina;
+﻿using Content.Shared._CE.Stamina;
 using Content.Shared.Throwing;
 
 namespace Content.Shared._CE.Throwing;
 
-public sealed class CEStaminaThrowableSystem : EntitySystem
+public sealed partial class CEStaminaThrowableSystem : EntitySystem
 {
-    [Dependency] private readonly CEStaminaSystem _stamina = default!;
+    [Dependency] private CEStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {

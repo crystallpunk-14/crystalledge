@@ -1,4 +1,4 @@
-using Content.Shared._CE.ZLevels.Core.EntitySystems;
+﻿using Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -13,7 +13,7 @@ public sealed partial class AddZVelocity : CEEntityEffectBase<AddZVelocity>
 
 public sealed partial class CEAddZVelocitySystem : CEEntityEffectSystem<AddZVelocity>
 {
-    [Dependency] private readonly CESharedZLevelsSystem _zLevel = default!;
+    [Dependency] private CESharedZLevelsSystem _zLevel = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<AddZVelocity> args)
     {

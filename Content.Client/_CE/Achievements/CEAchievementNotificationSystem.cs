@@ -1,4 +1,4 @@
-using Content.Shared._CE.Achievements;
+﻿using Content.Shared._CE.Achievements;
 using Robust.Client.Audio;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -10,12 +10,12 @@ namespace Content.Client._CE.Achievements;
 /// <summary>
 /// Client-side system that handles achievement unlock notifications and displays them as popups.
 /// </summary>
-public sealed class CEAchievementNotificationSystem : EntitySystem
+public sealed partial class CEAchievementNotificationSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterface = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IUserInterfaceManager _userInterface = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
 
     private SoundSpecifier _notificationSound = new SoundPathSpecifier("/Audio/_CE/achievement.ogg");
 

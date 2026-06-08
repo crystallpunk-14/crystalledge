@@ -1,4 +1,4 @@
-using Content.Shared._CE.Stamina;
+﻿using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
@@ -15,7 +15,7 @@ public sealed partial class CEBonusStaminaComponent : Component
 
 public sealed partial class CEBonusStaminaSystem : EntitySystem
 {
-    [Dependency] private readonly CEStaminaSystem _stamina = default!;
+    [Dependency] private CEStaminaSystem _stamina = default!;
 
     public override void Initialize()
     {

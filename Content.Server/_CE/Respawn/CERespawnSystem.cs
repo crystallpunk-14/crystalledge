@@ -1,4 +1,4 @@
-using Content.Server.GameTicking;
+﻿using Content.Server.GameTicking;
 using Content.Shared._CE.Respawn;
 using Content.Shared.Ghost;
 using Robust.Shared.Player;
@@ -7,7 +7,7 @@ namespace Content.Server._CE.Respawn;
 
 public sealed partial class CERespawnSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     public override void Initialize()
     {

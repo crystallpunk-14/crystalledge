@@ -1,4 +1,4 @@
-using Content.Server._CE.GOAP.Classifiers;
+﻿using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Health;
 using Robust.Shared.Random;
@@ -14,11 +14,11 @@ public sealed partial class CEGOAPSelectorRandomEnemy : CEGOAPTargetSelectorBase
 
 public sealed partial class CEGOAPSelectorRandomEnemySystem : CEGOAPTargetSelectorSystem<CEGOAPSelectorRandomEnemy>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly CEMobStateSystem _mobState = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CEMobStateSystem _mobState = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
-    [Dependency] private readonly EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
 
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorRandomEnemy> ev)
     {

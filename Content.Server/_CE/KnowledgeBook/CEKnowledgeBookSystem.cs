@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Content.Server.Chat.Managers;
 using Content.Server.Popups;
 using Content.Server._CE.Workbench;
@@ -8,12 +8,12 @@ using Robust.Shared.Player;
 
 namespace Content.Server._CE.KnowledgeBook;
 
-public sealed class CEKnowledgeBookSystem : CESharedKnowledgeBookSystem
+public sealed partial class CEKnowledgeBookSystem : CESharedKnowledgeBookSystem
 {
-    [Dependency] private readonly CERecipeKnowledgeSystem _recipeKnowledge = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private CERecipeKnowledgeSystem _recipeKnowledge = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IChatManager _chat = default!;
 
     protected override void OnDoAfter(Entity<CEKnowledgeBookComponent> ent, ref CEReadKnowledgeBookDoAfterEvent args)
     {

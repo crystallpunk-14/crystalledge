@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Content.Server._CE.Procedural.Generators;
 using Content.Server._CE.Procedural.Instance.Components;
@@ -14,8 +14,8 @@ namespace Content.Server._CE.Procedural.Instance;
 
 public sealed partial class CEDungeonInstanceSystem
 {
-    [Dependency] private readonly SharedFlashSystem _flash = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private SharedFlashSystem _flash = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     // Pending generation tasks started for active passages (maps to the active passage entity).
     // We store the proto id alongside the task so the result can be processed safely on the main thread.

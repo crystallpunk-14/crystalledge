@@ -1,4 +1,4 @@
-using Content.Shared._CE.ShockWave;
+﻿using Content.Shared._CE.ShockWave;
 using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;
 
@@ -6,8 +6,8 @@ namespace Content.Client._CE.ShockWave;
 
 public sealed partial class CEShockWaveSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
 
     private CEShockWaveOverlay _shockWaveOverlay = default!;
 

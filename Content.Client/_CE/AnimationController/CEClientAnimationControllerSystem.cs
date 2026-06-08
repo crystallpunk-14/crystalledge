@@ -1,4 +1,4 @@
-using Content.Client._CE.EntityEffect.Effects;
+﻿using Content.Client._CE.EntityEffect.Effects;
 using Content.Shared._CE.AnimationController;
 using Robust.Client.GameObjects;
 
@@ -19,7 +19,7 @@ public sealed partial class CEClientAnimationControllerSystem : EntitySystem
 {
     private const string LoopKey = "ce-controller-loop";
 
-    [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
 
     public override void Initialize()
     {

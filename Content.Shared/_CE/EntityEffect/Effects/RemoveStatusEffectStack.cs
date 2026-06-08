@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 
@@ -20,8 +20,8 @@ public sealed partial class RemoveStatusEffectStack : CEEntityEffectBase<RemoveS
 
 public sealed partial class CERemoveStatusEffectStackSystem : CEEntityEffectSystem<RemoveStatusEffectStack>
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _effectStack = default!;
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private CEStatusEffectStackSystem _effectStack = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<RemoveStatusEffectStack> args)
     {

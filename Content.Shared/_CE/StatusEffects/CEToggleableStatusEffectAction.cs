@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -14,8 +14,8 @@ public sealed partial class CEToggleableActionComponent : Component
 
 public sealed partial class CEToggleableStatusEffectActionSystem: EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private CEStatusEffectStackSystem _stack = default!;
 
     public override void Initialize()
     {

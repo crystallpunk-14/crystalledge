@@ -10,11 +10,11 @@ namespace Content.Server._CE.Speech;
 /// Server-side bark speech: listens to <see cref="EntitySpokeEvent"/> and plays
 /// syllable sequences via <see cref="SharedAudioSystem.PlayPvs"/>.
 /// </summary>
-public sealed class CEBarkSpeechSystem : CESharedBarkSpeechSystem
+public sealed partial class CEBarkSpeechSystem : CESharedBarkSpeechSystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     private readonly Dictionary<EntityUid, BarkSequence> _activeBarks = new();
 
@@ -119,7 +119,7 @@ public sealed class CEBarkSpeechSystem : CESharedBarkSpeechSystem
         }
     }
 
-    private sealed class BarkSequence
+    private sealed partial class BarkSequence
     {
         public List<BarkSyllable> Syllables = new();
         public int NextIndex;

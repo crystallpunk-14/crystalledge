@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared.Directions;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -19,8 +19,8 @@ public sealed partial class SpawnEntity : CEEntityEffectBase<SpawnEntity>
 
 public sealed partial class CESpawnEntityEffectSystem : CEEntityEffectSystem<SpawnEntity>
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<SpawnEntity> args)
     {

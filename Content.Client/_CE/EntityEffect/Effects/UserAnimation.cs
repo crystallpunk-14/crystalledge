@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.ZLevels.Core.Components;
@@ -39,9 +39,9 @@ public sealed partial class CEUserAnimationEffectSystem : CEEntityEffectSystem<U
     private const string ScaleKey = "ce-user-anim-scale";
     private const string ColorKey = "ce-user-anim-color";
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

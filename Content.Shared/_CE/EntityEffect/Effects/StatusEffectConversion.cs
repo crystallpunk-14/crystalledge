@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Robust.Shared.Prototypes;
 
@@ -37,7 +37,7 @@ public sealed partial class StatusEffectConversion : CEEntityEffectBase<StatusEf
 
 public sealed partial class CEStatusEffectConversionSystem : CEEntityEffectSystem<StatusEffectConversion>
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _effectStack = default!;
+    [Dependency] private CEStatusEffectStackSystem _effectStack = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<StatusEffectConversion> args)
     {

@@ -1,4 +1,4 @@
-using Content.Server._CE.GOAP;
+﻿using Content.Server._CE.GOAP;
 using Content.Server._CE.GOAP.Classifiers;
 using Content.Shared._CE.Animation.Core;
 using Robust.Shared.Audio.Systems;
@@ -9,10 +9,10 @@ namespace Content.Server._CE.GOAPAlarm;
 
 public sealed partial class CEGOAPAlarmSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CESharedAnimationActionSystem _animation = default!;
 
     public override void Initialize()
     {
@@ -68,7 +68,7 @@ public sealed partial class CEGOAPAlarmSystem : EntitySystem
 /// <summary>
 /// An event broadcast to alert GOAP agents within a radius
 /// </summary>
-public sealed class CEGOAPAlarmEvent(EntityCoordinates source, EntityUid target, float radius) : EntityEventArgs
+public sealed partial class CEGOAPAlarmEvent(EntityCoordinates source, EntityUid target, float radius) : EntityEventArgs
 {
     public EntityCoordinates Source = source;
     public EntityUid Target = target;

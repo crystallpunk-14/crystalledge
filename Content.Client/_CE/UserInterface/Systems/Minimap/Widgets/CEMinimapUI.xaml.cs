@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.Minimap;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
@@ -54,10 +54,10 @@ public sealed partial class CEMinimapUI : UIWidget
     private static readonly Color IconPreviewColor = Color.White.WithAlpha(0.45f);
     private static readonly Color IconVisitedColor = Color.White;
 
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IResourceCache _resCache = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IResourceCache _resCache = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private readonly Dictionary<ProtoId<CERoomTypePrototype>, Texture?> _iconCache = new();
 

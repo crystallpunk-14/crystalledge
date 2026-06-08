@@ -1,4 +1,4 @@
-using Content.Shared._CE.ScreenPopup;
+﻿using Content.Shared._CE.ScreenPopup;
 using Robust.Client.Audio;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
@@ -10,12 +10,12 @@ namespace Content.Client._CE.ScreenPopup;
 /// Listens for <see cref="CEScreenPopupShowEvent"/> network events and drives the
 /// <see cref="CEScreenPopupControl"/> queue, playing popups one at a time.
 /// </summary>
-public sealed class CEClientScreenPopupSystem : EntitySystem
+public sealed partial class CEClientScreenPopupSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly IUserInterfaceManager _userInterface = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly ILocalizationManager _loc = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private IUserInterfaceManager _userInterface = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private ILocalizationManager _loc = default!;
 
     private CEScreenPopupControl _ui = default!;
     private bool _remove;

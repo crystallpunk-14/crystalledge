@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Server.NPC.Systems;
 using Content.Shared._CE.GOAP;
@@ -29,13 +29,13 @@ public sealed partial class CEGOAPExploreAction : CEGOAPActionBase<CEGOAPExplore
 
 public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOAPExploreAction>
 {
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly NPCSteeringSystem _steering = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private NPCSteeringSystem _steering = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
-    [Dependency] private readonly EntityQuery<TransformComponent> _xformQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,

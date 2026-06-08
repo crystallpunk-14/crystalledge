@@ -1,4 +1,4 @@
-using Content.Server._CE.ZLevels.Core;
+using Content.Shared._CE.ZLevels.Core;
 using Content.Shared._CE.StatusEffects.Core;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;

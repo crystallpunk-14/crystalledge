@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -15,12 +15,12 @@ using Robust.Shared.Map.Components;
 namespace Content.Server._CE.ZLevels.Mapping.Commands;
 
 [AdminCommand(AdminFlags.Server | AdminFlags.Mapping)]
-public sealed class CEVariantizeZNetworkCommand : LocalizedEntityCommands
+public sealed partial class CEVariantizeZNetworkCommand : LocalizedEntityCommands
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly TileSystem _tile = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private TileSystem _tile = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override string Command => "znetwork-variantize";
     public override string Description => "Random tile variations over all zNetwork maps";

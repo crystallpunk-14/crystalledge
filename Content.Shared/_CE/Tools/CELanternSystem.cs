@@ -1,4 +1,4 @@
-using Content.Shared.Interaction;
+﻿using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Timing;
@@ -8,11 +8,11 @@ using Robust.Shared.Audio.Systems;
 
 namespace Content.Shared._CE.Tools;
 
-public sealed class CELanternSystem : EntitySystem
+public sealed partial class CELanternSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly UseDelaySystem _useDelay = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
 
     public override void Initialize()
     {

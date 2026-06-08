@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Camera;
 using Content.Shared._CE.MeleeWeapon;
@@ -14,15 +14,15 @@ namespace Content.Client._CE.MeleeWeapon;
 
 public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
 {
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly InputSystem _inputSystem = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CEScreenshakeSystem _shake = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private InputSystem _inputSystem = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CEScreenshakeSystem _shake = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private EntityQuery<TransformComponent> _xformQuery;
 

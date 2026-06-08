@@ -1,4 +1,4 @@
-using Content.Shared.Teleportation.Systems;
+﻿using Content.Shared.Teleportation.Systems;
 
 namespace Content.Server._CE.Teleportation;
 
@@ -10,9 +10,9 @@ namespace Content.Server._CE.Teleportation;
 /// on each can teleport to the other) and the auto-link component is stripped from both
 /// so the pairing never re-runs.
 /// </summary>
-public sealed class CEPortalAutoLinkSystem : EntitySystem
+public sealed partial class CEPortalAutoLinkSystem : EntitySystem
 {
-    [Dependency] private readonly LinkedEntitySystem _link = default!;
+    [Dependency] private LinkedEntitySystem _link = default!;
 
     public override void Initialize()
     {

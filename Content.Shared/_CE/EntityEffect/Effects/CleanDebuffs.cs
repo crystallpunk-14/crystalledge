@@ -1,4 +1,4 @@
-using Content.Shared._CE.DebuffCleaning;
+﻿using Content.Shared._CE.DebuffCleaning;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -11,7 +11,7 @@ public sealed partial class CleanDebuffs : CEEntityEffectBase<CleanDebuffs>
 
 public sealed partial class CECleanDebuffsSystem : CEEntityEffectSystem<CleanDebuffs>
 {
-    [Dependency] private readonly CEDebuffCleaningSystem _debuffClean = default!;
+    [Dependency] private CEDebuffCleaningSystem _debuffClean = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<CleanDebuffs> args)
     {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Numerics;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Map;
@@ -32,12 +32,12 @@ public sealed partial class ShootProjectile : CEEntityEffectBase<ShootProjectile
 
 public sealed partial class CEShootProjectileEffectSystem : CEEntityEffectSystem<ShootProjectile>
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedGunSystem _gun = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ShootProjectile> args)
     {

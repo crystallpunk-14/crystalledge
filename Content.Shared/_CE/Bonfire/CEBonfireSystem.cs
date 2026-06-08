@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.Mana.Core;
@@ -11,13 +11,13 @@ using Robust.Shared.Network;
 
 namespace Content.Shared._CE.Bonfire;
 
-public abstract class CESharedBonfireSystem : EntitySystem
+public abstract partial class CESharedBonfireSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
-    [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
-    [Dependency] private readonly SharedContainerSystem _containers = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private CESharedDamageableSystem _damageable = default!;
+    [Dependency] private CESharedMagicEnergySystem _magicEnergy = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -99,4 +99,4 @@ public abstract class CESharedBonfireSystem : EntitySystem
 /// <summary>
 /// Raised on a player entity when they successfully use a bonfire for the first time.
 /// </summary>
-public sealed class CEBonfireRestoredEvent : EntityEventArgs;
+public sealed partial class CEBonfireRestoredEvent : EntityEventArgs;

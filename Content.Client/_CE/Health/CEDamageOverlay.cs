@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared._CE.Health.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -8,14 +8,14 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Health;
 
-public sealed class CEDamageOverlay : Overlay
+public sealed partial class CEDamageOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> CircleMaskShader = "GradientCircleMask";
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 

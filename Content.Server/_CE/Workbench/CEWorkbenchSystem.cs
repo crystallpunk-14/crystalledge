@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Server.DoAfter;
 using Content.Server.Popups;
 using Content.Server.Stack;
@@ -18,19 +18,19 @@ namespace Content.Server._CE.Workbench;
 
 public sealed partial class CEWorkbenchSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly DoAfterSystem _doAfter = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly ContainerSystem _container = default!;
-    [Dependency] private readonly PhysicsSystem _physics = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly CERecipeKnowledgeSystem _recipeKnowledge = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private DoAfterSystem _doAfter = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private UserInterfaceSystem _userInterface = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private PhysicsSystem _physics = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private CERecipeKnowledgeSystem _recipeKnowledge = default!;
 
     private EntityQuery<CEWorkbenchComponent> _workbenchQuery;
     private EntityQuery<ContainerManagerComponent> _containerQuery;

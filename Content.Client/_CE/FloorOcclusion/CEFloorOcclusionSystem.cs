@@ -1,16 +1,16 @@
-using Content.Shared._CE.FloorOcclusion;
+﻿using Content.Shared._CE.FloorOcclusion;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._CE.FloorOcclusion;
 
-public sealed class CEFloorOcclusionSystem : CESharedFloorOcclusionSystem
+public sealed partial class CEFloorOcclusionSystem : CESharedFloorOcclusionSystem
 {
     private static readonly ProtoId<ShaderPrototype> HorizontalCut = "HorizontalCut";
 
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly EntityQuery<SpriteComponent> _spriteQuery = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
 
     public override void Initialize()
     {

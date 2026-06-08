@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared.Inventory.Events;
 
 namespace Content.Shared._CE.Equipment;
@@ -9,7 +9,7 @@ namespace Content.Shared._CE.Equipment;
 /// </summary>
 public sealed partial class CEEquipStatusEffectSystem : EntitySystem
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _stacks = default!;
+    [Dependency] private CEStatusEffectStackSystem _stacks = default!;
 
     public override void Initialize()
     {

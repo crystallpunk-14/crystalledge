@@ -1,4 +1,4 @@
-using System.Diagnostics.Metrics;
+﻿using System.Diagnostics.Metrics;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
 using Content.Shared.Roles;
@@ -8,14 +8,14 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Metrics;
 
-public sealed class CEJobMetricsSystem : EntitySystem
+public sealed partial class CEJobMetricsSystem : EntitySystem
 {
-    [Dependency] private readonly IMetricsManager _metrics = default!;
-    [Dependency] private readonly IMeterFactory _meterFactory = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly JobSystem _job = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ILogManager _logManager = default!;
+    [Dependency] private IMetricsManager _metrics = default!;
+    [Dependency] private IMeterFactory _meterFactory = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private JobSystem _job = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private ILogManager _logManager = default!;
 
     private Dictionary<ProtoId<JobPrototype>, int> _activeJobs = new();
 

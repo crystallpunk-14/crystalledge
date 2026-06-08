@@ -1,4 +1,4 @@
-using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
+﻿using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
@@ -13,9 +13,9 @@ using Robust.Shared.Timing;
 namespace Content.Client._CE.UserInterface.Systems.HealthMana;
 
 [UsedImplicitly]
-public sealed class CEBossHealthBarUiController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
+public sealed partial class CEBossHealthBarUiController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private CESharedDamageableSystem? _damageableSystem;
     private CEBossHealthBarUI? _bossBar;

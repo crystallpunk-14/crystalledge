@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Content.Server._CE.Procedural.Generators.Procedural.GenerationSteps;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared.Maps;
@@ -86,12 +86,12 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
 /// </summary>
 public sealed partial class CEProceduralGeneratorSystem : CEDungeonGeneratorSystem<CEProceduralConfig>
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
-    [Dependency] private readonly SharedMapSystem _maps = default!;
-    [Dependency] private readonly CEDungeonSystem _dungeon = default!;
-    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
+    [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private CEDungeonSystem _dungeon = default!;
+    [Dependency] private CEZLevelsSystem _zLevels = default!;
 
     protected override Job<CEDungeonGenerateResult> CreateJob(
         CEProceduralConfig config,

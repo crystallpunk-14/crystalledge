@@ -1,4 +1,4 @@
-using Content.Shared._CE.Bonfire;
+﻿using Content.Shared._CE.Bonfire;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
 using Robust.Shared.GameStates;
@@ -9,10 +9,10 @@ namespace Content.Client._CE.Bonfire;
 /// Client-side bonfire system. Reacts to networked state changes by toggling a sprite overlay
 /// layer on the bonfire entity whenever the local player's entity enters <see cref="CEBonfireComponent.UsedBy"/>.
 /// </summary>
-public sealed class CEBonfireSystem : CESharedBonfireSystem
+public sealed partial class CEBonfireSystem : CESharedBonfireSystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     public override void Initialize()
     {

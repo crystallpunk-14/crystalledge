@@ -1,4 +1,4 @@
-using Content.Shared._CE.EntityEffect.Effects;
+﻿using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.Graphics;
 using Robust.Shared.Console;
 
@@ -8,9 +8,9 @@ namespace Content.Client._CE.Animation.Core;
 /// Client-side system that listens for <see cref="CEDebugArcAttackEvent"/> and feeds
 /// debug arc data to <see cref="CEMeleeArcOverlay"/> for visualization.
 /// </summary>
-public sealed class CEArcAttackDebugSystem : EntitySystem
+public sealed partial class CEArcAttackDebugSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     private CEMeleeArcOverlay? _activeOverlay;
 
@@ -42,9 +42,9 @@ public sealed class CEArcAttackDebugSystem : EntitySystem
 /// Console command to toggle the ArcAttack debug overlay.
 /// Usage: showarcattack
 /// </summary>
-public sealed class CEShowArcAttackCommand : LocalizedCommands
+public sealed partial class CEShowArcAttackCommand : LocalizedCommands
 {
-    [Dependency] private readonly IEntitySystemManager _systemManager = default!;
+    [Dependency] private IEntitySystemManager _systemManager = default!;
 
     public override string Command => "showmeleespread";
 

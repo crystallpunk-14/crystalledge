@@ -1,4 +1,4 @@
-using Content.Shared.Movement.Components;
+﻿using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Robust.Shared.Physics.Components;
 
@@ -16,7 +16,7 @@ internal sealed partial class CEMovementStateComponent : Component
 
 public sealed partial class CEIdleWalkAnimationSystem : EntitySystem
 {
-    [Dependency] private readonly CEAnimationControllerSystem _controller = default!;
+    [Dependency] private CEAnimationControllerSystem _controller = default!;
 
     private const float MovingThresholdSq = 0.04f; // 0.2 m/s
 

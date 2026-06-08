@@ -1,4 +1,4 @@
-using Content.Server.Roles.Jobs;
+﻿using Content.Server.Roles.Jobs;
 using Content.Shared._CE.Skill.Core.Prototypes;
 using Content.Shared.Mind;
 using Prometheus;
@@ -8,8 +8,8 @@ namespace Content.Server._CE.Skills.Blessing;
 
 public sealed partial class CEBlessingSystem
 {
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly JobSystem _job = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private JobSystem _job = default!;
 
     private static readonly Counter SkillsOffered = Prometheus.Metrics.CreateCounter(
         "crystall_edge_blessing_skill_offered_total",

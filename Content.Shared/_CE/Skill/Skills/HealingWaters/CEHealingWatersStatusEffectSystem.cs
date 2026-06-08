@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
@@ -7,8 +7,8 @@ namespace Content.Shared._CE.Skill.Skills.HealingWaters;
 
 public sealed partial class CEHealingWatersStatusEffectSystem : EntitySystem
 {
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly CEStatusEffectStackSystem _stack = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private CEStatusEffectStackSystem _stack = default!;
 
     public override void Initialize()
     {

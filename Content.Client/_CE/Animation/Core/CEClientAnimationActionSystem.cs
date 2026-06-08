@@ -1,4 +1,4 @@
-using Content.Shared._CE.Animation.Core;
+﻿using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Robust.Client.Player;
@@ -9,8 +9,8 @@ namespace Content.Client._CE.Animation.Core;
 
 public sealed partial class CEClientAnimationActionSystem : CESharedAnimationActionSystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override void Initialize()
     {

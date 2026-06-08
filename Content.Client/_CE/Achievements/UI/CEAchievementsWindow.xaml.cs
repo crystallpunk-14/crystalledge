@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Client.Administration.Managers;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._CE.Achievements;
@@ -16,10 +16,10 @@ namespace Content.Client._CE.Achievements.UI;
 [GenerateTypedNameReferences]
 public sealed partial class CEAchievementsWindow : FancyWindow
 {
-    [Dependency] private readonly ICEAchievementsRequirementManager _achievementsManager = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IClientAdminManager _adminManager = default!;
+    [Dependency] private ICEAchievementsRequirementManager _achievementsManager = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IClientAdminManager _adminManager = default!;
     private readonly SpriteSystem _sprite = default!;
 
     public CEAchievementsWindow()

@@ -1,4 +1,4 @@
-using Content.Shared._CE.Mana.Core;
+﻿using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.MeleeWeapon.Components;
 using Content.Shared._CE.Stamina;
 
@@ -6,8 +6,8 @@ namespace Content.Shared._CE.MeleeWeapon;
 
 public abstract partial class CESharedWeaponSystem
 {
-    [Dependency] private readonly CESharedMagicEnergySystem _mana = default!;
-    [Dependency] private readonly CEStaminaSystem _stamina = default!;
+    [Dependency] private CESharedMagicEnergySystem _mana = default!;
+    [Dependency] private CEStaminaSystem _stamina = default!;
 
     private void InitializeCosts()
     {

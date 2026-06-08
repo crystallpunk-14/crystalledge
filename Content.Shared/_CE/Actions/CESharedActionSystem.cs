@@ -1,4 +1,4 @@
-using Content.Shared._CE.Animation.Core;
+﻿using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Prototypes;
 using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Soul;
@@ -14,13 +14,13 @@ namespace Content.Shared._CE.Actions;
 
 public abstract partial class CESharedActionSystem : EntitySystem
 {
-    [Dependency] protected readonly SharedPopupSystem Popup = default!;
-    [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedHandsSystem _hand = default!;
-    [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
-    [Dependency] private readonly CESharedSoulSystem _soul = default!;
-    [Dependency] private readonly CEStaminaSystem _stamina = default!;
+    [Dependency] protected SharedPopupSystem Popup = default!;
+    [Dependency] private CESharedAnimationActionSystem _animation = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedHandsSystem _hand = default!;
+    [Dependency] private CESharedMagicEnergySystem _magicEnergy = default!;
+    [Dependency] private CESharedSoulSystem _soul = default!;
+    [Dependency] private CEStaminaSystem _stamina = default!;
 
     [Dependency] private EntityQuery<ActionComponent> _actionQuery = default!;
 
@@ -136,7 +136,7 @@ public sealed partial class CEEntityTargetActionAnimationEvent : EntityTargetAct
 /// An event that checks all sorts of conditions, and calculates the total cost of casting a spell. Called before the spell is cast.
 /// </summary>
 /// <remarks>TODO: This call is duplicated at the beginning of the cast for checks, and at the end of the cast for mana subtraction.</remarks>
-public sealed class CECalculateManacostEvent(EntityUid? performer, int initialManacost) : EntityEventArgs, IInventoryRelayEvent
+public sealed partial class CECalculateManacostEvent(EntityUid? performer, int initialManacost) : EntityEventArgs, IInventoryRelayEvent
 {
     public EntityUid? Performer = performer;
     public int Manacost = initialManacost;

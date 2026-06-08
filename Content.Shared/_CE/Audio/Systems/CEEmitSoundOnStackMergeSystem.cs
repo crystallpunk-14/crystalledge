@@ -1,4 +1,4 @@
-using Content.Shared._CE.Audio.Components;
+﻿using Content.Shared._CE.Audio.Components;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
@@ -8,10 +8,10 @@ namespace Content.Shared._CE.Audio.Systems;
 /// <summary>
 /// System that plays sounds when stacks are merged together.
 /// </summary>
-public sealed class CEEmitSoundOnStackMergeSystem : EntitySystem
+public sealed partial class CEEmitSoundOnStackMergeSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {

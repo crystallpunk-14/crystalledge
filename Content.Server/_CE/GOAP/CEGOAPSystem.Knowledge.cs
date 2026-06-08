@@ -15,10 +15,12 @@ public sealed partial class CEGOAPSystem
     /// when a new entity is added or its position changes.
     /// </summary>
     public void Remember(
-        Entity<CEGOAPComponent> ent,
+        Entity<CEGOAPComponent?> ent,
         EntityUid target,
         EntityCoordinates coords)
     {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
         var now = _timing.CurTime;
         var expires = now + ent.Comp.MemoryDuration;
         var changed = !ent.Comp.Knowledge.TryGetValue(target, out var existing)
@@ -38,8 +40,11 @@ public sealed partial class CEGOAPSystem
     /// <summary>
     /// Removes a knowledge entry, raising the update event if anything was removed.
     /// </summary>
-    public bool Forget(Entity<CEGOAPComponent> ent, EntityUid target)
+    public bool Forget(Entity<CEGOAPComponent?> ent, EntityUid target)
     {
+        if (!Resolve(ent, ref ent.Comp))
+            return false;
+
         if (!ent.Comp.Knowledge.Remove(target))
             return false;
 
@@ -51,8 +56,11 @@ public sealed partial class CEGOAPSystem
     /// Drops entries whose ExpiresAt has elapsed or whose target entity no longer exists.
     /// Called by the GOAP orchestrator each agent tick.
     /// </summary>
-    public void PurgeExpiredKnowledge(Entity<CEGOAPComponent> ent)
+    public void PurgeExpiredKnowledge(Entity<CEGOAPComponent?> ent)
     {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
         if (ent.Comp.Knowledge.Count == 0)
             return;
 
@@ -79,7 +87,7 @@ public sealed partial class CEGOAPSystem
         RaiseKnowledgeUpdated(ent);
     }
 
-    private void RaiseKnowledgeUpdated(Entity<CEGOAPComponent> ent)
+    private void RaiseKnowledgeUpdated(EntityUid ent)
     {
         var ev = new CEGOAPKnowledgeUpdatedEvent();
         RaiseLocalEvent(ent, ref ev);

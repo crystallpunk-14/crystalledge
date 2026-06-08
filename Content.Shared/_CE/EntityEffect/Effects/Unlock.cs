@@ -1,4 +1,4 @@
-using Content.Shared.Doors.Systems;
+﻿using Content.Shared.Doors.Systems;
 using Content.Shared.Lock;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
@@ -17,8 +17,8 @@ public sealed partial class Unlock : CEEntityEffectBase<Unlock>
 /// </summary>
 public sealed partial class CEUnlockEffectSystem : CEEntityEffectSystem<Unlock>
 {
-    [Dependency] private readonly LockSystem _lock = default!;
-    [Dependency] private readonly SharedDoorSystem _door = default!;
+    [Dependency] private LockSystem _lock = default!;
+    [Dependency] private SharedDoorSystem _door = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<Unlock> args)
     {

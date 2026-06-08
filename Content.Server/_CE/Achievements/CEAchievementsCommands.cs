@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Database;
 using Content.Shared.Administration;
@@ -10,12 +10,12 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CE.Achievements;
 
 [AdminCommand(AdminFlags.Host)]
-public sealed class CEAddAchievementCommand : LocalizedCommands
+public sealed partial class CEAddAchievementCommand : LocalizedCommands
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     public override string Command => "achievementadd";
 
@@ -83,12 +83,12 @@ public sealed class CEAddAchievementCommand : LocalizedCommands
 }
 
 [AdminCommand(AdminFlags.Host)]
-public sealed class CERemoveAchievementCommand : LocalizedCommands
+public sealed partial class CERemoveAchievementCommand : LocalizedCommands
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IEntityManager _entMan = default!;
 
     public override string Command => "achievementremove";
 
@@ -153,11 +153,11 @@ public sealed class CERemoveAchievementCommand : LocalizedCommands
 }
 
 [AdminCommand(AdminFlags.Debug)]
-public sealed class CEListAchievementsCommand : LocalizedCommands
+public sealed partial class CEListAchievementsCommand : LocalizedCommands
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     public override string Command => "achievementlist";
 
@@ -213,11 +213,11 @@ public sealed class CEListAchievementsCommand : LocalizedCommands
 }
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class CEAddAchievementInspirationCommand : LocalizedCommands
+public sealed partial class CEAddAchievementInspirationCommand : LocalizedCommands
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IPlayerLocator _locator = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IEntityManager _entMan = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
 
     public override string Command => "achievement_give_admin_inspiration";
 

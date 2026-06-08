@@ -1,4 +1,4 @@
-namespace Content.Shared._CE.EntityEffect.Effects;
+﻿namespace Content.Shared._CE.EntityEffect.Effects;
 
 /// <summary>
 /// Teleports the resolved entity to the action target coordinates.
@@ -13,7 +13,7 @@ public sealed partial class Teleport : CEEntityEffectBase<Teleport>
 
 public sealed partial class CETeleportEffectSystem : CEEntityEffectSystem<Teleport>
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<Teleport> args)
     {

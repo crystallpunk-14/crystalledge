@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffectStacks;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
@@ -20,8 +20,8 @@ public sealed partial class ApplyStatusEffect : CEEntityEffectBase<ApplyStatusEf
 
 public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSystem<ApplyStatusEffect>
 {
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
-    [Dependency] private readonly CEStatusEffectStackSystem _statusEffectStack = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private CEStatusEffectStackSystem _statusEffectStack = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ApplyStatusEffect> args)
     {
@@ -58,7 +58,7 @@ public sealed partial class CEApplyStatusEffectEffectSystem : CEEntityEffectSyst
 /// target. Cancelling prevents the effect from being applied. Relayed to the source's active
 /// status effects via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
-public sealed class CEAttemptApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
+public sealed partial class CEAttemptApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
@@ -71,7 +71,7 @@ public sealed class CEAttemptApplyStatusEffectEvent(EntityUid target, EntProtoId
 /// Cancelling prevents the effect from being applied.
 /// Relayed to the target's active status effects via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
-public sealed class CEAttemptReceiveStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
+public sealed partial class CEAttemptReceiveStatusEffectEvent(EntityUid target, EntProtoId statusEffect, TimeSpan duration) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
@@ -84,7 +84,7 @@ public sealed class CEAttemptReceiveStatusEffectEvent(EntityUid target, EntProto
 /// <see cref="ApplyStatusEffectStack"/> successfully applies a status effect to a target.
 /// Relayed to the source's active status effects via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
-public sealed class CEAfterApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, int amount = 1, EntityUid? used = null) : EntityEventArgs
+public sealed partial class CEAfterApplyStatusEffectEvent(EntityUid target, EntProtoId statusEffect, int amount = 1, EntityUid? used = null) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;
@@ -96,7 +96,7 @@ public sealed class CEAfterApplyStatusEffectEvent(EntityUid target, EntProtoId s
 /// Raised on the source (attacker/caster) when a status effect they applied to a target is removed.
 /// Relayed to the source's active status effects via <c>StatusEffectRelayedEvent</c>.
 /// </summary>
-public sealed class CEAfterRemoveStatusEffectEvent(EntityUid target, EntProtoId statusEffect) : EntityEventArgs
+public sealed partial class CEAfterRemoveStatusEffectEvent(EntityUid target, EntProtoId statusEffect) : EntityEventArgs
 {
     public readonly EntityUid Target = target;
     public readonly EntProtoId StatusEffect = statusEffect;

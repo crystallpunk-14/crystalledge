@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.ZLevels.Mapping.Prototypes;
 using Robust.Shared.CPUJob.JobQueues;
@@ -26,10 +26,10 @@ public sealed partial class CERandomZNetworkConfig : CEDungeonGeneratorConfigBas
 
 public sealed partial class CERandomZNetworkGeneratorSystem : CEDungeonGeneratorSystem<CERandomZNetworkConfig>
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly MapLoaderSystem _loader = default!;
-    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MapLoaderSystem _loader = default!;
+    [Dependency] private CEZLevelsSystem _zLevels = default!;
 
     protected override Job<CEDungeonGenerateResult> CreateJob(
         CERandomZNetworkConfig config,

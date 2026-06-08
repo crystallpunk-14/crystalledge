@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Content.Shared._CE.Workbench.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -13,13 +13,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CE.KnowledgeBook;
 
-public abstract class CESharedKnowledgeBookSystem : EntitySystem
+public abstract partial class CESharedKnowledgeBookSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly SoundSpecifier KnowledgeLearnedSound =
         new SoundPathSpecifier("/Audio/_CE/Effects/knowledge_learned.ogg");

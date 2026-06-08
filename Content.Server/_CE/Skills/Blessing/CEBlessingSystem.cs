@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Server._CE.Skills.Blessing.Components;
 using Content.Shared._CE.Skill.Blessing;
 using Content.Shared._CE.Skill.Blessing.Components;
@@ -19,13 +19,13 @@ namespace Content.Server._CE.Skills.Blessing;
 
 public sealed partial class CEBlessingSystem : CESharedBlessingSystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly CESharedSkillSystem _skill = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly CESharedSoulSystem _souls = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CESharedSkillSystem _skill = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private CESharedSoulSystem _souls = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

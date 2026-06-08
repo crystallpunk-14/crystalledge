@@ -1,0 +1,23 @@
+- type: skill
+  parent: BaseNeutralSkill
+  id: StatsUp
+  weight: 0.5
+  unique: false
+  icon:
+    sprite: _CE/Skills/Neutral/all_upgrade.rsi
+    state: icon
+  effect: !type:AddStatusEffect
+    effect: CEStatusEffectStatsUp
+
+- type: entity
+  id: CEStatusEffectStatsUp
+  name: Stats Up
+  description: "+2 Stamina, +15 mana, +15 health"
+  components:
+  - type: StatusEffect
+  - type: CEBonusStamina
+    flatStaminaBonus: 2
+  - type: CEBonusMana
+    flatManaBonus: 15
+  - type: CEBonusHealth
+    flatHealthBonus: 15

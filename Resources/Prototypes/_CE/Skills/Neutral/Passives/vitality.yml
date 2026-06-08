@@ -1,6 +1,7 @@
 - type: skill
   parent: BaseNeutralSkill
   id: Vitality
+  weight: 0.5
   unique: false
   icon:
     sprite: _CE/Skills/Neutral/health_upgrade.rsi

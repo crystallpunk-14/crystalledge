@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
@@ -8,10 +8,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CE.ShockWave;
 
-public sealed class CEShockWaveOverlay : Overlay
+public sealed partial class CEShockWaveOverlay : Overlay
 {
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -13,9 +13,9 @@ namespace Content.Shared._CE.ZLevels.Weather;
 /// <summary>
 /// A subsystem that connects WeatherSystem with ZLevelSystem. Allows you to control the weather for the entire z-network at once.
 /// </summary>
-public sealed class CEWeatherSystem : EntitySystem
+public sealed partial class CEWeatherSystem : EntitySystem
 {
-    [Dependency] private readonly SharedWeatherSystem _weather = default!;
+    [Dependency] private SharedWeatherSystem _weather = default!;
 
     public void SetWeather(Entity<CEZLevelsNetworkComponent?> network, EntProtoId? proto, TimeSpan? duration)
     {

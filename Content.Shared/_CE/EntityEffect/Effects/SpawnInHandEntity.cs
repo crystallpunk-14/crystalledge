@@ -1,4 +1,4 @@
-using Content.Shared.Hands.EntitySystems;
+﻿using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
@@ -15,8 +15,8 @@ public sealed partial class SpawnInHandEntity : CEEntityEffectBase<SpawnInHandEn
 
 public sealed partial class CESpawnInHandEntityEffectSystem : CEEntityEffectSystem<SpawnInHandEntity>
 {
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<SpawnInHandEntity> args)
     {

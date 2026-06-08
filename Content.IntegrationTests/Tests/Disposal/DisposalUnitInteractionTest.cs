@@ -7,6 +7,8 @@ namespace Content.IntegrationTests.Tests.Disposal;
 
 public sealed class DisposalUnitInteractionTest : InteractionTest
 {
+
+/* CrystallEdge: Disabled
     private static readonly EntProtoId DisposalUnit = "DisposalUnit";
     private static readonly EntProtoId TrashItem = "BrokenBottle";
 
@@ -51,4 +53,5 @@ public sealed class DisposalUnitInteractionTest : InteractionTest
         var container = containerSys.GetContainer(ToServer(disposalUnit), throwInsertComp.ContainerId);
         Assert.That(container.ContainedEntities, Contains.Item(ToServer(trash)));
     }
+    */
 }

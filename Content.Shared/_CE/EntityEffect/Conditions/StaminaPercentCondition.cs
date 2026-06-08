@@ -1,4 +1,4 @@
-using Content.Shared._CE.Stamina;
+﻿using Content.Shared._CE.Stamina;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
 
@@ -19,8 +19,8 @@ public sealed partial class StaminaPercentCondition : CEEntityConditionBase<Stam
 
 public sealed partial class StaminaPercentConditionSystem : CEEntityConditionSystem<StaminaPercentCondition>
 {
-    [Dependency] private readonly CEStaminaSystem _stamina = default!;
-    [Dependency] private readonly EntityQuery<CEStaminaComponent> _staminaQuery = default!;
+    [Dependency] private CEStaminaSystem _stamina = default!;
+    [Dependency] private EntityQuery<CEStaminaComponent> _staminaQuery = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<StaminaPercentCondition> args)
     {

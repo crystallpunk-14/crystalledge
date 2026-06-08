@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
@@ -15,7 +15,7 @@ public sealed partial class CEBonusHealthComponent : Component
 
 public sealed partial class CEBonusHealthSystem : EntitySystem
 {
-    [Dependency] private readonly CEMobStateSystem _mobState = default!;
+    [Dependency] private CEMobStateSystem _mobState = default!;
 
     public override void Initialize()
     {

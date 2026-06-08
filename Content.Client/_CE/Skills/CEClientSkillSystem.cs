@@ -1,11 +1,11 @@
-using Content.Shared._CE.Skill.Core.Components;
+﻿using Content.Shared._CE.Skill.Core.Components;
 using Robust.Client.Player;
 
 namespace Content.Client._CE.Skills;
 
 public sealed partial class CEClientSkillSystem : Shared._CE.Skill.Core.CESharedSkillSystem
 {
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public event Action<EntityUid>? OnSkillUpdate;
 

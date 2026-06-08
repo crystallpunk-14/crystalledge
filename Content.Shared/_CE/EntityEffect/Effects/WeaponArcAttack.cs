@@ -1,4 +1,4 @@
-using Content.Shared._CE.Animation.Item.Components;
+﻿using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.MeleeWeapon;
 using Content.Shared.Interaction;
@@ -27,7 +27,7 @@ public sealed partial class WeaponArcAttack : CEEntityEffectBase<WeaponArcAttack
 /// <summary>
 /// Local event raised when an ArcAttack fires, used for debug visualization.
 /// </summary>
-public sealed class CEDebugArcAttackEvent(MapCoordinates position, Angle direction, float range, float arcWidth)
+public sealed partial class CEDebugArcAttackEvent(MapCoordinates position, Angle direction, float range, float arcWidth)
     : EntityEventArgs
 {
     public MapCoordinates Position = position;
@@ -38,10 +38,10 @@ public sealed class CEDebugArcAttackEvent(MapCoordinates position, Angle directi
 
 public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem<WeaponArcAttack>
 {
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly CESharedWeaponSystem _melee = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private CESharedWeaponSystem _melee = default!;
 
     /// <summary>
     /// Broad collision mask to hit mobs, items, machines, etc.

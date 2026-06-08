@@ -1,13 +1,13 @@
-using Robust.Client.Graphics;
+﻿using Robust.Client.Graphics;
 
 namespace Content.Client._CE.Water;
 
 /// <summary>
 /// System responsible for rendering tile distortion using <see cref="CETileDistortionOverlay"/>.
 /// </summary>
-public sealed class CETileDistortionOverlaySystem : EntitySystem
+public sealed partial class CETileDistortionOverlaySystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private IOverlayManager _overlayMan = default!;
 
     public override void Initialize()
     {

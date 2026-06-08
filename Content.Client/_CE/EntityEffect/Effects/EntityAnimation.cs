@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Client.Animations;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
@@ -19,12 +19,12 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
     private const string ColorAnimationKey = "ce-item-visual-color";
     private const string ScaleAnimationKey = "ce-item-visual-scale";
 
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
-    [Dependency] private readonly TransformSystem _transform = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly AnimationPlayerSystem _animationPlayer = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<EntityAnimation> args)
     {

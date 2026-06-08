@@ -1,4 +1,4 @@
-using Content.Shared.Projectiles;
+﻿using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
@@ -11,8 +11,8 @@ public sealed partial class ThrowToUser : CEEntityEffectBase<ThrowToUser>
 
 public sealed partial class CEThrowToUserEffectSystem : CEEntityEffectSystem<ThrowToUser>
 {
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedProjectileSystem _projectile = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedProjectileSystem _projectile = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ThrowToUser> args)
     {

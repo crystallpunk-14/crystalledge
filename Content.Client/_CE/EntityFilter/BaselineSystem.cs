@@ -1,4 +1,4 @@
-using Content.Shared.CCVar;
+﻿using Content.Shared.CCVar;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
@@ -8,9 +8,9 @@ namespace Content.Client._Baseline.EntityFilter;
 /// On the client side, it automatically enables entity filtering to hide all vanilla ss14 entities
 /// not marked with the ForkFiltered category from the spawn menu.
 /// </summary>
-public sealed class BaselineSystem : EntitySystem
+public sealed partial class BaselineSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     public override void Initialize()
     {

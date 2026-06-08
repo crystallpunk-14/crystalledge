@@ -1,4 +1,4 @@
-using Content.Server.Popups;
+﻿using Content.Server.Popups;
 using Content.Server._CE.Workbench;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
@@ -11,8 +11,8 @@ namespace Content.Server._CE.EntityEffect.Effects;
 /// </summary>
 public sealed partial class CELearnWorkbenchRecipesEffectSystem : CEEntityEffectSystem<LearnWorkbenchRecipes>
 {
-    [Dependency] private readonly CERecipeKnowledgeSystem _recipeKnowledge = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
+    [Dependency] private CERecipeKnowledgeSystem _recipeKnowledge = default!;
+    [Dependency] private PopupSystem _popup = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<LearnWorkbenchRecipes> args)
     {

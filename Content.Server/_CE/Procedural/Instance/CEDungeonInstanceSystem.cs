@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Content.Server._CE.Achievements;
 using Content.Server._CE.Procedural.Generators;
@@ -26,14 +26,14 @@ namespace Content.Server._CE.Procedural.Instance;
 /// </summary>
 public sealed partial class CEDungeonInstanceSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly CEAchievementsSystem _achievements = default!;
-    [Dependency] private readonly CEDungeonSystem _dungeon = default!;
-    [Dependency] private readonly CEZLevelsSystem _zLevels = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CEAchievementsSystem _achievements = default!;
+    [Dependency] private CEDungeonSystem _dungeon = default!;
+    [Dependency] private CEZLevelsSystem _zLevels = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     /// <summary>
     /// How long an empty unstable instance persists before cleanup.

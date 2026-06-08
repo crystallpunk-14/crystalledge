@@ -1,4 +1,4 @@
-using Content.Shared._CE.Stamina;
+﻿using Content.Shared._CE.Stamina;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
 
@@ -12,7 +12,7 @@ public sealed partial class ExhaustedCondition : CEEntityConditionBase<Exhausted
 
 public sealed partial class ExhaustedConditionSystem : CEEntityConditionSystem<ExhaustedCondition>
 {
-    [Dependency] private readonly EntityQuery<CEStaminaComponent> _staminaQuery = default!;
+    [Dependency] private EntityQuery<CEStaminaComponent> _staminaQuery = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<ExhaustedCondition> args)
     {

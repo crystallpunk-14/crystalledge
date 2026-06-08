@@ -1,4 +1,4 @@
-using Content.Server._CE.ZLevels.Core;
+﻿using Content.Shared._CE.ZLevels.Core;
 using Content.Server.Movement.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
@@ -9,9 +9,9 @@ using Robust.Shared.Player;
 
 namespace Content.Server._CE.MeleeWeapon;
 
-public sealed class CEWeaponSystem : CESharedWeaponSystem
+public sealed partial class CEWeaponSystem : CESharedWeaponSystem
 {
-    [Dependency] private readonly LagCompensationSystem _lag = default!;
+    [Dependency] private LagCompensationSystem _lag = default!;
     private const int MaxTargets = 10;
 
     /// <summary>

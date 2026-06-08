@@ -1,10 +1,10 @@
-using Content.Shared._CE.Animation.Core;
+﻿using Content.Shared._CE.Animation.Core;
 
 namespace Content.Shared._CE.Animation.SpawnAnimation;
 
 public sealed partial class CESpawnAnimationSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedAnimationActionSystem _animation = default!;
+    [Dependency] private CESharedAnimationActionSystem _animation = default!;
 
     public override void Initialize()
     {

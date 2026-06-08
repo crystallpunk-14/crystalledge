@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -11,10 +11,10 @@ namespace Content.Shared._CE.DPSMeter;
 /// and resets the session after TrackTimeAfterHit + FadeDuration of silence.
 /// Runs on both server and client; server state is authoritative via AutoGenerateComponentState.
 /// </summary>
-public sealed class CEDPSMeterSystem : EntitySystem
+public sealed partial class CEDPSMeterSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _netMan = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _netMan = default!;
 
     public override void Initialize()
     {

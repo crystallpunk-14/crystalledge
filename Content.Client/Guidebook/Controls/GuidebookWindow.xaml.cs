@@ -20,9 +20,10 @@ namespace Content.Client.Guidebook.Controls;
 [GenerateTypedNameReferences]
 public sealed partial class GuidebookWindow : FancyWindow, ILinkClickHandler, IAnchorClickHandler
 {
-    [Dependency] private readonly DocumentParsingManager _parsingMan = default!;
-    [Dependency] private readonly IResourceManager _resourceManager = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!; //Baseline
+    [Dependency] private DocumentParsingManager _parsingMan = default!;
+    [Dependency] private IResourceManager _resourceManager = default!;
+    // CrystallEdge: needed for LocFilter language filtering in RepopulateTree
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private Dictionary<ProtoId<GuideEntryPrototype>, GuideEntry> _entries = new();
 

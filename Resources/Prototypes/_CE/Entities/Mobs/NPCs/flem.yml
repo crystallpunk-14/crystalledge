@@ -50,9 +50,10 @@
       exploreRadius: 8
     # Move to enemy's last known position
   - type: CEGOAPCheckHealthLevelSensor
-    conditionKey: LowHealth
-    threshold: 0.5
-    selector: !type:CEGOAPSelectorSelf
+    entries:
+    - conditionKey: LowHealth
+      threshold: 0.5
+      selector: !type:CEGOAPSelectorSelf
 
   - type: NpcFactionMember
     factions:

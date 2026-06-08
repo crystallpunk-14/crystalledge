@@ -1,4 +1,4 @@
-using Content.Shared._CE.Mana.Core.Components;
+﻿using Content.Shared._CE.Mana.Core.Components;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
 
@@ -19,7 +19,7 @@ public sealed partial class ManaPercentCondition : CEEntityConditionBase<ManaPer
 
 public sealed partial class ManaPercentConditionSystem : CEEntityConditionSystem<ManaPercentCondition>
 {
-    [Dependency] private readonly EntityQuery<CEMagicEnergyContainerComponent> _manaQuery = default!;
+    [Dependency] private EntityQuery<CEMagicEnergyContainerComponent> _manaQuery = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<ManaPercentCondition> args)
     {

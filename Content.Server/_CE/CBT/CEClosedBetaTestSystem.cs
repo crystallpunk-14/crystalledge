@@ -1,4 +1,4 @@
-using Content.Server.Chat.Systems;
+﻿using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.RoundEnd;
 using Content.Shared.CCVar;
@@ -11,12 +11,12 @@ namespace Content.Server._CE.CBT;
 
 public sealed partial class CEClosedBetaTestSystem : EntitySystem
 {
-    [Dependency] private readonly IConsoleHost _consoleHost = default!;
-    [Dependency] private readonly GameTicker _ticker = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ChatSystem _chatSystem = default!;
-    [Dependency] private readonly RoundEndSystem _roundEnd = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConsoleHost _consoleHost = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private RoundEndSystem _roundEnd = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private TimeSpan _nextUpdateTime = TimeSpan.Zero;
     private readonly TimeSpan _updateFrequency = TimeSpan.FromSeconds(60f);

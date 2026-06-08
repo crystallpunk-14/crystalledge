@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
@@ -7,13 +7,13 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared._CE.Mana.Core;
 
-public abstract class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
+public abstract partial class CESharedMagicEnergyCrystalSlotSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private readonly CESharedMagicEnergySystem _magicEnergy = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private CESharedMagicEnergySystem _magicEnergy = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     public override void Initialize()
     {

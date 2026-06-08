@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
@@ -21,7 +21,7 @@ public sealed partial class StatusEffectStacksCondition : CEEntityConditionBase<
 
 public sealed partial class StatusEffectStacksConditionSystem : CEEntityConditionSystem<StatusEffectStacksCondition>
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _effectStack = default!;
+    [Dependency] private CEStatusEffectStackSystem _effectStack = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<StatusEffectStacksCondition> args)
     {

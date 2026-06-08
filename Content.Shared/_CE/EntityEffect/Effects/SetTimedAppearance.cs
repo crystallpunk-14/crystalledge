@@ -1,4 +1,4 @@
-using Content.Shared._CE.TimedAppearance;
+﻿using Content.Shared._CE.TimedAppearance;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -43,7 +43,7 @@ public sealed partial class SetTimedAppearance : CEEntityEffectBase<SetTimedAppe
 
 public sealed partial class CESetTimedAppearanceEffectSystem : CEEntityEffectSystem<SetTimedAppearance>
 {
-    [Dependency] private readonly CETimedAppearanceSystem _timedAppearance = default!;
+    [Dependency] private CETimedAppearanceSystem _timedAppearance = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<SetTimedAppearance> args)
     {

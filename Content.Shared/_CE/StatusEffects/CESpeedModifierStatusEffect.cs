@@ -1,4 +1,4 @@
-using Content.Shared._CE.StatusEffects.Core;
+﻿using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.StatusEffectNew;
@@ -18,7 +18,7 @@ public sealed partial class CESpeedModifierStatusEffectComponent : Component
 
 public sealed partial class CESpeedModifierStatusEffectSystem : EntitySystem
 {
-    [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private MovementSpeedModifierSystem _movement = default!;
 
     public override void Initialize()
     {

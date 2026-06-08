@@ -1,4 +1,4 @@
-using Content.Shared._CE.Mana.Core;
+﻿using Content.Shared._CE.Mana.Core;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -13,7 +13,7 @@ public sealed partial class RestoreMana : CEEntityEffectBase<RestoreMana>
 
 public sealed partial class CERestoreManaEffectSystem : CEEntityEffectSystem<RestoreMana>
 {
-    [Dependency] private readonly CESharedMagicEnergySystem _mana = default!;
+    [Dependency] private CESharedMagicEnergySystem _mana = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<RestoreMana> args)
     {

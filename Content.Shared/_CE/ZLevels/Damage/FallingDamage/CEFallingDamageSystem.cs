@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -8,9 +8,9 @@ using Content.Shared._CE.TileEffects.Core;
 
 namespace Content.Shared._CE.ZLevels.Damage.FallingDamage;
 
-public sealed class CEFallingDamageSystem : EntitySystem
+public sealed partial class CEFallingDamageSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedDamageableSystem _damageable = default!;
+    [Dependency] private CESharedDamageableSystem _damageable = default!;
     public override void Initialize()
     {
         base.Initialize();

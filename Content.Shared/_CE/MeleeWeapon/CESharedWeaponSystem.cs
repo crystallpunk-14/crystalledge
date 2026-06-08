@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
@@ -20,16 +20,16 @@ namespace Content.Shared._CE.MeleeWeapon;
 
 public abstract partial class CESharedWeaponSystem : EntitySystem
 {
-    [Dependency] protected readonly IGameTiming Timing = default!;
-    [Dependency] protected readonly IMapManager MapManager = default!;
-    [Dependency] protected readonly ActionBlockerSystem Blocker = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] protected readonly SharedCombatModeSystem CombatMode = default!;
-    [Dependency] protected readonly SharedInteractionSystem Interaction = default!;
-    [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
-    [Dependency] private readonly CESharedAnimationActionSystem _animationAction = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected IMapManager MapManager = default!;
+    [Dependency] protected ActionBlockerSystem Blocker = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] protected SharedCombatModeSystem CombatMode = default!;
+    [Dependency] protected SharedInteractionSystem Interaction = default!;
+    [Dependency] protected SharedTransformSystem TransformSystem = default!;
+    [Dependency] private CESharedAnimationActionSystem _animationAction = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {
@@ -350,7 +350,7 @@ public sealed partial class CEAfterAttackEvent(EntityUid weapon, List<EntityUid>
 /// Raised on the server and sent to clients to play melee attack visual effects.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CEMeleeAttackEffectEvent(NetEntity user, List<NetEntity> targets) : EntityEventArgs
+public sealed partial class CEMeleeAttackEffectEvent(NetEntity user, List<NetEntity> targets) : EntityEventArgs
 {
     /// <summary>
     /// The user who performed the attack.

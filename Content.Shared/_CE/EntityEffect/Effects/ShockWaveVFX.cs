@@ -1,4 +1,4 @@
-using Content.Shared._CE.ShockWave;
+﻿using Content.Shared._CE.ShockWave;
 using Robust.Shared.Network;
 using Robust.Shared.Spawners;
 
@@ -18,7 +18,7 @@ public sealed partial class ShockWaveVFX : CEEntityEffectBase<ShockWaveVFX>
 
 public sealed partial class CEShockWaveVFXEffectSystem : CEEntityEffectSystem<ShockWaveVFX>
 {
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private INetManager _net = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ShockWaveVFX> args)
     {

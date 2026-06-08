@@ -1,4 +1,4 @@
-using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
+﻿using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared._CE.Health;
@@ -12,9 +12,9 @@ using Robust.Shared.Timing;
 namespace Content.Client._CE.UserInterface.Systems.HealthMana;
 
 [UsedImplicitly]
-public sealed class CEHealthUiController : UIController
+public sealed partial class CEHealthUiController : UIController
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private CEHealthUI? _healthBar;
 

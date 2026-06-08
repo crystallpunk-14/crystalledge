@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -20,12 +20,12 @@ namespace Content.Shared._CE.ZLevels.Flight;
 
 public abstract partial class CESharedZFlightSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedZLevelsSystem _zLevel = default!;
-    [Dependency] private readonly SharedAmbientSoundSystem _ambient = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedGravitySystem _gravity = default!;
+    [Dependency] private CESharedZLevelsSystem _zLevel = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambient = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!;
 
     protected EntityQuery<CEZPhysicsComponent> ZPhyzQuery;
 
@@ -216,17 +216,17 @@ public abstract partial class CESharedZFlightSystem : EntitySystem
 /// <summary>
 /// Called on an entity when it attempts to start flight mode. Subscribe and cancel this event if you want to cancel your flight for any reason.
 /// </summary>
-public sealed class CEStartFlightAttemptEvent : CancellableEntityEventArgs;
+public sealed partial class CEStartFlightAttemptEvent : CancellableEntityEventArgs;
 
 /// <summary>
 /// Called on an entity when it enters flight mode
 /// </summary>
-public sealed class CEFlightStartedEvent : EntityEventArgs;
+public sealed partial class CEFlightStartedEvent : EntityEventArgs;
 
 /// <summary>
 /// Called on an entity when it exits flight mode
 /// </summary>
-public sealed class CEFlightStoppedEvent : EntityEventArgs;
+public sealed partial class CEFlightStoppedEvent : EntityEventArgs;
 
 
 /// <summary>

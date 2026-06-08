@@ -1,4 +1,4 @@
-using Content.Server.Discord.DiscordLink;
+﻿using Content.Server.Discord.DiscordLink;
 using NetCord;
 using NetCord.Gateway;
 using NetCord.Rest;
@@ -7,10 +7,10 @@ using Robust.Shared.Player;
 
 namespace Content.Server._CE.Discord;
 
-public sealed class CEDiscordBot : IPostInjectInit
+public sealed partial class CEDiscordBot : IPostInjectInit
 {
-    [Dependency] private readonly DiscordLink _discordLink = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private DiscordLink _discordLink = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     public void Initialize()
     {

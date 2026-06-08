@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Prototypes;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
@@ -38,9 +38,9 @@ public sealed partial class CETempShieldStatusEffectComponent : Component
 }
 
 
-public sealed class CETempShieldSystem : EntitySystem
+public sealed partial class CETempShieldSystem : EntitySystem
 {
-    [Dependency] private readonly CEStatusEffectStackSystem _stacks = default!;
+    [Dependency] private CEStatusEffectStackSystem _stacks = default!;
 
     public override void Initialize()
     {

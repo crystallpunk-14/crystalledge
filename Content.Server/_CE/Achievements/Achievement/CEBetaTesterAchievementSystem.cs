@@ -1,4 +1,4 @@
-using Content.Shared._CE.Achievements.Prototypes;
+﻿using Content.Shared._CE.Achievements.Prototypes;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Robust.Shared.Configuration;
@@ -6,10 +6,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.Achievements.Achievement;
 
-public sealed class CEBetaTesterAchievementSystem : EntitySystem
+public sealed partial class CEBetaTesterAchievementSystem : EntitySystem
 {
-    [Dependency] private readonly CEAchievementsSystem _achievement = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private CEAchievementsSystem _achievement = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private readonly ProtoId<CEAchievementPrototype> _proto = "BetaTester";
 

@@ -1,4 +1,4 @@
-using Content.Shared._CE.Health.Components;
+﻿using Content.Shared._CE.Health.Components;
 using Content.Shared.Throwing;
 
 namespace Content.Shared._CE.Health;
@@ -7,9 +7,9 @@ namespace Content.Shared._CE.Health;
 /// Applies CE damage when an entity with <see cref="CEDamageOnLandComponent"/> lands after being thrown.
 /// This triggers <see cref="CEDamageChangedEvent"/> which can then trigger <see cref="CEDestructibleSystem"/>.
 /// </summary>
-public sealed class CEDamageOnLandSystem : EntitySystem
+public sealed partial class CEDamageOnLandSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedDamageableSystem _damage = default!;
+    [Dependency] private CESharedDamageableSystem _damage = default!;
 
     public override void Initialize()
     {

@@ -1,4 +1,4 @@
-using Content.Shared._CE.Camera;
+﻿using Content.Shared._CE.Camera;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Health.Components;
 using Content.Shared.Effects;
@@ -9,11 +9,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Health;
 
-public sealed class CEDamageableSystem : CESharedDamageableSystem
+public sealed partial class CEDamageableSystem : CESharedDamageableSystem
 {
-    [Dependency] private readonly SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private readonly CEScreenshakeSystem _shake = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private CEScreenshakeSystem _shake = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -55,7 +55,7 @@ public sealed class CEDamageableSystem : CESharedDamageableSystem
     }
 }
 
-public sealed class CEClientMobStateSystem : EntitySystem
+public sealed partial class CEClientMobStateSystem : EntitySystem
 {
     public override void Initialize()
     {

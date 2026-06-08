@@ -1,4 +1,4 @@
-using Content.Shared._CE.Mana.Core;
+﻿using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.StatusEffects.Core;
 using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared.StatusEffectNew;
@@ -15,7 +15,7 @@ public sealed partial class CEBonusManaComponent : Component
 
 public sealed partial class CEBonusManaSystem : EntitySystem
 {
-    [Dependency] private readonly CESharedMagicEnergySystem _mana = default!;
+    [Dependency] private CESharedMagicEnergySystem _mana = default!;
 
     public override void Initialize()
     {

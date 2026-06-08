@@ -1,4 +1,4 @@
-using Content.Client.Graphics;
+﻿using Content.Client.Graphics;
 using Content.Shared._CE.Water;
 using Content.Shared.CCVar;
 using Robust.Client.Graphics;
@@ -17,7 +17,7 @@ namespace Content.Client._CE.Water;
 /// Overlay responsible for rendering tile distortion shader on tiles
 /// with an anchored <see cref="CETileDistortionComponent"/> entity.
 /// </summary>
-public sealed class CETileDistortionOverlay : Overlay
+public sealed partial class CETileDistortionOverlay : Overlay
 {
     public override bool RequestScreenTexture { get; set; } = true;
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
@@ -37,11 +37,11 @@ public sealed class CETileDistortionOverlay : Overlay
 
     private bool _reducedMotion;
 
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IConfigurationManager _configManager = default!;
-    [Dependency] private readonly IResourceCache _resourceCache = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _configManager = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
 
     private readonly EntityLookupSystem _lookup;
     private readonly SharedTransformSystem _xformSys;
@@ -177,7 +177,7 @@ public sealed class CETileDistortionOverlay : Overlay
         base.DisposeBehavior();
     }
 
-    internal sealed class CachedResources : IDisposable
+    internal sealed partial class CachedResources : IDisposable
     {
         public IRenderTexture? WaterTarget;
 

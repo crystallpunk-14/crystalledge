@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Shared._CE.Achievements;
 using Robust.Server.Player;
@@ -12,11 +12,11 @@ namespace Content.Server._CE.Achievements;
 /// Maintains cached achievement percentage statistics, refreshing them on first player join
 /// and when achievements are added or removed.
 /// </summary>
-public sealed class CEAchievementsSystem : EntitySystem
+public sealed partial class CEAchievementsSystem : EntitySystem
 {
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IServerNetManager _netManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IServerNetManager _netManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private Dictionary<string, float> _cachedPercentages = new();
 

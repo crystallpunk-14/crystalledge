@@ -1,4 +1,4 @@
-using Content.Shared._CE.Stamina;
+﻿using Content.Shared._CE.Stamina;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -13,7 +13,7 @@ public sealed partial class RestoreStamina : CEEntityEffectBase<RestoreStamina>
 
 public sealed partial class CERestoreStaminaEffectSystem : CEEntityEffectSystem<RestoreStamina>
 {
-    [Dependency] private readonly CEStaminaSystem _stamina = default!;
+    [Dependency] private CEStaminaSystem _stamina = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<RestoreStamina> args)
     {

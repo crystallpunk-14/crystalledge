@@ -1,4 +1,4 @@
-using Content.Shared.Actions;
+﻿using Content.Shared.Actions;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._CE.StatusEffects.ActionsProvide;
@@ -10,7 +10,7 @@ namespace Content.Shared._CE.StatusEffects.ActionsProvide;
 /// </summary>
 public sealed partial class CEActionsProvideStatusEffectSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
 
     public override void Initialize()
     {

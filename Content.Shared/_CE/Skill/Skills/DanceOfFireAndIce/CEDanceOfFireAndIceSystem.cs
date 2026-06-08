@@ -1,11 +1,11 @@
-using Content.Shared._CE.Health;
+﻿using Content.Shared._CE.Health;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._CE.Skill.Skills.DanceOfFireAndIce;
 
-public sealed class CEDanceOfFireAndIceSystem : EntitySystem
+public sealed partial class CEDanceOfFireAndIceSystem : EntitySystem
 {
-    [Dependency] private readonly StatusEffectsSystem _statusEffect = default!;
+    [Dependency] private StatusEffectsSystem _statusEffect = default!;
 
     public override void Initialize()
     {

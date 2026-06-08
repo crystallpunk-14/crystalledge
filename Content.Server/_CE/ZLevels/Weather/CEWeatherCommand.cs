@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is sublicensed under MIT License
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
@@ -17,12 +17,12 @@ using Robust.Shared.Timing;
 namespace Content.Server._CE.ZLevels.Weather;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed class CEWeatherCommand : LocalizedCommands
+public sealed partial class CEWeatherCommand : LocalizedCommands
 {
-    [Dependency] private readonly IEntityManager _entities = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IComponentFactory _compFactory = default!;
+    [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
 
     public override string Command => "znetwork-weather";
     public override string Description => "Sets weather for all maps in zNetwork";

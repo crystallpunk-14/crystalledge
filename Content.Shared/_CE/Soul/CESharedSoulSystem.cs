@@ -1,4 +1,4 @@
-using Content.Shared._CE.EphemeralCollectable;
+﻿using Content.Shared._CE.EphemeralCollectable;
 using Content.Shared._CE.Health;
 using Content.Shared._CE.Soul.Components;
 using Content.Shared.Popups;
@@ -15,13 +15,13 @@ namespace Content.Shared._CE.Soul;
 /// with <see cref="CESoulReceiverComponent"/>.
 /// All write APIs clamp to <c>[0, MaxSouls]</c> and dirty the component when the value changes.
 /// </summary>
-public abstract class CESharedSoulSystem : EntitySystem
+public abstract partial class CESharedSoulSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     public override void Initialize()
     {
