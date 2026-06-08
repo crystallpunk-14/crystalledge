@@ -1,4 +1,4 @@
-﻿using Content.Server._CE.ZLevels.Core;
+﻿using Content.Shared._CE.ZLevels.Core;
 using Content.Server.Movement.Systems;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;

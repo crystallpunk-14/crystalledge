@@ -10,7 +10,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 
-namespace Content.Server._CE.ZLevels.Core;
+namespace Content.Shared._CE.ZLevels.Core;
 
 /// <summary>
 /// CrystallEdge-specific filter factory methods that extend <see cref="Filter"/> functionality
@@ -29,7 +29,7 @@ public static class CEFilter
 
         var filter = Filter.PvsExcept(origin, entityManager: entManager);
 
-        var zSystem = entManager.System<CEZLevelsSystem>();
+        var zSystem = entManager.System<CESharedZLevelsSystem>();
         var transformSystem = entManager.System<SharedTransformSystem>();
 
         var xform = entManager.GetComponent<TransformComponent>(origin);
@@ -72,7 +72,7 @@ public static class CEFilter
 
         var filter = Filter.Pvs(origin, entityManager: entManager);
 
-        var zSystem = entManager.System<CEZLevelsSystem>();
+        var zSystem = entManager.System<CESharedZLevelsSystem>();
         var transformSystem = entManager.System<SharedTransformSystem>();
 
         var xform = entManager.GetComponent<TransformComponent>(origin);

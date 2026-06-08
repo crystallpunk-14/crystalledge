@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Content.Server._CE.ZLevels.Core;
+using Content.Shared._CE.ZLevels.Core;
 using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Components;
 using Content.Shared._CE.EntityEffect;
