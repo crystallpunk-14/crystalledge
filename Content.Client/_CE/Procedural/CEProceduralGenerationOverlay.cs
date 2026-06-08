@@ -242,8 +242,9 @@ public sealed class CEProceduralGenerationOverlay : Overlay
         var scaledSize = Math.Max(6, (int)(BaseFontSize / zoomFactor));
         var font = scaledSize == BaseFontSize ? _font : new VectorFont(_fontResource, scaledSize);
 
-        foreach (var room in comp.Rooms)
+        for (var i = 0; i < comp.Rooms.Count; i++)
         {
+            var room = comp.Rooms[i];
             var zStart = room.GridCoord.Z * room.Height;
             var zEnd = zStart + room.Height - 1;
             if (zIndex < zStart || zIndex > zEnd)
@@ -252,7 +253,7 @@ public sealed class CEProceduralGenerationOverlay : Overlay
             var worldCenter = new Vector2(room.Position.X + room.Size.X / 2f, room.Position.Y + room.Size.Y / 2f);
             var screenPos = viewport.WorldToScreen(worldCenter);
 
-            var label = $"#{room.Index} [{room.RoomType}]\n" +
+            var label = $"#{i} [{room.RoomType}]\n" +
                         $"grid: {room.GridCoord}\n" +
                         $"pos: {room.Position}\n" +
                         $"size: {room.Size.X}x{room.Size.Y}x{room.Height}";

@@ -9,6 +9,8 @@ namespace Content.Shared._CE.Procedural;
 /// Attached to the primary map entity while 3D procedural dungeon generation is in progress.
 /// Stores the abstract 3D room graph: rooms at logical (X, Y, Z) grid coordinates
 /// where Z is the z-level index.
+///
+/// Used by server for storing generation process, and used by client for minimap and debug overlays
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEGeneratingProceduralDungeon3DComponent : Component
@@ -33,12 +35,6 @@ public sealed partial class CEGeneratingProceduralDungeon3DComponent : Component
 [DataDefinition, Serializable, NetSerializable]
 public sealed partial class CEProceduralAbstractRoom3D
 {
-    /// <summary>
-    /// Index of this room in the <see cref="CEGeneratingProceduralDungeon3DComponent.Rooms"/> list.
-    /// </summary>
-    [DataField]
-    public int Index;
-
     /// <summary>
     /// Logical 3D grid coordinate: X/Y = horizontal cell, Z = z-level index.
     /// </summary>
@@ -77,9 +73,15 @@ public sealed partial class CEProceduralAbstractRoom3D
 [DataDefinition, Serializable, NetSerializable]
 public sealed partial class CEProceduralRoomConnection3D
 {
+    /// <summary>
+    /// Index of the first room in <see cref="CEGeneratingProceduralDungeon3DComponent.Rooms"/>.
+    /// </summary>
     [DataField]
     public int RoomA;
 
+    /// <summary>
+    /// Index of the second room in <see cref="CEGeneratingProceduralDungeon3DComponent.Rooms"/>.
+    /// </summary>
     [DataField]
     public int RoomB;
 }

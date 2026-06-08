@@ -7,18 +7,35 @@
   config:
     !type:CEProceduralConfig3D
     generationPlan:
-    - !type:SetRoomType3D
-      position: 0,0,0
-      roomType: MossyTempleGeneralRoom
-    - !type:SetRoomType3D
-      position: -1,0,2
-      roomType: MossyTempleGeneralRoom
-    - !type:SetRoomType3D
-      position: 1,0,0
-      roomType: MossyTempleGeneralRoom
-    - !type:ConnectRooms3D
-      roomA: 0,0,0
-      roomB: -1,0,2
-    - !type:ConnectRooms3D
-      roomA: 0,0,0
-      roomB: 1,0,0
+    - !type:Set
+      pos: 0,0,0
+      proto: MossyTempleGeneralRoom
+    - !type:Set
+      pos: -1,0,2
+      proto: MossyTempleGeneralRoom
+    - !type:Set
+      pos: 1,0,0
+      proto: MossyTempleGeneralRoom
+    - !type:Connect
+      pos1: 0,0,0
+      pos2: -1,0,2
+    - !type:Connect
+      pos1: 0,0,0
+      pos2: 1,0,0
+    - !type:Fill
+      from: 0,0,0
+      to: 0,0,5
+      proto: MossyTempleGeneralRoom
+    - !type:Fill
+      from: -2,-2,0
+      to: 2,2,0
+      proto: MossyTempleTreasureRoom
+    - !type:AppendRandom
+      proto: MossyTempleTreasureRoom
+      connectTo: MossyTempleTreasureRoom
+      count: 
+        min: 50
+        max: 50
+      connectSide: true
+      connectFloor: true
+      connectRoof: true
