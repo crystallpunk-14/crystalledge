@@ -8,7 +8,34 @@
   - type: PlacementReplacement
     key: CERoomPasswayMarker
   - type: Sprite
-    sprite: Markers/jobs.rsi
-    layers:
-    - sprite: _CE/Interface/arrow.rsi
-      state: arrow
+    sprite: _CE/Markers/DunGen/side_arrow.rsi
+    state: icon
+
+- type: entity
+  parent: MarkerBase
+  id: CERoomPasswayMarkerUp
+  name: room passway marker
+  suffix: Up
+  categories: [ ForkFiltered ]
+  components:
+  - type: CERoomPasswayMarker
+  - type: PlacementReplacement
+    key: CERoomPasswayMarker
+  - type: Sprite
+    sprite: _CE/Markers/DunGen/up_arrow.rsi
+    state: icon
+
+
+- type: entity
+  parent: MarkerBase
+  id: CERoomPasswayMarkerDown
+  name: room passway marker
+  suffix: Down
+  categories: [ ForkFiltered ]
+  components:
+  - type: CERoomPasswayMarker
+  - type: PlacementReplacement
+    key: CERoomPasswayMarker
+  - type: Sprite
+    sprite: _CE/Markers/DunGen/down_arrow.rsi
+    state: icon

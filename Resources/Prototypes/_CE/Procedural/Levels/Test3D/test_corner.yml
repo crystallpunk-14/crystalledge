@@ -7,28 +7,12 @@
   config:
     !type:CEProceduralConfig3D
     planning:
-    - !type:Set
-      pos: 0,0,0
-      proto: MossyTempleGeneralRoom
-    - !type:Set
-      pos: -1,0,2
-      proto: MossyTempleGeneralRoom
-    - !type:Set
-      pos: 1,0,0
-      proto: MossyTempleGeneralRoom
-    - !type:Connect
-      pos1: 0,0,0
-      pos2: -1,0,2
-    - !type:Connect
-      pos1: 0,0,0
-      pos2: 1,0,0
     - !type:Fill
       from: 0,0,0
       to: 0,0,5
       proto: MossyTempleGeneralRoom
-    - !type:Fill
-      from: -2,-2,0
-      to: 2,2,0
+    - !type:Set
+      pos: 0,0,0
       proto: MossyTempleTreasureRoom
     - !type:AppendRandom
       proto: MossyTempleTreasureRoom
@@ -39,3 +23,12 @@
       connectSide: true
       connectFloor: true
       connectRoof: true
+    - !type:AppendRandom
+      proto: MossyTempleGeneralRoom
+      connectTo: MossyTempleTreasureRoom
+      count: 
+        min: 10
+        max: 10
+      connectSide: false
+      connectFloor: true
+      connectRoof: false
