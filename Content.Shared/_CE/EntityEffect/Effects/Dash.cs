@@ -27,8 +27,8 @@ public sealed partial class CEDashEffectSystem : CEEntityEffectSystem<Dash>
 
         _throwing.TryThrow(
             entity,
-            args.Args.Angle.ToWorldVec() * args.Effect.Distance,
-            args.Effect.Speed,
+            args.Args.Angle.ToWorldVec() * (args.Effect.Distance * args.Args.Power),
+            args.Effect.Speed * args.Args.Power,
             entity,
             animated: false,
             doSpin: false);

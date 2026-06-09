@@ -29,7 +29,7 @@ public sealed partial class CERemoveStatusEffectStackSystem : CEEntityEffectSyst
             return;
 
         // Try to remove stacks first; if the effect has no stack component, fully remove it.
-        if (!_effectStack.TryRemoveStack(entity, args.Effect.StatusEffect, args.Effect.Amount))
+        if (!_effectStack.TryRemoveStack(entity, args.Effect.StatusEffect, (int)(args.Effect.Amount * args.Args.Power)))
             _statusEffect.TryRemoveStatusEffect(entity, args.Effect.StatusEffect);
     }
 }

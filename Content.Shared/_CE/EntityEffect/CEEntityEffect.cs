@@ -60,7 +60,8 @@ public record struct CEEntityEffectArgs(
     Angle Angle,
     float Speed,
     EntityUid? Target,
-    EntityCoordinates? Position);
+    EntityCoordinates? Position,
+    float Power = 1f);
 
 /// <summary>
 /// Broadcast event raised when a CE entity effect is dispatched.

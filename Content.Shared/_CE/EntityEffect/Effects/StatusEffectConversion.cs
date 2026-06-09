@@ -48,9 +48,12 @@ public sealed partial class CEStatusEffectConversionSystem : CEEntityEffectSyste
         if (currentSource <= 0)
             return;
 
+        var maxConversion = args.Effect.MaxConversion > 0
+            ? Math.Max(1, (int)(args.Effect.MaxConversion * args.Args.Power))
+            : 0;
         var toConvert = currentSource;
-        if (args.Effect.MaxConversion > 0)
-            toConvert = Math.Min(toConvert, args.Effect.MaxConversion);
+        if (maxConversion > 0)
+            toConvert = Math.Min(toConvert, maxConversion);
 
         var targetStacks = (int)(toConvert / args.Effect.Ratio);
         if (targetStacks <= 0)

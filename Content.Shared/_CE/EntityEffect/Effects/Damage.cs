@@ -31,7 +31,7 @@ public sealed partial class CEDamageEffectSystem : CEEntityEffectSystem<Damage>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        var damage = new CEDamageSpecifier(args.Effect.DamageSpec);
+        var damage = new CEDamageSpecifier(args.Effect.DamageSpec) * args.Args.Power;
 
         _health.TakeDamage(
             entity,

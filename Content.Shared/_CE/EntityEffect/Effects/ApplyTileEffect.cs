@@ -38,6 +38,6 @@ public sealed partial class CEApplyTileEffectSystem : CEEntityEffectSystem<Apply
         if (!TryResolveEffectCoordinates(args.Args, args.Effect.EffectTarget, out var coords))
             return;
 
-        _tileEffect.TryApplyTileEffect(args.Effect.TileEffect, args.Args.Source, coords, args.Effect.Amount, args.Effect.Max);
+        _tileEffect.TryApplyTileEffect(args.Effect.TileEffect, args.Args.Source, coords, Math.Max(1, (int)(args.Effect.Amount * args.Args.Power)), args.Effect.Max);
     }
 }

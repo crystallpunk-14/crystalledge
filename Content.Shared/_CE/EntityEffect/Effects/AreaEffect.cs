@@ -46,7 +46,8 @@ public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<Area
             return;
 
         var mapCenter = _transformSys.ToMapCoordinates(targetPoint);
-        var entitiesAround = _lookup.GetEntitiesInRange(targetPoint, args.Effect.Range, LookupFlags.Uncontained);
+        var scaledRange = args.Effect.Range * args.Args.Power;
+        var entitiesAround = _lookup.GetEntitiesInRange(targetPoint, scaledRange, LookupFlags.Uncontained);
 
         var count = 0;
         foreach (var entity in entitiesAround)
@@ -60,7 +61,7 @@ public sealed partial class CEAreaEffectEffectSystem : CEEntityEffectSystem<Area
             if (args.Effect.CheckLOS)
             {
                 var entityMapPos = _transformSys.GetMapCoordinates(entity);
-                if (!_examine.InRangeUnOccluded(mapCenter, entityMapPos, args.Effect.Range, null))
+                if (!_examine.InRangeUnOccluded(mapCenter, entityMapPos, scaledRange, null))
                     continue;
             }
 

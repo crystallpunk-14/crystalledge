@@ -26,6 +26,6 @@ public sealed partial class CEAddZVelocitySystem : CEEntityEffectSystem<AddZVelo
                 return;
         }
 
-        _zLevel.AddZVelocity(entity, args.Effect.Speed);
+        _zLevel.AddZVelocity(entity, args.Effect.Speed * args.Args.Power);
     }
 }

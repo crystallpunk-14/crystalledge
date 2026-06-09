@@ -26,6 +26,6 @@ public sealed partial class CEThrowToUserEffectSystem : CEEntityEffectSystem<Thr
             _projectile.EmbedDetach(targetEntity, embeddable);
         }
 
-        _throwing.TryThrow(targetEntity, xform.Coordinates, args.Effect.ThrowPower);
+        _throwing.TryThrow(targetEntity, xform.Coordinates, args.Effect.ThrowPower * args.Args.Power);
     }
 }

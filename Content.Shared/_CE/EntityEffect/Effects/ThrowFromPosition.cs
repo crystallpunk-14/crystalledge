@@ -51,6 +51,6 @@ public sealed partial class CEThrowFromPositionEffectSystem : CEEntityEffectSyst
             _projectile.EmbedDetach(targetEntity, embeddable);
         }
 
-        _throwing.TryThrow(targetEntity, normalized * args.Effect.Distance, args.Effect.ThrowPower, doSpin: true);
+        _throwing.TryThrow(targetEntity, normalized * (args.Effect.Distance * args.Args.Power), args.Effect.ThrowPower * args.Args.Power, doSpin: true);
     }
 }
