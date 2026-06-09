@@ -22,12 +22,19 @@
           damage:
             types:
               Cold: 5
-        - !type:StealMana
-          amount: 10
-        - !type:SpawnEntity
-          effectTarget: Target
-          spawns:
-          - CEEffectManaDrain
+        - !type:ConditionalEffectGroup
+          conditions:
+          - !type:ManaPercentCondition
+            max: 0
+            inverted: true
+          effects:
+          - !type:StealMana
+            amount: 10
+          - !type:SpawnEntity
+            effectTarget: Target
+            reparent: true
+            spawns:
+            - CEEffectManaDrain
       OnHeavyHit:
       - !type:WeaponArcAttack
         range: 1.4
@@ -38,12 +45,19 @@
           damage:
             types:
               Cold: 10
-        - !type:StealMana
-          amount: 20
-        - !type:SpawnEntity
-          effectTarget: Target
-          spawns:
-          - CEEffectManaDrain
+        - !type:ConditionalEffectGroup
+          conditions:
+          - !type:ManaPercentCondition
+            max: 0
+            inverted: true
+          effects:
+          - !type:StealMana
+            amount: 20
+          - !type:SpawnEntity
+            effectTarget: Target
+            reparent: true
+            spawns:
+            - CEEffectManaDrain
     animations:
       Primary:
       - anim: SpearAttackLight
