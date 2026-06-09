@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: CEBaseWeapon
   id: CEWeaponHeavyClub
   name: heavy club
@@ -19,7 +19,7 @@
           damage:
             types:
               Physical: 18
-        - !type:ThrowFromUser
+        - !type:ThrowFrom
           throwPower: 10
           distance: 1
       OnHeavyHit:

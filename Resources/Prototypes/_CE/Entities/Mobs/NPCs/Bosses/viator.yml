@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: MarkerBase
   id: CEMobBossViatorSpawner
   name: Viator Spawner
@@ -581,7 +581,7 @@
         damage:
           types:
             Physical: 15
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 3
         throwPower: 10
       - !type:ShockWaveVFX

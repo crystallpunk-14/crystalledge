@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: CEBaseWeapon
   id: CEWeaponMagicStaffWater
   name: water staff
@@ -69,7 +69,7 @@
       radius: 2
       fallOffFactor: 0.5
       maxStacks: 10
-    - !type:ThrowFromUser
+    - !type:ThrowFrom
       throwPower: 7
       distance: 2
     - !type:Damage
@@ -81,6 +81,7 @@
       affectCaster: true
       range: 2
       effects:
-      - !type:ThrowFromPosition
+      - !type:ThrowFrom
+        origin: Used
         throwPower: 7
         distance: 0.25

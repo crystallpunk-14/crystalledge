@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: MarkerBase
   id: CEMobBossSlimeSpawner
   name: Giant crystal slime Spawner
@@ -409,7 +409,7 @@
         damage:
           types:
             Physical: 15
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 1
     - !type:ShockWaveVFX
       width: 0.05
@@ -517,7 +517,7 @@
         damage:
           types:
             Physical: 25
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 1
     - !type:ShockWaveVFX
       width: 0.5

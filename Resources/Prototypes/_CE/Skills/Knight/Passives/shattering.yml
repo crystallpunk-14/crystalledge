@@ -1,4 +1,4 @@
-- type: skill
+﻿- type: skill
   parent: BaseKnightSkill
   id: Shattering
   icon:
@@ -29,7 +29,7 @@
           types:
             Physical: 20
         attackType: Melee
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         throwPower: 8
         distance: 3
       - !type:ShockWaveVFX

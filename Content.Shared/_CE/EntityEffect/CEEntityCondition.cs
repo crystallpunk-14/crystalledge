@@ -22,7 +22,7 @@ public abstract partial class CEEntityCondition
     /// </summary>
     public bool Passes(CEEntityEffectArgs args)
     {
-        EntityUid? entity = ConditionTarget switch
+        var entity = ConditionTarget switch
         {
             CEEffectTarget.User => args.Source,
             CEEffectTarget.Used => args.Used,

@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent:
   - BaseMob
   - CEMobDamageable
@@ -58,7 +58,7 @@
     - !type:AreaEffect
       range: 1
       effects:
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 1
   - type: CEGOAP
 
@@ -115,7 +115,7 @@
           damage:
             types:
               Fire: 15
-        - !type:ThrowFromUser
+        - !type:ThrowFrom
           distance: 1
     animations:
       Primary:
