@@ -8,10 +8,10 @@
     sprite: _CE/Objects/Weapons/Sword/iron.rsi
     state: icon
   - type: CEWeapon
+    range: 0.7
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.7
         arcWidth: 40
         effects:
         - !type:Damage
@@ -21,7 +21,7 @@
               Physical: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.6
+        rangeMultiplier: 0.857
         arcWidth: 180
         effects:
         - !type:Damage

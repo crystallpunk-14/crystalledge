@@ -573,7 +573,7 @@
         scale: 1, -1
     0.5:
     - !type:WeaponArcAttack
-      range: 0.8
+      rangeMultiplier: 1.6
       arcWidth: 165
       effects:
       - !type:Damage

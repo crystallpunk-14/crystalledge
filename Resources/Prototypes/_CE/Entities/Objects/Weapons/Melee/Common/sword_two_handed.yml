@@ -8,10 +8,10 @@
     sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
     state: icon
   - type: CEWeapon
+    range: 0.84
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.84
         arcWidth: 40
         effects:
         - !type:Damage
@@ -21,7 +21,7 @@
               Physical: 25
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.9
+        rangeMultiplier: 1.071
         arcWidth: 40
         effects:
         - !type:Damage

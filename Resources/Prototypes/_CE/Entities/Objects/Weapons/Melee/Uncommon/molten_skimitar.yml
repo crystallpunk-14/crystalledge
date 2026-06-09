@@ -11,10 +11,10 @@
     - state: fire
       shader: unshaded
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 60
         effects:
         - !type:Damage
@@ -29,7 +29,6 @@
           max: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 360
         effects:
         - !type:Damage

@@ -29,10 +29,10 @@
     targetZoom: 0.8, 0.8
   - type: CEWeapon
     spriteRotation: 0
+    range: 0.4
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.4
         arcWidth: 40
         effects:
         - !type:Damage

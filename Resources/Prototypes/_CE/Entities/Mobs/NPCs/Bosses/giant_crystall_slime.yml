@@ -401,7 +401,7 @@
       radius: 3
       maxStacks: 5
     - !type:WeaponArcAttack
-      range: 1.3
+      rangeMultiplier: 2.6
       arcWidth: 360
       effects:
       - !type:Damage
@@ -509,7 +509,7 @@
       radius: 3
       maxStacks: 5
     - !type:WeaponArcAttack
-      range: 1.3
+      rangeMultiplier: 2.6
       arcWidth: 360
       effects:
       - !type:Damage

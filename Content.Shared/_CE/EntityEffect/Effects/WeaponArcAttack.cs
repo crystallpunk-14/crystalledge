@@ -12,7 +12,7 @@ namespace Content.Shared._CE.EntityEffect.Effects;
 public sealed partial class WeaponArcAttack : CEEntityEffectBase<WeaponArcAttack>
 {
     [DataField]
-    public float Range = 1.5f;
+    public float RangeMultiplier = 1f;
 
     [DataField]
     public float ArcWidth = 90f;
@@ -65,14 +65,12 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
     protected override void Effect(ref CEEntityEffectEvent<WeaponArcAttack> args)
     {
         var used = args.Args.Used ?? args.Args.Source;
-
-        if (!TryComp<CEWeaponComponent>(used, out var weapon))
-            return;
+        TryComp<CEWeaponComponent>(used, out var weapon);
 
         var entityCoords = _transform.GetMapCoordinates(args.Args.Source);
         var direction = new Angle(args.Args.Angle.ToWorldVec()) + args.Effect.Angle;
 
-        var range = args.Effect.Range;
+        var range = (weapon?.Range ?? 1f) * args.Effect.RangeMultiplier;
 
         // Raise debug event for arc attack visualization
         var debugEvent = new CEDebugArcAttackEvent(entityCoords, direction, range, args.Effect.ArcWidth);
@@ -117,11 +115,9 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
         var targets = new List<EntityUid>(hitEntities);
 
-        // TODO: FIX THAT SHITCODE WITH EFFECT SLOTS & INLINE EFFECTS
-
         // Find which EffectSlot on the weapon contains this arc attack.
         // The server uses this to replay nested effects on validated targets.
-        var effectSlot = FindEffectSlot(weapon, args.Effect);
+        var effectSlot = weapon != null ? FindEffectSlot(weapon, args.Effect) : null;
 
         // If the arc attack was defined inline in an animation (not in weapon.EffectSlots),
         // FindEffectSlot returns null and ApplyArcEffects would skip the effects entirely.
@@ -138,7 +134,8 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
         }
 
         // Server clears targets for player attacks (damage goes through CEWeaponArcHitEvent).
-        _melee.HandleArcAttackHit(args.Args.Source, (used, weapon), targets, effectSlot);
+        if (weapon != null)
+            _melee.HandleArcAttackHit(args.Args.Source, (used, weapon), targets, effectSlot);
     }
 
     /// <summary>

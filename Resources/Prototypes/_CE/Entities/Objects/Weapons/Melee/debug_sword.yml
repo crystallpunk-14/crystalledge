@@ -10,10 +10,10 @@
     color: "#ee00ff"
     state: icon
   - type: CEWeapon
+    range: 0.7
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.7
         arcWidth: 20
         effects:
         - !type:Damage
@@ -23,7 +23,7 @@
               Physical: 100
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 1.1
+        rangeMultiplier: 1.571
         arcWidth: 15
         effects:
         - !type:Damage

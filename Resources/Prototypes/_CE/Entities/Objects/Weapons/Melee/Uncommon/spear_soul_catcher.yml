@@ -11,10 +11,10 @@
     - state: blade
       shader: unshaded
   - type: CEWeapon
+    range: 1.26
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 1.26
         arcWidth: 15
         effects:
         - !type:Damage
@@ -37,7 +37,7 @@
             - CEEffectManaDrain
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 1.4
+        rangeMultiplier: 1.111
         arcWidth: 25
         effects:
         - !type:Damage
@@ -61,15 +61,19 @@
     animations:
       Primary:
       - anim: SpearAttackLight
+        speed: 0.6
+      Secondary:
+      - anim: SpearAttackHeavy
+        speed: 0.6
+      - anim: SpearAttackHeavy2
+        speed: 0.6
+  - type: CEWieldedWeapon
+    animations:
+      Primary:
+      - anim: SpearAttackLight
       Secondary:
       - anim: SpearAttackHeavy
       - anim: SpearAttackHeavy2
-  #- type: CEWieldedWeapon #TODO: Custom wielded animations
-  #  animations:
-  #    Primary:
-  #    - anim: SpearAttackLight
-  #    Secondary:
-  #    - anim: SpearAttackHeavy
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1

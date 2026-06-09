@@ -8,10 +8,10 @@
     sprite: _CE/Objects/Weapons/Staff/wooden.rsi
     state: icon
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 100
         effects:
         - !type:Damage
@@ -21,7 +21,7 @@
               Physical: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.78
+        rangeMultiplier: 1.3
         arcWidth: 45
         effects:
         - !type:Damage

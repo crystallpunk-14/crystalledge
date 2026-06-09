@@ -76,10 +76,10 @@
     baseSprintSpeed: 2.5
   - type: CEWeapon
     spriteRotation: -90
+    range: 0.7
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.7
         arcWidth: 40
         effects:
         - !type:Damage

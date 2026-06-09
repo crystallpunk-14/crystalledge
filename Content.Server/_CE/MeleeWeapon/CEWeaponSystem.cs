@@ -84,22 +84,25 @@ public sealed partial class CEWeaponSystem : CESharedWeaponSystem
     }
 
     /// <summary>
-    /// Computes the maximum effective range (range * 2) from all WeaponArcAttack effects
-    /// defined in the weapon's effect slots.
+    /// Computes the maximum effective range (base range * max multiplier * 2) from all WeaponArcAttack
+    /// effects defined in the weapon's effect slots.
     /// </summary>
     private float GetMaxEffectiveRange(Entity<CEWeaponComponent> weapon)
     {
-        var maxRange = 0f;
+        var maxMultiplier = 0f;
 
         foreach (var effects in weapon.Comp.EffectSlots.Values)
         {
             foreach (var effect in effects)
             {
-                if (effect is WeaponArcAttack arc && arc.Range > maxRange)
-                    maxRange = arc.Range;
+                if (effect is WeaponArcAttack arc && arc.RangeMultiplier > maxMultiplier)
+                    maxMultiplier = arc.RangeMultiplier;
             }
         }
 
-        return maxRange > 0f ? maxRange * 2 : FallbackRange;
+        if (maxMultiplier <= 0f)
+            return weapon.Comp.Range > 0f ? weapon.Comp.Range * 2 : FallbackRange;
+
+        return weapon.Comp.Range * maxMultiplier * 2;
     }
 }

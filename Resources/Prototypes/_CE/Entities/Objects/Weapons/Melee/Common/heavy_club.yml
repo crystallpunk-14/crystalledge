@@ -8,10 +8,10 @@
     sprite: _CE/Objects/Weapons/heavy_club.rsi
     state: icon
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 60
         effects:
         - !type:Damage
@@ -24,7 +24,6 @@
           distance: 1
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 180
         effects:
         - !type:Damage

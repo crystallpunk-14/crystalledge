@@ -38,10 +38,10 @@
         params:
           variation: 0.1
   - type: CEWeapon
+    range: 0.4
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.4
         arcWidth: 40
         effects:
         - !type:Damage
@@ -51,7 +51,7 @@
               Physical: 9
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.6
+        rangeMultiplier: 1.5
         arcWidth: 40
         effects:
         - !type:Damage

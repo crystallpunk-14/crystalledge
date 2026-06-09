@@ -9,6 +9,7 @@
     layers:
     - state: icon
   - type: CEWeapon
+    range: 0.78
     effectSlots:
       OnHit:
       - !type:ShootProjectile
@@ -16,7 +17,6 @@
         projectileSpeed: 7
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.78
         arcWidth: 45
         effects:
         - !type:Damage

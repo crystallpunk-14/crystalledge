@@ -8,10 +8,10 @@
     sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
     state: icon
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 60
         effects:
         - !type:Damage
@@ -21,7 +21,6 @@
               Physical: 10
       OnHeavyHit:
       - !type:WeaponArcAttack
-        range: 0.6
         arcWidth: 360
         effects:
         - !type:Damage
