@@ -44,6 +44,7 @@
         volume: 8
   - type: CETileDistortion
     intensity: 0.4
+  - type: CESafeFalling
   - type: CEPreventTileEffect
     blocks:
     - CETileEffectFire
@@ -69,6 +70,18 @@
     range: 4
     sound:
       path: /Audio/_CE/Ambience/water.ogg
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEEffectOnFallenOnStatusEffect
+      scaleWithStacks: false
+      scaleWithSpeed: true
+      effects:
+      - !type:CETileAffectArea
+        effectTarget: User
+        tileEffect: CETileEffectWater
+        radius: 0.5
+        fallOffFactor: 0.5
+        maxStacks: 3
 
 - type: entity
   parent: CEWater
