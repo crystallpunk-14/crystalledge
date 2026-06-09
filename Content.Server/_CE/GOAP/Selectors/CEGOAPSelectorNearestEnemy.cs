@@ -4,6 +4,7 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 using Robust.Shared.Map;
 
 namespace Content.Server._CE.GOAP.Selectors;
@@ -26,6 +27,7 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
     [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private EntityQuery<CEGOAPKnowledgeCacheComponent> _cacheQuery = default!;
     [Dependency] private EntityQuery<CEGOAPComponent> _goapQuery = default!;
+    [Dependency] private EntityQuery<CEMobStateComponent> _mobStateQuery = default!;
 
     protected override void Resolve(ref CEGOAPSelectorResolveEvent<CEGOAPSelectorNearestEnemy> ev)
     {
@@ -43,7 +45,9 @@ public sealed partial class CEGOAPSelectorNearestEnemySystem : CEGOAPTargetSelec
 
         foreach (var enemy in cache.Enemies)
         {
-            if (!_mobState.IsAlive(enemy))
+            if (_mobStateQuery.TryGetComponent(enemy, out var mobState)
+                ? !_mobState.IsAlive(enemy, mobState)
+                : Terminating(enemy))
                 continue;
 
             if (!_xformQuery.TryGetComponent(enemy, out var ex))

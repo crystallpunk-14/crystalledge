@@ -60,7 +60,9 @@ public sealed class CEGOAPCheckManaLevelSensorSystem : EntitySystem
             return;
 
         foreach (var entry in ent.Comp.Entries)
+        {
             EvaluateEntry(ent, entry, goap);
+        }
     }
 
     private void EvaluateEntry(EntityUid uid, CEGOAPCheckManaLevelSensorEntry entry, CEGOAPComponent goap)

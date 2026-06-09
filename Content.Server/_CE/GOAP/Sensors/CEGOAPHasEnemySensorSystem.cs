@@ -47,12 +47,17 @@ public sealed class CEGOAPHasEnemySensorSystem : EntitySystem
         if (!TryComp<CEGOAPKnowledgeCacheComponent>(ent, out var cache))
         {
             foreach (var entry in ent.Comp.Entries)
+            {
                 goap.WorldState[entry.ConditionKey] = false;
+            }
+
             return;
         }
 
         var hasEnemy = cache.Enemies.Count > 0;
         foreach (var entry in ent.Comp.Entries)
+        {
             goap.WorldState[entry.ConditionKey] = hasEnemy;
+        }
     }
 }

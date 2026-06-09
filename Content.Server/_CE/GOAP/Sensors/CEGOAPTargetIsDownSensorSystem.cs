@@ -2,6 +2,7 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Content.Shared._CE.GOAP.Selectors;
 using Content.Shared._CE.Health;
+using Content.Shared._CE.Health.Components;
 
 namespace Content.Server._CE.GOAP.Sensors;
 
@@ -30,6 +31,8 @@ public sealed partial class CEGOAPTargetIsDownSensorComponent : Component
 public sealed partial class CEGOAPTargetIsDownSensorSystem : EntitySystem
 {
     [Dependency] private CEMobStateSystem _mobState = default!;
+
+    [Dependency] private EntityQuery<CEMobStateComponent> _mobStateQuery = default!;
 
     public override void Initialize()
     {
@@ -66,6 +69,10 @@ public sealed partial class CEGOAPTargetIsDownSensorSystem : EntitySystem
     private void EvaluateEntry(Entity<CEGOAPComponent> ent, CEGOAPTargetIsDownSensorEntry entry)
     {
         var result = entry.Selector.Resolve(ent, EntityManager);
-        ent.Comp.WorldState[entry.ConditionKey] = result.Entity is { } target && !_mobState.IsAlive(target);
+        var isDown = result.Entity is { } target && (
+            _mobStateQuery.TryGetComponent(target, out var mobState)
+                ? !_mobState.IsAlive(target, mobState)
+                : Terminating(target));
+        ent.Comp.WorldState[entry.ConditionKey] = isDown;
     }
 }

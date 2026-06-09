@@ -61,7 +61,9 @@ public sealed partial class CEGOAPCheckHealthLevelSensorSystem : EntitySystem
             return;
 
         foreach (var entry in ent.Comp.Entries)
+        {
             EvaluateEntry(ent, entry, goap);
+        }
     }
 
     private void EvaluateEntry(EntityUid uid, CEGOAPCheckHealthLevelSensorEntry entry, CEGOAPComponent goap)
