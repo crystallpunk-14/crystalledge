@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSkimitarMolten
-  parent: CEBaseWeapon
+  parent: CEBaseSkimitar
   name: molten skimitar
   description: TODO
   components:
@@ -48,10 +48,3 @@
       - anim: SkimitarAttackLight2
       Secondary:
       - anim: SkimitarAttackHeavy1
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: Clothing
-    slots:
-    - neck

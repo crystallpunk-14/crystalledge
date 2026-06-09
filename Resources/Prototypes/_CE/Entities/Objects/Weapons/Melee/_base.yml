@@ -1,0 +1,27 @@
+- type: entity
+  id: CEBaseSkimitar
+  parent: CEBaseWeapon
+  abstract: true
+  components:
+  - type: CETag
+    tags:
+    - WeaponSkimitar
+  - type: CEDualWield
+    animationSets:
+    - tag: WeaponSkimitar
+      useType: Secondary
+      animations:
+      - anim: SkimitarAttackDualWield1
+      - anim: SkimitarAttackDualWield2
+      - anim: SkimitarAttackDualWield3
+  - type: Clothing
+    slots:
+    - neck
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 1
+
+
+- type: CETag
+  id: WeaponSkimitar

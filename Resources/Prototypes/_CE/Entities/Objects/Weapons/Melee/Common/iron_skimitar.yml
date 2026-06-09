@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSkimitarIron
-  parent: CEBaseWeapon
+  parent: CEBaseSkimitar
   name: iron skimitar
   description: TODO
   components:
@@ -34,10 +34,3 @@
       - anim: SkimitarAttackLight2
       Secondary:
       - anim: SkimitarAttackHeavy1
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: Clothing
-    slots:
-    - neck

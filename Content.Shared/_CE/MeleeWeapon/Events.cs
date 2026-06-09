@@ -6,10 +6,11 @@ namespace Content.Shared._CE.MeleeWeapon;
 /// <summary>
 /// Is called on the object being used to determine what animations it provides
 /// </summary>
-public sealed class CEGetWeaponAnimationsEvent(Entity<CEWeaponComponent> used, CEUseType useType) : HandledEntityEventArgs
+public sealed class CEGetWeaponAnimationsEvent(Entity<CEWeaponComponent> used, CEUseType useType, EntityUid user) : HandledEntityEventArgs
 {
     public Entity<CEWeaponComponent> Used = used;
     public CEUseType UseType = useType;
+    public EntityUid User = user;
     public List<CEAnimationEntry> Animations = new();
 }
 

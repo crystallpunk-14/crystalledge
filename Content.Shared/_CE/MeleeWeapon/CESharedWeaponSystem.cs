@@ -4,6 +4,7 @@ using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Health.Components;
+using Content.Shared._CE.MeleeWeapon.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CombatMode;
 using Content.Shared.Hands.EntitySystems;
@@ -85,15 +86,24 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
-        if (!TryGetWeapon(user, out var weapon) ||
-            weapon.Value.Owner != GetEntity(ev.Weapon))
+        var weaponEntity = GetEntity(ev.Weapon);
+        if (!TryComp<CEWeaponComponent>(weaponEntity, out var weaponComp))
             return;
 
-        var targets = GetEntityList(ev.Targets);
-        targets = ValidateArcTargets(user, weapon.Value, targets, args.SenderSession);
+        // Validate the user holds this weapon in any hand (supports off-hand dual-wield attacks)
+        var userHoldsWeapon = false;
+        foreach (var held in _hands.EnumerateHeld(user))
+        {
+            if (held == weaponEntity) { userHoldsWeapon = true; break; }
+        }
+        if (!userHoldsWeapon) return;
 
-        TryAttack(user, weapon.Value, targets);
-        ApplyArcEffects(user, weapon.Value, targets, ev.EffectSlot);
+        var weapon = new Entity<CEWeaponComponent>(weaponEntity, weaponComp);
+        var targets = GetEntityList(ev.Targets);
+        targets = ValidateArcTargets(user, weapon, targets, args.SenderSession);
+
+        TryAttack(user, weapon, targets);
+        ApplyArcEffects(user, weapon, targets, ev.EffectSlot);
     }
 
     /// <summary>
@@ -175,7 +185,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         //Get animations
         List<CEAnimationEntry> animations = new();
 
-        var animEv = new CEGetWeaponAnimationsEvent(used, useType);
+        var animEv = new CEGetWeaponAnimationsEvent(used, useType, user);
         RaiseLocalEvent(used, animEv);
 
         if (animEv.Handled && animEv.Animations.Count != 0)
