@@ -8,7 +8,6 @@
 <!-- Attach media if the PR makes in-game changes. -->
 
 **Changelog**
-<!--
 :cl:
 - add: Added fun!
 - remove: Removed fun!
