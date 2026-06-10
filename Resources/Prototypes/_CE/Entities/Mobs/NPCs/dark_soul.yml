@@ -1,0 +1,49 @@
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobGOAPBase
+  id: CEMobDarkSoul
+  name: dark soul
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAP
+    goals:
+    # TODO
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+    actions:
+    # Explore
+    - !type:CEGOAPExploreAction
+      effects:
+        EnemyDead: true
+      cost: 1
+      exploreRadius: 8
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/dark_souls.rsi
+    layers:
+    - state: base_female
+      map: [ "random" ]
+    - state: eyes
+      shader: unshaded
+  - type: RandomSprite
+    available:
+    - random:
+        male1: ""
+        male2: ""
+        female1: ""
+        female2: ""
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 1
+    baseAcceleration: 5
+    baseFriction: 0.5
+  - type: CEShiny
+    effect: CEEffectAddCurse
+    minFrequency: 0.5
+    maxFrequency: 1
+    radius: 0
