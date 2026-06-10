@@ -35,10 +35,37 @@
   - type: CEEmitSoundOnStackMerge
     sound:
       collection: CECoins
+  - type: Tag
+    tags:
+    - CECoin
+  - type: CECollectOnContact
+    storageTag: CEWallet
   - type: CEShiny
     radius: 0.2
     minFrequency: 2
     maxFrequency: 6
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        hard: false
+        mask:
+        - MobLayer
+        layer:
+        - MobLayer
+      fix2: # Hard collision to prevent flying throught walls
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        mask:
+        - LowImpassable
+  - type: CENavIgnore
+  - type: CollisionWake
+    enabled: false
 
 # Copper
 

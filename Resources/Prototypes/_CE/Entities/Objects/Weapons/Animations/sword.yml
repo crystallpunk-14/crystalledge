@@ -291,7 +291,7 @@
       scaleAnimation:
       - time: 0.0
         scale: 1, 1
-    0.2:  
+    0.2:
     - !type:WeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
@@ -302,7 +302,7 @@
     0.25:
     - !type:OffHandWeaponEffectSlot
       slot: OnSwing
-    - !type:WeaponArcAttack 
+    - !type:WeaponArcAttack
       arcWidth: 180
       useOffHand: true
       effects:
@@ -365,7 +365,7 @@
       - !type:WeaponEffectSlot
         slot: OnHeavyHit
     0.35:
-    - !type:OffHandEntityAnimation
+    - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
         offset: 0.9, -0.1
@@ -400,11 +400,10 @@
       - time: 0.0
         scale: 1, 1
     0.55:
-    - !type:OffHandWeaponEffectSlot
+    - !type:WeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
       arcWidth: 180
-      useOffHand: true
       effects:
       - !type:WeaponEffectSlot
         slot: OnHeavyHit
@@ -422,7 +421,7 @@
     - !type:PlaySound
       sound:
         path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
-    - !type:OffHandEntityAnimation
+    - !type:UsedEntityAnimation
       offsetAnimation:
       - time: 0.0
         offset: -0.3, -0.1
@@ -456,11 +455,10 @@
       - time: 0.0
         scale: 1, -1
     0.2:
-    - !type:OffHandWeaponEffectSlot
+    - !type:WeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
       arcWidth: 40
-      useOffHand: true
       effects:
       - !type:WeaponEffectSlot
         slot: OnHeavyHit

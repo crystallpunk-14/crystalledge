@@ -1,0 +1,47 @@
+- type: entity
+  id: CEWallet
+  name: wallet
+  description: A small wallet, handy for storing coins.
+  suffix: Empty
+  categories:
+  - ForkFiltered
+  parent: BaseStorageItem
+  components:
+  - type: Sprite
+    sprite: /Textures/_CE/Objects/Storage/wallet.rsi
+    layers:
+    - state: wallet-0
+      map:
+      - enum.StorageFillLayers.Fill
+  - type: Storage
+    grid:
+    - 0,0,3,2
+    maxItemSize: Tiny
+    quickInsert: true
+    areaInsert: false
+    whitelist:
+      tags:
+      - CECoin
+      - Dice
+    storageInsertSound: null
+    storageOpenSound:
+      collection: storageRustle
+  - type: UseDelay
+    delay: 0.3
+  - type: Appearance
+  - type: StorageFillVisualizer
+    maxFillLevels: 4
+    fillBaseName: wallet
+  - type: Dumpable
+    soundDump:
+      collection: CECoins
+    multiplier: 0.8
+  - type: Clothing
+    slots:
+    - belt
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - CEWallet
+  - type: CECollectOnContactTarget
