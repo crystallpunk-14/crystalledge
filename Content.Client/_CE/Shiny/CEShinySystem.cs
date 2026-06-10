@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client._CE.Shiny;
 
-public sealed class CEShinySystem : EntitySystem
+public sealed partial class CEShinySystem : EntitySystem
 {
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
