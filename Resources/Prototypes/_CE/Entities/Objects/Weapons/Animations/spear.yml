@@ -1,3 +1,4 @@
+#MARK: Light 1
 - type: entityEffectAnimation
   id: SpearAttackLight
   movementSpeed: 0.3
@@ -37,7 +38,7 @@
     - !type:WeaponEffectSlot
       slot: OnHit
 
-
+#MARK: Heavy 1
 - type: entityEffectAnimation
   id: SpearAttackHeavy
   movementSpeed: 0.2
@@ -93,7 +94,7 @@
     - !type:WeaponEffectSlot
       slot: OnHeavyHit
 
-
+#MARK: Heavy 2
 - type: entityEffectAnimation
   id: SpearAttackHeavy2
   movementSpeed: 0.2

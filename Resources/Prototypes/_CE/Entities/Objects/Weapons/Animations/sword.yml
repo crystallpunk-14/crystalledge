@@ -1,3 +1,4 @@
+#MARK: Light 1
 - type: entityEffectAnimation
   id: SwordAttackLight1
   movementSpeed: 0.3
@@ -46,6 +47,7 @@
     - !type:WeaponEffectSlot
       slot: OnHit
 
+#MARK: Light 2
 - type: entityEffectAnimation
   id: SwordAttackLight2
   movementSpeed: 0.3
@@ -94,7 +96,7 @@
     - !type:WeaponEffectSlot
       slot: OnHit
 
-
+#MARK: Heavy 1
 - type: entityEffectAnimation
   id: SwordAttackHeavy1
   movementSpeed: 0.3
@@ -142,6 +144,7 @@
     - !type:WeaponEffectSlot
       slot: OnHeavyHit
 
+#MARK: Heavy 2
 - type: entityEffectAnimation
   id: SwordAttackHeavy2
   movementSpeed: 0.3
