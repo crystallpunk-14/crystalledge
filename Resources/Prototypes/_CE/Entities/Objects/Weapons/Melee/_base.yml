@@ -22,6 +22,33 @@
       Primary: 1
       Secondary: 1
 
+- type: entity
+  id: CEBaseSword
+  parent: CEBaseWeapon
+  abstract: true
+  components:
+  - type: CETag
+    tags:
+    - WeaponSword
+  - type: CEDualWield
+    animationSets:
+    - tag: WeaponSword
+      useType: Secondary
+      animations:
+      - anim: SwordAttackDualWield1
+      - anim: SwordAttackDualWield2
+      - anim: SwordAttackDualWield3
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 1
+  - type: Clothing
+    slots:
+    - neck
+
 
 - type: CETag
   id: WeaponSkimitar
+
+- type: CETag
+  id: WeaponSword

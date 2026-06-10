@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSwordDebug
-  parent: CEBaseWeapon
+  parent: CEBaseSword
   name: admin sword
   description: INFINITY POWER
   suffix: DEBUG

@@ -70,7 +70,7 @@
 
 - type: entity
   id: CEWeaponSwordFrostTemporary
-  parent: CEBaseWeapon
+  parent: CEBaseSword
   name: frost blade
   suffix: 120 seconds
   description: A magical weapon woven from ice, which will soon melt away.
@@ -114,13 +114,6 @@
         speed: 1.2
       - anim: SwordAttackHeavy2
         speed: 1.2
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: Clothing
-    slots:
-    - neck
   - type: TimedDespawn
     lifetime: 120
   - type: PointLight

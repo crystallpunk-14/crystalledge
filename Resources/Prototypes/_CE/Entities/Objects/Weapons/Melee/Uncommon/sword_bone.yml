@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSwordBone
-  parent: CEBaseWeapon
+  parent: CEBaseSword
   name: bone sword
   description: Nicks on the blade leave bruise wounds, increasing the damage dealt to the target
   components:
@@ -37,10 +37,3 @@
       Secondary:
       - anim: SpearAttackHeavy2
         speed: 1.2
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 2
-  - type: Clothing
-    slots:
-    - neck
