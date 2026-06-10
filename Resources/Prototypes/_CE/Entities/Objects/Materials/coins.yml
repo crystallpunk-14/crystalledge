@@ -35,6 +35,10 @@
   - type: CEEmitSoundOnStackMerge
     sound:
       collection: CECoins
+  - type: CEShiny
+    radius: 0.2
+    minFrequency: 2
+    maxFrequency: 6
 
 # Copper
 
@@ -55,6 +59,8 @@
     count: 1
   - type: CEStackPrice
     price: 1
+  - type: CEShiny
+    effect: CEEffectCoinCopper
 
 - type: entity
   id: CECoinCopper5
@@ -95,6 +101,8 @@
     count: 1
   - type: CEStackPrice
     price: 10
+  - type: CEShiny
+    effect: CEEffectCoinSilver
 
 - type: entity
   id: CECoinSilver5
@@ -135,6 +143,8 @@
     count: 1
   - type: CEStackPrice
     price: 100
+  - type: CEShiny
+    effect: CEEffectCoinGold
 
 - type: entity
   id: CECoinGold5
@@ -175,6 +185,8 @@
     count: 1
   - type: CEStackPrice
     price: 1000
+  - type: CEShiny
+    effect: CEEffectCoinPlatinim
 
 - type: entity
   id: CECoinPlatinum5
