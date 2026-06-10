@@ -1,0 +1,9 @@
+<widgets:CECurrencyUI xmlns="https://spacestation14.io"
+                    xmlns:widgets="clr-namespace:Content.Client._CE.UserInterface.Systems.HealthMana.Widgets"
+                    MinSize="0 48">
+    <BoxContainer Name="Container"
+                  Orientation="Horizontal"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Left"
+                  SeparationOverride="4" />
+</widgets:CECurrencyUI>

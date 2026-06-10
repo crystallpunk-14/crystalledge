@@ -49,6 +49,11 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         SetAnchorAndMarginPreset(SoulBar, LayoutPreset.CenterBottom);
         SetMarginLeft(SoulBar, soulOffset);
 
+        // Currency bar: slightly right of SoulBar left edge, above it but half its own height lower.
+        SetAnchorAndMarginPreset(CurrencyBar, LayoutPreset.CenterBottom, margin: (int)(SoulBar.MinSize.Y + 4 - CurrencyBar.MinSize.Y / 2f));
+        SetMarginLeft(CurrencyBar, soulOffset + 4);
+        SetMarginRight(CurrencyBar, soulOffset + 4 + 400f);
+
         // Stamina bar at center bottom
         SetAnchorAndMarginPreset(StaminaBar, LayoutPreset.CenterBottom, margin: 80);
         SetMarginLeft(StaminaBar, -StaminaBar.MinSize.X / 2f);

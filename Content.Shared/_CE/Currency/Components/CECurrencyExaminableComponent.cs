@@ -1,9 +1,8 @@
-namespace Content.Shared._CE.Currency;
+namespace Content.Shared._CE.Currency.Components;
 
 /// <summary>
-/// Allows you to estimate the value of an item with a simple glance.
+/// Allows examining an entity to see its CE currency value.
 /// </summary>
-
 [RegisterComponent]
 public sealed partial class CECurrencyExaminableComponent : Component
 {
