@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Currency;
 
-public sealed class CECurrencySystem : EntitySystem
+public sealed partial class CECurrencySystem : EntitySystem
 {
     public static readonly KeyValuePair<EntProtoId, int> CP = new("CECoinCopper1", 1);
     public static readonly KeyValuePair<EntProtoId, int> SP = new("CECoinSilver1", 10);
