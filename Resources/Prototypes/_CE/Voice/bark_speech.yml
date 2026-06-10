@@ -488,4 +488,41 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Flegmant2
+  saySound:
+    path: /Audio/_CE/F2.ogg
+  askSound:
+    path: /Audio/_CE/F2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/F2_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
 
+- type: barkSpeech
+  id: Flegmant3
+  saySound:
+    path: /Audio/_CE/F3.ogg
+  askSound:
+    path: /Audio/_CE/F3_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/F3_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Flegmant4
+  saySound:
+    path: /Audio/_CE/F4.ogg
+  askSound:
+    path: /Audio/_CE/F4_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/F4_a.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
