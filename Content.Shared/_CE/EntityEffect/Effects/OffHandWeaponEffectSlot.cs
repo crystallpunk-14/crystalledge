@@ -13,6 +13,9 @@ public sealed partial class OffHandWeaponEffectSlot : CEEntityEffectBase<OffHand
 {
     [DataField(required: true)]
     public string Slot = string.Empty;
+
+    [DataField]
+    public float Power = 1f;
 }
 
 public sealed partial class CEOffHandWeaponEffectSlotSystem : CEEntityEffectSystem<OffHandWeaponEffectSlot>
@@ -59,7 +62,7 @@ public sealed partial class CEOffHandWeaponEffectSlotSystem : CEEntityEffectSyst
         if (!slots.TryGetValue(args.Effect.Slot, out var effects))
             return;
 
-        var offHandArgs = args.Args with { Used = offHandWeapon.Value };
+        var offHandArgs = args.Args with { Used = offHandWeapon.Value, Power = args.Args.Power * args.Effect.Power };
         foreach (var effect in effects)
         {
             effect.Effect(offHandArgs);

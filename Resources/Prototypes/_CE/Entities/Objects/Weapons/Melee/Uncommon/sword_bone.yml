@@ -11,32 +11,25 @@
     range: 0.7
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        arcWidth: 20
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 7
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectBruise
-          amount: 1
-          max: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 7
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectBruise
+        amount: 1
+        max: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        rangeMultiplier: 1.571
-        arcWidth: 15
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 10
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectBruise
-          amount: 2
-          max: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 10
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectBruise
+        amount: 2
+        max: 10
     animations:
       Primary:
       - anim: SwordAttackLight1

@@ -58,17 +58,22 @@ public sealed class CEWeaponUseEvent(
 public sealed class CEWeaponArcHitEvent(
     NetEntity weapon,
     List<NetEntity> targets,
-    string? effectSlot)
+    string? effectSlot,
+    float power = 1f)
     : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
     public readonly List<NetEntity> Targets = targets;
 
     /// <summary>
-    /// The EffectSlot key on CEWeaponComponent that triggered this arc attack.
-    /// Used by the server to replay nested effects on validated targets.
+    /// The EffectSlot key on the weapon that triggered this arc attack.
     /// </summary>
     public readonly string? EffectSlot = effectSlot;
+
+    /// <summary>
+    /// Accumulated power multiplier from the WeaponEffectSlot chain.
+    /// </summary>
+    public readonly float Power = power;
 }
 
 /// <summary>

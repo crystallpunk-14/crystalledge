@@ -41,24 +41,17 @@
     range: 0.4
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 9
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 9
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        rangeMultiplier: 1.5
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 13
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 13
     animations:
       Primary:
       - anim: DaggerAttackLight1

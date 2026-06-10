@@ -11,19 +11,16 @@
   - type: CEWeapon
     range: 0.78
     effectSlots:
-      OnHit:
+      OnSwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicWater
         projectileSpeed: 7
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
     animations:
       Primary:
       - anim: StaffAttackLight1

@@ -11,24 +11,17 @@
     range: 1.26
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        arcWidth: 15
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 7
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 7
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        rangeMultiplier: 1.111
-        arcWidth: 25
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 15
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 15
     animations:
       Primary:
       - anim: SpearAttackLight

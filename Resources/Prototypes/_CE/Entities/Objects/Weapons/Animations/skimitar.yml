@@ -50,7 +50,12 @@
         scale: 1, -1
     0.13:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 60
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Light 2
 - type: entityEffectAnimation
@@ -104,7 +109,12 @@
         scale: 1, 1
     0.25:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 60
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Heavy 1
 - type: entityEffectAnimation
@@ -167,7 +177,12 @@
       distance: 1
     0.15:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 360
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
 #MARK: Dual 1
 - type: entityEffectAnimation
@@ -252,10 +267,21 @@
         scale: 1, -1
     0.15:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 60
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
     0.35:
     - !type:OffHandWeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 60
+      useOffHand: true
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Dual 2
 - type: entityEffectAnimation
@@ -338,10 +364,21 @@
         scale: 1, 1
     0.15:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 60
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
     0.35:
     - !type:OffHandWeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 60
+      useOffHand: true
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Dual 3
 - type: entityEffectAnimation
@@ -454,7 +491,18 @@
       distance: 1
     0.15:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 360
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
     0.35:
     - !type:OffHandWeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 360
+      useOffHand: true
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

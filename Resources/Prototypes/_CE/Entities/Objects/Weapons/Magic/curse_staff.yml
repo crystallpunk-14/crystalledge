@@ -10,12 +10,12 @@
     - state: icon
   - type: CEWeapon
     effectSlots:
-      OnHit:
+      OnSwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicCurse
         projectileSpeed: 4
         projectileMaxSpeed: 6
-      OnHeavyHit:
+      OnHeavySwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicCurse
         projectileSpeed: 4

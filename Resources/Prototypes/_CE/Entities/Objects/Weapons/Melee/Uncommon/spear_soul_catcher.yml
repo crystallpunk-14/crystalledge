@@ -14,50 +14,43 @@
     range: 1.26
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        arcWidth: 15
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Cold: 5
+      - !type:ConditionalEffectGroup
+        conditions:
+        - !type:ManaPercentCondition
+          max: 0
+          inverted: true
         effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Cold: 5
-        - !type:ConditionalEffectGroup
-          conditions:
-          - !type:ManaPercentCondition
-            max: 0
-            inverted: true
-          effects:
-          - !type:StealMana
-            amount: 10
-          - !type:SpawnEntity
-            effectTarget: Target
-            reparent: true
-            spawns:
-            - CEEffectManaDrain
+        - !type:StealMana
+          amount: 10
+        - !type:SpawnEntity
+          effectTarget: Target
+          reparent: true
+          spawns:
+          - CEEffectManaDrain
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        rangeMultiplier: 1.111
-        arcWidth: 25
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Cold: 10
+      - !type:ConditionalEffectGroup
+        conditions:
+        - !type:ManaPercentCondition
+          max: 0
+          inverted: true
         effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Cold: 10
-        - !type:ConditionalEffectGroup
-          conditions:
-          - !type:ManaPercentCondition
-            max: 0
-            inverted: true
-          effects:
-          - !type:StealMana
-            amount: 20
-          - !type:SpawnEntity
-            effectTarget: Target
-            reparent: true
-            spawns:
-            - CEEffectManaDrain
+        - !type:StealMana
+          amount: 20
+        - !type:SpawnEntity
+          effectTarget: Target
+          reparent: true
+          spawns:
+          - CEEffectManaDrain
     animations:
       Primary:
       - anim: SpearAttackLight

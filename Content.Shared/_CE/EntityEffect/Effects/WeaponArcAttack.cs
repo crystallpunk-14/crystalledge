@@ -1,6 +1,8 @@
 ﻿using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
 using Content.Shared._CE.MeleeWeapon;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Physics;
 using Robust.Shared.Map;
@@ -22,6 +24,13 @@ public sealed partial class WeaponArcAttack : CEEntityEffectBase<WeaponArcAttack
 
     [DataField]
     public List<CEEntityEffect> Effects = new();
+
+    /// <summary>
+    /// When true, resolve the weapon from the off-hand instead of the active hand.
+    /// Used in dual-wield animations to give each hand its own independent arc attack.
+    /// </summary>
+    [DataField]
+    public bool UseOffHand = false;
 }
 
 /// <summary>
@@ -42,6 +51,9 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private CESharedWeaponSystem _melee = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+
+    [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
 
     /// <summary>
     /// Broad collision mask to hit mobs, items, machines, etc.
@@ -65,7 +77,43 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
     protected override void Effect(ref CEEntityEffectEvent<WeaponArcAttack> args)
     {
         var used = args.Args.Used ?? args.Args.Source;
+
+        if (args.Effect.UseOffHand && _handsQuery.TryComp(args.Args.Source, out var hands))
+        {
+            foreach (var handId in hands.SortedHands)
+            {
+                if (handId == hands.ActiveHandId)
+                    continue;
+                if (!_hands.TryGetHeldItem(args.Args.Source, handId, out var held))
+                    continue;
+                if (!HasComp<CEWeaponComponent>(held.Value))
+                    continue;
+                used = held.Value;
+                break;
+            }
+        }
+
         TryComp<CEWeaponComponent>(used, out var weapon);
+
+        // Scan Effects for a WeaponEffectSlot before raycasting.
+        // If none is found (inline kick/ability), effects are applied directly.
+        string? effectSlot = null;
+        var effectPower = 1f;
+
+        foreach (var effect in args.Effect.Effects)
+        {
+            if (effect is WeaponEffectSlot wes)
+            {
+                effectSlot = wes.Slot;
+                effectPower = wes.Power;
+                break;
+            }
+        }
+
+        // If a slot name was found but the weapon doesn't define that slot, skip arc entirely.
+        // This prevents magic staffs (OnSwing-only) from triggering melee hit effects.
+        if (effectSlot != null && weapon != null && !weapon.EffectSlots.ContainsKey(effectSlot))
+            return;
 
         var entityCoords = _transform.GetMapCoordinates(args.Args.Source);
         var direction = new Angle(args.Args.Angle.ToWorldVec()) + args.Effect.Angle;
@@ -94,7 +142,11 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
             var ray = new CollisionRay(entityCoords.Position, castAngle.ToVec(), ArcAttackMask);
 
             foreach (var result in _physics.IntersectRay(
-                         entityCoords.MapId, ray, effectiveRange, args.Args.Source, false))
+                         entityCoords.MapId,
+                         ray,
+                         effectiveRange,
+                         args.Args.Source,
+                         false))
             {
                 hitEntities.Add(result.HitEntity);
             }
@@ -115,43 +167,22 @@ public sealed partial class CEWeaponArcAttackEffectSystem : CEEntityEffectSystem
 
         var targets = new List<EntityUid>(hitEntities);
 
-        // Find which EffectSlot on the weapon contains this arc attack.
-        // The server uses this to replay nested effects on validated targets.
-        var effectSlot = weapon != null ? FindEffectSlot(weapon, args.Effect) : null;
-
-        // If the arc attack was defined inline in an animation (not in weapon.EffectSlots),
-        // FindEffectSlot returns null and ApplyArcEffects would skip the effects entirely.
-        // In that case, apply the inline Effects list directly to each hit target here.
-        // This runs on both server (authoritative) and client (prediction) via the shared animation system.
+        // Inline effects (kick, ability with no weapon slot): apply directly to each hit target.
+        // Runs on both peers via the shared animation system.
         if (effectSlot == null && args.Effect.Effects.Count > 0)
         {
             foreach (var target in targets)
             {
                 var inlineArgs = args.Args with { Target = target };
                 foreach (var effect in args.Effect.Effects)
+                {
                     effect.Effect(inlineArgs);
+                }
             }
         }
 
-        // Server clears targets for player attacks (damage goes through CEWeaponArcHitEvent).
+        // Weapon-based attacks: route through HandleArcAttackHit for server validation.
         if (weapon != null)
-            _melee.HandleArcAttackHit(args.Args.Source, (used, weapon), targets, effectSlot);
-    }
-
-    /// <summary>
-    /// Finds the EffectSlot key that contains the given WeaponArcAttack instance.
-    /// </summary>
-    private static string? FindEffectSlot(CEWeaponComponent weapon, WeaponArcAttack effect)
-    {
-        foreach (var (key, effects) in weapon.EffectSlots)
-        {
-            foreach (var e in effects)
-            {
-                if (ReferenceEquals(e, effect))
-                    return key;
-            }
-        }
-
-        return null;
+            _melee.HandleArcAttackHit(args.Args.Source, (used, weapon), targets, effectSlot, effectPower);
     }
 }

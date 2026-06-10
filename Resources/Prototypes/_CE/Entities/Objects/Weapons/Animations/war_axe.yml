@@ -54,7 +54,12 @@
       - CEDustTileEffect
     0.8:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Light 2
 - type: entityEffectAnimation
@@ -115,7 +120,12 @@
       - CEDustTileEffect
     0.8:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Heavy 1
 - type: entityEffectAnimation
@@ -164,7 +174,12 @@
         path: /Audio/_CE/Effects/Weapon/slash_sword3.ogg
     0.5:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 90
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
 #MARK: Heavy 2
 - type: entityEffectAnimation
@@ -213,4 +228,9 @@
         path: /Audio/_CE/Effects/Weapon/slash_sword3.ogg
     0.5:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 90
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

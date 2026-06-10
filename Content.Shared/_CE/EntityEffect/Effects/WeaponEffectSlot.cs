@@ -15,6 +15,9 @@ public sealed partial class WeaponEffectSlot : CEEntityEffectBase<WeaponEffectSl
     /// </summary>
     [DataField(required: true)]
     public string Slot = string.Empty;
+
+    [DataField]
+    public float Power = 1f;
 }
 
 public sealed partial class CEWeaponEffectSlotSystem : CEEntityEffectSystem<WeaponEffectSlot>
@@ -31,9 +34,10 @@ public sealed partial class CEWeaponEffectSlotSystem : CEEntityEffectSystem<Weap
         if (!effectsSlots.TryGetValue(args.Effect.Slot, out var effects))
             return;
 
+        var scaledArgs = args.Args with { Power = args.Args.Power * args.Effect.Power };
         foreach (var effect in effects)
         {
-            effect.Effect(args.Args);
+            effect.Effect(scaledArgs);
         }
     }
 }

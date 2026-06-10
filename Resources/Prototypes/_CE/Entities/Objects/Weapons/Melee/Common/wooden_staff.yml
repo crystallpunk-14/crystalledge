@@ -11,24 +11,17 @@
     range: 0.6
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        arcWidth: 100
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        rangeMultiplier: 1.3
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
     animations:
       Primary:
       - anim: StaffAttackLight1

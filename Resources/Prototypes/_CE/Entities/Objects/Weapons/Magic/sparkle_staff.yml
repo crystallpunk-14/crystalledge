@@ -12,11 +12,11 @@
       shader: unshaded
   - type: CEWeapon
     effectSlots:
-      OnHit:
+      OnSwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicSparkle
         projectileSpeed: 10
-      OnHeavyHit:
+      OnHeavySwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicSparkle
         projectileSpeed: 10

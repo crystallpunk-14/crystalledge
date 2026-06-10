@@ -12,11 +12,11 @@
       shader: unshaded
   - type: CEWeapon
     effectSlots:
-      OnHit:
+      OnSwing:
       - !type:ShootProjectile
         prototype: CEProjectileStaffFirebolt
         projectileSpeed: 10
-      OnHeavyHit:
+      OnHeavySwing:
       - !type:ShootProjectile
         prototype: CEProjectileStaffFirebolt
         projectileSpeed: 10

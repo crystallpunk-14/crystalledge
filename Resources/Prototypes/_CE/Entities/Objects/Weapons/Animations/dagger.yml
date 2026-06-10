@@ -43,7 +43,12 @@
         scale: 1, -1
     0.1:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Light 2
 - type: entityEffectAnimation
@@ -90,7 +95,12 @@
         scale: 1, 1
     0.1:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Self Cut
 - type: entityEffectAnimation
@@ -127,7 +137,13 @@
         easing: QuadOut
     0.39:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnHeavySwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      rangeMultiplier: 1.5
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
 #MARK: Heavy 1
 - type: entityEffectAnimation
@@ -182,4 +198,10 @@
         path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
     0.55:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      rangeMultiplier: 1.5
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

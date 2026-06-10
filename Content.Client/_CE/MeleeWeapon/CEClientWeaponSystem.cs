@@ -94,7 +94,7 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
         OnAttackEffectEvent(new CEMeleeAttackEffectEvent(GetNetEntity(user), GetNetEntityList(targets)));
     }
 
-    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot, float power = 1f)
     {
         if (!Timing.IsFirstTimePredicted)
             return;
@@ -104,6 +104,7 @@ public sealed partial class CEClientWeaponSystem : CESharedWeaponSystem
         RaisePredictiveEvent(new CEWeaponArcHitEvent(
             GetNetEntity(weapon.Owner),
             GetNetEntityList(targets),
-            effectSlot));
+            effectSlot,
+            power));
     }
 }

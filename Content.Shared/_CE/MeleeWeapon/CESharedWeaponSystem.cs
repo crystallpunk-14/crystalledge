@@ -29,7 +29,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     [Dependency] protected SharedInteractionSystem Interaction = default!;
     [Dependency] protected SharedTransformSystem TransformSystem = default!;
     [Dependency] private CESharedAnimationActionSystem _animationAction = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] protected IPrototypeManager _proto = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
@@ -103,7 +103,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
         targets = ValidateArcTargets(user, weapon, targets, args.SenderSession);
 
         TryAttack(user, weapon, targets);
-        ApplyArcEffects(user, weapon, targets, ev.EffectSlot);
+        ApplyArcEffects(user, weapon, targets, ev.EffectSlot, ev.Power);
     }
 
     /// <summary>
@@ -115,11 +115,11 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     }
 
     /// <summary>
-    /// Runs nested arc effects on validated targets.
+    /// Runs effects from the weapon's EffectSlot on validated targets.
     /// Server overrides to apply damage from the weapon's EffectSlot data.
     /// Client base does nothing — effects are applied in the Effect() loop during prediction.
     /// </summary>
-    protected void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    protected void ApplyArcEffects(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot, float power = 1f)
     {
         if (effectSlot == null
             || !weapon.Comp.EffectSlots.TryGetValue(effectSlot, out var slotEffects)
@@ -135,17 +135,12 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
                 Angle.Zero,
                 1f,
                 target,
-                null);
+                null,
+                power);
 
             foreach (var slotEffect in slotEffects)
             {
-                if (slotEffect is WeaponArcAttack arc)
-                {
-                    foreach (var childEffect in arc.Effects)
-                    {
-                        childEffect.Effect(effectArgs);
-                    }
-                }
+                slotEffect.Effect(effectArgs);
             }
         }
     }
@@ -282,7 +277,7 @@ public abstract partial class CESharedWeaponSystem : EntitySystem
     /// Client overrides to send hit list to server. Server overrides to skip (waits for client event)
     /// unless the attacker is an NPC.
     /// </summary>
-    public virtual void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    public virtual void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot, float power = 1f)
     {
         TryAttack(user, weapon, targets);
     }

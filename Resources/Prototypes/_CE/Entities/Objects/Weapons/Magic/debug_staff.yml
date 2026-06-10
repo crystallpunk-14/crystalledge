@@ -14,11 +14,11 @@
       shader: unshaded
   - type: CEWeapon
     effectSlots:
-      OnHit:
+      OnSwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicMissileDebug
         projectileSpeed: 10
-      OnHeavyHit:
+      OnHeavySwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicMissileDebug
         projectileSpeed: 10

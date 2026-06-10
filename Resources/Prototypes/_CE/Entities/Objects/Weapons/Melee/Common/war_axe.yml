@@ -11,23 +11,17 @@
     range: 0.84
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 25
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 25
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        arcWidth: 90
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 25
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 25
     animations:
       Primary:
       - anim: WarAxeAttackLight

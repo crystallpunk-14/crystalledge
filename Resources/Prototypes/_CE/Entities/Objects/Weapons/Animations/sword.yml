@@ -45,7 +45,12 @@
         scale: 1, -1
     0.1:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Light 2
 - type: entityEffectAnimation
@@ -94,7 +99,12 @@
         scale: 1, 1
     0.1:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
 #MARK: Heavy 1
 - type: entityEffectAnimation
@@ -142,7 +152,12 @@
         scale: 1, -1
     0.2:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 180
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
 #MARK: Heavy 2
 - type: entityEffectAnimation
@@ -190,4 +205,9 @@
         scale: 1, 1
     0.2:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 180
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

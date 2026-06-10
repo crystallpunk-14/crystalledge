@@ -12,7 +12,7 @@
       shader: unshaded
   - type: CEWeapon
     effectSlots:
-      OnHit:
+      OnSwing:
       - !type:ShootProjectile
         prototype: CEProjectileMagicHealing
         projectileCount: 3
@@ -25,7 +25,7 @@
         damage:
           types:
             Physical: 1
-      OnHeavyHit:
+      OnHeavySwing:
       - !type:Heal
         amount: 9
       - !type:SpawnEntity
