@@ -6,6 +6,8 @@ using Content.Shared._CE.Trading.Components;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
@@ -21,6 +23,7 @@ namespace Content.Server._CE.Trading;
 public sealed partial class CETradingSystem : EntitySystem
 {
     [Dependency] private CECurrencySystem _currency = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedStackSystem _stack = default!;
     [Dependency] private SharedStorageSystem _storage = default!;
@@ -87,6 +90,7 @@ public sealed partial class CETradingSystem : EntitySystem
                 Filter.Entities(player));
         }
 
+        _audio.PlayPvs(new SoundPathSpecifier("/Audio/_CE/Effects/cash.ogg"), player);
         args.Handled = true;
         QueueDel(ent);
     }

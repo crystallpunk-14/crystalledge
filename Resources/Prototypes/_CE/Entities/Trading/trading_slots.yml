@@ -51,6 +51,43 @@
       entity: CEConsumablePotionAlchemicalFire
 
 - type: entity
+  id: CETradingSlotPlushie
+  parent: CETradingSlotBase
+  suffix: Plushie
+  components:
+  - type: CETradingSlot
+    price: 111
+    offers:
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieHuman
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieDwarf
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieElf
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieGoblin
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieTiefling
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieSilva
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieZombie
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieFlegmant
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieCarcat
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieFrog
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieSkeleton
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieLumi
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieAgaric
+    - !type:CETradingSpawnItemOffer
+      entity: CEPlushieCarrin
+
+- type: entity
   id: CETradingSlotWeapon
   parent: CETradingSlotBase
   suffix: Weapon

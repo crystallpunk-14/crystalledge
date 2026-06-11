@@ -1,0 +1,136 @@
+- type: entity
+  id: CEPlushieBase
+  parent: BasePlushie
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _CE/Objects/Decorations/plushies.rsi
+
+- type: entity
+  id: CEPlushieHuman
+  parent: CEPlushieBase
+  name: human plushie
+  description: A soft stuffed human. Huggable.
+  components:
+  - type: Sprite
+    state: human
+
+- type: entity
+  id: CEPlushieDwarf
+  parent: CEPlushieBase
+  name: dwarf plushie
+  description: A soft stuffed dwarf. Compact and huggable.
+  components:
+  - type: Sprite
+    state: dwarf
+
+- type: entity
+  id: CEPlushieElf
+  parent: CEPlushieBase
+  name: elf plushie
+  description: A soft stuffed elf. Pointy ears included.
+  components:
+  - type: Sprite
+    state: elf
+
+- type: entity
+  id: CEPlushieGoblin
+  parent: CEPlushieBase
+  name: goblin plushie
+  description: A soft stuffed goblin. Somehow still cute.
+  components:
+  - type: Sprite
+    state: goblin
+
+- type: entity
+  id: CEPlushieTiefling
+  parent: CEPlushieBase
+  name: tiefling plushie
+  description: A soft stuffed tiefling. Tiny horns and all.
+  components:
+  - type: Sprite
+    state: tiefling
+
+- type: entity
+  id: CEPlushieSilva
+  parent: CEPlushieBase
+  name: silva plushie
+  description: A soft stuffed silva. Made of bark-like fabric.
+  components:
+  - type: Sprite
+    state: silva
+
+- type: entity
+  id: CEPlushieZombie
+  parent: CEPlushieBase
+  name: zombie plushie
+  description: A soft stuffed zombie. It smells fine, thankfully.
+  components:
+  - type: Sprite
+    state: zombie
+
+- type: entity
+  id: CEPlushieFlegmant
+  parent: CEPlushieBase
+  name: flegmant plushie
+  description: A soft stuffed flegmant. Woof.
+  components:
+  - type: Sprite
+    state: flem
+
+- type: entity
+  id: CEPlushieCarcat
+  parent: CEPlushieBase
+  name: carcat plushie
+  description: A soft stuffed carcat. Meow.
+  components:
+  - type: Sprite
+    state: carcat
+
+- type: entity
+  id: CEPlushieFrog
+  parent: CEPlushieBase
+  name: frog plushie
+  description: A soft stuffed frog. Ribbit.
+  components:
+  - type: Sprite
+    state: frog
+
+- type: entity
+  id: CEPlushieSkeleton
+  parent: CEPlushieBase
+  name: skeleton plushie
+  description: A soft stuffed skeleton. Still has no organs, even as a plushie.
+  components:
+  - type: Sprite
+    state: skeleton
+
+- type: entity
+  id: CEPlushieLumi
+  parent: CEPlushieBase
+  name: lumi plushie
+  description: A soft stuffed lumi. Glows faintly in the dark.
+  components:
+  - type: Sprite
+    state: lumi
+
+- type: entity
+  id: CEPlushieAgaric
+  parent: CEPlushieBase
+  name: agaric plushie
+  description: A soft stuffed agaric. Squeaky cap.
+  components:
+  - type: Sprite
+    state: agaric
+
+- type: entity
+  id: CEPlushieCarrin
+  parent: CEPlushieBase
+  name: carrin plushie
+  description: A soft stuffed carrin. Suspiciously heavy.
+  components:
+  - type: Sprite
+    state: carrin
