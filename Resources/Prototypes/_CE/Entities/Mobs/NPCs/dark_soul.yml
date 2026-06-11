@@ -47,3 +47,5 @@
     minFrequency: 0.5
     maxFrequency: 1
     radius: 0
+  - type: CEBarkSpeech
+    barkSpeech: DarkSoul

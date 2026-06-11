@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Client._CE.Speech;
 using Content.Shared._CE.Speech;
 using Robust.Shared.Prototypes;
@@ -14,7 +15,7 @@ public sealed partial class HumanoidProfileEditor
         BarkVoiceButton.Clear();
         _barkVoices.Clear();
 
-        _barkVoices.AddRange(_prototypeManager.EnumeratePrototypes<CEBarkSpeechPrototype>());
+        _barkVoices.AddRange(_prototypeManager.EnumeratePrototypes<CEBarkSpeechPrototype>().Where(p => p.Selectable));
         _barkVoices.Sort((a, b) => string.Compare(a.ID, b.ID, StringComparison.Ordinal));
 
         for (var i = 0; i < _barkVoices.Count; i++)

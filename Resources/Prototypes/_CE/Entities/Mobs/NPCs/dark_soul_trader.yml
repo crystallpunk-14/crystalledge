@@ -73,5 +73,11 @@
     - !type:SpawnEntity
       spawns:
       - CEEffectAddCurse
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/coins1.ogg
+        params:
+          pitch: 0.5
+          variation: 0.01
     0.2:
     - !type:RefreshTradingSlot
