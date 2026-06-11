@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.Trading.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Shared._CE.Trading.Offers;
 
@@ -36,7 +37,7 @@ public sealed partial class CETradingApplyEffectOffer : CETradingOffer
         return null;
     }
 
-    public override void UpdateSlotVisuals(EntityUid slotEntity, IEntityManager entMan, IPrototypeManager proto)
+    public override void UpdateSlotVisuals(EntityUid slotEntity, IEntityManager entMan, IPrototypeManager proto, IRobustRandom random)
     {
         var metaData = entMan.System<MetaDataSystem>();
         metaData.SetEntityName(slotEntity, OfferName);

@@ -102,7 +102,7 @@ public sealed partial class CETradingSystem : EntitySystem
 
         var offer = _random.Pick(slot.Comp.Offers);
         slot.Comp.ActiveOffer = offer;
-        offer.UpdateSlotVisuals(slot.Owner, EntityManager, _proto);
+        offer.UpdateSlotVisuals(slot.Owner, EntityManager, _proto, _random);
         Dirty(slot.Owner, slot.Comp);
     }
 

@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Shared._CE.Trading;
 
@@ -13,7 +14,8 @@ public abstract partial class CETradingOffer
     public abstract void UpdateSlotVisuals(
         EntityUid slotEntity,
         IEntityManager entMan,
-        IPrototypeManager proto);
+        IPrototypeManager proto,
+        IRobustRandom random);
 }
 
 public record struct CETradingOfferArgs(

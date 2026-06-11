@@ -28,6 +28,9 @@
   parent: CEPotionBase
   abstract: true
   components:
+  - type: CETradingCategory
+    tags:
+      - CEPotion
   - type: CEConsumable
     whitelist:
       components:

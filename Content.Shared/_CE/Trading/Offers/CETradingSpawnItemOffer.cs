@@ -1,6 +1,7 @@
 using Content.Shared._CE.Trading.Components;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Shared._CE.Trading.Offers;
 
@@ -18,7 +19,7 @@ public sealed partial class CETradingSpawnItemOffer : CETradingOffer
         return spawned;
     }
 
-    public override void UpdateSlotVisuals(EntityUid slotEntity, IEntityManager entMan, IPrototypeManager proto)
+    public override void UpdateSlotVisuals(EntityUid slotEntity, IEntityManager entMan, IPrototypeManager proto, IRobustRandom random)
     {
         if (!proto.TryIndex<EntityPrototype>(Entity, out var entProto))
             return;

@@ -8,6 +8,9 @@
     size: Small
   - type: Sprite
     sprite: _CE/Objects/Decorations/plushies.rsi
+  - type: CETradingCategory
+    tags:
+      - CEPlushie
 
 - type: entity
   id: CEPlushieHuman
