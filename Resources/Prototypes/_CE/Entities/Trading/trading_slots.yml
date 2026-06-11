@@ -1,0 +1,76 @@
+- type: entity
+  id: CETradingSlotBase
+  abstract: true
+  name: trading lot
+  description: Another merchant refactor here.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CETradingSlot
+    offset: 0, 0.5
+
+- type: entity
+  id: CETradingSlotPotion
+  parent: CETradingSlotBase
+  suffix: Potions
+  components:
+  - type: CETradingSlot
+    price: 15
+    offers:
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionHealingSmall
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionHealingMedium
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionManaSmall
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionManaMedium
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionManaSmallCondensated
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionManaMediumCondensated
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionRegeneration
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionShield
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionStrength
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionAcceleration
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionFrost
+    - !type:CETradingSpawnItemOffer
+      entity: CEConsumablePotionAlchemicalFire
+
+- type: entity
+  id: CETradingSlotWeapon
+  parent: CETradingSlotBase
+  suffix: Weapon
+  components:
+  - type: CETradingSlot
+    price: 50
+    offers:
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponHeavyClub
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponStaffHolyStick
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponSkimitarIron
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponSpearIron
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponSwordIron
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponTwoHandedSwordIron
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponWarAxeIron
+    - !type:CETradingSpawnItemOffer
+      entity: CEWeaponStaffWooden
