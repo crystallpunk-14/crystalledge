@@ -1,4 +1,19 @@
 - type: entity
+  parent: MarkerBase
+  id: CEMobDarkSoulSpawner
+  name: Dark soul marker
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base_male
+      sprite: _CE/Mobs/dark_souls.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobDarkSoul
+
+- type: entity
   parent:
   - BaseMob
   - CEMobGOAPBase
@@ -14,8 +29,9 @@
         EnemyDead: true
       priority: 1
     actions:
-    # Explore
     - !type:CEGOAPExploreAction
+      preconditions:
+        SoulIsSpeaking: false
       effects:
         EnemyDead: true
       cost: 1
@@ -29,8 +45,6 @@
     layers:
     - state: base_female
       map: [ "random" ]
-    - state: eyes
-      shader: unshaded
   - type: RandomSprite
     available:
     - random:
@@ -38,6 +52,8 @@
         male2: ""
         female1: ""
         female2: ""
+        gob: ""
+        guy: ""
   - type: MovementSpeedModifier
     baseSprintSpeed: 1
     baseAcceleration: 5
@@ -49,3 +65,40 @@
     radius: 0
   - type: CEBarkSpeech
     barkSpeech: DarkSoul
+  - type: ActiveListener
+    range: 12
+  - type: CEDarkSoulSpeech
+  - type: Speech
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.01, 0.99
+      - time: 2
+        scale: 0.99, 1.01
+      - time: 4
+        scale: 1.01, 0.99
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 2
+        offset: 0, 0.01
+      - time: 4
+        offset: 0, 0
+  - type: CEWalkingAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.02, 0.98
+      - time: 1
+        scale: 0.98, 1.02
+      - time: 2
+        scale: 1.02, 0.98
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 1
+        offset: 0, 0.02
+      - time: 2
+        offset: 0, 0

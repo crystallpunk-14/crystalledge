@@ -77,6 +77,16 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPExploreAction> args)
     {
+        // Once idle timer is set, run it to completion regardless of steering status.
+        // InRange fires for only one frame — checking it again would miss the timer.
+        if (_idleUntil.TryGetValue(ent, out var idleEnd))
+        {
+            args.Status = _timing.CurTime >= idleEnd
+                ? CEGOAPActionStatus.Finished
+                : CEGOAPActionStatus.Running;
+            return;
+        }
+
         if (!TryComp<NPCSteeringComponent>(ent, out var steering))
         {
             args.Status = CEGOAPActionStatus.Failed;
@@ -86,21 +96,9 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
         switch (steering.Status)
         {
             case SteeringStatus.InRange:
-                if (!_idleUntil.TryGetValue(ent, out var idleEnd))
-                {
-                    var idleSecs = _random.NextFloat(args.Action.MinIdleTime, args.Action.MaxIdleTime);
-                    _idleUntil[ent] = _timing.CurTime + TimeSpan.FromSeconds(idleSecs);
-                    args.Status = CEGOAPActionStatus.Running;
-                    return;
-                }
-
-                if (_timing.CurTime < idleEnd)
-                {
-                    args.Status = CEGOAPActionStatus.Running;
-                    return;
-                }
-
-                args.Status = CEGOAPActionStatus.Finished;
+                var idleSecs = _random.NextFloat(args.Action.MinIdleTime, args.Action.MaxIdleTime);
+                _idleUntil[ent] = _timing.CurTime + TimeSpan.FromSeconds(idleSecs);
+                args.Status = CEGOAPActionStatus.Running;
                 return;
             case SteeringStatus.NoPath:
                 args.Status = CEGOAPActionStatus.Failed;

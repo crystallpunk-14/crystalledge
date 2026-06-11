@@ -1,8 +1,21 @@
 - type: entity
+  parent: MarkerBase
+  id: CEMobDarkSoulTraderSpawner
+  name: Dark soul trader marker
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: female2
+      sprite: _CE/Mobs/dark_souls.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobDarkSoulTrader
+
+- type: entity
   parent: CEMobDarkSoul
   id: CEMobDarkSoulTrader
-  name: dark soul trader
-  description: A shadowy merchant that tends to the market's empty stalls.
   categories: [ ForkFiltered ]
   components:
   - type: CEGOAP
@@ -23,10 +36,13 @@
       selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
       preconditions:
         InactiveTradingSlotVisible: true
+        SoulIsSpeaking: false
       effects:
         AtInactiveSlot: true
       cost: 2
     - !type:CEGOAPExploreAction
+      preconditions:
+        SoulIsSpeaking: false
       effects:
         InactiveTradingSlotVisible: true
         TradingSlotRestored: true
@@ -35,6 +51,7 @@
   - type: NpcFactionMember
     factions:
     - Passive
+  - type: CEDarkSoulSpeech
   - type: CEGOAPHasInactiveTradingSlotSensor
     conditionKey: InactiveTradingSlotVisible
     scanRadius: 15

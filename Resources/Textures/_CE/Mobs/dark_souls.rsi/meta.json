@@ -36,6 +36,14 @@
     {
       "name": "male2",
       "directions": 4
+    },
+    {
+      "name": "gob",
+      "directions": 4
+    },
+    {
+      "name": "guy",
+      "directions": 4
     }
   ]
 }

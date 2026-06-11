@@ -14,10 +14,13 @@
   - type: Sprite
     noRot: true
     drawdepth: Effects
+    sprite: _CE/Interface/Misc/reroll.rsi
+    state: reroll
   - type: Clickable
   - type: InteractionOutline
   - type: CETradingSlot
     offset: 0, 0.5
+  - type: CEDarkSoulSpeechAccent
 
 - type: entity
   id: CETradingSlotPotion
