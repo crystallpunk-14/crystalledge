@@ -102,6 +102,9 @@ public sealed class CETradingCostOverlay : Overlay
             if (xform.MapID != args.MapId)
                 continue;
 
+            if (slot.ActivePreviewProto == null)
+                continue;
+
             var slotPos  = _transform.GetWorldPosition(xform);
             var distance = Vector2.Distance(slotPos, playerPos);
 

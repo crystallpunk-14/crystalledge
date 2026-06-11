@@ -9,6 +9,8 @@
     snap:
     - Wall
   components:
+  - type: PlacementReplacement
+    key: CETradingSlotBase
   - type: Sprite
     noRot: true
     drawdepth: Effects

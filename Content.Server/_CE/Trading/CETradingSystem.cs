@@ -92,10 +92,17 @@ public sealed partial class CETradingSystem : EntitySystem
 
         _audio.PlayPvs(new SoundPathSpecifier("/Audio/_CE/Effects/cash.ogg"), player);
         args.Handled = true;
-        QueueDel(ent);
+        DeactivateSlot(ent);
     }
 
-    private void RefreshSlot(Entity<CETradingSlotComponent> slot)
+    private void DeactivateSlot(Entity<CETradingSlotComponent> slot)
+    {
+        slot.Comp.ActiveOffer = null;
+        slot.Comp.ActivePreviewProto = null;
+        Dirty(slot.Owner, slot.Comp);
+    }
+
+    public void RefreshSlot(Entity<CETradingSlotComponent> slot)
     {
         if (slot.Comp.Offers.Count == 0)
             return;

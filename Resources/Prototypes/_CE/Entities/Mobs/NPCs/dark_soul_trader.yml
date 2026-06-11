@@ -1,0 +1,77 @@
+- type: entity
+  parent: CEMobDarkSoul
+  id: CEMobDarkSoulTrader
+  name: dark soul trader
+  description: A shadowy merchant that tends to the market's empty stalls.
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAP
+    goals:
+    - desiredState:
+        TradingSlotRestored: true
+      priority: 1
+    actions:
+    - !type:CEGOAPUseAction
+      selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
+      preconditions:
+        AtInactiveSlot: true
+      effects:
+        TradingSlotRestored: true
+      cost: 1
+      actionPrototype: CEActionRestoreTradingSlot
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
+      preconditions:
+        InactiveTradingSlotVisible: true
+      effects:
+        AtInactiveSlot: true
+      cost: 2
+    - !type:CEGOAPExploreAction
+      effects:
+        InactiveTradingSlotVisible: true
+        TradingSlotRestored: true
+      cost: 5
+      exploreRadius: 3
+  - type: NpcFactionMember
+    factions:
+    - Passive
+  - type: CEGOAPHasInactiveTradingSlotSensor
+    conditionKey: InactiveTradingSlotVisible
+    scanRadius: 15
+  - type: CEGOAPRangeToTargetSensor
+    entries:
+    - conditionKey: AtInactiveSlot
+      selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
+      range: 1.5
+
+# Trading slot restock action
+
+- type: entity
+  id: CEActionRestoreTradingSlot
+  name: restock
+  description: Replenishes an empty trading slot with a new offer.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Action
+    useDelay: 5
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CETradingSlot
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: CEAnimationRestoreTradingSlot
+
+- type: entityEffectAnimation
+  id: CEAnimationRestoreTradingSlot
+  movementSpeed: 0
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectAddCurse
+    0.2:
+    - !type:RefreshTradingSlot
