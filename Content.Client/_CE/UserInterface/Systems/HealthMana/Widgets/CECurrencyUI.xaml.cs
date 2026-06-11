@@ -11,7 +11,7 @@ namespace Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 [GenerateTypedNameReferences]
 public sealed partial class CECurrencyUI : UIWidget
 {
-    [Dependency] private readonly IResourceCache _resCache = default!;
+    [Dependency] private IResourceCache _resCache = default!;
 
     private const string RsiPath = "/Textures/_CE/Interface/coins.rsi";
 
