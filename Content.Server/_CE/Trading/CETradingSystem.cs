@@ -39,6 +39,7 @@ public sealed partial class CETradingSystem : EntitySystem
     [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
     [Dependency] private EntityQuery<CECollectOnContactTargetComponent> _targetQuery = default!;
 
+    private readonly ProtoId<TagPrototype> _walletTag = "CEWallet";
     public override void Initialize()
     {
         base.Initialize();
@@ -230,7 +231,7 @@ public sealed partial class CETradingSystem : EntitySystem
             foreach (var item in container.ContainedEntities)
             {
                 if (_targetQuery.HasComponent(item)
-                    && _tag.HasTag(item, "CEWallet")
+                    && _tag.HasTag(item, _walletTag)
                     && _storageQuery.HasComponent(item))
                     return item;
 
