@@ -537,6 +537,6 @@
   exclaimSound:
     path: /Audio/_CE/Voice/Dark/dark_e.ogg
   syllableInterval: 0.12
-  charsPerSyllable: 6
+  charsPerSyllable: 3
   audioParams:
-    volume: -2
+    volume: -6

@@ -296,12 +296,6 @@ public sealed partial class CEDarkSoulSpeechSystem : EntitySystem
         if (!_xformQuery.TryGetComponent(uid, out var xform))
             return words;
 
-        foreach (var entity in _lookup.GetEntitiesInRange(xform.Coordinates, comp.TargetSearchRadius))
-        {
-            if (_actorQuery.HasComponent(entity))
-                words.Add(Name(entity));
-        }
-
         foreach (var entity in _lookup.GetEntitiesInRange(xform.Coordinates, comp.AccentPickupRadius))
         {
             if (_accentQuery.HasComponent(entity))

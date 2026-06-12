@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseStructureDynamic
+  parent: BaseStructure
   id: CEChestBase
   categories: [ HideSpawnMenu, ForkFiltered ]
   name: chest
@@ -51,6 +51,7 @@
   - type: StaticPrice
     price: 0
   - type: Appearance
+  - type: Climbable
   - type: ContainerContainer
     containers:
       storagebase: !type:Container

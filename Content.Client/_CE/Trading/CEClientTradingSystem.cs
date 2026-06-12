@@ -12,11 +12,11 @@ public sealed partial class CEClientTradingSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CETradingSlotComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<CETradingSlotComponent, MapInitEvent>(OnStartup);
         SubscribeLocalEvent<CETradingSlotComponent, AfterAutoHandleStateEvent>(OnAfterAutoHandleState);
     }
 
-    private void OnStartup(Entity<CETradingSlotComponent> ent, ref ComponentStartup args)
+    private void OnStartup(Entity<CETradingSlotComponent> ent, ref MapInitEvent args)
     {
         UpdateVisuals(ent);
     }
