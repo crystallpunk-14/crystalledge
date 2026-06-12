@@ -55,16 +55,15 @@
     state: alchemy
 
 - type: dungeonRoomType
-  id: MossyTempleLibraryRoom
-  doorPrototype: CEGoldenLockedDoor
-  supportsWideConnection: false
+  id: MossyTempleMerchantRoom
+  supportsWideConnection: true
   showIconFromNeighbour: true
-  allowMobsSpawn: false
-  allowLootSpawn: false
-  color: "#b587dd"
+  allowMobsSpawn: true
+  allowLootSpawn: true
+  color: "#00ff26"
   minimapIcon:
-    sprite: /Textures/_CE/Interface/minimap_icons.rsi
-    state: library
+    sprite: /Textures/_CE/Interface/coins.rsi
+    state: g
 
 - type: dungeonRoomType
   id: MossyTempleSecretRoom

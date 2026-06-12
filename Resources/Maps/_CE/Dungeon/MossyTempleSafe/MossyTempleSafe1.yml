@@ -1216,6 +1216,7 @@ entities:
   - uid: 352
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: 4.5,7.5
       parent: 1
 - proto: CETradingSlotPlushie
@@ -1223,6 +1224,7 @@ entities:
   - uid: 119
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: 41.5,-11.5
       parent: 1
   - uid: 346
@@ -1235,11 +1237,13 @@ entities:
   - uid: 120
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: 7.5,7.5
       parent: 1
   - uid: 348
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: 6.5,7.5
       parent: 1
 - proto: CETradingSlotWeapon
@@ -1247,6 +1251,7 @@ entities:
   - uid: 121
     components:
     - type: Transform
+      rot: -1.5707963267948966 rad
       pos: 5.5,7.5
       parent: 1
 - proto: CEUpgradePostament
