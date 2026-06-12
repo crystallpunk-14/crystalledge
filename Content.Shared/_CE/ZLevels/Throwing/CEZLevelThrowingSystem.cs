@@ -1,4 +1,4 @@
-﻿using Content.Shared._CE.ZLevels.Core.Components;
+using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.Throwing;
 
@@ -26,7 +26,7 @@ public sealed partial class CEZLevelThrowingSystem : EntitySystem
             return;
 
         var distToGround = ent.Comp.LocalPosition - ent.Comp.CachedGroundHeight;
-        var v0 = (0.5f * CESharedZLevelsSystem.ZGravityForce * flyTime - distToGround / flyTime) * 2f;
+        var v0 = MathF.Max(0f, (0.5f * CESharedZLevelsSystem.ZGravityForce * flyTime - distToGround / flyTime) * 2f);
         _zLevels.AddZVelocity((ent.Owner, ent.Comp), v0);
     }
 }
