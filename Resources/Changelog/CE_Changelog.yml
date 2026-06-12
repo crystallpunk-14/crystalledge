@@ -663,3 +663,25 @@
   id: 10057
   time: '2026-06-10T12:34:03.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/298
+- author: TheShuEd
+  changes:
+  - message: Added 3 new barks
+    type: Add
+  id: 10058
+  time: '2026-06-11T13:37:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/300
+- author: TheShuEd
+  changes:
+  - message: Coins are falling out of the pots again.
+    type: Add
+  - message: Coins are now automatically collected on collide.
+    type: Add
+  - message: The interface now shows how many coins you have on hand.
+    type: Add
+  - message: Wallets have been added to all players' starting gear.
+    type: Add
+  - message: The coins now glow beautifully in the dark.
+    type: Add
+  id: 10059
+  time: '2026-06-11T09:32:23.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/299
