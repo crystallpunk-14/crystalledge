@@ -54,6 +54,7 @@
         female2: ""
         gob: ""
         guy: ""
+        carcat: ""
   - type: MovementSpeedModifier
     baseSprintSpeed: 1
     baseAcceleration: 5
