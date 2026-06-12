@@ -28,7 +28,7 @@
   suffix: Potions
   components:
   - type: CETradingSlot
-    price: 15
+    price: 2
     offers:
     - !type:CETradingSpawnFromCategoryOffer
       tags:
@@ -40,7 +40,7 @@
   suffix: Plushie
   components:
   - type: CETradingSlot
-    price: 111
+    price: 500
     offers:
     - !type:CETradingSpawnFromCategoryOffer
       tags:

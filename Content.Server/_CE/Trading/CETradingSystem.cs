@@ -13,7 +13,6 @@ using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
-using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -176,7 +175,18 @@ public sealed partial class CETradingSystem : EntitySystem
         }
 
         if (overpaid > 0)
-            SpawnChange(player, overpaid);
+        {
+            var coords = Transform(player).Coordinates;
+            var spawnedCoins = _currency.SpawnCurrency(overpaid, coords);
+            var wallet = FindWallet(player);
+            if (wallet.HasValue)
+            {
+                foreach (var coin in spawnedCoins)
+                {
+                    _storage.Insert(wallet.Value, coin, out _, playSound: false);
+                }
+            }
+        }
 
         return true;
     }
@@ -188,32 +198,6 @@ public sealed partial class CETradingSystem : EntitySystem
         if (_staticPriceQuery.TryGetComponent(uid, out var fp))
             return (int) fp.Price;
         return 0;
-    }
-
-    private void SpawnChange(EntityUid player, int change)
-    {
-        var coords = Transform(player).Coordinates;
-        var wallet = FindWallet(player);
-
-        SpawnAndStore(CECurrencySystem.PP.Key, change / 1000, coords, wallet);
-        change %= 1000;
-        SpawnAndStore(CECurrencySystem.GP.Key, change / 100, coords, wallet);
-        change %= 100;
-        SpawnAndStore(CECurrencySystem.SP.Key, change / 10, coords, wallet);
-        change %= 10;
-        SpawnAndStore(CECurrencySystem.CP.Key, change, coords, wallet);
-    }
-
-    private void SpawnAndStore(EntProtoId proto, int count, EntityCoordinates coords, EntityUid? wallet)
-    {
-        if (count <= 0)
-            return;
-
-        var coin = Spawn(proto, coords);
-        _stack.SetCount(coin, count);
-
-        if (wallet.HasValue)
-            _storage.Insert(wallet.Value, coin, out _, playSound: false);
     }
 
     private EntityUid? FindWallet(EntityUid player)
