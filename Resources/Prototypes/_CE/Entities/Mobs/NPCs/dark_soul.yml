@@ -55,6 +55,8 @@
         gob: ""
         guy: ""
         carcat: ""
+        carcat2: ""
+        carrin: ""
   - type: MovementSpeedModifier
     baseSprintSpeed: 1
     baseAcceleration: 5

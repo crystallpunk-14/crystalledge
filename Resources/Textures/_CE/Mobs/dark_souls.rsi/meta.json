@@ -48,6 +48,14 @@
     {
       "name": "carcat",
       "directions": 4
+    },
+    {
+      "name": "carcat2",
+      "directions": 4
+    },
+    {
+      "name": "carrin",
+      "directions": 4
     }
   ]
 }

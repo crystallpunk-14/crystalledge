@@ -90,3 +90,11 @@
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleMana
     budget: 10
+  - !type:CEEntityTableBudgetSpawnPostProcess
+    entries:
+    - table: !type:CEMoneySelector
+        max: 500
+        min: 250
+        largeCoinChance: 0.7
+      cost: 1
+    budget: 1
