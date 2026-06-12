@@ -31,6 +31,6 @@
     ambientLightColor: "#31455a"
   - type: CEMapStatusEffects
     effects:
-    - CEStatusEffectPacifism
+    - CEStatusEffectPacifismStrong
   - type: CEMapAmbientMusicTheme
     theme: MossySafe

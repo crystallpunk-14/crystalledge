@@ -11,6 +11,23 @@
   - type: CEStatusEffectStack
   - type: CEPacifismStatusEffect
 
+- type: entity
+  id: CEStatusEffectPacifismStrong
+  name: Pacifism
+  description: All combat is disabled.
+  components:
+  - type: StatusEffect
+  - type: StatusEffectAlert
+    alert: CEPacifism
+    showDuration: false
+  - type: CEStatusEffectStack
+  - type: CEPacifismStatusEffect
+  - type: CEActionBlockerStatusEffect
+    blockActions: true
+    blockAttack: true
+    blockThrow: true
+    blockPull: true
+
 - type: alert
   id: CEPacifism
   icons:

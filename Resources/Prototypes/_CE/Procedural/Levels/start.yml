@@ -36,4 +36,4 @@
       ambientLightColor: "#c8fdff"
     - type: CEMapStatusEffects
       effects:
-      - CEStatusEffectPacifism
+      - CEStatusEffectPacifismStrong

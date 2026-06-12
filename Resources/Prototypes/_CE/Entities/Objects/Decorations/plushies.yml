@@ -77,10 +77,10 @@
     state: zombie
 
 - type: entity
-  id: CEPlushieFlegmant
+  id: CEPlushieFlem
   parent: CEPlushieBase
-  name: flegmant plushie
-  description: A soft stuffed flegmant. Woof.
+  name: flem plushie
+  description: A soft stuffed flem. Bulb.
   components:
   - type: Sprite
     state: flem
