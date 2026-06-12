@@ -54,19 +54,18 @@
   - type: CETradingSlot
     price: 50
     offers:
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponHeavyClub
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponStaffHolyStick
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponSkimitarIron
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponSpearIron
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponSwordIron
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponTwoHandedSwordIron
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponWarAxeIron
-    - !type:CETradingSpawnItemOffer
-      entity: CEWeaponStaffWooden
+    - !type:CETradingSpawnFromCategoryOffer
+      tags:
+        - CEWeapon
+
+- type: entity
+  id: CETradingSlotAccessory
+  parent: CETradingSlotBase
+  suffix: Accessory
+  components:
+  - type: CETradingSlot
+    price: 75
+    offers:
+    - !type:CETradingSpawnFromCategoryOffer
+      tags:
+        - CEAccessory

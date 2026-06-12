@@ -42,6 +42,10 @@
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5
 
 - type: entity
   id: CEProjectileMagicWater

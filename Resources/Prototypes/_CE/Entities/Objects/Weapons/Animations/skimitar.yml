@@ -269,7 +269,7 @@
     - !type:WeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
-      arcWidth: 60
+      arcWidth: 140
       effects:
       - !type:WeaponEffectSlot
         slot: OnHit
@@ -277,7 +277,7 @@
     - !type:OffHandWeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
-      arcWidth: 60
+      arcWidth: 140
       useOffHand: true
       effects:
       - !type:WeaponEffectSlot
@@ -366,7 +366,7 @@
     - !type:WeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
-      arcWidth: 60
+      arcWidth: 140
       effects:
       - !type:WeaponEffectSlot
         slot: OnHit
@@ -374,7 +374,7 @@
     - !type:OffHandWeaponEffectSlot
       slot: OnSwing
     - !type:WeaponArcAttack
-      arcWidth: 60
+      arcWidth: 140
       useOffHand: true
       effects:
       - !type:WeaponEffectSlot

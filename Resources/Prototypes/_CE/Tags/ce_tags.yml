@@ -11,3 +11,9 @@
 - type: CETag
   id: CEPlushie
 
+- type: CETag
+  id: CEWeapon
+
+- type: CETag
+  id: CEAccessory
+

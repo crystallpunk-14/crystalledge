@@ -8,9 +8,10 @@
     size: Small
   - type: Sprite
     sprite: _CE/Objects/Decorations/plushies.rsi
-  - type: CETradingCategory
+  - type: CELootCategory
     tags:
-      - CEPlushie
+    - tag: CEPlushie
+      weight: 1.0
 
 - type: entity
   id: CEPlushieHuman

@@ -42,3 +42,7 @@
       - anim: SkimitarAttackLight2
       Secondary:
       - anim: SkimitarAttackHeavy1
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5

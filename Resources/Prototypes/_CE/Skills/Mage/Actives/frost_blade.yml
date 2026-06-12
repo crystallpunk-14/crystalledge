@@ -86,7 +86,7 @@
       OnHit:
       - !type:Damage
         attackType: Melee
-        damage: 
+        damage:
           types:
             Physical: 3
             Cold: 6

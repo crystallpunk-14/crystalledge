@@ -1,11 +1,11 @@
 - type: entity
   parent: CEBaseWeapon
-  id: CEWeaponMagicStaffMagicMissile
-  name: magic missile staff
-  description: "A mage's standard weapon that fires compressed beams of energy."
+  id: CEWeaponMagicStaffFireball
+  name: staff of fireballs
+  description: I CAST FIREBALL
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/Staff/magic_missile_staff.rsi
+    sprite: _CE/Objects/Weapons/Staff/fire_staff.rsi
     layers:
     - state: icon
     - state: orb
@@ -14,11 +14,11 @@
     effectSlots:
       OnSwing:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicMissile
+        prototype: CEProjectileStaffFirebolt
         projectileSpeed: 10
       OnHeavySwing:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicMissile
+        prototype: CEProjectileStaffFirebolt
         projectileSpeed: 10
         projectileMaxSpeed: 5
         projectileCount: 3
@@ -35,33 +35,51 @@
       Secondary: 3
   - type: CEWeaponManaCost
     costs:
-      Secondary: 3
+      Primary: 10
+      Secondary: 30
   - type: CEMagicEnergyContainer
-    maxEnergy: 50
+    maxEnergy: 70
   - type: CEMagicEnergyExaminable
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5
+
 
 - type: entity
-  id: CEProjectileMagicMissile
-  name: magic missile
+  id: CEProjectileStaffFirebolt
+  name: firebolt projectile
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/magic_missile.rsi
+    sprite: _CE/Effects/firebolt.rsi
     layers:
     - state: effect
       shader: unshaded
   - type: PointLight
-    color: "#ffffff"
-    radius: 1.5
-    energy: 3.0
+    color: "#ff9603"
+    radius: 2.0
+    energy: 5.0
   - type: CEProjectile
     hitEffects:
     - !type:Damage
       attackType: Ranged
       damage:
         types:
-          Physical: 5
+          Fire: 20
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectFire
+      radius: 2
+      maxStacks: 6
+    - !type:SpawnEntity
+      effectTarget: Used
+      spawns:
+      - CEEffectPotionAlchemicalFire
+    - !type:ShockWaveVFX
+      effectTarget: Used
+      width: 0.1

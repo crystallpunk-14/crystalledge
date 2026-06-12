@@ -44,3 +44,7 @@
     slots:
     - neck
   - type: Wieldable
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

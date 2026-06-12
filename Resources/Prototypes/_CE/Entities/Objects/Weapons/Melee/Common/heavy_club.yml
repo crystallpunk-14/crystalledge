@@ -41,3 +41,7 @@
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

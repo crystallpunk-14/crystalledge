@@ -37,3 +37,7 @@
       Secondary:
       - anim: SpearAttackHeavy2
         speed: 1.2
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5

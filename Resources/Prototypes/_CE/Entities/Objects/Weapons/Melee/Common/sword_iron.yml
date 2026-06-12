@@ -31,3 +31,7 @@
         speed: 1.2
       - anim: SwordAttackHeavy2
         speed: 1.2
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

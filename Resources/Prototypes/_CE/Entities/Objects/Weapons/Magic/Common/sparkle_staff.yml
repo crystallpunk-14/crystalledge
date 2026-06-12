@@ -1,11 +1,11 @@
 - type: entity
   parent: CEBaseWeapon
-  id: CEWeaponMagicStaffIce
-  name: ice staff
-  description: A staff imbued with ice magic. Launches freezing projectiles at enemies.
+  id: CEWeaponMagicStaffSparkle
+  name: fire sparkle staff
+  description: The simplest magical weapon that shoots hot sparks
   components:
   - type: Sprite
-    sprite: _CE/Objects/Weapons/Staff/ice_staff.rsi
+    sprite: _CE/Objects/Weapons/Staff/sparkle_staff.rsi
     layers:
     - state: icon
     - state: orb
@@ -14,11 +14,11 @@
     effectSlots:
       OnSwing:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicIce
+        prototype: CEProjectileMagicSparkle
         projectileSpeed: 10
       OnHeavySwing:
       - !type:ShootProjectile
-        prototype: CEProjectileMagicIce
+        prototype: CEProjectileMagicSparkle
         projectileSpeed: 10
         projectileMaxSpeed: 5
         projectileCount: 3
@@ -42,20 +42,24 @@
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0
 
 - type: entity
-  id: CEProjectileMagicIce
-  name: ice bolt
+  id: CEProjectileMagicSparkle
+  name: fire bolt
   parent: BaseBullet
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+    sprite: _CE/Effects/StatusEffects/fire_status.rsi
     layers:
     - state: effect
       shader: unshaded
   - type: PointLight
-    color: "#30caf5"
+    color: "#ff9603"
     radius: 1.5
     energy: 3.0
   - type: CEProjectile
@@ -64,4 +68,4 @@
       attackType: Ranged
       damage:
         types:
-          Cold: 5
+          Fire: 5
