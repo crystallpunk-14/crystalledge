@@ -1,44 +1,3 @@
-- type: entityTable
-  id: CECommonWeapon
-  table: !type:GroupSelector
-    children:
-    - id: CEWeaponHeavyClub
-    - id: CEWeaponMagicStaffSparkle
-    - id: CEWeaponMagicStaffMagicMissile
-    - id: CEWeaponMagicStaffIce
-    - id: CEWeaponSkimitarIron
-    - id: CEWeaponSpearIron
-    - id: CEWeaponSwordIron
-    - id: CEWeaponStaffWooden
-    - id: CEWeaponStaffHolyStick
-    - id: CEWeaponTwoHandedSwordIron
-    - id: CEWeaponWarAxeIron
-    - id: CEWeaponThrowingDagger
-    - id: CEWeaponShuriken
-
-- type: entityTable
-  id: CEUncommonWeapon
-  table: !type:GroupSelector
-    children:
-    - id: CEWeaponMagicStaffHealing
-    - id: CEWeaponSwordBone
-    - id: CEWeaponSpearSoulCatcher
-    - id: CEWeaponMagicStaffWater
-    - id: CEWeaponSkimitarMolten
-    - id: CEWeaponMagicStaffCurse
-    - id: CEWeaponMagicStaffFireball
-
-- type: entityTable
-  id: CERandomWeapon
-  table: !type:GroupSelector
-    children:
-    - !type:NestedSelector
-      tableId: CECommonWeapon
-      weight: 1
-    - !type:NestedSelector
-      tableId: CEUncommonWeapon
-      weight: 0.75
-
 - type: entity
   id: CESpawnerRandomWeapon
   name: random weapon spawner
@@ -51,6 +10,6 @@
     - sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
       state: icon
   - type: EntityTableSpawner
-    table: !type:NestedSelector
-      tableId: CERandomWeapon
-      prob: 1
+    table: !type:CELootCategorySelector
+      tags:
+      - CEWeapon

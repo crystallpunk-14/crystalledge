@@ -102,3 +102,24 @@
         offset: 0, 0.02
       - time: 2
         offset: 0, 0
+  - type: CESpawnAnimation
+    animation: DarkSoulSpawn
+
+
+- type: entityEffectAnimation
+  id: DarkSoulSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectAddCurse
+    - !type:UserAnimation
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"

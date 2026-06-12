@@ -39,7 +39,11 @@ public sealed partial class CEMoneySelector : EntityTableSelector
         IPrototypeManager proto,
         EntityTableContext ctx)
     {
-        yield break;
+        var avg = (Min + Max) / 2;
+        var rand = new System.Random(42); // stable seed — analytics only
+        var seen = new HashSet<EntProtoId>();
+        foreach (var p in CECurrencySystem.GetCoinProtos(avg, LargeCoinChance, rand))
+            if (seen.Add(p)) yield return (p, 1.0);
     }
 
     protected override IEnumerable<(EntProtoId spawn, double)> AverageSpawnsImplementation(
@@ -47,6 +51,15 @@ public sealed partial class CEMoneySelector : EntityTableSelector
         IPrototypeManager proto,
         EntityTableContext ctx)
     {
-        yield break;
+        var avg = (Min + Max) / 2;
+        var rand = new System.Random(42);
+        var counts = new Dictionary<EntProtoId, int>();
+        foreach (var p in CECurrencySystem.GetCoinProtos(avg, LargeCoinChance, rand))
+        {
+            counts.TryGetValue(p, out var c);
+            counts[p] = c + 1;
+        }
+        foreach (var (id, count) in counts)
+            yield return (id, count);
     }
 }

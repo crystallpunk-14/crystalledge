@@ -32,7 +32,9 @@ public sealed partial class CETradingApplyEffectOffer : CETradingOffer
             args.Position);
 
         foreach (var effect in EffectsToApply)
+        {
             effect.Effect(effectArgs);
+        }
 
         return null;
     }
