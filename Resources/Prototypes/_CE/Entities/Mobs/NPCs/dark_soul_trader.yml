@@ -49,9 +49,6 @@
         TradingSlotRestored: true
       cost: 5
       exploreRadius: 3
-  - type: NpcFactionMember
-    factions:
-    - Passive
   - type: CEDarkSoulSpeech
   - type: CEGOAPHasInactiveTradingSlotSensor
     conditionKey: InactiveTradingSlotVisible

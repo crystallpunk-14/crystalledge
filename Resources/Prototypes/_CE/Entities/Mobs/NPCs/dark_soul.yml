@@ -36,9 +36,6 @@
         EnemyDead: true
       cost: 1
       exploreRadius: 8
-  - type: NpcFactionMember
-    factions:
-    - SimpleHostile
   - type: Sprite
     drawdepth: Mobs
     sprite: _CE/Mobs/dark_souls.rsi

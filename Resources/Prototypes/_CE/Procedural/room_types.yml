@@ -58,7 +58,7 @@
   id: MossyTempleMerchantRoom
   supportsWideConnection: true
   showIconFromNeighbour: true
-  allowMobsSpawn: true
+  allowMobsSpawn: false
   allowLootSpawn: true
   color: "#00ff26"
   minimapIcon:
