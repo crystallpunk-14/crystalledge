@@ -136,8 +136,8 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("codewordFaction");
             _prototypeManager.RegisterIgnore("dungeonLevel"); // CrystallEdge — server-only prototype
             _prototypeManager.RegisterIgnore("dungeonSpawnTable"); // CrystallEdge — server-only prototype
-            _prototypeManager.RegisterIgnore("ceWorldConfig"); // CrystallEdge — server-only prototype
-            _prototypeManager.RegisterIgnore("ceWorldChunkType"); // CrystallEdge — server-only prototype
+            _prototypeManager.RegisterIgnore("worldConfig"); // CrystallEdge — server-only prototype
+            _prototypeManager.RegisterIgnore("worldChunkType"); // CrystallEdge — server-only prototype
 
             _componentFactory.GenerateNetIds();
             _adminManager.Initialize();

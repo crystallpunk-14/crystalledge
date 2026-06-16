@@ -9,7 +9,7 @@ namespace Content.Server._CE.WorldGen.Prototypes;
 /// chunk's tiles and entities are produced across all of its z-levels. Today only
 /// fill generation exists; noise/layer generators can be added without touching the planner.
 /// </summary>
-[Prototype("ceWorldChunkType")]
+[Prototype("worldChunkType")]
 public sealed partial class CEWorldChunkTypePrototype : IPrototype
 {
     /// <inheritdoc/>

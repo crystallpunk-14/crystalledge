@@ -1,11 +1,8 @@
 # World recipes. The world has no fixed size — it is bounded only by what the plan paints.
 # CETestWorld is generated automatically at round start (MVP).
 
-- type: ceWorldConfig
+- type: worldConfig
   id: CETestWorld
-  chunkSizeTiles: 8
-  seed: 0                       # 0 => random per round
-  loadRadiusChunks: 2
   mapComponents:
   - type: Gravity
     enabled: true

@@ -1,9 +1,7 @@
 using System.Numerics;
 using Content.Server._CE.WorldGen.Components;
-using Content.Server._CE.WorldGen.Prototypes;
 using Content.Shared._CE.Maths;
 using JetBrains.Annotations;
-using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.WorldGen;
 
@@ -17,8 +15,6 @@ namespace Content.Server._CE.WorldGen;
 /// </summary>
 public sealed partial class CEWorldGenSystem
 {
-    private readonly List<Vector3i> _reloadScratch = new();
-
     /// <summary>
     /// Reserves every tile in a world-space box on the given z-level map: marks them modified so
     /// world-gen neither generates over them nor unloads them. Call before placing structures /
@@ -30,7 +26,7 @@ public sealed partial class CEWorldGenSystem
         if (!TryResolveWorldLevel(mapUid, out var world, out var chunkZ, out var level))
             return;
 
-        var size = world.Comp.ChunkSize;
+        var size = ChunkSize;
         var minX = (int)MathF.Floor(bounds.Left);
         var maxX = (int)MathF.Ceiling(bounds.Right);
         var minY = (int)MathF.Floor(bounds.Bottom);
@@ -57,7 +53,7 @@ public sealed partial class CEWorldGenSystem
         if (!TryResolveWorldLevel(mapUid, out var world, out var chunkZ, out _))
             return;
 
-        var size = world.Comp.ChunkSize;
+        var size = ChunkSize;
         var cx = (int)MathF.Floor(worldPos.X / size);
         var cy = (int)MathF.Floor(worldPos.Y / size);
 
@@ -69,35 +65,6 @@ public sealed partial class CEWorldGenSystem
 
                 if (world.Comp.ChunkMap.ContainsKey(cell) && !world.Comp.LoadedChunks.Contains(cell))
                     LoadChunk(world, cell);
-            }
-        }
-    }
-
-    /// <summary>
-    /// On hot-reload of a <see cref="CEWorldChunkTypePrototype"/>, regenerates every currently-loaded
-    /// chunk of that type so generator edits show up immediately (preserving player edits via the normal
-    /// unload path). New chunks pick up the new data on their own. Mirrors biome ProtoReload.
-    /// </summary>
-    private void OnProtoReload(PrototypesReloadedEventArgs args)
-    {
-        if (!args.TryGetModified<CEWorldChunkTypePrototype>(out var modifiedIds))
-            return;
-
-        var query = AllEntityQuery<CEWorldComponent>();
-        while (query.MoveNext(out var uid, out var world))
-        {
-            _reloadScratch.Clear();
-
-            foreach (var cell in world.LoadedChunks)
-            {
-                if (world.ChunkMap.TryGetValue(cell, out var type) && modifiedIds.Contains(type.Id))
-                    _reloadScratch.Add(cell);
-            }
-
-            foreach (var cell in _reloadScratch)
-            {
-                UnloadChunk((uid, world), cell);
-                LoadChunk((uid, world), cell);
             }
         }
     }
@@ -118,8 +85,8 @@ public sealed partial class CEWorldGenSystem
         }
 
         world = (zMap.NetworkUid, comp);
-        chunkZ = FloorDiv(zMap.Depth, ChunkHeightLevels);
-        level = zMap.Depth - chunkZ * ChunkHeightLevels;
+        chunkZ = FloorDiv(zMap.Depth, ChunkHeight);
+        level = zMap.Depth - chunkZ * ChunkHeight;
         return true;
     }
 

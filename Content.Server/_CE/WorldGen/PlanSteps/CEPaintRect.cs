@@ -38,7 +38,6 @@ public sealed class CEPaintRectSystem : CEWorldPlanStepSystem<CEPaintRect>
 {
     protected override void Plan(ref CEWorldPlanStepEvent<CEPaintRect> args)
     {
-        var step = args.Step;
-        SetChunkType(args.Args, step.From, step.To, step.ChunkType);
+        SetChunkType(args.Args, args.Step.From, args.Step.To, args.Step.ChunkType);
     }
 }

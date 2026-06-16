@@ -1,3 +1,4 @@
+using Content.Server._CE.WorldGen;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -40,7 +41,7 @@ public sealed partial class CEFillChunkGeneratorSystem : CEChunkGeneratorSystem<
         var a = args.Args;
 
         var tile = new Tile(_tileDef[gen.FillTile].TileId);
-        var levelTiles = new List<(Vector2i, Tile)>(a.ChunkSize * a.ChunkSize);
+        var levelTiles = new List<(Vector2i, Tile)>(CEWorldGenSystem.ChunkSize * CEWorldGenSystem.ChunkSize);
 
         for (var level = 0; level < a.LevelGrids.Count; level++)
         {
@@ -49,9 +50,9 @@ public sealed partial class CEFillChunkGeneratorSystem : CEChunkGeneratorSystem<
 
             // Tiles first (batched per level).
             levelTiles.Clear();
-            for (var x = 0; x < a.ChunkSize; x++)
+            for (var x = 0; x < CEWorldGenSystem.ChunkSize; x++)
             {
-                for (var y = 0; y < a.ChunkSize; y++)
+                for (var y = 0; y < CEWorldGenSystem.ChunkSize; y++)
                 {
                     var idx = new Vector2i(a.ChunkOriginTile.X + x, a.ChunkOriginTile.Y + y);
                     if (modified.Contains(idx))
@@ -73,7 +74,8 @@ public sealed partial class CEFillChunkGeneratorSystem : CEChunkGeneratorSystem<
                 var coords = _map.GridTileToLocal(grid.Owner, grid.Comp, idx);
                 var ent = Spawn(proto, coords);
 
-                if (TryComp<TransformComponent>(ent, out var xform) && !xform.Anchored)
+                var xform = Transform(ent);
+                if (!xform.Anchored)
                     _transform.AnchorEntity((ent, xform), grid, idx);
 
                 a.SpawnedEntities.Add((level, ent, idx));

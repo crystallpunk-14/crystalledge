@@ -1,12 +1,12 @@
 # Paintable chunk types. MVP: a single "full fill" generator kind.
 # Each chunk is 8x8 tiles across 2 z-levels; the fill generator fills every cell of every level.
 
-- type: ceWorldChunkType
+- type: worldChunkType
   id: CEWorldStoneFloor
   generator: !type:CEFillChunkGenerator
     fillTile: CEStone
 
-- type: ceWorldChunkType
+- type: worldChunkType
   id: CEWorldStoneWall
   generator: !type:CEFillChunkGenerator
     fillTile: CEStone

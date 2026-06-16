@@ -43,7 +43,6 @@ public sealed class CEChunkGenArgs(
     IEntityManager entityManager,
     IReadOnlyList<Entity<MapGridComponent>> levelGrids,
     Vector2i chunkOriginTile,
-    int chunkSize,
     int seed,
     IReadOnlyList<HashSet<Vector2i>> modifiedTilesPerLevel,
     List<(int Level, Vector2i Tile, Tile Value)> generatedTiles,
@@ -51,20 +50,27 @@ public sealed class CEChunkGenArgs(
 {
     public readonly IEntityManager EntityManager = entityManager;
 
-    /// <summary>One grid per z-level of the chunk; index == depth offset (0 == bottom).</summary>
+    /// <summary>
+    /// One grid per z-level of the chunk; index == depth offset (0 == bottom).
+    /// </summary>
     public readonly IReadOnlyList<Entity<MapGridComponent>> LevelGrids = levelGrids;
 
     public readonly Vector2i ChunkOriginTile = chunkOriginTile;
-    public readonly int ChunkSize = chunkSize;
     public readonly int Seed = seed;
 
-    /// <summary>Tiles already edited by players, per level — never overwrite these.</summary>
+    /// <summary>
+    /// Tiles already edited by players, per level — never overwrite these.
+    /// </summary>
     public readonly IReadOnlyList<HashSet<Vector2i>> ModifiedTilesPerLevel = modifiedTilesPerLevel;
 
-    /// <summary>Output: every tile the generator placed, tagged with its level, for unload diffing.</summary>
+    /// <summary>
+    /// Output: every tile the generator placed, tagged with its level, for unload diffing.
+    /// </summary>
     public readonly List<(int Level, Vector2i Tile, Tile Value)> GeneratedTiles = generatedTiles;
 
-    /// <summary>Output: every entity the generator spawned, tagged with its level, for unload cleanup.</summary>
+    /// <summary>
+    /// Output: every entity the generator spawned, tagged with its level, for unload cleanup.
+    /// </summary>
     public readonly List<(int Level, EntityUid Ent, Vector2i Tile)> SpawnedEntities = spawnedEntities;
 }
 

@@ -21,7 +21,9 @@ namespace Content.Server._CE.WorldGen;
 /// </summary>
 public sealed partial class CEWorldGenSystem
 {
-    /// <summary>Seconds between active-chunk scans.</summary>
+    /// <summary>
+    /// Seconds between active-chunk scans.
+    /// </summary>
     private const float UpdateInterval = 0.5f;
 
     private float _accumulator;
@@ -74,14 +76,14 @@ public sealed partial class CEWorldGenSystem
             }
 
             var worldPos = _transform.GetWorldPosition(xform);
-            var cx = (int)MathF.Floor(worldPos.X / world.ChunkSize);
-            var cy = (int)MathF.Floor(worldPos.Y / world.ChunkSize);
-            var radius = (int)MathF.Ceiling(world.LoadRadiusChunks);
+            var cx = (int)MathF.Floor(worldPos.X / ChunkSize);
+            var cy = (int)MathF.Floor(worldPos.Y / ChunkSize);
+            var radius = (int)MathF.Ceiling(LoadRadiusChunks);
 
             // The player can see down through several z-levels (and one up). Keep every chunk layer in
             // that visible depth range loaded, or the floors below would render as void.
-            var minChunkZ = FloorDiv(zMap.Depth - CESharedZLevelsSystem.MaxZLevelsBelowRendering, ChunkHeightLevels);
-            var maxChunkZ = FloorDiv(zMap.Depth + 1, ChunkHeightLevels);
+            var minChunkZ = FloorDiv(zMap.Depth - CESharedZLevelsSystem.MaxZLevelsBelowRendering, ChunkHeight);
+            var maxChunkZ = FloorDiv(zMap.Depth + 1, ChunkHeight);
 
             for (var dx = -radius; dx <= radius; dx++)
             {
@@ -134,22 +136,22 @@ public sealed partial class CEWorldGenSystem
         _activeChunks.Clear();
     }
 
-    private void LoadChunk(Entity<CEWorldComponent> world, Vector3i cell)
+    private void LoadChunk(Entity<CEWorldComponent> world, Vector3i chunk)
     {
         var comp = world.Comp;
 
-        if (!comp.ChunkMap.TryGetValue(cell, out var typeId) || !_proto.TryIndex(typeId, out var chunkType))
+        if (!comp.ChunkMap.TryGetValue(chunk, out var typeId) || !_proto.TryIndex(typeId, out var chunkType))
             return;
 
         _levelGrids.Clear();
         _modifiedPerLevel.Clear();
-        comp.ModifiedTiles.TryGetValue(cell, out var modifiedByLevel);
+        comp.ModifiedTiles.TryGetValue(chunk, out var modifiedByLevel);
 
-        for (var level = 0; level < ChunkHeightLevels; level++)
+        for (var level = 0; level < ChunkHeight; level++)
         {
-            if (!TryGetLevelGrid(comp, cell, level, out var grid))
+            if (!TryGetLevelGrid(world.Owner, chunk, level, out var grid))
             {
-                Log.Error($"CEWorldGen: missing z-level grid for chunk {cell} level {level}.");
+                Log.Error($"CEWorldGen: missing z-level grid for chunk {chunk} level {level}.");
                 return;
             }
 
@@ -163,7 +165,7 @@ public sealed partial class CEWorldGenSystem
             _modifiedPerLevel.Add(mod);
         }
 
-        var originTile = new Vector2i(cell.X * comp.ChunkSize, cell.Y * comp.ChunkSize);
+        var originTile = new Vector2i(chunk.X * ChunkSize, chunk.Y * ChunkSize);
         var generated = new List<(int Level, Vector2i Tile, Tile Value)>();
         var spawned = new List<(int Level, EntityUid Ent, Vector2i Tile)>();
 
@@ -171,7 +173,6 @@ public sealed partial class CEWorldGenSystem
             EntityManager,
             _levelGrids,
             originTile,
-            comp.ChunkSize,
             comp.Seed,
             _modifiedPerLevel,
             generated,
@@ -179,37 +180,37 @@ public sealed partial class CEWorldGenSystem
 
         chunkType.Generator.Generate(args);
 
-        comp.LoadedEntities[cell] = spawned;
-        comp.GeneratedTiles[cell] = generated;
-        comp.LoadedChunks.Add(cell);
+        comp.LoadedEntities[chunk] = spawned;
+        comp.GeneratedTiles[chunk] = generated;
+        comp.LoadedChunks.Add(chunk);
     }
 
-    private void UnloadChunk(Entity<CEWorldComponent> world, Vector3i cell)
+    private void UnloadChunk(Entity<CEWorldComponent> world, Vector3i chunk)
     {
         var comp = world.Comp;
-        var modifiedByLevel = comp.ModifiedTiles.TryGetValue(cell, out var existing)
+        var modifiedByLevel = comp.ModifiedTiles.TryGetValue(chunk, out var existing)
             ? existing
             : new Dictionary<int, HashSet<Vector2i>>();
 
         // Entities FIRST: delete pristine ones; keep anything a player touched (moved/unanchored/!IsDefault).
         // Keeping an entity marks its tile modified, which the tile pass below then refuses to clear — so a
         // kept (e.g. damaged) entity never ends up floating over a removed tile.
-        if (comp.LoadedEntities.TryGetValue(cell, out var ents))
+        if (comp.LoadedEntities.TryGetValue(chunk, out var ents))
         {
             foreach (var (level, ent, tile) in ents)
             {
-                if (ShouldKeepEntity(comp, cell, level, ent, tile))
+                if (ShouldKeepEntity(world.Owner, chunk, level, ent, tile))
                     MarkModified(modifiedByLevel, level, tile);
                 else
                     Del(ent);
             }
 
-            comp.LoadedEntities.Remove(cell);
+            comp.LoadedEntities.Remove(chunk);
         }
 
         // Tiles SECOND: clear tiles still matching what we generated; keep (mark modified) any the player
         // changed, and skip tiles already marked modified above (those under kept entities).
-        if (comp.GeneratedTiles.TryGetValue(cell, out var gen))
+        if (comp.GeneratedTiles.TryGetValue(chunk, out var gen))
         {
             var emptyByLevel = new Dictionary<int, List<(Vector2i, Tile)>>();
 
@@ -218,7 +219,7 @@ public sealed partial class CEWorldGenSystem
                 if (modifiedByLevel.TryGetValue(level, out var modSet) && modSet.Contains(tile))
                     continue;
 
-                if (!TryGetLevelGrid(comp, cell, level, out var grid))
+                if (!TryGetLevelGrid(world.Owner, chunk, level, out var grid))
                     continue;
 
                 // Don't mess with anything that's potentially anchored (our kept entity, or one the
@@ -249,31 +250,31 @@ public sealed partial class CEWorldGenSystem
 
             foreach (var (level, list) in emptyByLevel)
             {
-                if (TryGetLevelGrid(comp, cell, level, out var grid))
+                if (TryGetLevelGrid(world.Owner, chunk, level, out var grid))
                     _map.SetTiles(grid.Owner, grid.Comp, list);
             }
 
-            comp.GeneratedTiles.Remove(cell);
+            comp.GeneratedTiles.Remove(chunk);
         }
 
-        comp.LoadedChunks.Remove(cell);
+        comp.LoadedChunks.Remove(chunk);
 
         if (modifiedByLevel.Count == 0)
-            comp.ModifiedTiles.Remove(cell);
+            comp.ModifiedTiles.Remove(chunk);
         else
-            comp.ModifiedTiles[cell] = modifiedByLevel;
+            comp.ModifiedTiles[chunk] = modifiedByLevel;
     }
 
     /// <summary>
     /// True if an entity must be preserved across unload: deleted, moved, unanchored, or edited
     /// (any DataField diverged from its prototype, per <see cref="IEntityManager.IsDefault"/>).
     /// </summary>
-    private bool ShouldKeepEntity(CEWorldComponent comp, Vector3i cell, int level, EntityUid ent, Vector2i tile)
+    private bool ShouldKeepEntity(EntityUid worldUid, Vector3i chunk, int level, EntityUid ent, Vector2i tile)
     {
         if (Deleted(ent) || !_xformQuery.TryGetComponent(ent, out var xform))
             return true;
 
-        if (!TryGetLevelGrid(comp, cell, level, out var grid))
+        if (!TryGetLevelGrid(worldUid, chunk, level, out var grid))
             return true;
 
         if (!xform.Anchored || _map.LocalToTile(grid.Owner, grid.Comp, xform.Coordinates) != tile)
@@ -282,12 +283,14 @@ public sealed partial class CEWorldGenSystem
         return !EntityManager.IsDefault(ent);
     }
 
-    private bool TryGetLevelGrid(CEWorldComponent comp, Vector3i cell, int level, out Entity<MapGridComponent> grid)
+    private bool TryGetLevelGrid(EntityUid worldUid, Vector3i chunk, int level, out Entity<MapGridComponent> grid)
     {
         grid = default;
-        var depth = cell.Z * ChunkHeightLevels + level;
+        var depth = chunk.Z * ChunkHeight + level;
 
-        if (!comp.ZLevelMaps.TryGetValue(depth, out var gridUid) || !_gridQuery.TryGetComponent(gridUid, out var gridComp))
+
+        if (!_zLevels.TryGetMapAtDepth(worldUid, depth, out var gridUid) ||
+            !_gridQuery.TryGetComponent(gridUid, out var gridComp))
             return false;
 
         grid = (gridUid, gridComp);
