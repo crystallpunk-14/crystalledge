@@ -172,6 +172,7 @@ public sealed partial class CEWorldGenSystem
         var args = new CEChunkGenArgs(
             EntityManager,
             _levelGrids,
+            chunk,
             originTile,
             comp.Seed,
             _modifiedPerLevel,
