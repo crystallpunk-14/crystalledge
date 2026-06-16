@@ -10,17 +10,11 @@
   - type: MapLight
     ambientLightColor: "#9aa0b0"
   planSteps:
-  # 8x8-chunk stone floor slab on chunk layer 0 (z-levels 0 and 1).
   - !type:CEPaintRect
     from: 0,0,0
-    to: 7,7,0
-    chunkType: CEWorldStoneFloor
-  # A solid stone-wall block in one corner, demonstrating overpainting.
-  - !type:CEPaintRect
-    from: 0,0,0
-    to: 0,7,1
+    to: 11,11,0
     chunkType: CEWorldStoneWall
   - !type:CEPaintRect
-    from: 7,0,0
-    to: 7,7,1
-    chunkType: CEWorldStoneWall
+    from: 1,1,0
+    to: 10,10,0
+    chunkType: CEWorldForest

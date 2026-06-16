@@ -1,0 +1,40 @@
+# Worldgen herringbone atlas.
+# Each room is exactly one herringbone domino: 16x8 tiles, spanning the full chunk height (2 z-levels).
+# Rooms are placed flush against each other (no seam-filling); design edges so openings line up.
+
+- type: zMap
+  id: DunTest
+  maps:
+  - /Maps/_CE/Dungeon/DunTest/DunTest0.yml
+  - /Maps/_CE/Dungeon/DunTest/DunTest1.yml
+  components:
+    - type: MapLight
+      ambientLightColor: "#b0d138"
+
+- type: dungeonRoomType
+  id: CEWorldForestRoom
+  color: "#3ab33a"
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room1
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 2
+  zLevelMap: DunTest
+  offset: 2, 2
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room2
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 2
+  zLevelMap: DunTest
+  offset: 2, 11
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room3
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 2
+  zLevelMap: DunTest
+  offset: 2, 20

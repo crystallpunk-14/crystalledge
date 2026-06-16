@@ -11,3 +11,9 @@
   generator: !type:CEFillChunkGenerator
     fillTile: CEStone
     fillEntity: CEWallStone
+
+# Herringbone-filled chunk: each chunk is half of a 16x8x2 domino room from the worldgen atlas pool.
+- type: worldChunkType
+  id: CEWorldForest
+  generator: !type:CEHerringboneChunkGenerator
+    roomPool: CEWorldForestRoom
