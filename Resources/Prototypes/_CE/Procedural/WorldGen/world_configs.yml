@@ -1,0 +1,29 @@
+# World recipes. The world has no fixed size — it is bounded only by what the plan paints.
+# CETestWorld is generated automatically at round start (MVP).
+
+- type: ceWorldConfig
+  id: CETestWorld
+  chunkSizeTiles: 8
+  seed: 0                       # 0 => random per round
+  loadRadiusChunks: 2
+  mapComponents:
+  - type: Gravity
+    enabled: true
+    inherent: true
+  - type: MapLight
+    ambientLightColor: "#9aa0b0"
+  planSteps:
+  # 8x8-chunk stone floor slab on chunk layer 0 (z-levels 0 and 1).
+  - !type:CEPaintRect
+    from: 0,0,0
+    to: 7,7,0
+    chunkType: CEWorldStoneFloor
+  # A solid stone-wall block in one corner, demonstrating overpainting.
+  - !type:CEPaintRect
+    from: 0,0,0
+    to: 0,7,1
+    chunkType: CEWorldStoneWall
+  - !type:CEPaintRect
+    from: 7,0,0
+    to: 7,7,1
+    chunkType: CEWorldStoneWall

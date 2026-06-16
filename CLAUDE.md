@@ -30,7 +30,6 @@ Build output is in Russian: `Ошибок: 0` = success, `Предупрежде
 | Server | `dotnet build Content.Server/Content.Server.csproj` |
 | Client | `dotnet build Content.Client/Content.Client.csproj` |
 | Full | `dotnet build` |
-| YAML linter | `dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj` |
 
 Incremental builds (CE files only changed) take ~15-30s. Never run `dotnet build` as a foreground command with short timeouts — it will be cancelled.
 
@@ -87,9 +86,9 @@ dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj
   ```csharp
   namespace Content.Shared._CE.Example;
 
-  public sealed class CEExampleSystem : EntitySystem
+  public sealed partial class CEExampleSystem : EntitySystem
   {
-      [Dependency] private readonly IGameTiming _timing = default!;
+      [Dependency] private IGameTiming _timing = default!;
 
       public override void Initialize()
       {
@@ -104,8 +103,9 @@ dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj
   }
   ```
 
-- Use `[Dependency]` for dependency injection
+- Use `[Dependency]` for dependency injection WITHOUT readonly key.
 - Use `[Dependency] EntityQuery<T>` for performance-critical component lookups
+- All classes that use [Dependency] should be partial.
 
 **Critical ECS rules:**
 - Never store mutable state inside systems — it is not saved/loaded with the game save. All persistent data belongs in components.
