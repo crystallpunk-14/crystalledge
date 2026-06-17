@@ -123,17 +123,17 @@
         domainWarpAmp: 120
       entities:
       - CEHighBush
-    - !type:BiomeEntityLayer
-      threshold: 0.3
-      noise:
-        seed: 877
-        noiseType: OpenSimplex2
-        fractalType: Ridged
-        frequency: 0.03
-        octaves: 3
-        lacunarity: 1.8
-        gain: 0.7
-        domainWarpType: OpenSimplex2
-        domainWarpAmp: 120
-      entities:
-      - CEGodRaysMoon
+    #- !type:BiomeEntityLayer
+    #  threshold: 0.3
+    #  noise:
+    #    seed: 877
+    #    noiseType: OpenSimplex2
+    #    fractalType: Ridged
+    #    frequency: 0.03
+    #    octaves: 3
+    #    lacunarity: 1.8
+    #    gain: 0.7
+    #    domainWarpType: OpenSimplex2
+    #    domainWarpAmp: 120
+    #  entities:
+    #  - CEGodRaysMoon
