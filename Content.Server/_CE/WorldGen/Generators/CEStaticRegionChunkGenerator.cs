@@ -34,7 +34,7 @@ public sealed partial class CEStaticRegionChunkGeneratorSystem
         _hasRoom = false;
         _snapshot = null;
 
-        var worldQuery = EntityManager.EntityQueryEnumerator<CEWorldComponent>();
+        var worldQuery = EntityQueryEnumerator<CEWorldComponent>();
         if (!worldQuery.MoveNext(out _, out var world))
         {
             Log.Error("CEStaticRegionChunkGenerator: no CEWorldComponent found.");

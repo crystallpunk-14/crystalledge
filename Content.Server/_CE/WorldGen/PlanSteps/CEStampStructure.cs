@@ -46,7 +46,7 @@ public sealed partial class CEStampStructure : CEWorldPlanStepBase<CEStampStruct
 /// <c>CEWorldStaticRegion</c> onto every chunk in the footprint, and writes per-chunk entries to
 /// <see cref="CEWorldComponent.StaticRegions"/> so the generator can locate the correct room slice.
 /// </summary>
-public sealed class CEStampStructureSystem : CEWorldPlanStepSystem<CEStampStructure>
+public sealed partial class CEStampStructureSystem : CEWorldPlanStepSystem<CEStampStructure>
 {
     [Dependency] private IPrototypeManager _protoMan = default!;
 
@@ -86,7 +86,7 @@ public sealed class CEStampStructureSystem : CEWorldPlanStepSystem<CEStampStruct
         // Each z-level of the room maps to one chunk-Z (ChunkHeight == 1).
         var regionZ = room.Height;
 
-        var worldQuery = EntityManager.EntityQueryEnumerator<CEWorldComponent>();
+        var worldQuery = EntityQueryEnumerator<CEWorldComponent>();
         if (!worldQuery.MoveNext(out _, out var world))
         {
             Log.Error("CEStampStructure: no CEWorldComponent found. Cannot write static regions.");
