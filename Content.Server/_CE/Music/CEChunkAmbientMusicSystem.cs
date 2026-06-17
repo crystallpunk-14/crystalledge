@@ -1,7 +1,8 @@
+using Content.Server._CE.WorldGen;
 using Content.Shared._CE.Music;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CE.WorldGen;
+namespace Content.Server._CE.Music;
 
 /// <summary>
 /// Server side of per-chunk ambient music: as a player crosses into a new chunk type, copies that
