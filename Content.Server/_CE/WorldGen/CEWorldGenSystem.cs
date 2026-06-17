@@ -1,6 +1,7 @@
-using Content.Server._CE.WorldGen.Components;
-using Content.Server._CE.WorldGen.PlanSteps;
-using Content.Server._CE.WorldGen.Prototypes;
+using System.Linq;
+using Content.Shared._CE.WorldGen.Components;
+using Content.Shared._CE.WorldGen.PlanSteps;
+using Content.Shared._CE.WorldGen.Prototypes;
 using Content.Server._CE.ZLevels.Core;
 using Content.Server.GameTicking.Events;
 using Content.Shared._CE.Maths;
@@ -37,20 +38,9 @@ public sealed partial class CEWorldGenSystem : EntitySystem
     private readonly ObjectPool<HashSet<Vector3i>> _chunkSetPool =
         new DefaultObjectPool<HashSet<Vector3i>>(new SetPolicy<Vector3i>(), 64);
 
-    /// <summary>
-    /// Side length of one chunk in tiles.
-    /// </summary>
-    public const int ChunkSize = 8;
-
-    /// <summary>
-    /// How many z-levels a single chunk spans.
-    /// </summary>
-    public const int ChunkHeight = 1;
-
-    /// <summary>
-    /// Chunks to keep loaded outward from each player.
-    /// </summary>
-    public const float LoadRadiusChunks = 2f;
+    public const int ChunkSize = CEWorldComponent.ChunkSize;
+    public const int ChunkHeight = CEWorldComponent.ChunkHeight;
+    public const float LoadRadiusChunks = CEWorldComponent.LoadRadiusChunks;
 
     /// <summary>
     /// Config generated automatically at round start (MVP — could become a CVar).
@@ -67,12 +57,17 @@ public sealed partial class CEWorldGenSystem : EntitySystem
 
     private void OnRoundStarting(RoundStartingEvent ev)
     {
-        if (!_proto.TryIndex(DefaultWorldConfig, out var config))
+        CreateWorld(DefaultWorldConfig);
+    }
+
+    private void CreateWorld(ProtoId<CEWorldConfigPrototype> configId)
+    {
+        if (!_proto.TryIndex(configId, out var config))
             return;
 
         var network = _zLevels.CreateZNetwork(config.MapComponents);
         var world = AddComp<CEWorldComponent>(network.Owner);
-        world.Config = config.ID;
+        world.Config = configId;
         world.Seed = _random.Next();
 
         // Planning: run each step to paint the chunk map.
@@ -81,6 +76,8 @@ public sealed partial class CEWorldGenSystem : EntitySystem
         {
             step.Execute(planArgs);
         }
+
+        Dirty(network.Owner, world);
 
         if (world.ChunkMap.Count == 0)
         {
@@ -114,7 +111,43 @@ public sealed partial class CEWorldGenSystem : EntitySystem
         _meta.SetEntityName(network.Owner, $"World z-Network: {config.ID}");
 
         var zCount = maxDepth - minDepth + 1;
-        Log.Info($"CEWorldGen: world {config.ID} planned: {world.ChunkMap.Count} chunks across {zCount} z-levels (seed {world.Seed}).");
+        Log.Info(
+            $"CEWorldGen: world {config.ID} planned: {world.ChunkMap.Count} chunks across {zCount} z-levels (seed {world.Seed}).");
+    }
+
+    /// <summary>
+    /// Unloads all chunk content, re-paints the chunk map from current prototypes (same seed),
+    /// and lets the update loop reload chunks fresh. Z-network and maps are preserved.
+    /// </summary>
+    public void RegenerateWorld()
+    {
+        var query = AllEntityQuery<CEWorldComponent>();
+        while (query.MoveNext(out var uid, out var world))
+        {
+            // Clear player edits FIRST so UnloadChunk treats all tiles as pristine
+            world.ModifiedTiles.Clear();
+
+            // Unload all chunks — fully clean because ModifiedTiles is empty
+            foreach (var cell in world.LoadedChunks.ToList())
+            {
+                UnloadChunk((uid, world), cell);
+            }
+
+            // Re-paint from current in-memory prototypes (keep same seed)
+            world.ChunkMap.Clear();
+            if (_proto.TryIndex(world.Config, out var config))
+            {
+                var planArgs = new CEWorldPlanArgs(EntityManager, world.ChunkMap, _random);
+                foreach (var step in config.PlanSteps)
+                {
+                    step.Execute(planArgs);
+                }
+            }
+
+            Dirty(uid, world);
+
+            Log.Info($"CEWorldGen: world {world.Config} regenerated in-place (seed {world.Seed}).");
+        }
     }
 
     /// <summary>

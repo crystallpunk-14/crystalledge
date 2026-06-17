@@ -1,4 +1,5 @@
-using Content.Server._CE.WorldGen.Generators;
+using Content.Shared._CE.WorldGen.Generators;
+using Content.Shared._CE.WorldGen.PostProcess;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.WorldGen.PostProcess;

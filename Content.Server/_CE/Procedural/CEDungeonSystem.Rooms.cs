@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Server._CE.WorldGen.Generators;
 using Content.Server.Procedural;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.WorldGen.Generators;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Decals;
 using Content.Shared.Maps;

@@ -2,6 +2,7 @@
 
 - type: worldChunkType
   id: CEWorldForest
+  debugColor: "#49a33d"
   generator: !type:CEHerringboneChunkGenerator
     roomPool: CEWorldForestRoom
   postProcess:

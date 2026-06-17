@@ -1,6 +1,6 @@
-using Content.Server._CE.WorldGen.Generators;
+using Content.Shared._CE.WorldGen.Generators;
 
-namespace Content.Server._CE.WorldGen.PostProcess;
+namespace Content.Shared._CE.WorldGen.PostProcess;
 
 /// <summary>
 /// Data-only base for per-tile worldgen post-processing layers. Logic is in systems subscribing to

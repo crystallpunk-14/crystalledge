@@ -3,11 +3,13 @@
 
 - type: worldChunkType
   id: CEWorldStoneFloor
+  debugColor: "#181a17"
   generator: !type:CEFillChunkGenerator
     fillTile: CEStone
 
 - type: worldChunkType
   id: CEWorldStoneWall
+  debugColor: "#181a17"
   generator: !type:CEFillChunkGenerator
     fillTile: CEStone
     fillEntity: CEWallStoneBrick

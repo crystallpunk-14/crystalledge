@@ -1,5 +1,6 @@
 - type: worldChunkType
   id: CEWorldDungeon
+  debugColor: "#474f74"
   generator: !type:CEHerringboneChunkGenerator
     roomPool: CEWorldDungeonRoom
   postProcess:

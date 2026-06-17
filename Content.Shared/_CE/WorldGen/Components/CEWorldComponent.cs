@@ -1,19 +1,30 @@
-using Content.Server._CE.WorldGen.Prototypes;
 using Content.Shared._CE.Maths;
+using Content.Shared._CE.WorldGen.Prototypes;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CE.WorldGen.Components;
+namespace Content.Shared._CE.WorldGen.Components;
 
 /// <summary>
 /// Runtime state of one procedurally generated world. Added onto the z-network entity
 /// (alongside <c>CEZLevelsNetworkComponent</c>) — never onto an individual map, since the
 /// chunk map and modified-tile ledger are shared across every z-level of the world.
-/// Server-only; reached from a player via that map's network uid.
+/// Reached from a player via that map's network uid.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEWorldComponent : Component
 {
+    /// <summary>Side length of one chunk in tiles.</summary>
+    public const int ChunkSize = 8;
+
+    /// <summary>How many z-levels a single chunk spans.</summary>
+    public const int ChunkHeight = 1;
+
+    /// <summary>Chunks to keep loaded outward from each player.</summary>
+    public const float LoadRadiusChunks = 2f;
+
+
     /// <summary>
     /// Recipe this world was generated from.
     /// </summary>
@@ -28,8 +39,9 @@ public sealed partial class CEWorldComponent : Component
 
     /// <summary>
     /// Painted chunk map: (x, y, chunkZ) -> chunk type. Cells absent here stay void.
+    /// Networked so the client overlay can visualize chunk types.
     /// </summary>
-    [ViewVariables]
+    [DataField, AutoNetworkedField]
     public Dictionary<Vector3i, ProtoId<CEWorldChunkTypePrototype>> ChunkMap = new();
 
     /// <summary>

@@ -1,9 +1,9 @@
-using Content.Server._CE.WorldGen.Prototypes;
 using Content.Shared._CE.Maths;
+using Content.Shared._CE.WorldGen.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
-namespace Content.Server._CE.WorldGen.PlanSteps;
+namespace Content.Shared._CE.WorldGen.PlanSteps;
 
 /// <summary>
 /// Data-only base class for world plan steps.
@@ -85,17 +85,11 @@ public abstract partial class CEWorldPlanStepSystem<T> : EntitySystem where T : 
 
     // ── Chunk-map API ─────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Paints a single chunk cell with a type.
-    /// </summary>
     protected void SetChunkType(CEWorldPlanArgs args, Vector3i cell, ProtoId<CEWorldChunkTypePrototype> type)
     {
         args.ChunkMap[cell] = type;
     }
 
-    /// <summary>
-    /// Paints every cell of the inclusive 3D box From..To with a type.
-    /// </summary>
     protected void SetChunkType(CEWorldPlanArgs args, Vector3i from, Vector3i to, ProtoId<CEWorldChunkTypePrototype> type)
     {
         foreach (var cell in EnumerateBox(from, to))
@@ -104,17 +98,11 @@ public abstract partial class CEWorldPlanStepSystem<T> : EntitySystem where T : 
         }
     }
 
-    /// <summary>
-    /// Removes a single chunk cell (returns it to void). Returns true if it existed.
-    /// </summary>
     protected bool ClearChunk(CEWorldPlanArgs args, Vector3i cell)
     {
         return args.ChunkMap.Remove(cell);
     }
 
-    /// <summary>
-    /// Removes every cell of the inclusive 3D box From..To (returns them to void).
-    /// </summary>
     protected void ClearChunks(CEWorldPlanArgs args, Vector3i from, Vector3i to)
     {
         foreach (var cell in EnumerateBox(from, to))
@@ -123,25 +111,16 @@ public abstract partial class CEWorldPlanStepSystem<T> : EntitySystem where T : 
         }
     }
 
-    /// <summary>
-    /// True if a cell has been painted.
-    /// </summary>
     protected bool HasChunk(CEWorldPlanArgs args, Vector3i cell)
     {
         return args.ChunkMap.ContainsKey(cell);
     }
 
-    /// <summary>
-    /// Gets the type painted at a cell, if any.
-    /// </summary>
     protected bool TryGetChunkType(CEWorldPlanArgs args, Vector3i cell, out ProtoId<CEWorldChunkTypePrototype> type)
     {
         return args.ChunkMap.TryGetValue(cell, out type);
     }
 
-    /// <summary>
-    /// Enumerates every cell of the inclusive 3D box spanning two corners, in any order.
-    /// </summary>
     protected static IEnumerable<Vector3i> EnumerateBox(Vector3i from, Vector3i to)
     {
         var minX = Math.Min(from.X, to.X);

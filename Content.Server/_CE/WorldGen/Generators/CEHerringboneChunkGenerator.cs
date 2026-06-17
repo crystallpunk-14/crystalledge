@@ -1,6 +1,7 @@
 using Content.Server._CE.Procedural;
 using Content.Shared._CE.Procedural;
 using Content.Shared._CE.WorldGen;
+using Content.Shared._CE.WorldGen.Generators;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 

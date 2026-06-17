@@ -1,14 +1,11 @@
-using Content.Server._CE.WorldGen.PlanSteps;
+using Content.Shared._CE.WorldGen.PlanSteps;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server._CE.WorldGen.Prototypes;
+namespace Content.Shared._CE.WorldGen.Prototypes;
 
 /// <summary>
 /// Top-level recipe for a procedurally generated CE world.
-/// The world has no fixed size: it is bounded only by the chunks the plan paints,
-/// which configs may grow arbitrarily large. Chunks the plan never paints stay void,
-/// and the vertical extent (number of z-levels) is derived from the painted plan.
-/// Server-only, like the dungeon level prototypes — all world-gen logic lives on the server.
+/// The world has no fixed size: it is bounded only by the chunks the plan paints.
 /// </summary>
 [Prototype("worldConfig")]
 public sealed partial class CEWorldConfigPrototype : IPrototype
@@ -19,8 +16,9 @@ public sealed partial class CEWorldConfigPrototype : IPrototype
 
     /// <summary>
     /// Ordered list of planner steps that paint chunk types onto the chunk grid.
+    /// Server-only: concrete step types are not registered on the client.
     /// </summary>
-    [DataField]
+    [DataField(serverOnly: true)]
     public List<CEWorldPlanStep> PlanSteps = new();
 
     /// <summary>
@@ -28,5 +26,4 @@ public sealed partial class CEWorldConfigPrototype : IPrototype
     /// </summary>
     [DataField]
     public ComponentRegistry MapComponents = new();
-
 }

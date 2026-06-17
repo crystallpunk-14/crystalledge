@@ -1,4 +1,5 @@
-using Content.Server._CE.WorldGen.Generators;
+using Content.Shared._CE.WorldGen.Generators;
+using Content.Shared._CE.WorldGen.PostProcess;
 using Content.Shared.Maps;
 using Content.Shared.Parallax.Biomes;
 using Content.Shared.Parallax.Biomes.Layers;
