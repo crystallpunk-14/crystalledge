@@ -76,6 +76,13 @@ public sealed partial class CEWorldComponent : Component
     /// </summary>
     [ViewVariables]
     public Dictionary<Vector3i, CEStaticRegionEntry> StaticRegions = [];
+
+    /// <summary>
+    /// Chunks that must stay loaded at all times, regardless of player proximity.
+    /// Populated by plan steps (e.g. <c>CEStampStructure</c> with <c>pin: true</c>).
+    /// </summary>
+    [ViewVariables]
+    public HashSet<Vector3i> PinnedChunks = [];
 }
 
 /// <summary>

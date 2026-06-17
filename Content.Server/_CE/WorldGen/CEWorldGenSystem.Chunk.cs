@@ -127,6 +127,10 @@ public sealed partial class CEWorldGenSystem
             if (!_activeChunks.TryGetValue(uid, out var set))
                 continue;
 
+            // Pinned chunks are always active — inject before the load pass so they're never unloaded.
+            foreach (var pinned in world.PinnedChunks)
+                set.Add(pinned);
+
             foreach (var cell in set)
             {
                 if (!world.LoadedChunks.Contains(cell))

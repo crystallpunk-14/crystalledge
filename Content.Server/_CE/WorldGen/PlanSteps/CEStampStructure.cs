@@ -39,6 +39,13 @@ public sealed partial class CEStampStructure : CEWorldPlanStepBase<CEStampStruct
     /// </summary>
     [DataField]
     public bool RandomRotation;
+
+    /// <summary>
+    /// When true, all chunks in the stamped footprint are added to
+    /// <see cref="CEWorldComponent.PinnedChunks"/> and will never unload.
+    /// </summary>
+    [DataField]
+    public bool Pin;
 }
 
 /// <summary>
@@ -104,6 +111,8 @@ public sealed partial class CEStampStructureSystem : CEWorldPlanStepSystem<CESta
                     var coord = new Vector3i(step.At.X + dx, step.At.Y + dy, step.At.Z + dz);
                     SetChunkType(planArgs, coord, "CEWorldStaticRegion");
                     world.StaticRegions[coord] = entry;
+                    if (step.Pin)
+                        world.PinnedChunks.Add(coord);
                 }
             }
         }

@@ -101,6 +101,10 @@ public sealed partial class CEWorldGenSystem : EntitySystem
         var zCount = maxDepth - minDepth + 1;
         Log.Info(
             $"CEWorldGen: world {config.ID} planned: {world.ChunkMap.Count} chunks across {zCount} z-levels (seed {world.Seed}).");
+
+        // Preload pinned chunks immediately so they exist before player spawn.
+        foreach (var pinned in world.PinnedChunks)
+            LoadChunk((network.Owner, world), pinned);
     }
 
     /// <summary>

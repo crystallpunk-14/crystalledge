@@ -46,4 +46,5 @@
   - !type:CEStampStructure # Starting camp in the forest south of the dungeon entrance
     room: CEWorldForest_StartingCamp
     at: 4,-5,1
+    pin: true
 
