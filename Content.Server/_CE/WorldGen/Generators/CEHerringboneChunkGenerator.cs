@@ -48,8 +48,8 @@ public sealed partial class CEHerringboneChunkGeneratorSystem : CEChunkGenerator
         var cc = args.ChunkCoord;
         var (domino, half) = CEHerringboneLattice.Classify(cc.X, cc.Y, cc.Z);
 
-        // Room choice depends only on the domino + seed, so both halves agree.
-        var rng = new Random(CEHerringboneLattice.RoomSeed(domino, args.Seed));
+        // Room choice depends only on the domino + cz + seed, so both halves at the same z-level agree.
+        var rng = new Random(CEHerringboneLattice.RoomSeed(domino, cc.Z, args.Seed));
 
         var room = _dungeon.GetRoomPrototype(rng, roomType: gen.RoomPool);
         if (room == null)

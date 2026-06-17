@@ -92,7 +92,7 @@ public sealed class CEHerringboneLatticeTest
     }
 
     /// <summary>
-    /// Both halves of a domino derive the same room-selection seed, so they pick the same room.
+    /// Both halves of a domino at the same z-level derive the same room-selection seed.
     /// </summary>
     [Test]
     public void RoomSeedAgreesAcrossHalves()
@@ -103,9 +103,26 @@ public sealed class CEHerringboneLatticeTest
             var partner = domino.Cell(1 - half);
             var (partnerDomino, _) = CEHerringboneLattice.Classify(partner.X, partner.Y, z);
 
-            Assert.That(CEHerringboneLattice.RoomSeed(partnerDomino, Seed),
-                Is.EqualTo(CEHerringboneLattice.RoomSeed(domino, Seed)),
-                $"halves of domino at {domino.Anchor} disagree on room seed");
+            Assert.That(CEHerringboneLattice.RoomSeed(partnerDomino, z, Seed),
+                Is.EqualTo(CEHerringboneLattice.RoomSeed(domino, z, Seed)),
+                $"halves of domino at {domino.Anchor} (z={z}) disagree on room seed");
+        }
+    }
+
+    /// <summary>
+    /// Vertically-stacked chunks (same XY, different z) produce different room seeds.
+    /// </summary>
+    [Test]
+    public void RoomSeedDiffersAcrossZLevels()
+    {
+        foreach (var (x, y, _) in Chunks())
+        {
+            var (d0, _) = CEHerringboneLattice.Classify(x, y, 0);
+            var (d1, _) = CEHerringboneLattice.Classify(x, y, 1);
+            // Seeds must differ — different z means different content.
+            Assert.That(CEHerringboneLattice.RoomSeed(d0, 0, Seed),
+                Is.Not.EqualTo(CEHerringboneLattice.RoomSeed(d1, 1, Seed)),
+                $"z=0 and z=1 give same room seed for chunk ({x},{y})");
         }
     }
 }

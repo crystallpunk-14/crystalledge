@@ -45,7 +45,7 @@ public sealed partial class CEWorldGenSystem : EntitySystem
     /// <summary>
     /// How many z-levels a single chunk spans.
     /// </summary>
-    public const int ChunkHeight = 2;
+    public const int ChunkHeight = 1;
 
     /// <summary>
     /// Chunks to keep loaded outward from each player.

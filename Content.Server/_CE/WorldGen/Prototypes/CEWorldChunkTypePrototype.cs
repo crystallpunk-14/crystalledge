@@ -1,4 +1,5 @@
 using Content.Server._CE.WorldGen.Generators;
+using Content.Server._CE.WorldGen.PostProcess;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.WorldGen.Prototypes;
@@ -21,4 +22,10 @@ public sealed partial class CEWorldChunkTypePrototype : IPrototype
     /// </summary>
     [DataField(required: true)]
     public CEChunkGenerator Generator = default!;
+
+    /// <summary>
+    /// Ordered per-tile post-process layers applied after generation (empty == no post-processing).
+    /// </summary>
+    [DataField]
+    public List<CEWorldPostProcessLayer> PostProcess = new();
 }

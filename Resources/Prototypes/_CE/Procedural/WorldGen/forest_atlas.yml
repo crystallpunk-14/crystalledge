@@ -1,12 +1,11 @@
 # Worldgen herringbone atlas.
-# Each room is exactly one herringbone domino: 16x8 tiles, spanning the full chunk height (2 z-levels).
+# Each room is exactly one herringbone domino: 16x8 tiles, ChunkHeight=1 z-level.
 # Rooms are placed flush against each other (no seam-filling); design edges so openings line up.
 
 - type: zMap
   id: DunTest
   maps:
   - /Maps/_CE/Dungeon/DunTest/DunTest0.yml
-  - /Maps/_CE/Dungeon/DunTest/DunTest1.yml
   components:
     - type: MapLight
       ambientLightColor: "#b0d138"
@@ -19,7 +18,7 @@
   id: CEWorldForest_Room1
   roomType: CEWorldForestRoom
   size: 16, 8
-  height: 2
+  height: 1
   zLevelMap: DunTest
   offset: 2, 2
 
@@ -27,7 +26,7 @@
   id: CEWorldForest_Room2
   roomType: CEWorldForestRoom
   size: 16, 8
-  height: 2
+  height: 1
   zLevelMap: DunTest
   offset: 2, 11
 
@@ -35,6 +34,54 @@
   id: CEWorldForest_Room3
   roomType: CEWorldForestRoom
   size: 16, 8
-  height: 2
+  height: 1
   zLevelMap: DunTest
   offset: 2, 20
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room4
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: 2, 29
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room5
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: 19, 2
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room6
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: 19, 11
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room7
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: 19, 20
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room8
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: 19, 29
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room9
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: 19, 38

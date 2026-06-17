@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server._CE.WorldGen.PostProcess;
 using Content.Server.Decals;
 using Content.Shared._CE.Maths;
 using Content.Shared.Decals;
@@ -89,11 +90,13 @@ public readonly record struct CEDecalSpec(
     bool Cleanable = false);
 
 /// <summary>
-/// Per-tile input handed to a generator. Deliberately carries NO grid handle — a generator can only
-/// describe content for the asked tile, never write outside its chunk. The base system owns the loop,
-/// bounds, batching and load/unload bookkeeping.
+/// Per-tile input handed to a generator. Deliberately carries NO write access to the grid — a
+/// generator can only describe content for the asked tile, never write outside its chunk. The base
+/// system owns the loop, bounds, batching and load/unload bookkeeping. The <see cref="Grid"/> field
+/// is provided for read-only per-tile queries (e.g. by post-process biome layers) but must not be
+/// used to write tiles.
 /// </summary>
-public readonly ref struct CETileGenContext
+public readonly struct CETileGenContext
 {
     /// <summary>
     /// Entity manager for read-only lookups.
@@ -130,6 +133,12 @@ public readonly ref struct CETileGenContext
     /// </summary>
     public readonly int Seed;
 
+    /// <summary>
+    /// The level grid this tile lives on. Passed to post-process layers (e.g. biome system) for
+    /// read-only per-tile queries; generators themselves must not write to the grid directly.
+    /// </summary>
+    public readonly Entity<MapGridComponent> Grid;
+
     public CETileGenContext(
         IEntityManager entityManager,
         Vector3i chunkCoord,
@@ -137,7 +146,8 @@ public readonly ref struct CETileGenContext
         int level,
         Vector2i worldTile,
         int depth,
-        int seed)
+        int seed,
+        Entity<MapGridComponent> grid)
     {
         EntityManager = entityManager;
         ChunkCoord = chunkCoord;
@@ -146,6 +156,7 @@ public readonly ref struct CETileGenContext
         WorldTile = worldTile;
         Depth = depth;
         Seed = seed;
+        Grid = grid;
     }
 }
 
@@ -163,7 +174,8 @@ public sealed class CEChunkGenArgs(
     int seed,
     IReadOnlyList<HashSet<Vector2i>> modifiedTilesPerLevel,
     List<(int Level, Vector2i Tile, Tile Value)> generatedTiles,
-    List<(int Level, EntityUid Ent, Vector2i Tile)> spawnedEntities)
+    List<(int Level, EntityUid Ent, Vector2i Tile)> spawnedEntities,
+    IReadOnlyList<CEWorldPostProcessLayer> postProcess)
 {
     /// <summary>
     /// Entity manager for the generator dispatch.
@@ -204,6 +216,11 @@ public sealed class CEChunkGenArgs(
     /// Output: every entity the generator spawned, tagged with its level, for unload cleanup.
     /// </summary>
     public readonly List<(int Level, EntityUid Ent, Vector2i Tile)> SpawnedEntities = spawnedEntities;
+
+    /// <summary>
+    /// Ordered post-process layers applied per-tile after <see cref="CEChunkGeneratorSystem{T}.GenerateTile"/>.
+    /// </summary>
+    public readonly IReadOnlyList<CEWorldPostProcessLayer> PostProcess = postProcess;
 }
 
 /// <summary>
@@ -230,6 +247,7 @@ public abstract partial class CEChunkGeneratorSystem<T> : EntitySystem where T :
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private DecalSystem _decals = default!;
     [Dependency] private ITileDefinitionManager _tileDef = default!;
+    [Dependency] private TileSystem _tile = default!;
 
     // Per-level scratch (single-threaded load, see class doc).
     private readonly List<(Vector2i, Tile)> _tileBatch = new();
@@ -250,6 +268,7 @@ public abstract partial class CEChunkGeneratorSystem<T> : EntitySystem where T :
         BeginChunk(gen, a);
 
         var content = new CETileContent();
+        var hasPostProcess = a.PostProcess.Count > 0;
 
         for (var level = 0; level < a.LevelGrids.Count; level++)
         {
@@ -272,14 +291,30 @@ public abstract partial class CEChunkGeneratorSystem<T> : EntitySystem where T :
                         continue;
 
                     content.Clear();
-                    var ctx = new CETileGenContext(EntityManager, a.ChunkCoord, local, level, world, depth, a.Seed);
+                    var ctx = new CETileGenContext(EntityManager, a.ChunkCoord, local, level, world, depth, a.Seed, grid);
                     GenerateTile(gen, ctx, ref content);
+
+                    // Post-process layers run after generation, before the void-tile gate.
+                    // Only entered when layers are configured AND the tile is non-void.
+                    if (hasPostProcess && content.Tile != null)
+                    {
+                        for (var i = 0; i < a.PostProcess.Count; i++)
+                        {
+                            var layerSeed = HashCode.Combine(a.Seed, world.X, world.Y, level, i);
+                            a.PostProcess[i].Process(EntityManager, ctx, ref content, layerSeed);
+                            // A layer may void the tile — stop processing remaining layers.
+                            if (content.Tile == null)
+                                break;
+                        }
+                    }
 
                     // A void tile carries nothing — skip its entity/decal too.
                     if (content.Tile is not { } tileProto)
                         continue;
 
-                    var tile = new Tile(_tileDef[tileProto].TileId);
+                    var tileDef = (ContentTileDefinition) _tileDef[tileProto];
+                    var variantSeed = HashCode.Combine(a.Seed, world.X, world.Y, level);
+                    var tile = _tile.GetVariantTile(tileDef, variantSeed);
                     _tileBatch.Add((world, tile));
                     a.GeneratedTiles.Add((level, world, tile));
 

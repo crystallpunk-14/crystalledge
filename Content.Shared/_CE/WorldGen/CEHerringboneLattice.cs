@@ -66,53 +66,63 @@ public static class CEHerringboneLattice
     /// Classifies a chunk into its domino (anchor in absolute chunk coords, orientation) and which half of
     /// that domino it is (0 == anchor cell, 1 == other cell).
     ///
-    /// The lattice is shifted by (cz, cz) per chunk-z layer so vertically-stacked chunks fall into
-    /// differently-placed dominoes (different anchor → different room) — no boring columns. The shift does
-    /// not change orientation/half because (cx-cz) - (cy-cz) == cx - cy.
+    /// Each z-level shifts the X input by +cz so the herringbone partition uses a different region of the
+    /// lattice per z-level: <c>r = FloorMod((cx + cz) - cy, 4)</c> varies with cz, meaning different pairs
+    /// of absolute chunks form dominoes at each depth. The shifted anchor is converted back to absolute
+    /// chunk coordinates by subtracting cz from X. Period of repetition is 4 z-levels (the natural period
+    /// of the herringbone lattice).
     /// </summary>
     public static (CEHerringboneDomino Domino, int Half) Classify(int cx, int cy, int cz)
     {
-        var sx = cx - cz;
-        var sy = cy - cz;
+        // Shift X by cz to get a different partition per z-level.
+        var sx = cx + cz;
+        var sy = cy;
         var r = FloorMod(sx - sy, 4);
 
-        Vector2i anchor;
+        Vector2i shiftedAnchor;
         CEHerringboneOrientation orient;
         int half;
 
         switch (r)
         {
             case 0: // horizontal, left half
-                anchor = new Vector2i(sx, sy);
+                shiftedAnchor = new Vector2i(sx, sy);
                 orient = CEHerringboneOrientation.Horizontal;
                 half = 0;
                 break;
             case 1: // horizontal, right half
-                anchor = new Vector2i(sx - 1, sy);
+                shiftedAnchor = new Vector2i(sx - 1, sy);
                 orient = CEHerringboneOrientation.Horizontal;
                 half = 1;
                 break;
             case 2: // vertical, top half
-                anchor = new Vector2i(sx, sy - 1);
+                shiftedAnchor = new Vector2i(sx, sy - 1);
                 orient = CEHerringboneOrientation.Vertical;
                 half = 1;
                 break;
             default: // r == 3: vertical, bottom half
-                anchor = new Vector2i(sx, sy);
+                shiftedAnchor = new Vector2i(sx, sy);
                 orient = CEHerringboneOrientation.Vertical;
                 half = 0;
                 break;
         }
 
-        return (new CEHerringboneDomino(anchor + new Vector2i(cz, cz), orient), half);
+        // Convert shifted anchor back to absolute chunk coordinates.
+        var anchor = new Vector2i(shiftedAnchor.X - cz, shiftedAnchor.Y);
+        return (new CEHerringboneDomino(anchor, orient), half);
     }
 
     /// <summary>
-    /// Deterministic per-domino room-selection seed. Depends only on the domino (anchor + orientation) and
-    /// the world seed — never on half/level — so both halves pick the same room.
+    /// Deterministic per-domino room-selection seed. Depends on the domino (anchor + orientation), the
+    /// chunk-z layer (<paramref name="cz"/>) and the world seed — never on half — so both halves at the
+    /// same z-level pick the same room. Including cz ensures vertically-stacked dominoes get different rooms
+    /// even when they share an anchor (which can happen at z-level multiples of 4 due to the X-shift period).
     /// </summary>
-    public static int RoomSeed(CEHerringboneDomino domino, int seed)
-        => (int)Hash((uint)seed ^ 0x1234567u, (uint)domino.Anchor.X, (uint)domino.Anchor.Y, (byte)domino.Orientation);
+    public static int RoomSeed(CEHerringboneDomino domino, int cz, int seed)
+    {
+        var h = Hash((uint)seed ^ 0x1234567u, (uint)domino.Anchor.X, (uint)domino.Anchor.Y, (byte)domino.Orientation);
+        return (int)Mix(h, (uint)cz);
+    }
 
     /// <summary>
     /// Floored modulo (result always in [0, m) for positive m).

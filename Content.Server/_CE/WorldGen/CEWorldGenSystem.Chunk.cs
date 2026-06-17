@@ -177,7 +177,8 @@ public sealed partial class CEWorldGenSystem
             comp.Seed,
             _modifiedPerLevel,
             generated,
-            spawned);
+            spawned,
+            chunkType.PostProcess);
 
         chunkType.Generator.Generate(args);
 
@@ -267,8 +268,17 @@ public sealed partial class CEWorldGenSystem
     }
 
     /// <summary>
-    /// True if an entity must be preserved across unload: deleted, moved, unanchored, or edited
-    /// (any DataField diverged from its prototype, per <see cref="IEntityManager.IsDefault"/>).
+    /// True if a generated entity must be preserved across unload.
+    ///
+    /// An entity is kept if it has moved away from its spawn tile (player relocated it). Anchored
+    /// state is NOT used as the primary signal: worldgen can legitimately spawn unanchored entities
+    /// (biome vegetation, ambient spawners) and those must also unload when pristine.
+    ///
+    /// An entity at its spawn tile is deleted unless <see cref="IEntityManager.IsDefault"/> says its
+    /// state diverged from the prototype — which means a player actively modified it (damaged, edited
+    /// a data field). Entities that self-mutate on spawn (e.g. light behaviour, physics fixtures) must
+    /// declare those fields in their prototype so <see cref="IEntityManager.IsDefault"/> considers them
+    /// default; see <c>CEBaseWallmount</c> for the Fixtures pattern.
     /// </summary>
     private bool ShouldKeepEntity(EntityUid worldUid, Vector3i chunk, int level, EntityUid ent, Vector2i tile)
     {
@@ -278,10 +288,36 @@ public sealed partial class CEWorldGenSystem
         if (!TryGetLevelGrid(worldUid, chunk, level, out var grid))
             return true;
 
-        if (!xform.Anchored || _map.LocalToTile(grid.Owner, grid.Comp, xform.Coordinates) != tile)
+        // Entity moved away from its spawn tile — a player relocated it; keep it.
+        if (_map.LocalToTile(grid.Owner, grid.Comp, xform.Coordinates) != tile)
             return true;
 
-        return !EntityManager.IsDefault(ent);
+        var nonDefault = !EntityManager.IsDefault(ent);
+
+#if DEBUG || TOOLS
+        // Diagnostic: log which components have non-default data so self-mutating entities can be fixed.
+        if (nonDefault && MetaData(ent).EntityPrototype is { } diagProto)
+        {
+            var protoComps = diagProto.Components;
+            var nonDefaultComps = new List<string>();
+            foreach (var comp in EntityManager.GetComponents(ent))
+            {
+                var compType = comp.GetType();
+                if (compType == typeof(TransformComponent) || compType == typeof(MetaDataComponent))
+                    continue;
+
+                var name = EntityManager.ComponentFactory.GetComponentName(compType);
+                if (!protoComps.ContainsKey(name))
+                    nonDefaultComps.Add($"+{name}(runtime)");
+                // Individual field diffs need VV or profiling; can't cheaply detect here without
+                // duplicating IEntityManager.IsDefault internals.
+            }
+
+            var runtimeStr = nonDefaultComps.Count > 0 ? string.Join(",", nonDefaultComps) : "none";
+            Log.Warning($"[CEWG-DIAG] keep '{diagProto.ID}': anchored={xform.Anchored} runtime-added=[{runtimeStr}] — if empty, a component FIELD diverged from prototype (use VV to inspect).");
+        }
+#endif
+        return nonDefault;
     }
 
     private bool TryGetLevelGrid(EntityUid worldUid, Vector3i chunk, int level, out Entity<MapGridComponent> grid)
