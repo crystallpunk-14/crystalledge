@@ -66,49 +66,47 @@ public static class CEHerringboneLattice
     /// Classifies a chunk into its domino (anchor in absolute chunk coords, orientation) and which half of
     /// that domino it is (0 == anchor cell, 1 == other cell).
     ///
-    /// Each z-level shifts the X input by +cz so the herringbone partition uses a different region of the
-    /// lattice per z-level: <c>r = FloorMod((cx + cz) - cy, 4)</c> varies with cz, meaning different pairs
-    /// of absolute chunks form dominoes at each depth. The shifted anchor is converted back to absolute
-    /// chunk coordinates by subtracting cz from X. Period of repetition is 4 z-levels (the natural period
-    /// of the herringbone lattice).
+    /// The partition is z-invariant: <c>r = FloorMod(cx - cy, 4)</c> does not depend on cz, so every
+    /// z-level uses the exact same herringbone partition and dominoes stack vertically aligned. This lets
+    /// two-story connection rooms occupy the same domino footprint on two adjacent floors. The within-floor
+    /// herringbone (so chunk seams never form continuous lines) is preserved; only the per-z variation is
+    /// dropped. The <paramref name="cz"/> parameter is kept for API stability and is unused here — room
+    /// variety per floor still comes from <see cref="RoomSeed"/>, which mixes cz.
     /// </summary>
     public static (CEHerringboneDomino Domino, int Half) Classify(int cx, int cy, int cz)
     {
-        // Shift X by cz to get a different partition per z-level.
-        var sx = cx + cz;
+        var sx = cx;
         var sy = cy;
         var r = FloorMod(sx - sy, 4);
 
-        Vector2i shiftedAnchor;
+        Vector2i anchor;
         CEHerringboneOrientation orient;
         int half;
 
         switch (r)
         {
             case 0: // horizontal, left half
-                shiftedAnchor = new Vector2i(sx, sy);
+                anchor = new Vector2i(sx, sy);
                 orient = CEHerringboneOrientation.Horizontal;
                 half = 0;
                 break;
             case 1: // horizontal, right half
-                shiftedAnchor = new Vector2i(sx - 1, sy);
+                anchor = new Vector2i(sx - 1, sy);
                 orient = CEHerringboneOrientation.Horizontal;
                 half = 1;
                 break;
             case 2: // vertical, top half
-                shiftedAnchor = new Vector2i(sx, sy - 1);
+                anchor = new Vector2i(sx, sy - 1);
                 orient = CEHerringboneOrientation.Vertical;
                 half = 1;
                 break;
             default: // r == 3: vertical, bottom half
-                shiftedAnchor = new Vector2i(sx, sy);
+                anchor = new Vector2i(sx, sy);
                 orient = CEHerringboneOrientation.Vertical;
                 half = 0;
                 break;
         }
 
-        // Convert shifted anchor back to absolute chunk coordinates.
-        var anchor = new Vector2i(shiftedAnchor.X - cz, shiftedAnchor.Y);
         return (new CEHerringboneDomino(anchor, orient), half);
     }
 

@@ -44,3 +44,7 @@
     from: 3,0,0
     to: 7,0,2
     chunkType: CEWorldDungeon
+  - !type:CEPaintRect # Entry point
+    from: 3,10,0
+    to: 7,10,2
+    chunkType: CEWorldDungeon

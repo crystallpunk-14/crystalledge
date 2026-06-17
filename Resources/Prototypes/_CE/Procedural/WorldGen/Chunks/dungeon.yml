@@ -3,6 +3,7 @@
   debugColor: "#474f74"
   generator: !type:CEHerringboneChunkGenerator
     roomPool: CEWorldDungeonRoom
+    connectionChance: 0.1
   postProcess:
   - !type:CEEntitySwapWorldPostProcess
     source: CEWallStoneBrick

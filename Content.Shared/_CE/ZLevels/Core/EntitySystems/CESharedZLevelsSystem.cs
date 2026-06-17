@@ -121,6 +121,23 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Returns the inclusive depth range of the z-network the given map belongs to
+    /// (<c>minDepth</c>..<c>maxDepth</c>). False if the map is not in a z-network.
+    /// </summary>
+    [PublicAPI]
+    public bool TryGetDepthBounds(EntityUid mapUid, out int minDepth, out int maxDepth)
+    {
+        minDepth = 0;
+        maxDepth = 0;
+        if (!TryGetZNetwork(mapUid, out var network))
+            return false;
+
+        minDepth = network.Comp.SortedMin;
+        maxDepth = network.Comp.SortedMax;
+        return true;
+    }
+
     [PublicAPI]
     public bool TryMapOffset(Entity<CEZLevelMapComponent?> entity, int offset, out Entity<CEZLevelMapComponent> output)
     {

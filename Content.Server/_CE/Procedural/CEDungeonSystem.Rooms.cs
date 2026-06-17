@@ -24,7 +24,9 @@ public sealed partial class CEDungeonSystem
     public CEDungeonRoom3DPrototype? GetRoomPrototype(Random random,
         Vector2i? minSize = null,
         Vector2i? maxSize = null,
-        ProtoId<CERoomTypePrototype>? roomType = null)
+        ProtoId<CERoomTypePrototype>? roomType = null,
+        int? minHeight = null,
+        int? maxHeight = null)
     {
         _availableRooms.Clear();
 
@@ -34,6 +36,12 @@ public sealed partial class CEDungeonSystem
                 continue;
 
             if (maxSize is not null && (proto.Size.X > maxSize.Value.X || proto.Size.Y > maxSize.Value.Y))
+                continue;
+
+            if (minHeight is not null && proto.Height < minHeight.Value)
+                continue;
+
+            if (maxHeight is not null && proto.Height > maxHeight.Value)
                 continue;
 
             if (roomType != null && proto.RoomType != roomType)
