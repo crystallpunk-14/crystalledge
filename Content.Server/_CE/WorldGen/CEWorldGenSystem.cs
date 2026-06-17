@@ -3,7 +3,6 @@ using Content.Shared._CE.WorldGen.Components;
 using Content.Shared._CE.WorldGen.PlanSteps;
 using Content.Shared._CE.WorldGen.Prototypes;
 using Content.Server._CE.ZLevels.Core;
-using Content.Server.GameTicking.Events;
 using Content.Shared._CE.Maths;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Microsoft.Extensions.ObjectPool;
@@ -42,25 +41,14 @@ public sealed partial class CEWorldGenSystem : EntitySystem
     public const int ChunkHeight = CEWorldComponent.ChunkHeight;
     public const float LoadRadiusChunks = CEWorldComponent.LoadRadiusChunks;
 
-    /// <summary>
-    /// Config generated automatically at round start (MVP — could become a CVar).
-    /// </summary>
-    private static readonly ProtoId<CEWorldConfigPrototype> DefaultWorldConfig = "CETestWorld";
-
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnProtoReload);
     }
 
-    private void OnRoundStarting(RoundStartingEvent ev)
-    {
-        CreateWorld(DefaultWorldConfig);
-    }
-
-    private void CreateWorld(ProtoId<CEWorldConfigPrototype> configId)
+    public void CreateWorld(ProtoId<CEWorldConfigPrototype> configId)
     {
         if (!_proto.TryIndex(configId, out var config))
             return;

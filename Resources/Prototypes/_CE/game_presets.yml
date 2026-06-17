@@ -1,11 +1,42 @@
+- type: entity
+  id: CEDungeonRule
+  parent: BaseGameRule
+  components:
+  - type: CEDungeonRule
+
+- type: entity
+  id: CEWorldGenRule
+  parent: BaseGameRule
+  components:
+  - type: CEWorldGenRule
+    config: CETestWorld
+
+- type: gamePreset
+  id: Roguelike
+  name: ce-roguelike-title
+  description: ce-roguelike-description
+  showInVote: true
+  maxPlayers: 100
+  rules:
+    - CEDungeonRule
+
+- type: gamePreset
+  id: OpenWorld
+  name: ce-worldgen-title
+  description: ce-worldgen-description
+  showInVote: true
+  maxPlayers: 100
+  rules:
+    - CEWorldGenRule
+
 - type: gamePreset
   id: Secret
   alias:
     - secret
     - sekrit
   name: secret-title
-  showInVote: true
   description: secret-description
+  showInVote: true
   rules:
     - Secret
 
@@ -13,11 +44,7 @@
   id: Secret
   weights:
     Roguelike: 1
-
-
-- type: entity
-  id: CEDummyRule
-  parent: BaseGameRule
+    WorldGen: 0 #Temporaly disabled
 
 - type: gamePreset
   id: BaselineSandbox
@@ -29,12 +56,3 @@
   maxPlayers: 5
   rules:
     - Sandbox
-
-- type: gamePreset
-  id: Roguelike
-  name: sandbox-title #TODO
-  description: sandbox-description #TODO
-  showInVote: true
-  maxPlayers: 100
-  rules:
-    - CEDummyRule
