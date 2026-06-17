@@ -1,4 +1,5 @@
 using Content.Shared._CE.Maths;
+using Content.Shared._CE.Procedural;
 using Content.Shared._CE.WorldGen.Prototypes;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
@@ -68,4 +69,19 @@ public sealed partial class CEWorldComponent : Component
     /// </summary>
     [ViewVariables]
     public Dictionary<Vector3i, List<(int Level, Vector2i Tile, Tile Value)>> GeneratedTiles = new();
+
+    /// <summary>
+    /// Per-chunk data for statically-stamped structures. Written by <c>CEStampStructure</c> plan step,
+    /// read by <c>CEStaticRegionChunkGenerator</c> at chunk load time.
+    /// </summary>
+    [ViewVariables]
+    public Dictionary<Vector3i, CEStaticRegionEntry> StaticRegions = [];
 }
+
+/// <summary>
+/// Describes which room to render for one chunk that belongs to a stamped static structure.
+/// </summary>
+public record struct CEStaticRegionEntry(
+    ProtoId<CEDungeonRoom3DPrototype> Room,
+    Vector3i At,
+    int RotationSteps);

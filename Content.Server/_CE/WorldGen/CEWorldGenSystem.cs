@@ -71,7 +71,7 @@ public sealed partial class CEWorldGenSystem : EntitySystem
         world.Seed = _random.Next();
 
         // Planning: run each step to paint the chunk map.
-        var planArgs = new CEWorldPlanArgs(EntityManager, world.ChunkMap, _random);
+        var planArgs = new CEWorldPlanArgs(EntityManager, world.ChunkMap, _random, world.Seed);
         foreach (var step in config.PlanSteps)
         {
             step.Execute(planArgs);
@@ -137,7 +137,7 @@ public sealed partial class CEWorldGenSystem : EntitySystem
             world.ChunkMap.Clear();
             if (_proto.TryIndex(world.Config, out var config))
             {
-                var planArgs = new CEWorldPlanArgs(EntityManager, world.ChunkMap, _random);
+                var planArgs = new CEWorldPlanArgs(EntityManager, world.ChunkMap, _random, world.Seed);
                 foreach (var step in config.PlanSteps)
                 {
                     step.Execute(planArgs);

@@ -42,7 +42,8 @@ public abstract partial class CEWorldPlanStepBase<T> : CEWorldPlanStep where T :
 public sealed class CEWorldPlanArgs(
     IEntityManager entityManager,
     Dictionary<Vector3i, ProtoId<CEWorldChunkTypePrototype>> chunkMap,
-    IRobustRandom random)
+    IRobustRandom random,
+    int seed)
 {
     public readonly IEntityManager EntityManager = entityManager;
 
@@ -52,7 +53,13 @@ public sealed class CEWorldPlanArgs(
     public readonly Dictionary<Vector3i, ProtoId<CEWorldChunkTypePrototype>> ChunkMap = chunkMap;
 
     /// <summary>
-    /// Deterministic RNG for this run.
+    /// World seed — use this (not Random) for deterministic per-step hashes.
+    /// </summary>
+    public readonly int Seed = seed;
+
+    /// <summary>
+    /// Non-deterministic RNG — only for effects that intentionally vary per run.
+    /// For reproducible randomness, derive a <c>new Random(HashCode.Combine(Seed, ...))</c> instead.
     /// </summary>
     public readonly IRobustRandom Random = random;
 }

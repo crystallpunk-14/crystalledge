@@ -83,3 +83,12 @@
   height: 1
   zLevelMap: DunTest
   offset: -34, 38
+
+#MARK: Structures
+
+- type: dungeonRoom3d
+  id: CEWorldForest_StartingCamp
+  size: 16, 16
+  height: 2
+  zLevelMap: DunTest
+  offset: 2, -17

@@ -48,3 +48,7 @@
     from: 3,10,0
     to: 7,10,2
     chunkType: CEWorldDungeon
+  - !type:CEStampStructure # Starting camp in the forest south of the dungeon entrance
+    room: CEWorldForest_StartingCamp
+    at: 4,-4,1
+

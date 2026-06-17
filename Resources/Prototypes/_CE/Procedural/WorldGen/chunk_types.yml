@@ -13,3 +13,8 @@
   generator: !type:CEFillChunkGenerator
     fillTile: CEStone
     fillEntity: CEWallStoneBrick
+
+- type: worldChunkType
+  id: CEWorldStaticRegion
+  debugColor: "#8b5cf6"
+  generator: !type:CEStaticRegionChunkGenerator
