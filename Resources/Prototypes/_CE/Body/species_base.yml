@@ -86,6 +86,7 @@
   - type: CEBlessingReceiver
   - type: CESoulContainer
     souls: 20
+  - type: CanMoveInAir
   - type: CESkillStorage
   - type: CEStamina
   - type: CEMobState

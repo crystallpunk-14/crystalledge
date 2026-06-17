@@ -1,0 +1,183 @@
+
+
+- type: worldChunkType
+  id: CEWorldForest
+  generator: !type:CEHerringboneChunkGenerator
+    roomPool: CEWorldForestRoom
+  postProcess:
+  - !type:CEBiomeWorldPostProcess
+    layers:
+    - !type:BiomeTileLayer
+      tile: CEDirt
+      threshold: 0.15
+      noise:
+        seed: 0
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.08
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+    - !type:BiomeTileLayer
+      tile: CECobblestone
+      threshold: 0.15
+      noise:
+        seed: 98
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.08
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+    - !type:BiomeTileLayer
+      tile: CEGrassLight
+      threshold: 0
+      noise:
+        seed: 0
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+    - !type:BiomeTileLayer
+      tile: CEGrassTall
+      threshold: 0.5
+      noise:
+        seed: 0
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+    - !type:BiomeDecalLayer
+      threshold: 0.1
+      divisions: 1
+      noise:
+        seed: 12
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+      - CEFloraGrass1
+      - CEFloraGrass2
+      - CEFloraGrass3
+      - CEFloraGrass4
+      - CEFloraGrass5
+      - CEFloraGrass6
+      - CEFloraGrass7
+      - CEFloraGrass8
+      - CEFloraGrass9
+      - CEFloraGrass10
+      - CEFloraGrass11
+      - CEFloraGrass12
+      - CEFloraGrass13
+      - CEFloraGrass14
+    - !type:BiomeDecalLayer
+      threshold: 0.5
+      divisions: 1
+      noise:
+        seed: 18
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.11
+        octaves: 3
+        lacunarity: 1.7
+        gain: 0.8
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+      - CEFloraRock01
+      - CEFloraRock02
+      - CEFloraRock03
+      - CEFloraRock04
+      - CEFloraRock05
+    - !type:BiomeDecalLayer
+      threshold: 0.4
+      divisions: 1
+      noise:
+        seed: 12
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      decals:
+      - CEGrassBushes1
+      - CEGrassBushes2
+      - CEGrassBushes3
+      - CEGrassBushes4
+      - CEGrassBushes5
+      - CEGrassBushes6
+      - CEGrassBushes7
+      - CEGrassBushes8
+      - CEGrassBushes9
+    - !type:BiomeEntityLayer
+      threshold: 0.4
+      noise:
+        seed: 23
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.05
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+      - CEHighBush
+    - !type:BiomeEntityLayer
+      threshold: 0.4
+      noise:
+        seed: 87
+        noiseType: OpenSimplex2
+        fractalType: Ridged
+        frequency: 0.4
+        octaves: 3
+        lacunarity: 1.8
+        gain: 0.7
+        domainWarpType: OpenSimplex2
+        domainWarpAmp: 120
+      entities:
+      - CEFloraTreeGreen
+      - CEFloraTreeGreen
+      - CEFloraTreeGreenLarge
+      - CEFloraTreeDead
+      - CEFloraTreeDeadSmall
+      - CEFloraTreeBirchSmall
+      - CEFloraTreeBirchSmall
+      - CEFloraTreeBirchMedium
+      - CEFloraTreeSpruceSmall
+      - CEFloraTreeSpruceSmall
+      - CEFloraTreeSpruceMedium
+    - !type:BiomeEntityLayer
+      #allowedTiles:
+      #- FloorSnow
+      #- FloorIce
+      threshold: 0.95
+      noise:
+        seed: 3
+        noiseType: OpenSimplex2
+        frequency: 0.003
+        lacunarity: 1.50
+        fractalType: Ridged
+        octaves: 1
+      entities:
+      - CEWater

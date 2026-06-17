@@ -22,6 +22,6 @@ public sealed partial class RandomSpriteComponent : Component
     /// <summary>
     /// Selected colors
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), DataField("selected")]
+    [ViewVariables(VVAccess.ReadWrite)] //CrystallEdge removed DataField for clear procedural generation
     public Dictionary<string, (string State, Color? Color)> Selected = new();
 }

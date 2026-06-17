@@ -4,17 +4,43 @@
 - type: worldConfig
   id: CETestWorld
   mapComponents:
-  - type: Gravity
-    enabled: true
-    inherent: true
-  - type: MapLight
-    ambientLightColor: "#9aa0b0"
+    - type: MapLight
+      ambientLightColor: "#c8fdff"
+    - type: Gravity
+      enabled: true
+      inherent: true
+    - type: CEZLevelMapRoof
+    - type: SunShadow
+      alpha: 0.8
+      direction: 2, -0.75
+    - type: CEMapStatusEffects
+      effects:
+      - CEStatusEffectPacifism
+    - type: CEMapAmbientMusicTheme
+      theme: MossyTemple
+    - type: SunShadowCycle
+      offset: 490
+    - type: LightCycle
+      offset: 490
+      originalColor: "#c8fdff"
   planSteps:
   - !type:CEPaintRect
+    from: -5,-5,0
+    to: 15,15,0
+    chunkType: CEWorldDungeon
+  - !type:CEPaintRect
+    from: -5,-5,1
+    to: 15,15,1
+    chunkType: CEWorldForest
+  - !type:CEPaintRect
     from: 0,0,0
-    to: 11,11,5
+    to: 10,10,2
     chunkType: CEWorldStoneWall
   - !type:CEPaintRect
     from: 1,1,0
-    to: 10,10,4
-    chunkType: CEWorldForest
+    to: 9,9,2
+    chunkType: CEWorldDungeon
+  - !type:CEPaintRect # Entry point
+    from: 3,0,1
+    to: 7,0,2
+    chunkType: CEWorldDungeon
