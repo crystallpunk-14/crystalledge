@@ -1,6 +1,10 @@
 - type: worldChunkType
   id: CEWorldDungeon
   debugColor: "#474f74"
+  name: ce-world-chunk-dungeon-name
+  ambientMusic: MossyTemple
+  entrySound:
+    collection: CEDemiplaneIntro
   generator: !type:CEHerringboneChunkGenerator
     roomPool: CEWorldDungeonRoom
     connectionChance: 0.1

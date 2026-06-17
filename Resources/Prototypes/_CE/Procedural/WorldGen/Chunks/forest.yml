@@ -3,6 +3,7 @@
 - type: worldChunkType
   id: CEWorldForest
   debugColor: "#49a33d"
+  name: ce-world-chunk-forest-name
   generator: !type:CEHerringboneChunkGenerator
     roomPool: CEWorldForestRoom
   postProcess:

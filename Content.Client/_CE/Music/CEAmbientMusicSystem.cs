@@ -1,5 +1,4 @@
-﻿using Content.Shared._CE.GOAP.Components;
-using Content.Shared._CE.Music;
+﻿using Content.Shared._CE.Music;
 using Content.Shared.CCVar;
 using Robust.Client.Player;
 using Robust.Shared.Audio;
@@ -52,12 +51,6 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
     private int _currentIntensity;
     private float _volumeSlider;
 
-    // Threat intensity: set to 1 when local player has CEGOAPTargetComponent.
-    // Stays at 1 for ThreatLingerSeconds after the component is removed.
-    private const float ThreatLingerSeconds = 6f;
-    private TimeSpan _threatExpireTime = TimeSpan.Zero;
-    private bool _isThreatActive;
-
     // When true, the next Update tick will reset all stream positions to 0 so they stay phase-locked.
     // Deferred because OpenAL buffers may not be initialized in the same frame as PlayGlobal.
     private bool _needsSync;
@@ -66,8 +59,8 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
     private readonly List<EntityUid> _fadingOutStreams = new();
     private readonly Dictionary<EntityUid, float> _fadingOutVolumes = new();
 
-    private EntityQuery<TransformComponent> _xformQuery;
-    private EntityQuery<CEMapAmbientMusicThemeComponent> _mapThemeQuery;
+    // Theme requested by each controller (map, chunk, ...). The highest-priority non-null one wins.
+    private readonly Dictionary<CEAmbientMusicSource, ProtoId<CEAmbientMusicPrototype>> _sourceThemes = new();
 
     public override void Initialize()
     {
@@ -75,52 +68,48 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
 
         UpdatesOutsidePrediction = true;
         _sawmill = _logManager.GetSawmill("audio.ce-ambient");
-        _xformQuery = GetEntityQuery<TransformComponent>();
-        _mapThemeQuery = GetEntityQuery<CEMapAmbientMusicThemeComponent>();
         Subs.CVar(_cfg, CCVars.AmbientMusicVolume, OnVolumeChanged, true);
 
-        SubscribeLocalEvent<ActorComponent, EntParentChangedMessage>(OnParentChanged); //Prohibited dark magic used here! TODO: remove that cursed subscription
+        InitializeMapMusic();
+        InitializeChunkMusic();
     }
 
-    private void UpdateThreatIntensity()
-    {
-        var localPlayer = _player.LocalEntity;
-        var isTargeted = localPlayer.HasValue && HasComp<CEGOAPTargetComponent>(localPlayer.Value);
+    // ── Theme arbitration API ─────────────────────────────────────────────
+    // Controllers declare their preferred theme via SetSourceTheme; the engine plays the
+    // highest-priority non-null one. Controllers never touch playback, or each other, directly.
 
-        if (isTargeted)
-        {
-            _threatExpireTime = _timing.CurTime + TimeSpan.FromSeconds(ThreatLingerSeconds);
-            if (!_isThreatActive)
-            {
-                _isThreatActive = true;
-                if (_currentProtoId != null)
-                    SetIntense(1);
-            }
-        }
-        else if (_isThreatActive)
-        {
-            if (_timing.CurTime >= _threatExpireTime)
-            {
-                _isThreatActive = false;
-                if (_currentProtoId != null)
-                    SetIntense(0);
-            }
-        }
+    /// <summary>
+    /// Sets (or clears, when <paramref name="theme"/> is null) the theme requested by one controller,
+    /// then re-resolves which theme should actually play.
+    /// </summary>
+    public void SetSourceTheme(CEAmbientMusicSource source, ProtoId<CEAmbientMusicPrototype>? theme)
+    {
+        if (theme == null)
+            _sourceThemes.Remove(source);
+        else
+            _sourceThemes[source] = theme.Value;
+
+        ResolveActiveTheme();
     }
 
-    private void OnParentChanged(Entity<ActorComponent> ent, ref EntParentChangedMessage args)
+    private void ResolveActiveTheme()
     {
-        if (args.Entity != _player.LocalEntity)
-            return;
+        ProtoId<CEAmbientMusicPrototype>? winner = null;
+        var bestPriority = int.MinValue;
 
-        var mapUid = _xformQuery.TryGetComponent(args.Entity, out var xform) ? xform.MapUid : null;
-        if (mapUid == null || !_mapThemeQuery.TryGetComponent(mapUid.Value, out var theme) || theme.Theme == null)
+        foreach (var (source, theme) in _sourceThemes)
         {
+            if ((int)source <= bestPriority)
+                continue;
+
+            bestPriority = (int)source;
+            winner = theme;
+        }
+
+        if (winner == null)
             StopMusic();
-            return;
-        }
-
-        SetMusic(theme.Theme.Value);
+        else
+            SetMusic(winner.Value);
     }
 
     public override void Shutdown()
@@ -346,4 +335,17 @@ public sealed partial class CEAmbientMusicSystem : EntitySystem
 
         ApplyIntensityTargets();
     }
+}
+
+/// <summary>
+/// Controllers that can request an ambient theme, ordered by priority — a higher value wins when more
+/// than one source has a theme set.
+/// </summary>
+public enum CEAmbientMusicSource
+{
+    /// <summary>Map-wide theme from <see cref="Content.Shared._CE.Music.CEMapAmbientMusicThemeComponent"/>.</summary>
+    Map = 0,
+
+    /// <summary>Per-chunk theme; overrides the map theme when set.</summary>
+    Chunk = 1,
 }

@@ -13,11 +13,6 @@
     - type: SunShadow
       alpha: 0.8
       direction: 2, -0.75
-    - type: CEMapStatusEffects
-      effects:
-      - CEStatusEffectPacifism
-    - type: CEMapAmbientMusicTheme
-      theme: MossyTemple
     - type: SunShadowCycle
       offset: 490
     - type: LightCycle
@@ -50,5 +45,5 @@
     chunkType: CEWorldDungeon
   - !type:CEStampStructure # Starting camp in the forest south of the dungeon entrance
     room: CEWorldForest_StartingCamp
-    at: 4,-4,1
+    at: 4,-5,1
 

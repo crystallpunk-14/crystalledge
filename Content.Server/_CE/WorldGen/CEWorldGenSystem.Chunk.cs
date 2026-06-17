@@ -2,10 +2,12 @@ using Content.Server._CE.WorldGen.Generators;
 using Content.Shared._CE.Maths;
 using Content.Shared._CE.WorldGen.Components;
 using Content.Shared._CE.WorldGen.Generators;
+using Content.Shared._CE.WorldGen.Prototypes;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._CE.WorldGen;
 
@@ -80,6 +82,22 @@ public sealed partial class CEWorldGenSystem
             var cx = (int)MathF.Floor(worldPos.X / ChunkSize);
             var cy = (int)MathF.Floor(worldPos.Y / ChunkSize);
             var radius = (int)MathF.Ceiling(LoadRadiusChunks);
+
+            // Fire a location-change event for the chunk the player actually stands in. The chunk type
+            // only exists where the plan painted one; void leaves the last known location untouched.
+            // This loop only detects the transition — resolving any title is the announce system's job.
+            var playerChunk = new Vector3i(cx, cy, FloorDiv(zMap.Depth, ChunkHeight));
+            if (world.ChunkMap.TryGetValue(playerChunk, out var standingType))
+            {
+                var visitor = EnsureComp<CELocationVisitorComponent>(player);
+                if (visitor.CurrentLocation != standingType)
+                {
+                    // Broadcast so the component-filtered announce handler and any future global listeners fire.
+                    var moveEv = new CEMoveToNewLocation(player, visitor.CurrentLocation, standingType);
+                    RaiseLocalEvent(player, ref moveEv, broadcast: true);
+                    visitor.CurrentLocation = standingType;
+                }
+            }
 
             // The player can see down through several z-levels (and one up). Keep every chunk layer in
             // that visible depth range loaded, or the floors below would render as void.
@@ -346,3 +364,15 @@ public sealed partial class CEWorldGenSystem
         set.Add(tile);
     }
 }
+
+/// <summary>
+/// Raised on a player entity when it crosses a chunk boundary into a location (chunk type) different
+/// from the one it was previously standing in. <see cref="From"/> is null for the very first location
+/// a player is resolved into. The worldgen loop only reports the transition; consumers decide what,
+/// if anything, to do with it (e.g. the location-title popup).
+/// </summary>
+[ByRefEvent]
+public readonly record struct CEMoveToNewLocation(
+    EntityUid Player,
+    ProtoId<CEWorldChunkTypePrototype>? From,
+    ProtoId<CEWorldChunkTypePrototype> To);
