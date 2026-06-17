@@ -153,7 +153,8 @@ public sealed partial class CEDungeonOverviewControl : BoxContainer
         LevelName.SetMessage(FormattedMessage.FromMarkupPermissive(
             Loc.GetString("ce-dungeon-overview-no-selection")));
         LevelDesc.SetMessage(FormattedMessage.FromMarkupPermissive(string.Empty));
-        DetailsContainer.RemoveAllChildren();
+        if (!DetailsContainer.Disposed)
+            DetailsContainer.RemoveAllChildren();
     }
 
     private void ShowLevelDetails(string levelId)
