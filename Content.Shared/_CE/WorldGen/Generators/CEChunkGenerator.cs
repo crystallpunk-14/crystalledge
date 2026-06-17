@@ -95,68 +95,56 @@ public readonly record struct CEDecalSpec(
 /// is provided for read-only per-tile queries (e.g. by post-process biome layers) but must not be
 /// used to write tiles.
 /// </summary>
-public readonly struct CETileGenContext
+public readonly struct CETileGenContext(
+    IEntityManager entityManager,
+    Vector3i chunkCoord,
+    Vector2i localTile,
+    int level,
+    Vector2i worldTile,
+    int depth,
+    int seed,
+    Entity<MapGridComponent> grid)
 {
     /// <summary>
     /// Entity manager for read-only lookups.
     /// </summary>
-    public readonly IEntityManager EntityManager;
+    public readonly IEntityManager EntityManager = entityManager;
 
     /// <summary>
     /// Chunk this tile belongs to (x, y, chunk-z).
     /// </summary>
-    public readonly Vector3i ChunkCoord;
+    public readonly Vector3i ChunkCoord = chunkCoord;
 
     /// <summary>
     /// Tile position inside the chunk: 0..<c>CEWorldGenConstants.ChunkSize</c>-1.
     /// </summary>
-    public readonly Vector2i LocalTile;
+    public readonly Vector2i LocalTile = localTile;
 
     /// <summary>
     /// Z-level offset within the chunk: 0..<c>CEWorldGenConstants.ChunkHeight</c>-1.
     /// </summary>
-    public readonly int Level;
+    public readonly int Level = level;
 
     /// <summary>
     /// Absolute tile index on the level grid.
     /// </summary>
-    public readonly Vector2i WorldTile;
+    public readonly Vector2i WorldTile = worldTile;
 
     /// <summary>
     /// Absolute world depth of this level.
     /// </summary>
-    public readonly int Depth;
+    public readonly int Depth = depth;
 
     /// <summary>
     /// World seed.
     /// </summary>
-    public readonly int Seed;
+    public readonly int Seed = seed;
 
     /// <summary>
     /// The level grid this tile lives on. Passed to post-process layers (e.g. biome system) for
     /// read-only per-tile queries; generators themselves must not write to the grid directly.
     /// </summary>
-    public readonly Entity<MapGridComponent> Grid;
-
-    public CETileGenContext(
-        IEntityManager entityManager,
-        Vector3i chunkCoord,
-        Vector2i localTile,
-        int level,
-        Vector2i worldTile,
-        int depth,
-        int seed,
-        Entity<MapGridComponent> grid)
-    {
-        EntityManager = entityManager;
-        ChunkCoord = chunkCoord;
-        LocalTile = localTile;
-        Level = level;
-        WorldTile = worldTile;
-        Depth = depth;
-        Seed = seed;
-        Grid = grid;
-    }
+    public readonly Entity<MapGridComponent> Grid = grid;
 }
 
 /// <summary>
