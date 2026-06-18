@@ -1,0 +1,19 @@
+- type: ceRarity
+  id: Uncommon
+  name: ce-rarity-uncommon
+  color: "#81d884"
+
+- type: ceRarity
+  id: Rare
+  name: ce-rarity-rare
+  color: "#2196F3"
+
+- type: ceRarity
+  id: Epic
+  name: ce-rarity-epic
+  color: "#be46d3"
+
+- type: ceRarity
+  id: Legendary
+  name: ce-rarity-legendary
+  color: "#FFB300"

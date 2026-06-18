@@ -1,11 +1,14 @@
 using System.Numerics;
 using Content.Client.Items.Systems;
+using Content.Shared._CE.Rarity.Components;
+using Content.Shared._CE.Rarity.Prototypes;
 using Content.Shared.Item;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.UserInterface.Systems.Storage.Controls;
 
@@ -22,6 +25,10 @@ public sealed class ItemGridPiece : Control, IEntityControl
 
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPiecePressed;
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPieceUnpressed;
+
+    // CrystallEdge: cached rarity color for border tint
+    private Color? _rarityColor;
+    // CrystallEdge end
 
     #region Textures
     private readonly string _centerTexturePath = "Storage/piece_center";
@@ -62,6 +69,15 @@ public sealed class ItemGridPiece : Control, IEntityControl
         MouseFilter = MouseFilterMode.Stop;
 
         TooltipSupplier = SupplyTooltip;
+
+        // CrystallEdge: resolve rarity border color once on creation
+        if (_entityManager.TryGetComponent<CERarityComponent>(entity.Owner, out var rarityComp))
+        {
+            var protoManager = IoCManager.Resolve<IPrototypeManager>();
+            if (protoManager.TryIndex(rarityComp.Rarity, out CERarityPrototype? rarityProto))
+                _rarityColor = rarityProto.Color;
+        }
+        // CrystallEdge end
 
         OnThemeUpdated();
     }
@@ -117,7 +133,13 @@ public sealed class ItemGridPiece : Control, IEntityControl
 
         var hovering = !_storageController.IsDragging && UserInterfaceManager.CurrentlyHovered == this;
         //yeah, this coloring is kinda hardcoded. deal with it. B)
-        Color? colorModulate = hovering  ? null : Color.FromHex("#a8a8a8");
+        // CrystallEdge: use rarity color as border tint when present
+        Color? colorModulate;
+        if (_rarityColor.HasValue)
+            colorModulate = _rarityColor.Value;
+        else
+            colorModulate = hovering ? null : Color.FromHex("#a8a8a8");
+        // CrystallEdge end
 
         var marked = Marked != null;
         Vector2i? maybeMarkedPos = null;
