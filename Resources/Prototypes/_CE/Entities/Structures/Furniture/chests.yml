@@ -91,3 +91,63 @@
     sprite: _CE/Structures/Furniture/Chests/wooden_old.rsi
   - type: Icon
     sprite: _CE/Structures/Furniture/Chests/wooden_old.rsi
+
+# Shadow entity spawned per-player when they open a meta chest.
+# Invisible, no physics, save: false so it never persists to map.
+- type: entity
+  id: CEMetaChestPersonal
+  save: false
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CEMetaChestPersonal
+  - type: Storage
+    grid:
+    - 0,0,7,7
+    maxItemSize: Large
+    storageOpenSound: /Audio/Effects/closetopen.ogg
+    storageCloseSound: /Audio/Effects/closetclose.ogg
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+
+# Real meta chest on the map — interaction point only, no actual storage logic.
+- type: entity
+  parent: BaseStructure
+  id: CEMetaChest
+  name: meta chest
+  description: A chest that remembers its contents between sessions.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Transform
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.29"
+        density: 500
+        mask:
+        - SmallMobMask
+        layer:
+        - MachineLayer
+  - type: Sprite
+    offset: 0,0.3
+    noRot: true
+    color: "#a11cad"
+    sprite: _CE/Structures/Furniture/Chests/gold.rsi
+    layers:
+    - state: base
+    - state: closed
+  - type: Icon
+    sprite: _CE/Structures/Furniture/Chests/gold.rsi
+    state: icon
+  - type: InteractionOutline
+  - type: CEMetaChest
+    chestSlot: 0

@@ -8,7 +8,7 @@ import os
 import psycopg2
 from uuid import UUID
 
-LATEST_DB_MIGRATION = "20260409224308_BarkSpeechProfile"
+LATEST_DB_MIGRATION = "20260618095155_CEAddMetaChestItems"
 
 def main():
     parser = argparse.ArgumentParser()

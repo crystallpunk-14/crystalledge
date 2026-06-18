@@ -15,7 +15,7 @@ namespace Content.Server.Database.Migrations.Sqlite
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.6");
 
             modelBuilder.Entity("Content.Server.Database.Admin", b =>
                 {
@@ -963,6 +963,46 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("player_achievement", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.PlayerMetaChestItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("player_meta_chest_item_id");
+
+                    b.Property<int>("ChestSlot")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("chest_slot");
+
+                    b.Property<byte>("GridRotation")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("grid_rotation");
+
+                    b.Property<int>("GridX")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("grid_x");
+
+                    b.Property<int>("GridY")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("grid_y");
+
+                    b.Property<string>("ItemYaml")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("item_yaml");
+
+                    b.Property<Guid>("PlayerUserId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("PK_player_meta_chest_item");
+
+                    b.HasIndex("PlayerUserId", "ChestSlot");
+
+                    b.ToTable("player_meta_chest_item", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.Preference", b =>
                 {
                     b.Property<int>("Id")
@@ -1840,6 +1880,19 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Player");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.PlayerMetaChestItem", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany("PlayerMetaChestItems")
+                        .HasForeignKey("PlayerUserId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_player_meta_chest_item_player_player_user_id");
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("Content.Server.Database.Profile", b =>
                 {
                     b.HasOne("Content.Server.Database.Preference", "Preference")
@@ -2049,6 +2102,8 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("JobWhitelists");
 
                     b.Navigation("PlayerAchievements");
+
+                    b.Navigation("PlayerMetaChestItems");
                 });
 
             modelBuilder.Entity("Content.Server.Database.Preference", b =>

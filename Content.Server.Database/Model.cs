@@ -44,6 +44,7 @@ namespace Content.Server.Database
         public DbSet<PlayTime> PlayTime { get; set; } = default!;
         public DbSet<UploadedResourceLog> UploadedResourceLog { get; set; } = default!;
         public DbSet<PlayerAchievement> PlayerAchievement { get; set; } = default!; //CrystallEdge achievements
+        public DbSet<PlayerMetaChestItem> PlayerMetaChestItem { get; set; } = default!; //CrystallEdge meta chest
         public DbSet<AdminNote> AdminNotes { get; set; } = null!;
         public DbSet<AdminWatchlist> AdminWatchlists { get; set; } = null!;
         public DbSet<AdminMessage> AdminMessages { get; set; } = null!;
@@ -155,6 +156,18 @@ namespace Content.Server.Database
                 .HasPrincipalKey(p => p.UserId)
                 .IsRequired();
             //CrystallEdge achievements end
+
+            //CrystallEdge meta chest
+            modelBuilder.Entity<PlayerMetaChestItem>()
+                .HasIndex(p => new { p.PlayerUserId, p.ChestSlot });
+
+            modelBuilder.Entity<PlayerMetaChestItem>()
+                .HasOne(p => p.Player)
+                .WithMany(p => p.PlayerMetaChestItems)
+                .HasForeignKey(p => p.PlayerUserId)
+                .HasPrincipalKey(p => p.UserId)
+                .IsRequired();
+            //CrystallEdge meta chest end
 
             modelBuilder.Entity<Round>()
                 .HasIndex(round => round.StartDate);
@@ -540,6 +553,7 @@ namespace Content.Server.Database
         public List<Ban> AdminServerBansLastEdited { get; set; } = null!;
         public List<RoleWhitelist> JobWhitelists { get; set; } = null!;
         public List<PlayerAchievement> PlayerAchievements { get; set; } = null!; //CrystallEdge achievements
+        public List<PlayerMetaChestItem> PlayerMetaChestItems { get; set; } = null!; //CrystallEdge meta chest
     }
 
     [Table("whitelist")]
@@ -1076,19 +1090,4 @@ namespace Content.Server.Database
         public float Score { get; set; }
     }
 
-    //CrystallEdge achievements
-    [Table("player_achievement")]
-    public sealed class PlayerAchievement
-    {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [Required, ForeignKey("Player")]
-        public Guid PlayerUserId { get; set; }
-        public Player Player { get; set; } = default!;
-
-        [Required, Column("proto_id")]
-        public string ProtoId { get; set; } = string.Empty;
-    }
-    //CrystallEdge achievements end
 }

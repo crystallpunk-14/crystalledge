@@ -1637,6 +1637,42 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         //CrystallEdge achievements end
         #endregion
 
+        #region CrystallEdge Meta Chest
+        //CrystallEdge meta chest
+
+        public async Task<List<PlayerMetaChestItem>> GetMetaChestItems(Guid userId, int chestSlot)
+        {
+            await using var db = await GetDb();
+
+            return await db.DbContext.PlayerMetaChestItem
+                .Where(w => w.PlayerUserId == userId && w.ChestSlot == chestSlot)
+                .ToListAsync();
+        }
+
+        public async Task SaveMetaChestItems(Guid userId, int chestSlot, List<PlayerMetaChestItem> items)
+        {
+            await using var db = await GetDb();
+
+            var existing = await db.DbContext.PlayerMetaChestItem
+                .Where(w => w.PlayerUserId == userId && w.ChestSlot == chestSlot)
+                .ToListAsync();
+
+            db.DbContext.PlayerMetaChestItem.RemoveRange(existing);
+
+            foreach (var item in items)
+            {
+                item.Id = 0;
+                item.PlayerUserId = userId;
+                item.ChestSlot = chestSlot;
+                db.DbContext.PlayerMetaChestItem.Add(item);
+            }
+
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        //CrystallEdge meta chest end
+        #endregion
+
         # region IPIntel
 
         public async Task<bool> UpsertIPIntelCache(DateTime time, IPAddress ip, float score)

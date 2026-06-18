@@ -316,6 +316,14 @@ namespace Content.Server.Database
 
         #endregion
 
+        #region CrystallEdge Meta Chest
+
+        Task<List<PlayerMetaChestItem>> GetMetaChestItems(Guid userId, int chestSlot);
+
+        Task SaveMetaChestItems(Guid userId, int chestSlot, List<PlayerMetaChestItem> items);
+
+        #endregion
+
         #region IPintel
 
         Task<bool> UpsertIPIntelCache(DateTime time, IPAddress ip, float score);
@@ -1007,6 +1015,20 @@ namespace Content.Server.Database
             return RunDbCommand(() => _db.GetAchievementPercentages());
         }
         //CrystallEdge achievements end
+
+        //CrystallEdge meta chest
+        public Task<List<PlayerMetaChestItem>> GetMetaChestItems(Guid userId, int chestSlot)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetMetaChestItems(userId, chestSlot));
+        }
+
+        public Task SaveMetaChestItems(Guid userId, int chestSlot, List<PlayerMetaChestItem> items)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SaveMetaChestItems(userId, chestSlot, items));
+        }
+        //CrystallEdge meta chest end
 
         public Task<bool> UpsertIPIntelCache(DateTime time, IPAddress ip, float score)
         {
