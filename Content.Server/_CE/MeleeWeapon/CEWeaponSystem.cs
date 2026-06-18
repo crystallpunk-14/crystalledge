@@ -38,7 +38,7 @@ public sealed partial class CEWeaponSystem : CESharedWeaponSystem
     /// Damage comes from the predicted <see cref="CEWeaponArcHitEvent"/> handled in the shared system.
     /// For NPCs (no attached session), apply damage directly since there is no client.
     /// </summary>
-    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot)
+    public override void HandleArcAttackHit(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, string? effectSlot, float power = 1f)
     {
         if (HasComp<ActorComponent>(user))
         {
@@ -49,7 +49,7 @@ public sealed partial class CEWeaponSystem : CESharedWeaponSystem
         }
 
         TryAttack(user, weapon, targets);
-        ApplyArcEffects(user, weapon, targets, effectSlot);
+        ApplyArcEffects(user, weapon, targets, effectSlot, power);
     }
 
     protected override List<EntityUid> ValidateArcTargets(EntityUid user, Entity<CEWeaponComponent> weapon, List<EntityUid> targets, ICommonSession? session)
@@ -84,22 +84,34 @@ public sealed partial class CEWeaponSystem : CESharedWeaponSystem
     }
 
     /// <summary>
-    /// Computes the maximum effective range (range * 2) from all WeaponArcAttack effects
-    /// defined in the weapon's effect slots.
+    /// Computes the maximum effective range (base range * max multiplier * 2) from all WeaponArcAttack
+    /// effects defined in the weapon's animation keyframes.
     /// </summary>
     private float GetMaxEffectiveRange(Entity<CEWeaponComponent> weapon)
     {
-        var maxRange = 0f;
+        var maxMultiplier = 0f;
 
-        foreach (var effects in weapon.Comp.EffectSlots.Values)
+        foreach (var entries in weapon.Comp.Animations.Values)
         {
-            foreach (var effect in effects)
+            foreach (var entry in entries)
             {
-                if (effect is WeaponArcAttack arc && arc.Range > maxRange)
-                    maxRange = arc.Range;
+                if (!_proto.TryIndex(entry.Anim, out var anim))
+                    continue;
+
+                foreach (var effects in anim.Events.Values)
+                {
+                    foreach (var effect in effects)
+                    {
+                        if (effect is WeaponArcAttack arc && arc.RangeMultiplier > maxMultiplier)
+                            maxMultiplier = arc.RangeMultiplier;
+                    }
+                }
             }
         }
 
-        return maxRange > 0f ? maxRange * 2 : FallbackRange;
+        if (maxMultiplier <= 0f)
+            return weapon.Comp.Range > 0f ? weapon.Comp.Range * 2 : FallbackRange;
+
+        return weapon.Comp.Range * maxMultiplier * 2;
     }
 }

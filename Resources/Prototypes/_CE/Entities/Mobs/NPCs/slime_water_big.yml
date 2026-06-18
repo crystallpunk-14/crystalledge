@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent:
   - BaseMob
   - CEMobDamageable
@@ -58,7 +58,7 @@
     - !type:AreaEffect
       range: 1
       effects:
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 1
   - type: CEGOAP
 
@@ -95,6 +95,7 @@
     baseSprintSpeed: 0.75
   - type: CEWeapon
     spriteRotation: -90
+    range: 0.9
     effectSlots:
       OnHit:
       - !type:CETileAffectArea
@@ -103,7 +104,6 @@
         radius: 2
         maxStacks: 5
       - !type:WeaponArcAttack
-        range: 0.9
         arcWidth: 360
         effects:
         - !type:Damage
@@ -111,7 +111,7 @@
           damage:
             types:
               Physical: 15
-        - !type:ThrowFromUser
+        - !type:ThrowFrom
           distance: 1
     animations:
       Primary:

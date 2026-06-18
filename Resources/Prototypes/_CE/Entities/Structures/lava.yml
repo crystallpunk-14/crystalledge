@@ -54,6 +54,15 @@
       statusEffect: CEStatusEffectFire
       amount: 3
       max: 30
+    - !type:Damage
+      attackType: TileEffect
+      damage:
+        types:
+          Fire: 10
+  - type: CEFallingDamage
+    damage:
+      types:
+        Fire: 10
 
 - type: entity
   parent: CELava

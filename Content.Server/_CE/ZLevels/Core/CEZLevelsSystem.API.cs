@@ -78,6 +78,24 @@ public sealed partial class CEZLevelsSystem
         return true;
     }
 
+    /// <summary>
+    /// Returns the map entity at a specific depth within a z-network, or false if none exists.
+    /// </summary>
+    [PublicAPI]
+    public bool TryGetMapAtDepth(Entity<CEZLevelsNetworkComponent?> network, int depth, out EntityUid mapUid)
+    {
+        mapUid = EntityUid.Invalid;
+
+        if (!Resolve(network, ref network.Comp, false) ||
+            !network.Comp.ZLevels.TryGetValue(depth, out var uid) ||
+            uid is not { } validUid)
+            return false;
+
+        mapUid = validUid;
+        return true;
+    }
+
+    [PublicAPI]
     public bool TryAddMapsIntoZNetwork(Entity<CEZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
     {
         var success = true;

@@ -1,0 +1,98 @@
+- type: entity
+  parent: MarkerBase
+  id: CEMobDarkSoulTraderSpawner
+  name: Dark soul trader marker
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: female2
+      sprite: _CE/Mobs/dark_souls.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobDarkSoulTrader
+
+- type: entity
+  parent: CEMobDarkSoul
+  id: CEMobDarkSoulTrader
+  suffix: Trader
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAP
+    goals:
+    - desiredState:
+        TradingSlotRestored: true
+      priority: 1
+    actions:
+    - !type:CEGOAPUseAction
+      selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
+      preconditions:
+        AtInactiveSlot: true
+      effects:
+        TradingSlotRestored: true
+      cost: 1
+      actionPrototype: CEActionRestoreTradingSlot
+    - !type:CEGOAPMoveToTargetAction
+      selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
+      preconditions:
+        InactiveTradingSlotVisible: true
+        SoulIsSpeaking: false
+      effects:
+        AtInactiveSlot: true
+      cost: 2
+    - !type:CEGOAPExploreAction
+      preconditions:
+        SoulIsSpeaking: false
+      effects:
+        InactiveTradingSlotVisible: true
+        TradingSlotRestored: true
+      cost: 5
+      exploreRadius: 3
+  - type: CEDarkSoulSpeech
+  - type: CEGOAPHasInactiveTradingSlotSensor
+    conditionKey: InactiveTradingSlotVisible
+    scanRadius: 15
+  - type: CEGOAPRangeToTargetSensor
+    entries:
+    - conditionKey: AtInactiveSlot
+      selector: !type:CEGOAPSelectorNearestInactiveTradingSlot
+      range: 1.5
+
+# Trading slot restock action
+
+- type: entity
+  id: CEActionRestoreTradingSlot
+  name: restock
+  description: Replenishes an empty trading slot with a new offer.
+  categories: [ ForkFiltered ]
+  components:
+  - type: Action
+    useDelay: 5
+  - type: TargetAction
+    range: 1.5
+    interactOnMiss: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - CETradingSlot
+    event: !type:CEEntityTargetActionAnimationEvent
+      animation: CEAnimationRestoreTradingSlot
+
+- type: entityEffectAnimation
+  id: CEAnimationRestoreTradingSlot
+  movementSpeed: 0
+  duration: 1.5
+  events:
+    0:
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectAddCurse
+    - !type:PlaySound
+      sound:
+        path: /Audio/_CE/Effects/coins1.ogg
+        params:
+          pitch: 0.5
+          variation: 0.01
+    0.2:
+    - !type:RefreshTradingSlot

@@ -63,7 +63,7 @@ public sealed partial class TagResource : CEWorkbenchCraftRequirement
         if (!protoManager.TryIndex(Tag, out var indexedTag))
             return "Error tag";
 
-        return $"{Loc.GetString(indexedTag.Name)} x{Count}";
+        return $"{Loc.GetString(indexedTag.Name ?? "Unnamed tag")} x{Count}";
     }
 
     public override SpriteSpecifier? GetRequirementTexture(IPrototypeManager protoManager)

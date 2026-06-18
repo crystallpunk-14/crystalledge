@@ -21,8 +21,7 @@
     - coin9
     - coin10
   - type: Appearance
-  - type: StaticPrice
-    price: 0
+  - type: CECurrency
   - type: CECurrencyExaminable
   - type: EmitSoundOnLand
     sound:
@@ -36,6 +35,37 @@
   - type: CEEmitSoundOnStackMerge
     sound:
       collection: CECoins
+  - type: Tag
+    tags:
+    - CECoin
+  - type: CECollectOnContact
+    storageTag: CEWallet
+  - type: CEShiny
+    radius: 0.2
+    minFrequency: 2
+    maxFrequency: 6
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        hard: false
+        mask:
+        - MobLayer
+        layer:
+        - MobLayer
+      fix2: # Hard collision to prevent flying throught walls
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 50
+        mask:
+        - LowImpassable
+  - type: CENavIgnore
+  - type: CollisionWake
+    enabled: false
 
 # Copper
 
@@ -54,8 +84,10 @@
   - type: Stack
     stackType: CECoinCopper
     count: 1
-  - type: StackPrice
+  - type: CEStackPrice
     price: 1
+  - type: CEShiny
+    effect: CEEffectCoinCopper
 
 - type: entity
   id: CECoinCopper5
@@ -94,8 +126,10 @@
   - type: Stack
     stackType: CECoinSilver
     count: 1
-  - type: StackPrice
+  - type: CEStackPrice
     price: 10
+  - type: CEShiny
+    effect: CEEffectCoinSilver
 
 - type: entity
   id: CECoinSilver5
@@ -134,8 +168,10 @@
   - type: Stack
     stackType: CECoinGold
     count: 1
-  - type: StackPrice
+  - type: CEStackPrice
     price: 100
+  - type: CEShiny
+    effect: CEEffectCoinGold
 
 - type: entity
   id: CECoinGold5
@@ -174,8 +210,10 @@
   - type: Stack
     stackType: CECoinPlatinum
     count: 1
-  - type: StackPrice
+  - type: CEStackPrice
     price: 1000
+  - type: CEShiny
+    effect: CEEffectCoinPlatinim
 
 - type: entity
   id: CECoinPlatinum5

@@ -1,7 +1,7 @@
-using Content.Shared._CE.MeleeWeapon;
+using Content.Shared._CE.Animation.Item.Components;
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CE.Animation.Item.Components;
+namespace Content.Shared._CE.MeleeWeapon.Components;
 
 /// <summary>
 /// Replaces attack animations for the item being used if the item is held in both hands (wielded).

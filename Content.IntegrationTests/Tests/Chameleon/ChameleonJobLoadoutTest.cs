@@ -13,11 +13,11 @@ namespace Content.IntegrationTests.Tests.Chameleon;
 /// </summary>
 public sealed class ChameleonJobLoadoutTest : InteractionTest
 {
+    /* CrystallEdge: we dont need chameleon outfits
     private static readonly List<ProtoId<JobPrototype>> JobBlacklist =
     [
 
     ];
-
     [Test]
     public Task CheckAllJobs()
     {
@@ -65,4 +65,5 @@ public sealed class ChameleonJobLoadoutTest : InteractionTest
         return job.StartingGear != null && ProtoMan.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID));
     }
 
+    */
 }

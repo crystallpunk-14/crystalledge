@@ -4,7 +4,7 @@
   - CEConsumablePotionBase
   - CEPotionStar
   name: acceleration potion
-  description: Increases your movement speed for a short duration.
+  description: A crackling golden brew that floods the body with energy. Greatly increases movement speed, restores stamina instantly.
   components:
   - type: Sprite
     layers:
@@ -15,8 +15,10 @@
     effects:
     - !type:ApplyStatusEffectStack
       statusEffect: CEStatusEffectAcceleration
-      amount: 6
+      amount: 10
       max: 10
+    - !type:RestoreStamina
+      amount: 100
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
@@ -30,8 +32,10 @@
       effects:
       - !type:ApplyStatusEffectStack
         statusEffect: CEStatusEffectAcceleration
-        amount: 3
+        amount: 5
         max: 10
+      - !type:RestoreStamina
+        amount: 50
       - !type:SpawnEntity
         spawns:
         - CEEffectHealingGeneric

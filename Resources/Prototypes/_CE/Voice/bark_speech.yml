@@ -488,4 +488,55 @@
   audioParams:
     volume: 10
 
+- type: barkSpeech
+  id: Flegmant2
+  saySound:
+    path: /Audio/_CE/Voice/flegmant2.ogg
+  askSound:
+    path: /Audio/_CE/Voice/flegmant2_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/flegmant2_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
 
+- type: barkSpeech
+  id: Flegmant3
+  saySound:
+    path: /Audio/_CE/Voice/flegmant3.ogg
+  askSound:
+    path: /Audio/_CE/Voice/flegmant3_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/flegmant3_e.ogg
+  syllableInterval: 0.09
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: Flegmant4
+  saySound:
+    path: /Audio/_CE/Voice/flegmant4.ogg
+  askSound:
+    path: /Audio/_CE/Voice/flegmant4_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/flegmant4_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 2
+  audioParams:
+    volume: 10
+
+- type: barkSpeech
+  id: DarkSoul
+  selectable: false
+  saySound:
+    path: /Audio/_CE/Voice/Dark/dark.ogg
+  askSound:
+    path: /Audio/_CE/Voice/Dark/dark_a.ogg
+  exclaimSound:
+    path: /Audio/_CE/Voice/Dark/dark_e.ogg
+  syllableInterval: 0.12
+  charsPerSyllable: 3
+  audioParams:
+    volume: -6

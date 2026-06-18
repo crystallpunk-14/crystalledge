@@ -14,3 +14,4 @@
   #- type: CEWallmount
   - type: Physics
     canCollide: false
+  - type: Fixtures

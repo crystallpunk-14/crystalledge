@@ -1,7 +1,7 @@
 - type: entity
-  parent: CEChestWoodenOld
   id: CEChestWoodenOldFilled
   suffix: Filled
+  parent: CEChestWoodenOld
   components:
   - type: EntityTableContainerFill
     containers:
@@ -28,6 +28,10 @@
           - !type:NestedSelector
             tableId: CERandomCrayon
             weight: 0.3
+        - !type:CEMoneySelector
+          min: 0
+          max: 5
+          largeCoinChance: 0.6
 
 - type: entity
   parent: CEChestWooden
@@ -43,10 +47,10 @@
           rolls: !type:RangeNumberSelector
           prob: 0.5
           children:
-          - !type:NestedSelector
-            tableId: CERandomWeapon
-          - !type:NestedSelector
-            tableId: CEAccessories
+          - !type:CELootCategorySelector
+            tags:
+            - CEWeapon
+            - CEAccessory
           - !type:NestedSelector
             tableId: CECommonArmor
             weight: 0.5
@@ -69,6 +73,10 @@
           - !type:NestedSelector
             tableId: CERandomCrayon
             weight: 0.3
+        - !type:CEMoneySelector
+          min: 5
+          max: 15
+          largeCoinChance: 0.7
 
 - type: entity
   parent: CEChestGold
@@ -84,10 +92,10 @@
           rolls: !type:RangeNumberSelector
             range: 2, 3
           children:
-          - !type:NestedSelector
-            tableId: CERandomWeapon
-          - !type:NestedSelector
-            tableId: CEAccessories
+          - !type:CELootCategorySelector
+            tags:
+            - CEWeapon
+            - CEAccessory
           - !type:NestedSelector
             tableId: CECommonArmor
             weight: 0.5
@@ -110,3 +118,7 @@
           - !type:NestedSelector
             tableId: CERandomCrayon
             weight: 0.3
+        - !type:CEMoneySelector
+          min: 15
+          max: 50
+          largeCoinChance: 0.8

@@ -1,0 +1,78 @@
+- type: entity
+  id: CEEffectCoinBase
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  abstract: true
+  name: coin sparkle
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    sprite: _CE/Effects/sparkle_coin.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+  - type: TimedDespawn
+    lifetime: 1.5
+
+- type: entity
+  id: CEEffectCoinPlatinim
+  parent: CEEffectCoinBase
+  categories: [ ForkFiltered ]
+  suffix: Platinum
+  save: false
+  components:
+  - type: Sprite
+    color: "#e5e4e2"
+  - type: PointLight
+    color: "#e5e4e2"
+
+- type: entity
+  id: CEEffectCoinGold
+  parent: CEEffectCoinBase
+  categories: [ ForkFiltered ]
+  suffix: Gold
+  save: false
+  components:
+  - type: Sprite
+    color: "#cb9c36"
+  - type: PointLight
+    color: "#cb9c36"
+
+- type: entity
+  id: CEEffectCoinSilver
+  parent: CEEffectCoinBase
+  categories: [ ForkFiltered ]
+  suffix: Silver
+  save: false
+  components:
+  - type: Sprite
+    color: "#8e8e8e"
+  - type: PointLight
+    color: "#8e8e8e"
+
+- type: entity
+  id: CEEffectCoinCopper
+  parent: CEEffectCoinBase
+  categories: [ ForkFiltered ]
+  suffix: Copper
+  save: false
+  components:
+  - type: Sprite
+    color: "#d36630"
+  - type: PointLight
+    color: "#d36630"

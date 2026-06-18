@@ -1,3 +1,4 @@
+#MARK: Light 1
 - type: entityEffectAnimation
   id: DaggerAttackLight1
   movementSpeed: 0.3
@@ -42,8 +43,14 @@
         scale: 1, -1
     0.1:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
+#MARK: Light 2
 - type: entityEffectAnimation
   id: DaggerAttackLight2
   movementSpeed: 0.3
@@ -88,8 +95,14 @@
         scale: 1, 1
     0.1:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
+#MARK: Self Cut
 - type: entityEffectAnimation
   id: SelfCut
   movementSpeed: 0.6
@@ -124,9 +137,15 @@
         easing: QuadOut
     0.39:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnHeavySwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      rangeMultiplier: 1.5
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
-
+#MARK: Heavy 1
 - type: entityEffectAnimation
   id: DaggerAttackHeavy
   movementSpeed: 0.5
@@ -179,4 +198,10 @@
         path: /Audio/_CE/Effects/Weapon/slash_sword1.ogg
     0.55:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      rangeMultiplier: 1.5
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

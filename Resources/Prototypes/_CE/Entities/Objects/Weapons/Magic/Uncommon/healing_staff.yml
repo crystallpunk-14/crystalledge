@@ -1,0 +1,80 @@
+- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponMagicStaffHealing
+  name: healing staff
+  description: A staff imbued with healing magic. Restores health to anything it hit.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/healing_staff.rsi
+    layers:
+    - state: icon
+    - state: orb
+      shader: unshaded
+  - type: CEWeapon
+    effectSlots:
+      OnSwing:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicHealing
+        projectileCount: 3
+        projectileSpeed: 3
+        projectileMaxSpeed: 7
+        spread: 0.2
+      - !type:Damage
+        attackType: Melee
+        effectTarget: Used
+        damage:
+          types:
+            Physical: 1
+      OnHeavySwing:
+      - !type:Heal
+        amount: 9
+      - !type:SpawnEntity
+        spawns:
+        - CEEffectHealingGeneric
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+      - anim: StaffAttackLight2
+      Secondary:
+      - anim: SelfCut
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+  - type: CEWeaponManaCost
+    costs:
+      Primary: 10
+      Secondary: 10
+  - type: CEMagicEnergyContainer
+    maxEnergy: 60
+  - type: CEMagicEnergyExaminable
+  - type: Clothing
+    slots:
+    - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5
+
+- type: entity
+  id: CEProjectileMagicHealing
+  name: healing energy bolt
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+      color: "#30f5b7"
+  - type: PointLight
+    color: "#30f5b7"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:Heal
+      amount: 3
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric

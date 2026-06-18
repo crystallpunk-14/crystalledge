@@ -20,7 +20,8 @@ public sealed partial class CEStunEffectSystem : CEEntityEffectSystem<Stun>
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _stun.TryKnockdown(entity, args.Effect.Duration, drop: args.Effect.DropItems);
-        _stun.TryAddStunDuration(entity, args.Effect.Duration);
+        var duration = args.Effect.Duration * args.Args.Power;
+        _stun.TryKnockdown(entity, duration, drop: args.Effect.DropItems);
+        _stun.TryAddStunDuration(entity, duration);
     }
 }

@@ -1,6 +1,8 @@
 using System.Numerics;
+using Content.Server._CE.WorldGen.Generators;
 using Content.Server.Procedural;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.WorldGen.Generators;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Decals;
 using Content.Shared.Maps;
@@ -22,7 +24,9 @@ public sealed partial class CEDungeonSystem
     public CEDungeonRoom3DPrototype? GetRoomPrototype(Random random,
         Vector2i? minSize = null,
         Vector2i? maxSize = null,
-        ProtoId<CERoomTypePrototype>? roomType = null)
+        ProtoId<CERoomTypePrototype>? roomType = null,
+        int? minHeight = null,
+        int? maxHeight = null)
     {
         _availableRooms.Clear();
 
@@ -32,6 +36,12 @@ public sealed partial class CEDungeonSystem
                 continue;
 
             if (maxSize is not null && (proto.Size.X > maxSize.Value.X || proto.Size.Y > maxSize.Value.Y))
+                continue;
+
+            if (minHeight is not null && proto.Height < minHeight.Value)
+                continue;
+
+            if (maxHeight is not null && proto.Height > maxHeight.Value)
                 continue;
 
             if (roomType != null && proto.RoomType != roomType)
@@ -221,6 +231,132 @@ public sealed partial class CEDungeonSystem
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// Reads an atlas room into a rotated, read-only <see cref="CERoomSnapshot"/> (tiles + one entity + one
+    /// decal per cell, all rotated by <paramref name="rotationSteps"/> × 90° CCW). Nothing is written to the
+    /// world — used by the herringbone world generator to stamp room halves per-tile.
+    /// </summary>
+    public CERoomSnapshot? ReadRoomRegion(CEDungeonRoom3DPrototype room, int rotationSteps)
+    {
+        if (!_proto.Resolve(room.ZLevelMap, out var indexedZMap))
+            return null;
+
+        var k = ((rotationSteps % 4) + 4) % 4;
+        var w = room.Size.X;
+        var h = room.Size.Y;
+        var rotatedSize = k % 2 == 0 ? new Vector2i(w, h) : new Vector2i(h, w);
+        // Rotation is clockwise by k*90 (matches Rotate/RotateWithinTile below): a CW quarter turn maps
+        // east->south, i.e. -90 degrees in Robust's CCW-positive angles.
+        var angle = Angle.FromDegrees(-90 * k);
+
+        var snapshot = new CERoomSnapshot(rotatedSize, room.Height);
+        var bounds = new Box2(room.Offset, room.Offset + room.Size);
+
+        for (var level = 0; level < room.Height && level < indexedZMap.Maps.Count; level++)
+        {
+            var roomMap = GetOrCreateTemplate(indexedZMap.Maps[level]);
+            var templateMapUid = _maps.GetMapOrInvalid(roomMap);
+            var templateGrid = Comp<MapGridComponent>(templateMapUid);
+            var cells = snapshot.Cells[level];
+
+            // Tiles.
+            for (var x = 0; x < w; x++)
+            {
+                for (var y = 0; y < h; y++)
+                {
+                    var indices = new Vector2i(x + room.Offset.X, y + room.Offset.Y);
+                    var tileRef = _maps.GetTileRef(templateMapUid, templateGrid, indices);
+                    if (tileRef.Tile.IsEmpty)
+                        continue;
+
+                    if (room.IgnoreTile is not null
+                        && _maps.TryGetTileDef(templateGrid, indices, out var ignoreDef)
+                        && room.IgnoreTile == ignoreDef.ID)
+                    {
+                        continue;
+                    }
+
+                    var (rx, ry) = Rotate(x, y, w, h, k);
+                    cells[rx + ry * rotatedSize.X].Tile = _tileDefManager[tileRef.Tile.TypeId].ID;
+                }
+            }
+
+            // Entities (one per cell; a void cell keeps nothing).
+            foreach (var templateEnt in _lookup.GetEntitiesIntersecting(templateMapUid, bounds, LookupFlags.Uncontained))
+            {
+                var xform = _xformQuery.GetComponent(templateEnt);
+                var cell = xform.LocalPosition.Floored() - room.Offset;
+                if (cell.X < 0 || cell.X >= w || cell.Y < 0 || cell.Y >= h)
+                    continue;
+
+                if (_metaQuery.GetComponent(templateEnt).EntityPrototype?.ID is not { } proto)
+                    continue;
+
+                var (rx, ry) = Rotate(cell.X, cell.Y, w, h, k);
+                var idx = rx + ry * rotatedSize.X;
+                if (cells[idx].Tile is null || cells[idx].Entity is not null)
+                    continue;
+
+                cells[idx].Entity = new CEEntitySpec(proto, xform.LocalRotation + angle, xform.Anchored);
+            }
+
+            // Decals (one per cell).
+            if (TryComp<DecalGridComponent>(templateMapUid, out var loadedDecals))
+            {
+                foreach (var (_, decal) in _decals.GetDecalsIntersecting(templateMapUid, bounds, loadedDecals))
+                {
+                    var cellFloor = decal.Coordinates.Floored();
+                    var cell = cellFloor - room.Offset;
+                    if (cell.X < 0 || cell.X >= w || cell.Y < 0 || cell.Y >= h)
+                        continue;
+
+                    var (rx, ry) = Rotate(cell.X, cell.Y, w, h, k);
+                    var idx = rx + ry * rotatedSize.X;
+                    if (cells[idx].Tile is null || cells[idx].Decal is not null)
+                        continue;
+
+                    var within = RotateWithinTile(decal.Coordinates - (Vector2)cellFloor, k);
+                    var decalAngle = (decal.Angle + angle).Reduced();
+                    cells[idx].Decal = new CEDecalSpec(decal.Id, within, decalAngle, decal.Color, decal.Cleanable);
+                }
+            }
+        }
+
+        return snapshot;
+    }
+
+    /// <summary>
+    /// Maps an unrotated room cell to its position after <paramref name="k"/> × 90° clockwise rotation.
+    /// Linear part is (x,y) -> (y,-x) per quarter turn; entity/decal angles use the matching -90*k.
+    /// </summary>
+    private static (int X, int Y) Rotate(int x, int y, int w, int h, int k)
+    {
+        return k switch
+        {
+            0 => (x, y),
+            1 => (y, w - 1 - x),
+            2 => (w - 1 - x, h - 1 - y),
+            _ => (h - 1 - y, x),
+        };
+    }
+
+    /// <summary>
+    /// Rotates a sub-tile offset (in [0,1)²) by <paramref name="k"/> × 90° clockwise about the tile centre,
+    /// using the same linear map as <see cref="Rotate"/> so decals stay aligned with their tiles.
+    /// </summary>
+    private static Vector2 RotateWithinTile(Vector2 p, int k)
+    {
+        var d = p - new Vector2(0.5f, 0.5f);
+        var r = k switch
+        {
+            0 => d,
+            1 => new Vector2(d.Y, -d.X),
+            2 => new Vector2(-d.X, -d.Y),
+            _ => new Vector2(-d.Y, d.X),
+        };
+        return r + new Vector2(0.5f, 0.5f);
     }
 
     private MapId GetOrCreateTemplate(ResPath atlasPath)

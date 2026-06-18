@@ -1,0 +1,74 @@
+- type: entity
+  id: CETradingSlotBase
+  abstract: true
+  name: trading lot
+  description: Another merchant refactor here.
+  categories: [ ForkFiltered ]
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    noRot: true
+    anchored: true
+  - type: PlacementReplacement
+    key: CETradingSlotBase
+  - type: Sprite
+    noRot: true
+    drawdepth: Effects
+    sprite: _CE/Interface/Misc/reroll.rsi
+    state: reroll
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CETradingSlot
+    offset: 0, 0.5
+  - type: CEDarkSoulSpeechAccent
+
+- type: entity
+  id: CETradingSlotPotion
+  parent: CETradingSlotBase
+  suffix: Potions
+  components:
+  - type: CETradingSlot
+    price: 15
+    offers:
+    - !type:CETradingSpawnFromCategoryOffer
+      tags:
+        - CEPotion
+
+- type: entity
+  id: CETradingSlotPlushie
+  parent: CETradingSlotBase
+  suffix: Plushie
+  components:
+  - type: CETradingSlot
+    price: 500
+    offers:
+    - !type:CETradingSpawnFromCategoryOffer
+      tags:
+        - CEPlushie
+
+- type: entity
+  id: CETradingSlotWeapon
+  parent: CETradingSlotBase
+  suffix: Weapon
+  components:
+  - type: CETradingSlot
+    price: 50
+    offers:
+    - !type:CETradingSpawnFromCategoryOffer
+      tags:
+        - CEWeapon
+
+- type: entity
+  id: CETradingSlotAccessory
+  parent: CETradingSlotBase
+  suffix: Accessory
+  components:
+  - type: CETradingSlot
+    price: 75
+    offers:
+    - !type:CETradingSpawnFromCategoryOffer
+      tags:
+        - CEAccessory

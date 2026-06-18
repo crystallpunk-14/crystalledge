@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseStructureDynamic
+  parent: BaseStructure
   id: CEChestBase
   categories: [ HideSpawnMenu, ForkFiltered ]
   name: chest
@@ -51,6 +51,7 @@
   - type: StaticPrice
     price: 0
   - type: Appearance
+  - type: Climbable
   - type: ContainerContainer
     containers:
       storagebase: !type:Container
@@ -75,6 +76,11 @@
     sprite: _CE/Structures/Furniture/Chests/gold.rsi
   - type: Icon
     sprite: _CE/Structures/Furniture/Chests/gold.rsi
+  - type: CEShiny
+    effect: CEEffectCoinGold
+    radius: 0.8
+    minFrequency: 1.5
+    maxFrequency: 4
 
 - type: entity
   parent: CEChestBase

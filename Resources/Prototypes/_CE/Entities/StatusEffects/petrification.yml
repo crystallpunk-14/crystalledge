@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   id: CEStatusEffectPetrification
   name: Petrification
   components:
@@ -69,7 +69,7 @@
         damage:
           types:
             Physical: 20
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         effectTarget: Target
         distance: 1
         throwPower: 10

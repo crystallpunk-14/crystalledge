@@ -73,6 +73,13 @@ public sealed partial class UsedEntityAnimation : EntityAnimation;
 /// </summary>
 public sealed partial class ActiveHandEntityAnimation : EntityAnimation;
 
+/// <summary>
+/// Resolves the sprite from the user's off-hand (non-active hand) item.
+/// Used in dual-wield animations to show the off-hand weapon's swing independently.
+/// If <see cref="EntityAnimation.DummyEntity"/> is set, it overrides the off-hand sprite.
+/// </summary>
+public sealed partial class OffHandEntityAnimation : EntityAnimation;
+
 
 /// <summary>
 /// Network event sent to non-predicting clients to display visual effects

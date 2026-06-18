@@ -1,0 +1,94 @@
+
+- type: dungeonRoomType
+  id: CEWorldForestRoom
+  color: "#3ab33a"
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room1
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -17, 2
+  weight: 2 #Empty space preferred
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room2
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -17, 11
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room3
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -17, 20
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room4
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -17, 29
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room5
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -17, 38
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room6
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -34, 2
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room7
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -34, 11
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room8
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -34, 20
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room9
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -34, 29
+
+- type: dungeonRoom3d
+  id: CEWorldForest_Room10
+  roomType: CEWorldForestRoom
+  size: 16, 8
+  height: 1
+  zLevelMap: DunTest
+  offset: -34, 38
+
+#MARK: Structures
+
+- type: dungeonRoom3d
+  id: CEWorldForest_StartingCamp
+  size: 16, 16
+  height: 2
+  zLevelMap: DunTest
+  offset: 2, -17

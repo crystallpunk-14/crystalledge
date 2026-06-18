@@ -5,6 +5,7 @@
   description: ce-job-desc-priest
   playTimeTracker: CEJobPriest
   icon: CEJobIconPriest
+  startingGear: CEBaseStartingGear
 
 - type: playTimeTracker
   id: CEJobPriest

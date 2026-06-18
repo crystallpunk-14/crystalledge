@@ -1,0 +1,125 @@
+- type: entity
+  parent: MarkerBase
+  id: CEMobDarkSoulSpawner
+  name: Dark soul marker
+  categories: [ ForkFiltered ]
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: base_male
+      sprite: _CE/Mobs/dark_souls.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - CEMobDarkSoul
+
+- type: entity
+  parent:
+  - BaseMob
+  - CEMobGOAPBase
+  id: CEMobDarkSoul
+  name: dark soul
+  description: TODO
+  categories: [ ForkFiltered ]
+  components:
+  - type: CEGOAP
+    goals:
+    # TODO
+    - desiredState:
+        EnemyDead: true
+      priority: 1
+    actions:
+    - !type:CEGOAPExploreAction
+      preconditions:
+        SoulIsSpeaking: false
+      effects:
+        EnemyDead: true
+      cost: 1
+      exploreRadius: 8
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Mobs/dark_souls.rsi
+    layers:
+    - state: base_female
+      map: [ "random" ]
+  - type: RandomSprite
+    available:
+    - random:
+        male1: ""
+        male2: ""
+        female1: ""
+        female2: ""
+        gob: ""
+        guy: ""
+        carcat: ""
+        carcat2: ""
+        carrin: ""
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 1
+    baseAcceleration: 5
+    baseFriction: 0.5
+  - type: CEShiny
+    effect: CEEffectAddCurse
+    minFrequency: 0.5
+    maxFrequency: 1
+    radius: 0
+  - type: CEBarkSpeech
+    barkSpeech: DarkSoul
+  - type: ActiveListener
+    range: 12
+  - type: CEDarkSoulSpeech
+  - type: Speech
+  - type: CEAnimationController
+  - type: CEIdleAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.01, 0.99
+      - time: 2
+        scale: 0.99, 1.01
+      - time: 4
+        scale: 1.01, 0.99
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 2
+        offset: 0, 0.01
+      - time: 4
+        offset: 0, 0
+  - type: CEWalkingAnimation
+    animation:
+      scaleAnimation:
+      - time: 0
+        scale: 1.02, 0.98
+      - time: 1
+        scale: 0.98, 1.02
+      - time: 2
+        scale: 1.02, 0.98
+      offsetAnimation:
+      - time: 0
+        offset: 0, 0
+      - time: 1
+        offset: 0, 0.02
+      - time: 2
+        offset: 0, 0
+  - type: CESpawnAnimation
+    animation: DarkSoulSpawn
+
+
+- type: entityEffectAnimation
+  id: DarkSoulSpawn
+  movementSpeed: 0
+  duration: 1
+  events:
+    0:
+    - !type:SpawnEntity
+      reparent: true
+      effectTarget: User
+      spawns:
+      - CEEffectAddCurse
+    - !type:UserAnimation
+      colorAnimation:
+      - time: 0.0
+        color: "#ffffff01"
+      - time: 0.9
+        color: "#ffffff"

@@ -1,4 +1,4 @@
-- type: skill
+﻿- type: skill
   parent: BaseKnightSkill
   id: Kick
   effect: !type:AddAction
@@ -64,7 +64,7 @@
         scale: -1, 1
     0.5:
     - !type:WeaponArcAttack
-      range: 0.75
+      rangeMultiplier: 1.5
       arcWidth: 35
       effects:
       - !type:Damage
@@ -72,7 +72,7 @@
         damage:
           types:
             Physical: 15
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 3
         throwPower: 10
 

@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSkimitarMolten
-  parent: CEBaseWeapon
+  parent: CEBaseSkimitar
   name: molten skimitar
   description: TODO
   components:
@@ -11,37 +11,30 @@
     - state: fire
       shader: unshaded
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 60
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
-              Fire: 5
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectFire
-          amount: 2
-          max: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
+            Fire: 5
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectFire
+        amount: 2
+        max: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 360
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 2
-              Fire: 3
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectFire
-          amount: 2
-          max: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 2
+            Fire: 3
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectFire
+        amount: 2
+        max: 10
 
     animations:
       Primary:
@@ -49,10 +42,7 @@
       - anim: SkimitarAttackLight2
       Secondary:
       - anim: SkimitarAttackHeavy1
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: Clothing
-    slots:
-    - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5

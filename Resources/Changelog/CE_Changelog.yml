@@ -614,3 +614,123 @@
   id: 10052
   time: '2026-06-04T21:23:21.0000000+00:00'
   url: https://github.com/crystallpunk-14/crystalledge/pull/285
+- author: TheShuEd
+  changes:
+  - message: "The \u201CMageslayer\u201D ability has been reworked\u2014the bonus\
+      \ damage has been reduced from 10 to 5, but the ability now grants a passive\
+      \ effect that steals 5 mana on every attack"
+    type: Tweak
+  - message: Fixed a bug that caused friendly rats to attack mobs
+    type: Fix
+  id: 10053
+  time: '2026-06-09T21:32:51.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/296
+- author: TheShuEd
+  changes:
+  - message: Falling into water no longer causes damage, but it does create a water
+      splash where you land.
+    type: Add
+  - message: Lava now also deals high damage on contact, rather than just applying
+      burn status effects.
+    type: Tweak
+  id: 10054
+  time: '2026-06-09T15:05:26.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/295
+- author: TheShuEd
+  changes:
+  - message: Fixed falling damage one-shots
+    type: Fix
+  - message: Slimes now has falling damage immunity
+    type: Fix
+  id: 10055
+  time: '2026-06-07T11:48:59.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/290
+- author: TheShuEd
+  changes:
+  - message: 'Scimitars now support dual-wielding: Right-clicking to attack while
+      holding a scimitar in each hand now triggers a special attack pattern that uses
+      both weapons.'
+    type: Add
+  id: 10056
+  time: '2026-06-09T22:48:22.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/297
+- author: TheShuEd
+  changes:
+  - message: Added dual wielding combos for swords.
+    type: Add
+  - message: Minor nerfing dual combos for skimitars by slowing animations
+    type: Tweak
+  id: 10057
+  time: '2026-06-10T12:34:03.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/298
+- author: TheShuEd
+  changes:
+  - message: Added 3 new barks
+    type: Add
+  id: 10058
+  time: '2026-06-11T13:37:54.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/300
+- author: TheShuEd
+  changes:
+  - message: Coins are falling out of the pots again.
+    type: Add
+  - message: Coins are now automatically collected on collide.
+    type: Add
+  - message: The interface now shows how many coins you have on hand.
+    type: Add
+  - message: Wallets have been added to all players' starting gear.
+    type: Add
+  - message: The coins now glow beautifully in the dark.
+    type: Add
+  id: 10059
+  time: '2026-06-11T09:32:23.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/299
+- author: TheShuEd
+  changes:
+  - message: The merchant has been added to the safe zone.
+    type: Add
+  id: 10060
+  time: '2026-06-11T23:04:10.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/301
+- author: TheShuEd
+  changes:
+  - message: Fixed slimes oneshoting players (real this time)
+    type: Fix
+  id: 10061
+  time: '2026-06-12T16:15:24.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/303
+- author: TheShuEd
+  changes:
+  - message: Added merchant rooms into dungeon
+    type: Add
+  - message: Removed libraries rooms
+    type: Remove
+  - message: Bookshelf with alchemy books added into aclhemy rooms randomly
+    type: Tweak
+  - message: 'Strong pacifism into safezones added: Blocks using any actions'
+    type: Tweak
+  id: 10062
+  time: '2026-06-12T21:50:12.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/304
+- author: TheShuEd
+  changes:
+  - message: Added 2 new potions.
+    type: Add
+  - message: Accceleration potions buffed.
+    type: Tweak
+  - message: frost potion now apply frozen status effect on drinking instead slowdowning.
+    type: Tweak
+  - message: Fixed bug when mobs trying attacks dark souls.
+    type: Fix
+  - message: Fixed thrhowing vertical speed stacking.
+    type: Fix
+  id: 10063
+  time: '2026-06-13T16:30:48.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/305
+- author: TheShuEd
+  changes:
+  - message: Players controls they jumps again.
+    type: Fix
+  id: 10064
+  time: '2026-06-17T21:49:11.0000000+00:00'
+  url: https://github.com/crystallpunk-14/crystalledge/pull/308

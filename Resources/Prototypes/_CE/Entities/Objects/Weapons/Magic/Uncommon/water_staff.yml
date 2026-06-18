@@ -1,0 +1,88 @@
+﻿- type: entity
+  parent: CEBaseWeapon
+  id: CEWeaponMagicStaffWater
+  name: water staff
+  description: A staff imbued with water magic. Launches slow water orbs that drench and repel their target.
+  components:
+  - type: Sprite
+    sprite: _CE/Objects/Weapons/Staff/water_staff.rsi
+    layers:
+    - state: icon
+  - type: CEWeapon
+    range: 0.78
+    effectSlots:
+      OnSwing:
+      - !type:ShootProjectile
+        prototype: CEProjectileMagicWater
+        projectileSpeed: 7
+      OnHeavyHit:
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
+    animations:
+      Primary:
+      - anim: StaffAttackLight1
+        speed: 0.6
+      - anim: StaffAttackLight2
+        speed: 0.6
+      Secondary:
+      - anim: StaffAttackHeavy
+  - type: CEWeaponStaminaCost
+    costs:
+      Primary: 1
+      Secondary: 1
+  - type: CEWeaponManaCost
+    costs:
+      Primary: 5
+  - type: CEMagicEnergyContainer
+    maxEnergy: 60
+  - type: CEMagicEnergyExaminable
+  - type: Clothing
+    slots:
+    - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5
+
+- type: entity
+  id: CEProjectileMagicWater
+  name: water bolt
+  parent: BaseBullet
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/StatusEffects/water_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#1e90ff"
+    radius: 1.5
+    energy: 3.0
+  - type: CEProjectile
+    hitEffects:
+    - !type:CETileAffectArea
+      effectTarget: Used
+      tileEffect: CETileEffectWater
+      radius: 2
+      fallOffFactor: 0.5
+      maxStacks: 10
+    - !type:ThrowFrom
+      throwPower: 7
+      distance: 2
+    - !type:Damage
+      attackType: Ranged
+      damage:
+        types:
+          Physical: 15
+    - !type:AreaEffect
+      affectCaster: true
+      range: 2
+      effects:
+      - !type:ThrowFrom
+        origin: Used
+        throwPower: 7
+        distance: 0.25

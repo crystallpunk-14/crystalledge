@@ -6,10 +6,11 @@ namespace Content.Shared._CE.MeleeWeapon;
 /// <summary>
 /// Is called on the object being used to determine what animations it provides
 /// </summary>
-public sealed class CEGetWeaponAnimationsEvent(Entity<CEWeaponComponent> used, CEUseType useType) : HandledEntityEventArgs
+public sealed class CEGetWeaponAnimationsEvent(Entity<CEWeaponComponent> used, CEUseType useType, EntityUid user) : HandledEntityEventArgs
 {
     public Entity<CEWeaponComponent> Used = used;
     public CEUseType UseType = useType;
+    public EntityUid User = user;
     public List<CEAnimationEntry> Animations = new();
 }
 
@@ -57,17 +58,22 @@ public sealed class CEWeaponUseEvent(
 public sealed class CEWeaponArcHitEvent(
     NetEntity weapon,
     List<NetEntity> targets,
-    string? effectSlot)
+    string? effectSlot,
+    float power = 1f)
     : EntityEventArgs
 {
     public readonly NetEntity Weapon = weapon;
     public readonly List<NetEntity> Targets = targets;
 
     /// <summary>
-    /// The EffectSlot key on CEWeaponComponent that triggered this arc attack.
-    /// Used by the server to replay nested effects on validated targets.
+    /// The EffectSlot key on the weapon that triggered this arc attack.
     /// </summary>
     public readonly string? EffectSlot = effectSlot;
+
+    /// <summary>
+    /// Accumulated power multiplier from the WeaponEffectSlot chain.
+    /// </summary>
+    public readonly float Power = power;
 }
 
 /// <summary>

@@ -10,7 +10,7 @@
 - type: entity
   id: CEStatusEffectMageslayer
   name: Mageslayer
-  description: Your melee attacks against enemies with [color=#5d9ee2]no mana[/color] deal 10 extra [color=#5d9ee2]Cold[/color] damage, ignoring armor.
+  description: Your melee attacks steals 5 mana, and deal 10 extra [color=#5d9ee2]Cold[/color] damage, ignoring armor, against enemies [color=#5d9ee2]without mana[/color] .
   components:
   - type: StatusEffect
   - type: StatusEffectAlert
@@ -25,7 +25,7 @@
       - !type:Damage
         damage:
           types:
-            Cold: 10
+            Cold: 5
         attackType: Melee
         ignoreArmor: true
       - !type:SpawnEntity
@@ -37,6 +37,19 @@
           path: /Audio/Magic/staff_door.ogg
           params:
             variation: 0.02
+    - !type:ConditionalEffectGroup
+      conditions:
+      - !type:ManaPercentCondition
+        max: 0
+        inverted: true
+      effects:
+      - !type:StealMana
+        amount: 5
+      - !type:SpawnEntity
+        effectTarget: Target
+        reparent: true
+        spawns:
+        - CEEffectManaDrain
 
 
 - type: alert

@@ -1,3 +1,4 @@
+#MARK: Light 1
 - type: entityEffectAnimation
   id: WarAxeAttackLight
   movementSpeed: 0.4
@@ -53,8 +54,14 @@
       - CEDustTileEffect
     0.8:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
+#MARK: Light 2
 - type: entityEffectAnimation
   id: WarAxeAttackLight2
   movementSpeed: 0.4
@@ -113,8 +120,14 @@
       - CEDustTileEffect
     0.8:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 40
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
+#MARK: Heavy 1
 - type: entityEffectAnimation
   id: WarAxeAttackHeavy1
   movementSpeed: 0.4
@@ -161,8 +174,14 @@
         path: /Audio/_CE/Effects/Weapon/slash_sword3.ogg
     0.5:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 90
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
+#MARK: Heavy 2
 - type: entityEffectAnimation
   id: WarAxeAttackHeavy2
   movementSpeed: 0.4
@@ -209,4 +228,9 @@
         path: /Audio/_CE/Effects/Weapon/slash_sword3.ogg
     0.5:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 90
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

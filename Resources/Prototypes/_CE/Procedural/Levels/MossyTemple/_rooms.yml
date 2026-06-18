@@ -1,3 +1,4 @@
+
 - type: zMap
   id: MossyTemple
   maps:
@@ -7,6 +8,7 @@
     - type: MapLight
       ambientLightColor: "#38d18a"
 
+#MARK: Corridors
 - type: dungeonRoom3d
   id: MossyTemple_PillarsWideCrossroad
   roomType: MossyTempleGeneralRoom
@@ -311,26 +313,7 @@
   zLevelMap: MossyTemple
   offset: 30, 53
 
-
-
-
-# Dead ends
-
-- type: dungeonRoom3d
-  id: MossyTemple_DeadEnd_SomeKindOfLibrary
-  roomType: MossyTempleLibraryRoom
-  size: 11, 11
-  height: 2
-  zLevelMap: MossyTemple
-  offset: 0, -24
-
-- type: dungeonRoom3d
-  id: MossyTemple_DeadEnd_PotionsBehindFrames
-  roomType: MossyTempleLibraryRoom
-  size: 6, 11
-  height: 2
-  zLevelMap: MossyTemple
-  offset: 12, -24
+#MARK: Dead ends
 
 - type: dungeonRoom3d
   id: MossyTemple_DeadEnd_PotionsInCave
@@ -404,11 +387,7 @@
   zLevelMap: MossyTemple
   offset: 32, -29
 
-
-
-
-
-# Entrance
+#MARK: Entrance
 
 - type: dungeonRoom3d
   id: MossyTemple_Entrance_LockedBox
@@ -458,12 +437,7 @@
   zLevelMap: MossyTemple
   offset: -46, -10
 
-
-
-
-
-
-# Exits
+#MARK: Exits
 
 - type: dungeonRoom3d
   id: MossyTemple_Exit_First
@@ -521,11 +495,7 @@
   zLevelMap: MossyTemple
   offset: -37, 10
 
-
-
-
-
-# Blessing
+#MARK: Blessing
 
 - type: dungeonRoom3d
   id: MossyTemple_Blessing_Dirty2
@@ -575,12 +545,7 @@
   zLevelMap: MossyTemple
   offset: -36, -22
 
-
-
-
-
-
-# Treasure
+#MARK: Treasure
 
 - type: dungeonRoom3d
   id: MossyTemple_Treasure1
@@ -598,14 +563,7 @@
   zLevelMap: MossyTemple
   offset: 8, -71
 
-
-
-
-
-
-# SECRETS
-
-
+#MARK: Secrets
 
 - type: dungeonRoom3d
   id: MossyTemple_DoorsDoorsDoors
@@ -654,3 +612,37 @@
   height: 2
   zLevelMap: MossyTemple
   offset: 16, -48
+
+#MARK: Merchants
+
+- type: dungeonRoom3d
+  id: MossyTemple_Merchant1
+  roomType: MossyTempleMerchantRoom
+  size: 9, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -12, -68
+
+- type: dungeonRoom3d
+  id: MossyTemple_Merchant2
+  roomType: MossyTempleMerchantRoom
+  size: 6, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -19, -68
+
+- type: dungeonRoom3d
+  id: MossyTemple_Merchant3
+  roomType: MossyTempleMerchantRoom
+  size: 8, 7
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -19, -76
+
+- type: dungeonRoom3d
+  id: MossyTemple_Merchant4
+  roomType: MossyTempleMerchantRoom
+  size: 7, 6
+  height: 2
+  zLevelMap: MossyTemple
+  offset: -10, -75

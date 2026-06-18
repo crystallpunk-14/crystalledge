@@ -20,6 +20,6 @@ public sealed partial class CERestoreStaminaEffectSystem : CEEntityEffectSystem<
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _stamina.RestoreStamina(entity, args.Effect.Amount);
+        _stamina.RestoreStamina(entity, args.Effect.Amount * args.Args.Power);
     }
 }

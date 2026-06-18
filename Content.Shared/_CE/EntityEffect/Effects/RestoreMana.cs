@@ -20,6 +20,6 @@ public sealed partial class CERestoreManaEffectSystem : CEEntityEffectSystem<Res
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _mana.Restore(entity, args.Effect.Amount, args.Args.Source, args.Effect.ApplyModifiers);
+        _mana.Restore(entity, (int)(args.Effect.Amount * args.Args.Power), args.Args.Source, args.Effect.ApplyModifiers);
     }
 }

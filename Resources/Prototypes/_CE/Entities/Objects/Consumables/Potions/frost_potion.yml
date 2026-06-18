@@ -18,8 +18,8 @@
   - type: CEConsumable
     effects:
     - !type:ApplyStatusEffectStack
-      statusEffect: CEStatusEffectColdSlowdown
-      amount: 6
+      statusEffect: CEStatusEffectFrozen
+      amount: 8
     - !type:SpawnEntity
       spawns:
       - CEEffectHealingGeneric
@@ -29,6 +29,10 @@
       tileEffect: CETileEffectFreeze
       radius: 2
       maxStacks: 6
+    - !type:CETileAffectArea
+      tileEffect: CETileEffectIceSpikes
+      radius: 2
+      maxStacks: 6
     - !type:AreaEffect
       range: 2
       effects:
@@ -36,7 +40,7 @@
         attackType: Ranged
         damage:
           types:
-            Cold: 20
+            Cold: 30
   - type: CEDestructible
   - type: PointLight
     color: "#00d9ff"

@@ -45,3 +45,7 @@
     unequipDelay: 0
     slots:
     - belt
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

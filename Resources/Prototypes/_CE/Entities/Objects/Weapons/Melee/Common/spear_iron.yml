@@ -8,27 +8,20 @@
     sprite: _CE/Objects/Weapons/Spear/iron.rsi
     state: icon
   - type: CEWeapon
+    range: 1.26
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 1.26
-        arcWidth: 15
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 7
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 7
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 1.4
-        arcWidth: 25
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 15
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 15
     animations:
       Primary:
       - anim: SpearAttackLight
@@ -53,3 +46,7 @@
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

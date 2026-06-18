@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: CEBaseWeapon
   id: CEWeaponHeavyClub
   name: heavy club
@@ -8,30 +8,23 @@
     sprite: _CE/Objects/Weapons/heavy_club.rsi
     state: icon
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 60
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 18
-        - !type:ThrowFromUser
-          throwPower: 10
-          distance: 1
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 18
+      - !type:ThrowFrom
+        throwPower: 10
+        distance: 1
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 180
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 18
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 18
     animations:
       Primary:
       - anim: WarAxeAttackLight
@@ -48,3 +41,7 @@
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

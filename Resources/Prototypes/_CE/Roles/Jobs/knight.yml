@@ -5,6 +5,7 @@
   description: ce-job-desc-knight
   playTimeTracker: CEJobKnight
   icon: CEJobIconKnight
+  startingGear: CEBaseStartingGear
 
 - type: playTimeTracker
   id: CEJobKnight

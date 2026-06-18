@@ -1,3 +1,4 @@
+#MARK: Light 1
 - type: entityEffectAnimation
   id: SpearAttackLight
   movementSpeed: 0.3
@@ -35,9 +36,14 @@
         scale: 1, -1
     0.08:
     - !type:WeaponEffectSlot
-      slot: OnHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 15
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHit
 
-
+#MARK: Heavy 1
 - type: entityEffectAnimation
   id: SpearAttackHeavy
   movementSpeed: 0.2
@@ -91,9 +97,15 @@
       distance: 1
     0.55:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 25
+      rangeMultiplier: 1.111
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit
 
-
+#MARK: Heavy 2
 - type: entityEffectAnimation
   id: SpearAttackHeavy2
   movementSpeed: 0.2
@@ -147,4 +159,10 @@
       distance: 1
     0.55:
     - !type:WeaponEffectSlot
-      slot: OnHeavyHit
+      slot: OnSwing
+    - !type:WeaponArcAttack
+      arcWidth: 25
+      rangeMultiplier: 1.111
+      effects:
+      - !type:WeaponEffectSlot
+        slot: OnHeavyHit

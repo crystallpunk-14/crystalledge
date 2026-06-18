@@ -1,4 +1,4 @@
-- type: entity
+﻿- type: entity
   parent: MarkerBase
   id: CEMobBossViatorSpawner
   name: Viator Spawner
@@ -573,7 +573,7 @@
         scale: 1, -1
     0.5:
     - !type:WeaponArcAttack
-      range: 0.8
+      rangeMultiplier: 1.6
       arcWidth: 165
       effects:
       - !type:Damage
@@ -581,7 +581,7 @@
         damage:
           types:
             Physical: 15
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         distance: 3
         throwPower: 10
       - !type:ShockWaveVFX

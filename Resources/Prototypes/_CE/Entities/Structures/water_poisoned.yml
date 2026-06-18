@@ -21,6 +21,26 @@
   - type: CETileEffectTransform
     transforms:
       CETileEffectFreeze: CEIcePoisoned
+  - type: CEInnateStatusEffect
+    components:
+    - type: CEEffectOnFallenOnStatusEffect
+      scaleWithStacks: false
+      scaleWithSpeed: true
+      effects:
+      - !type:CETileAffectArea
+        effectTarget: User
+        tileEffect: CETileEffectWater
+        radius: 0.5
+        fallOffFactor: 0.5
+        maxStacks: 3
+      - !type:AreaEffect
+        effectTarget: User
+        range: 1
+        effects:
+        - !type:ApplyStatusEffectStack
+          statusEffect: CEStatusEffectPoison
+          amount: 2
+          max: 5
   - type: RandomSpawner
     prototypes: []
 

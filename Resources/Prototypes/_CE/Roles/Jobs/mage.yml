@@ -5,6 +5,7 @@
   description: ce-job-desc-mage
   playTimeTracker: CEJobMage
   icon: CEJobIconMage
+  startingGear: CEBaseStartingGear
 
 - type: playTimeTracker
   id: CEJobMage

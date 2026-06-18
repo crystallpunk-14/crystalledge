@@ -638,7 +638,7 @@ namespace Content.Shared.Preferences
             SpawnPriority = spawnPriority;
 
             // CrystallEdge: validate bark voice and pitch
-            if (!prototypeManager.HasIndex(BarkVoice))
+            if (!prototypeManager.TryIndex(BarkVoice, out var barkProto) || !barkProto.Selectable)
                 BarkVoice = "Ed";
 
             if (BarkPitch <= 0f)

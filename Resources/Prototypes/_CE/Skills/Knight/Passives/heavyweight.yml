@@ -1,4 +1,4 @@
-- type: skill
+﻿- type: skill
   parent: BaseKnightSkill
   id: Heavyweight
   icon:
@@ -30,7 +30,7 @@
         damage:
           types:
             Physical: 15
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         effectTarget: Target
         distance: 1
         throwPower: 10

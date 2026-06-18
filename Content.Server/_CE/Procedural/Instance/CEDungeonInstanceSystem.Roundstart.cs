@@ -1,24 +1,18 @@
 using Content.Server._CE.Procedural.Prototypes;
-using Content.Server.GameTicking;
-using Content.Server.GameTicking.Events;
 
 namespace Content.Server._CE.Procedural.Instance;
 
 public sealed partial class CEDungeonInstanceSystem
 {
-    private void InitializeRoundstart()
-    {
-        SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
-    }
-
     /// <summary>
     /// Generates and registers every <see cref="CEDungeonLevelPrototype"/> with
     /// <c>roundstart: true</c> as a singleton instance, so the round can begin with
     /// dungeon levels already present (their embedded spawn points pick up players
     /// during the standard <c>SpawnPlayers</c> step right after this event).
     /// The job queue is pumped synchronously so generation finishes before player spawn.
+    /// Called by <c>CEDungeonRuleSystem</c> when the Roguelike game rule starts.
     /// </summary>
-    private void OnRoundStarting(RoundStartingEvent ev)
+    public void GenerateRoundstartDungeons()
     {
         foreach (var proto in _proto.EnumeratePrototypes<CEDungeonLevelPrototype>())
         {

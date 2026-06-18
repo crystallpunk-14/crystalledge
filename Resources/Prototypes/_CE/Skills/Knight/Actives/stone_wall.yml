@@ -1,4 +1,4 @@
-- type: skill
+﻿- type: skill
   parent: BaseKnightSkill
   id: StoneWall
   effect: !type:AddAction
@@ -114,7 +114,7 @@
           damage:
             types:
               Physical: 10
-        - !type:ThrowFromUser
+        - !type:ThrowFrom
           effectTarget: Target
           distance: 1
           throwPower: 10
@@ -127,7 +127,7 @@
         damage:
           types:
             Physical: 25
-      - !type:ThrowFromUser
+      - !type:ThrowFrom
         effectTarget: Target
         distance: 1
         throwPower: 5

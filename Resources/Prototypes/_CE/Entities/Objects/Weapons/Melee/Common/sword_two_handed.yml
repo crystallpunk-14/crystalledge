@@ -8,27 +8,20 @@
     sprite: _CE/Objects/Weapons/TwoHandedSword/iron.rsi
     state: icon
   - type: CEWeapon
+    range: 0.84
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.84
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 25
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 25
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.9
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 25
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 25
     animations:
       Primary:
       - anim: WarAxeAttackLight
@@ -56,3 +49,7 @@
     slots:
     - neck
   - type: Wieldable
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

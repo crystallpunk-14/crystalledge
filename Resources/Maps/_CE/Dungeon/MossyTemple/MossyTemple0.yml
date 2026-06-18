@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 275.2.0
+  engineVersion: 277.0.0
   forkId: ""
   forkVersion: ""
-  time: 05/30/2026 08:22:25
+  time: 06/12/2026 21:10:19
   entityCount: 1309
 maps:
 - 1
@@ -20434,95 +20434,10 @@ entities:
           hard: False
           restitution: 0
           friction: 0.4
-  - uid: 1139
-    components:
-    - type: Transform
-      pos: 1.5,-66.5
-      parent: 1
-    - type: Fixtures
-      fixtures:
-        fix1:
-          shape: !type:PolygonShape
-            radius: 0.01
-            vertices:
-            - -0.5,-0.5
-            - 0.5,-0.5
-            - 0.5,0.5
-            - -0.5,0.5
-          mask: []
-          layer:
-          - Impassable
-          - TableLayer
-          - LowImpassable
-          - DoorPassable
-          density: 1
-          hard: False
-          restitution: 0
-          friction: 0.4
-        conveyor:
-          shape: !type:PolygonShape
-            radius: 0.01
-            vertices:
-            - -0.55,-0.55
-            - 0.55,-0.55
-            - 0.55,0.55
-            - -0.55,0.55
-          mask: []
-          layer:
-          - Impassable
-          - TableLayer
-          - LowImpassable
-          density: 1
-          hard: False
-          restitution: 0
-          friction: 0.4
   - uid: 1145
     components:
     - type: Transform
       pos: 1.5,-63.5
-      parent: 1
-    - type: Fixtures
-      fixtures:
-        fix1:
-          shape: !type:PolygonShape
-            radius: 0.01
-            vertices:
-            - -0.5,-0.5
-            - 0.5,-0.5
-            - 0.5,0.5
-            - -0.5,0.5
-          mask: []
-          layer:
-          - Impassable
-          - TableLayer
-          - LowImpassable
-          - DoorPassable
-          density: 1
-          hard: False
-          restitution: 0
-          friction: 0.4
-        conveyor:
-          shape: !type:PolygonShape
-            radius: 0.01
-            vertices:
-            - -0.55,-0.55
-            - 0.55,-0.55
-            - 0.55,0.55
-            - -0.55,0.55
-          mask: []
-          layer:
-          - Impassable
-          - TableLayer
-          - LowImpassable
-          density: 1
-          hard: False
-          restitution: 0
-          friction: 0.4
-  - uid: 1148
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 5.5,-66.5
       parent: 1
     - type: Fixtures
       fixtures:
@@ -22113,6 +22028,18 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 25.5,35.5
+      parent: 1
+  - uid: 1139
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 1.5,-66.5
+      parent: 1
+  - uid: 1148
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 5.5,-66.5
       parent: 1
   - uid: 1168
     components:

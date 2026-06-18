@@ -8,6 +8,7 @@ using Content.Shared._CE.StatusEffects.Core.Components;
 using Content.Shared._CE.StatusEffects.EffectsOnTriggerStatusEffects.Components;
 using Content.Shared._CE.TileEffects.Core;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
+using Content.Shared._CE.ZLevels.Damage;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Whitelist;
@@ -40,6 +41,7 @@ public sealed partial class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
         SubscribeLocalEvent<CEEffectOnStatusEffectRemoveStatusEffectComponent, StatusEffectRelayedEvent<CEAfterRemoveStatusEffectEvent>>(OnStatusEffectRemove);
         SubscribeLocalEvent<CEEffectOnLandingStatusEffectComponent, StatusEffectRelayedEvent<CEZLevelHitEvent>>(OnLanding);
         SubscribeLocalEvent<CEEffectOnHighSpeedImpactStatusEffectComponent, StatusEffectRelayedEvent<StartCollideEvent>>(OnHighSpeedImpact);
+        SubscribeLocalEvent<CEEffectOnFallenOnStatusEffectComponent, StatusEffectRelayedEvent<CEZFellOnMeEvent>>(OnFallenOn);
     }
 
     private void OnAfterAttack(Entity<CEEffectOnAttackStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEAfterAttackEvent> args)
@@ -395,6 +397,38 @@ public sealed partial class CEEffectsOnTriggerStatusEffectSystem : EntitySystem
             1f,
             args.Args.OtherEntity,
             Transform(status.AppliedTo.Value).Coordinates);
+
+        foreach (var effect in ent.Comp.Effects)
+        {
+            for (var i = 0; i < stack; i++)
+            {
+                effect.Effect(effectArgs);
+            }
+        }
+
+        _stack.TryRemoveStack(ent.Owner, ent.Comp.StackCost);
+    }
+
+    private void OnFallenOn(Entity<CEEffectOnFallenOnStatusEffectComponent> ent, ref StatusEffectRelayedEvent<CEZFellOnMeEvent> args)
+    {
+        if (!_statusQuery.TryComp(ent, out var status) || status.AppliedTo is null)
+            return;
+
+        var stack = 1;
+        if (ent.Comp.ScaleWithStacks && _stackQuery.TryComp(ent, out var stackComp))
+            stack = stackComp.Stacks;
+
+        var power = ent.Comp.ScaleWithSpeed ? args.Args.Speed : 1f;
+
+        var effectArgs = new CEEntityEffectArgs(
+            EntityManager,
+            status.AppliedTo.Value,
+            null,
+            Angle.Zero,
+            1f,
+            args.Args.Fallen,
+            Transform(status.AppliedTo.Value).Coordinates,
+            Power: power);
 
         foreach (var effect in ent.Comp.Effects)
         {

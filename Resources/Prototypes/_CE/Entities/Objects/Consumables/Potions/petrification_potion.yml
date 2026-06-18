@@ -1,0 +1,58 @@
+- type: entity
+  id: CEConsumablePotionPetrification
+  parent:
+  - CEConsumablePotionBase
+  - CEPotionCube
+  name: petrification potion
+  description: A thick, stone-grey brew that hardens flesh into living rock. Completely paralyzing, but nearly impenetrable while it lasts.
+  components:
+  - type: Sprite
+    layers:
+    - state: icon
+    - state: fill
+      color: "#7a6344"
+  - type: CEConsumable
+    effects:
+    - !type:ConditionalEffectGroup
+      conditions:
+      - !type:HasStatusEffectCondition
+        statusEffect: CEStatusEffectTempShield
+      effects:
+      - !type:StatusEffectConversion
+        sourceEffect: CEStatusEffectTempShield
+        targetEffect: CEStatusEffectPetrification
+        ratio: 1
+    - !type:ApplyStatusEffectStack
+      statusEffect: CEStatusEffectPetrification
+      amount: 12
+    - !type:SpawnEntity
+      spawns:
+      - CEEffectHealingGeneric
+  - type: CEDestructionEffect
+    effects:
+    - !type:ShockWaveVFX
+      effectTarget: User
+      width: 0.05
+    - !type:AreaEffect
+      range: 2
+      whitelist:
+        components:
+        - CEMobState
+        - CEGOAP
+      effects:
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectPetrification
+        amount: 5
+      - !type:SpawnEntity
+        effectTarget: Target
+        spawns:
+        - CEDustTileEffect
+    - !type:SpawnEntity
+      effectTarget: User
+      spawns:
+      - CEEffectAreaHealingEffect
+  - type: CEDestructible
+  - type: PointLight
+    color: "#8b7355"
+    radius: 1.0
+    energy: 5

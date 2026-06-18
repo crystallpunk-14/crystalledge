@@ -1,5 +1,8 @@
-﻿using System.Numerics;
+using System.Numerics;
+using Content.Shared._CE.Maths;
 using Content.Shared._CE.Procedural;
+using Content.Shared._CE.WorldGen.Components;
+using Content.Shared._CE.WorldGen.Prototypes;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Robust.Client.Graphics;
@@ -11,8 +14,12 @@ using Robust.Shared.Prototypes;
 namespace Content.Client._CE.Procedural;
 
 /// <summary>
-/// Debug overlay that visualizes <see cref="CEGeneratingProceduralDungeonComponent"/> data:
-/// draws coloured rectangles for each abstract room and lines for room connections.
+/// Debug overlay that visualizes:
+/// <list type="bullet">
+///   <item><see cref="CEGeneratingProceduralDungeonComponent"/> — abstract room graph (rooms + connections).</item>
+///   <item><see cref="CEWorldComponent"/> — chunk grid in the loading radius around the player (colored by type).</item>
+/// </list>
+/// Toggled by <c>dungen_generation_visualize</c>.
 /// </summary>
 public sealed partial class CEProceduralGenerationOverlay : Overlay
 {
@@ -28,9 +35,6 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
     private static readonly Color DefaultBorderColor = Color.Gray;
     private static readonly Color ConnectionColor = Color.White.WithAlpha(0.6f);
 
-    /// <summary>
-    /// Base font size at zoom level 1. Scales proportionally with camera zoom.
-    /// </summary>
     private const int BaseFontSize = 12;
 
     private readonly FontResource _fontResource;
@@ -63,13 +67,26 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
             else if (args.Space == OverlaySpace.ScreenSpace)
                 DrawScreen3D(in args, dun3d, zIndex);
         }
+
+        // ── World chunk grid ───────────────────────────────────────────────
+        if (_entMan.TryGetComponent<CEZLevelMapComponent>(args.MapUid, out var zMap) &&
+            _entMan.TryGetComponent<CEWorldComponent>(zMap.NetworkUid, out var world) &&
+            world.ChunkMap.Count > 0)
+        {
+            var chunkZ = zMap.Depth; // CEWorldComponent.ChunkHeight == 1, so chunkZ == Depth
+            if (args.Space == OverlaySpace.WorldSpace)
+                DrawWorldChunks(in args, world.ChunkMap, chunkZ);
+            else if (args.Space == OverlaySpace.ScreenSpace)
+                DrawScreenChunks(in args, world.ChunkMap, chunkZ);
+        }
     }
+
+    // ── Dungeon draw ───────────────────────────────────────────────────────
 
     private void DrawWorld(in OverlayDrawArgs args, CEGeneratingProceduralDungeonComponent comp)
     {
         var handle = args.WorldHandle;
 
-        // Draw room rectangles.
         foreach (var room in comp.Rooms)
         {
             var roomTypeProto = room.RoomType != null && _proto.Resolve(room.RoomType.Value, out var roomType)
@@ -86,7 +103,6 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
 
             handle.DrawRect(box, fillColor);
 
-            // Border.
             var tl = new Vector2(box.Left, box.Top);
             var tr = new Vector2(box.Right, box.Top);
             var bl = new Vector2(box.Left, box.Bottom);
@@ -98,7 +114,6 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
             handle.DrawLine(bl, tl, borderColor);
         }
 
-        // Draw connection lines between room centres.
         foreach (var conn in comp.Connections)
         {
             if (conn.RoomA < 0 || conn.RoomA >= comp.Rooms.Count ||
@@ -127,7 +142,6 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
         if (viewport == null)
             return;
 
-        // Scale font size with camera zoom so labels grow/shrink proportionally.
         var zoom = args.Viewport.Eye?.Zoom ?? Vector2.One;
         var zoomFactor = Math.Max(zoom.X, zoom.Y);
         var scaledSize = Math.Max(6, (int)(BaseFontSize / zoomFactor));
@@ -281,4 +295,72 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
         return false;
     }
 
+    // ── World chunk draw ───────────────────────────────────────────────────
+
+    private void DrawWorldChunks(
+        in OverlayDrawArgs args,
+        Dictionary<Vector3i, ProtoId<CEWorldChunkTypePrototype>> chunkMap,
+        int chunkZ)
+    {
+        var eyePos = args.Viewport.Eye?.Position.Position ?? Vector2.Zero;
+        var cx = (int)MathF.Floor(eyePos.X / CEWorldComponent.ChunkSize);
+        var cy = (int)MathF.Floor(eyePos.Y / CEWorldComponent.ChunkSize);
+        var radius = (int)MathF.Ceiling(CEWorldComponent.LoadRadiusChunks * 3);
+
+        var handle = args.WorldHandle;
+        foreach (var (pos, typeId) in chunkMap)
+        {
+            if (pos.Z != chunkZ) continue;
+            if (Math.Abs(pos.X - cx) > radius || Math.Abs(pos.Y - cy) > radius) continue;
+
+            var color = _proto.TryIndex(typeId, out var chunkType) ? chunkType.DebugColor : Color.Gray;
+            var box = new Box2(
+                pos.X * CEWorldComponent.ChunkSize,
+                pos.Y * CEWorldComponent.ChunkSize,
+                (pos.X + 1) * CEWorldComponent.ChunkSize,
+                (pos.Y + 1) * CEWorldComponent.ChunkSize);
+
+            handle.DrawRect(box, color.WithAlpha(0.25f));
+            handle.DrawLine(box.TopLeft, box.TopRight, color);
+            handle.DrawLine(box.TopRight, box.BottomRight, color);
+            handle.DrawLine(box.BottomRight, box.BottomLeft, color);
+            handle.DrawLine(box.BottomLeft, box.TopLeft, color);
+        }
+    }
+
+    private void DrawScreenChunks(
+        in OverlayDrawArgs args,
+        Dictionary<Vector3i, ProtoId<CEWorldChunkTypePrototype>> chunkMap,
+        int chunkZ)
+    {
+        var viewport = args.ViewportControl;
+        if (viewport == null)
+            return;
+
+        var eyePos = args.Viewport.Eye?.Position.Position ?? Vector2.Zero;
+        var cx = (int)MathF.Floor(eyePos.X / CEWorldComponent.ChunkSize);
+        var cy = (int)MathF.Floor(eyePos.Y / CEWorldComponent.ChunkSize);
+        var radius = (int)MathF.Ceiling(CEWorldComponent.LoadRadiusChunks * 3);
+
+        var zoom = args.Viewport.Eye?.Zoom ?? Vector2.One;
+        var zoomFactor = Math.Max(zoom.X, zoom.Y);
+        var scaledSize = Math.Max(6, (int)(BaseFontSize / zoomFactor));
+        var font = scaledSize == BaseFontSize
+            ? _font
+            : new VectorFont(_fontResource, scaledSize);
+
+        var handle = args.ScreenHandle;
+        foreach (var (pos, typeId) in chunkMap)
+        {
+            if (pos.Z != chunkZ) continue;
+            if (Math.Abs(pos.X - cx) > radius || Math.Abs(pos.Y - cy) > radius) continue;
+
+            var worldCenter = new Vector2(
+                (pos.X + 0.5f) * CEWorldComponent.ChunkSize,
+                (pos.Y + 0.5f) * CEWorldComponent.ChunkSize);
+
+            var screenPos = viewport.WorldToScreen(worldCenter);
+            handle.DrawString(font, screenPos, $"{typeId.Id}\n({pos.X},{pos.Y})");
+        }
+    }
 }

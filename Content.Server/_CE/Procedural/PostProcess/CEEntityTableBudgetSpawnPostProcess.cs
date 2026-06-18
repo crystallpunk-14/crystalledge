@@ -158,15 +158,12 @@ public sealed partial class CEEntityTableBudgetSpawnPostProcess : CEDungeonPostP
                     break;
             }
 
-            if (candidateIdx >= candidates.Count)
-                break;
-
-            var (_, _, coords) = candidates[candidateIdx];
-            candidateIdx++;
-
-            // Resolve the entity table and spawn all resulting prototypes at the same tile.
+            // Each proto from the table gets its own candidate tile.
             foreach (var proto in entityTable.GetSpawns(entry.Table, random))
             {
+                if (candidateIdx >= candidates.Count)
+                    break;
+                var (_, _, coords) = candidates[candidateIdx++];
                 entMan.SpawnEntity(proto, coords);
             }
 

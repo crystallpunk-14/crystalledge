@@ -15,8 +15,8 @@ public sealed class CESoulCostOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
-    private const float FullVisibilityRange = 3f;
-    private const float HiddenRange = 5f;
+    private const float FullVisibilityRange = 1.5f;
+    private const float HiddenRange = 2.5f;
 
     private const float OutlineOffset = 2f;
     private const float IconTextGap = 4f;
@@ -57,7 +57,7 @@ public sealed class CESoulCostOverlay : Overlay
         _soul = entManager.System<CESharedSoulSystem>();
 
         var fontResource = cache.GetResource<FontResource>("/Fonts/_CE/Vollkorn/VollkornSC-Bold.ttf");
-        _font = new VectorFont(fontResource, 16);
+        _font = new VectorFont(fontResource, 21);
 
         if (cache.TryGetResource<RSIResource>(new ResPath("/Textures/_CE/Effects/soul.rsi"), out var rsi)
             && rsi.RSI.TryGetState("effect", out var state))
@@ -65,7 +65,7 @@ public sealed class CESoulCostOverlay : Overlay
             _soulIcon = state.Frame0;
         }
 
-        _iconSize       = _soulIcon != null ? new Vector2(_soulIcon.Width, _soulIcon.Height) : Vector2.Zero;
+        _iconSize       = _soulIcon != null ? new Vector2(_soulIcon.Width, _soulIcon.Height) * 1.3f : Vector2.Zero;
         _iconTextOffset = _iconSize.X > 0f ? _iconSize.X + IconTextGap : 0f;
     }
 

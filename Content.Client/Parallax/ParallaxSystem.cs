@@ -14,7 +14,7 @@ public sealed partial class ParallaxSystem : SharedParallaxSystem
     [Dependency] private IParallaxManager _parallax = default!;
     [Dependency] private SharedMapSystem _map = default!;
 
-    private static readonly ProtoId<ParallaxPrototype> Fallback = "CEAbyss"; //CrystallEdge default parallax
+    private static readonly ProtoId<ParallaxPrototype> Fallback = "CESky"; //CrystallEdge default parallax
 
     public const int ParallaxZIndex = 0;
 

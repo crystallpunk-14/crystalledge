@@ -8,35 +8,28 @@
     sprite: _CE/Objects/Weapons/Staff/holy_stick.rsi
     state: icon
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 100
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 10
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectBlessing
-          amount: 5
-          max: 5
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 10
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectBlessing
+        amount: 5
+        max: 5
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.78
-        arcWidth: 45
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectBlessing
-          amount: 5
-          max: 5
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectBlessing
+        amount: 5
+        max: 5
     animations:
       Primary:
       - anim: StaffAttackLight1
@@ -51,3 +44,7 @@
     slots:
     - neck
   - type: Wieldable
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

@@ -40,8 +40,8 @@
       attachToTypes:
       - MossyTempleGeneralRoom
       count:
-        min: 0
-        max: 2
+        min: 1
+        max: 1
     - !type:MarkDeadEnds
       ofType: MossyTempleGeneralRoom
       roomType: MossyTempleDeadEndRoom
@@ -74,3 +74,11 @@
   - !type:CETableBudgetSpawnPostProcess
     table: MossyTempleMana
     budget: 10
+  - !type:CEEntityTableBudgetSpawnPostProcess
+    entries:
+    - table: !type:CEMoneySelector
+        max: 50
+        min: 25
+        largeCoinChance: 0.3
+      cost: 1
+    budget: 1

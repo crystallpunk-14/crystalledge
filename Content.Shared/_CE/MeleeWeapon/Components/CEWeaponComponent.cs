@@ -11,7 +11,6 @@ namespace Content.Shared._CE.Animation.Item.Components;
 /// Using this item in combat mode triggers action animations on the character.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true)]
-[Access(typeof(CESharedWeaponSystem))]
 public sealed partial class CEWeaponComponent : Component
 {
     /// <summary>
@@ -66,6 +65,13 @@ public sealed partial class CEWeaponComponent : Component
     /// </summary>
     [DataField]
     public SoundSpecifier HitSound = new SoundCollectionSpecifier("WeakHit");
+
+    /// <summary>
+    /// Base attack range of the weapon in tiles.
+    /// WeaponArcAttack multiplies this by its RangeMultiplier to get the effective range per-slot.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float Range = 1f;
 }
 
 [DataDefinition, Serializable]

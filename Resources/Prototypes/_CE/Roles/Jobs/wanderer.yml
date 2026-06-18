@@ -5,6 +5,7 @@
   description: ce-job-desc-wanderer
   playTimeTracker: CEJobWanderer
   icon: CEJobIconWanderer
+  startingGear: CEBaseStartingGear
   requirements:
     - !type:CEAchievementRequirement
       achievement: ClassWanderer

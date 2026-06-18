@@ -5,6 +5,7 @@ using Content.Shared._CE.GOAP;
 using Content.Shared._CE.GOAP.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CE.GOAP.Actions;
 
@@ -25,6 +26,18 @@ public sealed partial class CEGOAPExploreAction : CEGOAPActionBase<CEGOAPExplore
     /// </summary>
     [DataField]
     public int SampleDirections = 12;
+
+    /// <summary>
+    /// Minimum idle time at the destination before the action completes.
+    /// </summary>
+    [DataField]
+    public float MinIdleTime = 1f;
+
+    /// <summary>
+    /// Maximum idle time at the destination before the action completes.
+    /// </summary>
+    [DataField]
+    public float MaxIdleTime = 2f;
 }
 
 public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOAPExploreAction>
@@ -34,8 +47,11 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
+
+    private readonly Dictionary<EntityUid, TimeSpan> _idleUntil = new();
 
     protected override void OnActionStartup(
         Entity<CEGOAPComponent> ent,
@@ -61,6 +77,16 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionUpdateEvent<CEGOAPExploreAction> args)
     {
+        // Once idle timer is set, run it to completion regardless of steering status.
+        // InRange fires for only one frame — checking it again would miss the timer.
+        if (_idleUntil.TryGetValue(ent, out var idleEnd))
+        {
+            args.Status = _timing.CurTime >= idleEnd
+                ? CEGOAPActionStatus.Finished
+                : CEGOAPActionStatus.Running;
+            return;
+        }
+
         if (!TryComp<NPCSteeringComponent>(ent, out var steering))
         {
             args.Status = CEGOAPActionStatus.Failed;
@@ -70,7 +96,9 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
         switch (steering.Status)
         {
             case SteeringStatus.InRange:
-                args.Status = CEGOAPActionStatus.Finished;
+                var idleSecs = _random.NextFloat(args.Action.MinIdleTime, args.Action.MaxIdleTime);
+                _idleUntil[ent] = _timing.CurTime + TimeSpan.FromSeconds(idleSecs);
+                args.Status = CEGOAPActionStatus.Running;
                 return;
             case SteeringStatus.NoPath:
                 args.Status = CEGOAPActionStatus.Failed;
@@ -85,6 +113,7 @@ public sealed partial class CEGOAPExploreActionSystem : CEGOAPActionSystem<CEGOA
         Entity<CEGOAPComponent> ent,
         ref CEGOAPActionShutdownEvent<CEGOAPExploreAction> args)
     {
+        _idleUntil.Remove(ent);
         _steering.Unregister(ent);
     }
 

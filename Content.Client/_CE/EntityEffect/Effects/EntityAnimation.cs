@@ -3,6 +3,7 @@ using Content.Client.Animations;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.EntityEffect;
 using Content.Shared._CE.EntityEffect.Effects;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Client.GameObjects;
 using Robust.Shared.Map;
@@ -26,6 +27,9 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
     [Dependency] private AnimationPlayerSystem _animationPlayer = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
 
+    [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
+    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+
     protected override void Effect(ref CEEntityEffectEvent<EntityAnimation> args)
     {
         if (!_timing.IsFirstTimePredicted)
@@ -46,18 +50,19 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         // Spawn a client-side clone entity at the entity's position
         var effectEntity = Spawn("clientsideclone", entityXform.Coordinates);
 
-        if (!TryComp<SpriteComponent>(effectEntity, out var effectSprite))
+        if (!_spriteQuery.TryComp(effectEntity, out var effectSprite))
             return;
 
         // Resolve sprite source (in priority order):
         // 1. DummyEntity — explicit VFX entity prototype, always wins
         // 2. ActiveHandEntityAnimation — resolve from user's active hand
-        // 3. UsedEntityAnimation — use the action's container item (args.Used)
+        // 3. OffHandEntityAnimation — resolve from user's non-active hand
+        // 4. UsedEntityAnimation — use the action's container item (args.Used)
         EntityUid? spriteSource = null;
         if (effect.DummyEntity != null)
         {
             var dummy = Spawn(effect.DummyEntity);
-            if (TryComp<SpriteComponent>(dummy, out var dummySprite))
+            if (_spriteQuery.TryComp(dummy, out var dummySprite))
                 _sprite.CopySprite((dummy, dummySprite), (effectEntity, effectSprite));
             Del(dummy);
 
@@ -66,13 +71,26 @@ public sealed partial class CEEntityAnimationEffectSystem : CEEntityEffectSystem
         }
         else if (effect is ActiveHandEntityAnimation
                  && _hands.TryGetActiveItem(entity, out var activeItem)
-                 && TryComp<SpriteComponent>(activeItem.Value, out var handSprite))
+                 && _spriteQuery.TryComp(activeItem.Value, out var handSprite))
         {
             spriteSource = activeItem.Value;
             _sprite.CopySprite((activeItem.Value, handSprite), (effectEntity, effectSprite));
         }
+        else if (effect is OffHandEntityAnimation
+                 && _handsQuery.TryComp(entity, out var handsComp))
+        {
+            foreach (var handId in handsComp.SortedHands)
+            {
+                if (handId == handsComp.ActiveHandId) continue;
+                if (!_hands.TryGetHeldItem(entity, handId, out var offHandItem)) continue;
+                if (!_spriteQuery.TryComp(offHandItem.Value, out var offHandSprite)) continue;
+                spriteSource = offHandItem.Value;
+                _sprite.CopySprite((offHandItem.Value, offHandSprite), (effectEntity, effectSprite));
+                break;
+            }
+        }
         else if (args.Args.Used is { } used
-                 && TryComp<SpriteComponent>(used, out var itemSprite))
+                 && _spriteQuery.TryComp(used, out var itemSprite))
         {
             spriteSource = used;
             _sprite.CopySprite((used, itemSprite), (effectEntity, effectSprite));

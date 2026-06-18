@@ -1,0 +1,50 @@
+# World recipes. The world has no fixed size — it is bounded only by what the plan paints.
+# CETestWorld is generated automatically at round start (MVP).
+
+- type: worldConfig
+  id: CETestWorld
+  mapComponents:
+    - type: MapLight
+      ambientLightColor: "#c8fdff"
+    - type: Gravity
+      enabled: true
+      inherent: true
+    - type: CEZLevelMapRoof
+    - type: SunShadow
+      alpha: 0.8
+      direction: 2, -0.75
+    - type: SunShadowCycle
+      offset: 490
+    - type: LightCycle
+      offset: 490
+      originalColor: "#c8fdff"
+  planSteps:
+  - !type:CEPaintRect
+    from: -5,-5,0
+    to: 15,15,0
+    chunkType: CEWorldDungeon
+  - !type:CEPaintRect
+    from: -5,-5,1
+    to: 15,15,1
+    chunkType: CEWorldForest
+  - !type:CEPaintRect
+    from: 0,0,0
+    to: 10,10,2
+    chunkType: CEWorldStoneWall
+  - !type:CEPaintRect
+    from: 1,1,0
+    to: 9,9,2
+    chunkType: CEWorldDungeon
+  - !type:CEPaintRect # Entry point
+    from: 3,0,0
+    to: 7,0,2
+    chunkType: CEWorldDungeon
+  - !type:CEPaintRect # Entry point
+    from: 3,10,0
+    to: 7,10,2
+    chunkType: CEWorldDungeon
+  - !type:CEStampStructure # Starting camp in the forest south of the dungeon entrance
+    room: CEWorldForest_StartingCamp
+    at: 4,-5,1
+    pin: true
+

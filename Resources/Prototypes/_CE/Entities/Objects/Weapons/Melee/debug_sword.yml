@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSwordDebug
-  parent: CEBaseWeapon
+  parent: CEBaseSword
   name: admin sword
   description: INFINITY POWER
   suffix: DEBUG
@@ -10,27 +10,20 @@
     color: "#ee00ff"
     state: icon
   - type: CEWeapon
+    range: 0.7
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.7
-        arcWidth: 20
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 100
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 100
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 1.1
-        arcWidth: 15
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 150
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 150
     animations:
       Primary:
       - anim: SwordAttackLight1

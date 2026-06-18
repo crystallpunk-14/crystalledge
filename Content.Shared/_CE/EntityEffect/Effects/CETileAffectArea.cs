@@ -54,9 +54,9 @@ public sealed partial class CETileAffectAreaSystem : CEEntityEffectSystem<CETile
             args.Effect.TileEffect,
             args.Args.Source,
             targetPoint,
-            args.Effect.Radius,
+            args.Effect.Radius * args.Args.Power,
             args.Effect.FallOffFactor,
-            args.Effect.MaxStacks,
+            Math.Max(1, (int)(args.Effect.MaxStacks * args.Args.Power)),
             args.Effect.CheckLos);
     }
 }

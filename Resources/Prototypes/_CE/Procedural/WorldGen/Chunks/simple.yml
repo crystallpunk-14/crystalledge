@@ -1,0 +1,17 @@
+- type: worldChunkType
+  id: CEWorldStoneFloor
+  debugColor: "#181a17"
+  generator: !type:CEFillChunkGenerator
+    fillTile: CEStone
+
+- type: worldChunkType
+  id: CEWorldStoneWall
+  debugColor: "#181a17"
+  generator: !type:CEFillChunkGenerator
+    fillTile: CEStone
+    fillEntity: CEWallStoneBrick
+
+- type: worldChunkType
+  id: CEWorldStaticRegion
+  debugColor: "#8b5cf6"
+  generator: !type:CEStaticRegionChunkGenerator

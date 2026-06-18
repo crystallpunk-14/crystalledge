@@ -28,6 +28,10 @@
   parent: CEPotionBase
   abstract: true
   components:
+  - type: CELootCategory
+    tags:
+    - tag: CEPotion
+      weight: 1.0
   - type: CEConsumable
     whitelist:
       components:

@@ -14,3 +14,7 @@
     state: icon
   - type: Item
     size: Normal
+  - type: CELootCategory
+    tags:
+    - tag: CEAccessory
+      weight: 1.0

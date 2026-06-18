@@ -1,3 +1,8 @@
+- type: startingGear
+  id: CEBaseStartingGear
+  storage:
+    back:
+    - CEWallet
 
 # Bags
 

@@ -20,6 +20,6 @@ public sealed partial class CEAddSoulEffectSystem : CEEntityEffectSystem<AddSoul
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } entity)
             return;
 
-        _souls.TryAddSouls(entity, args.Effect.Amount);
+        _souls.TryAddSouls(entity, (int)(args.Effect.Amount * args.Args.Power));
     }
 }

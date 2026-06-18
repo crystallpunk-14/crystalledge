@@ -101,4 +101,11 @@ public sealed partial class CEBarkSpeechPrototype : IPrototype
     /// </summary>
     [DataField]
     public AudioParams AudioParams = AudioParams.Default.WithVolume(-2f).WithRolloffFactor(4.5f);
+
+    /// <summary>
+    /// Whether players can select this bark voice in the character editor.
+    /// Set to false for NPC-only voices.
+    /// </summary>
+    [DataField]
+    public bool Selectable = true;
 }

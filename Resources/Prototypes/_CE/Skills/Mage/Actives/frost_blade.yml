@@ -70,7 +70,7 @@
 
 - type: entity
   id: CEWeaponSwordFrostTemporary
-  parent: CEBaseWeapon
+  parent: CEBaseSword
   name: frost blade
   suffix: 120 seconds
   description: A magical weapon woven from ice, which will soon melt away.
@@ -81,37 +81,30 @@
     - state: icon
       shader: unshaded
   - type: CEWeapon
+    range: 0.7
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.7
-        arcWidth: 40
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 3
-              Cold: 6
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectColdSlowdown
-          amount: 1
-          max: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 3
+            Cold: 6
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectColdSlowdown
+        amount: 1
+        max: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 180
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 3
-              Cold: 6
-        - !type:ApplyStatusEffectStack
-          statusEffect: CEStatusEffectColdSlowdown
-          amount: 1
-          max: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 3
+            Cold: 6
+      - !type:ApplyStatusEffectStack
+        statusEffect: CEStatusEffectColdSlowdown
+        amount: 1
+        max: 10
     animations:
       Primary:
       - anim: SwordAttackLight1
@@ -121,13 +114,6 @@
         speed: 1.2
       - anim: SwordAttackHeavy2
         speed: 1.2
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: Clothing
-    slots:
-    - neck
   - type: TimedDespawn
     lifetime: 120
   - type: PointLight

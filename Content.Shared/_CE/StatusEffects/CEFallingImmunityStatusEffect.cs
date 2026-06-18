@@ -4,13 +4,13 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._CE.StatusEffects;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CEFallingImmunityStatusEffectComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float DamageMultiplier = 1f;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public float StunMultiplier = 1f;
 }
 

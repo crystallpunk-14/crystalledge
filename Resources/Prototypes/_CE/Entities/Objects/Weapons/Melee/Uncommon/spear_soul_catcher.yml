@@ -11,51 +11,62 @@
     - state: blade
       shader: unshaded
   - type: CEWeapon
+    range: 1.26
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 1.26
-        arcWidth: 15
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Cold: 5
+      - !type:ConditionalEffectGroup
+        conditions:
+        - !type:ManaPercentCondition
+          max: 0
+          inverted: true
         effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Cold: 5
         - !type:StealMana
           amount: 10
         - !type:SpawnEntity
           effectTarget: Target
+          reparent: true
           spawns:
           - CEEffectManaDrain
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 1.4
-        arcWidth: 25
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Cold: 10
+      - !type:ConditionalEffectGroup
+        conditions:
+        - !type:ManaPercentCondition
+          max: 0
+          inverted: true
         effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Cold: 10
         - !type:StealMana
           amount: 20
         - !type:SpawnEntity
           effectTarget: Target
+          reparent: true
           spawns:
           - CEEffectManaDrain
+    animations:
+      Primary:
+      - anim: SpearAttackLight
+        speed: 0.6
+      Secondary:
+      - anim: SpearAttackHeavy
+        speed: 0.6
+      - anim: SpearAttackHeavy2
+        speed: 0.6
+  - type: CEWieldedWeapon
     animations:
       Primary:
       - anim: SpearAttackLight
       Secondary:
       - anim: SpearAttackHeavy
       - anim: SpearAttackHeavy2
-  #- type: CEWieldedWeapon #TODO: Custom wielded animations
-  #  animations:
-  #    Primary:
-  #    - anim: SpearAttackLight
-  #    Secondary:
-  #    - anim: SpearAttackHeavy
   - type: CEWeaponStaminaCost
     costs:
       Primary: 1
@@ -64,3 +75,7 @@
   - type: Clothing
     slots:
     - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 0.5

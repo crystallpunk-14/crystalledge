@@ -86,11 +86,13 @@
   - type: CEBlessingReceiver
   - type: CESoulContainer
     souls: 20
+  - type: CanMoveInAir
   - type: CESkillStorage
   - type: CEStamina
   - type: CEMobState
   - type: CEDungeonPlayer
   - type: CEMinimapData
+  - type: CEChunkAmbientMusic
   - type: CEDamageVisuals
     thresholds: [ 0.1, 0.2, 0.3, 0.5, 0.7, 1.0 ]
     targetLayers:
@@ -136,3 +138,4 @@
         offset: 0, 0.02
       - time: 0.3
         offset: 0, 0
+  - type: CEDarkSoulSpeechAccent

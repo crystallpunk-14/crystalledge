@@ -1,6 +1,6 @@
 - type: entity
   id: CEWeaponSkimitarIron
-  parent: CEBaseWeapon
+  parent: CEBaseSkimitar
   name: iron skimitar
   description: TODO
   components:
@@ -8,37 +8,27 @@
     sprite: _CE/Objects/Weapons/Skimitar/iron.rsi
     state: icon
   - type: CEWeapon
+    range: 0.6
     effectSlots:
       OnHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 60
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 10
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 10
       OnHeavyHit:
-      - !type:WeaponArcAttack
-        range: 0.6
-        arcWidth: 360
-        effects:
-        - !type:Damage
-          attackType: Melee
-          damage:
-            types:
-              Physical: 5
+      - !type:Damage
+        attackType: Melee
+        damage:
+          types:
+            Physical: 5
     animations:
       Primary:
       - anim: SkimitarAttackLight1
       - anim: SkimitarAttackLight2
       Secondary:
       - anim: SkimitarAttackHeavy1
-  - type: CEWeaponStaminaCost
-    costs:
-      Primary: 1
-      Secondary: 1
-  - type: Clothing
-    slots:
-    - neck
+  - type: CELootCategory
+    tags:
+    - tag: CEWeapon
+      weight: 1.0

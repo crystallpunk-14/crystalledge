@@ -17,6 +17,6 @@ public sealed partial class CETagPrototype : IPrototype
     [DataField]
     public SpriteSpecifier? Icon;
 
-    [DataField(required: true)]
-    public LocId Name = string.Empty;
+    [DataField]
+    public LocId? Name;
 }
