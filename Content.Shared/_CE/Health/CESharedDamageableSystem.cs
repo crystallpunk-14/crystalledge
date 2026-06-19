@@ -302,11 +302,17 @@ public abstract partial class CESharedDamageableSystem : EntitySystem
                 remainingUntilDeath = Math.Max(0, maxHp + destr.DestroyThreshold - damage.Damage.Total);
             }
 
+            float ratio = -1;
+            if (!mobState.Critical) // if mob isn't crit we use currentHp
+                ratio = maxHp > 0 ? Math.Clamp((float)currentHp / maxHp, 0f, 1f) : 0f;
+            else if (mobState.Critical && destroyThreshold != null) // if he is crit, though, we use damage total
+                ratio = Math.Clamp(1f - ((float)damage.Damage.Total - maxHp) / destroyThreshold.Value, 0f, 1f);
+
             return new CEHealthInfo
             {
                 CurrentHp = currentHp,
                 MaxHp = maxHp,
-                Ratio = maxHp > 0 ? Math.Clamp((float) currentHp / maxHp, 0f, 1f) : 0f,
+                Ratio = ratio,
                 Critical = mobState.Critical,
                 HasMobState = true,
                 DestroyThreshold = destroyThreshold,

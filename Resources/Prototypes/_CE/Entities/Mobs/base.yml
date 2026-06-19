@@ -5,6 +5,8 @@
   components:
   - type: CEDamageable
   - type: CEDamagePopup
+  - type: CEHealthExaminable
+    locPrefix: default
   - type: CEDestructible
     destroyThreshold: 100
     destroySound:
