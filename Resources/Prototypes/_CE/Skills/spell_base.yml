@@ -42,3 +42,14 @@
   - type: Sprite
     drawdepth: Effects
     sprite: _CE/Effects/cast_impact48.rsi
+    noRot: true
+
+- type: entity
+  parent: CEBaseMagicImpact
+  id: CEBaseMagicImpactAlt
+  name: magic impact (alt)
+  description: manifestation of magical energy in the physical plane (which can rotate!)
+  abstract: true
+  components:
+  - type: Sprite
+    noRot: false
