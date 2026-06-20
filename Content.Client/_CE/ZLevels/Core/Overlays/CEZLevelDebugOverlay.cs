@@ -43,10 +43,25 @@ public sealed partial class CEZLevelDebugOverlay : Overlay
                 !_entityManager.TryGetComponent<TransformComponent>(uid, out var xform))
                 continue;
 
-            if (xform.MapUid != xform.ParentUid)
+            if (xform.GridUid != xform.ParentUid)
                 continue;
 
             DrawEntityDebug(args, uid, zPhys);
+        }
+
+        var gridQ = _entityManager.EntityQueryEnumerator<CEZGridComponent, TransformComponent>();
+        while (gridQ.MoveNext(out _, out var gridNet, out var gridXform))
+        {
+            if (gridNet.NetworkId == string.Empty) continue;
+
+            var gridWorldPos  = _transform.GetWorldPosition(gridXform);
+            var gridScreenPos = args.ViewportControl?.WorldToScreen(gridWorldPos) ?? Vector2.Zero;
+            if (gridScreenPos == Vector2.Zero) continue;
+
+            var shortId = gridNet.NetworkId.Length >= 8
+                ? gridNet.NetworkId[..8]
+                : gridNet.NetworkId;
+            args.ScreenHandle.DrawString(_font, gridScreenPos, $"Net: {shortId}", Color.Cyan);
         }
     }
 

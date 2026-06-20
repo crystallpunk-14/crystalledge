@@ -53,7 +53,7 @@
             CEWanderer: [ -1, -1 ]
         - type: CEStationZLevels
           mapsAbove:
-          - /Maps/_CE/Empty.yml
+          - /Maps/_CE/EmptyGridMap.yml
           zLevelsComponentOverrides:
             - type: MapAtmosphere
               space: False
@@ -79,8 +79,8 @@
 - type: zMap
   id: Empty
   maps:
-  - /Maps/_CE/Empty.yml
-  - /Maps/_CE/Empty.yml
+  - /Maps/_CE/EmptyGridMap.yml
+  - /Maps/_CE/EmptyGridMap.yml
   components:
     - type: MapAtmosphere
       space: False

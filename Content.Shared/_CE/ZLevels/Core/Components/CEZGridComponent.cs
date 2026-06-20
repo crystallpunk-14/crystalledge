@@ -1,0 +1,23 @@
+/*
+ * This file is sublicensed under MIT License
+ * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
+ */
+
+using Robust.Shared.GameStates;
+
+namespace Content.Shared._CE.ZLevels.Core.Components;
+
+/// <summary>
+/// Runtime membership marker added to a grid by <see cref="CEZGridLinkerSystem"/>.
+/// Not persisted — always reconstructed from linker walls on map load.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, UnsavedComponent]
+public sealed partial class CEZGridComponent : Component
+{
+    [ViewVariables, AutoNetworkedField]
+    public string NetworkId = string.Empty;
+
+    /// <summary>Runtime cache — direct reference to the network manager entity.</summary>
+    [ViewVariables]
+    public EntityUid Network = EntityUid.Invalid;
+}
