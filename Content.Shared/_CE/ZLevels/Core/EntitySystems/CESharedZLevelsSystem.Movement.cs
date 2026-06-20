@@ -101,15 +101,10 @@ public abstract partial class CESharedZLevelsSystem
         if (!_zMapQuery.TryComp(xform.MapUid, out var zMapComp))
             return 0;
 
-        if (!_gridQuery.TryComp(xform.MapUid, out var mapGrid))
-            return 0;
-
-        var worldPosI = _transform.GetGridOrMapTilePosition(target);
         var worldPos = _transform.GetWorldPosition(target);
 
         //Select current map by default
         Entity<CEZLevelMapComponent> checkingMap = (xform.MapUid.Value, zMapComp);
-        var checkingGrid = mapGrid;
 
         for (var floor = 0; floor <= maxFloors; floor++)
         {
@@ -117,15 +112,18 @@ public abstract partial class CESharedZLevelsSystem
             {
                 if (!TryMapOffset((checkingMap.Owner, checkingMap.Comp), -floor, out var tempCheckingMap))
                     continue;
-                if (!_gridQuery.TryComp(tempCheckingMap, out var tempCheckingGrid))
-                    continue;
 
                 checkingMap = tempCheckingMap;
-                checkingGrid = tempCheckingGrid;
             }
 
+            //Find whichever grid (structure or planet) provides the floor here.
+            if (!_mapManager.TryFindGridAt(checkingMap, worldPos, out var gridUid, out var grid))
+                continue;
+
+            var gridTile = _map.WorldToTile(gridUid, grid, worldPos);
+
             //Check all types of ZHeight entities
-            var query = _map.GetAnchoredEntitiesEnumerator(checkingMap, checkingGrid, worldPosI);
+            var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, gridTile);
             while (query.MoveNext(out var uid))
             {
                 if (!_zHighGroundQuery.TryComp(uid, out var heightComp))
@@ -133,7 +131,8 @@ public abstract partial class CESharedZLevelsSystem
 
                 var dir = _transform.GetWorldRotation(uid.Value).GetCardinalDir();
 
-                var local = new Vector2((worldPos.X % 1 + 1) % 1, (worldPos.Y % 1 + 1) % 1);
+                var gridLocal = _map.WorldToLocal(gridUid, grid, worldPos);
+                var local = new Vector2((gridLocal.X % 1 + 1) % 1, (gridLocal.Y % 1 + 1) % 1);
 
                 var t = dir switch
                 {
@@ -173,7 +172,7 @@ public abstract partial class CESharedZLevelsSystem
             }
 
             //No ZEntities found, check floor tiles
-            if (_map.TryGetTileRef(checkingMap, checkingGrid, worldPosI, out var tileRef) &&
+            if (_map.TryGetTileRef(gridUid, grid, gridTile, out var tileRef) &&
                 !tileRef.Tile.IsEmpty)
                 return -floor; // tile ground has groundY == 0 -> -floor
         }
@@ -196,10 +195,11 @@ public abstract partial class CESharedZLevelsSystem
         if (!TryMapUp(currentMapUid.Value, out var mapAboveUid))
             return false;
 
-        if (!_gridQuery.TryComp(mapAboveUid, out var mapAboveGrid))
+        var worldPos = _transform.GetWorldPosition(ent);
+        if (!_mapManager.TryFindGridAt(mapAboveUid, worldPos, out var gridUid, out var grid))
             return false;
 
-        if (_map.TryGetTileRef(mapAboveUid, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef) &&
+        if (_map.TryGetTileRef(gridUid, grid, worldPos, out var tileRef) &&
             !tileRef.Tile.IsEmpty)
             return true;
 

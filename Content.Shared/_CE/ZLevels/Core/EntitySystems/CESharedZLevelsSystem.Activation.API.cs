@@ -50,7 +50,7 @@ public abstract partial class CESharedZLevelsSystem
         var transform = Transform(entity);
         var parent = transform.ParentUid;
 
-        if (parent != transform.MapUid
+        if (parent != transform.GridUid
             || transform.Anchored
             || _physicsQuery.TryComp(entity, out var physics)
             && physics.BodyType == BodyType.Static)

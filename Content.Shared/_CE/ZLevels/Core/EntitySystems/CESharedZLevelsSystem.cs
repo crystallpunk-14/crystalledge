@@ -25,6 +25,7 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
     [Dependency] private INetManager _net = null!;
     [Dependency] private IGameTiming _timing = null!;
     [Dependency] private IConfigurationManager _config = null!;
+    [Dependency] private IMapManager _mapManager = null!;
 
     [Dependency] private SharedPhysicsSystem _physicsSystem = null!;
     [Dependency] private SharedTransformSystem _transform = null!;
@@ -63,35 +64,6 @@ public abstract partial class CESharedZLevelsSystem : EntitySystem
         InitializeCacheHooks();
         InitializeMovement();
         InitializeView();
-    }
-
-    public bool IsVoidAtCoordinates(EntityCoordinates coords, out Entity<CEZLevelMapComponent> belowMap)
-    {
-        belowMap = default;
-
-        var mapId = _transform.GetMapId(coords);
-        if (mapId == MapId.Nullspace)
-            return false;
-
-        var mapUid = _map.GetMap(mapId);
-
-        if (!_zMapQuery.TryComp(mapUid, out var zMap))
-            return false;
-
-        if (!TryMapDown((mapUid, zMap), out belowMap))
-            return false;
-
-        // No grid means empty space.
-        if (!_gridQuery.TryComp(mapUid, out var grid))
-            return true;
-
-        var indices = _map.LocalToTile(mapUid, grid, coords);
-
-        // Avoid unnecessary temp variables.
-        return _map
-            .GetTileRef(mapUid, grid, indices)
-            .Tile
-            .IsEmpty;
     }
 
     /// <summary>

@@ -60,10 +60,11 @@ public abstract partial class CESharedZLevelsSystem
         if (!TryMapUp(currentMapUid.Value, out var mapAboveUid))
             return false;
 
-        if (!_gridQuery.TryComp(mapAboveUid, out var mapAboveGrid))
+        var worldPos = _transform.GetWorldPosition(ent);
+        if (!_mapManager.TryFindGridAt(mapAboveUid, worldPos, out var gridUid, out var grid))
             return false;
 
-        if (!_map.TryGetTileRef(mapAboveUid, mapAboveGrid, _transform.GetWorldPosition(ent), out var tileRef))
+        if (!_map.TryGetTileRef(gridUid, grid, worldPos, out var tileRef))
             return false;
 
         var tileDef = (ContentTileDefinition)TilDefMan[tileRef.Tile.TypeId];

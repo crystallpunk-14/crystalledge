@@ -68,10 +68,8 @@
               parallax: CESky
             - type: SunShadowCycle
               offset: 150
-              duration: 300
             - type: LightCycle
               offset: 150
-              duration: 300
               originalColor: "#75e3ff"
             - type: CEZLevelMapRoof
             - type: SunShadow
