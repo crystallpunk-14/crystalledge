@@ -76,6 +76,9 @@
             - type: SunShadow
             - type: MapLight
               ambientLightColor: "#ffed75"
+            - type: Gravity
+              enabled: true
+            - type: CEAutoGridGravity
 
 - type: zMap
   id: Empty
