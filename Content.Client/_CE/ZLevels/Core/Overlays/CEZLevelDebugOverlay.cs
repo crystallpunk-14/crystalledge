@@ -49,14 +49,16 @@ public sealed partial class CEZLevelDebugOverlay : Overlay
             DrawEntityDebug(args, uid, zPhys);
         }
 
-        var gridQ = _entityManager.EntityQueryEnumerator<CEZGridComponent, TransformComponent>();
-        while (gridQ.MoveNext(out _, out var gridNet, out var gridXform))
+        var gridQuery = _entityManager.EntityQueryEnumerator<CEZGridComponent, TransformComponent>();
+        while (gridQuery.MoveNext(out _, out var gridNet, out var gridXform))
         {
-            if (gridNet.NetworkId == string.Empty) continue;
+            if (gridNet.NetworkId == string.Empty)
+                continue;
 
-            var gridWorldPos  = _transform.GetWorldPosition(gridXform);
+            var gridWorldPos = _transform.GetWorldPosition(gridXform);
             var gridScreenPos = args.ViewportControl?.WorldToScreen(gridWorldPos) ?? Vector2.Zero;
-            if (gridScreenPos == Vector2.Zero) continue;
+            if (gridScreenPos == Vector2.Zero)
+                continue;
 
             var shortId = gridNet.NetworkId.Length >= 8
                 ? gridNet.NetworkId[..8]

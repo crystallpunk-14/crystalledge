@@ -13,6 +13,8 @@ namespace Content.Server._CE.ZLevels.Core;
 
 public sealed partial class CEZLevelsSystem
 {
+    [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+
     [PublicAPI]
     public Entity<CEZGridNetworkComponent> CreateGridNetwork()
     {
@@ -27,7 +29,7 @@ public sealed partial class CEZLevelsSystem
     [PublicAPI]
     public bool TryAddGridToNetwork(Entity<CEZGridNetworkComponent> network, EntityUid grid)
     {
-        if (!HasComp<MapGridComponent>(grid))
+        if (!_mapGridQuery.HasComp(grid))
         {
             Log.Error($"CEZGridLinker: {grid} is not a MapGrid.");
             return false;
@@ -42,10 +44,10 @@ public sealed partial class CEZLevelsSystem
         network.Comp.Grids.Add(grid);
         Dirty(network);
 
-        var gc = EnsureComp<CEZGridComponent>(grid);
-        gc.NetworkId = network.Comp.NetworkId;
-        gc.Network   = network.Owner;
-        Dirty(grid, gc);
+        var zGridComp = EnsureComp<CEZGridComponent>(grid);
+        zGridComp.NetworkId = network.Comp.NetworkId;
+        zGridComp.Network   = network.Owner;
+        Dirty(grid, zGridComp);
 
         var ev = new CEGridLinkedEvent(network.Owner);
         RaiseLocalEvent(grid, ref ev);

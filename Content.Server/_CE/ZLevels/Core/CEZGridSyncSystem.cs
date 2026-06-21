@@ -32,7 +32,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
     [Dependency] private CEZGridConnectorSystem _connectorSystem = default!;
 
     [Dependency] private EntityQuery<CEZGridComponent> _gridCompQuery = default!;
-    [Dependency] private EntityQuery<CEZGridNetworkComponent> _netQuery = default!;
+    [Dependency] private EntityQuery<CEZGridNetworkComponent> _zGridNetworkQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
     [Dependency] private EntityQuery<MapComponent> _mapCompQuery = default!;
@@ -53,7 +53,8 @@ public sealed partial class CEZGridSyncSystem : VirtualController
     private bool IsStaticAnchor(EntityUid gridUid)
     {
         return _mapCompQuery.HasComponent(gridUid)
-               || (_physicsQuery.TryComp(gridUid, out var body) && !IsMoveable(body));
+               || _physicsQuery.TryComp(gridUid, out var body)
+               && !IsMoveable(body);
     }
 
     private static bool IsMoveable(PhysicsComponent body)
@@ -61,13 +62,13 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         return (body.BodyType & (BodyType.Dynamic | BodyType.KinematicController)) != 0x0;
     }
 
-    private static Vector2 SnapToTile(Vector2 v, float tileSize)
+    private static Vector2 SnapPosition(Vector2 v, float tileSize)
     {
         return new Vector2(MathF.Round(v.X / tileSize) * tileSize,
-                           MathF.Round(v.Y / tileSize) * tileSize);
+            MathF.Round(v.Y / tileSize) * tileSize);
     }
 
-    private static Angle SnapToQuadrant(Angle a)
+    private static Angle SnapAngle(Angle a)
     {
         return Angle.FromDegrees(Math.Round(a.Degrees / 90.0) * 90.0);
     }
@@ -79,15 +80,17 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         var refPos = _transform.GetWorldPosition(refGrid);
         var refRot = _transform.GetWorldRotation(refGrid);
 
-        if (!_gridCompQuery.TryComp(refGrid, out var c))
+        if (!_gridCompQuery.TryComp(refGrid, out var zGridComp))
             return (refPos, refRot);
 
-        var rot = refRot - c.NetworkRotation;
-        return (refPos - rot.RotateVec(c.NetworkOffset), rot);
+        var rot = refRot - zGridComp.NetworkRotation;
+        return (refPos - rot.RotateVec(zGridComp.NetworkOffset), rot);
     }
 
-    private void ApplyAnchorToGrid(EntityUid gridUid, CEZGridComponent comp,
-        Vector2 anchorPos, Angle anchorRot)
+    private void ApplyAnchorToGrid(EntityUid gridUid,
+        CEZGridComponent comp,
+        Vector2 anchorPos,
+        Angle anchorRot)
     {
         _transform.SetWorldPositionRotation(gridUid,
             anchorPos + anchorRot.RotateVec(comp.NetworkOffset),
@@ -111,53 +114,53 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         network.Comp.HasStaticAnchor = hasStatic;
     }
 
-    private void OnGridLinked(Entity<CEZGridComponent> ent, ref CEGridLinkedEvent ev)
+    private void OnGridLinked(Entity<CEZGridComponent> zGridEnt, ref CEGridLinkedEvent ev)
     {
-        if (!_netQuery.TryComp(ev.Network, out var net))
+        if (!_zGridNetworkQuery.TryComp(ev.Network, out var zGridNetwork))
             return;
 
-        var worldPos = _transform.GetWorldPosition(ent);
-        var worldRot = _transform.GetWorldRotation(ent);
+        var worldPos = _transform.GetWorldPosition(zGridEnt);
+        var worldRot = _transform.GetWorldRotation(zGridEnt);
 
-        if (net.Grids.Count == 1)
+        if (zGridNetwork.Grids.Count == 1)
         {
-            ent.Comp.NetworkOffset = Vector2.Zero;
-            ent.Comp.NetworkRotation = Angle.Zero;
+            zGridEnt.Comp.NetworkOffset = Vector2.Zero;
+            zGridEnt.Comp.NetworkRotation = Angle.Zero;
         }
         else
         {
             // Pick anchor: static anchor takes priority, otherwise any existing grid
-            var anchorGrid = net.Grids.FirstOrDefault(IsStaticAnchor);
+            var anchorGrid = zGridNetwork.Grids.FirstOrDefault(IsStaticAnchor);
             if (anchorGrid == default)
-                anchorGrid = net.Grids.First(g => g != ent.Owner);
+                anchorGrid = zGridNetwork.Grids.First(g => g != zGridEnt.Owner);
             var (anchorPos, anchorRot) = GetAnchorFromGrid(anchorGrid);
 
             var localOffset = new Angle(-anchorRot.Theta).RotateVec(worldPos - anchorPos);
             var relRot = worldRot - anchorRot;
 
-            if (IsStaticAnchor(ent.Owner))
+            if (IsStaticAnchor(zGridEnt.Owner))
             {
                 // Planet cannot be moved — record exact position so the invariant holds.
-                ent.Comp.NetworkOffset = localOffset;
-                ent.Comp.NetworkRotation = relRot;
+                zGridEnt.Comp.NetworkOffset = localOffset;
+                zGridEnt.Comp.NetworkRotation = relRot;
             }
             else
             {
-                var tileSize = _mapGridQuery.GetComponent(ent.Owner).TileSize;
-                var snappedOffset = SnapToTile(localOffset, tileSize);
-                var snappedRot = SnapToQuadrant(relRot);
+                var tileSize = _mapGridQuery.GetComponent(zGridEnt.Owner).TileSize;
+                var snappedOffset = SnapPosition(localOffset, tileSize);
+                var snappedRot = SnapAngle(relRot);
 
                 // Always snap when joining a static-anchor network.
                 // For flying-only merges, only snap if the correction is small (≤ 1 tile, < 45°).
-                var shouldSnap = net.HasStaticAnchor
-                                 || ((snappedOffset - localOffset).Length() < tileSize
-                                     && Math.Abs((snappedRot - relRot).Theta) < Math.PI * 0.25);
+                var shouldSnap = zGridNetwork.HasStaticAnchor
+                                 || (snappedOffset - localOffset).Length() < tileSize
+                                 && Math.Abs((snappedRot - relRot).Theta) < Math.PI * 0.25;
                 if (shouldSnap)
                 {
-                    ent.Comp.NetworkOffset = snappedOffset;
-                    ent.Comp.NetworkRotation = snappedRot;
+                    zGridEnt.Comp.NetworkOffset = snappedOffset;
+                    zGridEnt.Comp.NetworkRotation = snappedRot;
                     _syncing = true;
-                    _transform.SetWorldPositionRotation(ent.Owner,
+                    _transform.SetWorldPositionRotation(zGridEnt.Owner,
                         anchorPos + anchorRot.RotateVec(snappedOffset),
                         anchorRot + snappedRot);
                     _syncing = false;
@@ -165,51 +168,54 @@ public sealed partial class CEZGridSyncSystem : VirtualController
                 }
                 else
                 {
-                    ent.Comp.NetworkOffset = localOffset;
-                    ent.Comp.NetworkRotation = relRot;
+                    zGridEnt.Comp.NetworkOffset = localOffset;
+                    zGridEnt.Comp.NetworkRotation = relRot;
                 }
             }
         }
 
-        ent.Comp.CachedFixturesMass = _physicsQuery.TryComp(ent.Owner, out var body)
-            ? body.FixturesMass : 0f;
+        zGridEnt.Comp.CachedFixturesMass = _physicsQuery.TryComp(zGridEnt.Owner, out var body)
+            ? body.FixturesMass
+            : 0f;
 
-        RecalculateNetworkCache((ev.Network, net));
+        RecalculateNetworkCache((ev.Network, zGridNetwork));
 
         // When a static anchor is present: re-compute and snap all moveable grids
         // relative to it, then zero their velocities.
         // This also handles the case where the planet joined after the flying grids.
-        if (net.HasStaticAnchor)
+        if (!zGridNetwork.HasStaticAnchor)
+            return;
+
+        var staticGrid = zGridNetwork.Grids.FirstOrDefault(IsStaticAnchor);
+        if (staticGrid == default)
+            return;
+
+        var (sAnchorPos, sAnchorRot) = GetAnchorFromGrid(staticGrid);
+        var sTileSize = _mapGridQuery.GetComponent(staticGrid).TileSize;
+
+        _syncing = true;
+        foreach (var gUid in zGridNetwork.Grids)
         {
-            var staticGrid = net.Grids.FirstOrDefault(IsStaticAnchor);
-            if (staticGrid != default)
-            {
-                var (sAnchorPos, sAnchorRot) = GetAnchorFromGrid(staticGrid);
-                var sTileSize = _mapGridQuery.GetComponent(staticGrid).TileSize;
+            if (IsStaticAnchor(gUid) || !_gridCompQuery.TryComp(gUid, out var gComp))
+                continue;
 
-                _syncing = true;
-                foreach (var gUid in net.Grids)
-                {
-                    if (IsStaticAnchor(gUid) || !_gridCompQuery.TryComp(gUid, out var gComp))
-                        continue;
+            var gPos = _transform.GetWorldPosition(gUid);
+            var gRot = _transform.GetWorldRotation(gUid);
+            gComp.NetworkOffset = SnapPosition(
+                new Angle(-sAnchorRot.Theta).RotateVec(gPos - sAnchorPos),
+                sTileSize);
+            gComp.NetworkRotation = SnapAngle(gRot - sAnchorRot);
+            ApplyAnchorToGrid(gUid, gComp, sAnchorPos, sAnchorRot);
 
-                    var gPos = _transform.GetWorldPosition(gUid);
-                    var gRot = _transform.GetWorldRotation(gUid);
-                    gComp.NetworkOffset = SnapToTile(
-                        new Angle(-sAnchorRot.Theta).RotateVec(gPos - sAnchorPos), sTileSize);
-                    gComp.NetworkRotation = SnapToQuadrant(gRot - sAnchorRot);
-                    ApplyAnchorToGrid(gUid, gComp, sAnchorPos, sAnchorRot);
+            if (!_physicsQuery.TryComp(gUid, out var gBody) || !IsMoveable(gBody))
+                continue;
 
-                    if (_physicsQuery.TryComp(gUid, out var gBody) && IsMoveable(gBody))
-                    {
-                        PhysicsSystem.SetLinearVelocity(gUid, Vector2.Zero, body: gBody);
-                        PhysicsSystem.SetAngularVelocity(gUid, 0f, body: gBody);
-                    }
-                }
-                _syncing = false;
-                _connectorSystem.MarkDirty();
-            }
+            PhysicsSystem.SetLinearVelocity(gUid, Vector2.Zero, body: gBody);
+            PhysicsSystem.SetAngularVelocity(gUid, 0f, body: gBody);
         }
+
+        _syncing = false;
+        _connectorSystem.MarkDirty();
     }
 
     private void OnGridUnlinked(Entity<CEZGridComponent> ent, ref CEGridUnlinkedEvent ev)
@@ -218,14 +224,15 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         ent.Comp.NetworkRotation = Angle.Zero;
         ent.Comp.CachedFixturesMass = 0f;
 
-        if (_netQuery.TryComp(ev.Network, out var net))
+        if (_zGridNetworkQuery.TryComp(ev.Network, out var net))
             RecalculateNetworkCache((ev.Network, net));
     }
 
     private void OnMassChanged(Entity<CEZGridComponent> ent, ref MassDataChangedEvent args)
     {
         ent.Comp.CachedFixturesMass = _physicsQuery.TryComp(ent.Owner, out var body)
-            ? body.FixturesMass : 0f;
+            ? body.FixturesMass
+            : 0f;
 
         if (_zlevels.TryGetGridNetwork(ent.Owner, out var network))
             RecalculateNetworkCache(network);
@@ -263,6 +270,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
                 continue;
             ApplyAnchorToGrid(otherGrid, otherComp, newAnchorPos, newAnchorRot);
         }
+
         _syncing = false;
     }
 
@@ -356,6 +364,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
                     if (Math.Abs(body.AngularVelocity) > 1e-4f)
                         PhysicsSystem.SetAngularVelocity(gUid, 0f, body: body);
                 }
+
                 continue;
             }
 
@@ -412,6 +421,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
                 if (_gridCompQuery.TryComp(gUid, out var comp))
                     ApplyAnchorToGrid(gUid, comp, avgPos, avgRot);
             }
+
             _syncing = false;
         }
     }

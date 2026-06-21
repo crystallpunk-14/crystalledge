@@ -24,6 +24,7 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
     [Dependency] private EntityQuery<CEZGridComponent> _zgridQuery = default!;
     [Dependency] private EntityQuery<CEZGridNetworkComponent> _zgridNetworkQuery = default!;
+    [Dependency] private EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
 
     private bool _dirty;
 
@@ -79,9 +80,6 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
     private void OnGridNetworkShutdown(Entity<CEZGridNetworkComponent> ent, ref ComponentShutdown args)
     {
-        // Safety cleanup for external network deletions. Grids removed by the recalculator
-        // (via DeleteGridNetwork → RemComp<CEZGridComponent>) will not have CEZGridComponent
-        // anymore, so the TryComp check below skips them safely.
         foreach (var grid in ent.Comp.Grids.ToList())
         {
             if (!_zgridQuery.TryComp(grid, out var gc) || gc.Network != ent.Owner)
@@ -94,11 +92,10 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
     {
         if (!_dirty)
             return;
+
         _dirty = false;
         RecalculateGridNetworks();
     }
-
-    // ── Recalculation ─────────────────────────────────────────────────────────
 
     private void RecalculateGridNetworks()
     {
@@ -166,37 +163,39 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
     {
         var adj = new Dictionary<EntityUid, HashSet<EntityUid>>();
 
-        var lq = EntityQueryEnumerator<CEZGridConnectorComponent, TransformComponent>();
-        while (lq.MoveNext(out var connectorUid, out _, out var xform))
+        var query = EntityQueryEnumerator<CEZGridConnectorComponent, TransformComponent>();
+        while (query.MoveNext(out var connectorUid, out _, out var xform))
         {
             if (!xform.Anchored || xform.GridUid == null || xform.MapUid == null)
                 continue;
 
-            var lower = xform.GridUid.Value;
-            if (!TryComp<CEZLevelMapComponent>(xform.MapUid.Value, out var zMap))
+            var lowerGridUid = xform.GridUid.Value;
+            if (!_zMapQuery.TryComp(xform.MapUid.Value, out var zMap))
                 continue;
             if (!_zLevels.TryMapUp((xform.MapUid.Value, zMap), out var aboveMap))
                 continue;
 
             var worldPos = _transform.GetWorldPosition(connectorUid);
-            if (!_mapManager.TryFindGridAt(aboveMap.Owner, worldPos, out var upper, out var upperGrid))
+            if (!_mapManager.TryFindGridAt(aboveMap.Owner, worldPos, out var upperGridUid, out var upperGrid))
                 continue;
-            if (upper == lower)
+            if (upperGridUid == lowerGridUid)
                 continue;
 
             // TryFindGridAt matches by AABB — verify the tile at this position actually exists
-            if (!_mapSystem.TryGetTileRef(upper, upperGrid, worldPos, out var tileRef) || tileRef.Tile.IsEmpty)
+            if (!_mapSystem.TryGetTileRef(upperGridUid, upperGrid, worldPos, out var tileRef) || tileRef.Tile.IsEmpty)
                 continue;
 
-            if (!adj.TryGetValue(lower, out var ln))
-                adj[lower] = ln = new HashSet<EntityUid>();
-            if (!adj.TryGetValue(upper, out var un))
-                adj[upper] = un = new HashSet<EntityUid>();
-            ln.Add(upper);
-            un.Add(lower);
+            if (!adj.TryGetValue(lowerGridUid, out var lowerNeighbors))
+                adj[lowerGridUid] = lowerNeighbors = new HashSet<EntityUid>();
+
+            if (!adj.TryGetValue(upperGridUid, out var upperNeighbors))
+                adj[upperGridUid] = upperNeighbors = new HashSet<EntityUid>();
+
+            lowerNeighbors.Add(upperGridUid);
+            upperNeighbors.Add(lowerGridUid);
         }
 
-        // BFS → connected components
+        // BFS connected components
         var visited = new HashSet<EntityUid>();
         var result = new List<HashSet<EntityUid>>();
 

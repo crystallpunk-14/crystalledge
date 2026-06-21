@@ -3,7 +3,6 @@
  * https://github.com/space-wizards/space-station-14/blob/master/LICENSE.TXT
  */
 
-using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CE.ZLevels.Core.Components;
 using JetBrains.Annotations;
 
@@ -23,13 +22,13 @@ public abstract partial class CESharedZLevelsSystem
     {
         network = default;
 
-        if (!_zgridQuery.TryComp(grid, out var gc) || gc.NetworkId == string.Empty)
+        if (!_zgridQuery.TryComp(grid, out var zGridComp) || zGridComp.NetworkId == string.Empty)
             return false;
 
         // Fast path
-        if (gc.Network.IsValid() && _zgridNetworkQuery.TryComp(gc.Network, out var cached))
+        if (zGridComp.Network.IsValid() && _zgridNetworkQuery.TryComp(zGridComp.Network, out var cached))
         {
-            network = (gc.Network, cached);
+            network = (zGridComp.Network, cached);
             return true;
         }
 
@@ -37,9 +36,9 @@ public abstract partial class CESharedZLevelsSystem
         var q = EntityQueryEnumerator<CEZGridNetworkComponent>();
         while (q.MoveNext(out var uid, out var nc))
         {
-            if (nc.NetworkId != gc.NetworkId)
+            if (nc.NetworkId != zGridComp.NetworkId)
                 continue;
-            gc.Network = uid;
+            zGridComp.Network = uid;
             network = (uid, nc);
             return true;
         }
@@ -49,7 +48,7 @@ public abstract partial class CESharedZLevelsSystem
 }
 
 /// <summary>
-/// Directed at a grid entity when it is added to a z-grid network by <see cref="CEZGridLinkerSystem"/>.
+/// Directed at a grid entity when it is added to a z-grid network by <see cref="CEZGridConnectorSystem"/>.
 /// </summary>
 [ByRefEvent]
 public readonly struct CEGridLinkedEvent(EntityUid network)
