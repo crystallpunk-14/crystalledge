@@ -1,0 +1,114 @@
+using Content.Server._CE.Power.Components;
+using Content.Server.NodeContainer.EntitySystems;
+using Content.Server.Power.EntitySystems;
+using Content.Server.Power.Nodes;
+using Content.Server.Radiation.Systems;
+using Content.Shared._CE.Power;
+using Content.Shared._CE.Power.Components;
+using Content.Shared._CE.ZLevels.Core.Components;
+using Content.Shared._CE.ZLevels.Core.EntitySystems;
+using Content.Shared.Interaction;
+using Content.Shared.NodeContainer;
+using Content.Shared.Radiation.Components;
+using Robust.Server.GameObjects;
+using Robust.Shared.Map.Components;
+
+namespace Content.Server._CE.Power;
+
+public sealed partial class CEPowerSystem : CESharedPowerSystem
+{
+    [Dependency] private RadiationSystem _radiation = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private NodeGroupSystem _nodeGroup = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<CEEnergyLeakComponent, PowerConsumerReceivedChanged>(OnPowerChanged);
+        SubscribeLocalEvent<CEToggleableConnectorComponent, ActivateInWorldEvent>(OnActivateInWorld);
+
+        // CrystallEdge: reflood vertical pipe nodes when ZGrid network topology changes
+        SubscribeLocalEvent<MapGridComponent, CEGridLinkedEvent>(OnGridLinked);
+        SubscribeLocalEvent<MapGridComponent, CEGridUnlinkedEvent>(OnGridUnlinked);
+        // CrystallEdge end
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        UpdateChargers(frameTime);
+    }
+
+    public void ToggleConnector(Entity<NodeContainerComponent> connector, bool status)
+    {
+        foreach (var node in connector.Comp.Nodes.Values)
+        {
+            if (node is CEConnectorCenterNode cableNode)
+            {
+                cableNode.Active = status;
+                _nodeGroup.QueueReflood(node);
+            }
+        }
+
+        _appearance.SetData(connector, CEToggleableCableVisuals.Enabled, status);
+    }
+
+    private void OnActivateInWorld(Entity<CEToggleableConnectorComponent> ent, ref ActivateInWorldEvent args)
+    {
+        if (UseDelay.IsDelayed(ent.Owner))
+            return;
+
+        if (!TryComp<NodeContainerComponent>(ent, out var nodeContainer))
+            return;
+
+        var newState = !ent.Comp.Active;
+        ent.Comp.Active = newState;
+        ToggleConnector((ent, nodeContainer), newState);
+
+        UseDelay.TryResetDelay(ent);
+    }
+
+    private void OnGridLinked(Entity<MapGridComponent> grid, ref CEGridLinkedEvent args)
+    {
+        RefloodVerticalNodes(grid.Owner);
+    }
+
+    private void OnGridUnlinked(Entity<MapGridComponent> grid, ref CEGridUnlinkedEvent args)
+    {
+        RefloodVerticalNodes(grid.Owner);
+    }
+
+    private void RefloodVerticalNodes(EntityUid gridUid)
+    {
+        var enumerator = EntityQueryEnumerator<NodeContainerComponent, TransformComponent>();
+        while (enumerator.MoveNext(out _, out var nc, out var xform))
+        {
+            if (xform.GridUid != gridUid)
+                continue;
+
+            foreach (var node in nc.Nodes.Values)
+            {
+                if (node is CECableVerticalNode)
+                    _nodeGroup.QueueReflood(node);
+            }
+        }
+    }
+
+    private void OnPowerChanged(Entity<CEEnergyLeakComponent> ent, ref PowerConsumerReceivedChanged args)
+    {
+        var enabled = args.ReceivedPower >= 0;
+
+        PointLight.SetEnabled(ent, enabled);
+
+        if (TryComp<RadiationSourceComponent>(ent, out var radComp))
+        {
+            _radiation.SetSourceEnabled((ent.Owner, radComp), enabled);
+            _radiation.SetIntensity((ent.Owner, radComp), args.ReceivedPower * ent.Comp.LeakPercentage);
+        }
+
+        ent.Comp.CurrentLeak = args.ReceivedPower * ent.Comp.LeakPercentage;
+        Dirty(ent);
+    }
+}
