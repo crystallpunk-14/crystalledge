@@ -129,7 +129,7 @@ public abstract partial class CESharedZLevelsSystem
                 if (!_zHighGroundQuery.TryComp(uid, out var heightComp))
                     continue;
 
-                var dir = _transform.GetWorldRotation(uid.Value).GetCardinalDir();
+                var dir = Transform(uid.Value).LocalRotation.GetCardinalDir();
 
                 var gridLocal = _map.WorldToLocal(gridUid, grid, worldPos);
                 var local = new Vector2((gridLocal.X % 1 + 1) % 1, (gridLocal.Y % 1 + 1) % 1);
