@@ -5,7 +5,6 @@ using Content.Server.Power.Nodes;
 using Content.Server.Radiation.Systems;
 using Content.Shared._CE.Power;
 using Content.Shared._CE.Power.Components;
-using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.NodeContainer;

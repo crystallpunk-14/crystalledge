@@ -24,7 +24,7 @@ namespace Content.Shared.Tiles;
 
 public sealed partial class FloorTileSystem : EntitySystem
 {
-    [Dependency] private SharedDoAfterSystem _doAfter = default!; // CrystallEdge: tile placement doAfter
+    [Dependency] private SharedDoAfterSystem _doAfter = default!; // CrystallEdge: delayed tile placement
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _netManager = default!;
@@ -54,7 +54,7 @@ public sealed partial class FloorTileSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<FloorTileComponent, AfterInteractEvent>(OnAfterInteract);
-        SubscribeLocalEvent<FloorTileComponent, FloorTileDoAfterEvent>(OnFloorTileDoAfter); // CrystallEdge
+        SubscribeLocalEvent<FloorTileComponent, FloorTileDoAfterEvent>(OnFloorTileDoAfter); // CrystallEdge: delayed tile placement
     }
 
     private void OnAfterInteract(EntityUid uid, FloorTileComponent component, AfterInteractEvent args)
@@ -173,18 +173,22 @@ public sealed partial class FloorTileSystem : EntitySystem
             }
             else if (HasBaseTurf(currentTileDefinition, new ProtoId<ContentTileDefinition>(ContentTileDefinition.SpaceID)))
             {
-                if (!_stackSystem.TryUse((uid, stack), 1))
-                    continue;
-
-                args.Handled = true;
-                if (_netManager.IsClient)
-                    return;
-
-                var grid = _mapManager.CreateGridEntity(locationMap.MapId);
-                var gridXform = Transform(grid);
-                _transform.SetWorldPosition((grid, gridXform), locationMap.Position);
-                location = new EntityCoordinates(grid, Vector2.Zero);
-                PlaceAt(args.User, grid, grid.Comp, location, _tileDefinitionManager[component.Outputs[0]].TileId, component.PlaceTileSound, grid.Comp.TileSize / 2f);
+                // CrystallEdge: start doAfter for space placement (TargetGrid null = create new grid)
+                var doAfterEvent = new FloorTileDoAfterEvent
+                {
+                    Location = GetNetCoordinates(location),
+                    TargetGrid = null,
+                    TileId = currentTileDefinition.TileId,
+                    PlaceSound = component.PlaceTileSound,
+                };
+                var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.PlaceDelay, doAfterEvent, uid)
+                {
+                    BreakOnMove = true,
+                    BreakOnDamage = true,
+                    NeedHand = true,
+                };
+                args.Handled = _doAfter.TryStartDoAfter(doAfterArgs);
+                // CrystallEdge end
                 return;
             }
         }
@@ -199,11 +203,27 @@ public sealed partial class FloorTileSystem : EntitySystem
         if (!_stackSystem.TryUse(uid, 1))
             return;
 
+        if (args.TargetGrid == null)
+        {
+            // Space placement: create a new grid at the target location (server only)
+            args.Handled = true;
+            if (_netManager.IsClient)
+                return;
+
+            var spaceLocation = GetCoordinates(args.Location);
+            var spaceMapPos = _transform.ToMapCoordinates(spaceLocation);
+            var newGrid = _mapManager.CreateGridEntity(spaceMapPos.MapId);
+            _transform.SetWorldPosition((newGrid, Transform(newGrid)), spaceMapPos.Position);
+            var gridCoords = new EntityCoordinates(newGrid, Vector2.Zero);
+            PlaceAt(args.User, newGrid, newGrid.Comp, gridCoords, args.TileId, args.PlaceSound, newGrid.Comp.TileSize / 2f);
+            return;
+        }
+
         var grid = GetEntity(args.TargetGrid);
-        if (grid == null || !TryComp<MapGridComponent>(grid, out var mapGrid))
+        if (grid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var mapGrid))
             return;
 
-        PlaceAt(args.User, grid.Value, mapGrid, GetCoordinates(args.Location), args.TileId, args.PlaceSound, args.Offset);
+        PlaceAt(args.User, gridUid, mapGrid, GetCoordinates(args.Location), args.TileId, args.PlaceSound, args.Offset);
         args.Handled = true;
     }
     // CrystallEdge end
@@ -213,7 +233,7 @@ public sealed partial class FloorTileSystem : EntitySystem
         return tileDef.BaseTurf == baseTurf;
     }
 
-    private bool CanPlaceOn(ContentTileDefinition tileDef, ProtoId<ContentTileDefinition> currentTurfId)
+    public bool CanPlaceOn(ContentTileDefinition tileDef, ProtoId<ContentTileDefinition> currentTurfId) // CrystallEdge: was private
     {
         //Check exact BaseTurf match
         if (tileDef.BaseTurf == currentTurfId)

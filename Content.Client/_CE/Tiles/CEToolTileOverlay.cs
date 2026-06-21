@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.CombatMode;
 using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Client.Resources;
@@ -22,20 +23,21 @@ namespace Content.Client._CE.Tiles;
 /// Overlay that displays a sprite over the tile the cursor is hovering over
 /// when the player is holding a tool with ToolTileCompatibleComponent
 /// </summary>
-public sealed class CEToolTileOverlay : Overlay
+public sealed partial class CEToolTileOverlay : Overlay
 {
-    [Dependency] private readonly IEntityManager _entityManager = default!;
-    [Dependency] private readonly IInputManager _inputManager = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
-    [Dependency] private readonly IStateManager _stateManager = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IEyeManager _eyeManager = default!;
+    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
+    [Dependency] private IStateManager _stateManager = default!;
 
     private readonly SpriteSystem _sprite;
     private readonly SharedMapSystem _mapSystem;
     private readonly HandsSystem _handsSystem;
     private readonly SharedInteractionSystem _interactionSystem;
+    private readonly CombatModeSystem _combatMode;
 
     private readonly Texture _texture;
 
@@ -49,6 +51,7 @@ public sealed class CEToolTileOverlay : Overlay
         _handsSystem = _entityManager.System<HandsSystem>();
         _interactionSystem = _entityManager.System<SharedInteractionSystem>();
         _sprite = _entityManager.System<SpriteSystem>();
+        _combatMode = _entityManager.System<CombatModeSystem>();
 
         _texture = _sprite.Frame0(
             new SpriteSpecifier.Rsi(new ResPath("/Textures/_CE/Markers/biome.rsi"), "frame"));
@@ -56,6 +59,9 @@ public sealed class CEToolTileOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
+        if (_combatMode.IsInCombatMode())
+            return false;
+
         return args.Viewport.Eye is not ScalingViewport.ZEye;
     }
 
