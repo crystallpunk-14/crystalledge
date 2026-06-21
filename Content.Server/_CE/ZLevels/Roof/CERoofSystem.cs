@@ -14,7 +14,7 @@ using Content.Shared.Maps;
 namespace Content.Server._CE.ZLevels.Roof;
 
 /// <inheritdoc/>
-public sealed class CERoofSystem : CESharedRoofSystem
+public sealed partial class CERoofSystem : CESharedRoofSystem
 {
     [Dependency] private EntityQuery<CEZGridComponent> _zgridQuery = default!;
     [Dependency] private EntityQuery<CEZGridNetworkComponent> _zGridNetworkQuery = default!;
