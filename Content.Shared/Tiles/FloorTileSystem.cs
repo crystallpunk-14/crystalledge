@@ -24,7 +24,7 @@ namespace Content.Shared.Tiles;
 
 public sealed partial class FloorTileSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!; // CrystallEdge: tile placement doAfter
+    [Dependency] private SharedDoAfterSystem _doAfter = default!; // CrystallEdge: tile placement doAfter
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _netManager = default!;
