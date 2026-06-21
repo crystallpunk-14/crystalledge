@@ -76,17 +76,17 @@ public sealed partial class CEZLevelsSystem
     }
 
     /// <summary>
-    /// Explicit teardown: clears membership on all grids and queues the manager for deletion.
-    /// Does not raise per-grid events — use <see cref="TryRemoveGridFromNetwork"/> for that.
+    /// Explicit teardown: removes every grid (raising <see cref="CEGridUnlinkedEvent"/> per grid)
+    /// and queues the manager for deletion.
     /// </summary>
     [PublicAPI]
     public void DeleteGridNetwork(Entity<CEZGridNetworkComponent> network)
     {
+        // TryRemoveGridFromNetwork mutates Grids, so iterate a snapshot.
         foreach (var grid in network.Comp.Grids.ToList())
-        {
-            if (_zgridQuery.HasComp(grid))
-                RemComp<CEZGridComponent>(grid);
-        }
-        QueueDel(network);
+            TryRemoveGridFromNetwork(grid);
+
+        if (!TerminatingOrDeleted(network.Owner))
+            QueueDel(network);
     }
 }

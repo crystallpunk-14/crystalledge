@@ -21,6 +21,14 @@ public sealed partial class CEZGridNetworkComponent : Component
     public readonly HashSet<EntityUid> Grids = new();
 
     /// <summary>
+    /// The single authoritative grid all relative poses are stored against.
+    /// Static anchors (planet) take priority; otherwise the lowest <see cref="EntityUid"/> for determinism.
+    /// Its own <see cref="CEZGridComponent.NetworkOffset"/>/<see cref="CEZGridComponent.NetworkRotation"/> are zero.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid AnchorGrid = EntityUid.Invalid;
+
+    /// <summary>
     /// Total cached fixture mass of all grids in the network.
     /// </summary>
     [ViewVariables]
