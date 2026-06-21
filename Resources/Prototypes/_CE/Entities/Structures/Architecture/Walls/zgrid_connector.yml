@@ -1,8 +1,0 @@
-- type: entity
-  id: CEZGridConnectorWall
-  parent: CEWallStoneBrick
-  name: Z-Grid Connector
-  description: Links this grid to the grid on the z-level directly above. Removing it may disconnect the grids.
-  categories: [ ForkFiltered ]
-  components:
-  - type: CEZGridConnector

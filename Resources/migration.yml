@@ -30,6 +30,8 @@ CEConsumablePotionColdShield: CEConsumablePotionShield
 
 CEChasm: null
 
+CEZGridConnectorWall: CEWallStoneBrick
+
 # CrystallEdge zone end
 
 
