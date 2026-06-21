@@ -5,6 +5,7 @@
 
 using Content.Shared._CE.ZLevels.Core.Components;
 using JetBrains.Annotations;
+using Robust.Shared.Map.Components;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
@@ -12,6 +13,28 @@ public abstract partial class CESharedZLevelsSystem
 {
     [Dependency] protected EntityQuery<CEZGridComponent> _zgridQuery = default!;
     [Dependency] protected EntityQuery<CEZGridNetworkComponent> _zgridNetworkQuery = default!;
+
+    /// <summary>
+    /// Returns the z-level depth of the map containing the given grid,
+    /// or null if the grid's map is not part of a z-level network.
+    /// </summary>
+    [PublicAPI]
+    public int? TryGetGridZDepth(EntityUid gridUid)
+    {
+        var mapUid = Transform(gridUid).MapUid;
+        return mapUid.HasValue && _zMapQuery.TryComp(mapUid.Value, out var zMap) ? zMap.Depth : null;
+    }
+
+    /// <summary>
+    /// Returns the world tile coordinate for a grid tile (floor of tile-center world position).
+    /// Correct for 90°-rotated, tile-snapped grids — tile centers are always at half-integer world coords.
+    /// </summary>
+    [PublicAPI]
+    public Vector2i GridTileToWorldTile(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    {
+        var c = _map.GridTileToWorldPos(gridUid, grid, tile);
+        return new Vector2i((int)MathF.Floor(c.X), (int)MathF.Floor(c.Y));
+    }
 
     /// <summary>
     /// Cache-first lookup: checks <see cref="CEZGridComponent.Network"/> first,

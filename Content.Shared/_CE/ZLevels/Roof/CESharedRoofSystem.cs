@@ -36,6 +36,7 @@ public abstract partial class CESharedRoofSystem : EntitySystem
 
     /// <summary>
     /// When changing tiles, we iteratively go down to the end of the ZLevels network, repeatedly calculating whether the tiles at the bottom now have a roof or not.
+    /// For child grids (those without <see cref="CEZLevelMapComponent"/>), delegates to <see cref="OnChildGridTileChanged"/>.
     /// </summary>
     private void OnTileChanged(Entity<CEZLevelMapRoofComponent> ent, ref TileChangedEvent args)
     {
@@ -44,7 +45,10 @@ public abstract partial class CESharedRoofSystem : EntitySystem
         if (!RoofQuery.TryComp(ent, out var currentRoof))
             return;
         if (!TryComp<CEZLevelMapComponent>(ent, out var zLevelMapComp))
+        {
+            OnChildGridTileChanged(ent, ref args);
             return;
+        }
 
         if (args.Changes.Length == 0)
             return;
@@ -80,4 +84,10 @@ public abstract partial class CESharedRoofSystem : EntitySystem
             }
         }
     }
+
+    /// <summary>
+    /// Called when tiles change on an entity with <see cref="CEZLevelMapRoofComponent"/> that is NOT a z-level map.
+    /// Override in the server system to handle child grids in z-grid networks.
+    /// </summary>
+    protected virtual void OnChildGridTileChanged(Entity<CEZLevelMapRoofComponent> ent, ref TileChangedEvent args) { }
 }

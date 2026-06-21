@@ -35,20 +35,11 @@
     spawnedPrototype: CEWoodenPlanks1
     spawnCount: 3
   - type: Appearance
-  - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Wood
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 25
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: WoodDestroy
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 25
+    destroySound:
+      collection: WoodDestroy
   - type: PhysicalComposition
     materialComposition:
       CEWood: 30
@@ -94,20 +85,11 @@
   - type: PhysicalComposition
     materialComposition:
       CEWood: 10
-  - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Wood
-  - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 25
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: WoodDestroy
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
+  - type: CEDamageable
+  - type: CEDestructible
+    destroyThreshold: 25
+    destroySound:
+      collection: WoodDestroy
   - type: FloorTile
     placeTileSound:
       path: /Audio/Items/genhit.ogg

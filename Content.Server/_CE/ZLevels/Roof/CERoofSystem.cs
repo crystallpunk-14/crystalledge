@@ -6,6 +6,7 @@
 using System.Linq;
 using Content.Server._CE.ZLevels.Core;
 using Content.Shared._CE.ZLevels.Core.Components;
+using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Content.Shared._CE.ZLevels.Roof;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
@@ -15,6 +16,9 @@ namespace Content.Server._CE.ZLevels.Roof;
 /// <inheritdoc/>
 public sealed class CERoofSystem : CESharedRoofSystem
 {
+    [Dependency] private EntityQuery<CEZGridComponent> _zgridQuery = default!;
+    [Dependency] private EntityQuery<CEZGridNetworkComponent> _zGridNetworkQuery = default!;
+
     private readonly HashSet<Vector2i> _roofMap = new();
 
     public override void Initialize()
@@ -22,11 +26,47 @@ public sealed class CERoofSystem : CESharedRoofSystem
         base.Initialize();
 
         SubscribeLocalEvent<CEZLevelsNetworkComponent, CEZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
+
+        SubscribeLocalEvent<CEZGridComponent, MapInitEvent>(OnZGridMapInit);
+        SubscribeLocalEvent<CEZLevelMapRoofComponent, CEGridLinkedEvent>(OnZGridLinked);
+        SubscribeLocalEvent<CEZLevelMapRoofComponent, CEGridUnlinkedEvent>(OnZGridUnlinked);
     }
 
     private void OnNetworkUpdated(Entity<CEZLevelsNetworkComponent> ent, ref CEZLevelNetworkUpdatedEvent args)
     {
         RecalculateNetworkRoofs(ent);
+    }
+
+    private void OnZGridMapInit(Entity<CEZGridComponent> ent, ref MapInitEvent args)
+    {
+        EnsureComp<CEZLevelMapRoofComponent>(ent.Owner);
+    }
+
+    private void OnZGridLinked(Entity<CEZLevelMapRoofComponent> ent, ref CEGridLinkedEvent args)
+    {
+        if (!_zgridQuery.TryComp(ent.Owner, out var zGrid))
+            return;
+        if (!_zGridNetworkQuery.TryComp(zGrid.Network, out var network))
+            return;
+        RecalculateZGridNetworkRoofs((zGrid.Network, network));
+    }
+
+    private void OnZGridUnlinked(Entity<CEZLevelMapRoofComponent> ent, ref CEGridUnlinkedEvent args)
+    {
+        RemCompDeferred<CEZLevelMapRoofComponent>(ent.Owner);
+        RemCompDeferred<RoofComponent>(ent.Owner);
+
+        if (_zGridNetworkQuery.TryComp(args.Network, out var network))
+            RecalculateZGridNetworkRoofs((args.Network, network));
+    }
+
+    protected override void OnChildGridTileChanged(Entity<CEZLevelMapRoofComponent> ent, ref TileChangedEvent args)
+    {
+        if (!_zgridQuery.TryComp(ent.Owner, out var zGrid))
+            return;
+        if (!_zGridNetworkQuery.TryComp(zGrid.Network, out var network))
+            return;
+        RecalculateZGridNetworkRoofs((zGrid.Network, network));
     }
 
     public void RecalculateNetworkRoofs(Entity<CEZLevelsNetworkComponent> network)
@@ -59,6 +99,36 @@ public sealed class CERoofSystem : CESharedRoofSystem
 
                 if (!tileDef.Transparent)
                     _roofMap.Add(tileRef.Value.GridIndices);
+            }
+        }
+    }
+
+    public void RecalculateZGridNetworkRoofs(Entity<CEZGridNetworkComponent> network)
+    {
+        _roofMap.Clear();
+
+        var sorted = network.Comp.Grids
+            .Select(g => (Grid: g, Depth: ZLevel.TryGetGridZDepth(g)))
+            .Where(x => x.Depth.HasValue)
+            .OrderByDescending(x => x.Depth!.Value);
+
+        foreach (var (gridUid, _) in sorted)
+        {
+            if (!GridQuery.TryComp(gridUid, out var grid))
+                continue;
+
+            var roofComp = EnsureComp<RoofComponent>(gridUid);
+            var enumerator = Map.GetAllTilesEnumerator(gridUid, grid);
+
+            while (enumerator.MoveNext(out var tileRef))
+            {
+                var worldTile = ZLevel.GridTileToWorldTile(gridUid, grid, tileRef.Value.GridIndices);
+                Roof.SetRoof((gridUid, grid, roofComp), tileRef.Value.GridIndices,
+                             _roofMap.Contains(worldTile));
+
+                var tileDef = (ContentTileDefinition)TilDefMan[tileRef.Value.Tile.TypeId];
+                if (!tileDef.Transparent)
+                    _roofMap.Add(worldTile);
             }
         }
     }

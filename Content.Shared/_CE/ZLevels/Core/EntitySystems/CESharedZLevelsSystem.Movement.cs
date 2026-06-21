@@ -229,6 +229,23 @@ public abstract partial class CESharedZLevelsSystem
         return false;
     }
 
+    /// <summary>
+    /// Checks whether any grid on the map above has a non-empty tile at the given world position.
+    /// World-position overload; see also <see cref="HasTileAbove(EntityUid, Entity{CEZLevelMapComponent?}?)"/>
+    /// and <see cref="HasTileAbove(Vector2i, Entity{CEZLevelMapComponent?})"/>.
+    /// </summary>
+    [PublicAPI]
+    public bool HasTileAbove(Vector2 worldPos, Entity<CEZLevelMapComponent?> currentMap)
+    {
+        if (!TryMapUp(currentMap, out var mapAboveUid))
+            return false;
+
+        if (!_mapManager.TryFindGridAt(mapAboveUid, worldPos, out var gridUid, out var grid))
+            return false;
+
+        return _map.TryGetTileRef(gridUid, grid, worldPos, out var tileRef) && !tileRef.Tile.IsEmpty;
+    }
+
     [PublicAPI]
     public void SetZPosition(Entity<CEZPhysicsComponent?> ent, float newPosition)
     {
