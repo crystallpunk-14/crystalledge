@@ -71,6 +71,9 @@
       fallOffFactor: 0.5
       maxStacks: 10
     - !type:ThrowFrom
+      blacklist:
+        components:
+        - Ghost
       throwPower: 7
       distance: 2
     - !type:Damage
@@ -83,6 +86,9 @@
       range: 2
       effects:
       - !type:ThrowFrom
+        blacklist:
+          components:
+          - Ghost
         origin: Used
         throwPower: 7
         distance: 0.25

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.Projectiles;
 using Content.Shared.Throwing;
+using Content.Shared.Whitelist;
 
 namespace Content.Shared._CE.EntityEffect.Effects;
 
@@ -17,6 +18,12 @@ public sealed partial class ThrowFrom : CEEntityEffectBase<ThrowFrom>
 
     [DataField]
     public float Distance = 2.5f;
+
+    [DataField]
+    public EntityWhitelist? Whitelist;
+
+    [DataField]
+    public EntityWhitelist? Blacklist;
 }
 
 public sealed partial class CEThrowFromEffectSystem : CEEntityEffectSystem<ThrowFrom>
@@ -24,10 +31,14 @@ public sealed partial class CEThrowFromEffectSystem : CEEntityEffectSystem<Throw
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     protected override void Effect(ref CEEntityEffectEvent<ThrowFrom> args)
     {
         if (ResolveEffectEntity(args.Args, args.Effect.EffectTarget) is not { } targetEntity)
+            return;
+
+        if (!_whitelist.CheckBoth(targetEntity, args.Effect.Blacklist, args.Effect.Whitelist))
             return;
 
         var originEntity = ResolveEffectEntity(args.Args, args.Effect.Origin) ?? args.Args.Source;
