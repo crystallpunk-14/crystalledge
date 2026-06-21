@@ -27,6 +27,12 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
     private bool _dirty;
 
+    /// <summary>Schedules a network recalculation on the next tick.</summary>
+    public void MarkDirty()
+    {
+        _dirty = true;
+    }
+
     public override void Initialize()
     {
         base.Initialize();

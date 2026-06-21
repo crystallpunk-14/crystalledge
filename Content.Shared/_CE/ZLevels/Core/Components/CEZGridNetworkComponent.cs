@@ -19,4 +19,12 @@ public sealed partial class CEZGridNetworkComponent : Component
 
     [ViewVariables, AutoNetworkedField]
     public readonly HashSet<EntityUid> Grids = new();
+
+    /// <summary>Total cached fixture mass of all grids in the network.</summary>
+    [ViewVariables]
+    public float TotalCachedMass = 0f;
+
+    /// <summary>True if network contains a static anchor (planet/terrain). Entire network is locked in place.</summary>
+    [ViewVariables]
+    public bool HasStaticAnchor = false;
 }
