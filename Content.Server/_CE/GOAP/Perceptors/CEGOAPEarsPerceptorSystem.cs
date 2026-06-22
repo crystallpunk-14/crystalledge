@@ -35,7 +35,7 @@ public sealed partial class CEGOAPEarsPerceptorSystem : EntitySystem
             return;
 
         var alarmPos = _transform.ToWorldPosition(ev.Source);
-        _zLevel.TryGetZNetwork(alarmMap.Value, out var alarmZNetwork);
+        _zLevel.TryGetMapNetwork(alarmMap.Value, out var alarmZNetwork);
 
         var targetCoords = Transform(ev.Target).Coordinates;
 
@@ -45,7 +45,7 @@ public sealed partial class CEGOAPEarsPerceptorSystem : EntitySystem
             if (xform.MapUid is null)
                 continue;
 
-            if (_zLevel.TryGetZNetwork(xform.MapUid.Value, out var zNetwork))
+            if (_zLevel.TryGetMapNetwork(xform.MapUid.Value, out var zNetwork))
             {
                 if (zNetwork != alarmZNetwork)
                     continue;

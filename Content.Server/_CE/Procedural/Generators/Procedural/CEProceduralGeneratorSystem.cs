@@ -34,7 +34,6 @@ public sealed partial class CEProceduralConfig : CEDungeonGeneratorConfigBase<CE
 
     /// <summary>
     /// Shared components applied to every z-level map in the dungeon's z-network
-    /// (e.g. MapAtmosphere, MapLight, CEZLevelMapRoof).
     /// </summary>
     [DataField]
     public ComponentRegistry Components = new();

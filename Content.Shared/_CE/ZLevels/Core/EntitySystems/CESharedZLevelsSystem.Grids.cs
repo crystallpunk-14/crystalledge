@@ -5,13 +5,36 @@
 
 using Content.Shared._CE.ZLevels.Core.Components;
 using JetBrains.Annotations;
+using Robust.Shared.Map.Components;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 
 public abstract partial class CESharedZLevelsSystem
 {
-    [Dependency] protected EntityQuery<CEZGridComponent> _zgridQuery = default!;
-    [Dependency] protected EntityQuery<CEZGridNetworkComponent> _zgridNetworkQuery = default!;
+    [Dependency] private EntityQuery<CEZGridComponent> _zGridQuery = default!;
+    [Dependency] private EntityQuery<CEZGridNetworkComponent> _zGridNetworkQuery = default!;
+
+    /// <summary>
+    /// Returns the z-level depth of the map containing the given grid,
+    /// or null if the grid's map is not part of a z-level network.
+    /// </summary>
+    [PublicAPI]
+    public int? TryGetGridZDepth(EntityUid gridUid)
+    {
+        var mapUid = Transform(gridUid).MapUid;
+        return mapUid.HasValue && _zMapQuery.TryComp(mapUid.Value, out var zMap) ? zMap.Depth : null;
+    }
+
+    /// <summary>
+    /// Returns the world tile coordinate for a grid tile (floor of tile-center world position).
+    /// Correct for 90°-rotated, tile-snapped grids — tile centers are always at half-integer world coords.
+    /// </summary>
+    [PublicAPI]
+    public Vector2i GridTileToWorldTile(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    {
+        var c = _map.GridTileToWorldPos(gridUid, grid, tile);
+        return new Vector2i((int)MathF.Floor(c.X), (int)MathF.Floor(c.Y));
+    }
 
     /// <summary>
     /// Cache-first lookup: checks <see cref="CEZGridComponent.Network"/> first,
@@ -22,11 +45,11 @@ public abstract partial class CESharedZLevelsSystem
     {
         network = default;
 
-        if (!_zgridQuery.TryComp(grid, out var zGridComp) || zGridComp.NetworkId == string.Empty)
+        if (!_zGridQuery.TryComp(grid, out var zGridComp) || zGridComp.NetworkId == string.Empty)
             return false;
 
         // Fast path
-        if (zGridComp.Network.IsValid() && _zgridNetworkQuery.TryComp(zGridComp.Network, out var cached))
+        if (zGridComp.Network.IsValid() && _zGridNetworkQuery.TryComp(zGridComp.Network, out var cached))
         {
             network = (zGridComp.Network, cached);
             return true;
@@ -48,10 +71,15 @@ public abstract partial class CESharedZLevelsSystem
 }
 
 /// <summary>
+/// Called on ZLevel grid Network Entity, when grid added or removed from network
+/// </summary>
+public sealed class CEZLevelGridNetworkUpdatedEvent : EntityEventArgs;
+
+/// <summary>
 /// Directed at a grid entity when it is added to a z-grid network by <see cref="CEZGridConnectorSystem"/>.
 /// </summary>
 [ByRefEvent]
-public readonly struct CEGridLinkedEvent(EntityUid network)
+public readonly struct CEGridAddedIntoZNetworkEvent(EntityUid network)
 {
     public readonly EntityUid Network = network;
 }
@@ -61,7 +89,7 @@ public readonly struct CEGridLinkedEvent(EntityUid network)
 /// either by the recalculator or by external network deletion.
 /// </summary>
 [ByRefEvent]
-public readonly struct CEGridUnlinkedEvent(EntityUid network)
+public readonly struct CEGridRemovedFromZNetworkEvent(EntityUid network)
 {
     public readonly EntityUid Network = network;
 }

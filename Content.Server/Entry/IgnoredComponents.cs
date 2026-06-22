@@ -7,6 +7,7 @@ namespace Content.Server.Entry
             //CrystallEdge zone
             "CEWaveShader",
             "CEIconSmooth",
+            "CEPipeVisualizer",
             //CrystallEdge zone end
             "ConstructionGhost",
             "IconSmooth",

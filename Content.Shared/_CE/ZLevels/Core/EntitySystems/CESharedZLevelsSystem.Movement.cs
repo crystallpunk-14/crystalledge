@@ -16,15 +16,30 @@ namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
 public abstract partial class CESharedZLevelsSystem
 {
     private TimeSpan _accumulatedTime = TimeSpan.Zero;
+    private readonly List<EntityUid> _dirtyMovementBodies = new();
 
     private void InitializeMovement()
     {
         SubscribeLocalEvent<CEZPhysicsComponent, CEZLevelMapMoveEvent>(OnZLevelMapMove);
         SubscribeLocalEvent<CEZPhysicsComponent, MoveEvent>(OnMoveEvent);
-        SubscribeLocalEvent<CEZLevelMapComponent, TileChangedEvent>(OnTileChanged);
+        SubscribeLocalEvent<CEZMapComponent, TileChangedEvent>(OnTileChanged);
     }
 
-    private void OnTileChanged(Entity<CEZLevelMapComponent> ent, ref TileChangedEvent args)
+    /// <summary>
+    /// Returns the last cached distance to the floor.
+    /// </summary>
+    /// <param name="target">The entity, the distance to the floor which we calculate</param>
+    /// <returns></returns>
+    [PublicAPI]
+    public float DistanceToGround(Entity<CEZPhysicsComponent?> target)
+    {
+        if (!Resolve(target, ref target.Comp, false))
+            return 0;
+
+        return target.Comp.LocalPosition - target.Comp.CachedGroundHeight;
+    }
+
+    private void OnTileChanged(Entity<CEZMapComponent> ent, ref TileChangedEvent args)
     {
         if (!TryComp<MapGridComponent>(args.Entity, out var grid))
             return;
@@ -62,7 +77,10 @@ public abstract partial class CESharedZLevelsSystem
 
     private void OnMoveEvent(Entity<CEZPhysicsComponent> entity, ref MoveEvent args)
     {
-        DirtyMovement((entity, entity));
+        if (_dirtyMovementBodies.Contains(entity))
+            return;
+
+        _dirtyMovementBodies.Add(entity);
     }
 
     private void OnZLevelMapMove(Entity<CEZPhysicsComponent> ent, ref CEZLevelMapMoveEvent args)
@@ -70,19 +88,6 @@ public abstract partial class CESharedZLevelsSystem
         ent.Comp.CurrentZLevel = args.CurrentZLevel;
         DirtyField(ent, ent.Comp, nameof(CEZPhysicsComponent.CurrentZLevel));
         RequestCacheMovement(ent);
-    }
-
-    /// <summary>
-    /// Returns the last cached distance to the floor.
-    /// </summary>
-    /// <param name="target">The entity, the distance to the floor which we calculate</param>
-    /// <returns></returns>
-    public float DistanceToGround(Entity<CEZPhysicsComponent?> target)
-    {
-        if (!Resolve(target, ref target.Comp, false))
-            return 0;
-
-        return target.Comp.LocalPosition - target.Comp.CachedGroundHeight;
     }
 
     /// <summary>
@@ -104,7 +109,7 @@ public abstract partial class CESharedZLevelsSystem
         var worldPos = _transform.GetWorldPosition(target);
 
         //Select current map by default
-        Entity<CEZLevelMapComponent> checkingMap = (xform.MapUid.Value, zMapComp);
+        Entity<CEZMapComponent> checkingMap = (xform.MapUid.Value, zMapComp);
 
         for (var floor = 0; floor <= maxFloors; floor++)
         {
@@ -129,7 +134,7 @@ public abstract partial class CESharedZLevelsSystem
                 if (!_zHighGroundQuery.TryComp(uid, out var heightComp))
                     continue;
 
-                var dir = _transform.GetWorldRotation(uid.Value).GetCardinalDir();
+                var dir = Transform(uid.Value).LocalRotation.GetCardinalDir();
 
                 var gridLocal = _map.WorldToLocal(gridUid, grid, worldPos);
                 var local = new Vector2((gridLocal.X % 1 + 1) % 1, (gridLocal.Y % 1 + 1) % 1);
@@ -185,7 +190,7 @@ public abstract partial class CESharedZLevelsSystem
     /// If there are no Z-levels above, false will be returned.
     /// </summary>
     [PublicAPI]
-    public bool HasTileAbove(EntityUid ent, Entity<CEZLevelMapComponent?>? currentMapUid = null)
+    public bool HasTileAbove(EntityUid ent, Entity<CEZMapComponent?>? currentMapUid = null)
     {
         currentMapUid ??= Transform(ent).MapUid;
 
@@ -211,7 +216,7 @@ public abstract partial class CESharedZLevelsSystem
     /// If there are no Z-levels above, false will be returned.
     /// </summary>
     [PublicAPI]
-    public bool HasTileAbove(Vector2i indices, Entity<CEZLevelMapComponent?> map)
+    public bool HasTileAbove(Vector2i indices, Entity<CEZMapComponent?> map)
     {
         if (!Resolve(map, ref map.Comp, false))
             return false;
@@ -227,6 +232,23 @@ public abstract partial class CESharedZLevelsSystem
             return true;
 
         return false;
+    }
+
+    /// <summary>
+    /// Checks whether any grid on the map above has a non-empty tile at the given world position.
+    /// World-position overload; see also <see cref="HasTileAbove(EntityUid, Entity{CEZMapComponent?}?)"/>
+    /// and <see cref="HasTileAbove(Vector2i, Entity{CEZMapComponent?})"/>.
+    /// </summary>
+    [PublicAPI]
+    public bool HasTileAbove(Vector2 worldPos, Entity<CEZMapComponent?> currentMap)
+    {
+        if (!TryMapUp(currentMap, out var mapAboveUid))
+            return false;
+
+        if (!_mapManager.TryFindGridAt(mapAboveUid, worldPos, out var gridUid, out var grid))
+            return false;
+
+        return _map.TryGetTileRef(gridUid, grid, worldPos, out var tileRef) && !tileRef.Tile.IsEmpty;
     }
 
     [PublicAPI]
@@ -291,7 +313,7 @@ public abstract partial class CESharedZLevelsSystem
     }
 
     [PublicAPI]
-    public bool TryMove(EntityUid ent, int offset, Entity<CEZLevelMapComponent?>? map = null)
+    public bool TryMove(EntityUid ent, int offset, Entity<CEZMapComponent?>? map = null)
     {
         map ??= Transform(ent).MapUid;
 
@@ -342,6 +364,23 @@ public abstract partial class CESharedZLevelsSystem
 
         return false;
     }
+
+    private void UpdateDirtyMovement()
+    {
+        for (var i = _dirtyMovementBodies.Count - 1; i >= 0; i--)
+        {
+            var uid = _dirtyMovementBodies[i];
+
+            if (!ZPhysicsQuery.TryComp(uid, out var component))
+                continue;
+
+            var entity = (uid, component);
+            RequestCacheMovement(entity);
+            RefreshBody(entity);
+        }
+
+        _dirtyMovementBodies.Clear();
+    }
 }
 
 /// <summary>
@@ -379,7 +418,7 @@ public struct CEZLevelHitEvent(float impactPower)
 }
 
 /// <summary>
-/// Is called every frame to calculate the current vertical velocity of the object with CEActiveZPhysicsComponent.
+/// Is called every frame to calculate the current vertical velocity of the active zphysics entities.
 /// </summary>
 [ByRefEvent]
 public struct CEGetZVelocityEvent(Entity<CEZPhysicsComponent> target)

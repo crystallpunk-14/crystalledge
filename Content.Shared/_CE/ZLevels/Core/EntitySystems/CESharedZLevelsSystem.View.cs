@@ -7,6 +7,7 @@ using System.Numerics;
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared._CE.ZLevels.Core.Events;
 using Content.Shared.Maps;
+using JetBrains.Annotations;
 using Robust.Shared.Map;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;
@@ -50,7 +51,7 @@ public abstract partial class CESharedZLevelsSystem
         DirtyField(entity, entity.Comp, nameof(CEZLevelViewerComponent.LookUp));
     }
 
-    public bool HasOpaqueAbove(EntityUid ent, Entity<CEZLevelMapComponent?>? currentMapUid = null)
+    public bool HasOpaqueAbove(EntityUid ent, Entity<CEZMapComponent?>? currentMapUid = null)
     {
         currentMapUid ??= Transform(ent).MapUid;
 
@@ -69,6 +70,25 @@ public abstract partial class CESharedZLevelsSystem
 
         var tileDef = (ContentTileDefinition)TilDefMan[tileRef.Tile.TypeId];
         return !tileDef.Transparent;
+    }
+
+    /// <summary>
+    /// Checks whether any grid on the map above has an opaque (non-transparent) tile at the given world position.
+    /// World-position overload; see also <see cref="HasOpaqueAbove(EntityUid, Entity{CEZMapComponent?}?)"/>.
+    /// </summary>
+    [PublicAPI]
+    public bool HasOpaqueAbove(Vector2 worldPos, Entity<CEZMapComponent?> currentMap)
+    {
+        if (!TryMapUp(currentMap, out var mapAboveUid))
+            return false;
+
+        if (!_mapManager.TryFindGridAt(mapAboveUid, worldPos, out var gridUid, out var grid))
+            return false;
+
+        if (!_map.TryGetTileRef(gridUid, grid, worldPos, out var tileRef))
+            return false;
+
+        return !((ContentTileDefinition)TilDefMan[tileRef.Tile.TypeId]).Transparent;
     }
 
     public bool TryFindZShotOpening(

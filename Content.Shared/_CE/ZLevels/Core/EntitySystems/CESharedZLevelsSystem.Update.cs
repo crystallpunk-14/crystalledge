@@ -5,7 +5,6 @@
 
 using Content.Shared._CE.ZLevels.Core.Components;
 using Content.Shared.Throwing;
-using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Shared._CE.ZLevels.Core.EntitySystems;

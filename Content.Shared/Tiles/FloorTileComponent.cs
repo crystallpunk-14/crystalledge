@@ -15,6 +15,11 @@ namespace Content.Shared.Tiles
         [DataField]
         public List<ProtoId<ContentTileDefinition>>? Outputs;
 
+        // CrystallEdge: delay before placing a tile (doAfter duration)
+        [DataField("placeDelay")]
+        public TimeSpan PlaceDelay = TimeSpan.FromSeconds(1);
+        // CrystallEdge end
+
         [DataField("placeTileSound")] public SoundSpecifier PlaceTileSound =
             new SoundPathSpecifier("/Audio/Items/genhit.ogg")
             {

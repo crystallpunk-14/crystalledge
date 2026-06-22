@@ -17,7 +17,7 @@ public sealed partial class CEWeatherSystem : EntitySystem
 {
     [Dependency] private SharedWeatherSystem _weather = default!;
 
-    public void SetWeather(Entity<CEZLevelsNetworkComponent?> network, EntProtoId? proto, TimeSpan? duration)
+    public void SetWeather(Entity<CEZMapNetworkComponent?> network, EntProtoId? proto, TimeSpan? duration)
     {
         if (!Resolve(network, ref network.Comp))
             return;

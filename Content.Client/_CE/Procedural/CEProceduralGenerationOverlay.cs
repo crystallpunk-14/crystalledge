@@ -57,7 +57,7 @@ public sealed partial class CEProceduralGenerationOverlay : Overlay
         }
 
         // ── World chunk grid ───────────────────────────────────────────────
-        if (_entMan.TryGetComponent<CEZLevelMapComponent>(args.MapUid, out var zMap) &&
+        if (_entMan.TryGetComponent<CEZMapComponent>(args.MapUid, out var zMap) &&
             _entMan.TryGetComponent<CEWorldComponent>(zMap.NetworkUid, out var world) &&
             world.ChunkMap.Count > 0)
         {

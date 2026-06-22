@@ -23,9 +23,9 @@ desc = "A multiplayer party-based roguelike. A roguelike in which dozens of team
 lobbyenabled = true
 soft_max_players = 40
 maxplayers = 50
-lobbyduration = 60
+lobbyduration = 60000
 role_timers = true
-closed_beta_test = true
+closed_beta_test = false
 
 [server]
 rules_file = "CERules"

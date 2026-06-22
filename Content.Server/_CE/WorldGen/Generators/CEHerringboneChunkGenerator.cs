@@ -146,7 +146,7 @@ public sealed partial class CEHerringboneChunkGeneratorSystem : CEChunkGenerator
     private int GetMinChunkZ(CEChunkGenArgs args)
     {
         if (args.LevelGrids.Count > 0
-            && _zLevels.TryGetDepthBounds(args.LevelGrids[0].Owner, out var minDepth, out _))
+            && TryGetDepthBounds(args.LevelGrids[0].Owner, out var minDepth, out _))
         {
             return FloorDiv(minDepth, CEWorldGenSystem.ChunkHeight);
         }
@@ -284,6 +284,23 @@ public sealed partial class CEHerringboneChunkGeneratorSystem : CEChunkGenerator
         if (a % b != 0 && (a < 0) != (b < 0))
             q--;
         return q;
+    }
+
+
+    /// <summary>
+    /// Returns the inclusive depth range of the z-network the given map belongs to
+    /// (<c>minDepth</c>..<c>maxDepth</c>). False if the map is not in a z-network.
+    /// </summary>
+    public bool TryGetDepthBounds(EntityUid mapUid, out int minDepth, out int maxDepth)
+    {
+        minDepth = 0;
+        maxDepth = 0;
+        if (!_zLevels.TryGetMapNetwork(mapUid, out var network))
+            return false;
+
+        minDepth = network.Comp.SortedMin;
+        maxDepth = network.Comp.SortedMax;
+        return true;
     }
 }
 

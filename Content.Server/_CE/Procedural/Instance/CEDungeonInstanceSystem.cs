@@ -47,14 +47,14 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
     private TimeSpan _nextCleanupCheck;
 
     private EntityQuery<CEDungeonInstanceComponent> _instanceQuery;
-    private EntityQuery<CEZLevelsNetworkComponent> _zNetQuery;
+    private EntityQuery<CEZMapNetworkComponent> _zNetQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
         _instanceQuery = GetEntityQuery<CEDungeonInstanceComponent>();
-        _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
+        _zNetQuery = GetEntityQuery<CEZMapNetworkComponent>();
 
         InitializePassage();
         InitializeEntryAnnounce();
@@ -119,7 +119,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
                 continue;
 
             Log.Info($"cleaning up empty unstable instance '{inst.PrototypeId}'.");
-            _zLevels.DeleteZNetwork(uid);
+            _zLevels.DeleteMapNetwork(uid);
         }
     }
 
@@ -134,7 +134,7 @@ public sealed partial class CEDungeonInstanceSystem : EntitySystem
         if (mapUid is null)
             return false;
 
-        if (_zLevels.TryGetZNetwork(mapUid.Value, out var zNet) && _instanceQuery.TryComp(zNet.Owner, out instance))
+        if (_zLevels.TryGetMapNetwork(mapUid.Value, out var zNet) && _instanceQuery.TryComp(zNet.Owner, out instance))
             return true;
 
         return _instanceQuery.TryComp(mapUid, out instance);

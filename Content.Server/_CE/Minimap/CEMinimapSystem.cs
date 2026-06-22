@@ -126,7 +126,7 @@ public sealed partial class CEMinimapSystem : EntitySystem
         }
 
         // Otherwise scan sibling maps in the same z-level network.
-        if (!_zLevels.TryGetZNetwork(currentMap, out var zNet))
+        if (!_zLevels.TryGetMapNetwork(currentMap, out var zNet))
             return false;
 
         foreach (var sibling in zNet.Comp.ZLevels.Values)

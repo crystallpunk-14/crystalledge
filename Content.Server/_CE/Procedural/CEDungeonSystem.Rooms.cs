@@ -83,7 +83,7 @@ public sealed partial class CEDungeonSystem
             return false;
         // Try to get z-level information for the provided grid. If none exists we'll just
         // spawn everything onto the provided grid.
-        if (!TryComp<CEZLevelMapComponent>(gridUid, out var zMapComp))
+        if (!TryComp<CEZMapComponent>(gridUid, out var zMapComp))
             return false;
 
         for (var offset = 0; offset < room.Height; offset++)

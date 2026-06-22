@@ -16,7 +16,7 @@ public sealed partial class CEDungeonInstanceSystem
     private void RegisterInstance(EntityUid mapUid, CEDungeonLevelPrototype proto)
     {
         // Determine the anchor entity: z-network entity if the map belongs to one, else the map itself.
-        var anchorUid = _zLevels.TryGetZNetwork(mapUid, out var zLevelNetwork) ? zLevelNetwork.Owner : mapUid;
+        var anchorUid = _zLevels.TryGetMapNetwork(mapUid, out var zLevelNetwork) ? zLevelNetwork.Owner : mapUid;
 
         var instance = EnsureComp<CEDungeonInstanceComponent>(anchorUid);
         instance.PrototypeId = proto.ID;
@@ -90,7 +90,7 @@ public sealed partial class CEDungeonInstanceSystem
             if (xform.MapUid is null)
                 continue;
 
-            if (!_zLevels.TryGetZNetwork(xform.MapUid.Value, out var zNetwork))
+            if (!_zLevels.TryGetMapNetwork(xform.MapUid.Value, out var zNetwork))
                 continue;
 
             if (!_instanceQuery.TryComp(zNetwork, out var dungeonInstance))

@@ -38,6 +38,17 @@ namespace Content.Server.Power.Nodes
                     nodeDirs.Add((Direction.Invalid, node));
                 }
 
+                // CrystallEdge: vertical and connector nodes for CE pipes
+                if (node is CECableVerticalNode && dir == Direction.Invalid)
+                {
+                    nodeDirs.Add((Direction.Invalid, node));
+                }
+                if (node is CEConnectorEdgeNode edge && dir != Direction.Invalid && edge.Direction == dir.GetOpposite())
+                {
+                    nodeDirs.Add((dir, node));
+                }
+                // CrystallEdge end
+
                 if (node is CableTerminalNode)
                 {
                     if (dir == Direction.Invalid)

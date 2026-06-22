@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -23,6 +24,7 @@ namespace Content.Shared.Tiles;
 
 public sealed partial class FloorTileSystem : EntitySystem
 {
+    [Dependency] private SharedDoAfterSystem _doAfter = default!; // CrystallEdge: delayed tile placement
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _netManager = default!;
@@ -52,6 +54,7 @@ public sealed partial class FloorTileSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<FloorTileComponent, AfterInteractEvent>(OnAfterInteract);
+        SubscribeLocalEvent<FloorTileComponent, FloorTileDoAfterEvent>(OnFloorTileDoAfter); // CrystallEdge: delayed tile placement
     }
 
     private void OnAfterInteract(EntityUid uid, FloorTileComponent component, AfterInteractEvent args)
@@ -145,39 +148,92 @@ public sealed partial class FloorTileSystem : EntitySystem
 
                 if (CanPlaceOn(currentTileDefinition, baseTurf.ID))
                 {
-                    if (!_stackSystem.TryUse((uid, stack), 1))
-                        continue;
-
-                    PlaceAt(args.User, gridUid, mapGrid, location, currentTileDefinition.TileId, component.PlaceTileSound);
-                    args.Handled = true;
+                    // CrystallEdge: start doAfter instead of placing immediately
+                    var doAfterEvent = new FloorTileDoAfterEvent
+                    {
+                        Location = GetNetCoordinates(location),
+                        TargetGrid = GetNetEntity(gridUid),
+                        TileId = currentTileDefinition.TileId,
+                        PlaceSound = component.PlaceTileSound,
+                    };
+                    var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.PlaceDelay, doAfterEvent, uid)
+                    {
+                        BreakOnMove = true,
+                        BreakOnDamage = true,
+                        NeedHand = true,
+                    };
+                    args.Handled = _doAfter.TryStartDoAfter(doAfterArgs);
+                    // CrystallEdge end
                     return;
                 }
+
+                // CrystallEdge: inform the player they're placing on the wrong base turf
+                _popup.PopupPredictedCoordinates(Loc.GetString("ce-floor-tile-wrong-turf"), location, args.User);
+                // CrystallEdge end
             }
             else if (HasBaseTurf(currentTileDefinition, new ProtoId<ContentTileDefinition>(ContentTileDefinition.SpaceID)))
             {
-                if (!_stackSystem.TryUse((uid, stack), 1))
-                    continue;
-
-                args.Handled = true;
-                if (_netManager.IsClient)
-                    return;
-
-                var grid = _mapManager.CreateGridEntity(locationMap.MapId);
-                var gridXform = Transform(grid);
-                _transform.SetWorldPosition((grid, gridXform), locationMap.Position);
-                location = new EntityCoordinates(grid, Vector2.Zero);
-                PlaceAt(args.User, grid, grid.Comp, location, _tileDefinitionManager[component.Outputs[0]].TileId, component.PlaceTileSound, grid.Comp.TileSize / 2f);
+                // CrystallEdge: start doAfter for space placement (TargetGrid null = create new grid)
+                var doAfterEvent = new FloorTileDoAfterEvent
+                {
+                    Location = GetNetCoordinates(location),
+                    TargetGrid = null,
+                    TileId = currentTileDefinition.TileId,
+                    PlaceSound = component.PlaceTileSound,
+                };
+                var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.PlaceDelay, doAfterEvent, uid)
+                {
+                    BreakOnMove = true,
+                    BreakOnDamage = true,
+                    NeedHand = true,
+                };
+                args.Handled = _doAfter.TryStartDoAfter(doAfterArgs);
+                // CrystallEdge end
                 return;
             }
         }
     }
+
+    // CrystallEdge: handle tile placement after doAfter completes
+    private void OnFloorTileDoAfter(EntityUid uid, FloorTileComponent component, FloorTileDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
+            return;
+
+        if (!_stackSystem.TryUse(uid, 1))
+            return;
+
+        if (args.TargetGrid == null)
+        {
+            // Space placement: create a new grid at the target location (server only)
+            args.Handled = true;
+            if (_netManager.IsClient)
+                return;
+
+            var spaceLocation = GetCoordinates(args.Location);
+            var spaceMapPos = _transform.ToMapCoordinates(spaceLocation);
+            var newGrid = _mapManager.CreateGridEntity(spaceMapPos.MapId);
+            _transform.SetWorldPosition((newGrid, Transform(newGrid)), spaceMapPos.Position);
+            var gridCoords = new EntityCoordinates(newGrid, Vector2.Zero);
+            PlaceAt(args.User, newGrid, newGrid.Comp, gridCoords, args.TileId, args.PlaceSound, newGrid.Comp.TileSize / 2f);
+            return;
+        }
+
+        var grid = GetEntity(args.TargetGrid);
+        if (grid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var mapGrid))
+            return;
+
+        PlaceAt(args.User, gridUid, mapGrid, GetCoordinates(args.Location), args.TileId, args.PlaceSound, args.Offset);
+        args.Handled = true;
+    }
+    // CrystallEdge end
 
     public bool HasBaseTurf(ContentTileDefinition tileDef, ProtoId<ContentTileDefinition> baseTurf)
     {
         return tileDef.BaseTurf == baseTurf;
     }
 
-    private bool CanPlaceOn(ContentTileDefinition tileDef, ProtoId<ContentTileDefinition> currentTurfId)
+    public bool CanPlaceOn(ContentTileDefinition tileDef, ProtoId<ContentTileDefinition> currentTurfId) // CrystallEdge: was private
     {
         //Check exact BaseTurf match
         if (tileDef.BaseTurf == currentTurfId)

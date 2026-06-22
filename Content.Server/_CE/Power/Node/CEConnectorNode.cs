@@ -1,0 +1,99 @@
+using Content.Server.NodeContainer.Nodes;
+using Content.Shared.NodeContainer;
+using Robust.Shared.Map.Components;
+
+namespace Content.Server.Power.Nodes;
+
+/// <summary>
+/// A node that connects to cables or active center nodes in a specific direction on the grid.
+/// </summary>
+[DataDefinition]
+public sealed partial class CEConnectorEdgeNode : Node
+{
+    [DataField(required: true)]
+    public Direction Direction = Direction.Invalid;
+
+    public override IEnumerable<Node> GetReachableNodes(
+        Entity<TransformComponent> xform,
+        EntityQuery<NodeContainerComponent> nodeQuery,
+        EntityQuery<TransformComponent> xformQuery,
+        Entity<MapGridComponent>? grid,
+        IEntityManager entMan)
+    {
+        if (!xform.Comp.Anchored || grid is not { } gridEnt)
+            yield break;
+
+        var mapSystem = entMan.System<SharedMapSystem>();
+        var gridIndex = mapSystem.TileIndicesFor(gridEnt, xform.Comp.Coordinates);
+
+        List<(Direction, Node)> nodeDirs = new();
+
+        foreach (var (dir, node) in NodeHelpers.GetCardinalNeighborNodes(nodeQuery, gridEnt, gridIndex, mapSystem))
+        {
+            if (node is CableNode && Direction == dir)
+            {
+                nodeDirs.Add((dir, node));
+            }
+
+            if (node is CEConnectorCenterNode center && center.Active)
+                nodeDirs.Add((dir, node));
+        }
+
+        foreach (var (_, node) in nodeDirs)
+        {
+            yield return node;
+        }
+    }
+}
+
+/// <summary>
+/// A central connector node that can be toggled to enable or disable connections to edge nodes.
+/// </summary>
+[DataDefinition]
+public sealed partial class CEConnectorCenterNode : Node
+{
+    /// <summary>
+    /// If disabled, this cable will never connect.
+    /// </summary>
+    /// <remarks>
+    /// If you change this,
+    /// you must manually call <see cref="NodeGroupSystem.QueueReflood"/> to update the node connections.
+    /// </remarks>
+    [DataField]
+    public bool Active = true;
+
+    public override bool Connectable(IEntityManager entMan, TransformComponent? xform = null)
+    {
+        if (!Active)
+            return false;
+
+        return base.Connectable(entMan, xform);
+    }
+
+    public override IEnumerable<Node> GetReachableNodes(
+        Entity<TransformComponent> xform,
+        EntityQuery<NodeContainerComponent> nodeQuery,
+        EntityQuery<TransformComponent> xformQuery,
+        Entity<MapGridComponent>? grid,
+        IEntityManager entMan)
+    {
+        if (!xform.Comp.Anchored || grid is not { } gridEnt || !Active)
+            yield break;
+
+        var mapSystem = entMan.System<SharedMapSystem>();
+        var gridIndex = mapSystem.TileIndicesFor(gridEnt, xform.Comp.Coordinates);
+
+        List<Node> connectNodes = new();
+
+        foreach (var node in NodeHelpers.GetNodesInTile(nodeQuery, gridEnt, gridIndex, mapSystem))
+        {
+            if (node is CEConnectorEdgeNode)
+                connectNodes.Add(node);
+        }
+
+        foreach (var node in connectNodes)
+        {
+            yield return node;
+        }
+    }
+}

@@ -95,7 +95,7 @@ public sealed partial class CERandomZNetworkGeneratorSystem : CEDungeonGenerator
         }
 
         // Create the z-network with shared components from the prototype.
-        var network = _zLevels.CreateZNetwork(zMapProto.Components);
+        var network = _zLevels.CreateMapNetwork(zMapProto.Components);
 
         var mapsByDepth = new Dictionary<EntityUid, int>();
         EntityUid? primaryMapUid = null;
@@ -117,7 +117,7 @@ public sealed partial class CERandomZNetworkGeneratorSystem : CEDungeonGenerator
             depth++;
         }
 
-        if (!_zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth))
+        if (!_zLevels.TryAddMapsIntoNetwork(network, mapsByDepth))
         {
             Log.Error($"CERandomZNetworkGeneratorSystem: failed to link maps into z-network for '{chosen}'.");
             return new CEDungeonGenerateResult(false);
