@@ -71,25 +71,25 @@ public abstract partial class CESharedZLevelsSystem
 }
 
 /// <summary>
-/// Called on ZLevel grid Network Entity, when grid added or removed from network
+/// Raised on ZLevel grid Network Entity, when grid added or removed from network
 /// </summary>
 public sealed class CEZLevelGridNetworkUpdatedEvent : EntityEventArgs;
 
 /// <summary>
-/// Directed at a grid entity when it is added to a z-grid network by <see cref="CEZGridConnectorSystem"/>.
+/// Raised at a grid entity when it is added to a z-grid network by <see cref="CEZGridConnectorSystem"/>.
 /// </summary>
 [ByRefEvent]
-public readonly struct CEGridAddedIntoZNetworkEvent(EntityUid network)
+public readonly struct CEGridAddedIntoZNetworkEvent(Entity<CEZGridNetworkComponent> network)
 {
-    public readonly EntityUid Network = network;
+    public readonly Entity<CEZGridNetworkComponent> Network = network;
 }
 
 /// <summary>
-/// Directed at a grid entity when it is removed from a z-grid network,
+/// Raised at a grid entity when it is removed from a z-grid network,
 /// either by the recalculator or by external network deletion.
 /// </summary>
 [ByRefEvent]
-public readonly struct CEGridRemovedFromZNetworkEvent(EntityUid network)
+public readonly struct CEGridRemovedFromZNetworkEvent(Entity<CEZGridNetworkComponent> network)
 {
-    public readonly EntityUid Network = network;
+    public readonly Entity<CEZGridNetworkComponent> Network = network;
 }

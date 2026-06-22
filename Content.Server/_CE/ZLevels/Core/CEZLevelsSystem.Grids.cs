@@ -30,13 +30,13 @@ public sealed partial class CEZLevelsSystem
     {
         if (!_mapGridQuery.HasComp(grid))
         {
-            Log.Error($"CEZGridLinker: {grid} is not a MapGrid.");
+            Log.Error($"ZGrid: {grid} is not a MapGrid.");
             return false;
         }
 
         if (TryGetGridNetwork(grid, out var existing))
         {
-            Log.Error($"CEZGridLinker: grid {grid} already in network {existing.Owner}.");
+            Log.Error($"ZGrid: grid {grid} already in network {existing.Owner}.");
             return false;
         }
 
@@ -48,7 +48,7 @@ public sealed partial class CEZLevelsSystem
         zGridComp.Network   = gridNetwork.Owner;
         Dirty(grid, zGridComp);
 
-        var ev = new CEGridAddedIntoZNetworkEvent(gridNetwork.Owner);
+        var ev = new CEGridAddedIntoZNetworkEvent(gridNetwork);
         RaiseLocalEvent(grid, ref ev);
 
         RaiseLocalEvent(gridNetwork, new CEZLevelGridNetworkUpdatedEvent());
@@ -68,7 +68,7 @@ public sealed partial class CEZLevelsSystem
         if (!TerminatingOrDeleted(gridNetwork.Owner))
             Dirty(gridNetwork);
 
-        var ev = new CEGridRemovedFromZNetworkEvent(gridNetwork.Owner);
+        var ev = new CEGridRemovedFromZNetworkEvent(gridNetwork);
         RaiseLocalEvent(grid, ref ev);
 
         if (gridNetwork.Comp.Grids.Count == 0 && !TerminatingOrDeleted(gridNetwork.Owner))
