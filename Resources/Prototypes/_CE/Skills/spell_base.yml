@@ -46,8 +46,8 @@
 
 - type: entity
   parent: CEBaseMagicImpact
-  id: CEBaseMagicImpactAlt
-  name: magic impact (alt)
+  id: CEBaseMagicImpactDirectional
+  name: magic impact (directional)
   description: manifestation of magical energy in the physical plane (which can rotate!)
   abstract: true
   components:
