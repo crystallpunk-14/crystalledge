@@ -74,7 +74,7 @@ public sealed partial class CEBossMusicSystem : EntitySystem
 
         _affectedMaps.Add(sourceUid);
 
-        if (!_zLevels.TryGetZNetwork(sourceUid, out var network))
+        if (!_zLevels.TryGetMapNetwork(sourceUid, out var network))
             return;
 
         foreach (var levelUid in network.Comp.SortedZLevels)

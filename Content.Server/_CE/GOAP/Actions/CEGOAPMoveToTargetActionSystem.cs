@@ -43,7 +43,7 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
     [Dependency] private EntityQuery<NPCSteeringComponent> _steeringQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
     [Dependency] private EntityQuery<MapComponent> _mapQuery = default!;
-    [Dependency] private EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
+    [Dependency] private EntityQuery<CEZMapComponent> _zMapQuery = default!;
 
 
     private readonly Dictionary<EntityUid, Direction> _pendingAscent = new();
@@ -245,8 +245,8 @@ public sealed partial class CEGOAPMoveToTargetActionSystem : CEGOAPActionSystem<
             return 0;
 
         // Reject cross-network routing: maps must be in the same Z-network.
-        if (!_zLevels.TryGetZNetwork(npcMapUid, out var npcNetwork) ||
-            !_zLevels.TryGetZNetwork(targetMapUid, out var targetNetwork) ||
+        if (!_zLevels.TryGetMapNetwork(npcMapUid, out var npcNetwork) ||
+            !_zLevels.TryGetMapNetwork(targetMapUid, out var targetNetwork) ||
             npcNetwork.Owner != targetNetwork.Owner)
             return 0;
 

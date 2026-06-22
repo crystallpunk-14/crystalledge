@@ -25,14 +25,14 @@ public sealed partial class CERoofSystem : CESharedRoofSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEZLevelsNetworkComponent, CEZLevelNetworkUpdatedEvent>(OnNetworkUpdated);
+        SubscribeLocalEvent<CEZMapNetworkComponent, CEZLevelMapNetworkUpdatedEvent>(OnNetworkUpdated);
 
         SubscribeLocalEvent<CEZGridComponent, MapInitEvent>(OnZGridMapInit);
-        SubscribeLocalEvent<CEZLevelMapRoofComponent, CEGridLinkedEvent>(OnZGridLinked);
-        SubscribeLocalEvent<CEZLevelMapRoofComponent, CEGridUnlinkedEvent>(OnZGridUnlinked);
+        SubscribeLocalEvent<CEZLevelMapRoofComponent, CEGridAddedIntoZNetworkEvent>(OnZGridLinked);
+        SubscribeLocalEvent<CEZLevelMapRoofComponent, CEGridRemovedFromZNetworkEvent>(OnZGridUnlinked);
     }
 
-    private void OnNetworkUpdated(Entity<CEZLevelsNetworkComponent> ent, ref CEZLevelNetworkUpdatedEvent args)
+    private void OnNetworkUpdated(Entity<CEZMapNetworkComponent> ent, ref CEZLevelMapNetworkUpdatedEvent args)
     {
         RecalculateNetworkRoofs(ent);
     }
@@ -42,7 +42,7 @@ public sealed partial class CERoofSystem : CESharedRoofSystem
         EnsureComp<CEZLevelMapRoofComponent>(ent.Owner);
     }
 
-    private void OnZGridLinked(Entity<CEZLevelMapRoofComponent> ent, ref CEGridLinkedEvent args)
+    private void OnZGridLinked(Entity<CEZLevelMapRoofComponent> ent, ref CEGridAddedIntoZNetworkEvent args)
     {
         if (!_zgridQuery.TryComp(ent.Owner, out var zGrid))
             return;
@@ -51,7 +51,7 @@ public sealed partial class CERoofSystem : CESharedRoofSystem
         RecalculateZGridNetworkRoofs((zGrid.Network, network));
     }
 
-    private void OnZGridUnlinked(Entity<CEZLevelMapRoofComponent> ent, ref CEGridUnlinkedEvent args)
+    private void OnZGridUnlinked(Entity<CEZLevelMapRoofComponent> ent, ref CEGridRemovedFromZNetworkEvent args)
     {
         RemCompDeferred<CEZLevelMapRoofComponent>(ent.Owner);
         RemCompDeferred<RoofComponent>(ent.Owner);
@@ -69,7 +69,7 @@ public sealed partial class CERoofSystem : CESharedRoofSystem
         RecalculateZGridNetworkRoofs((zGrid.Network, network));
     }
 
-    public void RecalculateNetworkRoofs(Entity<CEZLevelsNetworkComponent> network)
+    public void RecalculateNetworkRoofs(Entity<CEZMapNetworkComponent> network)
     {
         _roofMap.Clear();
 

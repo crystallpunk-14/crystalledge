@@ -45,7 +45,7 @@ public sealed partial class CEWeatherCommand : LocalizedCommands
             return;
         }
 
-        if (!_entities.TryGetComponent<CEZLevelsNetworkComponent>(target, out var levelComp))
+        if (!_entities.TryGetComponent<CEZMapNetworkComponent>(target, out var levelComp))
         {
             shell.WriteError($"Target entity doesnt have CEZLevelsNetworkComponent {args[1]}");
             return;
@@ -84,7 +84,7 @@ public sealed partial class CEWeatherCommand : LocalizedCommands
         if (args.Length == 1)
         {
             var options = new List<CompletionOption>();
-            var query = _entities.EntityQueryEnumerator<CEZLevelsNetworkComponent, MetaDataComponent>();
+            var query = _entities.EntityQueryEnumerator<CEZMapNetworkComponent, MetaDataComponent>();
             while (query.MoveNext(out var uid, out _, out var meta))
             {
                 options.Add(new CompletionOption(_entities.GetNetEntity(uid).ToString(), meta.EntityName));

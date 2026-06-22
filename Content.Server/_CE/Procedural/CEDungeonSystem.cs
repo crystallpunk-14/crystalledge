@@ -135,7 +135,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
             // Initialize z-network maps now that we are outside the job context,
             // so InitializeMap does not conflict with PVS parallel jobs.
             if (result.ZNetworkUid != null
-                && TryComp<CEZLevelsNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
+                && TryComp<CEZMapNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
             {
                 _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
             }
@@ -214,7 +214,7 @@ public sealed partial class CEDungeonSystem : EntitySystem
             {
                 // Initialize z-network maps now that we are outside the job context.
                 if (result.ZNetworkUid != null
-                    && TryComp<CEZLevelsNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
+                    && TryComp<CEZMapNetworkComponent>(result.ZNetworkUid.Value, out var networkComp))
                 {
                     _zLevels.InitializeZNetwork((result.ZNetworkUid.Value, networkComp));
                 }
@@ -250,16 +250,19 @@ public sealed partial class CEDungeonSystem : EntitySystem
         var dungeonName = proto.Name.HasValue ? Loc.GetString(proto.Name.Value) : proto.ID;
 
         if (result.ZNetworkUid is { } networkUid
-            && TryComp<CEZLevelsNetworkComponent>(networkUid, out var networkComp))
+            && TryComp<CEZMapNetworkComponent>(networkUid, out var networkComp))
         {
             // Unstable levels can have multiple concurrent instances — disambiguate with the
             // network entity id so admins can tell them apart in dev tools / overview UIs.
             var mapNameBase = proto.Stable ? dungeonName : $"{dungeonName} #{networkUid.Id}";
 
-            _zLevels.SetZNetworkName(
-                (networkUid, networkComp),
-                $"Dungeon z-Network: {mapNameBase}",
-                mapNameBase);
+            _meta.SetEntityName(networkUid, $"Dungeon z-Network: {mapNameBase}");
+
+            foreach (var (depth, mapUid2) in networkComp.ZLevels)
+            {
+                if (mapUid2 is { } mu)
+                    _meta.SetEntityName(mu, $"{mapNameBase} [{depth}]");
+            }
         }
         else
         {

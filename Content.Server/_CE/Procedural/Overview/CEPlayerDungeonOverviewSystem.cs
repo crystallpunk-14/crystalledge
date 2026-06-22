@@ -24,14 +24,14 @@ public sealed partial class CEPlayerDungeonOverviewSystem : EntitySystem
     [Dependency] private CEZLevelsSystem _zLevels = default!;
 
     private EntityQuery<CEDungeonInstanceComponent> _instanceQuery;
-    private EntityQuery<CEZLevelsNetworkComponent> _zNetQuery;
+    private EntityQuery<CEZMapNetworkComponent> _zNetQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
         _instanceQuery = GetEntityQuery<CEDungeonInstanceComponent>();
-        _zNetQuery = GetEntityQuery<CEZLevelsNetworkComponent>();
+        _zNetQuery = GetEntityQuery<CEZMapNetworkComponent>();
 
         SubscribeLocalEvent<CEPlayerDungeonOverviewComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<CEDungeonPlayerLevelChangedEvent>(OnPlayerLevelChanged);
@@ -144,7 +144,7 @@ public sealed partial class CEPlayerDungeonOverviewSystem : EntitySystem
         if (Transform(host).MapUid is not { } mapUid)
             return null;
 
-        if (_zLevels.TryGetZNetwork(mapUid, out var zNetAnchor)
+        if (_zLevels.TryGetMapNetwork(mapUid, out var zNetAnchor)
             && _instanceQuery.TryComp(zNetAnchor.Owner, out var zInst))
         {
             return zInst.PrototypeId;

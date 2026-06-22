@@ -13,21 +13,20 @@ namespace Content.Server._CE.ZLevels.Core;
 
 public sealed partial class CEZLevelsSystem
 {
-    [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
-
     [PublicAPI]
     public Entity<CEZGridNetworkComponent> CreateGridNetwork()
     {
-        var networkId = Guid.NewGuid().ToString("N");
         var ent  = Spawn();
+
         var comp = EnsureComp<CEZGridNetworkComponent>(ent);
-        comp.NetworkId = networkId;
+        comp.NetworkId = Guid.NewGuid().ToString("N");
         Dirty(ent, comp);
+
         return (ent, comp);
     }
 
     [PublicAPI]
-    public bool TryAddGridToNetwork(Entity<CEZGridNetworkComponent> network, EntityUid grid)
+    public bool TryAddGridToNetwork(Entity<CEZGridNetworkComponent> gridNetwork, EntityUid grid)
     {
         if (!_mapGridQuery.HasComp(grid))
         {
@@ -37,46 +36,53 @@ public sealed partial class CEZLevelsSystem
 
         if (TryGetGridNetwork(grid, out var existing))
         {
-            Log.Warning($"CEZGridLinker: grid {grid} already in network {existing.Owner}.");
+            Log.Error($"CEZGridLinker: grid {grid} already in network {existing.Owner}.");
             return false;
         }
 
-        network.Comp.Grids.Add(grid);
-        Dirty(network);
+        gridNetwork.Comp.Grids.Add(grid);
+        Dirty(gridNetwork);
 
         var zGridComp = EnsureComp<CEZGridComponent>(grid);
-        zGridComp.NetworkId = network.Comp.NetworkId;
-        zGridComp.Network   = network.Owner;
+        zGridComp.NetworkId = gridNetwork.Comp.NetworkId;
+        zGridComp.Network   = gridNetwork.Owner;
         Dirty(grid, zGridComp);
 
-        var ev = new CEGridLinkedEvent(network.Owner);
+        var ev = new CEGridAddedIntoZNetworkEvent(gridNetwork.Owner);
         RaiseLocalEvent(grid, ref ev);
+
+        RaiseLocalEvent(gridNetwork, new CEZLevelGridNetworkUpdatedEvent());
+
         return true;
     }
 
     [PublicAPI]
     public bool TryRemoveGridFromNetwork(EntityUid grid)
     {
-        if (!TryGetGridNetwork(grid, out var network))
+        if (!TryGetGridNetwork(grid, out var gridNetwork))
             return false;
 
-        network.Comp.Grids.Remove(grid);
+        gridNetwork.Comp.Grids.Remove(grid);
         RemComp<CEZGridComponent>(grid);
 
-        if (!TerminatingOrDeleted(network.Owner))
-            Dirty(network);
+        if (!TerminatingOrDeleted(gridNetwork.Owner))
+            Dirty(gridNetwork);
 
-        var ev = new CEGridUnlinkedEvent(network.Owner);
+        var ev = new CEGridRemovedFromZNetworkEvent(gridNetwork.Owner);
         RaiseLocalEvent(grid, ref ev);
 
-        if (network.Comp.Grids.Count == 0 && !TerminatingOrDeleted(network.Owner))
-            QueueDel(network);
+        if (gridNetwork.Comp.Grids.Count == 0 && !TerminatingOrDeleted(gridNetwork.Owner))
+            QueueDel(gridNetwork);
+        else
+        {
+            RaiseLocalEvent(gridNetwork, new CEZLevelGridNetworkUpdatedEvent());
+        }
 
         return true;
     }
 
     /// <summary>
-    /// Explicit teardown: removes every grid (raising <see cref="CEGridUnlinkedEvent"/> per grid)
+    /// Explicit teardown: removes every grid (raising <see cref="CEGridRemovedFromZNetworkEvent"/> per grid)
     /// and queues the manager for deletion.
     /// </summary>
     [PublicAPI]
@@ -84,7 +90,9 @@ public sealed partial class CEZLevelsSystem
     {
         // TryRemoveGridFromNetwork mutates Grids, so iterate a snapshot.
         foreach (var grid in network.Comp.Grids.ToList())
+        {
             TryRemoveGridFromNetwork(grid);
+        }
 
         if (!TerminatingOrDeleted(network.Owner))
             QueueDel(network);

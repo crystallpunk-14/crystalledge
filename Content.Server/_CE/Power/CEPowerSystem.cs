@@ -27,10 +27,8 @@ public sealed partial class CEPowerSystem : CESharedPowerSystem
         SubscribeLocalEvent<CEEnergyLeakComponent, PowerConsumerReceivedChanged>(OnPowerChanged);
         SubscribeLocalEvent<CEToggleableConnectorComponent, ActivateInWorldEvent>(OnActivateInWorld);
 
-        // CrystallEdge: reflood vertical pipe nodes when ZGrid network topology changes
-        SubscribeLocalEvent<MapGridComponent, CEGridLinkedEvent>(OnGridLinked);
-        SubscribeLocalEvent<MapGridComponent, CEGridUnlinkedEvent>(OnGridUnlinked);
-        // CrystallEdge end
+        SubscribeLocalEvent<MapGridComponent, CEGridAddedIntoZNetworkEvent>(OnGridLinked);
+        SubscribeLocalEvent<MapGridComponent, CEGridRemovedFromZNetworkEvent>(OnGridUnlinked);
     }
 
     public override void Update(float frameTime)
@@ -40,15 +38,15 @@ public sealed partial class CEPowerSystem : CESharedPowerSystem
         UpdateChargers(frameTime);
     }
 
-    public void ToggleConnector(Entity<NodeContainerComponent> connector, bool status)
+    private void ToggleConnector(Entity<NodeContainerComponent> connector, bool status)
     {
         foreach (var node in connector.Comp.Nodes.Values)
         {
-            if (node is CEConnectorCenterNode cableNode)
-            {
-                cableNode.Active = status;
-                _nodeGroup.QueueReflood(node);
-            }
+            if (node is not CEConnectorCenterNode cableNode)
+                continue;
+
+            cableNode.Active = status;
+            _nodeGroup.QueueReflood(node);
         }
 
         _appearance.SetData(connector, CEToggleableCableVisuals.Enabled, status);
@@ -69,12 +67,12 @@ public sealed partial class CEPowerSystem : CESharedPowerSystem
         UseDelay.TryResetDelay(ent);
     }
 
-    private void OnGridLinked(Entity<MapGridComponent> grid, ref CEGridLinkedEvent args)
+    private void OnGridLinked(Entity<MapGridComponent> grid, ref CEGridAddedIntoZNetworkEvent args)
     {
         RefloodVerticalNodes(grid.Owner);
     }
 
-    private void OnGridUnlinked(Entity<MapGridComponent> grid, ref CEGridUnlinkedEvent args)
+    private void OnGridUnlinked(Entity<MapGridComponent> grid, ref CEGridRemovedFromZNetworkEvent args)
     {
         RefloodVerticalNodes(grid.Owner);
     }

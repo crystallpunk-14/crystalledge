@@ -23,6 +23,8 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private StationSystem _station = default!;
 
+    [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -38,7 +40,7 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
             return;
 
         var stationName = MetaData(ent).EntityName;
-        var stationNetwork = CreateZNetwork(ent.Comp.ZLevelsComponentOverrides);
+        var stationNetwork = CreateMapNetwork(ent.Comp.ZLevelsComponentOverrides);
 
         ent.Comp.ZNetworkEntity = stationNetwork;
 
@@ -94,14 +96,14 @@ public sealed partial class CEZLevelsSystem : CESharedZLevelsSystem
             depth++;
         }
 
-        TryAddMapsIntoZNetwork(stationNetwork, dict);
+        TryAddMapsIntoNetwork(stationNetwork, dict);
     }
 
     /// <summary>
     /// Initializes all uninitialized maps in the z-network.
     /// </summary>
     [PublicAPI]
-    public void InitializeZNetwork(Entity<CEZLevelsNetworkComponent> network)
+    public void InitializeZNetwork(Entity<CEZMapNetworkComponent> network)
     {
         foreach (var (_, mapUid) in network.Comp.ZLevels)
         {

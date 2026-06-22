@@ -64,7 +64,7 @@ public sealed partial class CEMappingZNetworkCommand : LocalizedEntityCommands
 
         //Ok all parsing is done, we start creating maps
 
-        var network = _zLevel.CreateZNetwork(indexedZMap.Components);
+        var network = _zLevel.CreateMapNetwork(indexedZMap.Components);
         _meta.SetEntityName(network, $"Mapping zNetwork: {indexedZMap.ID}");
         Dictionary<EntityUid, int> dict = new();
 
@@ -99,7 +99,7 @@ public sealed partial class CEMappingZNetworkCommand : LocalizedEntityCommands
             }
         }
 
-        if (!_zLevel.TryAddMapsIntoZNetwork(network, dict))
+        if (!_zLevel.TryAddMapsIntoNetwork(network, dict))
         {
             shell.WriteError($"Failed to create zNetwork from loaded maps!");
             return;

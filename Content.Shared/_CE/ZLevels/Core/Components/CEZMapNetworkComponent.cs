@@ -14,7 +14,7 @@ namespace Content.Shared._CE.ZLevels.Core.Components;
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(CESharedZLevelsSystem))]
-public sealed partial class CEZLevelsNetworkComponent : Component
+public sealed partial class CEZMapNetworkComponent : Component
 {
     [ViewVariables, AutoNetworkedField]
     public readonly Dictionary<int, EntityUid?> ZLevels = new();

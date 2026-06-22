@@ -24,7 +24,7 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
     [Dependency] private EntityQuery<CEZGridComponent> _zgridQuery = default!;
     [Dependency] private EntityQuery<CEZGridNetworkComponent> _zgridNetworkQuery = default!;
-    [Dependency] private EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
+    [Dependency] private EntityQuery<CEZMapComponent> _zMapQuery = default!;
 
     private bool _dirty;
 

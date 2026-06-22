@@ -60,7 +60,7 @@ public sealed class CEProceduralDungeonJob(
         await SuspendIfOutOfTime();
 
         // Create z-network so 3D rooms can be spawned across z-levels.
-        var network = zLevels.CreateZNetwork(config.Components);
+        var network = zLevels.CreateMapNetwork(config.Components);
 
         // Determine the maximum room height to know how many z-levels we need.
         var maxHeight = 1;
@@ -86,7 +86,7 @@ public sealed class CEProceduralDungeonJob(
             mapsByDepth[extraMapUid] = zOffset;
         }
 
-        zLevels.TryAddMapsIntoZNetwork(network, mapsByDepth);
+        zLevels.TryAddMapsIntoNetwork(network, mapsByDepth);
         await SuspendIfOutOfTime();
 
         // Ensure the map has a grid for tile/entity placement.
@@ -109,7 +109,7 @@ public sealed class CEProceduralDungeonJob(
         if (config.MainZLevel != 0)
         {
             if (zLevels.TryMapOffset(
-                    (mapUid, entManager.EnsureComponent<CEZLevelMapComponent>(mapUid)),
+                    (mapUid, entManager.EnsureComponent<CEZMapComponent>(mapUid)),
                     config.MainZLevel,
                     out var mainLevelMap))
             {

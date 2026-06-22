@@ -51,7 +51,7 @@ public abstract partial class CESharedZLevelsSystem
         DirtyField(entity, entity.Comp, nameof(CEZLevelViewerComponent.LookUp));
     }
 
-    public bool HasOpaqueAbove(EntityUid ent, Entity<CEZLevelMapComponent?>? currentMapUid = null)
+    public bool HasOpaqueAbove(EntityUid ent, Entity<CEZMapComponent?>? currentMapUid = null)
     {
         currentMapUid ??= Transform(ent).MapUid;
 
@@ -74,10 +74,10 @@ public abstract partial class CESharedZLevelsSystem
 
     /// <summary>
     /// Checks whether any grid on the map above has an opaque (non-transparent) tile at the given world position.
-    /// World-position overload; see also <see cref="HasOpaqueAbove(EntityUid, Entity{CEZLevelMapComponent?}?)"/>.
+    /// World-position overload; see also <see cref="HasOpaqueAbove(EntityUid, Entity{CEZMapComponent?}?)"/>.
     /// </summary>
     [PublicAPI]
-    public bool HasOpaqueAbove(Vector2 worldPos, Entity<CEZLevelMapComponent?> currentMap)
+    public bool HasOpaqueAbove(Vector2 worldPos, Entity<CEZMapComponent?> currentMap)
     {
         if (!TryMapUp(currentMap, out var mapAboveUid))
             return false;

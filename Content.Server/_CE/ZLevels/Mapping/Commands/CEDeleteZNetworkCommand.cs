@@ -23,7 +23,7 @@ public sealed partial class CEDeleteZNetworkCommand : LocalizedEntityCommands
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         var options = new List<CompletionOption>();
-        var query = _entities.EntityQueryEnumerator<CEZLevelsNetworkComponent, MetaDataComponent>();
+        var query = _entities.EntityQueryEnumerator<CEZMapNetworkComponent, MetaDataComponent>();
         while (query.MoveNext(out var uid, out var zLevelComp, out var meta))
         {
             options.Add(new CompletionOption(_entities.GetNetEntity(uid).ToString(), meta.EntityName));
@@ -46,13 +46,13 @@ public sealed partial class CEDeleteZNetworkCommand : LocalizedEntityCommands
             return;
         }
 
-        if (!_entities.HasComponent<CEZLevelsNetworkComponent>(target))
+        if (!_entities.HasComponent<CEZMapNetworkComponent>(target))
         {
             shell.WriteError($"Target entity doesnt have CEZLevelsNetworkComponent {args[0]}");
             return;
         }
 
-        _zLevels.DeleteZNetwork(target.Value);
+        _zLevels.DeleteMapNetwork(target.Value);
 
         shell.WriteLine("ZNetwork and all its maps deleted.");
     }

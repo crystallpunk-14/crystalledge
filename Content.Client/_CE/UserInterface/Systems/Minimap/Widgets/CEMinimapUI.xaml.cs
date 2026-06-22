@@ -281,7 +281,7 @@ public sealed partial class CEMinimapUI : UIWidget
         }
 
         var zLevels = _entMan.System<CESharedZLevelsSystem>();
-        if (!zLevels.TryGetZNetwork(currentMap, out var zNet))
+        if (!zLevels.TryGetMapNetwork(currentMap, out var zNet))
             return false;
 
         foreach (var sibling in zNet.Comp.ZLevels.Values)

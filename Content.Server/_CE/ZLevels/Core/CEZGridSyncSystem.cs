@@ -47,12 +47,12 @@ public sealed partial class CEZGridSyncSystem : VirtualController
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CEZGridComponent, CEGridLinkedEvent>(OnGridLinked);
-        SubscribeLocalEvent<CEZGridComponent, CEGridUnlinkedEvent>(OnGridUnlinked);
+        SubscribeLocalEvent<CEZGridComponent, CEGridAddedIntoZNetworkEvent>(OnGridLinked);
+        SubscribeLocalEvent<CEZGridComponent, CEGridRemovedFromZNetworkEvent>(OnGridUnlinked);
         SubscribeLocalEvent<CEZGridComponent, MoveEvent>(OnGridMoved);
         SubscribeLocalEvent<CEZGridComponent, MassDataChangedEvent>(OnMassChanged);
     }
-    private void OnGridLinked(Entity<CEZGridComponent> zGridEnt, ref CEGridLinkedEvent ev)
+    private void OnGridLinked(Entity<CEZGridComponent> zGridEnt, ref CEGridAddedIntoZNetworkEvent ev)
     {
         if (!_zGridNetworkQuery.TryComp(ev.Network, out var net))
             return;
@@ -84,7 +84,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         RecalculateNetworkCache((ev.Network, net));
     }
 
-    private void OnGridUnlinked(Entity<CEZGridComponent> ent, ref CEGridUnlinkedEvent ev)
+    private void OnGridUnlinked(Entity<CEZGridComponent> ent, ref CEGridRemovedFromZNetworkEvent ev)
     {
         ent.Comp.NetworkOffset = Vector2.Zero;
         ent.Comp.NetworkRotation = Angle.Zero;

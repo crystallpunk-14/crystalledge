@@ -27,7 +27,7 @@ public sealed partial class CEWorldGenSystem : EntitySystem
     [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
     [Dependency] private EntityQuery<CEWorldComponent> _worldQuery = default!;
-    [Dependency] private EntityQuery<CEZLevelMapComponent> _zMapQuery = default!;
+    [Dependency] private EntityQuery<CEZMapComponent> _zMapQuery = default!;
 
     /// <summary>
     /// Reused per-tick scratch: chunks each world wants loaded.
@@ -53,7 +53,7 @@ public sealed partial class CEWorldGenSystem : EntitySystem
         if (!_proto.TryIndex(configId, out var config))
             return;
 
-        var network = _zLevels.CreateZNetwork(config.MapComponents);
+        var network = _zLevels.CreateMapNetwork(config.MapComponents);
         var world = AddComp<CEWorldComponent>(network.Owner);
         world.Config = configId;
         world.Seed = _random.Next();
@@ -95,7 +95,7 @@ public sealed partial class CEWorldGenSystem : EntitySystem
             depthByMap[mapUid] = depth;
         }
 
-        _zLevels.TryAddMapsIntoZNetwork(network, depthByMap);
+        _zLevels.TryAddMapsIntoNetwork(network, depthByMap);
         _meta.SetEntityName(network.Owner, $"World z-Network: {config.ID}");
 
         var zCount = maxDepth - minDepth + 1;

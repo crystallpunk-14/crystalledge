@@ -29,7 +29,7 @@ public sealed partial class CEDungeonPostProcessSystem : EntitySystem
     {
         var maps = new List<EntityUid>();
 
-        if (_zLevels.TryGetZNetwork(mapUid, out var zNet))
+        if (_zLevels.TryGetMapNetwork(mapUid, out var zNet))
         {
             foreach (var (_, zMapUid) in zNet.Comp.ZLevels)
             {
@@ -52,7 +52,7 @@ public sealed partial class CEDungeonPostProcessSystem : EntitySystem
     /// </summary>
     internal EntityUid GetMapAtZLevel(EntityUid mapUid, int depth)
     {
-        if (!_zLevels.TryGetZNetwork(mapUid, out var zNet))
+        if (!_zLevels.TryGetMapNetwork(mapUid, out var zNet))
             return mapUid;
 
         var zLevels = zNet.Comp.ZLevels;
