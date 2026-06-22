@@ -10,6 +10,8 @@ using Robust.Shared.Map;
 
 namespace Content.Server._CE.ZLevels.Core;
 
+//WARNING: This file is vibecoded. It WORKS, but i dunno how that works - and we need investigate that and rewrite to more propriate code human style.
+
 /// <summary>
 /// Universal z-grid network recalculator driven by <see cref="CEZGridConnectorComponent"/>.
 /// Sets a dirty flag on any topology event and runs a single recalculation pass per dirty cycle.
