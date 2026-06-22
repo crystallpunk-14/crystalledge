@@ -5,8 +5,8 @@
 
 using System.Linq;
 using Content.Shared._CE.ZLevels.Core.Components;
+using Content.Shared._CE.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 
 namespace Content.Server._CE.ZLevels.Core;
 
@@ -63,7 +63,8 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
         SubscribeLocalEvent<CEZGridConnectorComponent, MapInitEvent>(OnConnectorMapInit);
         SubscribeLocalEvent<CEZGridConnectorComponent, AnchorStateChangedEvent>(OnConnectorAnchorChanged);
         SubscribeLocalEvent<CEZGridConnectorComponent, EntityTerminatingEvent>(OnConnectorTerminating);
-        SubscribeLocalEvent<MapGridComponent, EntityTerminatingEvent>(OnGridTerminating);
+
+        SubscribeLocalEvent<CEZGridComponent, EntityTerminatingEvent>(OnGridTerminating);
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
         SubscribeLocalEvent<GridSplitEvent>(OnGridSplit);
 
@@ -85,7 +86,7 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
         _dirty = true;
     }
 
-    private void OnGridTerminating(Entity<MapGridComponent> ent, ref EntityTerminatingEvent args)
+    private void OnGridTerminating(Entity<CEZGridComponent> ent, ref EntityTerminatingEvent args)
     {
         _dirty = true;
     }
@@ -121,8 +122,8 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
     /// <summary>
     /// Reconciles live network membership with the desired connected components by applying the
-    /// minimal delta: survivors keep their pose, only joined grids fire <see cref="CEGridLinkedEvent"/>
-    /// and only departed grids fire <see cref="CEGridUnlinkedEvent"/>. Networks are reused (never
+    /// minimal delta: survivors keep their pose, only joined grids fire <see cref="CEGridAddedIntoZNetworkEvent"/>
+    /// and only departed grids fire <see cref="CEGridRemovedFromZNetworkEvent"/>. Networks are reused (never
     /// torn down and rebuilt) so unrelated members are never re-snapped.
     /// </summary>
     private void RecalculateGridNetworks()
@@ -142,7 +143,9 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
             _claimedNets.Add(target);
             foreach (var grid in component)
+            {
                 _gridToTargetNet[grid] = target;
+            }
         }
 
         // Removals first: any grid whose live network is not its target leaves (raises Unlinked).
@@ -159,7 +162,9 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
         }
 
         foreach (var grid in _removeBuffer)
+        {
             _zLevels.TryRemoveGridFromNetwork(grid);
+        }
 
         // Additions: place each grid into its target network if it isn't there already.
         foreach (var (grid, target) in _gridToTargetNet)
@@ -172,7 +177,10 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
         // Reclaim component sets for the next pass.
         foreach (var component in _components)
+        {
             ReturnSet(component);
+        }
+
         _components.Clear();
     }
 
@@ -213,6 +221,9 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
         {
             if (!xform.Anchored || xform.GridUid == null || xform.MapUid == null)
                 continue;
+
+            if (xform.ParentUid == xform.MapUid)
+                continue; //We do not support connecting grid to planet maps right now
 
             var lowerGridUid = xform.GridUid.Value;
             if (!_zMapQuery.TryComp(xform.MapUid.Value, out var zMap))
@@ -271,7 +282,10 @@ public sealed partial class CEZGridConnectorSystem : EntitySystem
 
         // Return adjacency neighbor sets to the pool (component sets are released after reconciliation).
         foreach (var neighbors in _adj.Values)
+        {
             ReturnSet(neighbors);
+        }
+
         _adj.Clear();
     }
 }

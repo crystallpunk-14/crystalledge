@@ -35,7 +35,6 @@ public sealed partial class CEZGridSyncSystem : VirtualController
     [Dependency] private CEZGridConnectorSystem _connectorSystem = default!;
 
     [Dependency] private EntityQuery<CEZGridComponent> _gridCompQuery = default!;
-    [Dependency] private EntityQuery<CEZGridNetworkComponent> _zGridNetworkQuery = default!;
     [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
     [Dependency] private EntityQuery<MapComponent> _mapCompQuery = default!;
@@ -49,61 +48,57 @@ public sealed partial class CEZGridSyncSystem : VirtualController
 
         SubscribeLocalEvent<CEZGridComponent, CEGridAddedIntoZNetworkEvent>(OnGridLinked);
         SubscribeLocalEvent<CEZGridComponent, CEGridRemovedFromZNetworkEvent>(OnGridUnlinked);
+
         SubscribeLocalEvent<CEZGridComponent, MoveEvent>(OnGridMoved);
         SubscribeLocalEvent<CEZGridComponent, MassDataChangedEvent>(OnMassChanged);
     }
+
     private void OnGridLinked(Entity<CEZGridComponent> zGridEnt, ref CEGridAddedIntoZNetworkEvent ev)
     {
-        if (!_zGridNetworkQuery.TryComp(ev.Network, out var net))
-            return;
-
-        zGridEnt.Comp.CachedFixturesMass = _physicsQuery.TryComp(zGridEnt.Owner, out var body)
+        zGridEnt.Comp.CachedMass = _physicsQuery.TryComp(zGridEnt.Owner, out var body)
             ? body.FixturesMass
             : 0f;
 
-        if (net.Grids.Count == 1)
+        if (ev.Network.Comp.Grids.Count == 1)
         {
             // First member becomes the anchor.
             zGridEnt.Comp.NetworkOffset = Vector2.Zero;
             zGridEnt.Comp.NetworkRotation = Angle.Zero;
-            net.AnchorGrid = zGridEnt.Owner;
+            ev.Network.Comp.AnchorGrid = zGridEnt.Owner;
         }
-        else if (IsStaticAnchor(zGridEnt.Owner) && net.AnchorGrid != zGridEnt.Owner)
+        else if (IsStaticAnchor(zGridEnt.Owner) && ev.Network.Comp.AnchorGrid != zGridEnt.Owner)
         {
-            // A planet joined an existing flying network: dock the whole network onto it as one rigid body.
-            DockFlyingNetworkToStatic(net, zGridEnt.Owner);
+            //TODO: Connection grid to map?
         }
         else
         {
             // Make sure an anchor exists (recovery if it was invalidated), then snap only the new grid.
-            EnsureAnchor(net);
-            if (zGridEnt.Owner != net.AnchorGrid)
-                SnapNewGridToAnchor(net, zGridEnt);
+            EnsureAnchor(ev.Network.Comp);
+            if (zGridEnt.Owner != ev.Network.Comp.AnchorGrid)
+                SnapNewGridToAnchor(ev.Network.Comp, zGridEnt);
         }
 
-        RecalculateNetworkCache((ev.Network, net));
+        RecalculateNetworkCache(ev.Network);
     }
 
     private void OnGridUnlinked(Entity<CEZGridComponent> ent, ref CEGridRemovedFromZNetworkEvent ev)
     {
         ent.Comp.NetworkOffset = Vector2.Zero;
         ent.Comp.NetworkRotation = Angle.Zero;
-        ent.Comp.CachedFixturesMass = 0f;
-
-        if (!_zGridNetworkQuery.TryComp(ev.Network, out var net))
-            return;
+        ent.Comp.CachedMass = 0f;
 
         // If the departing grid was the anchor, rebase the survivors onto a new one (in place, no move).
-        if (net.AnchorGrid == ent.Owner)
+        if (ev.Network.Comp.AnchorGrid == ent.Owner)
         {
-            net.AnchorGrid = EntityUid.Invalid;
-            var newAnchor = ChooseAnchor(net);
+            ev.Network.Comp.AnchorGrid = EntityUid.Invalid;
+            var newAnchor = ChooseAnchor(ev.Network.Comp);
             if (newAnchor.IsValid())
-                RebaseToAnchor(net, newAnchor);
+                RebaseToAnchor(ev.Network.Comp, newAnchor);
         }
 
-        RecalculateNetworkCache((ev.Network, net));
+        RecalculateNetworkCache(ev.Network);
     }
+
     private void OnGridMoved(Entity<CEZGridComponent> ent, ref MoveEvent ev)
     {
         if (_syncing || _inPhysicsTick)
@@ -139,12 +134,13 @@ public sealed partial class CEZGridSyncSystem : VirtualController
                 continue;
             ApplyAnchorToGrid(other, otherComp, anchorPos, anchorRot);
         }
+
         _syncing = false;
     }
 
     private void OnMassChanged(Entity<CEZGridComponent> ent, ref MassDataChangedEvent args)
     {
-        ent.Comp.CachedFixturesMass = _physicsQuery.TryComp(ent.Owner, out var body)
+        ent.Comp.CachedMass = _physicsQuery.TryComp(ent.Owner, out var body)
             ? body.FixturesMass
             : 0f;
 
@@ -267,63 +263,6 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         }
     }
 
-    /// <summary>
-    /// Docks a flying network onto a static planet as one rigid body: the whole network is rotated by a
-    /// single delta to the nearest 90° and translated once onto the planet tile grid, preserving the
-    /// internal arrangement. The planet becomes the anchor; per-grid offsets are then exact.
-    /// </summary>
-    private void DockFlyingNetworkToStatic(CEZGridNetworkComponent net, EntityUid planet)
-    {
-        var (pPos, pRot) = GetGridPose(planet);
-        net.AnchorGrid = planet;
-
-        // Reference grid defines the network's current base rotation/pivot.
-        var refGrid = EntityUid.Invalid;
-        foreach (var g in net.Grids)
-        {
-            if (g != planet)
-            {
-                refGrid = g;
-                break;
-            }
-        }
-
-        if (!refGrid.IsValid())
-            return;
-
-        var pivot = _transform.GetWorldPosition(refGrid);
-        var baseRot = _transform.GetWorldRotation(refGrid);
-        var deltaRot = (pRot + SnapAngle(baseRot - pRot)) - baseRot;
-
-        // Single tile-snap translation derived from the reference grid (rotates about itself → unchanged).
-        var tileSize = _mapGridQuery.TryComp(refGrid, out var refMapGrid) ? refMapGrid.TileSize : 1f;
-        var refLocal = new Angle(-pRot.Theta).RotateVec(pivot - pPos);
-        var translation = pRot.RotateVec(SnapPosition(refLocal, tileSize) - refLocal);
-
-        _syncing = true;
-        foreach (var g in net.Grids)
-        {
-            if (g == planet || !_gridCompQuery.TryComp(g, out var comp))
-                continue;
-
-            var (gPos, gRot) = GetGridPose(g);
-            var finalPos = pivot + deltaRot.RotateVec(gPos - pivot) + translation;
-            var finalRot = gRot + deltaRot;
-
-            comp.NetworkOffset = new Angle(-pRot.Theta).RotateVec(finalPos - pPos);
-            comp.NetworkRotation = finalRot - pRot;
-            _transform.SetWorldPositionRotation(g, finalPos, finalRot);
-
-            if (_physicsQuery.TryComp(g, out var body) && IsMoveable(body))
-            {
-                PhysicsSystem.SetLinearVelocity(g, Vector2.Zero, body: body);
-                PhysicsSystem.SetAngularVelocity(g, 0f, body: body);
-            }
-        }
-        _syncing = false;
-        _connectorSystem.MarkDirty();
-    }
-
     private void RecalculateNetworkCache(Entity<CEZGridNetworkComponent> network)
     {
         var totalMass = 0f;
@@ -332,7 +271,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         foreach (var g in network.Comp.Grids)
         {
             if (_gridCompQuery.TryComp(g, out var comp))
-                totalMass += comp.CachedFixturesMass;
+                totalMass += comp.CachedMass;
             if (IsStaticAnchor(g))
                 hasStatic = true;
         }
@@ -396,10 +335,10 @@ public sealed partial class CEZGridSyncSystem : VirtualController
 
         foreach (var gUid in net.Grids)
         {
-            if (!_gridCompQuery.TryComp(gUid, out var gComp) || gComp.CachedFixturesMass <= 0f)
+            if (!_gridCompQuery.TryComp(gUid, out var gComp) || gComp.CachedMass <= 0f)
                 continue;
-            com += _transform.GetWorldPosition(gUid) * gComp.CachedFixturesMass;
-            totalMass += gComp.CachedFixturesMass;
+            com += _transform.GetWorldPosition(gUid) * gComp.CachedMass;
+            totalMass += gComp.CachedMass;
         }
 
         if (totalMass <= 0f)
@@ -416,7 +355,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
             if (!_physicsQuery.TryComp(gUid, out var body) || !_gridCompQuery.TryComp(gUid, out var gComp))
                 continue;
 
-            var mass = gComp.CachedFixturesMass;
+            var mass = gComp.CachedMass;
             var r = _transform.GetWorldPosition(gUid) - com;
 
             if (mass > 0f)
@@ -541,6 +480,7 @@ public sealed partial class CEZGridSyncSystem : VirtualController
             if (_gridCompQuery.TryComp(gUid, out var comp))
                 ApplyAnchorToGrid(gUid, comp, avgPos, avgRot);
         }
+
         _syncing = false;
     }
 }

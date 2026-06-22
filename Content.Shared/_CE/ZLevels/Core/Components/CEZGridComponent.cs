@@ -40,5 +40,5 @@ public sealed partial class CEZGridComponent : Component
     /// Cached fixture mass (updates on grid mass changes).
     /// </summary>
     [ViewVariables]
-    public float CachedFixturesMass = 0f;
+    public float CachedMass = 0f;
 }
