@@ -379,87 +379,6 @@ public sealed partial class CEZGridSyncSystem : VirtualController
         }
     }
 
-    // === Debug ===
-
-    private void DebugLogNetworks()
-    {
-        var nq = EntityQueryEnumerator<CEZGridNetworkComponent>();
-        while (nq.MoveNext(out var netUid, out var net))
-        {
-            if (net.Grids.Count < 2 || net.HasStaticAnchor)
-                continue;
-
-            Log.Warning($"[ZGridSync] Net={netUid} anchor={net.AnchorGrid} grids={net.Grids.Count}");
-
-            var sumPos = Vector2.Zero;
-            var sumRot = 0.0;
-            var count = 0;
-
-            foreach (var gUid in net.Grids)
-            {
-                var (pos, rot) = GetGridPose(gUid);
-                _physicsQuery.TryComp(gUid, out var body);
-                _gridCompQuery.TryComp(gUid, out var comp);
-
-                var linVel = body?.LinearVelocity ?? Vector2.Zero;
-                var angVel = body?.AngularVelocity ?? 0f;
-                var offset = comp?.NetworkOffset ?? Vector2.Zero;
-                var netRot = comp?.NetworkRotation ?? Angle.Zero;
-
-                Log.Warning($"  grid={gUid} pos=({pos.X:F3},{pos.Y:F3}) rot={rot.Degrees:F4}deg " +
-                            $"vel=({linVel.X:F4},{linVel.Y:F4}) angVel={angVel:F6}rad/s");
-                Log.Warning($"         offset=({offset.X:F3},{offset.Y:F3}) netRot={netRot.Degrees:F4}deg");
-
-                if (comp != null)
-                {
-                    var (aPos, aRot) = GetAnchorPoseFromGrid(gUid);
-                    Log.Warning($"         derivedAnchor=({aPos.X:F3},{aPos.Y:F3}) rot={aRot.Degrees:F4}deg");
-                    sumPos += aPos;
-                    sumRot += aRot.Theta;
-                    count++;
-                }
-            }
-
-            if (count > 0)
-            {
-                var avgPos = sumPos / count;
-                var avgRot = new Angle(sumRot / count);
-                Log.Warning($"  avgAnchor=({avgPos.X:F3},{avgPos.Y:F3}) rot={avgRot.Degrees:F4}deg");
-            }
-
-            // Recompute consensus read-only (spin-only, same model as RunRigidBodyConsensus).
-            if (net.TotalCachedMass <= 0f)
-                continue;
-
-            var p = Vector2.Zero;
-            var totalMass = 0f;
-            var spinL = 0f;
-            var spinI = 0f;
-            foreach (var gUid in net.Grids)
-            {
-                if (!_physicsQuery.TryComp(gUid, out var body) || !_gridCompQuery.TryComp(gUid, out var gc))
-                    continue;
-                if (gc.CachedMass > 0f)
-                {
-                    p += body.LinearVelocity * gc.CachedMass;
-                    totalMass += gc.CachedMass;
-                }
-                if (body.Inertia > 0f)
-                {
-                    spinL += body.Inertia * body.AngularVelocity;
-                    spinI += body.Inertia;
-                }
-            }
-
-            if (totalMass <= 0f)
-                continue;
-
-            var vCom = p / totalMass;
-            var omegaOut = spinI > 0f ? spinL / spinI : 0f;
-            Log.Warning($"  consensus: vCom=({vCom.X:F4},{vCom.Y:F4}) spinL={spinL:F4} spinI={spinI:F2} => omega={omegaOut:F6}rad/s");
-        }
-    }
-
     public override void UpdateBeforeSolve(bool prediction, float frameTime)
     {
         _inPhysicsTick = true;
@@ -498,13 +417,6 @@ public sealed partial class CEZGridSyncSystem : VirtualController
 
         if (prediction)
             return;
-
-        _debugTimer += frameTime;
-        if (_debugTimer >= 2f)
-        {
-            _debugTimer = 0f;
-            DebugLogNetworks();
-        }
 
         var netEnum = EntityQueryEnumerator<CEZGridNetworkComponent>();
         while (netEnum.MoveNext(out _, out var net))
