@@ -156,7 +156,7 @@
     - type: Gravity
       enabled: true
       inherent: true
-    - type: CEZLevelMapRoof
+    - type: CEZLevelRoof
     - type: SunShadow
       alpha: 0.8
       direction: 2, -0.75
