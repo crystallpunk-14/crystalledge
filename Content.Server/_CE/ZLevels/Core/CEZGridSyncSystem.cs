@@ -43,7 +43,6 @@ public sealed partial class CEZGridSyncSystem : VirtualController
 
     private bool _inPhysicsTick;
     private bool _syncing;
-    private float _debugTimer;
 
     public override void Initialize()
     {
