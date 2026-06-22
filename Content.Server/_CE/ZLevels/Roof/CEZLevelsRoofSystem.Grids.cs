@@ -45,15 +45,17 @@ public sealed partial class CEZLevelsRoofSystem
 
         foreach (var (gridUid, _) in sorted)
         {
+            RemCompDeferred<ImplicitRoofComponent>(gridUid); //hack but that way we dont need edit vanilla code
+
             if (!GridQuery.TryComp(gridUid, out var grid))
                 continue;
-
             var roofComp = EnsureComp<RoofComponent>(gridUid);
             var enumerator = Map.GetAllTilesEnumerator(gridUid, grid);
 
             while (enumerator.MoveNext(out var tileRef))
             {
                 var worldTile = ZLevel.GridTileToWorldTile(gridUid, grid, tileRef.Value.GridIndices);
+
                 Roof.SetRoof((gridUid, grid, roofComp),
                     tileRef.Value.GridIndices,
                     _roofMap.Contains(worldTile));
