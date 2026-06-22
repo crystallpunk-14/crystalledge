@@ -15,7 +15,13 @@
   abstract: true
   categories: [ ForkFiltered ]
   components:
-  - type: CEMagicEnergyContainer
+  - type: Battery
+    maxCharge: 100
+    startingCharge: 100
+  - type: RadiationReceiver
+  - type: CEEnergyRadiationRegeneration
+  - type: CEEnergyOverchargeDamage
+  - type: CEEnergyDeficitDamage
 
 - type: entity
   id: CEMobCombat

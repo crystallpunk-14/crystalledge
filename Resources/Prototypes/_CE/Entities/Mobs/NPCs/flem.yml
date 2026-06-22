@@ -10,8 +10,9 @@
   categories: [ ForkFiltered ]
   components:
   - type: CEGOAPAlarm
-  - type: CEMagicEnergyContainer
-    maxEnergy: 500
+  - type: Battery
+    maxCharge: 500
+    startingCharge: 500
   - type: CEGOAP
     goals:
     # Most important - stay alive

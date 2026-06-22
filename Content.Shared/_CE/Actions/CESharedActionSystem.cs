@@ -1,6 +1,6 @@
 ﻿using Content.Shared._CE.Animation.Core;
 using Content.Shared._CE.Animation.Core.Prototypes;
-using Content.Shared._CE.Mana.Core;
+using Content.Shared._CE.MagicEnergy.Systems;
 using Content.Shared._CE.Soul;
 using Content.Shared._CE.Stamina;
 using Content.Shared.Actions;
@@ -8,6 +8,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
+using Content.Shared.Power.EntitySystems;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CE.Actions;
@@ -21,6 +22,7 @@ public abstract partial class CESharedActionSystem : EntitySystem
     [Dependency] private CESharedMagicEnergySystem _magicEnergy = default!;
     [Dependency] private CESharedSoulSystem _soul = default!;
     [Dependency] private CEStaminaSystem _stamina = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
 
     [Dependency] private EntityQuery<ActionComponent> _actionQuery = default!;
 

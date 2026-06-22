@@ -37,9 +37,6 @@
     costs:
       Primary: 10
       Secondary: 30
-  - type: CEMagicEnergyContainer
-    maxEnergy: 70
-  - type: CEMagicEnergyExaminable
   - type: Clothing
     slots:
     - neck

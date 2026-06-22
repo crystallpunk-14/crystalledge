@@ -1,8 +1,7 @@
 using Content.Shared._CE.Actions.Components;
-using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared._CE.Soul.Components;
-using Content.Shared._CE.Stamina;
 using Content.Shared.Actions.Events;
+using Content.Shared.Power.Components;
 
 namespace Content.Shared._CE.Actions;
 
@@ -39,8 +38,8 @@ public abstract partial class CESharedActionSystem
             manaCost = manaEv.TotalManacost;
         }
 
-        if (manaCost > 0 && TryComp<CEMagicEnergyContainerComponent>(args.Performer, out var playerMana))
-            _magicEnergy.Take((args.Performer, playerMana), manaCost);
+        if (manaCost > 0 && TryComp<BatteryComponent>(args.Performer, out var playerMana))
+            _battery.UseCharge((args.Performer, playerMana), manaCost);
     }
 
     private void OnSoulCostActionPerformed(Entity<CEActionSoulCostComponent> ent, ref ActionPerformedEvent args)

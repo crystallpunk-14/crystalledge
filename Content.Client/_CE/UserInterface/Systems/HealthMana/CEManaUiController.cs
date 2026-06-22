@@ -1,7 +1,7 @@
 ﻿using Content.Client._CE.UserInterface.Systems.HealthMana.Widgets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared._CE.Mana.Core.Components;
+using Content.Shared.Power.Components;
 using JetBrains.Annotations;
 using Robust.Client.Player;
 using Robust.Client.UserInterface.Controllers;
@@ -81,7 +81,7 @@ public sealed partial class CEManaUiController : UIController
             _manaBar.Visible = false;
     }
 
-    private void UpdateMana(EntityUid uid, CEMagicEnergyContainerComponent? container = null)
+    private void UpdateMana(EntityUid uid, BatteryComponent? container = null)
     {
         if (_manaBar == null)
             return;
@@ -98,7 +98,7 @@ public sealed partial class CEManaUiController : UIController
             return;
         }
 
-        var maxEnergy = (float) container.MaxEnergy;
+        var maxEnergy = container.MaxCharge;
 
         if (maxEnergy <= 0f)
         {
@@ -106,7 +106,7 @@ public sealed partial class CEManaUiController : UIController
             return;
         }
 
-        var currentEnergy = (float) container.Energy;
+        var currentEnergy = container.LastCharge;
         var ratio = Math.Clamp(currentEnergy / maxEnergy, 0f, 1f);
 
         _manaBar.Visible = true;

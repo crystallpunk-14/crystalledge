@@ -1,14 +1,12 @@
 using Content.Shared._CE.Actions.Components;
 using Content.Shared._CE.Animation.Item.Components;
 using Content.Shared._CE.Health.Components;
-using Content.Shared._CE.Mana.Core.Components;
 using Content.Shared._CE.Soul.Components;
-using Content.Shared._CE.Stamina;
 using Content.Shared._CE.StatusEffects.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
-using Content.Shared.Damage.Components;
 using Content.Shared.Hands.Components;
+using Content.Shared.Power.Components;
 using Content.Shared.SSDIndicator;
 using Content.Shared.StatusEffectNew.Components;
 
@@ -89,14 +87,14 @@ public abstract partial class CESharedActionSystem
         }
 
         //Trying get mana from performer
-        if (!TryComp<CEMagicEnergyContainerComponent>(args.User, out var playerMana))
+        if (!TryComp<BatteryComponent>(args.User, out var playerMana))
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-no-mana-component"), args.User, args.User);
             args.Cancelled = true;
             return;
         }
 
-        if (playerMana.Energy < requiredMana)
+        if (playerMana.LastCharge < requiredMana)
         {
             Popup.PopupClient(Loc.GetString("ce-magic-spell-not-enough-mana"), args.User, args.User);
             args.Cancelled = true;
