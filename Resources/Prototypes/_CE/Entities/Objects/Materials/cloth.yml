@@ -56,18 +56,6 @@
     layers:
       - state: cloth_1
         map: ["base"]
-  - type: Healing
-    damageContainers:
-      - CEBiological
-    damage:
-      types:
-        Slash: -3
-        Piercing: -3
-    bloodlossModifier: -8
-    healingBeginSound:
-      path: "/Audio/Items/Medical/brutepack_begin.ogg"
-    healingEndSound:
-      path: "/Audio/Items/Medical/brutepack_end.ogg"
   - type: Appearance
   - type: Stack
     stackType: CECloth
