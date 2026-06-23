@@ -43,3 +43,13 @@
     drawdepth: Effects
     sprite: _CE/Effects/cast_impact48.rsi
     noRot: true
+
+- type: entity
+  parent: CEBaseMagicImpact
+  id: CEBaseMagicImpactDirectional
+  name: magic impact (directional)
+  description: manifestation of magical energy in the physical plane (which can rotate!)
+  abstract: true
+  components:
+  - type: Sprite
+    noRot: false

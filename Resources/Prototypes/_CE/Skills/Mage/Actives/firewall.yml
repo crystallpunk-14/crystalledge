@@ -80,7 +80,7 @@
 
 - type: entity
   id: CEEffectFireballCharge
-  parent: CEBaseMagicImpact
+  parent: CEBaseMagicImpactAlt
   categories: [ ForkFiltered ]
   suffix: VFX
   name: fireball charge
