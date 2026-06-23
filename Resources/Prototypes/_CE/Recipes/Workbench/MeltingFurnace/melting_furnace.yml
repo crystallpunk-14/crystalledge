@@ -5,6 +5,7 @@
   tag: CERecipeMeltingFurnace
   category: Materials
   craftTime: 2.5
+  roundStart: true
   requirements:
   - !type:MaterialResource
     material: CEIron
@@ -20,6 +21,7 @@
   tag: CERecipeMeltingFurnace
   category: Materials
   craftTime: 2.5
+  roundStart: true
   requirements:
   - !type:MaterialResource
     material: CEBrass
@@ -37,6 +39,7 @@
   tag: CERecipeMeltingFurnace
   category: Materials
   craftTime: 2.5
+  roundStart: true
   requirements:
   - !type:MaterialResource
     material: CEBrass
@@ -52,6 +55,7 @@
   tag: CERecipeMeltingFurnace
   category: Materials
   craftTime: 2.5
+  roundStart: true
   requirements:
   - !type:MaterialResource
     material: CEIron
@@ -69,6 +73,7 @@
   tag: CERecipeMeltingFurnace
   category: Materials
   craftTime: 2.5
+  roundStart: true
   requirements:
   - !type:MaterialResource
     material: CEIron
@@ -84,6 +89,7 @@
   tag: CERecipeMeltingFurnace
   category: Materials
   craftTime: 2.5
+  roundStart: true
   requirements:
   - !type:MaterialResource
     material: CEBrass
