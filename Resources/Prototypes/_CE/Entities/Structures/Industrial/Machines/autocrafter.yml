@@ -77,7 +77,7 @@
     sprite: _CE/Structures/Industrial/melting_furnace.rsi
     state: base
   - type: CEWorkbench
-    vfx: CEFireWhooshEffect
+    vfx: CEEffectFireCreation 
     recipeTags:
     - CERecipeMeltingFurnace
     craftSound:

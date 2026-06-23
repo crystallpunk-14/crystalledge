@@ -120,31 +120,3 @@
     color: "#159fee"
     radius: 2.5
     energy: 2
-
-- type: entity
-  id: CEEffectFrostBladeSpawn
-  parent: CEBaseMagicImpact
-  categories: [ HideSpawnMenu ]
-  save: false
-  components:
-  - type: Sprite
-    drawdepth: Effects
-    sprite: _CE/Effects/ice_consume.rsi
-    layers:
-    - state: effect
-      shader: unshaded
-  - type: PointLight
-    color: "#159fee"
-    radius: 1.5
-  - type: TimedDespawn
-    lifetime: 2
-  - type: LightBehaviour
-    behaviours:
-      - !type:PulseBehaviour
-        interpolate: Linear
-        maxDuration: 2
-        startValue: 0
-        endValue: 5.0
-        property: Energy
-        isLooped: false
-        enabled: true

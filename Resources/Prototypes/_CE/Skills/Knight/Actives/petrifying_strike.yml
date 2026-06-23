@@ -68,37 +68,6 @@
       statusEffect: CEStatusEffectPetrifyingStrike
 
 - type: entity
-  id: CEEffectPetrifyingStrikeTelegraphy
-  parent: CEBaseMagicImpact
-  categories: [ ForkFiltered ]
-  suffix: VFX
-  name: petrifying strike
-  save: false
-  components:
-  - type: Sprite
-    drawdepth: Effects
-    sprite: _CE/Structures/Nature/ice_rock.rsi
-    layers:
-    - state: smol
-      shader: unshaded
-      color: "#8b7355"
-  - type: PointLight
-    color: "#7a5c2e"
-    radius: 1.5
-  - type: TimedDespawn
-    lifetime: 1.5
-  - type: LightBehaviour
-    behaviours:
-      - !type:PulseBehaviour
-        interpolate: Linear
-        maxDuration: 1.5
-        startValue: 0
-        endValue: 3.0
-        property: Energy
-        isLooped: false
-        enabled: true
-
-- type: entity
   id: CEStatusEffectPetrifyingStrike
   name: Petrifying Strike
   description: Your next melee attack applies [color=#8b7355]5 Petrification[/color] stacks, immobilizing the target.

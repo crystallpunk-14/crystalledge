@@ -57,36 +57,6 @@
       spread: 0
 
 - type: entity
-  id: CEEffectFireboltCharge
-  parent: CEBaseMagicImpact
-  categories: [ ForkFiltered ]
-  suffix: VFX
-  name: firebolt charge
-  save: false
-  components:
-  - type: Sprite
-    drawdepth: Effects
-    sprite: _CE/Effects/firebolt_charge.rsi
-    layers:
-    - state: effect
-      shader: unshaded
-  - type: PointLight
-    color: "#ff8a05"
-    radius: 2.5
-  - type: TimedDespawn
-    lifetime: 3
-  - type: LightBehaviour
-    behaviours:
-      - !type:PulseBehaviour
-        interpolate: Linear
-        maxDuration: 3
-        startValue: 0
-        endValue: 5.0
-        property: Energy
-        isLooped: false
-        enabled: true
-
-- type: entity
   id: CEProjectileFirebolt
   name: firebolt projectile
   parent: BaseBullet

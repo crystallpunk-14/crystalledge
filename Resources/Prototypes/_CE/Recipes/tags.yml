@@ -1,2 +1,5 @@
 - type: Tag
   id: CERecipeAlchemyTable
+
+- type: Tag
+  id: CERecipeMeltingFurnace

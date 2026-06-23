@@ -57,34 +57,3 @@
 #  icons:
 #  - sprite: _CE/Skills/Mage/mageslayer.rsi
 #    state: icon
-#
-#- type: entity
-#  id: CEEffectMageSlayer
-#  parent: CEBaseMagicImpact
-#  categories: [ ForkFiltered ]
-#  suffix: VFX
-#  name: mage slayer
-#  save: false
-#  components:
-#  - type: Sprite
-#    drawdepth: Effects
-#    sprite: _CE/Effects/critical_charge.rsi
-#    layers:
-#    - state: blue
-#      shader: unshaded
-#  - type: PointLight
-#    color: "#239ef0"
-#    radius: 1.5
-#  - type: TimedDespawn
-#    lifetime: 1.5
-#  - type: LightBehaviour
-#    behaviours:
-#      - !type:PulseBehaviour
-#        interpolate: Linear
-#        maxDuration: 1.5
-#        startValue: 0
-#        endValue: 5.0
-#        property: Energy
-#        isLooped: false
-#        enabled: true
-#
