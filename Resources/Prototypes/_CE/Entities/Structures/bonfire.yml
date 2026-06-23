@@ -1,8 +1,8 @@
 - type: entity
   id: CEBonfire
   parent: BaseStructure
-  name: Bonfire
-  description: "Interact to restore health and mana. TODO: immersive name and description"
+  name: bonfire
+  description: TODO
   categories: [ ForkFiltered ]
   components:
   - type: PlacementReplacement
@@ -20,10 +20,6 @@
       shader: unshaded
       state: effect
       offset: "0.1,1.4"
-    - state: heal
-      shader: unshaded
-      map: ["used"]
-      offset: "0,1.4"
   - type: Fixtures
     fixtures:
       fix1:
@@ -59,4 +55,3 @@
         property: Energy
         isLooped: true
         enabled: true
-  - type: CEBonfire

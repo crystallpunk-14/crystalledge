@@ -1,0 +1,95 @@
+- type: entity
+  id: CEBaseMachineCore
+  parent: BaseItem
+  name: machine core
+  description: A modular control core containing the circuitry and logic needed to assemble and operate advanced machines.
+  abstract: true
+  categories: [ ForkFiltered ]
+  components:
+  - type: MachineBoard
+    stackRequirements:
+      CEBrassSheet: 1
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _CE/Structures/Industrial/machine_cores.rsi
+    state: generic
+  - type: Item
+    size: Normal
+  - type: Circuitboard
+
+- type: entity
+  id: CEMachineCoreMeltingFurnace
+  parent: CEBaseMachineCore
+  name: melting furnace machine core
+  components:
+  - type: Sprite
+    state: melting_furnace
+  - type: MachineBoard
+    prototype: CEMeltingFurnace
+  - type: StaticPrice
+    price: 130
+
+- type: entity
+  id: CEMachineCoreCharger
+  parent: CEBaseMachineCore
+  name: charger machine core
+  components:
+  - type: MachineBoard
+    prototype: CECharger
+  - type: StaticPrice
+    price: 150
+
+- type: entity
+  id: CEMachineCoreFunnel
+  parent: CEBaseMachineCore
+  name: funnel machine core
+  components:
+  - type: MachineBoard
+    prototype: CEFunnel
+  - type: StaticPrice
+    price: 40
+
+- type: entity
+  id: CEMachineCoreDistributionUnit
+  parent: CEBaseMachineCore
+  name: distribution unit machine core
+  components:
+  - type: Sprite
+    state: power
+  - type: MachineBoard
+    prototype: CEDistributionUnitBasic
+  - type: StaticPrice
+    price: 150
+
+- type: entity
+  id: CEMachineCoreAccumulatorVessel
+  parent: CEBaseMachineCore
+  name: accumulator vessel machine core
+  components:
+  - type: Sprite
+    state: power
+  - type: MachineBoard
+    prototype: CEAccumulatorVesselEmpty
+  - type: StaticPrice
+    price: 350
+
+- type: entity
+  id: CEMachineCoreTerminal
+  parent: CEBaseMachineCore
+  name: terminal machine core
+  components:
+  - type: MachineBoard
+    prototype: CEPipeTerminalDebug
+
+- type: entity
+  id: CEMachineCoreGeneratorMagicCapacitor
+  parent: CEBaseMachineCore
+  name: magic capacitor machine core
+  components:
+  - type: Sprite
+    state: power
+  - type: MachineBoard
+    prototype: CEGeneratorMagicCapacitor
+  - type: StaticPrice
+    price: 200

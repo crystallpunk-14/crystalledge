@@ -1,4 +1,9 @@
 - type: CERecipeCategory
+  id: MachineCore
+  name: ce-recipe-category-machine-core
+  priority: 3
+
+- type: CERecipeCategory
   id: Tools
   name: ce-recipe-category-tool
   priority: 2
@@ -17,6 +22,18 @@
   id: Materials
   name: ce-recipe-category-materials
   priority: 1
+
+- type: CERecipeCategory
+  id: FloorTile
+  name: ce-recipe-category-tile
+
+- type: CERecipeCategory
+  id: Carpet
+  name: ce-recipe-category-carpet
+
+- type: CERecipeCategory
+  id: Wallpaper
+  name: ce-recipe-category-wallpaper
 
 - type: CERecipeCategory
   id: Clothing

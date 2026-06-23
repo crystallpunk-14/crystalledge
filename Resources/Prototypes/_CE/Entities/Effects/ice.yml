@@ -1,0 +1,115 @@
+- type: entity
+  id: CEEffectFrostBladeSpawn
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/ice_consume.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#159fee"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectFrostFlowTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: frost flow telegraphy
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/StatusEffects/cold_slowdown_status.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectFrostFlowCharge
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: frost flow charge
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/TileEffects/freeze_effect.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 3
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 3
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectHealingFrostVFX
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/ice_consume.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#30caf5"
+    radius: 2
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

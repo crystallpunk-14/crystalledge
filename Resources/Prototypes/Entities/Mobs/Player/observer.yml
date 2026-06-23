@@ -32,7 +32,6 @@
     autoStep: false
     velocityGravity: false
   - type: CEZLevelGhostMover
-  - type: CEMinimapData
 
 # shared parent between aghosts, replay spectators and normal observers
 - type: entity

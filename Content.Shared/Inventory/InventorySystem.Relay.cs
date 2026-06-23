@@ -1,6 +1,5 @@
 using Content.Shared._CE.Actions;
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Stamina;
 using Content.Shared.Armor;
 using Content.Shared.Atmos;
@@ -46,7 +45,6 @@ public partial class InventorySystem
         SubscribeLocalEvent<InventoryComponent, CEDamageCalculateEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateManacostEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateMaxHealthEvent>(RelayInventoryEvent);
-        SubscribeLocalEvent<InventoryComponent, CECalculateMaxManaEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateMaxStaminaEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CECalculateStaminaRegenEvent>(RelayInventoryEvent);
         SubscribeLocalEvent<InventoryComponent, CEGetIncomingHealEvent>(RelayInventoryEvent);

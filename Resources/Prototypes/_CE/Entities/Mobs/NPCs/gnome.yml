@@ -9,8 +9,9 @@
   description: TODO
   categories: [ ForkFiltered ]
   components:
-  - type: CEMagicEnergyContainer
-    maxEnergy: 50
+  - type: Battery
+    maxCharge: 50
+    startingCharge: 50
   - type: CEGOAPAlarm
     sound:
       path: /Audio/_CE/Mobs/gnome5.ogg

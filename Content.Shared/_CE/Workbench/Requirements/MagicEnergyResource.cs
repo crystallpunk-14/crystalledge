@@ -1,5 +1,5 @@
-﻿using Content.Shared._CE.Mana.Core;
-using Content.Shared._CE.Mana.Core.Components;
+﻿using Content.Shared.Power.Components;
+using Content.Shared.Power.EntitySystems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -21,10 +21,10 @@ public sealed partial class MagicEnergyResource : CEWorkbenchCraftRequirement
         if (user is null)
             return false;
 
-        if (!entManager.TryGetComponent<CEMagicEnergyContainerComponent>(user.Value, out var magicEnergy))
+        if (!entManager.TryGetComponent<BatteryComponent>(user.Value, out var magicEnergy))
             return false;
 
-        if (magicEnergy.Energy < Amount)
+        if (magicEnergy.LastCharge < Amount)
             return false;
 
         return true;
@@ -41,9 +41,9 @@ public sealed partial class MagicEnergyResource : CEWorkbenchCraftRequirement
         if (!entManager.TryGetComponent<TransformComponent>(user.Value, out var xform))
             return;
 
-        var magicSys = entManager.System<CESharedMagicEnergySystem>();
+        var magicSys = entManager.System<SharedBatterySystem>();
 
-        magicSys.Take(user.Value, Amount);
+        magicSys.UseCharge(user.Value, Amount);
         entManager.SpawnAtPosition(VFX, xform.Coordinates);
     }
 

@@ -1,5 +1,6 @@
-﻿using Content.Client.Overlays;
-using Content.Shared._CE.Mana.Core.Components;
+﻿using Content.Client._CE.MagicEnergy;
+using Content.Client.Overlays;
+using Content.Shared._CE.MagicEnergy.Components;
 using Content.Shared.Inventory.Events;
 using Robust.Client.Graphics;
 

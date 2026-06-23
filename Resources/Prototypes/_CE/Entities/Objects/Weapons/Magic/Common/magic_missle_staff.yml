@@ -36,9 +36,6 @@
   - type: CEWeaponManaCost
     costs:
       Secondary: 3
-  - type: CEMagicEnergyContainer
-    maxEnergy: 50
-  - type: CEMagicEnergyExaminable
   - type: Clothing
     slots:
     - neck

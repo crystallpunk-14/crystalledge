@@ -1,79 +1,49 @@
-- type: skill
-  parent: BaseMageSkill
-  id: ManaSteal
-  effect: !type:AddAction
-    action: CEActionManaSteal
-
-- type: entity
-  id: CEActionManaSteal
-  parent: CEActionSpellBase
-  name: Mana Steal
-  description: Steal [color=#3082f5]20 mana[/color] from the selected target and transfer it to yourself.
-  components:
-  - type: CEVisualizeRadiusTargetAction
-  - type: CEVisualizeAoEZoneAction
-    radius: 0.5
-  - type: Action
-    useDelay: 8
-    icon:
-      sprite: _CE/Skills/Mage/mana_steal.rsi
-      state: icon
-  - type: TargetAction
-    range: 1.5
-    interactOnMiss: false
-  - type: EntityTargetAction
-    canTargetSelf: false
-    whitelist:
-      requireAll: true
-      components:
-      - CEMagicEnergyContainer
-    event: !type:CEEntityTargetActionAnimationEvent
-      animation: AnimationManaSteal
-
-- type: entityEffectAnimation
-  id: AnimationManaSteal
-  movementSpeed: 0.6
-  duration: 0.5
-  events:
-    0:
-    - !type:SpawnEntity
-      effectTarget: Target
-      spawns:
-      - CEEffectManaDrain
-    0.45:
-    - !type:SpawnEntity
-      effectTarget: User
-      spawns:
-      - CEEffectManaRestore
-    - !type:StealMana
-      amount: 20
-
-- type: entity
-  id: CEEffectManaDrain
-  parent: CEBaseMagicImpact
-  categories: [ ForkFiltered ]
-  name: mana drain effect
-  suffix: VFX
-  save: false
-  components:
-  - type: Sprite
-    drawdepth: Effects
-    sprite: _CE/Effects/mana_drain.rsi
-    layers:
-    - state: effect
-      shader: unshaded
-  - type: PointLight
-    color: "#6b19af"
-    radius: 1.5
-  - type: TimedDespawn
-    lifetime: 2
-  - type: LightBehaviour
-    behaviours:
-      - !type:PulseBehaviour
-        interpolate: Linear
-        maxDuration: 2
-        startValue: 0
-        endValue: 5.0
-        property: Energy
-        isLooped: false
-        enabled: true
+#- type: skill
+#  parent: BaseMageSkill
+#  id: ManaSteal
+#  effect: !type:AddAction
+#    action: CEActionManaSteal
+#
+#- type: entity
+#  id: CEActionManaSteal
+#  parent: CEActionSpellBase
+#  name: Mana Steal
+#  description: Steal [color=#3082f5]20 mana[/color] from the selected target and transfer it to yourself.
+#  components:
+#  - type: CEVisualizeRadiusTargetAction
+#  - type: CEVisualizeAoEZoneAction
+#    radius: 0.5
+#  - type: Action
+#    useDelay: 8
+#    icon:
+#      sprite: _CE/Skills/Mage/mana_steal.rsi
+#      state: icon
+#  - type: TargetAction
+#    range: 1.5
+#    interactOnMiss: false
+#  - type: EntityTargetAction
+#    canTargetSelf: false
+#    whitelist:
+#      requireAll: true
+#      components:
+#      - CEMagicEnergyContainer
+#    event: !type:CEEntityTargetActionAnimationEvent
+#      animation: AnimationManaSteal
+#
+#- type: entityEffectAnimation
+#  id: AnimationManaSteal
+#  movementSpeed: 0.6
+#  duration: 0.5
+#  events:
+#    0:
+#    - !type:SpawnEntity
+#      effectTarget: Target
+#      spawns:
+#      - CEEffectManaDrain
+#    0.45:
+#    - !type:SpawnEntity
+#      effectTarget: User
+#      spawns:
+#      - CEEffectManaRestore
+#    - !type:StealMana
+#      amount: 20

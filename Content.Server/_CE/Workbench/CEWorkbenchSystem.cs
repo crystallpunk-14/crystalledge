@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Server.DoAfter;
 using Content.Server.Popups;
 using Content.Server.Stack;
@@ -13,6 +13,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CE.Workbench;
 
@@ -30,19 +31,18 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private CERecipeKnowledgeSystem _recipeKnowledge = default!;
 
-    private EntityQuery<CEWorkbenchComponent> _workbenchQuery;
-    private EntityQuery<ContainerManagerComponent> _containerQuery;
+    [Dependency] private EntityQuery<CEWorkbenchComponent> _workbenchQuery = default!;
+    [Dependency] private EntityQuery<ContainerManagerComponent> _containerQuery = default!;
 
     public override void Initialize()
     {
         base.Initialize();
         InitProviders();
+        InitAutoCrafter();
         InitUserCrafter();
-
-        _workbenchQuery = GetEntityQuery<CEWorkbenchComponent>();
-        _containerQuery = GetEntityQuery<ContainerManagerComponent>();
 
         SubscribeLocalEvent<CEWorkbenchComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CEWorkbenchComponent, BeforeActivatableUIOpenEvent>(OnBeforeUIOpen);
@@ -53,13 +53,13 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
     {
         foreach (var recipe in _proto.EnumeratePrototypes<CEWorkbenchRecipePrototype>())
         {
-            if (ent.Comp.Recipes.Contains(recipe.ID))
+            if (ent.Comp.Recipes.Contains(recipe))
                 continue;
 
             if (!ent.Comp.RecipeTags.Contains(recipe.Tag))
                 continue;
 
-            ent.Comp.Recipes.Add(recipe.ID);
+            ent.Comp.Recipes.Add(recipe);
         }
     }
 
@@ -119,7 +119,9 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
             recipes.Add(entry);
         }
 
-        _userInterface.SetUiState(entity.Owner, CEWorkbenchUiKey.Key, new CEWorkbenchUiRecipesState(recipes, entity.Comp.SelectedRecipe));
+        _userInterface.SetUiState(entity.Owner,
+            CEWorkbenchUiKey.Key,
+            new CEWorkbenchUiRecipesState(recipes, entity.Comp.SelectedRecipe));
     }
 
     private bool CanCraftRecipe(CEWorkbenchRecipePrototype recipe, HashSet<EntityUid> entities, EntityUid? user = null)
@@ -138,9 +140,32 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
     }
 
     /// <summary>
+    /// Checks recipe conditions and triggers failure effects.
+    /// </summary>
+    /// <returns>True if all conditions pass, otherwise false.</returns>
+    private bool CheckRecipeConditions(CEWorkbenchRecipePrototype recipe, EntityUid workbench, EntityUid? user)
+    {
+        var passConditions = true;
+        foreach (var condition in recipe.Conditions)
+        {
+            if (!condition.CheckCondition(EntityManager, _proto, workbench, user))
+            {
+                condition.FailedEffect(EntityManager, _proto, workbench, user);
+                passConditions = false;
+            }
+
+            condition.PostCraft(EntityManager, _proto, workbench, user);
+        }
+
+        return passConditions;
+    }
+
+    /// <summary>
     /// Consumes resources required for crafting.
     /// </summary>
-    private void ConsumeRecipeResources(CEWorkbenchRecipePrototype recipe, HashSet<EntityUid> resources, EntityUid? user)
+    private void ConsumeRecipeResources(CEWorkbenchRecipePrototype recipe,
+        HashSet<EntityUid> resources,
+        EntityUid? user)
     {
         foreach (var req in recipe.Requirements)
         {
@@ -163,7 +188,10 @@ public sealed partial class CEWorkbenchSystem : EntitySystem
         // Teleport result to workbench AFTER crafting
         foreach (var resultEntity in resultEntities)
         {
-            _transform.SetCoordinates(resultEntity, Transform(workbench).Coordinates.Offset(new Vector2(_random.NextFloat(-0.25f, 0.25f), _random.NextFloat(-0.25f, 0.25f))));
+            _transform.SetCoordinates(resultEntity,
+                Transform(workbench)
+                    .Coordinates
+                    .Offset(new Vector2(_random.NextFloat(-0.25f, 0.25f), _random.NextFloat(-0.25f, 0.25f))));
             _stack.TryMergeToContacts(resultEntity);
             _physics.WakeBody(resultEntity);
         }

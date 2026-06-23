@@ -29,7 +29,7 @@
     whitelist:
       requireAll: true
       components:
-      - CEMagicEnergyContainer
+      - Battery
     event: !type:CEEntityTargetActionAnimationEvent
       animation: AnimationManaGift
 
@@ -50,34 +50,3 @@
       - CEEffectManaRestore
     - !type:RestoreMana
       amount: 25
-      applyModifiers: false
-
-- type: entity
-  id: CEEffectManaRestore
-  parent: CEBaseMagicImpact
-  categories: [ ForkFiltered ]
-  name: mana restore effect
-  suffix: VFX
-  save: false
-  components:
-  - type: Sprite
-    drawdepth: Effects
-    sprite: _CE/Effects/mana_restore_generic.rsi
-    layers:
-    - state: effect
-      shader: unshaded
-  - type: PointLight
-    color: "#5428e7"
-    radius: 1.5
-  - type: TimedDespawn
-    lifetime: 2
-  - type: LightBehaviour
-    behaviours:
-      - !type:PulseBehaviour
-        interpolate: Linear
-        maxDuration: 2
-        startValue: 0
-        endValue: 5.0
-        property: Energy
-        isLooped: false
-        enabled: true

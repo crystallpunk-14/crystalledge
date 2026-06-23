@@ -1,0 +1,86 @@
+- type: entity
+  id: CEMachineFrameBase
+  categories: [ ForkFiltered ]
+  name: machine frame
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _CE/Structures/Industrial/machine_frame.rsi
+    snapCardinals: true
+  - type: Transform
+    anchored: false
+    noRot: true
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Anchorable
+  - type: Rotatable
+  - type: Pullable
+  - type: CEDamageable
+  - type: CEZPhysics
+
+- type: entity
+  id: CEMachineFrame
+  parent: CEMachineFrameBase
+  components:
+  - type: Sprite
+    state: box
+  - type: CEDestructible
+    destroyThreshold: 100
+    destroySound:
+      collection: MetalBreak
+  - type: MachineFrame
+  - type: ContainerContainer
+    containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: Appearance
+  - type: ItemMapper
+    mapLayers:
+      box_core:
+        minCount: 1
+        whitelist:
+          components:
+          - MachineBoard
+  - type: Construction
+    graph: CEMachine
+    node: machineFrame
+    defaultTarget: machine
+    containers:
+    - machine_board
+    - machine_parts
+
+- type: entity
+  id: CEMachineFrameDestroyed
+  parent: CEMachineFrameBase
+  name: destroyed machine frame
+  components:
+  - type: Construction
+    graph: CEMachine
+    node: destroyed
+  - type: CEDestructible
+    destroyThreshold: 100
+    lootTable: !type:AllSelector
+      children:
+      - !type:GroupSelector
+        rolls: !type:RangeNumberSelector
+          range: 1, 2
+        children:
+        - id: CEScrapBrass1
+  - type: Sprite
+    state: destroyed

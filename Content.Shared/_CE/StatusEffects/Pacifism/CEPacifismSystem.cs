@@ -1,9 +1,7 @@
 ﻿using Content.Shared._CE.EntityEffect.Effects;
 using Content.Shared._CE.Health;
-using Content.Shared._CE.Mana.Core;
 using Content.Shared._CE.Procedural.Components;
 using Content.Shared._CE.StatusEffects.Core;
-using Content.Shared.Mind.Components;
 using Content.Shared.Prototypes;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
@@ -36,7 +34,6 @@ public sealed partial class CEPacifismSystem : EntitySystem
         SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEOutgoingDamageCalculateEvent>>(OnOutgoingDamage);
         SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyStatusEffectEvent>>(OnAttemptApplyStatusEffect);
         SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptApplyStatusEffectStackEvent>>(OnAttemptApplyStatusEffectStack);
-        SubscribeLocalEvent<CEPacifismStatusEffectComponent, StatusEffectRelayedEvent<CEAttemptStealManaEvent>>(OnAttemptStealMana);
     }
 
     private void OnOutgoingDamage(
@@ -110,19 +107,5 @@ public sealed partial class CEPacifismSystem : EntitySystem
             return false;
 
         return proto.HasComponent<CENegativeStatusEffectComponent>(_compFactory);
-    }
-
-    private void OnAttemptStealMana(
-        Entity<CEPacifismStatusEffectComponent> ent,
-        ref StatusEffectRelayedEvent<CEAttemptStealManaEvent> args)
-    {
-        if (args.Args.Cancelled)
-            return;
-
-        // Target is the entity being drained (victim), while User is the drainer. Block when the victim is a player.
-        if (!HasComp<CEDungeonPlayerComponent>(args.Args.Target))
-            return;
-
-        args.Args.Cancelled = true;
     }
 }

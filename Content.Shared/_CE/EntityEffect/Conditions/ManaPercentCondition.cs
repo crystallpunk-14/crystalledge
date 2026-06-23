@@ -1,4 +1,4 @@
-﻿using Content.Shared._CE.Mana.Core.Components;
+﻿using Content.Shared.Power.Components;
 
 namespace Content.Shared._CE.EntityEffect.Conditions;
 
@@ -19,14 +19,14 @@ public sealed partial class ManaPercentCondition : CEEntityConditionBase<ManaPer
 
 public sealed partial class ManaPercentConditionSystem : CEEntityConditionSystem<ManaPercentCondition>
 {
-    [Dependency] private EntityQuery<CEMagicEnergyContainerComponent> _manaQuery = default!;
+    [Dependency] private EntityQuery<BatteryComponent> _manaQuery = default!;
 
     protected override void Condition(ref CEEntityConditionEvent<ManaPercentCondition> args)
     {
-        if (!_manaQuery.TryComp(args.Entity, out var mana) || mana.MaxEnergy <= 0)
+        if (!_manaQuery.TryComp(args.Entity, out var mana) || mana.MaxCharge <= 0)
             return;
 
-        var ratio = (float) mana.Energy / mana.MaxEnergy;
+        var ratio = mana.LastCharge / mana.MaxCharge;
 
         if (args.Condition.Min is { } min && ratio < min)
             return;

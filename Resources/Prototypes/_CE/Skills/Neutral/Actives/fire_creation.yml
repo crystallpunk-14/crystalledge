@@ -50,34 +50,6 @@
       - CEHandheldFire
 
 - type: entity
-  id: CEEffectFireCreation
-  parent: CEBaseMagicImpact
-  categories: [ HideSpawnMenu ]
-  save: false
-  components:
-  - type: Sprite
-    drawdepth: Effects
-    sprite: _CE/Effects/fire_absorbtion.rsi
-    layers:
-    - state: effect
-      shader: unshaded
-  - type: PointLight
-    color: "#fa9c29"
-    radius: 1.5
-  - type: TimedDespawn
-    lifetime: 2
-  - type: LightBehaviour
-    behaviours:
-      - !type:PulseBehaviour
-        interpolate: Linear
-        maxDuration: 2
-        startValue: 0
-        endValue: 5.0
-        property: Energy
-        isLooped: false
-        enabled: true
-
-- type: entity
   id: CEHandheldFire
   parent: BaseItem
   categories: [ ForkFiltered ]

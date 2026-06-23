@@ -168,3 +168,61 @@
       params:
         variation: 0.250
         volume: 15
+
+- type: entity
+  id: CEEffectRaiseShieldsTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: raise shields telegraphy
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/shield_up_telegraphy.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#b2e3eb"
+    radius: 2.5
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectKissImpact
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/kiss.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#fa29f3"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

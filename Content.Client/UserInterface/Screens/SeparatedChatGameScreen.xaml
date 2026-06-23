@@ -11,7 +11,6 @@
     xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:inventory="clr-namespace:Content.Client.UserInterface.Systems.Inventory.Widgets"
     xmlns:healthMana="clr-namespace:Content.Client._CE.UserInterface.Systems.HealthMana.Widgets"
-    xmlns:minimap="clr-namespace:Content.Client._CE.UserInterface.Systems.Minimap.Widgets"
     Name="SeparatedChatHud"
     VerticalExpand="False"
     VerticalAlignment="Bottom"
@@ -32,7 +31,6 @@
             <healthMana:CECurrencyUI Name="CurrencyBar" Access="Public" />
             <healthMana:CEStaminaUI Name="StaminaBar" Access="Public" />
             <healthMana:CEBossHealthBarUI Name="BossHealthBar" Access="Public" />
-            <minimap:CEMinimapUI Name="Minimap" Access="Public" />
             <actions:ActionsBar Name="Actions" Access="Protected" />
         </LayoutContainer>
         <PanelContainer Name="SeparatedChatPanel" MinWidth="300">

@@ -1,0 +1,77 @@
+- type: entity
+  id: CEEffectWaterBurstTelegraphy
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: water burst telegraphy
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CE/Effects/water_burst_telegraphy.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#1e90ff"
+    radius: 3.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+    - !type:PulseBehaviour
+      interpolate: Linear
+      maxDuration: 2
+      startValue: 0
+      endValue: 5.0
+      property: Energy
+      isLooped: false
+      enabled: true
+
+- type: entity
+  id: CEEffectWaterBurstEffect
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: water burst impact
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    sprite: _CE/Effects/TileEffects/water_tile_impact.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#1e90ff"
+    radius: 5
+    energy: 4.0
+  - type: TimedDespawn
+    lifetime: 1.0
+
+- type: entity
+  id: CEEffectWaterCreation
+  parent: CEBaseMagicImpact
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/water_consume.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#155aee"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

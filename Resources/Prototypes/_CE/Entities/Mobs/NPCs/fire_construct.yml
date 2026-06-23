@@ -11,8 +11,9 @@
   - type: CEGOAPAlarm
   - type: CEDestructible
     destroyThreshold: 150
-  - type: CEMagicEnergyContainer
-    maxEnergy: 500
+  - type: Battery
+    maxCharge: 500
+    startingCharge: 500
   - type: CEGOAP
     goals:
     - desiredState:

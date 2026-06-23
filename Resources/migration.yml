@@ -31,6 +31,7 @@ CEConsumablePotionColdShield: CEConsumablePotionShield
 CEChasm: null
 
 CEZGridConnectorWall: CEWallStoneBrick
+CEMobBossViator: null
 
 # CrystallEdge zone end
 

@@ -1,12 +1,12 @@
-﻿using Content.Shared._CE.Mana.Core;
-using Content.Shared._CE.MeleeWeapon.Components;
+﻿using Content.Shared._CE.MeleeWeapon.Components;
 using Content.Shared._CE.Stamina;
+using Content.Shared.Power.EntitySystems;
 
 namespace Content.Shared._CE.MeleeWeapon;
 
 public abstract partial class CESharedWeaponSystem
 {
-    [Dependency] private CESharedMagicEnergySystem _mana = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private CEStaminaSystem _stamina = default!;
 
     private void InitializeCosts()
@@ -50,7 +50,7 @@ public abstract partial class CESharedWeaponSystem
         if (!ent.Comp.Costs.TryGetValue(args.UseType, out var cost) || cost <= 0)
             return;
 
-        if (!_mana.HasEnergy(ent.Owner, cost))
+        if (_battery.GetCharge(ent.Owner) < cost)
             args.Cancel();
     }
 
@@ -59,6 +59,6 @@ public abstract partial class CESharedWeaponSystem
         if (!ent.Comp.Costs.TryGetValue(args.UseType, out var cost) || cost <= 0)
             return;
 
-        _mana.Take(ent.Owner, cost);
+        _battery.UseCharge(ent.Owner, cost);
     }
 }

@@ -32,6 +32,7 @@ public sealed partial class ConveyorController : SharedConveyorController
         SubscribeLocalEvent<ConveyorComponent, SignalReceivedEvent>(OnSignalReceived);
         SubscribeLocalEvent<ConveyorComponent, PowerChangedEvent>(OnPowerChanged);
 
+        InitCrystallEdge();
         base.Initialize();
     }
 

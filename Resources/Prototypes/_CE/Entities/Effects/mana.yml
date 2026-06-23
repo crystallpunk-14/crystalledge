@@ -1,0 +1,89 @@
+- type: entity
+  id: CEEffectManaRestore
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: mana restore effect
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/mana_restore_generic.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#5428e7"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectManaDrain
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  name: mana drain effect
+  suffix: VFX
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/mana_drain.rsi
+    layers:
+    - state: effect
+      shader: unshaded
+  - type: PointLight
+    color: "#6b19af"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 2
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 2
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true
+
+- type: entity
+  id: CEEffectMageSlayer
+  parent: CEBaseMagicImpact
+  categories: [ ForkFiltered ]
+  suffix: VFX
+  name: mage slayer
+  save: false
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CE/Effects/critical_charge.rsi
+    layers:
+    - state: blue
+      shader: unshaded
+  - type: PointLight
+    color: "#239ef0"
+    radius: 1.5
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: LightBehaviour
+    behaviours:
+      - !type:PulseBehaviour
+        interpolate: Linear
+        maxDuration: 1.5
+        startValue: 0
+        endValue: 5.0
+        property: Energy
+        isLooped: false
+        enabled: true

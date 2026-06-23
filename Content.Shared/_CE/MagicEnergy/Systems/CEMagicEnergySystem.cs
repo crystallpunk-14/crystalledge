@@ -1,0 +1,82 @@
+using Content.Shared._CE.MagicEnergy.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
+using Content.Shared.Jittering;
+using Content.Shared.Popups;
+using Robust.Shared.Audio.Systems;
+
+namespace Content.Shared._CE.MagicEnergy.Systems;
+
+public abstract partial class CESharedMagicEnergySystem : EntitySystem
+{
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<CEEnergyOverchargeDamageComponent, CEEnergyOverchargeEvent>(OnOvercharge);
+        SubscribeLocalEvent<CEEnergyDeficitDamageComponent, CEEnergyDeficitEvent>(OnDeficit);
+
+        SubscribeLocalEvent<CEEnergyRadiationArmorComponent, ExaminedEvent>(OnExamined);
+    }
+
+    private void OnOvercharge(Entity<CEEnergyOverchargeDamageComponent> ent, ref CEEnergyOverchargeEvent args)
+    {
+        if (ent.Comp.Damage.GetTotal() <= 0)
+            return;
+
+        _damageable.TryChangeDamage(ent.Owner, ent.Comp.Damage * args.Overcharge, interruptsDoAfters: false);
+        _jitter.DoJitter(ent, TimeSpan.FromSeconds(0.5f), true, 2, 8);
+        _popup.PopupEntity(Loc.GetString(ent.Comp.Popup), ent, PopupType.SmallCaution);
+
+        var xform = Transform(ent);
+        SpawnAtPosition(ent.Comp.VFX, xform.Coordinates);
+        _audio.PlayPvs(ent.Comp.OverchargeSound, xform.Coordinates);
+    }
+
+    private void OnDeficit(Entity<CEEnergyDeficitDamageComponent> ent, ref CEEnergyDeficitEvent args)
+    {
+        if (ent.Comp.Damage.GetTotal() <= 0)
+            return;
+
+        _damageable.TryChangeDamage(ent.Owner, ent.Comp.Damage * args.Deficit, interruptsDoAfters: false);
+        _jitter.DoJitter(ent, TimeSpan.FromSeconds(0.5f), true, 2, 8);
+        _popup.PopupEntity(Loc.GetString(ent.Comp.Popup), ent, PopupType.SmallCaution);
+
+        var xform = Transform(ent);
+        SpawnAtPosition(ent.Comp.VFX, xform.Coordinates);
+        _audio.PlayPvs(ent.Comp.OverchargeSound, xform.Coordinates);
+    }
+
+    private void OnExamined(Entity<CEEnergyRadiationArmorComponent> ent, ref ExaminedEvent args)
+    {
+        if (ent.Comp.Armor <= 0)
+            return;
+
+        var defence = Math.Min(ent.Comp.Armor, 1);
+
+        args.PushMarkup(Loc.GetString("ce-energy-armor-examined", ("value", Math.Round(defence * 100))));
+    }
+}
+
+/// <summary>
+/// is triggered on entities when the amount of energy received exceeds storage limits
+/// </summary>
+/// <param name="overcharge">The amount of energy that did not fit into the storage</param>
+[ByRefEvent]
+public sealed class CEEnergyOverchargeEvent(float overcharge) : EntityEventArgs
+{
+    public float Overcharge = overcharge;
+}
+
+/// <summary>
+/// Triggered when an entity attempts to use magic energy (mana) but does not have enough available.
+/// </summary>
+/// <param name="deficit">The amount of mana that was attempted to be used but was unavailable.</param>
+[ByRefEvent]
+public sealed class CEEnergyDeficitEvent(float deficit) : EntityEventArgs
+{
+    public float Deficit = deficit;
+}
