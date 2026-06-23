@@ -12,12 +12,13 @@
 #- type: entity
 #  id: CEStatusEffectStatsUp
 #  name: Stats Up
-#  description: "+2 Stamina, +15 mana, +15 health"
+#  description: +2 Stamina, +15 mana, +15 health
 #  components:
 #  - type: StatusEffect
-#  - type: CEBonusStamina
-#    flatStaminaBonus: 2
-#  - type: CEBonusMana
-#    flatManaBonus: 15
-#  - type: CEBonusHealth
-#    flatHealthBonus: 15
+#  - type: CEChangeMaxStamina
+#    flatChange: 2
+#  - type: CEChangeMaxMana
+#    flatChange: 15
+#  - type: CEChangeMaxHealth
+#    flatChange: 15
+#

@@ -11,9 +11,9 @@
 
 - type: entity
   id: CEStatusEffectNinjaBandana
-  categories: [ HideSpawnMenu ]
+  categories:
+  - HideSpawnMenu
   components:
   - type: StatusEffect
-  - type: CEStatusEffectStack
-  - type: CEBonusStamina
-    flatStaminaBonus: 3
+  - type: CEChangeMaxStamina
+    flatChange: 3
