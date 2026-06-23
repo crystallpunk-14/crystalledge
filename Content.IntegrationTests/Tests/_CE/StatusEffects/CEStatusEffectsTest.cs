@@ -20,8 +20,8 @@ public sealed class CEStatusEffectsTest : GameTest
     baseMaxHealth: 100
   - type: CEInnateStatusEffect
     components:
-    - type: CEBonusHealth
-      flatHealthBonus: 50
+    - type: CEChangeMaxHealth
+      flatChange: 50
 ";
 
     #region CEInnateStatusEffect

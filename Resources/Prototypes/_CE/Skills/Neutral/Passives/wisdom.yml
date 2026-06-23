@@ -1,3 +1,4 @@
+
 #- type: skill
 #  parent: BaseNeutralSkill
 #  id: Wisdom
@@ -15,5 +16,6 @@
 #  description: Your maximum mana is increased by [color=#3296fa]50[/color].
 #  components:
 #  - type: StatusEffect
-#  - type: CEBonusMana
-#    flatManaBonus: 50
+#  - type: CEChangeMaxMana
+#    flatChange: 50
+#
