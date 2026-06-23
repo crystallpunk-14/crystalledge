@@ -50,7 +50,6 @@
       - CEEffectManaRestore
     - !type:RestoreMana
       amount: 25
-      applyModifiers: false
 
 - type: entity
   id: CEEffectManaRestore
