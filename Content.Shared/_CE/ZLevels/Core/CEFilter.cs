@@ -104,4 +104,43 @@ public static class CEFilter
 
         return filter;
     }
+
+    public static Filter ZPvs(EntityCoordinates origin, float rangeMultiplier = 2f, IEntityManager? entManager = null, ISharedPlayerManager? playerManager = null)
+    {
+        IoCManager.Resolve(ref entManager);
+        IoCManager.Resolve(ref playerManager);
+
+        var filter = Filter.Pvs(origin, rangeMultiplier, entManager, playerManager);
+
+        var zSystem = entManager.System<CESharedZLevelsSystem>();
+        var transformSystem = entManager.System<SharedTransformSystem>();
+        var mapSystem = entManager.System<SharedMapSystem>();
+
+        var worldPos = transformSystem.ToWorldPosition(origin);
+
+        if (!mapSystem.TryGetMap(transformSystem.GetMapId(origin), out var mapUid) || mapUid is not { } currentMap)
+            return filter;
+
+        var visibleMap = new List<EntityUid>();
+
+        if (zSystem.TryMapOffset(currentMap, 1, out var mapAbove))
+            visibleMap.Add(mapAbove);
+
+        for (var i = 1; i <= CESharedZLevelsSystem.MaxZLevelsBelowRendering; i++)
+        {
+            if (zSystem.TryMapOffset(currentMap, -i, out var mapBelow))
+                visibleMap.Add(mapBelow);
+        }
+
+        foreach (var map in visibleMap)
+        {
+            if (!entManager.TryGetComponent<MapComponent>(map, out var mapComp))
+                continue;
+
+            var mapCoord = new MapCoordinates(worldPos, mapComp.MapId);
+            filter.AddPlayersByPvs(mapCoord);
+        }
+
+        return filter;
+    }
 }
