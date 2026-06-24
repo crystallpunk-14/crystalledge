@@ -4,7 +4,7 @@ meta:
   engineVersion: 277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/21/2026 12:48:46
+  time: 06/24/2026 20:37:06
   entityCount: 1
 maps:
 - 3
@@ -18,7 +18,7 @@ entities:
   - uid: 3
     components:
     - type: MetaData
-      name: EmptyMap [4]
+      name: Mapping Dev [4]
     - type: Transform
     - type: Map
       mapPaused: True

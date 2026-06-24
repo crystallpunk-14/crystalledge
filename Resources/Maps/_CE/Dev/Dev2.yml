@@ -4,8 +4,8 @@ meta:
   engineVersion: 277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/21/2026 12:48:46
-  entityCount: 6
+  time: 06/24/2026 20:37:06
+  entityCount: 29
 maps:
 - 3
 grids:
@@ -73,37 +73,191 @@ entities:
   - uid: 3
     components:
     - type: MetaData
-      name: EmptyMap [2]
+      name: Mapping Dev [2]
     - type: Transform
     - type: Map
       mapPaused: True
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
-- proto: CEFloorTorchAlwaysPowered
+- proto: CELamppostDouble
   entities:
   - uid: 2
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: -2.5,-4.5
       parent: 1
   - uid: 4
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 5.5,-4.5
       parent: 1
   - uid: 5
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: 5.5,3.5
       parent: 1
   - uid: 6
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
       pos: -2.5,3.5
+      parent: 1
+- proto: CEPipeBrassMedium
+  entities:
+  - uid: 8
+    components:
+    - type: Transform
+      pos: 4.5,-4.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 12
+    components:
+    - type: Transform
+      pos: 5.5,-4.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 13
+    components:
+    - type: Transform
+      pos: -1.5,-4.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 14
+    components:
+    - type: Transform
+      pos: -2.5,-4.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 15
+    components:
+    - type: Transform
+      pos: -1.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 16
+    components:
+    - type: Transform
+      pos: -2.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 17
+    components:
+    - type: Transform
+      pos: 4.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 18
+    components:
+    - type: Transform
+      pos: 5.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: CEPipeBrassMediumVerticalDown
+  entities:
+  - uid: 7
+    components:
+    - type: Transform
+      pos: -1.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 9
+    components:
+    - type: Transform
+      pos: 4.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 10
+    components:
+    - type: Transform
+      pos: 4.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 11
+    components:
+    - type: Transform
+      pos: -1.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: ComputerShuttleSyndie
+  entities:
+  - uid: 29
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 5.5,-0.5
+      parent: 1
+    - type: ApcPowerReceiver
+      needsPower: False
+- proto: DebugThruster
+  entities:
+  - uid: 19
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -3.5,1.5
+      parent: 1
+  - uid: 20
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -3.5,-2.5
+      parent: 1
+  - uid: 21
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -2.5,-5.5
+      parent: 1
+  - uid: 22
+    components:
+    - type: Transform
+      pos: -2.5,4.5
+      parent: 1
+  - uid: 23
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 6.5,3.5
+      parent: 1
+  - uid: 24
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 6.5,-4.5
+      parent: 1
+  - uid: 25
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 5.5,-5.5
+      parent: 1
+  - uid: 26
+    components:
+    - type: Transform
+      pos: 5.5,4.5
+      parent: 1
+  - uid: 27
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -3.5,3.5
+      parent: 1
+  - uid: 28
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: -3.5,-4.5
       parent: 1
 ...
