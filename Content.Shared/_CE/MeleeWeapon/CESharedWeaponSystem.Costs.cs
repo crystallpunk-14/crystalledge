@@ -18,8 +18,6 @@ public abstract partial class CESharedWeaponSystem
         SubscribeLocalEvent<CEWeaponManaCostComponent, CEWeaponUsedEvent>(OnManaCostUsed);
     }
 
-    // ── Stamina ──
-
     private void OnStaminaCostAttempt(Entity<CEWeaponStaminaCostComponent> ent, ref CEWeaponUseAttemptEvent args)
     {
         if (args.Cancelled)
@@ -39,8 +37,6 @@ public abstract partial class CESharedWeaponSystem
 
         _stamina.TryTakeDamage(args.User, cost);
     }
-
-    // ── Mana ──
 
     private void OnManaCostAttempt(Entity<CEWeaponManaCostComponent> ent, ref CEWeaponUseAttemptEvent args)
     {
