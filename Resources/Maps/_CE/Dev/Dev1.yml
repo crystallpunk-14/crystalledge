@@ -4,8 +4,8 @@ meta:
   engineVersion: 277.0.0
   forkId: ""
   forkVersion: ""
-  time: 06/21/2026 12:48:46
-  entityCount: 69
+  time: 06/24/2026 20:37:06
+  entityCount: 112
 maps:
 - 3
 grids:
@@ -76,13 +76,27 @@ entities:
   - uid: 3
     components:
     - type: MetaData
-      name: Empty Debug Map
+      name: Mapping Dev [1]
     - type: Transform
     - type: Map
       mapPaused: True
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
+- proto: CECharger
+  entities:
+  - uid: 104
+    components:
+    - type: Transform
+      pos: 3.5,4.5
+      parent: 1
+- proto: CEDistributionUnitBasic
+  entities:
+  - uid: 70
+    components:
+    - type: Transform
+      pos: 2.5,-1.5
+      parent: 1
 - proto: CEFenceIron
   entities:
   - uid: 4
@@ -353,12 +367,291 @@ entities:
     - type: Transform
       pos: 1.5,-2.5
       parent: 1
+- proto: CEPipeBrassBigVerticalDown
+  entities:
+  - uid: 71
+    components:
+    - type: Transform
+      pos: 2.5,-0.5
+      parent: 1
+- proto: CEPipeBrassMedium
+  entities:
+  - uid: 68
+    components:
+    - type: Transform
+      pos: 2.5,-2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 69
+    components:
+    - type: Transform
+      pos: 2.5,-1.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 74
+    components:
+    - type: Transform
+      pos: 2.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 76
+    components:
+    - type: Transform
+      pos: 4.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 77
+    components:
+    - type: Transform
+      pos: 1.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 78
+    components:
+    - type: Transform
+      pos: 0.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 79
+    components:
+    - type: Transform
+      pos: -0.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 80
+    components:
+    - type: Transform
+      pos: -1.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 82
+    components:
+    - type: Transform
+      pos: -3.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 83
+    components:
+    - type: Transform
+      pos: 2.5,-0.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 84
+    components:
+    - type: Transform
+      pos: 2.5,0.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 85
+    components:
+    - type: Transform
+      pos: 2.5,1.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 86
+    components:
+    - type: Transform
+      pos: 2.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 89
+    components:
+    - type: Transform
+      pos: 4.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 90
+    components:
+    - type: Transform
+      pos: 1.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 91
+    components:
+    - type: Transform
+      pos: 0.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 92
+    components:
+    - type: Transform
+      pos: -0.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 93
+    components:
+    - type: Transform
+      pos: -1.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 95
+    components:
+    - type: Transform
+      pos: -3.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 105
+    components:
+    - type: Transform
+      pos: 3.5,4.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: CEPipeBrassMediumValve
+  entities:
+  - uid: 102
+    components:
+    - type: Transform
+      pos: 3.5,3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+- proto: CEPipeBrassMediumVerticalUp
+  entities:
+  - uid: 75
+    components:
+    - type: Transform
+      pos: 3.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 81
+    components:
+    - type: Transform
+      pos: -2.5,-3.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 88
+    components:
+    - type: Transform
+      pos: 3.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
+  - uid: 94
+    components:
+    - type: Transform
+      pos: -2.5,2.5
+      parent: 1
+    - type: Fixtures
+      fixtures: {}
 - proto: CESpawnPointJob
   entities:
   - uid: 57
     components:
     - type: Transform
       pos: 1.5,3.5
+      parent: 1
+- proto: CETableWooden
+  entities:
+  - uid: 87
+    components:
+    - type: Transform
+      pos: 5.5,2.5
+      parent: 1
+    - type: ItemPlacer
+      placedEntities:
+      - 108
+      - 109
+  - uid: 96
+    components:
+    - type: Transform
+      pos: 5.5,1.5
+      parent: 1
+    - type: ItemPlacer
+      placedEntities:
+      - 110
+  - uid: 97
+    components:
+    - type: Transform
+      pos: 5.5,0.5
+      parent: 1
+    - type: ItemPlacer
+      placedEntities:
+      - 110
+      - 111
+      - 112
+  - uid: 98
+    components:
+    - type: Transform
+      pos: 5.5,-0.5
+      parent: 1
+    - type: ItemPlacer
+      placedEntities:
+      - 111
+      - 112
+  - uid: 99
+    components:
+    - type: Transform
+      pos: 5.5,-1.5
+      parent: 1
+  - uid: 100
+    components:
+    - type: Transform
+      pos: 5.5,-2.5
+      parent: 1
+  - uid: 101
+    components:
+    - type: Transform
+      pos: 5.5,-3.5
+      parent: 1
+  - uid: 103
+    components:
+    - type: Transform
+      pos: 4.5,-3.5
+      parent: 1
+  - uid: 106
+    components:
+    - type: Transform
+      pos: 4.5,2.5
+      parent: 1
+    - type: ItemPlacer
+      placedEntities:
+      - 107
+      - 108
+- proto: CEWallLight
+  entities:
+  - uid: 60
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 4.5,-3.5
+      parent: 1
+  - uid: 61
+    components:
+    - type: Transform
+      pos: 4.5,2.5
+      parent: 1
+  - uid: 64
+    components:
+    - type: Transform
+      pos: -3.5,2.5
+      parent: 1
+  - uid: 66
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: -3.5,-3.5
       parent: 1
 - proto: CEWallmountTorchAlwaysPowered
   entities:
@@ -367,28 +660,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: -0.5,1.5
-      parent: 1
-  - uid: 66
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -3.5,-3.5
-      parent: 1
-  - uid: 67
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 4.5,-3.5
-      parent: 1
-  - uid: 68
-    components:
-    - type: Transform
-      pos: 4.5,2.5
-      parent: 1
-  - uid: 69
-    components:
-    - type: Transform
-      pos: -3.5,2.5
       parent: 1
 - proto: CEWallStoneBrick
   entities:
@@ -428,6 +699,12 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 1.5,-1.5
       parent: 1
+  - uid: 59
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: -3.5,-4.5
+      parent: 1
   - uid: 62
     components:
     - type: Transform
@@ -440,33 +717,84 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -3.5,3.5
       parent: 1
-  - uid: 64
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: -3.5,-4.5
-      parent: 1
   - uid: 65
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 4.5,-4.5
       parent: 1
+- proto: CEWeaponMagicStaffFireball
+  entities:
+  - uid: 110
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 5.3521004,1.0205582
+      parent: 1
+    - type: CollisionWake
+      enabled: False
+- proto: CEWeaponSkimitarIron
+  entities:
+  - uid: 107
+    components:
+    - type: Transform
+      pos: 4.6021004,2.661183
+      parent: 1
+    - type: CollisionWake
+      enabled: False
+- proto: CEWeaponSwordIron
+  entities:
+  - uid: 108
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 5.1958504,2.254933
+      parent: 1
+    - type: CollisionWake
+      enabled: False
+- proto: CEWeaponThrowingDagger
+  entities:
+  - uid: 111
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 5.314151,0.20596194
+      parent: 1
+    - type: CollisionWake
+      enabled: False
+  - uid: 112
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 5.611026,0.19033694
+      parent: 1
+    - type: CollisionWake
+      enabled: False
+- proto: CEWeaponWarAxeIron
+  entities:
+  - uid: 109
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 5.5083504,2.348683
+      parent: 1
+    - type: CollisionWake
+      enabled: False
 - proto: CEZLevelLadderStone
   entities:
-  - uid: 59
+  - uid: 67
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -1.5,0.5
       parent: 1
-  - uid: 60
+  - uid: 72
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: -1.5,-0.5
       parent: 1
-  - uid: 61
+  - uid: 73
     components:
     - type: Transform
       rot: -1.5707963267948966 rad
