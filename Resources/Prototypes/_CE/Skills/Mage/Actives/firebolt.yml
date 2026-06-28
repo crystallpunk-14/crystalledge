@@ -58,7 +58,7 @@
 
 - type: entity
   id: CEEffectFireboltCharge
-  parent: CEBaseMagicImpactAlt
+  parent: CEBaseMagicImpactDirectional
   categories: [ ForkFiltered ]
   suffix: VFX
   name: firebolt charge
